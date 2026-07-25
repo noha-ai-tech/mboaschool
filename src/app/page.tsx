@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   Search,
@@ -18,11 +19,21 @@ import {
   Heart,
   Menu,
   X,
-  SlidersHorizontal,
   ChevronDown,
   ChevronRight,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+
+const LocalSchoolMap = dynamic(() => import("@/components/LocalSchoolMap"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center bg-slate-100">
+      <span className="text-sm text-slate-400 font-medium">Chargement de la carte…</span>
+    </div>
+  ),
+});
+
+const DEFAULT_CENTER = { lat: 4.0511, lng: 9.7679 }; // Douala
 
 const HERO_IMAGES = [
   "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80",
@@ -172,6 +183,157 @@ function Money({ value }: { value: number }) {
   return <>{value.toLocaleString("fr-FR")} FCFA</>;
 }
 
+function SchoolCard({
+  school,
+  userLocation,
+  compare,
+  toggleCompare,
+}: {
+  school: School;
+  userLocation: { lat: number; lng: number } | null;
+  compare: string[];
+  toggleCompare: (id: string) => void;
+}) {
+  const dist = userLocation && school.lat && school.lng
+    ? haversineKm(userLocation.lat, userLocation.lng, school.lat, school.lng)
+    : null;
+  const inCompare = compare.includes(school.id);
+
+  return (
+    <div className="group bg-white rounded-xl overflow-hidden border border-[#ebebeb] hover:border-[#ccc] hover:-translate-y-0.5 transition-all duration-200">
+      {/* Image / Fallback */}
+      <div className="relative h-48 overflow-hidden bg-slate-100">
+        {school.image ? (
+          <img
+            src={school.image}
+            alt={school.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+        ) : school.couleurPrimaire && school.couleurSecondaire ? (
+          <div
+            className="w-full h-full group-hover:scale-105 transition-transform duration-500"
+            style={{ background: `linear-gradient(135deg, ${school.couleurPrimaire}, ${school.couleurSecondaire})` }}
+          />
+        ) : (
+          <div className="w-full h-full bg-slate-800 flex items-center justify-center">
+            <span className="text-5xl">{school.emojiLogo ?? "🏫"}</span>
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+
+        {/* Emoji badge top-left (quand pas sponsorisé) */}
+        {school.emojiLogo && !school.isFeatured && (
+          <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-base leading-none px-2 py-1 rounded-xl">
+            {school.emojiLogo}
+          </span>
+        )}
+
+        {school.isFeatured && (
+          <span className="absolute top-3 left-3 bg-yellow-400 text-[#0a0a0a] text-[11px] font-black px-2.5 py-1 rounded-full tracking-wide">
+            SPONSORISÉ
+          </span>
+        )}
+
+        <div className="absolute top-3 right-3 flex gap-1.5">
+          <button
+            onClick={(e) => { e.preventDefault(); toggleCompare(school.id); }}
+            className={`backdrop-blur-sm rounded-full p-1.5 transition-colors ${inCompare ? "bg-emerald-600 text-white" : "bg-white/90 text-slate-600 hover:text-emerald-600"}`}
+          >
+            <Scale size={13} />
+          </button>
+          <button className="bg-white/90 backdrop-blur-sm rounded-full p-1.5 text-slate-600 hover:text-red-500 transition-colors">
+            <Heart size={13} />
+          </button>
+        </div>
+      </div>
+
+      {/* Info */}
+      <div className="p-4">
+        {/* Badges */}
+        <div className="flex flex-wrap gap-1.5 mb-2">
+          <span className="text-[10px] font-semibold bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full capitalize">
+            {school.category}{school.subcategory ? ` · ${school.subcategory}` : ""}
+          </span>
+          {school.verified && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">
+              <CheckCircle2 size={9} /> Vérifiée
+            </span>
+          )}
+          {!school.isClaimed && (
+            <span className="text-[10px] font-semibold bg-slate-50 text-slate-400 border border-slate-200 px-2 py-0.5 rounded-full">
+              Non revendiquée
+            </span>
+          )}
+        </div>
+
+        <h3 className="font-bold text-[15px] leading-snug text-[#0a0a0a] mb-1.5 line-clamp-2">
+          {school.name}
+        </h3>
+
+        <p className="flex items-center gap-1 text-xs text-slate-500 mb-1">
+          <MapPin size={11} />
+          {school.quartier ? `${school.quartier}, ` : ""}{school.city}
+          {dist !== null && (
+            <span className="ml-1 text-emerald-600 font-semibold">· {dist.toFixed(1)} km</span>
+          )}
+        </p>
+
+        {school.phone ? (
+          <a
+            href={`tel:${school.phone}`}
+            className="flex items-center gap-1 text-xs text-slate-500 hover:text-emerald-700 transition-colors mb-3"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Phone size={11} />
+            {school.phone}
+          </a>
+        ) : (
+          <div className="mb-3" />
+        )}
+
+        {school.fees > 0 && (
+          <p className="text-xs text-slate-500 mb-3">
+            À partir de <span className="font-bold text-[#0a0a0a]"><Money value={school.fees} /></span>/an
+          </p>
+        )}
+
+        {school.infrastructure.length > 0 && (
+          <div className="flex flex-wrap gap-1 mb-4">
+            {school.infrastructure.slice(0, 3).map((item) => (
+              <span key={item} className="text-[10px] font-semibold bg-slate-50 text-slate-600 border border-slate-200 px-2 py-0.5 rounded-full">
+                {item}
+              </span>
+            ))}
+            {school.infrastructure.length > 3 && (
+              <span className="text-[10px] font-semibold text-slate-400 px-1 py-0.5">
+                +{school.infrastructure.length - 3}
+              </span>
+            )}
+          </div>
+        )}
+
+        {school.isClaimed ? (
+          <Link
+            href={`/ecole/${school.id}`}
+            className="flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:text-emerald-600 transition-colors group/link"
+          >
+            Voir la fiche
+            <ArrowRight size={14} className="group-hover/link:translate-x-0.5 transition-transform" />
+          </Link>
+        ) : (
+          <Link
+            href={`/auth/inscription?ecole=${school.id}`}
+            className="flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-[#0a0a0a] transition-colors group/link"
+          >
+            Revendiquer cette page
+            <ArrowRight size={14} className="group-hover/link:translate-x-0.5 transition-transform" />
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 export default function HomePage() {
@@ -186,8 +348,9 @@ export default function HomePage() {
   const [radius, setRadius] = useState("5");
   const [compare, setCompare] = useState<string[]>([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [filtersOpen, setFiltersOpen] = useState(false);
   const [heroSlide, setHeroSlide] = useState(0);
+  const [mapModalOpen, setMapModalOpen] = useState(false);
+  const [locating, setLocating] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -220,11 +383,16 @@ export default function HomePage() {
   }, []);
 
   function handleLocationToggle() {
-    if (useLocation) { setUseLocation(false); setUserLocation(null); return; }
     if (!navigator.geolocation) { alert("Géolocalisation non supportée."); return; }
+    setLocating(true);
     navigator.geolocation.getCurrentPosition(
-      (p) => { setUserLocation({ lat: p.coords.latitude, lng: p.coords.longitude }); setUseLocation(true); },
-      () => alert("Position indisponible.")
+      (p) => {
+        setUserLocation({ lat: p.coords.latitude, lng: p.coords.longitude });
+        setUseLocation(true);
+        setLocating(false);
+        setMapModalOpen(true);
+      },
+      () => { setLocating(false); alert("Position indisponible."); }
     );
   }
 
@@ -240,6 +408,19 @@ export default function HomePage() {
     () => ["all", ...Array.from(new Set(schools.map((s) => s.city)))],
     [schools]
   );
+
+  const mapCenter = userLocation ?? DEFAULT_CENTER;
+
+  const nearbySchools = useMemo(() => {
+    const withCoords = schools.filter(
+      (s): s is School & { lat: number; lng: number } =>
+        s.lat != null && s.lng != null && (activeCategory === "all" || s.category === activeCategory)
+    );
+    if (!userLocation) return withCoords.slice(0, 30);
+    return withCoords
+      .filter((s) => haversineKm(userLocation.lat, userLocation.lng, s.lat, s.lng) <= Number(radius))
+      .slice(0, 30);
+  }, [schools, userLocation, radius, activeCategory]);
 
   const filtered = schools.filter((s) => {
     if (activeCategory !== "all" && s.category !== activeCategory) return false;
@@ -257,6 +438,13 @@ export default function HomePage() {
   });
 
   const compareSchools = schools.filter((s) => compare.includes(s.id)).slice(0, 3);
+
+  const groupedByCategory = useMemo(() => {
+    if (activeCategory !== "all") return null;
+    return categories
+      .map((cat) => ({ cat, items: filtered.filter((s) => s.category === cat.key).slice(0, 3) }))
+      .filter((group) => group.items.length > 0);
+  }, [filtered, activeCategory]);
 
   return (
     <div className="min-h-screen bg-[#f9f7f2] text-[#0a0a0a]">
@@ -360,13 +548,14 @@ export default function HomePage() {
 
           <div className="flex flex-col py-10 lg:py-0">
             {/* Search form card */}
-            <div className="flex-1 rounded-3xl p-[2px] bg-gradient-to-br from-red-500 via-yellow-400 to-yellow-300 shadow-2xl">
-              <div className="bg-white text-[#0a0a0a] rounded-[22px] h-full p-6 lg:p-8 flex flex-col justify-center gap-4">
-                <div>
+            <div className="flex-1 rounded-3xl p-1 bg-gradient-to-br from-red-500 via-yellow-400 to-yellow-300 shadow-2xl">
+              <div className="bg-white text-[#0a0a0a] rounded-[20px] h-full p-6 lg:p-8 flex flex-col justify-center gap-3.5">
+                <div className="mb-1">
                   <p className="text-xs font-semibold text-emerald-600 uppercase tracking-wider mb-2">Recherche rapide</p>
                   <h2 className="text-2xl font-black leading-tight">Trouvez l'école idéale près de chez vous.</h2>
                 </div>
 
+                {/* 1. Nom / mot-clé */}
                 <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus-within:border-emerald-400 transition-colors">
                   <Search size={16} className="text-slate-400 shrink-0" />
                   <input
@@ -382,24 +571,61 @@ export default function HomePage() {
                   )}
                 </div>
 
+                <div className="grid grid-cols-2 gap-2.5">
+                  {/* 2. Catégorie */}
+                  <select
+                    value={activeCategory}
+                    onChange={(e) => { setActiveCategory(e.target.value); setActiveSubcategory("all"); }}
+                    className="w-full border border-slate-200 rounded-xl px-3 py-3.5 text-sm font-semibold bg-white focus:outline-none focus:border-emerald-400 transition-colors"
+                  >
+                    <option value="all">Toutes catégories</option>
+                    {categories.map((cat) => (
+                      <option key={cat.key} value={cat.key}>{cat.label}</option>
+                    ))}
+                  </select>
+
+                  {/* 3. Ville */}
+                  <select
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    className="w-full border border-slate-200 rounded-xl px-3 py-3.5 text-sm font-semibold bg-white focus:outline-none focus:border-emerald-400 transition-colors"
+                  >
+                    {cities.map((c) => (
+                      <option key={c} value={c}>{c === "all" ? "Toutes les villes" : c}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* 4. Rayon de recherche */}
                 <select
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
+                  value={radius}
+                  onChange={(e) => setRadius(e.target.value)}
                   className="w-full border border-slate-200 rounded-xl px-4 py-3.5 text-sm font-semibold bg-white focus:outline-none focus:border-emerald-400 transition-colors"
                 >
-                  {cities.map((c) => (
-                    <option key={c} value={c}>{c === "all" ? "Toutes les villes" : c}</option>
-                  ))}
+                  <option value="2">Rayon : 2 km</option>
+                  <option value="5">Rayon : 5 km</option>
+                  <option value="10">Rayon : 10 km</option>
+                  <option value="20">Rayon : 20 km</option>
                 </select>
 
-                <Link
-                  href="/categorie/garderie"
-                  onClick={() => { setActiveCategory("all"); setActiveSubcategory("all"); }}
-                  className="w-full bg-[#0a0a0a] text-white rounded-xl py-3.5 font-bold text-sm flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors"
-                >
-                  Rechercher
-                  <ArrowRight size={16} />
-                </Link>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleLocationToggle}
+                    disabled={locating}
+                    className="flex-1 flex items-center justify-center gap-1.5 px-3 py-3.5 rounded-xl text-sm font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors disabled:opacity-50"
+                  >
+                    <Navigation size={15} />
+                    {locating ? "Localisation…" : "Me localiser"}
+                  </button>
+                  <Link
+                    href="/categorie/garderie"
+                    onClick={() => { setActiveCategory("all"); setActiveSubcategory("all"); }}
+                    className="flex-1 bg-[#0a0a0a] text-white rounded-xl py-3.5 font-bold text-sm flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors"
+                  >
+                    Rechercher
+                    <ArrowRight size={16} />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
@@ -454,6 +680,39 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── MAP MODAL (recherche géolocalisée façon Airbnb) ─────────── */}
+      {mapModalOpen && (
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 lg:p-8">
+          <div className="bg-white rounded-3xl overflow-hidden shadow-2xl w-full max-w-4xl h-[80vh] flex flex-col">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[#ebebeb] shrink-0">
+              <div>
+                <p className="font-black text-[#0a0a0a]">
+                  {nearbySchools.length} établissement{nearbySchools.length !== 1 ? "s" : ""}
+                  {activeCategory !== "all" ? ` · ${categories.find((c) => c.key === activeCategory)?.label}` : ""}
+                </p>
+                <p className="text-xs text-slate-400">
+                  Dans un rayon de {radius} km autour de votre position
+                </p>
+              </div>
+              <button
+                onClick={() => setMapModalOpen(false)}
+                className="p-2 rounded-full hover:bg-slate-100 text-slate-500 hover:text-[#0a0a0a] transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="flex-1 min-h-0">
+              <LocalSchoolMap
+                center={mapCenter}
+                userLocation={userLocation}
+                radiusKm={Number(radius)}
+                schools={nearbySchools}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── ANNOUNCEMENT MARQUEE ───────────────────────────────────── */}
       <div className="bg-[#0a0a0a] text-white py-3 overflow-hidden whitespace-nowrap">
         <div className="flex w-max animate-marquee">
@@ -477,14 +736,6 @@ export default function HomePage() {
 
         {/* Filters row */}
         <div className="flex items-center gap-3 mb-8 flex-wrap">
-          <button
-            onClick={() => setFiltersOpen(!filtersOpen)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-semibold transition-colors ${filtersOpen ? "bg-[#0a0a0a] text-white border-[#0a0a0a]" : "border-[#ddd] hover:border-[#aaa]"}`}
-          >
-            <SlidersHorizontal size={15} />
-            Filtres
-          </button>
-
           {city !== "all" && (
             <span className="flex items-center gap-2 px-3 py-2 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-semibold border border-emerald-200">
               {city}
@@ -504,229 +755,69 @@ export default function HomePage() {
           </span>
         </div>
 
-        {/* Expanded filters */}
-        {filtersOpen && (
-          <div className="bg-white border border-[#ebebeb] rounded-2xl p-5 mb-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Ville</label>
-              <select
-                className="w-full border border-[#ddd] rounded-lg px-3 py-2.5 text-sm bg-white focus:outline-none focus:border-[#aaa]"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-              >
-                {cities.map((c) => (
-                  <option key={c} value={c}>{c === "all" ? "Toutes les villes" : c}</option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Rayon de recherche</label>
-              <select
-                className="w-full border border-[#ddd] rounded-lg px-3 py-2.5 text-sm bg-white focus:outline-none focus:border-[#aaa]"
-                value={radius}
-                onChange={(e) => setRadius(e.target.value)}
-              >
-                <option value="2">2 km</option>
-                <option value="5">5 km</option>
-                <option value="10">10 km</option>
-                <option value="20">20 km</option>
-              </select>
-            </div>
-
-            <div className="flex items-end">
-              <button
-                onClick={handleLocationToggle}
-                className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-semibold transition-colors ${useLocation ? "bg-emerald-600 text-white border-emerald-600" : "border-[#ddd] hover:border-[#aaa]"}`}
-              >
-                <Navigation size={15} />
-                {useLocation ? "Position active" : "Utiliser ma position"}
-              </button>
-            </div>
-
-            <div className="flex items-end">
-              <button
-                onClick={() => { setCity("all"); setUseLocation(false); setUserLocation(null); setActiveCategory("all"); setActiveSubcategory("all"); setQuery(""); }}
-                className="w-full px-4 py-2.5 rounded-lg border border-[#ddd] text-sm font-semibold text-slate-500 hover:border-[#aaa] transition-colors"
-              >
-                Réinitialiser
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* Grid */}
         <div className="grid lg:grid-cols-[1fr_280px] gap-8 items-start">
           <div>
-            <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-
-              {/* Skeletons */}
-              {loading && [1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="bg-white rounded-xl overflow-hidden border border-[#ebebeb] animate-pulse">
-                  <div className="h-48 bg-slate-100" />
-                  <div className="p-4 space-y-3">
-                    <div className="h-4 bg-slate-100 rounded w-1/3" />
-                    <div className="h-5 bg-slate-100 rounded w-3/4" />
-                    <div className="h-4 bg-slate-100 rounded w-1/2" />
-                    <div className="h-9 bg-slate-100 rounded-lg mt-4" />
-                  </div>
-                </div>
-              ))}
-
-              {/* School cards */}
-              {!loading && filtered.map((school) => {
-                const dist = userLocation && school.lat && school.lng
-                  ? haversineKm(userLocation.lat, userLocation.lng, school.lat, school.lng)
-                  : null;
-                const inCompare = compare.includes(school.id);
-
-                return (
-                  <div
-                    key={school.id}
-                    className="group bg-white rounded-xl overflow-hidden border border-[#ebebeb] hover:border-[#ccc] hover:-translate-y-0.5 transition-all duration-200"
-                  >
-                    {/* Image / Fallback */}
-                    <div className="relative h-48 overflow-hidden bg-slate-100">
-                      {school.image ? (
-                        <img
-                          src={school.image}
-                          alt={school.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                      ) : school.couleurPrimaire && school.couleurSecondaire ? (
-                        <div
-                          className="w-full h-full group-hover:scale-105 transition-transform duration-500"
-                          style={{ background: `linear-gradient(135deg, ${school.couleurPrimaire}, ${school.couleurSecondaire})` }}
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-slate-800 flex items-center justify-center">
-                          <span className="text-5xl">{school.emojiLogo ?? "🏫"}</span>
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
-
-                      {/* Emoji badge top-left (quand pas sponsorisé) */}
-                      {school.emojiLogo && !school.isFeatured && (
-                        <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-base leading-none px-2 py-1 rounded-xl">
-                          {school.emojiLogo}
-                        </span>
-                      )}
-
-                      {school.isFeatured && (
-                        <span className="absolute top-3 left-3 bg-yellow-400 text-[#0a0a0a] text-[11px] font-black px-2.5 py-1 rounded-full tracking-wide">
-                          SPONSORISÉ
-                        </span>
-                      )}
-
-                      <div className="absolute top-3 right-3 flex gap-1.5">
-                        <button
-                          onClick={(e) => { e.preventDefault(); toggleCompare(school.id); }}
-                          className={`backdrop-blur-sm rounded-full p-1.5 transition-colors ${inCompare ? "bg-emerald-600 text-white" : "bg-white/90 text-slate-600 hover:text-emerald-600"}`}
-                        >
-                          <Scale size={13} />
-                        </button>
-                        <button className="bg-white/90 backdrop-blur-sm rounded-full p-1.5 text-slate-600 hover:text-red-500 transition-colors">
-                          <Heart size={13} />
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Info */}
-                    <div className="p-4">
-                      {/* Badges */}
-                      <div className="flex flex-wrap gap-1.5 mb-2">
-                        <span className="text-[10px] font-semibold bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full capitalize">
-                          {school.category}{school.subcategory ? ` · ${school.subcategory}` : ""}
-                        </span>
-                        {school.verified && (
-                          <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">
-                            <CheckCircle2 size={9} /> Vérifiée
-                          </span>
-                        )}
-                        {!school.isClaimed && (
-                          <span className="text-[10px] font-semibold bg-slate-50 text-slate-400 border border-slate-200 px-2 py-0.5 rounded-full">
-                            Non revendiquée
-                          </span>
-                        )}
-                      </div>
-
-                      <h3 className="font-bold text-[15px] leading-snug text-[#0a0a0a] mb-1.5 line-clamp-2">
-                        {school.name}
-                      </h3>
-
-                      <p className="flex items-center gap-1 text-xs text-slate-500 mb-1">
-                        <MapPin size={11} />
-                        {school.quartier ? `${school.quartier}, ` : ""}{school.city}
-                        {dist !== null && (
-                          <span className="ml-1 text-emerald-600 font-semibold">· {dist.toFixed(1)} km</span>
-                        )}
-                      </p>
-
-                      {school.phone ? (
-                        <a
-                          href={`tel:${school.phone}`}
-                          className="flex items-center gap-1 text-xs text-slate-500 hover:text-emerald-700 transition-colors mb-3"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <Phone size={11} />
-                          {school.phone}
-                        </a>
-                      ) : (
-                        <div className="mb-3" />
-                      )}
-
-                      {school.fees > 0 && (
-                        <p className="text-xs text-slate-500 mb-3">
-                          À partir de <span className="font-bold text-[#0a0a0a]"><Money value={school.fees} /></span>/an
-                        </p>
-                      )}
-
-                      {school.infrastructure.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mb-4">
-                          {school.infrastructure.slice(0, 3).map((item) => (
-                            <span key={item} className="text-[10px] font-semibold bg-slate-50 text-slate-600 border border-slate-200 px-2 py-0.5 rounded-full">
-                              {item}
-                            </span>
-                          ))}
-                          {school.infrastructure.length > 3 && (
-                            <span className="text-[10px] font-semibold text-slate-400 px-1 py-0.5">
-                              +{school.infrastructure.length - 3}
-                            </span>
-                          )}
-                        </div>
-                      )}
-
-                      {school.isClaimed ? (
-                        <Link
-                          href={`/ecole/${school.id}`}
-                          className="flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:text-emerald-600 transition-colors group/link"
-                        >
-                          Voir la fiche
-                          <ArrowRight size={14} className="group-hover/link:translate-x-0.5 transition-transform" />
-                        </Link>
-                      ) : (
-                        <Link
-                          href={`/auth/inscription?ecole=${school.id}`}
-                          className="flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-[#0a0a0a] transition-colors group/link"
-                        >
-                          Revendiquer cette page
-                          <ArrowRight size={14} className="group-hover/link:translate-x-0.5 transition-transform" />
-                        </Link>
-                      )}
+            {/* Skeletons */}
+            {loading && (
+              <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                {[1, 2, 3, 4, 5, 6].map((i) => (
+                  <div key={i} className="bg-white rounded-xl overflow-hidden border border-[#ebebeb] animate-pulse">
+                    <div className="h-48 bg-slate-100" />
+                    <div className="p-4 space-y-3">
+                      <div className="h-4 bg-slate-100 rounded w-1/3" />
+                      <div className="h-5 bg-slate-100 rounded w-3/4" />
+                      <div className="h-4 bg-slate-100 rounded w-1/2" />
+                      <div className="h-9 bg-slate-100 rounded-lg mt-4" />
                     </div>
                   </div>
-                );
-              })}
+                ))}
+              </div>
+            )}
 
-              {/* Empty state */}
-              {!loading && filtered.length === 0 && (
-                <div className="sm:col-span-2 xl:col-span-3 py-20 text-center">
-                  <p className="text-4xl mb-4">🏫</p>
-                  <h3 className="text-xl font-bold mb-2">Aucun résultat</h3>
-                  <p className="text-slate-500 text-sm">Modifiez vos filtres ou élargissez votre recherche.</p>
-                </div>
-              )}
-            </div>
+            {/* Grouped by category */}
+            {!loading && groupedByCategory && (
+              <div className="space-y-10">
+                {groupedByCategory.map(({ cat, items }) => (
+                  <div key={cat.key} className="border border-black rounded-xl p-5">
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-[20px] font-bold tracking-tight text-[#0a0a0a]">{cat.label}</h2>
+                      <Link
+                        href={`/categorie/${cat.key}`}
+                        className="flex items-center gap-1 text-sm font-semibold text-emerald-700 hover:text-emerald-600 transition-colors"
+                      >
+                        Voir tout
+                        <ArrowRight size={14} />
+                      </Link>
+                    </div>
+                    <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                      {items.map((school) => (
+                        <SchoolCard key={school.id} school={school} userLocation={userLocation} compare={compare} toggleCompare={toggleCompare} />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Flat grid (single category selected) */}
+            {!loading && !groupedByCategory && (
+              <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                {filtered.map((school) => (
+                  <SchoolCard key={school.id} school={school} userLocation={userLocation} compare={compare} toggleCompare={toggleCompare} />
+                ))}
+              </div>
+            )}
+
+            {/* Empty state */}
+            {!loading && filtered.length === 0 && (
+              <div className="py-20 text-center">
+                <p className="text-4xl mb-4">🏫</p>
+                <h3 className="text-xl font-bold mb-2">Aucun résultat</h3>
+                <p className="text-slate-500 text-sm">Modifiez vos filtres ou élargissez votre recherche.</p>
+              </div>
+            )}
           </div>
 
           {/* Sidebar compare */}
