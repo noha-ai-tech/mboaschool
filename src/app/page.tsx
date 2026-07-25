@@ -447,7 +447,7 @@ export default function HomePage() {
   }, [filtered, activeCategory]);
 
   return (
-    <div className="min-h-screen bg-[#f9f7f2] text-[#0a0a0a]">
+    <div className="min-h-screen bg-blue-100 text-[#0a0a0a]">
 
       {/* ── HEADER ─────────────────────────────────────────────────── */}
       <header className="fixed top-0 inset-x-0 z-50 bg-white border-b border-[#ebebeb]">
