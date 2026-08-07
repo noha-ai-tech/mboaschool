@@ -28,6 +28,7 @@ export default function AdminSchoolPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     name: "",
@@ -70,6 +71,7 @@ export default function AdminSchoolPage() {
   async function save(e: { preventDefault(): void }) {
     e.preventDefault();
     setSaving(true);
+    setSaveError(null);
     const { error } = await supabase
       .from("establishments")
       .update(form)
@@ -79,6 +81,8 @@ export default function AdminSchoolPage() {
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
       load();
+    } else {
+      setSaveError(error.message);
     }
   }
 
@@ -252,6 +256,12 @@ export default function AdminSchoolPage() {
                 <span className="flex items-center gap-1.5 text-sm text-emerald-700 font-semibold">
                   <CheckCircle2 size={15} />
                   Modifications sauvegardées
+                </span>
+              )}
+
+              {saveError && (
+                <span className="text-sm text-red-600 font-semibold">
+                  Échec de l&apos;enregistrement : {saveError}
                 </span>
               )}
             </div>

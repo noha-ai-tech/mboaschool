@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import DeconnexionButton from "@/components/enseignant/DeconnexionButton";
 
 export default async function EnseignantLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -42,14 +43,7 @@ export default async function EnseignantLayout({ children }: { children: React.R
             </span>
           </>
         )}
-        <form action="/auth/signout" method="post" className="ml-auto">
-          <button
-            type="submit"
-            className="text-xs text-slate-500 hover:text-white transition-colors"
-          >
-            Déconnexion
-          </button>
-        </form>
+        <DeconnexionButton />
       </header>
       <main>{children}</main>
     </div>
