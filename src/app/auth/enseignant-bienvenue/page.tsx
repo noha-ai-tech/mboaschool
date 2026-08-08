@@ -39,6 +39,13 @@ export default async function EnseignantBienvenueePage() {
       .from("enseignants")
       .update({ user_id: user.id })
       .in("id", ids);
+
+    // Synchronise staff_members.user_id (Mission 04 — fondation RH) pour les
+    // fiches liées à ces enseignants, si elles existent déjà (migration
+    // 0009_pro_hr_foundation.sql, non exécutée). N'affecte en rien le flux
+    // enseignant existant ci-dessus si la table n'existe pas encore.
+    await admin.from("staff_members").update({ user_id: user.id }).in("enseignant_id", ids);
+
     nom = enseignants[0].nom;
     prenom = enseignants[0].prenom;
   } else {
