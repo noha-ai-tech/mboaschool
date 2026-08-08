@@ -2,11 +2,16 @@ import Link from "next/link";
 import { School } from "lucide-react";
 
 const NAV = [
+  { href: "/pro/personnel",                    label: "Personnel" },
   { href: "/pro/emplois-du-temps",             label: "Emplois du temps" },
   { href: "/pro/matieres",                     label: "Matières" },
+  { href: "/pro/salles",                       label: "Salles" },
   { href: "/pro/parametres/emploi-du-temps",   label: "Contraintes EDT" },
   { href: "/pro/pointage/kiosque",             label: "Kiosque présence" },
   { href: "/pro/pointage/historique",          label: "Historique présence" },
+  { href: "/pro/remplacements",                label: "Remplacements" },
+  { href: "/pro/absences",                     label: "Absences" },
+  { href: "/pro/paie",                         label: "Paie" },
   { href: "/pro/enseignants",                  label: "Enseignants" },
   { href: "/pro/messagerie",                   label: "Messagerie" },
 ];
