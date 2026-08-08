@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useSchool } from "@/lib/useSchool";
-import { Save, CheckCircle2, ExternalLink } from "lucide-react";
+import { Save, CheckCircle2, ExternalLink, UserCog, ShieldCheck, Users, Crown, CreditCard } from "lucide-react";
 import Link from "next/link";
 
 const CATEGORIES = ["garderie", "primaire", "secondaire", "superieur", "autres"];
@@ -204,6 +204,67 @@ export default function ParametresPage() {
           )}
         </div>
       </form>
+
+      {/* Sections additionnelles (Mission 03, Phase 8) — structure prévue,
+          fonctionnalités non développées tant qu'elles n'existent pas
+          réellement (multi-utilisateur, sécurité avancée, facturation). */}
+      <div className="mt-10 pt-8 border-t border-[#ebebeb] space-y-4">
+        <p className="text-xs font-bold tracking-widest uppercase text-slate-400">Autres paramètres</p>
+
+        <div className="bg-white border border-[#ebebeb] rounded-2xl p-6 flex items-start justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <Crown size={18} className="text-emerald-600 mt-0.5 shrink-0" />
+            <div>
+              <p className="font-bold text-sm text-[#0a0a0a]">Abonnement</p>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Forfait actuel : <strong className="text-slate-600">{school.forfait === "pro" ? "Pro" : school.forfait === "gere" ? "Géré" : "Gratuit"}</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <Link
+          href="/dashboard/ecole/paiements"
+          className="flex items-start gap-3 bg-white border border-[#ebebeb] rounded-2xl p-6 hover:border-[#ccc] transition-colors"
+        >
+          <CreditCard size={18} className="text-slate-400 mt-0.5 shrink-0" />
+          <div>
+            <p className="font-bold text-sm text-[#0a0a0a]">Paiements</p>
+            <p className="text-xs text-slate-400 mt-0.5">Suivi des règlements — bientôt disponible.</p>
+          </div>
+        </Link>
+
+        <div className="bg-white border border-dashed border-slate-200 rounded-2xl p-6 flex items-start gap-3">
+          <UserCog size={18} className="text-slate-300 mt-0.5 shrink-0" />
+          <div>
+            <p className="font-bold text-sm text-slate-400">Responsables</p>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Désigner d&apos;autres responsables pour cet établissement — bientôt disponible.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-white border border-dashed border-slate-200 rounded-2xl p-6 flex items-start gap-3">
+          <Users size={18} className="text-slate-300 mt-0.5 shrink-0" />
+          <div>
+            <p className="font-bold text-sm text-slate-400">Utilisateurs</p>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Gestion des accès multi-utilisateurs — bientôt disponible. Un seul Administrateur Principal par
+              établissement pour l&apos;instant.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-white border border-dashed border-slate-200 rounded-2xl p-6 flex items-start gap-3">
+          <ShieldCheck size={18} className="text-slate-300 mt-0.5 shrink-0" />
+          <div>
+            <p className="font-bold text-sm text-slate-400">Sécurité</p>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Changement de mot de passe et double authentification — bientôt disponible.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

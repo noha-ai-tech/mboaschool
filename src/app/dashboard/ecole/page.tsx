@@ -18,12 +18,24 @@ import {
   School,
   Lock,
   Sparkles,
+  Globe,
+  Activity,
+  Camera,
+  Gauge,
 } from "lucide-react";
 
 export default function DashboardEcoleHome() {
   const { school, loading: schoolLoading } = useSchool();
   const [applications, setApplications] = useState<any[]>([]);
   const [classes, setClasses] = useState<any[]>([]);
+  const [profile, setProfile] = useState<{
+    logo_url: string | null;
+    description: string | null;
+    fees: any | null;
+    infra: any | null;
+    imageCount: number;
+    latestAnnouncement: string | null;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -33,7 +45,7 @@ export default function DashboardEcoleHome() {
 
   async function loadData(schoolId: string) {
     setLoading(true);
-    const [{ data: apps }, { data: cls }] = await Promise.all([
+    const [{ data: apps }, { data: cls }, estRes, feesRes, infraRes, imagesRes, annRes] = await Promise.all([
       supabase
         .from("applications")
         .select("id, student_first_name, student_last_name, full_student_name, parent_name, desired_level, status, created_at")
@@ -45,15 +57,53 @@ export default function DashboardEcoleHome() {
         .select("id, name, level, teacher_name")
         .eq("establishment_id", schoolId)
         .order("created_at", { ascending: false }),
+      supabase.from("establishments").select("logo_url, description").eq("id", schoolId).single(),
+      supabase.from("fees").select("tuition_fee, registration_fee").eq("establishment_id", schoolId).maybeSingle(),
+      supabase.from("infrastructures").select("*").eq("establishment_id", schoolId).maybeSingle(),
+      supabase.from("school_images").select("id", { count: "exact", head: true }).eq("establishment_id", schoolId),
+      supabase
+        .from("school_announcements")
+        .select("created_at")
+        .eq("establishment_id", schoolId)
+        .order("created_at", { ascending: false })
+        .limit(1),
     ]);
     if (apps) setApplications(apps);
     if (cls) setClasses(cls);
+    setProfile({
+      logo_url: estRes.data?.logo_url ?? null,
+      description: estRes.data?.description ?? null,
+      fees: feesRes.data ?? null,
+      infra: infraRes.data ?? null,
+      imageCount: imagesRes.count ?? 0,
+      latestAnnouncement: annRes.data?.[0]?.created_at ?? null,
+    });
     setLoading(false);
   }
 
   const pending = applications.filter((a) => a.status === "pending" || a.status === "reviewing").length;
   const accepted = applications.filter((a) => a.status === "accepted").length;
   const rejected = applications.filter((a) => a.status === "rejected").length;
+
+  // Checklist de complétion du profil (Mission 03, Phase 4) — chaque tâche
+  // reflète une donnée réellement vérifiée, jamais un pourcentage inventé.
+  const checklist = school && profile ? [
+    { label: "Ajouter un logo", done: !!profile.logo_url, href: "/dashboard/ecole/centre-documentaire" },
+    { label: "Ajouter des photos", done: profile.imageCount > 0, href: "/dashboard/ecole/galerie" },
+    { label: "Renseigner les frais", done: !!(profile.fees?.tuition_fee || profile.fees?.registration_fee), href: "/dashboard/ecole/frais" },
+    { label: "Compléter les infrastructures", done: !!profile.infra && Object.entries(profile.infra).some(([k, v]) => v === true && k !== "id"), href: "/dashboard/ecole/infrastructure" },
+    { label: "Publier une annonce", done: !!profile.latestAnnouncement, href: "/dashboard/ecole/annonces" },
+    { label: "Ajouter les contacts", done: !!(school.phone || school.email), href: "/dashboard/ecole/parametres" },
+    { label: "Compléter la description", done: !!profile.description && profile.description.length > 20, href: "/dashboard/ecole/parametres" },
+  ] : [];
+  const completionPct = checklist.length > 0
+    ? Math.round((checklist.filter((c) => c.done).length / checklist.length) * 100)
+    : 0;
+
+  const lastActivityDate = [
+    applications[0]?.created_at,
+    profile?.latestAnnouncement,
+  ].filter(Boolean).sort().reverse()[0] as string | undefined;
 
   if (schoolLoading) {
     return (
@@ -98,6 +148,61 @@ export default function DashboardEcoleHome() {
         <h1 className="text-3xl font-black tracking-tight text-[#0a0a0a]">{school.name}</h1>
         <p className="text-slate-500 text-sm mt-1">{school.city} · {school.main_category}</p>
       </div>
+
+      {/* KPI établissement (Mission 03, Phase 3) — données réelles uniquement */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        <div className="bg-white border border-[#ebebeb] rounded-xl p-5">
+          <Globe size={18} className="text-emerald-600 mb-3" />
+          <p className="text-sm font-black text-[#0a0a0a]">Publiée</p>
+          <p className="text-xs text-slate-400 font-semibold mt-1">Établissement</p>
+        </div>
+        <div className="bg-white border border-[#ebebeb] rounded-xl p-5">
+          <Gauge size={18} className="text-emerald-600 mb-3" />
+          <p className="text-3xl font-black text-[#0a0a0a]">{loading ? "—" : `${completionPct}%`}</p>
+          <p className="text-xs text-slate-400 font-semibold mt-1">Profil complété</p>
+        </div>
+        <div className="bg-white border border-[#ebebeb] rounded-xl p-5">
+          <Camera size={18} className="text-slate-700 mb-3" />
+          <p className="text-3xl font-black text-[#0a0a0a]">{loading ? "—" : profile?.imageCount ?? 0}</p>
+          <p className="text-xs text-slate-400 font-semibold mt-1">Photos</p>
+        </div>
+        <div className="bg-white border border-[#ebebeb] rounded-xl p-5">
+          <Activity size={18} className="text-slate-700 mb-3" />
+          <p className="text-sm font-black text-[#0a0a0a]">
+            {loading
+              ? "—"
+              : lastActivityDate
+                ? new Date(lastActivityDate).toLocaleDateString("fr-FR", { day: "2-digit", month: "short" })
+                : "Aucune"}
+          </p>
+          <p className="text-xs text-slate-400 font-semibold mt-1">Dernière activité</p>
+        </div>
+      </div>
+
+      {/* Checklist de complétion */}
+      {!loading && checklist.some((c) => !c.done) && (
+        <div className="bg-white border border-[#ebebeb] rounded-2xl p-5 mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <p className="font-bold text-sm">Complétez votre fiche</p>
+            <span className="text-xs font-bold text-emerald-700">{completionPct}%</span>
+          </div>
+          <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden mb-4">
+            <div className="h-full bg-emerald-500 transition-all" style={{ width: `${completionPct}%` }} />
+          </div>
+          <div className="grid sm:grid-cols-2 gap-2">
+            {checklist.filter((c) => !c.done).map((c) => (
+              <Link
+                key={c.label}
+                href={c.href}
+                className="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50 transition-colors border border-slate-100"
+              >
+                {c.label}
+                <ArrowRight size={13} className="text-slate-300" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

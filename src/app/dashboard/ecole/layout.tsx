@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSchool } from "@/lib/useSchool";
+import { NotificationBell } from "@/components/dashboard/NotificationBell";
 import {
   School,
   LayoutDashboard,
@@ -11,37 +12,69 @@ import {
   Bell,
   FileText,
   ImageIcon,
-  CreditCard,
   LogOut,
   CheckCircle2,
   ChevronRight,
   Menu,
   X,
   Settings,
-  DollarSign,
   Building2,
   CalendarDays,
+  Clock3,
+  BarChart3,
+  LifeBuoy,
+  Lock,
 } from "lucide-react";
 import { useState } from "react";
 
-const nav = [
-  { href: "/dashboard/ecole",               label: "Vue d'ensemble", icon: LayoutDashboard, exact: true },
-  { href: "/dashboard/ecole/admissions",    label: "Admissions",     icon: ClipboardList },
-  { href: "/dashboard/ecole/classes",       label: "Classes",        icon: GraduationCap },
-  { href: "/dashboard/ecole/annonces",      label: "Annonces",       icon: Bell },
-  { href: "/dashboard/ecole/frais",         label: "Frais",          icon: DollarSign },
-  { href: "/dashboard/ecole/infrastructure",label: "Infrastructures",icon: Building2 },
-  { href: "/dashboard/ecole/documents",     label: "Documents",      icon: FileText },
-  { href: "/dashboard/ecole/galerie",       label: "Galerie",        icon: ImageIcon },
-  { href: "/dashboard/ecole/paiements",     label: "Paiements",      icon: CreditCard },
-  { href: "/dashboard/ecole/parametres",    label: "Paramètres",     icon: Settings },
-  { href: "/pro/emplois-du-temps",          label: "Emplois du temps", icon: CalendarDays },
+// Navigation du School Operating Center (Mission 03, Phase 2).
+// Chaque groupe correspond à un pôle d'activité du directeur d'établissement.
+// Les modules Enseignants / Emplois du temps / Présences pointent vers le
+// module Pro existant (src/app/pro/*, inchangé) — verrouillés visuellement
+// si le forfait n'est pas "pro", cohérent avec /pro/acces-restreint déjà en
+// place. Aucun de ces modules n'est redéveloppé ici (voir docs/dashboard/01_ARCHITECTURE.md).
+const navGroups = (isPro: boolean) => [
+  {
+    label: null,
+    items: [
+      { href: "/dashboard/ecole", label: "Vue d'ensemble", icon: LayoutDashboard, exact: true },
+    ],
+  },
+  {
+    label: "Gestion",
+    items: [
+      { href: "/dashboard/ecole/etablissement", label: "Mon établissement", icon: Building2 },
+      { href: "/dashboard/ecole/admissions", label: "Admissions", icon: ClipboardList },
+      { href: isPro ? "/pro/enseignants" : "/pro/acces-restreint", label: "Enseignants", icon: GraduationCap, locked: !isPro },
+      { href: isPro ? "/pro/emplois-du-temps" : "/pro/acces-restreint", label: "Emplois du temps", icon: CalendarDays, locked: !isPro },
+      { href: isPro ? "/pro/pointage/historique" : "/pro/acces-restreint", label: "Présences", icon: Clock3, locked: !isPro },
+    ],
+  },
+  {
+    label: "Contenu",
+    items: [
+      { href: "/dashboard/ecole/centre-documentaire", label: "Documents", icon: FileText },
+      { href: "/dashboard/ecole/galerie", label: "Galerie", icon: ImageIcon },
+      { href: "/dashboard/ecole/annonces", label: "Actualités", icon: Bell },
+    ],
+  },
+  {
+    label: "Pilotage",
+    items: [
+      { href: "/dashboard/ecole/statistiques", label: "Statistiques", icon: BarChart3 },
+      { href: "/dashboard/ecole/parametres", label: "Paramètres", icon: Settings },
+      { href: "/dashboard/ecole/support", label: "Support", icon: LifeBuoy },
+    ],
+  },
 ];
 
 export default function EcoleDashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { school, user, loading, signOut } = useSchool();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const isPro = school?.forfait === "pro";
+  const groups = navGroups(isPro);
 
   function isActive(href: string, exact?: boolean) {
     if (exact) return pathname === href;
@@ -100,27 +133,43 @@ export default function EcoleDashboardLayout({ children }: { children: React.Rea
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-        {nav.map((item) => {
-          const Icon = item.icon;
-          const active = isActive(item.href, item.exact);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setMobileOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                active
-                  ? "bg-emerald-600/20 text-emerald-400"
-                  : "text-slate-400 hover:text-white hover:bg-white/5"
-              }`}
-            >
-              <Icon size={16} className={active ? "text-emerald-400" : ""} />
-              {item.label}
-              {active && <ChevronRight size={12} className="ml-auto text-emerald-400" />}
-            </Link>
-          );
-        })}
+      <nav className="flex-1 px-3 py-4 space-y-4 overflow-y-auto">
+        {groups.map((group, gi) => (
+          <div key={gi}>
+            {group.label && (
+              <p className="px-3 mb-1 text-[10px] font-semibold tracking-widest uppercase text-slate-600">
+                {group.label}
+              </p>
+            )}
+            <div className="space-y-0.5">
+              {group.items.map((item) => {
+                const Icon = item.icon;
+                const active = isActive(item.href, "exact" in item ? item.exact : undefined);
+                const locked = "locked" in item && item.locked;
+                return (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                      active
+                        ? "bg-emerald-600/20 text-emerald-400"
+                        : "text-slate-400 hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    <Icon size={16} className={active ? "text-emerald-400" : ""} />
+                    {item.label}
+                    {locked ? (
+                      <Lock size={11} className="ml-auto text-slate-600" />
+                    ) : (
+                      active && <ChevronRight size={12} className="ml-auto text-emerald-400" />
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </nav>
 
       {/* User + logout */}
@@ -158,17 +207,21 @@ export default function EcoleDashboardLayout({ children }: { children: React.Rea
 
       {/* Main */}
       <div className="flex-1 lg:ml-[220px] flex flex-col min-h-screen">
-        {/* Mobile top bar */}
-        <header className="lg:hidden flex items-center justify-between px-5 h-14 bg-white border-b border-[#ebebeb]">
-          <button onClick={() => setMobileOpen(true)}>
+        {/* Top bar — mobile menu toggle + notifications, visible on all sizes */}
+        <header className="flex items-center justify-between px-5 h-14 bg-white border-b border-[#ebebeb]">
+          <button onClick={() => setMobileOpen(true)} className="lg:hidden">
             <Menu size={22} />
           </button>
-          <span className="font-black text-sm">
+          <span className="font-black text-sm lg:hidden">
             {school?.name ?? "Dashboard"}
           </span>
-          <button onClick={() => setMobileOpen(false)}>
-            {mobileOpen ? <X size={22} /> : <div className="w-6" />}
-          </button>
+          <div className="hidden lg:block" />
+          <div className="flex items-center gap-2">
+            <NotificationBell schoolId={school?.id ?? null} />
+            <button onClick={() => setMobileOpen(false)} className="lg:hidden">
+              {mobileOpen ? <X size={22} /> : <div className="w-6" />}
+            </button>
+          </div>
         </header>
 
         <main className="flex-1 p-6 lg:p-8">
