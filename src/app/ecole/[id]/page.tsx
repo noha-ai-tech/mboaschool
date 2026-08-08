@@ -31,6 +31,7 @@ import {
   Dumbbell,
   BedDouble,
   HeartPulse,
+  UserCheck,
 } from "lucide-react";
 
 // Correspond aux colonnes réelles de la table infrastructures
@@ -352,6 +353,24 @@ export default function SchoolPage() {
             <p className="text-sm text-slate-600">Lundi – Vendredi</p>
             <p className="text-lg font-black text-[#0a0a0a] mt-1">07h30 – 17h00</p>
           </div>
+
+          {!school.owner_id && (
+            <div className="bg-white border border-[#ebebeb] rounded-2xl p-5">
+              <p className="text-xs font-bold tracking-widest uppercase text-slate-400 mb-3 flex items-center gap-2">
+                <UserCheck size={12} /> Vous représentez cet établissement ?
+              </p>
+              <p className="text-xs text-slate-500 mb-3 leading-relaxed">
+                Revendiquez cette page pour la gérer vous-même : modifier les informations, publier des photos,
+                traiter les préinscriptions.
+              </p>
+              <Link
+                href={`/revendiquer/${school.id}`}
+                className="block w-full text-center border border-[#0a0a0a] text-[#0a0a0a] py-2.5 rounded-xl text-sm font-bold hover:bg-[#0a0a0a] hover:text-white transition-colors"
+              >
+                C&apos;est mon établissement
+              </Link>
+            </div>
+          )}
         </aside>
       </div>
     </div>

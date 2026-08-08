@@ -14,6 +14,7 @@ import {
   LogOut,
   ShieldCheck,
   LayoutDashboard,
+  ClipboardCheck,
 } from "lucide-react";
 
 function Logo() {
@@ -89,6 +90,13 @@ export default function AdminDashboardPage() {
           >
             <LayoutDashboard size={16} />
             Vue d'ensemble
+          </Link>
+          <Link
+            href="/dashboard/admin/verifications"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
+          >
+            <ClipboardCheck size={16} />
+            Vérifications
           </Link>
         </div>
 
