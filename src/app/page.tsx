@@ -617,14 +617,14 @@ export default function HomePage() {
                     <Navigation size={15} />
                     {locating ? "Localisation…" : "Me localiser"}
                   </button>
-                  <Link
-                    href="/categorie/garderie"
-                    onClick={() => { setActiveCategory("all"); setActiveSubcategory("all"); }}
+                  <button
+                    type="button"
+                    onClick={() => document.getElementById("resultats")?.scrollIntoView({ behavior: "smooth" })}
                     className="flex-1 bg-[#0a0a0a] text-white rounded-xl py-3.5 font-bold text-sm flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors"
                   >
                     Rechercher
                     <ArrowRight size={16} />
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
@@ -718,8 +718,12 @@ export default function HomePage() {
         <div className="flex w-max animate-marquee">
           {[0, 1].map((i) => (
             <span key={i} className="flex items-center gap-8 pr-8 text-sm font-semibold tracking-wide shrink-0" aria-hidden={i === 1}>
-              <span>🎓 46 établissements déjà référencés</span>
-              <span className="text-emerald-400">·</span>
+              {!loading && schools.length > 0 && (
+                <>
+                  <span>🎓 {schools.length} établissement{schools.length !== 1 ? "s" : ""} déjà référencé{schools.length !== 1 ? "s" : ""}</span>
+                  <span className="text-emerald-400">·</span>
+                </>
+              )}
               <span>Inscription gratuite pour votre école</span>
               <span className="text-emerald-400">·</span>
               <span>Préinscription en ligne en quelques minutes</span>
@@ -732,7 +736,7 @@ export default function HomePage() {
       </div>
 
       {/* ── MAIN CONTENT ───────────────────────────────────────────── */}
-      <main className="max-w-screen-xl mx-auto px-5 pt-8 pb-12">
+      <main id="resultats" className="max-w-screen-xl mx-auto px-5 pt-8 pb-12">
 
         {/* Filters row */}
         <div className="flex items-center gap-3 mb-8 flex-wrap">
