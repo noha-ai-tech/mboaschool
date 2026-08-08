@@ -133,16 +133,22 @@ export async function POST(req: NextRequest) {
     })),
   });
 
-  const { error: erreurSuppression } = await supabase
+  // Mission 05, Phase 5 - publication non destructive : une generation ne
+  // supprime plus jamais l'emploi du temps precedent. Elle produit un
+  // BROUILLON (statut='brouillon', est_actif=false) a cote de la version
+  // actuellement publiee (si elle existe), qui reste inchangee et visible
+  // tant qu'aucune publication explicite n'a lieu (POST /api/timetable/publish).
+  // Voir docs/timetable/01_ARCHITECTURE.md pour le comportement destructif
+  // que ce changement corrige.
+  const { data: versionsExistantes } = await supabase
     .from("emplois_du_temps")
-    .delete()
+    .select("version")
     .eq("etablissement_id", etablissementId)
     .eq("annee_scolaire", anneeScolaire)
-    .eq("statut", "genere");
+    .order("version", { ascending: false })
+    .limit(1);
 
-  if (erreurSuppression) {
-    return NextResponse.json({ error: `�chec nettoyage avant r�g�n�ration : ${erreurSuppression.message}` }, { status: 500 });
-  }
+  const prochaineVersion = (versionsExistantes?.[0]?.version ?? 0) + 1;
 
   if (resultat.affectations.length > 0) {
     const { error: erreurInsertionEDT } = await supabase.from("emplois_du_temps").insert(
@@ -153,17 +159,21 @@ export async function POST(req: NextRequest) {
         matiere_id: a.matiere_id,
         enseignant_id: a.enseignant_id,
         creneau_id: a.creneau_id,
-        statut: "genere",
+        statut: "brouillon",
+        version: prochaineVersion,
+        est_actif: false,
       }))
     );
 
     if (erreurInsertionEDT) {
-      return NextResponse.json({ error: `�chec sauvegarde : ${erreurInsertionEDT.message}` }, { status: 500 });
+      return NextResponse.json({ error: `echec sauvegarde : ${erreurInsertionEDT.message}` }, { status: 500 });
     }
   }
 
   return NextResponse.json({
     nbAffectations: resultat.affectations.length,
     besoinsNonSatisfaits: resultat.besoinsNonSatisfaits,
+    version: prochaineVersion,
+    statut: "brouillon",
   });
 }
