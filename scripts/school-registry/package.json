@@ -1,0 +1,19 @@
+{
+  "name": "ecoles237-school-registry",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Outils d'import du répertoire national des établissements scolaires (DATA-REGISTRY-01). Package isolé — n'affecte pas les dépendances de l'application principale.",
+  "type": "module",
+  "scripts": {
+    "import:minesec:fixture": "tsx run-import.ts --source=minesec --fixture",
+    "import:minesec:live": "tsx run-import.ts --source=minesec"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}

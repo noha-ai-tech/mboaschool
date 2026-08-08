@@ -1,0 +1,30 @@
+{
+  "source": "Répertoire des Établissements ESG",
+  "sourceUrl": "https://www.minesec.gov.cm/web/index.php/fr/15-pages/350-repertoire-des-etablissements-esg",
+  "ranAt": "2026-08-07T22:58:01.697Z",
+  "mode": "fixture",
+  "rawCount": 8,
+  "normalizedCount": 8,
+  "withOfficialIdentifier": 4,
+  "withoutOfficialIdentifier": 4,
+  "exactDuplicates": 1,
+  "potentialDuplicates": 1,
+  "rejected": 1,
+  "ready": 5,
+  "regionsCovered": [],
+  "rejectedDetails": [
+    {
+      "name": "Ecole Sans Localisation Connue",
+      "reason": "aucune donnée de localisation exploitable"
+    }
+  ],
+  "educationFamilyBreakdown": {
+    "secondary_general": 6,
+    "secondary_technical": 1,
+    "teacher_training": 1
+  },
+  "subsystemBreakdown": {
+    "francophone": 7,
+    "bilingual": 1
+  }
+}

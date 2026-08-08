@@ -1,0 +1,119 @@
+<!--
+  Fixture de test pour l'adaptateur MINESEC — scripts/school-registry/sources/minesec.ts
+
+  Les 3 premières lignes du tableau (DANFILI-MAMBAL, NGAOUNDAL, MBAKAOU) sont des
+  données RÉELLES observées sur la page officielle le 2026-08-07 via l'outil de
+  consultation web de cette session (voir docs/03_DATA_REGISTRY/SOURCE_CATALOG.md).
+
+  Les lignes suivantes sont SYNTHÉTIQUES — construites à la main pour exercer la
+  logique de normalisation et de dédoublonnage (doublon exact par matricule,
+  doublon potentiel par nom, ligne invalide, classification technique/normale).
+  Elles ne représentent AUCUNE donnée réelle et ne doivent jamais être traitées
+  comme telles.
+
+  Cette fixture existe parce que l'environnement d'exécution de cette mission
+  n'a pas d'accès réseau sortant fiable vers minesec.gov.cm (timeouts constatés
+  sur cette page précise malgré une connectivité internet générale fonctionnelle
+  — voir SOURCE_CATALOG.md). Le "dry-run" de cette mission tourne contre cette
+  fixture, PAS contre le site en production.
+-->
+<html>
+<body>
+<div class="repertoire-container">
+  <table class="items">
+    <thead>
+      <tr>
+        <th>Nom Etablissement</th>
+        <th>Localité</th>
+        <th>Cycles</th>
+        <th>Sous Système</th>
+        <th>Matricule</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- RÉEL -->
+      <tr>
+        <td>CES de DANFILI-MAMBAL</td>
+        <td>DANFILI</td>
+        <td>Premier Cycle</td>
+        <td>Francophone</td>
+        <td>2CC1GSFD102414108</td>
+      </tr>
+      <!-- RÉEL (matricule non observé lors de la consultation — laissé vide, non inventé) -->
+      <tr>
+        <td>Lycee Bilingue de NGAOUNDAL</td>
+        <td>MBILO</td>
+        <td>Premier et Second Cycles</td>
+        <td>Bilingue</td>
+        <td></td>
+      </tr>
+      <!-- RÉEL (matricule non observé lors de la consultation — laissé vide, non inventé) -->
+      <tr>
+        <td>Lycee de MBAKAOU</td>
+        <td>MBAKAOU</td>
+        <td>Premier et Second Cycles</td>
+        <td>Francophone</td>
+        <td></td>
+      </tr>
+
+      <!-- SYNTHÉTIQUE — doublon exact du premier (même matricule) -->
+      <tr>
+        <td>CES DANFILI MAMBAL</td>
+        <td>DANFILI</td>
+        <td>Premier Cycle</td>
+        <td>Francophone</td>
+        <td>2CC1GSFD102414108</td>
+      </tr>
+
+      <!-- SYNTHÉTIQUE — doublon potentiel (même nom normalisé, pas de matricule, localité orthographiée
+           différemment de la ligne MBAKAOU réelle ci-dessus -> fingerprint différent, nom identique) -->
+      <tr>
+        <td>Lycee de Mbakaou</td>
+        <td>Mbakaou-Centre</td>
+        <td>Premier Cycle</td>
+        <td>Francophone</td>
+        <td></td>
+      </tr>
+
+      <!-- SYNTHÉTIQUE — ligne invalide (nom manquant, filtrée dès le parsing HTML) -->
+      <tr>
+        <td></td>
+        <td>NKOLBISSON</td>
+        <td>Premier Cycle</td>
+        <td>Francophone</td>
+        <td></td>
+      </tr>
+
+      <!-- SYNTHÉTIQUE — ligne invalide (nom présent mais aucune donnée de localisation exploitable,
+           rejetée après normalisation plutôt qu'au parsing) -->
+      <tr>
+        <td>Ecole Sans Localisation Connue</td>
+        <td></td>
+        <td>Premier Cycle</td>
+        <td>Francophone</td>
+        <td></td>
+      </tr>
+
+      <!-- SYNTHÉTIQUE — établissement technique valide et distinct -->
+      <tr>
+        <td>Lycee Technique de Nkolbisson</td>
+        <td>NKOLBISSON</td>
+        <td>Premier et Second Cycles Techniques</td>
+        <td>Francophone</td>
+        <td>3TT2GSFD998877665</td>
+      </tr>
+
+      <!-- SYNTHÉTIQUE — école normale d'instituteurs valide et distincte -->
+      <tr>
+        <td>Ecole Normale d'Instituteurs de Bertoua</td>
+        <td>BERTOUA</td>
+        <td>Cycle Normal</td>
+        <td>Francophone</td>
+        <td>4NI3GSFD554433221</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="pagination-info">Page 1 sur 1</p>
+</div>
+</body>
+</html>
