@@ -301,7 +301,7 @@ export default function AdmissionsPage() {
 
             <div className="flex items-center justify-between px-6 py-5 border-b border-[#ebebeb] shrink-0">
               <h2 className="font-black text-lg text-[#0a0a0a]">Dossier</h2>
-              <button onClick={() => setSelected(null)}>
+              <button onClick={() => setSelected(null)} aria-label="Fermer">
                 <X size={20} className="text-slate-400 hover:text-[#0a0a0a]" />
               </button>
             </div>

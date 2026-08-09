@@ -127,7 +127,7 @@ export default function AdminSupportPage() {
           <div className="w-full max-w-md bg-white h-full overflow-y-auto shadow-2xl flex flex-col">
             <div className="flex items-center justify-between px-6 py-5 border-b border-[#ebebeb] shrink-0">
               <h2 className="font-black text-lg text-[#0a0a0a] truncate pr-4">{selected.subject}</h2>
-              <button onClick={() => setSelected(null)}><X size={20} className="text-slate-400 hover:text-[#0a0a0a]" /></button>
+              <button onClick={() => setSelected(null)} aria-label="Fermer"><X size={20} className="text-slate-400 hover:text-[#0a0a0a]" /></button>
             </div>
             <div className="px-6 py-4 border-b border-[#ebebeb]">
               <p className="text-xs text-slate-400 mb-2">{selected.establishments?.name}</p>
@@ -161,7 +161,7 @@ export default function AdminSupportPage() {
                 placeholder="Répondre…"
                 className="flex-1 border border-[#ddd] rounded-xl px-3 py-2 text-sm"
               />
-              <button onClick={sendReply} disabled={busy} className="bg-[#0a0a0a] text-white px-3 rounded-xl disabled:opacity-50">
+              <button onClick={sendReply} disabled={busy} aria-label="Envoyer" className="bg-[#0a0a0a] text-white px-3 rounded-xl disabled:opacity-50">
                 <Send size={15} />
               </button>
             </div>

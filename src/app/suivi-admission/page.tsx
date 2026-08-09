@@ -69,10 +69,11 @@ function SuiviForm() {
       <div className="max-w-lg mx-auto px-4 py-8">
         <form onSubmit={handleSubmit} className="bg-white border border-[#ebebeb] rounded-2xl p-6 space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+            <label htmlFor="tracking_code" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
               Code de suivi
             </label>
             <input
+              id="tracking_code"
               value={code}
               onChange={(e) => setCode(e.target.value.toUpperCase())}
               required
@@ -81,10 +82,11 @@ function SuiviForm() {
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+            <label htmlFor="parent_phone" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
               Téléphone utilisé lors de la demande
             </label>
             <input
+              id="parent_phone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               required

@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import {
-  School, ShieldCheck, ClipboardCheck, ClipboardList, GraduationCap,
+  School, ShieldCheck, ClipboardCheck, GraduationCap,
   Users, FileText, ArrowRight, MapPin, CheckCircle2, Crown,
 } from "lucide-react";
 

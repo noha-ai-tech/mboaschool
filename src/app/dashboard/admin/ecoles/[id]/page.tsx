@@ -11,10 +11,6 @@ import {
   CheckCircle2,
   Crown,
   ExternalLink,
-  Bell,
-  GraduationCap,
-  FileText,
-  ImageIcon,
   ShieldCheck,
   ShieldOff,
   RotateCcw,
@@ -379,10 +375,6 @@ export default function AdminSchoolPage() {
               <div className="space-y-1">
                 {[
                   { href: `/ecole/${id}`, label: "Page publique", icon: School },
-                  { href: `/dashboard/ecole/annonces`, label: "Annonces", icon: Bell },
-                  { href: `/dashboard/ecole/classes`, label: "Classes", icon: GraduationCap },
-                  { href: `#`, label: "Documents", icon: FileText },
-                  { href: `#`, label: "Galerie", icon: ImageIcon },
                 ].map((l) => {
                   const Icon = l.icon;
                   return (

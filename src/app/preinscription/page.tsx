@@ -217,10 +217,11 @@ function PreinscriptionForm() {
           {/* School */}
           <Section icon={School} title="Établissement souhaité">
             <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+              <label htmlFor="establishment_id" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
                 École
               </label>
               <select
+                id="establishment_id"
                 name="establishment_id"
                 value={form.establishment_id}
                 onChange={handleChange}
@@ -238,10 +239,11 @@ function PreinscriptionForm() {
 
             {anneesScolaires.length > 0 && (
               <div className="mt-4">
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+                <label htmlFor="annee_scolaire_id" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
                   Année scolaire
                 </label>
                 <select
+                  id="annee_scolaire_id"
                   name="annee_scolaire_id"
                   value={form.annee_scolaire_id}
                   onChange={handleChange}
@@ -277,10 +279,11 @@ function PreinscriptionForm() {
             </div>
 
             <div className="mt-4">
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+              <label htmlFor="message" className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
                 Message complémentaire
               </label>
               <textarea
+                id="message"
                 name="message"
                 value={form.message}
                 onChange={handleChange}
@@ -338,10 +341,11 @@ function Field({
 }) {
   return (
     <div>
-      <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+      <label htmlFor={name} className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
         {label}
       </label>
       <input
+        id={name}
         name={name}
         type={type}
         value={value}
