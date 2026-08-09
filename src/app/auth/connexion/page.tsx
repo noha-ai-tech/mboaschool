@@ -51,7 +51,7 @@ export default function ConnexionPage() {
 
         <div className="relative z-10 p-10 flex flex-col justify-between h-full">
           <Link href="/" className="flex items-center gap-2.5">
-            <Logo />
+            <Logo variant="dark" />
           </Link>
 
           <div className="mb-4">

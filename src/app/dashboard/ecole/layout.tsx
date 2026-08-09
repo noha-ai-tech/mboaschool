@@ -86,9 +86,9 @@ export default function EcoleDashboardLayout({ children }: { children: React.Rea
     <aside className="flex flex-col h-full bg-[#0a0f0d] text-white w-full">
       {/* Logo */}
       <div className="px-5 py-5 border-b border-white/8">
-        <Link href="/" className="flex items-center gap-2 bg-white rounded-lg px-2.5 py-1.5 w-fit">
+        <Link href="/" className="flex items-center gap-2">
           <Favicon size="sm" />
-          <Logo size="sm" />
+          <Logo variant="dark" size="sm" />
         </Link>
       </div>
 

@@ -29,9 +29,9 @@ import {
 
 function SidebarLogo() {
   return (
-    <Link href="/" className="flex items-center gap-2 bg-white rounded-lg px-2.5 py-1.5 w-fit">
+    <Link href="/" className="flex items-center gap-2">
       <Favicon size="sm" />
-      <Logo size="sm" />
+      <Logo variant="dark" size="sm" />
     </Link>
   );
 }

@@ -32,13 +32,13 @@ export const metadata: Metadata = {
     title: "Écoles237 — Trouver et inscrire dans une école au Cameroun",
     description:
       "Annuaire scolaire camerounais : trouvez, comparez et préinscrivez votre enfant dans les meilleures écoles.",
-    images: ["/branding/logo.png"],
+    images: ["/branding/logo-light.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Écoles237",
     description: "Annuaire scolaire camerounais — Préinscription en ligne.",
-    images: ["/branding/logo.png"],
+    images: ["/branding/logo-light.png"],
   },
   robots: {
     index: true,

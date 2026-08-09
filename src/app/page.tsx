@@ -932,8 +932,8 @@ export default function HomePage() {
       <footer className="bg-[#070a08] text-white border-t border-white/5">
         <div className="max-w-screen-xl mx-auto px-5 py-14 grid md:grid-cols-4 gap-10">
           <div className="md:col-span-1">
-            <Link href="/" className="inline-block bg-white rounded-lg px-2.5 py-1.5">
-              <Logo />
+            <Link href="/" className="inline-block">
+              <Logo variant="dark" />
             </Link>
             <p className="text-slate-500 text-sm mt-4 leading-relaxed max-w-[220px]">
               La plateforme camerounaise pour trouver et comparer les établissements éducatifs.

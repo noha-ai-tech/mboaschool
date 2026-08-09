@@ -21,9 +21,9 @@ export default async function EnseignantLayout({ children }: { children: React.R
   return (
     <div className="min-h-screen bg-[#f5f3ef]">
       <header className="bg-[#0a0f0d] text-white px-6 py-3 flex items-center gap-4">
-        <Link href="/enseignant/mon-espace" className="flex items-center gap-2 bg-white rounded-lg px-2.5 py-1.5 w-fit">
+        <Link href="/enseignant/mon-espace" className="flex items-center gap-2">
           <Favicon size="sm" />
-          <Logo size="sm" />
+          <Logo variant="dark" size="sm" />
         </Link>
         {enseignant && (
           <>
