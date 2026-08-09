@@ -22,7 +22,7 @@ export function NotificationBell({ schoolId }: { schoolId: string | null }) {
       .from("applications")
       .select("id", { count: "exact", head: true })
       .eq("establishment_id", schoolId)
-      .eq("status", "pending")
+      .eq("admission_status", "submitted")
       .then(({ count }) => setPendingCount(count ?? 0));
   }, [schoolId]);
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useSchool } from "@/lib/useSchool";
+import { admissionStatusConfig } from "@/lib/admissions/status";
 import {
   ClipboardList,
   GraduationCap,
@@ -48,7 +49,7 @@ export default function DashboardEcoleHome() {
     const [{ data: apps }, { data: cls }, estRes, feesRes, infraRes, imagesRes, annRes] = await Promise.all([
       supabase
         .from("applications")
-        .select("id, student_first_name, student_last_name, full_student_name, parent_name, desired_level, status, created_at")
+        .select("id, student_first_name, student_last_name, full_student_name, parent_name, desired_level, admission_status, created_at")
         .eq("establishment_id", schoolId)
         .order("created_at", { ascending: false })
         .limit(20),
@@ -81,9 +82,11 @@ export default function DashboardEcoleHome() {
     setLoading(false);
   }
 
-  const pending = applications.filter((a) => a.status === "pending" || a.status === "reviewing").length;
-  const accepted = applications.filter((a) => a.status === "accepted").length;
-  const rejected = applications.filter((a) => a.status === "rejected").length;
+  const pending = applications.filter((a) =>
+    ["submitted", "in_review", "documents_required", "interview", "waitlisted"].includes(a.admission_status)
+  ).length;
+  const accepted = applications.filter((a) => a.admission_status === "accepted").length;
+  const rejected = applications.filter((a) => a.admission_status === "rejected").length;
 
   // Checklist de complétion du profil (Mission 03, Phase 4) — chaque tâche
   // reflète une donnée réellement vérifiée, jamais un pourcentage inventé.
@@ -281,13 +284,7 @@ export default function DashboardEcoleHome() {
             <div className="divide-y divide-[#f5f5f5]">
               {applications.slice(0, 6).map((app) => {
                 const name = app.full_student_name || `${app.student_first_name ?? ""} ${app.student_last_name ?? ""}`.trim() || "—";
-                const statusConfig = {
-                  pending:   { label: "En attente", cls: "bg-yellow-50 text-yellow-700 border-yellow-200" },
-                  reviewing: { label: "En cours",   cls: "bg-blue-50 text-blue-700 border-blue-200" },
-                  accepted:  { label: "Acceptée",   cls: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-                  rejected:  { label: "Refusée",    cls: "bg-red-50 text-red-700 border-red-200" },
-                } as Record<string, { label: string; cls: string }>;
-                const s = statusConfig[app.status] ?? { label: app.status, cls: "bg-slate-50 text-slate-600 border-slate-200" };
+                const s = admissionStatusConfig(app.admission_status);
                 return (
                   <div key={app.id} className="flex items-center justify-between px-6 py-3.5 hover:bg-slate-50/50 transition-colors">
                     <div className="min-w-0">
