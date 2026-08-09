@@ -4,8 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSchool } from "@/lib/useSchool";
 import { NotificationBell } from "@/components/dashboard/NotificationBell";
+import { Logo } from "@/components/branding/Logo";
 import {
-  School,
   LayoutDashboard,
   ClipboardList,
   GraduationCap,
@@ -86,17 +86,7 @@ export default function EcoleDashboardLayout({ children }: { children: React.Rea
       {/* Logo */}
       <div className="px-5 py-5 border-b border-white/8">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="relative w-8 h-8 flex items-center justify-center shrink-0">
-            <div className="absolute inset-0 flex">
-              <span className="flex-1 bg-emerald-600 rounded-l-md" />
-              <span className="flex-1 bg-red-500" />
-              <span className="flex-1 bg-yellow-400 rounded-r-md" />
-            </div>
-            <School size={15} className="relative z-10 text-white" />
-          </div>
-          <span className="text-lg font-black tracking-tight">
-            Écoles<span className="text-emerald-400">237</span>
-          </span>
+          <Logo size="sm" />
         </Link>
       </div>
 

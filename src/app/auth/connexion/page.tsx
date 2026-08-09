@@ -4,25 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { School, ArrowRight, Eye, EyeOff } from "lucide-react";
-
-function Logo() {
-  return (
-    <Link href="/" className="flex items-center gap-2.5">
-      <div className="relative w-9 h-9 flex items-center justify-center">
-        <div className="absolute inset-0 flex">
-          <span className="flex-1 bg-emerald-600 rounded-l-lg" />
-          <span className="flex-1 bg-red-500" />
-          <span className="flex-1 bg-yellow-400 rounded-r-lg" />
-        </div>
-        <School size={18} className="relative z-10 text-white" />
-      </div>
-      <span className="text-2xl font-black tracking-tight text-[#0a0a0a]">
-        Écoles<span className="text-emerald-500">237</span>
-      </span>
-    </Link>
-  );
-}
+import { ArrowRight, Eye, EyeOff } from "lucide-react";
+import { Logo } from "@/components/branding/Logo";
 
 export default function ConnexionPage() {
   const router = useRouter();
@@ -67,7 +50,9 @@ export default function ConnexionPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f0d] via-transparent" />
 
         <div className="relative z-10 p-10 flex flex-col justify-between h-full">
-          <Logo />
+          <Link href="/" className="flex items-center gap-2.5">
+            <Logo />
+          </Link>
 
           <div className="mb-4">
             <p className="text-xs font-semibold tracking-[0.15em] uppercase text-emerald-400 mb-4">
@@ -87,7 +72,9 @@ export default function ConnexionPage() {
 
           {/* Logo mobile */}
           <div className="lg:hidden mb-10">
+            <Link href="/" className="flex items-center gap-2.5">
             <Logo />
+          </Link>
           </div>
 
           <div className="mb-8">

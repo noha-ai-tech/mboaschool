@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import Link from "next/link";
+import { Logo } from "@/components/branding/Logo";
 
 export default async function EnseignantBienvenueePage() {
   const supabase = await createClient();
@@ -71,17 +72,7 @@ export default async function EnseignantBienvenueePage() {
       <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
         {/* Logo */}
         <div className="flex justify-center mb-6">
-          <div className="relative w-12 h-12 flex items-center justify-center">
-            <div className="absolute inset-0 flex rounded-xl overflow-hidden">
-              <span className="flex-1 bg-emerald-600" />
-              <span className="flex-1 bg-red-500" />
-              <span className="flex-1 bg-yellow-400" />
-            </div>
-            <svg className="relative z-10 text-white" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
-              <polyline points="9 22 9 12 15 12 15 22"/>
-            </svg>
-          </div>
+          <Logo size="md" />
         </div>
 
         <div className="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-5">

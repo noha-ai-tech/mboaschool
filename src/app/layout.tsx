@@ -1,7 +1,11 @@
 import './globals.css'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
+
+export const viewport: Viewport = {
+  themeColor: "#059669",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -15,6 +19,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    icon: "/branding/favicon.png",
+    shortcut: "/branding/favicon.png",
+    apple: "/branding/favicon.png",
+  },
   openGraph: {
     type: "website",
     locale: "fr_CM",
@@ -23,11 +32,13 @@ export const metadata: Metadata = {
     title: "Écoles237 — Trouver et inscrire dans une école au Cameroun",
     description:
       "Annuaire scolaire camerounais : trouvez, comparez et préinscrivez votre enfant dans les meilleures écoles.",
+    images: ["/branding/logo.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Écoles237",
     description: "Annuaire scolaire camerounais — Préinscription en ligne.",
+    images: ["/branding/logo.png"],
   },
   robots: {
     index: true,

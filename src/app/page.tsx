@@ -23,6 +23,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { Logo } from "@/components/branding/Logo";
 
 const LocalSchoolMap = dynamic(() => import("@/components/LocalSchoolMap"), {
   ssr: false,
@@ -160,24 +161,6 @@ function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number) {
 }
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
-
-function Logo({ light = false }: { light?: boolean }) {
-  return (
-    <Link href="/" className="flex items-center gap-2.5 shrink-0">
-      <div className="relative w-9 h-9 flex items-center justify-center">
-        <div className="absolute inset-0 flex">
-          <span className="flex-1 bg-emerald-600 rounded-l-lg" />
-          <span className="flex-1 bg-red-500" />
-          <span className="flex-1 bg-yellow-400 rounded-r-lg" />
-        </div>
-        <School size={18} className="relative z-10 text-white" />
-      </div>
-      <span className={`text-2xl font-black tracking-tight ${light ? "text-white" : "text-[#0a0a0a]"}`}>
-        Écoles<span className="text-emerald-500">237</span>
-      </span>
-    </Link>
-  );
-}
 
 function Money({ value }: { value: number }) {
   return <>{value.toLocaleString("fr-FR")} FCFA</>;
@@ -452,7 +435,9 @@ export default function HomePage() {
       {/* ── HEADER ─────────────────────────────────────────────────── */}
       <header className="fixed top-0 inset-x-0 z-50 bg-white border-b border-[#ebebeb]">
         <div className="max-w-screen-xl mx-auto px-5 h-[60px] flex items-center gap-6">
-          <Logo />
+          <Link href="/" className="shrink-0">
+            <Logo priority />
+          </Link>
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-1 flex-1">
@@ -945,7 +930,9 @@ export default function HomePage() {
       <footer className="bg-[#070a08] text-white border-t border-white/5">
         <div className="max-w-screen-xl mx-auto px-5 py-14 grid md:grid-cols-4 gap-10">
           <div className="md:col-span-1">
-            <Logo light />
+            <Link href="/" className="inline-block">
+              <Logo />
+            </Link>
             <p className="text-slate-500 text-sm mt-4 leading-relaxed max-w-[220px]">
               La plateforme camerounaise pour trouver et comparer les établissements éducatifs.
             </p>

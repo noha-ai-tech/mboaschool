@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { School } from "lucide-react";
+import { Logo } from "@/components/branding/Logo";
 
 const NAV = [
   { href: "/pro/personnel",                    label: "Personnel" },
@@ -23,16 +23,9 @@ export default function ProLayout({ children }: { children: React.ReactNode }) {
         {/* Ligne 1 : logo + retour tableau de bord */}
         <div className="px-6 py-3 flex items-center gap-4 border-b border-white/5">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <div className="relative w-7 h-7 flex items-center justify-center">
-              <div className="absolute inset-0 flex">
-                <span className="flex-1 bg-emerald-600 rounded-l-md" />
-                <span className="flex-1 bg-red-500" />
-                <span className="flex-1 bg-yellow-400 rounded-r-md" />
-              </div>
-              <School size={13} className="relative z-10 text-white" />
-            </div>
+            <Logo size="sm" />
             <span className="text-base font-black tracking-tight">
-              Écoles237<span className="text-emerald-400 font-bold"> Pro</span>
+              <span className="text-emerald-400 font-bold">Pro</span>
             </span>
           </Link>
           <div className="ml-auto">

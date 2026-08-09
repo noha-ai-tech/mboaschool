@@ -11,8 +11,8 @@ import { usePathname } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { usePlatformAdmin } from "@/lib/platform/usePlatformAdmin";
 import { can, ADMIN_ROLE_LABELS, type PlatformPermission } from "@/lib/platform/permissions";
+import { Logo } from "@/components/branding/Logo";
 import {
-  School,
   LayoutDashboard,
   ClipboardCheck,
   Building2,
@@ -26,20 +26,10 @@ import {
   LogOut,
 } from "lucide-react";
 
-function Logo() {
+function SidebarLogo() {
   return (
     <Link href="/" className="flex items-center gap-2.5">
-      <div className="relative w-8 h-8 flex items-center justify-center shrink-0">
-        <div className="absolute inset-0 flex">
-          <span className="flex-1 bg-emerald-600 rounded-l-md" />
-          <span className="flex-1 bg-red-500" />
-          <span className="flex-1 bg-yellow-400 rounded-r-md" />
-        </div>
-        <School size={15} className="relative z-10 text-white" />
-      </div>
-      <span className="text-lg font-black tracking-tight text-white">
-        Écoles<span className="text-emerald-400">237</span>
-      </span>
+      <Logo size="sm" />
     </Link>
   );
 }
@@ -73,7 +63,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {/* Sidebar */}
       <aside className="hidden lg:flex flex-col w-[220px] shrink-0 bg-[#0a0f0d] fixed inset-y-0 left-0 z-40">
         <div className="px-5 py-5 border-b border-white/8">
-          <Logo />
+          <SidebarLogo />
         </div>
 
         <div className="px-3 py-4 flex-1 overflow-y-auto">
