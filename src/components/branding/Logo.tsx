@@ -8,7 +8,7 @@
 // hauteur fixe et largeur automatique préserve le ratio réel du fichier quel
 // qu'il soit, sans risque de déformation ou de recadrage inattendu.
 
-const HEIGHTS = { sm: 22, md: 32, lg: 48 } as const;
+const HEIGHTS = { sm: 28, md: 44, lg: 64 } as const;
 
 export type LogoSize = keyof typeof HEIGHTS;
 

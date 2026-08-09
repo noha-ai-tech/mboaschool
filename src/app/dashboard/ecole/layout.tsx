@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useSchool } from "@/lib/useSchool";
 import { NotificationBell } from "@/components/dashboard/NotificationBell";
 import { Logo } from "@/components/branding/Logo";
+import { Favicon } from "@/components/branding/Favicon";
 import {
   LayoutDashboard,
   ClipboardList,
@@ -85,7 +86,8 @@ export default function EcoleDashboardLayout({ children }: { children: React.Rea
     <aside className="flex flex-col h-full bg-[#0a0f0d] text-white w-full">
       {/* Logo */}
       <div className="px-5 py-5 border-b border-white/8">
-        <Link href="/" className="flex items-center gap-2.5">
+        <Link href="/" className="flex items-center gap-2 bg-white rounded-lg px-2.5 py-1.5 w-fit">
+          <Favicon size="sm" />
           <Logo size="sm" />
         </Link>
       </div>

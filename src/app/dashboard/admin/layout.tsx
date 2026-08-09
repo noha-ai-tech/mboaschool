@@ -12,6 +12,7 @@ import { supabase } from "@/lib/supabase";
 import { usePlatformAdmin } from "@/lib/platform/usePlatformAdmin";
 import { can, ADMIN_ROLE_LABELS, type PlatformPermission } from "@/lib/platform/permissions";
 import { Logo } from "@/components/branding/Logo";
+import { Favicon } from "@/components/branding/Favicon";
 import {
   LayoutDashboard,
   ClipboardCheck,
@@ -28,7 +29,8 @@ import {
 
 function SidebarLogo() {
   return (
-    <Link href="/" className="flex items-center gap-2.5">
+    <Link href="/" className="flex items-center gap-2 bg-white rounded-lg px-2.5 py-1.5 w-fit">
+      <Favicon size="sm" />
       <Logo size="sm" />
     </Link>
   );
