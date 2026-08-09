@@ -15,10 +15,32 @@ import {
   GraduationCap,
   FileText,
   ImageIcon,
+  ShieldCheck,
+  ShieldOff,
+  RotateCcw,
+  Loader2,
+  Users2,
+  History,
+  CreditCard,
 } from "lucide-react";
 
 const CATEGORIES = ["garderie", "primaire", "secondaire", "superieur", "autres"];
 const PLANS = ["free", "standard", "premium", "business"];
+
+const VERIFICATION_LABELS: Record<string, { label: string; cls: string }> = {
+  referenced:      { label: "Référencée",   cls: "text-slate-600 bg-slate-100 border-slate-200" },
+  claim_requested: { label: "Revendication", cls: "text-blue-700 bg-blue-50 border-blue-200" },
+  under_review:    { label: "En analyse",   cls: "text-orange-700 bg-orange-50 border-orange-200" },
+  verified:        { label: "Vérifiée",     cls: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+  active:          { label: "Active",       cls: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+  suspended:       { label: "Suspendue",    cls: "text-red-700 bg-red-50 border-red-200" },
+};
+
+const CRM_STATUSES = ["prospect", "contacte", "demonstration", "essai", "client", "suspendu", "resilie"];
+const CRM_LABELS: Record<string, string> = {
+  prospect: "Prospect", contacte: "Contacté", demonstration: "Démonstration",
+  essai: "Essai", client: "Client", suspendu: "Suspendu", resilie: "Résilié",
+};
 
 export default function AdminSchoolPage() {
   const params = useParams();
@@ -41,8 +63,18 @@ export default function AdminSchoolPage() {
     is_featured: false,
   });
 
+  const [stats, setStats] = useState({ classes: 0, teachers: 0, applications: 0 });
+  const [auditLog, setAuditLog] = useState<any[]>([]);
+  const [crm, setCrm] = useState<{ status: string; next_followup_date: string | null } | null>(null);
+  const [crmNotes, setCrmNotes] = useState<any[]>([]);
+  const [subscriptions, setSubscriptions] = useState<any[]>([]);
+  const [actionBusy, setActionBusy] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [newNote, setNewNote] = useState("");
+
   useEffect(() => {
     load();
+    loadSidebarData();
   }, [id]);
 
   async function load() {
@@ -66,6 +98,77 @@ export default function AdminSchoolPage() {
       });
     }
     setLoading(false);
+  }
+
+  async function loadSidebarData() {
+    const [classesRes, teachersRes, appsRes, auditRes, crmRes, notesRes, subsRes] = await Promise.all([
+      supabase.from("classes").select("id", { count: "exact", head: true }).eq("establishment_id", id),
+      supabase.from("enseignants").select("id", { count: "exact", head: true }).eq("establishment_id", id),
+      supabase.from("applications").select("id", { count: "exact", head: true }).eq("establishment_id", id),
+      supabase.from("platform_audit_log").select("*").eq("target_id", id).order("created_at", { ascending: false }).limit(10),
+      supabase.from("establishment_crm").select("status, next_followup_date").eq("establishment_id", id).maybeSingle(),
+      supabase.from("crm_notes").select("*").eq("establishment_id", id).order("created_at", { ascending: false }).limit(5),
+      supabase.from("subscriptions").select("*").eq("establishment_id", id).order("created_at", { ascending: false }).limit(5),
+    ]);
+    setStats({
+      classes: classesRes.count ?? 0,
+      teachers: teachersRes.count ?? 0,
+      applications: appsRes.count ?? 0,
+    });
+    if (auditRes.data) setAuditLog(auditRes.data);
+    if (crmRes.data) setCrm(crmRes.data);
+    if (notesRes.data) setCrmNotes(notesRes.data);
+    if (subsRes.data) setSubscriptions(subsRes.data);
+  }
+
+  async function runAction(action: "verifier" | "suspendre" | "reactiver") {
+    setActionBusy(action);
+    setActionError(null);
+    const res = await fetch(`/api/admin/ecoles/${id}/${action}`, { method: "POST" });
+    const body = await res.json().catch(() => ({}));
+    setActionBusy(null);
+    if (!res.ok) {
+      setActionError(body.error ?? "Échec de l'action");
+      return;
+    }
+    await Promise.all([load(), loadSidebarData()]);
+  }
+
+  async function changePlan(plan: string) {
+    setActionBusy("plan");
+    setActionError(null);
+    const res = await fetch(`/api/admin/ecoles/${id}/plan`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ plan }),
+    });
+    const body = await res.json().catch(() => ({}));
+    setActionBusy(null);
+    if (!res.ok) {
+      setActionError(body.error ?? "Échec du changement d'offre");
+      return;
+    }
+    await Promise.all([load(), loadSidebarData()]);
+  }
+
+  async function changeCrmStatus(status: string) {
+    setActionBusy("crm");
+    await supabase.from("establishment_crm").upsert(
+      { establishment_id: id, status, updated_at: new Date().toISOString() },
+      { onConflict: "establishment_id" }
+    );
+    setActionBusy(null);
+    await loadSidebarData();
+  }
+
+  async function addCrmNote() {
+    if (!newNote.trim()) return;
+    setActionBusy("note");
+    const { data: { user } } = await supabase.auth.getUser();
+    await supabase.from("crm_notes").insert({ establishment_id: id, author_id: user?.id, comment: newNote.trim() });
+    setNewNote("");
+    setActionBusy(null);
+    await loadSidebarData();
   }
 
   async function save(e: { preventDefault(): void }) {
@@ -306,6 +409,163 @@ export default function AdminSchoolPage() {
                  form.subscription_plan === "premium" ? "Toutes les fonctionnalités" :
                  "Fonctionnalités avancées"}
               </p>
+            </div>
+
+            {/* Statut de vérification + actions (Phase 4) */}
+            <div className="bg-white border border-[#ebebeb] rounded-2xl p-5">
+              <p className="text-[10px] font-semibold tracking-widest uppercase text-slate-400 mb-3">
+                Statut de vérification
+              </p>
+              {(() => {
+                const st = VERIFICATION_LABELS[school.verification_status ?? "referenced"];
+                return (
+                  <span className={`inline-block text-xs font-bold px-3 py-1.5 rounded-full border mb-4 ${st.cls}`}>
+                    {st.label}
+                  </span>
+                );
+              })()}
+              {actionError && <p className="text-xs text-red-600 font-semibold mb-3">{actionError}</p>}
+              <div className="flex flex-col gap-2">
+                {!["verified", "active", "suspended"].includes(school.verification_status) && (
+                  <button
+                    onClick={() => runAction("verifier")}
+                    disabled={actionBusy !== null}
+                    className="flex items-center justify-center gap-2 text-xs font-bold text-emerald-700 border border-emerald-200 bg-emerald-50 px-3 py-2 rounded-lg hover:bg-emerald-100 transition-colors disabled:opacity-50"
+                  >
+                    {actionBusy === "verifier" ? <Loader2 size={13} className="animate-spin" /> : <ShieldCheck size={13} />} Vérifier
+                  </button>
+                )}
+                {school.verification_status === "suspended" ? (
+                  <button
+                    onClick={() => runAction("reactiver")}
+                    disabled={actionBusy !== null}
+                    className="flex items-center justify-center gap-2 text-xs font-bold text-emerald-700 border border-emerald-200 bg-emerald-50 px-3 py-2 rounded-lg hover:bg-emerald-100 transition-colors disabled:opacity-50"
+                  >
+                    {actionBusy === "reactiver" ? <Loader2 size={13} className="animate-spin" /> : <RotateCcw size={13} />} Réactiver
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => { if (confirm("Suspendre cet établissement ?")) runAction("suspendre"); }}
+                    disabled={actionBusy !== null}
+                    className="flex items-center justify-center gap-2 text-xs font-bold text-red-600 border border-red-200 bg-white px-3 py-2 rounded-lg hover:bg-red-50 transition-colors disabled:opacity-50"
+                  >
+                    {actionBusy === "suspendre" ? <Loader2 size={13} className="animate-spin" /> : <ShieldOff size={13} />} Suspendre
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Statistiques réelles */}
+            <div className="bg-white border border-[#ebebeb] rounded-2xl p-5">
+              <p className="text-[10px] font-semibold tracking-widest uppercase text-slate-400 mb-3">Statistiques</p>
+              <div className="grid grid-cols-3 gap-2 text-center">
+                <div>
+                  <p className="text-lg font-black text-[#0a0a0a]">{stats.classes}</p>
+                  <p className="text-[10px] text-slate-400">Classes</p>
+                </div>
+                <div>
+                  <p className="text-lg font-black text-[#0a0a0a]">{stats.teachers}</p>
+                  <p className="text-[10px] text-slate-400">Enseignants</p>
+                </div>
+                <div>
+                  <p className="text-lg font-black text-[#0a0a0a]">{stats.applications}</p>
+                  <p className="text-[10px] text-slate-400">Admissions</p>
+                </div>
+              </div>
+            </div>
+
+            {/* CRM (Phase 5) */}
+            <div className="bg-white border border-[#ebebeb] rounded-2xl p-5">
+              <p className="text-[10px] font-semibold tracking-widest uppercase text-slate-400 mb-3 flex items-center gap-1.5">
+                <Users2 size={11} /> CRM commercial
+              </p>
+              <select
+                value={crm?.status ?? "prospect"}
+                onChange={(e) => changeCrmStatus(e.target.value)}
+                disabled={actionBusy !== null}
+                className="w-full border border-[#ddd] rounded-xl px-3 py-2 text-sm bg-white mb-3"
+              >
+                {CRM_STATUSES.map((s) => <option key={s} value={s}>{CRM_LABELS[s]}</option>)}
+              </select>
+              <div className="space-y-2 mb-3 max-h-32 overflow-y-auto">
+                {crmNotes.length === 0 ? (
+                  <p className="text-xs text-slate-400">Aucun historique.</p>
+                ) : crmNotes.map((n) => (
+                  <p key={n.id} className="text-xs text-slate-500 border-b border-[#f5f5f5] pb-1.5 last:border-0">
+                    {n.comment}
+                    <span className="block text-[10px] text-slate-300">
+                      {new Date(n.created_at).toLocaleDateString("fr-FR", { day: "2-digit", month: "short" })}
+                    </span>
+                  </p>
+                ))}
+              </div>
+              <div className="flex gap-1.5">
+                <input
+                  value={newNote}
+                  onChange={(e) => setNewNote(e.target.value)}
+                  placeholder="Ajouter un commentaire…"
+                  className="flex-1 border border-[#ddd] rounded-lg px-2.5 py-1.5 text-xs"
+                />
+                <button
+                  onClick={addCrmNote}
+                  disabled={actionBusy !== null}
+                  className="text-xs font-bold text-white bg-[#0a0a0a] px-2.5 rounded-lg hover:bg-slate-800 disabled:opacity-50"
+                >
+                  +
+                </button>
+              </div>
+            </div>
+
+            {/* Abonnements (Phase 6) */}
+            <div className="bg-white border border-[#ebebeb] rounded-2xl p-5">
+              <p className="text-[10px] font-semibold tracking-widest uppercase text-slate-400 mb-3 flex items-center gap-1.5">
+                <CreditCard size={11} /> Offre commerciale
+              </p>
+              <div className="flex gap-1.5 flex-wrap mb-3">
+                {(["decouverte", "verifiee", "pro"] as const).map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => changePlan(p)}
+                    disabled={actionBusy !== null}
+                    className="text-xs font-semibold border border-[#ddd] px-2.5 py-1.5 rounded-lg hover:border-[#aaa] transition-colors disabled:opacity-50 capitalize"
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
+              {subscriptions.length === 0 ? (
+                <p className="text-xs text-slate-400">Aucun historique d&apos;abonnement.</p>
+              ) : (
+                <div className="space-y-1.5">
+                  {subscriptions.map((s) => (
+                    <div key={s.id} className="text-xs text-slate-500 flex justify-between">
+                      <span className="capitalize font-semibold text-slate-600">{s.plan}</span>
+                      <span>{new Date(s.started_at).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "2-digit" })}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Historique (audit log, Phase 9) */}
+            <div className="bg-white border border-[#ebebeb] rounded-2xl p-5">
+              <p className="text-[10px] font-semibold tracking-widest uppercase text-slate-400 mb-3 flex items-center gap-1.5">
+                <History size={11} /> Historique
+              </p>
+              {auditLog.length === 0 ? (
+                <p className="text-xs text-slate-400">Aucune action enregistrée.</p>
+              ) : (
+                <div className="space-y-2">
+                  {auditLog.map((a) => (
+                    <div key={a.id} className="text-xs text-slate-500 border-b border-[#f5f5f5] pb-1.5 last:border-0">
+                      <span className="font-semibold text-slate-600">{a.action}</span>
+                      <span className="block text-[10px] text-slate-300">
+                        {new Date(a.created_at).toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "2-digit" })}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </aside>
         </div>

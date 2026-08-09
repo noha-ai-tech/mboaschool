@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { ArrowLeft, ChevronRight, Inbox } from "lucide-react";
+import { ChevronRight, Inbox } from "lucide-react";
 
 type ClaimRow = {
   id: string;
@@ -42,13 +42,7 @@ export default function VerificationsPage() {
   const countFor = (status: ClaimRow["status"]) => claims.filter((c) => c.status === status).length;
 
   return (
-    <div className="min-h-screen bg-[#f9f7f2] p-6 lg:p-8">
-      <div className="max-w-4xl mx-auto">
-        <Link href="/dashboard/admin" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-[#0a0a0a] transition-colors mb-6">
-          <ArrowLeft size={15} />
-          Retour à l&apos;admin
-        </Link>
-
+    <div className="max-w-4xl">
         <h1 className="text-2xl font-black text-[#0a0a0a] mb-1">Demandes de vérification</h1>
         <p className="text-sm text-slate-500 mb-6">Revendications d&apos;établissements en attente de traitement.</p>
 
@@ -106,7 +100,6 @@ export default function VerificationsPage() {
             ))}
           </div>
         )}
-      </div>
     </div>
   );
 }
