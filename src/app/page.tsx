@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Search,
   MapPin,
@@ -20,6 +20,7 @@ import {
   Menu,
   X,
   ChevronRight,
+  ChevronLeft,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { Logo } from "@/components/branding/Logo";
@@ -35,12 +36,38 @@ const LocalSchoolMap = dynamic(() => import("@/components/LocalSchoolMap"), {
 
 const DEFAULT_CENTER = { lat: 4.0511, lng: 9.7679 }; // Douala
 
-const HERO_IMAGES = [
-  "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1497486751825-1233686d5d80?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&w=800&q=80",
+// Contenu restauré tel quel depuis la version antérieure au Design Freeze
+// (commit 024b326, src/app/page.tsx) — voir docs/03_DESIGN_SYSTEM pour le
+// détail. Slide 3 (Pro) reprend le texte déjà réellement utilisé et validé
+// sur dashboard/ecole/page.tsx ("Écoles237 Pro" / "Emplois du temps,
+// pointage des enseignants et messagerie interne"), jamais inventé.
+const HERO_SLIDES = [
+  {
+    theme: "ivoire" as const,
+    eyebrow: "Pour les familles",
+    title: "Trouvez l'école idéale près de chez vous.",
+    text: "Comparez les établissements, consultez les frais et les infrastructures, et postulez en ligne en quelques minutes.",
+  },
+  {
+    theme: "green" as const,
+    eyebrow: "Pour votre école",
+    title: "Votre page visible dans tout le Cameroun.",
+    text: null,
+    cta: { label: "Inscrire mon établissement", href: "/auth/inscription" },
+  },
+  {
+    theme: "indigo" as const,
+    eyebrow: "Écoles237 Pro",
+    title: "Emplois du temps, présences et salaires, réunis.",
+    text: "Emplois du temps, pointage des enseignants et messagerie interne.",
+  },
 ];
+
+const SLIDE_THEME_CLASSES: Record<string, string> = {
+  ivoire: "bg-[linear-gradient(135deg,#F3EEE2_0%,#E7EFE4_55%,#CFE3D6_100%)] text-[#0A0A0A]",
+  green: "bg-[linear-gradient(135deg,#083D2A_0%,#0A5C3C_55%,#0F9D68_100%)] text-white",
+  indigo: "bg-[linear-gradient(135deg,#241B3D_0%,#3B2E63_55%,#0A5C3C_100%)] text-white",
+};
 
 // ─── Data & Types ────────────────────────────────────────────────────────────
 
@@ -331,15 +358,24 @@ export default function HomePage() {
   const [compare, setCompare] = useState<string[]>([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [heroSlide, setHeroSlide] = useState(0);
+  const [heroPaused, setHeroPaused] = useState(false);
+  const touchStartX = useRef<number | null>(null);
   const [mapModalOpen, setMapModalOpen] = useState(false);
   const [locating, setLocating] = useState(false);
 
+  // Carrousel Hero : intervalle 6s, pause au survol/interaction et quand
+  // l'onglet est masqué. Respecte prefers-reduced-motion (pas de rotation
+  // automatique dans ce mode — voir docs/03_DESIGN_SYSTEM/06_MOTION.md).
   useEffect(() => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion || heroPaused) return;
     const timer = setInterval(() => {
-      setHeroSlide((i) => (i + 1) % HERO_IMAGES.length);
-    }, 4500);
+      if (document.visibilityState === "visible") {
+        setHeroSlide((i) => (i + 1) % HERO_SLIDES.length);
+      }
+    }, 6000);
     return () => clearInterval(timer);
-  }, []);
+  }, [heroPaused]);
 
   useEffect(() => {
     async function load() {
@@ -493,130 +529,199 @@ export default function HomePage() {
         )}
       </header>
 
+      {/* ── ANNOUNCEMENT RIBBON ────────────────────────────────────── */}
+      {/* Restaurée (Correctif Landing) — contenu identique à la version
+          d'origine (établissements référencés, inscription gratuite,
+          préinscription en ligne, villes), retraitement visuel uniquement :
+          ruban éditorial compact plutôt que bannière noire clignotante. */}
+      <div className="bg-muted border-b border-border py-2 overflow-hidden whitespace-nowrap">
+        <div className="flex w-max animate-marquee-soft motion-reduce:animate-none">
+          {[0, 1].map((i) => (
+            <span key={i} className="flex items-center gap-6 pr-6 text-[13px] font-medium text-text-secondary shrink-0" aria-hidden={i === 1}>
+              {!loading && schools.length > 0 && (
+                <>
+                  <span className="text-text-primary font-semibold">{schools.length} établissement{schools.length !== 1 ? "s" : ""} déjà référencé{schools.length !== 1 ? "s" : ""}</span>
+                  <span className="text-border">·</span>
+                </>
+              )}
+              <span>Inscription gratuite pour votre école</span>
+              <span className="text-border">·</span>
+              <span>Préinscription en ligne en quelques minutes</span>
+              <span className="text-border">·</span>
+              <span>Douala · Yaoundé</span>
+              <span className="text-border">·</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
       {/* ── HERO ───────────────────────────────────────────────────── */}
-      <section className="relative pt-20 pb-6 bg-accent text-white overflow-hidden">
-        <div className="relative max-w-screen-xl mx-auto px-5 grid lg:grid-cols-[0.9fr_1.4fr] items-stretch gap-10 pt-16 lg:pt-20 pb-16 lg:pb-20">
-
-          <div className="flex flex-col justify-center py-10 lg:py-0">
-            <h1 className="text-3xl lg:text-4xl font-extrabold leading-tight tracking-tight mb-3">
-              Trouver une école.<br />Gérer un établissement.<br />Simplement.
-            </h1>
-            <p className="text-slate-300 text-base mb-8 max-w-md">
-              La plateforme qui connecte parents et établissements scolaires
-              partout au Cameroun.
-            </p>
-
-            {/* Search card */}
-            <div className="bg-surface text-text-primary rounded-card p-5 shadow-elevation-2 flex flex-col gap-3">
-              <div className="flex items-center gap-2 bg-muted border border-border rounded-[10px] px-4 h-12 focus-within:border-primary transition-colors duration-fast">
-                <Search size={16} className="text-text-secondary shrink-0" />
-                <input
-                  className="bg-transparent outline-none text-sm flex-1 min-w-0 placeholder:text-text-secondary"
-                  placeholder="Nom, ville, niveau…"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                />
-                {query && (
-                  <button onClick={() => setQuery("")} className="text-text-secondary hover:text-text-primary" aria-label="Effacer">
-                    <X size={14} />
-                  </button>
-                )}
-              </div>
-
-              {/* Filtres — repliés dans une seule ligne compacte */}
-              <div className="flex items-center gap-2">
-                <select
-                  value={activeCategory}
-                  onChange={(e) => { setActiveCategory(e.target.value); setActiveSubcategory("all"); }}
-                  className="flex-1 min-w-0 border border-border rounded-[10px] px-3 h-10 text-[13px] font-medium bg-surface focus:outline-none focus:border-primary transition-colors duration-fast"
-                >
-                  <option value="all">Toutes catégories</option>
-                  {categories.map((cat) => (
-                    <option key={cat.key} value={cat.key}>{cat.label}</option>
-                  ))}
-                </select>
-                <select
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  className="flex-1 min-w-0 border border-border rounded-[10px] px-3 h-10 text-[13px] font-medium bg-surface focus:outline-none focus:border-primary transition-colors duration-fast"
-                >
-                  {cities.map((c) => (
-                    <option key={c} value={c}>{c === "all" ? "Toutes les villes" : c}</option>
-                  ))}
-                </select>
-                <button
-                  onClick={handleLocationToggle}
-                  disabled={locating}
-                  aria-label="Me localiser"
-                  className="shrink-0 w-10 h-10 flex items-center justify-center rounded-[10px] border border-border text-text-secondary hover:text-text-primary hover:bg-muted transition-colors duration-fast disabled:opacity-50"
-                >
-                  <Navigation size={15} />
-                </button>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => document.getElementById("resultats")?.scrollIntoView({ behavior: "smooth" })}
-                className="bg-[#0A0A0A] text-white rounded-[10px] h-12 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-[#0A0A0A]/90 transition-colors duration-fast"
-              >
-                Trouver une école
-                <ArrowRight size={16} />
-              </button>
-            </div>
-
-            <Link
-              href="/auth/inscription"
-              className="mt-4 text-sm font-semibold text-slate-300 hover:text-white transition-colors duration-fast w-fit"
-            >
-              Référencer mon établissement →
-            </Link>
+      <section className="relative pt-10 pb-16 lg:pb-20 bg-background text-text-primary overflow-hidden">
+        <div className="relative max-w-screen-xl mx-auto px-5">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+            <span className="ml-2 text-sm font-semibold tracking-[0.15em] uppercase text-text-secondary">
+              Plateforme éducative · Cameroun
+            </span>
           </div>
 
-          {/* Hero image carousel — landscape card */}
-          <div className="hidden lg:block relative w-full aspect-[16/10] rounded-3xl overflow-hidden shadow-2xl">
-            {HERO_IMAGES.map((src, i) => (
-              <img
-                key={src}
-                src={src}
-                alt=""
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${i === heroSlide ? "opacity-100" : "opacity-0"}`}
-              />
-            ))}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#03130d]/80 via-transparent to-transparent" />
-            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#03130d]/70 to-transparent" />
+          <div className="grid lg:grid-cols-[0.85fr_1.5fr] items-stretch gap-8">
 
-            {/* Overlay caption */}
-            <div className="absolute top-6 left-6 right-24 z-10">
-              <p className="text-white text-lg font-semibold leading-snug drop-shadow">
-                Comparez les établissements, consultez les frais et les infrastructures, et postulez en ligne en quelques minutes.
-              </p>
-            </div>
+            {/* Search card */}
+            <div className="flex flex-col justify-center">
+              <div className="bg-surface border border-border rounded-card p-6 shadow-elevation-1 flex flex-col gap-3.5">
+                <div>
+                  <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-2">Recherche rapide</p>
+                  <h1 className="text-xl font-bold leading-snug">Trouvez l&apos;école idéale près de chez vous.</h1>
+                </div>
 
-            {/* Carousel dots */}
-            <div className="absolute top-5 right-5 flex gap-1.5 z-10">
-              {HERO_IMAGES.map((_, i) => (
+                <div className="flex items-center gap-2 bg-muted border border-border rounded-[10px] px-4 h-12 focus-within:border-primary transition-colors duration-fast">
+                  <Search size={16} className="text-text-secondary shrink-0" />
+                  <input
+                    className="bg-transparent outline-none text-sm flex-1 min-w-0 placeholder:text-text-secondary"
+                    placeholder="Nom, ville, niveau…"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                  />
+                  {query && (
+                    <button onClick={() => setQuery("")} className="text-text-secondary hover:text-text-primary" aria-label="Effacer">
+                      <X size={14} />
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <select
+                    value={activeCategory}
+                    onChange={(e) => { setActiveCategory(e.target.value); setActiveSubcategory("all"); }}
+                    className="flex-1 min-w-0 border border-border rounded-[10px] px-3 h-10 text-[13px] font-medium bg-surface focus:outline-none focus:border-primary transition-colors duration-fast"
+                  >
+                    <option value="all">Toutes catégories</option>
+                    {categories.map((cat) => (
+                      <option key={cat.key} value={cat.key}>{cat.label}</option>
+                    ))}
+                  </select>
+                  <select
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    className="flex-1 min-w-0 border border-border rounded-[10px] px-3 h-10 text-[13px] font-medium bg-surface focus:outline-none focus:border-primary transition-colors duration-fast"
+                  >
+                    {cities.map((c) => (
+                      <option key={c} value={c}>{c === "all" ? "Toutes les villes" : c}</option>
+                    ))}
+                  </select>
+                  <button
+                    onClick={handleLocationToggle}
+                    disabled={locating}
+                    aria-label="Me localiser"
+                    className="shrink-0 w-10 h-10 flex items-center justify-center rounded-[10px] border border-border text-text-secondary hover:text-text-primary hover:bg-muted transition-colors duration-fast disabled:opacity-50"
+                  >
+                    <Navigation size={15} />
+                  </button>
+                </div>
+
                 <button
-                  key={i}
-                  onClick={() => setHeroSlide(i)}
-                  className={`h-1.5 rounded-full transition-all ${i === heroSlide ? "w-6 bg-white" : "w-1.5 bg-white/40 hover:bg-white/60"}`}
-                  aria-label={`Image ${i + 1}`}
-                />
-              ))}
+                  type="button"
+                  onClick={() => document.getElementById("resultats")?.scrollIntoView({ behavior: "smooth" })}
+                  className="bg-[#0A0A0A] text-white rounded-[10px] h-12 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-[#0A0A0A]/90 transition-colors duration-fast"
+                >
+                  Rechercher
+                  <ArrowRight size={16} />
+                </button>
+              </div>
             </div>
 
-            {/* Floating card */}
-            <div className="absolute bottom-5 left-5 right-5 bg-white text-[#0a0a0a] rounded-2xl p-5 flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold text-slate-400 tracking-wider uppercase mb-2">Pour votre école</p>
-                <p className="font-black text-base leading-tight">Votre page visible dans tout le Cameroun.</p>
-              </div>
-              <Link
-                href="/auth/inscription"
-                className="shrink-0 inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-600 transition-colors"
+            {/* Hero carousel — panneaux éditoriaux thématiques */}
+            <div
+              className="relative w-full min-h-[380px] lg:min-h-0 rounded-card overflow-hidden"
+              onMouseEnter={() => setHeroPaused(true)}
+              onMouseLeave={() => setHeroPaused(false)}
+              onFocus={() => setHeroPaused(true)}
+              onBlur={() => setHeroPaused(false)}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowRight") setHeroSlide((i) => (i + 1) % HERO_SLIDES.length);
+                if (e.key === "ArrowLeft") setHeroSlide((i) => (i - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+              }}
+              onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+              onTouchEnd={(e) => {
+                if (touchStartX.current === null) return;
+                const delta = e.changedTouches[0].clientX - touchStartX.current;
+                if (delta < -40) setHeroSlide((i) => (i + 1) % HERO_SLIDES.length);
+                if (delta > 40) setHeroSlide((i) => (i - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+                touchStartX.current = null;
+              }}
+            >
+              {HERO_SLIDES.map((slide, i) => (
+                <div
+                  key={slide.title}
+                  role="group"
+                  aria-roledescription="slide"
+                  aria-label={`${i + 1} sur ${HERO_SLIDES.length}`}
+                  aria-hidden={i !== heroSlide}
+                  className={`absolute inset-0 flex flex-col justify-end p-8 lg:p-10 transition-all duration-500 ease-out ${SLIDE_THEME_CLASSES[slide.theme]} ${
+                    i === heroSlide ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 translate-y-3 pointer-events-none"
+                  }`}
+                >
+                  {/* Micro-motif géométrique camerounais — texture discrète, jamais illustrative */}
+                  <svg className="absolute inset-0 w-full h-full opacity-[0.06]" preserveAspectRatio="none" aria-hidden="true">
+                    <pattern id={`motif-${i}`} width="56" height="56" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                      <rect width="56" height="56" fill="none" />
+                      <path d="M28 0 L56 28 L28 56 L0 28 Z" fill="currentColor" />
+                    </pattern>
+                    <rect width="100%" height="100%" fill={`url(#motif-${i})`} />
+                  </svg>
+
+                  <div className="relative z-10 max-w-md">
+                    <p className={`text-xs font-semibold uppercase tracking-wider mb-3 ${slide.theme === "ivoire" ? "text-primary" : "text-white/70"}`}>
+                      {slide.eyebrow}
+                    </p>
+                    <h2 className="text-2xl lg:text-[28px] font-bold leading-tight mb-2">{slide.title}</h2>
+                    {slide.text && (
+                      <p className={`text-sm leading-relaxed ${slide.theme === "ivoire" ? "text-text-secondary" : "text-white/80"}`}>
+                        {slide.text}
+                      </p>
+                    )}
+                    {"cta" in slide && slide.cta && (
+                      <Link
+                        href={slide.cta.href}
+                        className={`mt-4 inline-flex items-center gap-2 text-sm font-semibold ${slide.theme === "ivoire" ? "text-primary" : "text-white"} hover:opacity-80 transition-opacity duration-fast`}
+                      >
+                        {slide.cta.label}
+                        <ArrowRight size={15} />
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {/* Contrôles */}
+              <button
+                onClick={() => setHeroSlide((i) => (i - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)}
+                aria-label="Diapositive précédente"
+                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-white/15 text-white hover:bg-white/25 transition-colors duration-fast backdrop-blur-sm"
               >
-                Inscrire
-                <ArrowRight size={15} />
-              </Link>
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                onClick={() => setHeroSlide((i) => (i + 1) % HERO_SLIDES.length)}
+                aria-label="Diapositive suivante"
+                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-white/15 text-white hover:bg-white/25 transition-colors duration-fast backdrop-blur-sm"
+              >
+                <ChevronRight size={16} />
+              </button>
+
+              <div className="absolute top-5 right-5 flex gap-1.5 z-20">
+                {HERO_SLIDES.map((slide, i) => (
+                  <button
+                    key={slide.title}
+                    onClick={() => setHeroSlide(i)}
+                    className={`h-1.5 rounded-full transition-all duration-fast ${i === heroSlide ? "w-6 bg-white" : "w-1.5 bg-white/40 hover:bg-white/60"}`}
+                    aria-label={`Aller à la diapositive ${i + 1}`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>

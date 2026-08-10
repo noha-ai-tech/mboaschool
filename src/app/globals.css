@@ -35,3 +35,15 @@ body {
   }
 }
 
+/* Ruban d'annonces (Correctif Landing) — mouvement continu très lent et
+   régulier, jamais "breaking news". prefers-reduced-motion géré via la
+   classe utilitaire motion-reduce:animate-none directement dans le JSX. */
+@keyframes marquee-soft {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee-soft {
+  animation: marquee-soft 48s linear infinite;
+}
+
