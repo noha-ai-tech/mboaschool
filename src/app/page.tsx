@@ -24,7 +24,6 @@ import {
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { Logo } from "@/components/branding/Logo";
-import { Favicon } from "@/components/branding/Favicon";
 
 const LocalSchoolMap = dynamic(() => import("@/components/LocalSchoolMap"), {
   ssr: false,
@@ -436,8 +435,7 @@ export default function HomePage() {
       {/* ── HEADER ─────────────────────────────────────────────────── */}
       <header className="fixed top-0 inset-x-0 z-50 bg-white border-b border-[#ebebeb]">
         <div className="max-w-screen-xl mx-auto px-5 h-[60px] flex items-center gap-6">
-          <Link href="/" className="shrink-0 flex items-center gap-2">
-            <Favicon size="md" />
+          <Link href="/" className="shrink-0 flex items-center">
             <Logo size="md" priority />
           </Link>
 

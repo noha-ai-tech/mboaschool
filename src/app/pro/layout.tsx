@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Logo } from "@/components/branding/Logo";
-import { Favicon } from "@/components/branding/Favicon";
 
 const NAV = [
   { href: "/pro/personnel",                    label: "Personnel" },
@@ -24,8 +23,7 @@ export default function ProLayout({ children }: { children: React.ReactNode }) {
         {/* Ligne 1 : logo + retour tableau de bord */}
         <div className="px-6 py-3 flex items-center gap-4 border-b border-white/5">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <Favicon size="sm" />
-            <Logo variant="dark" size="sm" />
+            <Logo variant="dark" size="md" />
             <span className="text-base font-black tracking-tight">
               <span className="text-emerald-400 font-bold">Pro</span>
             </span>

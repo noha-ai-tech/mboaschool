@@ -8,7 +8,7 @@
 // connues à l'écriture de ce composant. Un <img> classique avec hauteur fixe
 // et largeur automatique préserve le ratio réel du fichier quel qu'il soit.
 
-const HEIGHTS = { sm: 28, md: 44, lg: 64 } as const;
+const HEIGHTS = { sm: 32, md: 52, lg: 72 } as const;
 
 export type LogoSize = keyof typeof HEIGHTS;
 export type LogoVariant = "light" | "dark";

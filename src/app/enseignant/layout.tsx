@@ -2,7 +2,6 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import DeconnexionButton from "@/components/enseignant/DeconnexionButton";
 import { Logo } from "@/components/branding/Logo";
-import { Favicon } from "@/components/branding/Favicon";
 
 export default async function EnseignantLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -21,9 +20,8 @@ export default async function EnseignantLayout({ children }: { children: React.R
   return (
     <div className="min-h-screen bg-[#f5f3ef]">
       <header className="bg-[#0a0f0d] text-white px-6 py-3 flex items-center gap-4">
-        <Link href="/enseignant/mon-espace" className="flex items-center gap-2">
-          <Favicon size="sm" />
-          <Logo variant="dark" size="sm" />
+        <Link href="/enseignant/mon-espace" className="flex items-center">
+          <Logo variant="dark" size="md" />
         </Link>
         {enseignant && (
           <>
