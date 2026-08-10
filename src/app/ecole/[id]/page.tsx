@@ -78,7 +78,6 @@ export default function SchoolPage() {
   const [images, setImages]     = useState<any[]>([]);
   const [docsList, setDocsList] = useState<any[]>([]);
   const [loading, setLoading]   = useState(true);
-  const [activeTab, setActiveTab] = useState("general");
   const [activeSlide, setActiveSlide] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -163,12 +162,16 @@ export default function SchoolPage() {
 
   const infraItems = Object.keys(INFRA_LABELS).filter((k) => infra?.[k] === true);
 
-  const tabs = [
-    { id: "general",   label: "Général" },
-    { id: "galerie",   label: `Galerie${images.length > 0 ? ` (${images.length})` : ""}` },
-    { id: "documents", label: `Documents${docsList.length > 0 ? ` (${docsList.length})` : ""}` },
-    { id: "annonces",  label: "Annonces" },
-    { id: "parent",    label: "Espace parent" },
+  // Ancres de navigation — la barre sticky ne change jamais de page,
+  // elle fait défiler jusqu'à la section correspondante (voir les id=
+  // posés sur chaque section plus bas).
+  const sectionNav = [
+    { id: "presentation",     label: "Présentation" },
+    { id: "admissions",       label: "Admissions" },
+    { id: "frais",            label: "Frais" },
+    { id: "infrastructures",  label: "Infrastructures" },
+    { id: "galerie",          label: "Galerie" },
+    { id: "localisation",     label: "Localisation" },
   ];
 
   return (
@@ -268,46 +271,70 @@ export default function SchoolPage() {
         </div>
       </section>
 
-      {/* Tab bar */}
-      <div className="border-b border-[#e5e5e5] bg-white sticky top-0 z-30 overflow-x-auto">
+      {/* Navigation sticky — ancres vers les sections ci-dessous, tout reste sur la même page */}
+      <div className="border-b border-border bg-white sticky top-0 z-30 overflow-x-auto">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex gap-0 whitespace-nowrap">
-            {tabs.map((tab) => (
+            {sectionNav.map((item) => (
               <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-5 py-3.5 text-sm font-semibold border-b-2 transition-colors shrink-0 ${
-                  activeTab === tab.id
-                    ? "border-[#0a0a0a] text-[#0a0a0a]"
-                    : "border-transparent text-slate-400 hover:text-[#0a0a0a]"
-                }`}
+                key={item.id}
+                onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                className="px-5 py-3.5 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-[#0a0a0a] hover:border-slate-200 transition-colors duration-fast shrink-0"
               >
-                {tab.label}
+                {item.label}
               </button>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Content */}
+      {/* Contenu — toutes les sections empilées, jamais dispersées sur d'autres pages */}
       <div className="max-w-6xl mx-auto px-4 py-8 grid lg:grid-cols-[1fr_300px] gap-8 items-start">
 
-        <div>
-          {activeTab === "general" && (
-            <GeneralTab school={school} fees={fees} infra={infra} infraItems={infraItems} />
-          )}
-          {activeTab === "galerie" && (
+        <div className="space-y-5 pb-16 lg:pb-0">
+          <GeneralTab school={school} fees={fees} infra={infra} infraItems={infraItems} />
+
+          <div id="galerie" className="scroll-mt-20">
+            <h2 className="font-bold text-sm mb-3 px-1">Galerie{images.length > 0 ? ` (${images.length})` : ""}</h2>
             <GalerieTab images={images} />
+          </div>
+
+          {docsList.length > 0 && (
+            <div id="documents" className="scroll-mt-20">
+              <h2 className="font-bold text-sm mb-3 px-1">Documents ({docsList.length})</h2>
+              <DocumentsTab docs={docsList} />
+            </div>
           )}
-          {activeTab === "documents" && (
-            <DocumentsTab docs={docsList} />
-          )}
-          {activeTab === "annonces" && (
+
+          <div id="annonces" className="scroll-mt-20">
+            <h2 className="font-bold text-sm mb-3 px-1">Annonces</h2>
             <AnnouncementsTab schoolId={id} />
-          )}
-          {activeTab === "parent" && (
-            <ParentTab schoolId={id} />
-          )}
+          </div>
+
+          <div id="localisation" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
+            <h2 className="font-bold text-sm mb-4">Localisation</h2>
+            {school.city || school.neighborhood || school.address ? (
+              <>
+                <p className="text-sm text-slate-600 mb-4">
+                  {[school.address, school.neighborhood, school.city].filter(Boolean).join(", ")}
+                </p>
+                {school.latitude && school.longitude && (
+                  <a
+                    href={`https://www.google.com/maps?q=${school.latitude},${school.longitude}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+                  >
+                    <MapPin size={14} /> Voir sur la carte
+                  </a>
+                )}
+              </>
+            ) : (
+              <p className="text-sm text-slate-400">Localisation non renseignée par l&apos;établissement.</p>
+            )}
+          </div>
+
+          <ParentTab schoolId={id} />
         </div>
 
         {/* Sidebar */}
@@ -373,6 +400,17 @@ export default function SchoolPage() {
           )}
         </aside>
       </div>
+
+      {/* CTA sticky mobile — la préinscription reste accessible sans remonter en haut de page */}
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-border p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+        <Link
+          href={`/preinscription?ecole=${school.id}`}
+          className="block w-full text-center bg-[#0A0A0A] text-white py-3 rounded-[10px] text-sm font-bold"
+        >
+          Préinscrire mon enfant
+        </Link>
+      </div>
+      <div className="lg:hidden h-20" aria-hidden="true" />
     </div>
   );
 }
@@ -390,8 +428,8 @@ function GeneralTab({ school, fees, infra, infraItems }: {
 
   return (
     <div className="space-y-5">
-      <div className="bg-white border border-[#ebebeb] rounded-2xl p-6">
-        <h2 className="font-bold text-sm mb-4">À propos</h2>
+      <div id="presentation" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
+        <h2 className="font-bold text-sm mb-4">Présentation</h2>
         <p className="text-slate-600 text-sm leading-relaxed">
           {school.description || "Aucune description disponible pour le moment."}
         </p>
@@ -402,7 +440,7 @@ function GeneralTab({ school, fees, infra, infraItems }: {
             { label: "Quartier",  value: school.neighborhood },
             { label: "Téléphone", value: school.phone },
           ].filter((r) => r.value).map((row) => (
-            <div key={row.label} className="bg-[#f9f7f2] rounded-xl p-4">
+            <div key={row.label} className="bg-muted rounded-xl p-4">
               <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">{row.label}</p>
               <p className="font-bold text-[#0a0a0a] mt-1 text-sm">{row.value}</p>
             </div>
@@ -410,7 +448,7 @@ function GeneralTab({ school, fees, infra, infraItems }: {
         </div>
       </div>
 
-      <div className="bg-white border border-[#ebebeb] rounded-2xl p-6">
+      <div id="frais" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
         <h2 className="font-bold text-sm mb-4">Frais de scolarité</h2>
         {feeRows.length === 0 ? (
           <p className="text-sm text-slate-400">Frais non renseignés par l'établissement.</p>
@@ -428,23 +466,25 @@ function GeneralTab({ school, fees, infra, infraItems }: {
         )}
       </div>
 
-      {infraItems.length > 0 && (
-        <div className="bg-white border border-[#ebebeb] rounded-2xl p-6">
-          <h2 className="font-bold text-sm mb-4">Infrastructures</h2>
+      <div id="infrastructures" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
+        <h2 className="font-bold text-sm mb-4">Infrastructures</h2>
+        {infraItems.length === 0 ? (
+          <p className="text-sm text-slate-400">Infrastructures non renseignées par l&apos;établissement.</p>
+        ) : (
           <div className="grid sm:grid-cols-2 gap-3">
             {infraItems.map((key) => {
               const item = INFRA_LABELS[key];
               const Icon = item.icon;
               return (
-                <div key={key} className="flex items-center gap-3 bg-[#f9f7f2] rounded-xl p-3">
-                  <Icon size={15} className="text-emerald-600 shrink-0" />
+                <div key={key} className="flex items-center gap-3 bg-muted rounded-xl p-3">
+                  <Icon size={15} className="text-primary shrink-0" />
                   <span className="text-sm font-semibold text-[#0a0a0a]">{item.label}</span>
                 </div>
               );
             })}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
@@ -609,10 +649,11 @@ function ParentTab({ schoolId }: { schoolId: string }) {
   ];
 
   return (
-    <div className="bg-[#0a0f0d] text-white rounded-2xl p-6">
-      <h2 className="font-black text-2xl mb-2">Espace parent</h2>
+    <div id="admissions" className="bg-accent text-white rounded-card p-6 scroll-mt-20">
+      <h2 className="font-black text-2xl mb-2">Admissions</h2>
       <p className="text-slate-400 text-sm mb-6 leading-relaxed">
-        Après la préinscription et l'acceptation, cet espace devient le lien entre le parent, l'élève et l'école.
+        Préinscrivez votre enfant en ligne. Une fois le dossier accepté, cet
+        espace devient le lien entre le parent, l'élève et l'école.
       </p>
       <div className="grid sm:grid-cols-2 gap-3 mb-6">
         {cards.map(({ icon: Icon, title, text }) => (

@@ -72,8 +72,11 @@ function CategoryPageInner() {
     ).length;
   });
 
-  // Featured / verified for carousel
-  const featured = schools.filter((s) => s.is_featured || s.is_verified || s.subscription_plan === "premium");
+  // "Mis en avant" = uniquement is_featured (signal commercial réel, distinct
+  // de la vérification). Vérifié reste un badge indépendant affiché sur
+  // n'importe quelle carte, organique ou mise en avant — jamais fusionnés
+  // (voir docs/03_DESIGN_SYSTEM, hiérarchie commerciale organic/verified/sponsored).
+  const featured = schools.filter((s) => s.is_featured);
 
   // Filtered list
   const filtered = schools.filter((s) => {
@@ -123,7 +126,7 @@ function CategoryPageInner() {
                 {featured.length > 0 && (
                   <span className="flex items-center gap-1">
                     <Crown size={12} className="text-yellow-400" />
-                    {featured.length} vedette{featured.length > 1 ? "s" : ""}
+                    {featured.length} mis en avant
                   </span>
                 )}
               </div>
@@ -139,7 +142,7 @@ function CategoryPageInner() {
           <section>
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-black text-lg text-[#0a0a0a]">
-                Établissements vedettes
+                Établissements à découvrir
               </h2>
               <div className="flex gap-2">
                 <button onClick={() => scrollCarousel("left")}
@@ -175,13 +178,11 @@ function CategoryPageInner() {
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                        {s.is_featured && (
-                          <span className="absolute top-3 left-3 flex items-center gap-1 text-[10px] font-bold text-yellow-900 bg-yellow-400 px-2 py-0.5 rounded-full">
-                            <Crown size={8} /> Sponsorisé
-                          </span>
-                        )}
-                        {s.is_verified && !s.is_featured && (
-                          <span className="absolute top-3 left-3 flex items-center gap-1 text-[10px] font-semibold text-emerald-900 bg-emerald-400 px-2 py-0.5 rounded-full">
+                        <span className="absolute top-3 left-3 flex items-center gap-1 text-[10px] font-bold text-slate-700 bg-white/90 px-2 py-0.5 rounded-full">
+                          <Crown size={8} /> Mis en avant
+                        </span>
+                        {s.is_verified && (
+                          <span className="absolute top-3 right-3 flex items-center gap-1 text-[10px] font-semibold text-emerald-900 bg-emerald-300 px-2 py-0.5 rounded-full">
                             <CheckCircle2 size={8} /> Vérifié
                           </span>
                         )}
@@ -303,8 +304,8 @@ function CategoryPageInner() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                       <div className="absolute bottom-3 left-3 flex gap-1.5">
                         {s.is_featured && (
-                          <span className="text-[9px] font-bold text-yellow-900 bg-yellow-400 px-2 py-0.5 rounded-full flex items-center gap-1">
-                            <Crown size={8} /> Sponsorisé
+                          <span className="text-[9px] font-bold text-slate-700 bg-white/90 px-2 py-0.5 rounded-full flex items-center gap-1">
+                            <Crown size={8} /> Mis en avant
                           </span>
                         )}
                         {s.is_verified && (
