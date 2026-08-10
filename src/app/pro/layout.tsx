@@ -19,7 +19,7 @@ const NAV = [
 export default function ProLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-[#f9f7f2]">
-      <header className="bg-[#0a0f0d] text-white">
+      <header className="bg-accent text-white">
         {/* Ligne 1 : logo + retour tableau de bord */}
         <div className="px-6 py-3 flex items-center gap-4 border-b border-white/5">
           <Link href="/" className="flex items-center gap-2 shrink-0">

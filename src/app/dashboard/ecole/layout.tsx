@@ -82,7 +82,7 @@ export default function EcoleDashboardLayout({ children }: { children: React.Rea
   }
 
   const Sidebar = () => (
-    <aside className="flex flex-col h-full bg-[#0a0f0d] text-white w-full">
+    <aside className="flex flex-col h-full bg-accent text-white w-full">
       {/* Logo */}
       <div className="px-5 py-5 border-b border-white/8">
         <Link href="/" className="flex items-center">

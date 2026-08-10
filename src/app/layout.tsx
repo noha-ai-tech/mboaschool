@@ -1,5 +1,12 @@
 import './globals.css'
 import type { Metadata, Viewport } from 'next'
+import { Manrope } from 'next/font/google'
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
+  display: "swap",
+});
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 
@@ -64,7 +71,7 @@ const websiteJsonLd = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr">
+    <html lang="fr" className={manrope.variable}>
       <body>
         <script
           type="application/ld+json"

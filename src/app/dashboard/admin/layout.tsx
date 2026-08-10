@@ -61,7 +61,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     <div className="min-h-screen bg-[#f9f7f2] flex">
       {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-[220px] shrink-0 bg-[#0a0f0d] fixed inset-y-0 left-0 z-40">
+      <aside className="hidden lg:flex flex-col w-[220px] shrink-0 bg-accent fixed inset-y-0 left-0 z-40">
         <div className="px-5 py-5 border-b border-white/8">
           <SidebarLogo />
         </div>

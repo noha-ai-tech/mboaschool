@@ -19,7 +19,7 @@ export default async function EnseignantLayout({ children }: { children: React.R
 
   return (
     <div className="min-h-screen bg-[#f5f3ef]">
-      <header className="bg-[#0a0f0d] text-white px-6 py-3 flex items-center gap-4">
+      <header className="bg-accent text-white px-6 py-3 flex items-center gap-4">
         <Link href="/enseignant/mon-espace" className="flex items-center">
           <Logo variant="dark" size="lg" />
         </Link>

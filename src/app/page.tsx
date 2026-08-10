@@ -19,7 +19,6 @@ import {
   Heart,
   Menu,
   X,
-  ChevronDown,
   ChevronRight,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
@@ -328,7 +327,7 @@ export default function HomePage() {
   const [city, setCity] = useState("all");
   const [useLocation, setUseLocation] = useState(false);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [radius, setRadius] = useState("5");
+  const [radius] = useState("5");
   const [compare, setCompare] = useState<string[]>([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [heroSlide, setHeroSlide] = useState(0);
@@ -433,186 +432,144 @@ export default function HomePage() {
     <div className="min-h-screen bg-[#f9f7f2] text-[#0a0a0a]">
 
       {/* ── HEADER ─────────────────────────────────────────────────── */}
-      <header className="fixed top-0 inset-x-0 z-50 bg-white border-b border-[#ebebeb]">
-        <div className="max-w-screen-xl mx-auto px-5 h-[116px] flex items-center gap-6">
+      <header className="fixed top-0 inset-x-0 z-50 bg-white border-b border-border">
+        <div className="max-w-screen-xl mx-auto px-5 h-20 flex items-center gap-8">
           <Link href="/" className="shrink-0 flex items-center">
-            <Logo size="lg" priority />
+            <Logo size="md" priority />
           </Link>
 
-          {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-1 flex-1">
+          {/* Desktop nav — liens directs, pas de sous-menu au survol (inutilisable au tactile) */}
+          <nav className="hidden lg:flex items-center gap-1">
             <button
               onClick={() => { setActiveCategory("all"); setActiveSubcategory("all"); }}
-              className={`px-3 py-1.5 text-sm font-semibold rounded-md transition-colors ${activeCategory === "all" ? "bg-emerald-50 text-emerald-700" : "text-slate-500 hover:text-[#0a0a0a]"}`}
+              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-fast ${activeCategory === "all" ? "text-primary" : "text-text-secondary hover:text-text-primary"}`}
             >
-              Tous
+              Toutes les écoles
             </button>
             {categories.map((cat) => (
-              <div key={cat.key} className="relative group">
-                <Link
-                  href={`/categorie/${cat.key}`}
-                  className="px-3 py-1.5 text-sm font-semibold rounded-md transition-colors flex items-center gap-1 text-slate-500 hover:text-[#0a0a0a]"
-                >
-                  {cat.label}
-                  <ChevronDown size={13} className="opacity-50" />
-                </Link>
-                <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                  <div className="bg-white border border-[#ebebeb] rounded-xl shadow-lg py-1.5 min-w-[180px]">
-                    <Link
-                      href={`/categorie/${cat.key}`}
-                      className="w-full text-left px-4 py-2 text-sm font-semibold text-emerald-700 hover:bg-slate-50 flex items-center justify-between"
-                    >
-                      Tout voir <ChevronRight size={12} />
-                    </Link>
-                    <div className="border-t border-[#f5f5f5] my-1" />
-                    {cat.subcategories.map((sub) => (
-                      <Link
-                        key={sub}
-                        href={`/categorie/${cat.key}?sous=${encodeURIComponent(sub)}`}
-                        className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 block"
-                      >
-                        {sub}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <Link
+                key={cat.key}
+                href={`/categorie/${cat.key}`}
+                className="px-3 py-2 text-sm font-medium rounded-lg text-text-secondary hover:text-text-primary transition-colors duration-fast"
+              >
+                {cat.label}
+              </Link>
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-3 ml-auto">
-            <Link href="/auth/connexion" className="text-sm font-semibold text-slate-600 hover:text-[#0a0a0a] transition-colors">
+          <div className="hidden md:flex items-center gap-4 ml-auto">
+            <Link href="/auth/connexion" className="text-sm font-semibold text-text-secondary hover:text-text-primary transition-colors duration-fast">
               Connexion
             </Link>
-            <Link href="/auth/inscription" className="bg-[#0a0a0a] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-800 transition-colors">
+            <Link href="/auth/inscription" className="inline-flex items-center h-10 px-4 rounded-[10px] bg-[#0A0A0A] text-white text-sm font-semibold hover:bg-[#0A0A0A]/90 transition-colors duration-fast">
               Inscrire mon école
             </Link>
           </div>
 
-          <button className="lg:hidden ml-auto p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <button aria-label="Menu" className="lg:hidden ml-auto p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-[#ebebeb] bg-white px-5 py-4 space-y-1">
+          <div className="lg:hidden border-t border-border bg-white px-5 py-4 space-y-1">
             {categories.map((cat) => (
               <Link
                 key={cat.key}
                 href={`/categorie/${cat.key}`}
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-left px-3 py-2.5 text-sm font-semibold rounded-lg hover:bg-slate-50 flex items-center justify-between"
+                className="w-full text-left px-3 py-2.5 text-sm font-medium rounded-lg hover:bg-muted flex items-center justify-between"
               >
                 {cat.label}
-                <ChevronRight size={14} className="text-slate-300" />
+                <ChevronRight size={14} className="text-text-secondary" />
               </Link>
             ))}
-            <div className="pt-3 border-t border-[#ebebeb] flex flex-col gap-2 mt-2">
+            <div className="pt-3 border-t border-border flex flex-col gap-2 mt-2">
               <Link href="/auth/connexion" className="px-3 py-2.5 text-sm font-semibold">Connexion</Link>
-              <Link href="/auth/inscription" className="bg-[#0a0a0a] text-white px-4 py-2.5 rounded-lg text-sm font-semibold text-center">Inscrire mon école</Link>
+              <Link href="/auth/inscription" className="bg-[#0A0A0A] text-white px-4 py-2.5 rounded-[10px] text-sm font-semibold text-center">Inscrire mon école</Link>
             </div>
           </div>
         )}
       </header>
 
       {/* ── HERO ───────────────────────────────────────────────────── */}
-      <section className="relative pt-[116px] pb-6 bg-[radial-gradient(ellipse_farthest-corner_at_top_left,#03130d_0%,#0a3d28_12%,#0f9d68_30%,#2fb086_45%,#5fc29e_55%,#8ed4b8_65%,#c3e9d7_75%,#eaf6f0_85%,#ffffff_100%)] text-white overflow-hidden">
-        <div className="relative max-w-screen-xl mx-auto px-5 pt-16 lg:pt-20">
-          <div className="flex items-center gap-2 mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
-            <span className="w-1.5 h-1.5 rounded-full bg-yellow-400" />
-            <span className="ml-2 text-sm font-semibold tracking-[0.15em] uppercase text-slate-300">
-              Plateforme éducative · Cameroun
-            </span>
-          </div>
-        </div>
+      <section className="relative pt-20 pb-6 bg-accent text-white overflow-hidden">
+        <div className="relative max-w-screen-xl mx-auto px-5 grid lg:grid-cols-[0.9fr_1.4fr] items-stretch gap-10 pt-16 lg:pt-20 pb-16 lg:pb-20">
 
-        <div className="relative max-w-screen-xl mx-auto px-5 grid lg:grid-cols-[0.9fr_1.4fr] items-stretch gap-10 pb-16 lg:pb-20">
+          <div className="flex flex-col justify-center py-10 lg:py-0">
+            <h1 className="text-3xl lg:text-4xl font-extrabold leading-tight tracking-tight mb-3">
+              Trouver une école.<br />Gérer un établissement.<br />Simplement.
+            </h1>
+            <p className="text-slate-300 text-base mb-8 max-w-md">
+              La plateforme qui connecte parents et établissements scolaires
+              partout au Cameroun.
+            </p>
 
-          <div className="flex flex-col py-10 lg:py-0">
-            {/* Search form card */}
-            <div className="flex-1 rounded-3xl p-1 bg-gradient-to-br from-red-500 via-yellow-400 to-yellow-300 shadow-2xl">
-              <div className="bg-white text-[#0a0a0a] rounded-[20px] h-full p-6 lg:p-8 flex flex-col justify-center gap-3.5">
-                <div className="mb-1">
-                  <p className="text-xs font-semibold text-emerald-600 uppercase tracking-wider mb-2">Recherche rapide</p>
-                  <h2 className="text-2xl font-black leading-tight">Trouvez l'école idéale près de chez vous.</h2>
-                </div>
-
-                {/* 1. Nom / mot-clé */}
-                <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus-within:border-emerald-400 transition-colors">
-                  <Search size={16} className="text-slate-400 shrink-0" />
-                  <input
-                    className="bg-transparent outline-none text-sm flex-1 min-w-0 placeholder-slate-400"
-                    placeholder="Nom, ville, niveau, type d'établissement…"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                  />
-                  {query && (
-                    <button onClick={() => setQuery("")} className="text-slate-400 hover:text-slate-700">
-                      <X size={14} />
-                    </button>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-2 gap-2.5">
-                  {/* 2. Catégorie */}
-                  <select
-                    value={activeCategory}
-                    onChange={(e) => { setActiveCategory(e.target.value); setActiveSubcategory("all"); }}
-                    className="w-full border border-slate-200 rounded-xl px-3 py-3.5 text-sm font-semibold bg-white focus:outline-none focus:border-emerald-400 transition-colors"
-                  >
-                    <option value="all">Toutes catégories</option>
-                    {categories.map((cat) => (
-                      <option key={cat.key} value={cat.key}>{cat.label}</option>
-                    ))}
-                  </select>
-
-                  {/* 3. Ville */}
-                  <select
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    className="w-full border border-slate-200 rounded-xl px-3 py-3.5 text-sm font-semibold bg-white focus:outline-none focus:border-emerald-400 transition-colors"
-                  >
-                    {cities.map((c) => (
-                      <option key={c} value={c}>{c === "all" ? "Toutes les villes" : c}</option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* 4. Rayon de recherche */}
-                <select
-                  value={radius}
-                  onChange={(e) => setRadius(e.target.value)}
-                  className="w-full border border-slate-200 rounded-xl px-4 py-3.5 text-sm font-semibold bg-white focus:outline-none focus:border-emerald-400 transition-colors"
-                >
-                  <option value="2">Rayon : 2 km</option>
-                  <option value="5">Rayon : 5 km</option>
-                  <option value="10">Rayon : 10 km</option>
-                  <option value="20">Rayon : 20 km</option>
-                </select>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={handleLocationToggle}
-                    disabled={locating}
-                    className="flex-1 flex items-center justify-center gap-1.5 px-3 py-3.5 rounded-xl text-sm font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors disabled:opacity-50"
-                  >
-                    <Navigation size={15} />
-                    {locating ? "Localisation…" : "Me localiser"}
+            {/* Search card */}
+            <div className="bg-surface text-text-primary rounded-card p-5 shadow-elevation-2 flex flex-col gap-3">
+              <div className="flex items-center gap-2 bg-muted border border-border rounded-[10px] px-4 h-12 focus-within:border-primary transition-colors duration-fast">
+                <Search size={16} className="text-text-secondary shrink-0" />
+                <input
+                  className="bg-transparent outline-none text-sm flex-1 min-w-0 placeholder:text-text-secondary"
+                  placeholder="Nom, ville, niveau…"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+                {query && (
+                  <button onClick={() => setQuery("")} className="text-text-secondary hover:text-text-primary" aria-label="Effacer">
+                    <X size={14} />
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => document.getElementById("resultats")?.scrollIntoView({ behavior: "smooth" })}
-                    className="flex-1 bg-[#0a0a0a] text-white rounded-xl py-3.5 font-bold text-sm flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors"
-                  >
-                    Rechercher
-                    <ArrowRight size={16} />
-                  </button>
-                </div>
+                )}
               </div>
+
+              {/* Filtres — repliés dans une seule ligne compacte */}
+              <div className="flex items-center gap-2">
+                <select
+                  value={activeCategory}
+                  onChange={(e) => { setActiveCategory(e.target.value); setActiveSubcategory("all"); }}
+                  className="flex-1 min-w-0 border border-border rounded-[10px] px-3 h-10 text-[13px] font-medium bg-surface focus:outline-none focus:border-primary transition-colors duration-fast"
+                >
+                  <option value="all">Toutes catégories</option>
+                  {categories.map((cat) => (
+                    <option key={cat.key} value={cat.key}>{cat.label}</option>
+                  ))}
+                </select>
+                <select
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  className="flex-1 min-w-0 border border-border rounded-[10px] px-3 h-10 text-[13px] font-medium bg-surface focus:outline-none focus:border-primary transition-colors duration-fast"
+                >
+                  {cities.map((c) => (
+                    <option key={c} value={c}>{c === "all" ? "Toutes les villes" : c}</option>
+                  ))}
+                </select>
+                <button
+                  onClick={handleLocationToggle}
+                  disabled={locating}
+                  aria-label="Me localiser"
+                  className="shrink-0 w-10 h-10 flex items-center justify-center rounded-[10px] border border-border text-text-secondary hover:text-text-primary hover:bg-muted transition-colors duration-fast disabled:opacity-50"
+                >
+                  <Navigation size={15} />
+                </button>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => document.getElementById("resultats")?.scrollIntoView({ behavior: "smooth" })}
+                className="bg-[#0A0A0A] text-white rounded-[10px] h-12 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-[#0A0A0A]/90 transition-colors duration-fast"
+              >
+                Trouver une école
+                <ArrowRight size={16} />
+              </button>
             </div>
+
+            <Link
+              href="/auth/inscription"
+              className="mt-4 text-sm font-semibold text-slate-300 hover:text-white transition-colors duration-fast w-fit"
+            >
+              Référencer mon établissement →
+            </Link>
           </div>
 
           {/* Hero image carousel — landscape card */}
@@ -697,28 +654,6 @@ export default function HomePage() {
           </div>
         </div>
       )}
-
-      {/* ── ANNOUNCEMENT MARQUEE ───────────────────────────────────── */}
-      <div className="bg-[#0a0a0a] text-white py-3 overflow-hidden whitespace-nowrap">
-        <div className="flex w-max animate-marquee">
-          {[0, 1].map((i) => (
-            <span key={i} className="flex items-center gap-8 pr-8 text-sm font-semibold tracking-wide shrink-0" aria-hidden={i === 1}>
-              {!loading && schools.length > 0 && (
-                <>
-                  <span>🎓 {schools.length} établissement{schools.length !== 1 ? "s" : ""} déjà référencé{schools.length !== 1 ? "s" : ""}</span>
-                  <span className="text-emerald-400">·</span>
-                </>
-              )}
-              <span>Inscription gratuite pour votre école</span>
-              <span className="text-emerald-400">·</span>
-              <span>Préinscription en ligne en quelques minutes</span>
-              <span className="text-emerald-400">·</span>
-              <span>Douala · Yaoundé</span>
-              <span className="text-emerald-400">·</span>
-            </span>
-          ))}
-        </div>
-      </div>
 
       {/* ── MAIN CONTENT ───────────────────────────────────────────── */}
       <main id="resultats" className="max-w-screen-xl mx-auto px-5 pt-8 pb-12">
@@ -927,52 +862,47 @@ export default function HomePage() {
       </section>
 
       {/* ── FOOTER ─────────────────────────────────────────────────── */}
-      <footer className="bg-[#070a08] text-white border-t border-white/5">
+      <footer className="bg-accent text-white">
         <div className="max-w-screen-xl mx-auto px-5 py-14 grid md:grid-cols-4 gap-10">
           <div className="md:col-span-1">
             <Link href="/" className="inline-block">
               <Logo variant="dark" />
             </Link>
-            <p className="text-slate-500 text-sm mt-4 leading-relaxed max-w-[220px]">
-              La plateforme camerounaise pour trouver et comparer les établissements éducatifs.
+            <p className="text-slate-400 text-sm mt-4 leading-relaxed max-w-[220px]">
+              La plateforme camerounaise pour trouver et gérer un établissement scolaire.
             </p>
-          </div>
-
-          <div>
-            <p className="text-xs font-semibold tracking-wider uppercase text-slate-500 mb-4">Navigation</p>
-            <div className="space-y-2.5">
-              {["Accueil", "Recherche", "Comparer"].map((l) => (
-                <p key={l} className="text-sm text-slate-400 hover:text-white cursor-pointer transition-colors">{l}</p>
-              ))}
-            </div>
           </div>
 
           <div>
             <p className="text-xs font-semibold tracking-wider uppercase text-slate-500 mb-4">Catégories</p>
             <div className="space-y-2.5">
               {categories.map((cat) => (
-                <p key={cat.key} className="text-sm text-slate-400 hover:text-white cursor-pointer transition-colors">{cat.label}</p>
+                <Link key={cat.key} href={`/categorie/${cat.key}`} className="block text-sm text-slate-400 hover:text-white transition-colors duration-fast">
+                  {cat.label}
+                </Link>
               ))}
             </div>
           </div>
 
           <div>
-            <p className="text-xs font-semibold tracking-wider uppercase text-slate-500 mb-4">Écoles</p>
+            <p className="text-xs font-semibold tracking-wider uppercase text-slate-500 mb-4">Établissements</p>
             <div className="space-y-2.5">
-              {["Inscrire mon établissement", "Pack premium", "Dashboard"].map((l) => (
-                <p key={l} className="text-sm text-slate-400 hover:text-white cursor-pointer transition-colors">{l}</p>
-              ))}
+              <Link href="/auth/inscription" className="block text-sm text-slate-400 hover:text-white transition-colors duration-fast">Inscrire mon établissement</Link>
+              <Link href="/auth/connexion" className="block text-sm text-slate-400 hover:text-white transition-colors duration-fast">Connexion</Link>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold tracking-wider uppercase text-slate-500 mb-4">Légal</p>
+            <div className="space-y-2.5">
+              <p className="text-sm text-slate-500">Confidentialité</p>
+              <p className="text-sm text-slate-500">Conditions</p>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-white/5 max-w-screen-xl mx-auto px-5 py-5 flex justify-between items-center text-xs text-slate-600">
-          <span>© 2025 Écoles237. Tous droits réservés.</span>
-          <div className="flex gap-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-700" />
-            <span className="w-2.5 h-2.5 rounded-full bg-red-700" />
-            <span className="w-2.5 h-2.5 rounded-full bg-yellow-600" />
-          </div>
+        <div className="border-t border-white/10 max-w-screen-xl mx-auto px-5 py-5 text-xs text-slate-500">
+          © {new Date().getFullYear()} Écoles237. Tous droits réservés.
         </div>
       </footer>
     </div>

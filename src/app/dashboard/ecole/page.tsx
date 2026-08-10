@@ -9,20 +9,15 @@ import {
   ClipboardList,
   GraduationCap,
   CheckCircle,
-  Clock,
-  XCircle,
   ArrowRight,
-  FileText,
-  ImageIcon,
-  Bell,
-  CreditCard,
   School,
   Lock,
   Sparkles,
-  Globe,
-  Activity,
-  Camera,
   Gauge,
+  Bell,
+  FileText,
+  ImageIcon,
+  CreditCard,
 } from "lucide-react";
 
 export default function DashboardEcoleHome() {
@@ -86,7 +81,6 @@ export default function DashboardEcoleHome() {
     ["submitted", "in_review", "documents_required", "interview", "waitlisted"].includes(a.admission_status)
   ).length;
   const accepted = applications.filter((a) => a.admission_status === "accepted").length;
-  const rejected = applications.filter((a) => a.admission_status === "rejected").length;
 
   // Checklist de complétion du profil (Mission 03, Phase 4) — chaque tâche
   // reflète une donnée réellement vérifiée, jamais un pourcentage inventé.
@@ -102,11 +96,6 @@ export default function DashboardEcoleHome() {
   const completionPct = checklist.length > 0
     ? Math.round((checklist.filter((c) => c.done).length / checklist.length) * 100)
     : 0;
-
-  const lastActivityDate = [
-    applications[0]?.created_at,
-    profile?.latestAnnouncement,
-  ].filter(Boolean).sort().reverse()[0] as string | undefined;
 
   if (schoolLoading) {
     return (
@@ -152,33 +141,27 @@ export default function DashboardEcoleHome() {
         <p className="text-slate-500 text-sm mt-1">{school.city} · {school.main_category}</p>
       </div>
 
-      {/* KPI établissement (Mission 03, Phase 3) — données réelles uniquement */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        <div className="bg-white border border-[#ebebeb] rounded-xl p-5">
-          <Globe size={18} className="text-emerald-600 mb-3" />
-          <p className="text-sm font-black text-[#0a0a0a]">Publiée</p>
-          <p className="text-xs text-slate-400 font-semibold mt-1">Établissement</p>
+      {/* KPI — 4 maximum, données réelles uniquement (Design Freeze V1, Section 8) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="bg-white border border-border rounded-card p-5">
+          <ClipboardList size={18} className="text-primary mb-3" />
+          <p className="text-3xl font-extrabold text-text-primary">{loading ? "—" : pending}</p>
+          <p className="text-xs text-text-secondary font-medium mt-1">Admissions en attente</p>
         </div>
-        <div className="bg-white border border-[#ebebeb] rounded-xl p-5">
-          <Gauge size={18} className="text-emerald-600 mb-3" />
-          <p className="text-3xl font-black text-[#0a0a0a]">{loading ? "—" : `${completionPct}%`}</p>
-          <p className="text-xs text-slate-400 font-semibold mt-1">Profil complété</p>
+        <div className="bg-white border border-border rounded-card p-5">
+          <Gauge size={18} className="text-primary mb-3" />
+          <p className="text-3xl font-extrabold text-text-primary">{loading ? "—" : `${completionPct}%`}</p>
+          <p className="text-xs text-text-secondary font-medium mt-1">Profil complété</p>
         </div>
-        <div className="bg-white border border-[#ebebeb] rounded-xl p-5">
-          <Camera size={18} className="text-slate-700 mb-3" />
-          <p className="text-3xl font-black text-[#0a0a0a]">{loading ? "—" : profile?.imageCount ?? 0}</p>
-          <p className="text-xs text-slate-400 font-semibold mt-1">Photos</p>
+        <div className="bg-white border border-border rounded-card p-5">
+          <GraduationCap size={18} className="text-primary mb-3" />
+          <p className="text-3xl font-extrabold text-text-primary">{loading ? "—" : classes.length}</p>
+          <p className="text-xs text-text-secondary font-medium mt-1">Classes</p>
         </div>
-        <div className="bg-white border border-[#ebebeb] rounded-xl p-5">
-          <Activity size={18} className="text-slate-700 mb-3" />
-          <p className="text-sm font-black text-[#0a0a0a]">
-            {loading
-              ? "—"
-              : lastActivityDate
-                ? new Date(lastActivityDate).toLocaleDateString("fr-FR", { day: "2-digit", month: "short" })
-                : "Aucune"}
-          </p>
-          <p className="text-xs text-slate-400 font-semibold mt-1">Dernière activité</p>
+        <div className="bg-white border border-border rounded-card p-5">
+          <CheckCircle size={18} className="text-primary mb-3" />
+          <p className="text-3xl font-extrabold text-text-primary">{loading ? "—" : accepted}</p>
+          <p className="text-xs text-text-secondary font-medium mt-1">Admissions acceptées</p>
         </div>
       </div>
 
@@ -206,25 +189,6 @@ export default function DashboardEcoleHome() {
           </div>
         </div>
       )}
-
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {[
-          { label: "Demandes", value: applications.length, icon: ClipboardList, color: "text-slate-700" },
-          { label: "En attente", value: pending, icon: Clock, color: "text-yellow-600" },
-          { label: "Acceptées", value: accepted, icon: CheckCircle, color: "text-emerald-600" },
-          { label: "Refusées", value: rejected, icon: XCircle, color: "text-red-500" },
-        ].map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <div key={stat.label} className="bg-white border border-[#ebebeb] rounded-xl p-5">
-              <Icon size={18} className={`${stat.color} mb-3`} />
-              <p className="text-3xl font-black text-[#0a0a0a]">{stat.value}</p>
-              <p className="text-xs text-slate-400 font-semibold mt-1">{stat.label}</p>
-            </div>
-          );
-        })}
-      </div>
 
       {/* Module Pro */}
       {school.forfait === "pro" ? (

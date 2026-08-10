@@ -12,20 +12,26 @@ html {
 
 body {
   margin: 0;
-  background: #fbf8ef;
-  color: #0f172a;
+  background: #FAF8F3;
+  color: #0A0A0A;
+  font-family: var(--font-manrope), sans-serif;
 }
 
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+/* Design System V2 — docs/03_DESIGN_SYSTEM/04_COMPONENTS.md §Skeleton */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
-.animate-marquee {
-  animation: marquee 22s linear infinite;
+.skeleton-shimmer {
+  background-image: linear-gradient(90deg, #F4F3EF 25%, #EAE8E2 37%, #F4F3EF 63%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer {
+    animation: none;
+  }
 }
 
