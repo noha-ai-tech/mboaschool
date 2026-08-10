@@ -434,9 +434,9 @@ export default function HomePage() {
 
       {/* ── HEADER ─────────────────────────────────────────────────── */}
       <header className="fixed top-0 inset-x-0 z-50 bg-white border-b border-[#ebebeb]">
-        <div className="max-w-screen-xl mx-auto px-5 h-[60px] flex items-center gap-6">
+        <div className="max-w-screen-xl mx-auto px-5 h-[116px] flex items-center gap-6">
           <Link href="/" className="shrink-0 flex items-center">
-            <Logo size="md" priority />
+            <Logo size="lg" priority />
           </Link>
 
           {/* Desktop nav */}
@@ -517,7 +517,7 @@ export default function HomePage() {
       </header>
 
       {/* ── HERO ───────────────────────────────────────────────────── */}
-      <section className="relative pt-[60px] pb-6 bg-[radial-gradient(ellipse_farthest-corner_at_top_left,#03130d_0%,#0a3d28_12%,#0f9d68_30%,#2fb086_45%,#5fc29e_55%,#8ed4b8_65%,#c3e9d7_75%,#eaf6f0_85%,#ffffff_100%)] text-white overflow-hidden">
+      <section className="relative pt-[116px] pb-6 bg-[radial-gradient(ellipse_farthest-corner_at_top_left,#03130d_0%,#0a3d28_12%,#0f9d68_30%,#2fb086_45%,#5fc29e_55%,#8ed4b8_65%,#c3e9d7_75%,#eaf6f0_85%,#ffffff_100%)] text-white overflow-hidden">
         <div className="relative max-w-screen-xl mx-auto px-5 pt-16 lg:pt-20">
           <div className="flex items-center gap-2 mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />

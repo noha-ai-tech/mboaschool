@@ -29,7 +29,7 @@ import {
 function SidebarLogo() {
   return (
     <Link href="/" className="flex items-center">
-      <Logo variant="dark" size="md" />
+      <Logo variant="dark" size="lg" />
     </Link>
   );
 }
