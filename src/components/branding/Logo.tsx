@@ -1,25 +1,23 @@
-// Logo officiel Écoles237 (Branding Final V1). Composant UNIQUE de rendu du
-// logo — deux variantes fournies séparément (pas de recoloration CSS d'un
-// seul fichier) : logo-light.png pour les fonds clairs, logo-dark.png pour
-// les fonds sombres.
+// Logo officiel Écoles237. Composant UNIQUE de rendu du logo — utilise
+// désormais le badge carré (favicon.png) partout, sur fond clair comme
+// sombre : les anciens fichiers horizontaux (logo-light.png/logo-dark.png)
+// ne sont plus référencés. `variant` reste dans la signature pour ne pas
+// casser les appels existants, mais les deux valeurs pointent vers le même
+// fichier — le badge n'a qu'une seule version.
 //
-// `next/image` (import statique) n'est volontairement pas utilisé ici : les
-// dimensions réelles des fichiers officiels (logos horizontaux) ne sont pas
-// connues à l'écriture de ce composant. Un <img> classique avec hauteur fixe
-// et largeur automatique préserve le ratio réel du fichier quel qu'il soit.
+// `next/image` n'est volontairement pas utilisé ici : ce composant est
+// rendu dans un header en position fixed dès le premier paint (LCP), un
+// <img> classique évite toute dépendance à l'optimiseur d'image.
 
-const HEIGHTS = { sm: 40, md: 64, lg: 96 } as const;
+const SIZES = { sm: 32, md: 48, lg: 72, header: 40 } as const;
 
-export type LogoSize = keyof typeof HEIGHTS;
+export type LogoSize = keyof typeof SIZES;
 export type LogoVariant = "light" | "dark";
 
-const SOURCES: Record<LogoVariant, string> = {
-  light: "/branding/logo-light.png",
-  dark: "/branding/logo-dark.png",
-};
+const SOURCE = "/branding/favicon.png";
 
 export function Logo({
-  variant = "light",
+  variant: _variant = "light",
   size = "md",
   priority = false,
   className = "",
@@ -29,17 +27,18 @@ export function Logo({
   priority?: boolean;
   className?: string;
 }) {
-  const height = HEIGHTS[size];
+  const px = SIZES[size];
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={SOURCES[variant]}
+      src={SOURCE}
       alt="Écoles237"
-      height={height}
-      style={{ height, width: "auto" }}
+      width={px}
+      height={px}
+      style={{ width: px, height: px }}
       loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : undefined}
-      className={className}
+      className={`rounded-xl ${className}`}
     />
   );
 }

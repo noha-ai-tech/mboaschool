@@ -1,108 +1,37 @@
 "use client";
 
 import Link from "next/link";
-import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Search,
   MapPin,
-  Phone,
-  School,
-  GraduationCap,
-  Baby,
   Building2,
-  Wrench,
   CheckCircle2,
   ArrowRight,
-  Scale,
-  Navigation,
-  Heart,
   Menu,
   X,
   ChevronRight,
-  ChevronLeft,
+  Map as MapIcon,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { Logo } from "@/components/branding/Logo";
-
-const LocalSchoolMap = dynamic(() => import("@/components/LocalSchoolMap"), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex items-center justify-center bg-slate-100">
-      <span className="text-sm text-slate-400 font-medium">Chargement de la carte…</span>
-    </div>
-  ),
-});
-
-const DEFAULT_CENTER = { lat: 4.0511, lng: 9.7679 }; // Douala
-
-// Contenu restauré tel quel depuis la version antérieure au Design Freeze
-// (commit 024b326, src/app/page.tsx) — voir docs/03_DESIGN_SYSTEM pour le
-// détail. Slide 3 (Pro) reprend le texte déjà réellement utilisé et validé
-// sur dashboard/ecole/page.tsx ("Écoles237 Pro" / "Emplois du temps,
-// pointage des enseignants et messagerie interne"), jamais inventé.
-const HERO_SLIDES = [
-  {
-    theme: "ivoire" as const,
-    eyebrow: "Pour les familles",
-    title: "Trouvez l'école idéale près de chez vous.",
-    text: "Comparez les établissements, consultez les frais et les infrastructures, et postulez en ligne en quelques minutes.",
-  },
-  {
-    theme: "green" as const,
-    eyebrow: "Pour votre école",
-    title: "Votre page visible dans tout le Cameroun.",
-    text: null,
-    cta: { label: "Inscrire mon établissement", href: "/auth/inscription" },
-  },
-  {
-    theme: "indigo" as const,
-    eyebrow: "Écoles237 Pro",
-    title: "Emplois du temps, présences et salaires, réunis.",
-    text: "Emplois du temps, pointage des enseignants et messagerie interne.",
-  },
-];
-
-const SLIDE_THEME_CLASSES: Record<string, string> = {
-  ivoire: "bg-[linear-gradient(135deg,#F3EEE2_0%,#E7EFE4_55%,#CFE3D6_100%)] text-[#0A0A0A]",
-  green: "bg-[linear-gradient(135deg,#083D2A_0%,#0A5C3C_55%,#0F9D68_100%)] text-white",
-  indigo: "bg-[linear-gradient(135deg,#241B3D_0%,#3B2E63_55%,#0A5C3C_100%)] text-white",
-};
+import { HeroBackground } from "@/components/hero/HeroBackground";
+import { HeroSearch } from "@/components/hero/HeroSearch";
+import { HeroCarousel } from "@/components/hero/HeroCarousel";
+import type { HeroSlideData } from "@/components/hero/HeroSlide";
+import { AnnouncementTicker, type TickerItem } from "@/components/hero/AnnouncementTicker";
+import { CategoryCard } from "@/components/categories/CategoryCard";
+import { FeaturedSchoolsCarousel } from "@/components/schools/FeaturedSchoolsCarousel";
+import { PromotionCard } from "@/components/promotion/PromotionCard";
+import { PartnerAdCard, type PartnerAd } from "@/components/promotion/PartnerAdCard";
+import { StatCard as LandingStatCard } from "@/components/landing/StatCard";
+import { PartnerPlaceholder } from "@/components/landing/PartnerPlaceholder";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { getCameroonRegion } from "@/lib/cameroonRegions";
+import { categories } from "@/lib/categories";
 
 // ─── Data & Types ────────────────────────────────────────────────────────────
-
-const categories = [
-  {
-    key: "garderie",
-    label: "Garderie",
-    icon: Baby,
-    subcategories: ["Crèche", "Prématernelle", "Maternelle"],
-  },
-  {
-    key: "primaire",
-    label: "Primaire",
-    icon: School,
-    subcategories: ["Public", "Privé", "Confessionnel", "Bilingue"],
-  },
-  {
-    key: "secondaire",
-    label: "Secondaire",
-    icon: Building2,
-    subcategories: ["Lycée public", "Collège privé", "Technique", "Bilingue"],
-  },
-  {
-    key: "superieur",
-    label: "Supérieur",
-    icon: GraduationCap,
-    subcategories: ["Université", "Grande école", "Institut supérieur"],
-  },
-  {
-    key: "autres",
-    label: "Formations",
-    icon: Wrench,
-    subcategories: ["Santé", "Auto-école", "Couture", "Coiffure", "Hôtellerie", "Informatique", "Langues"],
-  },
-];
 
 type School = {
   id: string;
@@ -174,208 +103,85 @@ function transformSchool(raw: any): School {
   };
 }
 
-function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number) {
-  const R = 6371;
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
-function Money({ value }: { value: number }) {
-  return <>{value.toLocaleString("fr-FR")} FCFA</>;
-}
-
-function SchoolCard({
-  school,
-  userLocation,
-  compare,
-  toggleCompare,
-}: {
-  school: School;
-  userLocation: { lat: number; lng: number } | null;
-  compare: string[];
-  toggleCompare: (id: string) => void;
-}) {
-  const dist = userLocation && school.lat && school.lng
-    ? haversineKm(userLocation.lat, userLocation.lng, school.lat, school.lng)
-    : null;
-  const inCompare = compare.includes(school.id);
+function SecondaryCtaBanner({ photo }: { photo: string | null }) {
+  const [imgFailed, setImgFailed] = useState(false);
+  const showPhoto = photo && !imgFailed;
 
   return (
-    <div className="group bg-white rounded-xl overflow-hidden border border-[#ebebeb] hover:border-[#ccc] hover:-translate-y-0.5 transition-all duration-200">
-      {/* Image / Fallback */}
-      <div className="relative h-48 overflow-hidden bg-slate-100">
-        {school.image ? (
-          <img
-            src={school.image}
-            alt={school.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        ) : school.couleurPrimaire && school.couleurSecondaire ? (
-          <div
-            className="w-full h-full group-hover:scale-105 transition-transform duration-500"
-            style={{ background: `linear-gradient(135deg, ${school.couleurPrimaire}, ${school.couleurSecondaire})` }}
-          />
-        ) : (
-          <div className="w-full h-full bg-slate-800 flex items-center justify-center">
-            <span className="text-5xl">{school.emojiLogo ?? "🏫"}</span>
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
-
-        {/* Emoji badge top-left (quand pas sponsorisé) */}
-        {school.emojiLogo && !school.isFeatured && (
-          <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-base leading-none px-2 py-1 rounded-xl">
-            {school.emojiLogo}
-          </span>
-        )}
-
-        {school.isFeatured && (
-          <span className="absolute top-3 left-3 bg-yellow-400 text-[#0a0a0a] text-[11px] font-black px-2.5 py-1 rounded-full tracking-wide">
-            SPONSORISÉ
-          </span>
-        )}
-
-        <div className="absolute top-3 right-3 flex gap-1.5">
-          <button
-            onClick={(e) => { e.preventDefault(); toggleCompare(school.id); }}
-            className={`backdrop-blur-sm rounded-full p-1.5 transition-colors ${inCompare ? "bg-emerald-600 text-white" : "bg-white/90 text-slate-600 hover:text-emerald-600"}`}
-          >
-            <Scale size={13} />
-          </button>
-          <button className="bg-white/90 backdrop-blur-sm rounded-full p-1.5 text-slate-600 hover:text-red-500 transition-colors">
-            <Heart size={13} />
-          </button>
+    <section className="relative overflow-hidden bg-gradient-to-r from-primary to-primary-dark">
+      {showPhoto && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={photo as string}
+          alt=""
+          onError={() => setImgFailed(true)}
+          className="absolute inset-0 w-full h-full object-cover opacity-20"
+        />
+      )}
+      <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/95 to-primary-dark/95" />
+      <div className="relative max-w-[1520px] mx-auto px-[18px] py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+        <div>
+          <p className="text-white font-bold text-lg">Votre établissement mérite plus de visibilité.</p>
+          <p className="text-white/75 text-sm mt-0.5">Rejoignez Écoles237 et développez votre communauté.</p>
         </div>
+        <Link
+          href="/auth/inscription"
+          className="shrink-0 inline-flex items-center gap-2 bg-[#FCD116] text-[#0A0A0A] px-5 py-2.5 rounded-card text-sm font-bold hover:bg-[#FCD116]/90 transition-colors duration-base"
+        >
+          Commencer maintenant
+          <ArrowRight size={15} />
+        </Link>
       </div>
-
-      {/* Info */}
-      <div className="p-4">
-        {/* Badges */}
-        <div className="flex flex-wrap gap-1.5 mb-2">
-          <span className="text-[10px] font-semibold bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full capitalize">
-            {school.category}{school.subcategory ? ` · ${school.subcategory}` : ""}
-          </span>
-          {school.verified && (
-            <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">
-              <CheckCircle2 size={9} /> Vérifiée
-            </span>
-          )}
-          {!school.isClaimed && (
-            <span className="text-[10px] font-semibold bg-slate-50 text-slate-400 border border-slate-200 px-2 py-0.5 rounded-full">
-              Non revendiquée
-            </span>
-          )}
-        </div>
-
-        <h3 className="font-bold text-[15px] leading-snug text-[#0a0a0a] mb-1.5 line-clamp-2">
-          {school.name}
-        </h3>
-
-        <p className="flex items-center gap-1 text-xs text-slate-500 mb-1">
-          <MapPin size={11} />
-          {school.quartier ? `${school.quartier}, ` : ""}{school.city}
-          {dist !== null && (
-            <span className="ml-1 text-emerald-600 font-semibold">· {dist.toFixed(1)} km</span>
-          )}
-        </p>
-
-        {school.phone ? (
-          <a
-            href={`tel:${school.phone}`}
-            className="flex items-center gap-1 text-xs text-slate-500 hover:text-emerald-700 transition-colors mb-3"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Phone size={11} />
-            {school.phone}
-          </a>
-        ) : (
-          <div className="mb-3" />
-        )}
-
-        {school.fees > 0 && (
-          <p className="text-xs text-slate-500 mb-3">
-            À partir de <span className="font-bold text-[#0a0a0a]"><Money value={school.fees} /></span>/an
-          </p>
-        )}
-
-        {school.infrastructure.length > 0 && (
-          <div className="flex flex-wrap gap-1 mb-4">
-            {school.infrastructure.slice(0, 3).map((item) => (
-              <span key={item} className="text-[10px] font-semibold bg-slate-50 text-slate-600 border border-slate-200 px-2 py-0.5 rounded-full">
-                {item}
-              </span>
-            ))}
-            {school.infrastructure.length > 3 && (
-              <span className="text-[10px] font-semibold text-slate-400 px-1 py-0.5">
-                +{school.infrastructure.length - 3}
-              </span>
-            )}
-          </div>
-        )}
-
-        {school.isClaimed ? (
-          <Link
-            href={`/ecole/${school.id}`}
-            className="flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:text-emerald-600 transition-colors group/link"
-          >
-            Voir la fiche
-            <ArrowRight size={14} className="group-hover/link:translate-x-0.5 transition-transform" />
-          </Link>
-        ) : (
-          <Link
-            href={`/auth/inscription?ecole=${school.id}`}
-            className="flex items-center gap-1.5 text-sm font-semibold text-slate-500 hover:text-[#0a0a0a] transition-colors group/link"
-          >
-            Revendiquer cette page
-            <ArrowRight size={14} className="group-hover/link:translate-x-0.5 transition-transform" />
-          </Link>
-        )}
-      </div>
-    </div>
+    </section>
   );
 }
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 export default function HomePage() {
+  const router = useRouter();
   const [schools, setSchools] = useState<School[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("all");
-  const [activeSubcategory, setActiveSubcategory] = useState("all");
   const [query, setQuery] = useState("");
   const [city, setCity] = useState("all");
-  const [useLocation, setUseLocation] = useState(false);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [radius] = useState("5");
-  const [compare, setCompare] = useState<string[]>([]);
+  const [radius, setRadius] = useState("5");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [heroSlide, setHeroSlide] = useState(0);
-  const [heroPaused, setHeroPaused] = useState(false);
-  const touchStartX = useRef<number | null>(null);
-  const [mapModalOpen, setMapModalOpen] = useState(false);
   const [locating, setLocating] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
+  const [headerSearchOpen, setHeaderSearchOpen] = useState(false);
+  const [headerScrolled, setHeaderScrolled] = useState(false);
+  const headerSearchRef = useRef<HTMLDivElement | null>(null);
 
-  // Carrousel Hero : intervalle 6s, pause au survol/interaction et quand
-  // l'onglet est masqué. Respecte prefers-reduced-motion (pas de rotation
-  // automatique dans ce mode — voir docs/03_DESIGN_SYSTEM/06_MOTION.md).
+  // Header flottant Premium V2 — réduction de hauteur douce au scroll.
   useEffect(() => {
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion || heroPaused) return;
-    const timer = setInterval(() => {
-      if (document.visibilityState === "visible") {
-        setHeroSlide((i) => (i + 1) % HERO_SLIDES.length);
+    const onScroll = () => setHeaderScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Fermeture du panneau de recherche du header au clic extérieur / Échap.
+  useEffect(() => {
+    if (!headerSearchOpen) return;
+    function handleClick(e: MouseEvent) {
+      if (headerSearchRef.current && !headerSearchRef.current.contains(e.target as Node)) {
+        setHeaderSearchOpen(false);
       }
-    }, 6000);
-    return () => clearInterval(timer);
-  }, [heroPaused]);
+    }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setHeaderSearchOpen(false);
+    }
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [headerSearchOpen]);
 
   useEffect(() => {
     async function load() {
@@ -401,25 +207,40 @@ export default function HomePage() {
   }, []);
 
   function handleLocationToggle() {
-    if (!navigator.geolocation) { alert("Géolocalisation non supportée."); return; }
+    setLocationError(null);
+    if (!navigator.geolocation) {
+      setLocationError("La géolocalisation n'est pas disponible sur cet appareil. Vous pouvez rechercher par ville.");
+      return;
+    }
     setLocating(true);
     navigator.geolocation.getCurrentPosition(
       (p) => {
         setUserLocation({ lat: p.coords.latitude, lng: p.coords.longitude });
-        setUseLocation(true);
         setLocating(false);
-        setMapModalOpen(true);
       },
-      () => { setLocating(false); alert("Position indisponible."); }
+      () => {
+        setLocating(false);
+        setLocationError("Position indisponible. Vous pouvez rechercher par ville ou consulter la carte manuellement.");
+      }
     );
   }
 
-  function toggleCompare(id: string) {
-    setCompare((prev) => {
-      if (prev.includes(id)) return prev.filter((x) => x !== id);
-      if (prev.length >= 3) return [prev[1], prev[2], id].filter(Boolean);
-      return [...prev, id];
-    });
+  // La recherche du Hero ne filtre plus en place — elle navigue vers /recherche
+  // (Sprint Landing V5) avec les filtres actuels encodés en query params, page
+  // qui héberge désormais la liste/carte/comparaison réelle.
+  function goToRecherche(overrides?: { q?: string }) {
+    const params = new URLSearchParams();
+    const q = overrides?.q ?? query;
+    if (q.trim()) params.set("q", q.trim());
+    if (activeCategory !== "all") params.set("categorie", activeCategory);
+    if (city !== "all") params.set("ville", city);
+    if (userLocation) {
+      params.set("lat", String(userLocation.lat));
+      params.set("lng", String(userLocation.lng));
+      params.set("rayon", radius);
+    }
+    const qs = params.toString();
+    router.push(qs ? `/recherche?${qs}` : "/recherche");
   }
 
   const cities = useMemo(
@@ -427,589 +248,451 @@ export default function HomePage() {
     [schools]
   );
 
-  const mapCenter = userLocation ?? DEFAULT_CENTER;
+  // Données réelles pour Catégories / À la une / Statistiques — aucune valeur inventée.
+  const featuredSchools = useMemo(() => schools.filter((s) => s.isFeatured), [schools]);
+  const categoryCounts = useMemo(() => {
+    const map: Record<string, number> = {};
+    for (const cat of categories) map[cat.key] = schools.filter((s) => s.category === cat.key).length;
+    return map;
+  }, [schools]);
+  const statCities = Math.max(cities.length - 1, 0);
+  const statVerified = schools.filter((s) => s.verified).length;
+  // Régions réellement couvertes — dérivé des vraies villes en base via une
+  // table de correspondance géographique factuelle (src/lib/cameroonRegions),
+  // jamais un chiffre cible. "Préinscriptions envoyées" n'est pas affichable
+  // ici : la table `applications` n'a pas de policy RLS de lecture pour le
+  // rôle anonyme, et créer cette policy sortirait du périmètre Supabase de
+  // ce sprint — remplacé par une 4e statistique honnête.
+  const statRegions = useMemo(
+    () => new Set(schools.map((s) => getCameroonRegion(s.city)).filter((r): r is string => r !== null)).size,
+    [schools]
+  );
+  // Aucune donnée annonceur réelle n'existe encore — le panneau reste masqué.
+  const partnerAds: PartnerAd[] = [];
 
-  const nearbySchools = useMemo(() => {
-    const withCoords = schools.filter(
-      (s): s is School & { lat: number; lng: number } =>
-        s.lat != null && s.lng != null && (activeCategory === "all" || s.category === activeCategory)
-    );
-    if (!userLocation) return withCoords.slice(0, 30);
-    return withCoords
-      .filter((s) => haversineKm(userLocation.lat, userLocation.lng, s.lat, s.lng) <= Number(radius))
-      .slice(0, 30);
-  }, [schools, userLocation, radius, activeCategory]);
+  // Slides du Hero — écoles réellement "à la une" (is_featured, photo réelle)
+  // en tête, puis des slides produit réels (aucune photo stock/IA, aucune
+  // marque tierce non partenaire, aucune annonce institutionnelle fabriquée).
+  const heroSlides = useMemo<HeroSlideData[]>(() => {
+    const slides: HeroSlideData[] = [];
 
-  const filtered = schools.filter((s) => {
-    if (activeCategory !== "all" && s.category !== activeCategory) return false;
-    if (activeSubcategory !== "all" && s.subcategory.toLowerCase() !== activeSubcategory.toLowerCase()) return false;
-    if (city !== "all" && s.city !== city) return false;
-    if (useLocation && userLocation) {
-      if (!s.lat || !s.lng) return false;
-      if (haversineKm(userLocation.lat, userLocation.lng, s.lat, s.lng) > Number(radius)) return false;
+    // Jusqu'à 4 candidats réels (au lieu de 2) : si une photo est cassée,
+    // HeroSlide bascule sur un repli propre plutôt que de laisser un vide —
+    // élargir le pool réduit la probabilité que le carrousel ne montre que
+    // des replis quand une ou deux URL sont mortes.
+    for (const s of featuredSchools.slice(0, 4)) {
+      if (!s.image) continue;
+      slides.push({
+        id: `school-${s.id}`,
+        type: "school",
+        image: s.image,
+        badge: "École Premium",
+        eyebrow: `${s.city}${s.subcategory ? ` · ${s.subcategory}` : ""}`,
+        title: s.name,
+        ctaLabel: "Découvrir cette école",
+        ctaHref: s.isClaimed ? `/ecole/${s.id}` : `/auth/inscription?ecole=${s.id}`,
+        sponsor: s.name,
+      });
     }
-    if (query) {
-      const t = `${s.name} ${s.city} ${s.quartier} ${s.category} ${s.subcategory}`.toLowerCase();
-      if (!t.includes(query.toLowerCase())) return false;
+
+    // Landing V4 §12/§19-20 : chaque slide du carrousel Hero doit porter une
+    // vraie image — les anciennes slides "produit" en dégradé sans photo ont
+    // été retirées d'ici. Ce même contenu reste accessible ailleurs sur la
+    // page (PromotionCard, bannière CTA, bande d'annonces), donc rien n'est
+    // perdu, seul le carrousel devient strictement photo-only.
+    return slides;
+  }, [featuredSchools]);
+
+  // Bande d'annonces — chaque entrée est un vrai lien vers une fonctionnalité
+  // ou une page existante, jamais un message inventé.
+  const tickerItems = useMemo<TickerItem[]>(() => {
+    const items: TickerItem[] = [];
+    if (!loading && schools.length > 0) {
+      items.push({
+        id: "count",
+        label: `${schools.length} établissement${schools.length !== 1 ? "s" : ""} déjà référencé${schools.length !== 1 ? "s" : ""}`,
+        href: "/recherche",
+      });
     }
-    return true;
-  });
-
-  const compareSchools = schools.filter((s) => compare.includes(s.id)).slice(0, 3);
-
-  const groupedByCategory = useMemo(() => {
-    if (activeCategory !== "all") return null;
-    return categories
-      .map((cat) => ({ cat, items: filtered.filter((s) => s.category === cat.key).slice(0, 3) }))
-      .filter((group) => group.items.length > 0);
-  }, [filtered, activeCategory]);
+    items.push({ id: "preinscription", label: "Préinscription en ligne", href: "/preinscription" });
+    items.push({ id: "inscription", label: "Inscrire mon établissement", href: "/auth/inscription" });
+    if (featuredSchools[0]) {
+      items.push({
+        id: "featured",
+        label: `École à la une : ${featuredSchools[0].name}`,
+        href: featuredSchools[0].isClaimed ? `/ecole/${featuredSchools[0].id}` : `/auth/inscription?ecole=${featuredSchools[0].id}`,
+      });
+    }
+    return items;
+  }, [loading, schools.length, featuredSchools]);
 
   return (
-    <div className="min-h-screen bg-[#f9f7f2] text-[#0a0a0a]">
+    <div className="min-h-screen bg-muted text-[#0a0a0a]">
 
-      {/* ── HEADER ─────────────────────────────────────────────────── */}
-      <header className="fixed top-0 inset-x-0 z-50 bg-white border-b border-border">
-        <div className="max-w-screen-xl mx-auto px-5 h-20 flex items-center gap-8">
-          <Link href="/" className="shrink-0 flex items-center">
-            <Logo size="md" priority />
-          </Link>
-
-          {/* Desktop nav — liens directs, pas de sous-menu au survol (inutilisable au tactile) */}
-          <nav className="hidden lg:flex items-center gap-1">
-            <button
-              onClick={() => { setActiveCategory("all"); setActiveSubcategory("all"); }}
-              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-fast ${activeCategory === "all" ? "text-primary" : "text-text-secondary hover:text-text-primary"}`}
-            >
-              Toutes les écoles
-            </button>
-            {categories.map((cat) => (
-              <Link
-                key={cat.key}
-                href={`/categorie/${cat.key}`}
-                className="px-3 py-2 text-sm font-medium rounded-lg text-text-secondary hover:text-text-primary transition-colors duration-fast"
-              >
-                {cat.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="hidden md:flex items-center gap-4 ml-auto">
-            <Link href="/auth/connexion" className="text-sm font-semibold text-text-secondary hover:text-text-primary transition-colors duration-fast">
-              Connexion
-            </Link>
-            <Link href="/auth/inscription" className="inline-flex items-center h-10 px-4 rounded-[10px] bg-[#0A0A0A] text-white text-sm font-semibold hover:bg-[#0A0A0A]/90 transition-colors duration-fast">
-              Inscrire mon école
-            </Link>
-          </div>
-
-          <button aria-label="Menu" className="lg:hidden ml-auto p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
-        </div>
-
-        {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-border bg-white px-5 py-4 space-y-1">
-            {categories.map((cat) => (
-              <Link
-                key={cat.key}
-                href={`/categorie/${cat.key}`}
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-left px-3 py-2.5 text-sm font-medium rounded-lg hover:bg-muted flex items-center justify-between"
-              >
-                {cat.label}
-                <ChevronRight size={14} className="text-text-secondary" />
-              </Link>
-            ))}
-            <div className="pt-3 border-t border-border flex flex-col gap-2 mt-2">
-              <Link href="/auth/connexion" className="px-3 py-2.5 text-sm font-semibold">Connexion</Link>
-              <Link href="/auth/inscription" className="bg-[#0A0A0A] text-white px-4 py-2.5 rounded-[10px] text-sm font-semibold text-center">Inscrire mon école</Link>
-            </div>
-          </div>
-        )}
-      </header>
-
-      {/* ── ANNOUNCEMENT RIBBON ────────────────────────────────────── */}
-      {/* Restaurée (Correctif Landing) — contenu identique à la version
-          d'origine (établissements référencés, inscription gratuite,
-          préinscription en ligne, villes), retraitement visuel uniquement :
-          ruban éditorial compact plutôt que bannière noire clignotante. */}
-      <div className="bg-muted border-b border-border py-2 overflow-hidden whitespace-nowrap">
-        <div className="flex w-max animate-marquee-soft motion-reduce:animate-none">
-          {[0, 1].map((i) => (
-            <span key={i} className="flex items-center gap-6 pr-6 text-[13px] font-medium text-text-secondary shrink-0" aria-hidden={i === 1}>
-              {!loading && schools.length > 0 && (
-                <>
-                  <span className="text-text-primary font-semibold">{schools.length} établissement{schools.length !== 1 ? "s" : ""} déjà référencé{schools.length !== 1 ? "s" : ""}</span>
-                  <span className="text-border">·</span>
-                </>
+      {/* ── HEADER ─────────────────────────────────────────────────────
+          Barre pleine largeur, collée en haut, fond blanc opaque — plus
+          de pilule flottante/marge/coins arrondis (Landing V5, pattern
+          jw.org). Rétrécit doucement au scroll. */}
+      <header className="fixed inset-x-0 top-0 z-50 bg-white border-b border-border">
+        <div className="max-w-[1520px] mx-auto px-4 sm:px-6">
+          <div
+            className={`relative flex items-center gap-8 transition-all duration-300 ease-out ${
+              headerScrolled ? "h-14" : "h-[72px]"
+            }`}
+          >
+            <Link href="/" className="shrink-0 flex flex-col justify-center">
+              <Logo size={headerScrolled ? "sm" : "header"} priority />
+              {!headerScrolled && (
+                <span className="hidden sm:block text-[10px] leading-tight text-text-secondary mt-1 whitespace-nowrap">
+                  L&apos;éducation du Cameroun en un clic
+                </span>
               )}
-              <span>Inscription gratuite pour votre école</span>
-              <span className="text-border">·</span>
-              <span>Préinscription en ligne en quelques minutes</span>
-              <span className="text-border">·</span>
-              <span>Douala · Yaoundé</span>
-              <span className="text-border">·</span>
-            </span>
-          ))}
-        </div>
-      </div>
+            </Link>
 
-      {/* ── HERO ───────────────────────────────────────────────────── */}
-      <section className="relative pt-10 pb-16 lg:pb-20 bg-background text-text-primary overflow-hidden">
-        <div className="relative max-w-screen-xl mx-auto px-5">
-          <div className="flex items-center gap-2 mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-            <span className="w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-            <span className="w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-            <span className="ml-2 text-sm font-semibold tracking-[0.15em] uppercase text-text-secondary">
-              Plateforme éducative · Cameroun
-            </span>
-          </div>
-
-          <div className="grid lg:grid-cols-[0.85fr_1.5fr] items-stretch gap-8">
-
-            {/* Search card */}
-            <div className="flex flex-col justify-center">
-              <div className="bg-surface border border-border rounded-card p-6 shadow-elevation-1 flex flex-col gap-3.5">
-                <div>
-                  <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-2">Recherche rapide</p>
-                  <h1 className="text-xl font-bold leading-snug">Trouvez l&apos;école idéale près de chez vous.</h1>
-                </div>
-
-                <div className="flex items-center gap-2 bg-muted border border-border rounded-[10px] px-4 h-12 focus-within:border-primary transition-colors duration-fast">
-                  <Search size={16} className="text-text-secondary shrink-0" />
-                  <input
-                    className="bg-transparent outline-none text-sm flex-1 min-w-0 placeholder:text-text-secondary"
-                    placeholder="Nom, ville, niveau…"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                  />
-                  {query && (
-                    <button onClick={() => setQuery("")} className="text-text-secondary hover:text-text-primary" aria-label="Effacer">
-                      <X size={14} />
-                    </button>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <select
-                    value={activeCategory}
-                    onChange={(e) => { setActiveCategory(e.target.value); setActiveSubcategory("all"); }}
-                    className="flex-1 min-w-0 border border-border rounded-[10px] px-3 h-10 text-[13px] font-medium bg-surface focus:outline-none focus:border-primary transition-colors duration-fast"
-                  >
-                    <option value="all">Toutes catégories</option>
-                    {categories.map((cat) => (
-                      <option key={cat.key} value={cat.key}>{cat.label}</option>
-                    ))}
-                  </select>
-                  <select
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    className="flex-1 min-w-0 border border-border rounded-[10px] px-3 h-10 text-[13px] font-medium bg-surface focus:outline-none focus:border-primary transition-colors duration-fast"
-                  >
-                    {cities.map((c) => (
-                      <option key={c} value={c}>{c === "all" ? "Toutes les villes" : c}</option>
-                    ))}
-                  </select>
-                  <button
-                    onClick={handleLocationToggle}
-                    disabled={locating}
-                    aria-label="Me localiser"
-                    className="shrink-0 w-10 h-10 flex items-center justify-center rounded-[10px] border border-border text-text-secondary hover:text-text-primary hover:bg-muted transition-colors duration-fast disabled:opacity-50"
-                  >
-                    <Navigation size={15} />
-                  </button>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => document.getElementById("resultats")?.scrollIntoView({ behavior: "smooth" })}
-                  className="bg-[#0A0A0A] text-white rounded-[10px] h-12 font-semibold text-sm flex items-center justify-center gap-2 hover:bg-[#0A0A0A]/90 transition-colors duration-fast"
+            {/* Navigation — hover : texte vert + barre animée 200ms */}
+            <nav className="hidden lg:flex items-center gap-1">
+              <Link
+                href="/recherche"
+                className="group relative px-3 py-2 text-sm font-medium text-text-secondary hover:text-primary transition-colors duration-base"
+              >
+                Toutes les écoles
+                <span className="absolute left-3 right-3 -bottom-0.5 h-[2px] bg-primary origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-base" />
+              </Link>
+              {categories.map((cat) => (
+                <Link
+                  key={cat.key}
+                  href={`/categorie/${cat.key}`}
+                  className="group relative px-3 py-2 text-sm font-medium text-text-secondary hover:text-primary transition-colors duration-base"
                 >
-                  Rechercher
-                  <ArrowRight size={16} />
-                </button>
-              </div>
-            </div>
+                  {cat.label}
+                  <span className="absolute left-3 right-3 -bottom-0.5 h-[2px] bg-primary origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-base" />
+                </Link>
+              ))}
+            </nav>
 
-            {/* Hero carousel — panneaux éditoriaux thématiques */}
-            <div
-              className="relative w-full min-h-[380px] lg:min-h-0 rounded-card overflow-hidden"
-              onMouseEnter={() => setHeroPaused(true)}
-              onMouseLeave={() => setHeroPaused(false)}
-              onFocus={() => setHeroPaused(true)}
-              onBlur={() => setHeroPaused(false)}
-              onKeyDown={(e) => {
-                if (e.key === "ArrowRight") setHeroSlide((i) => (i + 1) % HERO_SLIDES.length);
-                if (e.key === "ArrowLeft") setHeroSlide((i) => (i - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
-              }}
-              onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
-              onTouchEnd={(e) => {
-                if (touchStartX.current === null) return;
-                const delta = e.changedTouches[0].clientX - touchStartX.current;
-                if (delta < -40) setHeroSlide((i) => (i + 1) % HERO_SLIDES.length);
-                if (delta > 40) setHeroSlide((i) => (i - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
-                touchStartX.current = null;
-              }}
-            >
-              {HERO_SLIDES.map((slide, i) => (
-                <div
-                  key={slide.title}
-                  role="group"
-                  aria-roledescription="slide"
-                  aria-label={`${i + 1} sur ${HERO_SLIDES.length}`}
-                  aria-hidden={i !== heroSlide}
-                  className={`absolute inset-0 flex flex-col justify-end p-8 lg:p-10 transition-all duration-500 ease-out ${SLIDE_THEME_CLASSES[slide.theme]} ${
-                    i === heroSlide ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 translate-y-3 pointer-events-none"
+            <div className="hidden md:flex items-center gap-2 ml-auto">
+              <div ref={headerSearchRef} className="relative">
+                <button
+                  aria-label="Rechercher"
+                  aria-expanded={headerSearchOpen}
+                  onClick={() => setHeaderSearchOpen((v) => !v)}
+                  className={`w-10 h-10 flex items-center justify-center rounded-full transition-colors duration-base ${
+                    headerSearchOpen ? "bg-primary/10 text-primary" : "text-text-secondary hover:text-primary hover:bg-primary/5"
                   }`}
                 >
-                  {/* Micro-motif géométrique camerounais — texture discrète, jamais illustrative */}
-                  <svg className="absolute inset-0 w-full h-full opacity-[0.06]" preserveAspectRatio="none" aria-hidden="true">
-                    <pattern id={`motif-${i}`} width="56" height="56" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-                      <rect width="56" height="56" fill="none" />
-                      <path d="M28 0 L56 28 L28 56 L0 28 Z" fill="currentColor" />
-                    </pattern>
-                    <rect width="100%" height="100%" fill={`url(#motif-${i})`} />
-                  </svg>
+                  <Search size={18} />
+                </button>
 
-                  <div className="relative z-10 max-w-md">
-                    <p className={`text-xs font-semibold uppercase tracking-wider mb-3 ${slide.theme === "ivoire" ? "text-primary" : "text-white/70"}`}>
-                      {slide.eyebrow}
-                    </p>
-                    <h2 className="text-2xl lg:text-[28px] font-bold leading-tight mb-2">{slide.title}</h2>
-                    {slide.text && (
-                      <p className={`text-sm leading-relaxed ${slide.theme === "ivoire" ? "text-text-secondary" : "text-white/80"}`}>
-                        {slide.text}
-                      </p>
-                    )}
-                    {"cta" in slide && slide.cta && (
-                      <Link
-                        href={slide.cta.href}
-                        className={`mt-4 inline-flex items-center gap-2 text-sm font-semibold ${slide.theme === "ivoire" ? "text-primary" : "text-white"} hover:opacity-80 transition-opacity duration-fast`}
-                      >
-                        {slide.cta.label}
-                        <ArrowRight size={15} />
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              ))}
-
-              {/* Contrôles */}
-              <button
-                onClick={() => setHeroSlide((i) => (i - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)}
-                aria-label="Diapositive précédente"
-                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-white/15 text-white hover:bg-white/25 transition-colors duration-fast backdrop-blur-sm"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <button
-                onClick={() => setHeroSlide((i) => (i + 1) % HERO_SLIDES.length)}
-                aria-label="Diapositive suivante"
-                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 flex items-center justify-center rounded-full bg-white/15 text-white hover:bg-white/25 transition-colors duration-fast backdrop-blur-sm"
-              >
-                <ChevronRight size={16} />
-              </button>
-
-              <div className="absolute top-5 right-5 flex gap-1.5 z-20">
-                {HERO_SLIDES.map((slide, i) => (
-                  <button
-                    key={slide.title}
-                    onClick={() => setHeroSlide(i)}
-                    className={`h-1.5 rounded-full transition-all duration-fast ${i === heroSlide ? "w-6 bg-white" : "w-1.5 bg-white/40 hover:bg-white/60"}`}
-                    aria-label={`Aller à la diapositive ${i + 1}`}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── MAP MODAL (recherche géolocalisée façon Airbnb) ─────────── */}
-      {mapModalOpen && (
-        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 lg:p-8">
-          <div className="bg-white rounded-3xl overflow-hidden shadow-2xl w-full max-w-4xl h-[80vh] flex flex-col">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[#ebebeb] shrink-0">
-              <div>
-                <p className="font-black text-[#0a0a0a]">
-                  {nearbySchools.length} établissement{nearbySchools.length !== 1 ? "s" : ""}
-                  {activeCategory !== "all" ? ` · ${categories.find((c) => c.key === activeCategory)?.label}` : ""}
-                </p>
-                <p className="text-xs text-slate-400">
-                  Dans un rayon de {radius} km autour de votre position
-                </p>
-              </div>
-              <button
-                onClick={() => setMapModalOpen(false)}
-                className="p-2 rounded-full hover:bg-slate-100 text-slate-500 hover:text-[#0a0a0a] transition-colors"
-              >
-                <X size={20} />
-              </button>
-            </div>
-            <div className="flex-1 min-h-0">
-              <LocalSchoolMap
-                center={mapCenter}
-                userLocation={userLocation}
-                radiusKm={Number(radius)}
-                schools={nearbySchools}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── MAIN CONTENT ───────────────────────────────────────────── */}
-      <main id="resultats" className="max-w-screen-xl mx-auto px-5 pt-8 pb-12">
-
-        {/* Filters row */}
-        <div className="flex items-center gap-3 mb-8 flex-wrap">
-          {city !== "all" && (
-            <span className="flex items-center gap-2 px-3 py-2 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-semibold border border-emerald-200">
-              {city}
-              <button onClick={() => setCity("all")}><X size={13} /></button>
-            </span>
-          )}
-
-          {useLocation && (
-            <span className="flex items-center gap-2 px-3 py-2 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-semibold border border-emerald-200">
-              À moins de {radius} km
-              <button onClick={() => { setUseLocation(false); setUserLocation(null); }}><X size={13} /></button>
-            </span>
-          )}
-
-          <span className="ml-auto text-sm text-slate-400 font-medium">
-            {loading ? "Chargement…" : <><span className="text-[#0a0a0a] font-bold">{filtered.length}</span> résultat{filtered.length !== 1 ? "s" : ""}</>}
-          </span>
-        </div>
-
-
-        {/* Grid */}
-        <div className="grid lg:grid-cols-[1fr_280px] gap-8 items-start">
-          <div>
-            {/* Skeletons */}
-            {loading && (
-              <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="bg-white rounded-xl overflow-hidden border border-[#ebebeb] animate-pulse">
-                    <div className="h-48 bg-slate-100" />
-                    <div className="p-4 space-y-3">
-                      <div className="h-4 bg-slate-100 rounded w-1/3" />
-                      <div className="h-5 bg-slate-100 rounded w-3/4" />
-                      <div className="h-4 bg-slate-100 rounded w-1/2" />
-                      <div className="h-9 bg-slate-100 rounded-lg mt-4" />
+                {/* Panneau de recherche moderne */}
+                {headerSearchOpen && (
+                  <div className="absolute right-0 top-[calc(100%+12px)] w-80 bg-white rounded-[18px] border border-border shadow-elevation-3 p-4">
+                    <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-3">Recherche rapide</p>
+                    <div className="flex items-center gap-2 bg-muted border border-border rounded-[10px] px-3 h-11 focus-within:border-primary transition-colors duration-base">
+                      <Search size={16} className="text-text-secondary shrink-0" />
+                      <input
+                        autoFocus
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            setHeaderSearchOpen(false);
+                            goToRecherche();
+                          }
+                        }}
+                        placeholder="Nom, ville, niveau…"
+                        className="flex-1 min-w-0 bg-transparent outline-none text-sm placeholder:text-text-secondary"
+                      />
+                      {query && (
+                        <button onClick={() => setQuery("")} aria-label="Effacer" className="text-text-secondary hover:text-text-primary shrink-0">
+                          <X size={14} />
+                        </button>
+                      )}
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Grouped by category */}
-            {!loading && groupedByCategory && (
-              <div className="space-y-10">
-                {groupedByCategory.map(({ cat, items }) => (
-                  <div key={cat.key} className="border border-black rounded-xl p-5">
-                    <div className="flex items-center justify-between mb-4">
-                      <h2 className="text-[20px] font-bold tracking-tight text-[#0a0a0a]">{cat.label}</h2>
-                      <Link
-                        href={`/categorie/${cat.key}`}
-                        className="flex items-center gap-1 text-sm font-semibold text-emerald-700 hover:text-emerald-600 transition-colors"
-                      >
-                        Voir tout
-                        <ArrowRight size={14} />
-                      </Link>
-                    </div>
-                    <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                      {items.map((school) => (
-                        <SchoolCard key={school.id} school={school} userLocation={userLocation} compare={compare} toggleCompare={toggleCompare} />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Flat grid (single category selected) */}
-            {!loading && !groupedByCategory && (
-              <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                {filtered.map((school) => (
-                  <SchoolCard key={school.id} school={school} userLocation={userLocation} compare={compare} toggleCompare={toggleCompare} />
-                ))}
-              </div>
-            )}
-
-            {/* Empty state */}
-            {!loading && filtered.length === 0 && (
-              <div className="py-20 text-center">
-                <p className="text-4xl mb-4">🏫</p>
-                <h3 className="text-xl font-bold mb-2">Aucun résultat</h3>
-                <p className="text-slate-500 text-sm">Modifiez vos filtres ou élargissez votre recherche.</p>
-              </div>
-            )}
-          </div>
-
-          {/* Sidebar compare */}
-          <aside className="hidden lg:block sticky top-[80px]">
-            <div className="bg-white border border-[#ebebeb] rounded-2xl overflow-hidden">
-              <div className="px-5 py-4 border-b border-[#ebebeb]">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-sm">Comparaison</h3>
-                  <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${compareSchools.length > 0 ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-400"}`}>
-                    {compareSchools.length}/3
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-4">
-                {compareSchools.length === 0 ? (
-                  <div className="text-center py-6">
-                    <Scale size={28} className="mx-auto text-slate-200 mb-3" />
-                    <p className="text-xs text-slate-400 leading-relaxed">
-                      Cliquez sur <Scale size={11} className="inline" /> sur une carte pour comparer jusqu'à 3 écoles.
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {compareSchools.map((school) => (
-                      <div key={school.id} className="border border-[#ebebeb] rounded-xl p-3">
-                        <div className="flex items-start justify-between gap-2 mb-2">
-                          <p className="font-semibold text-sm leading-snug">{school.name}</p>
-                          <button onClick={() => toggleCompare(school.id)} className="text-slate-300 hover:text-slate-500 shrink-0 mt-0.5">
-                            <X size={13} />
-                          </button>
-                        </div>
-                        <p className="text-xs text-slate-400 mb-2">{school.city}{school.subcategory ? ` · ${school.subcategory}` : ""}</p>
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                          <div className="bg-slate-50 rounded-lg p-2">
-                            <p className="text-slate-400 mb-0.5">Inscription</p>
-                            <p className="font-bold text-[11px]">
-                              {school.registration > 0 ? <Money value={school.registration} /> : "—"}
-                            </p>
-                          </div>
-                          <div className="bg-slate-50 rounded-lg p-2">
-                            <p className="text-slate-400 mb-0.5">Scolarité</p>
-                            <p className="font-bold text-[11px]">
-                              {school.fees > 0 ? <Money value={school.fees} /> : "—"}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-
-                    {compareSchools.length >= 2 && (
-                      <button className="w-full bg-[#0a0a0a] text-white text-xs font-semibold py-2.5 rounded-xl hover:bg-slate-800 transition-colors">
-                        Comparer côte à côte
-                      </button>
-                    )}
+                    <button
+                      onClick={() => {
+                        setHeaderSearchOpen(false);
+                        goToRecherche();
+                      }}
+                      className="mt-3 w-full h-10 rounded-card bg-gradient-to-r from-primary to-primary-dark text-white text-sm font-semibold hover:shadow-elevation-1 transition-all duration-base"
+                    >
+                      Rechercher
+                    </button>
                   </div>
                 )}
               </div>
-            </div>
 
-            {/* CTA card */}
-            <div className="mt-4 bg-[#0a0f0d] text-white rounded-2xl p-5">
-              <p className="text-xs font-semibold tracking-wider uppercase text-slate-400 mb-3">
-                Vous gérez une école ?
-              </p>
-              <p className="font-bold text-base leading-snug mb-4">
-                Inscrivez votre établissement et recevez des demandes de parents.
-              </p>
+              <Link href="/auth/connexion" className="px-2 text-sm font-semibold text-text-secondary hover:text-text-primary transition-colors duration-base">
+                Connexion
+              </Link>
               <Link
                 href="/auth/inscription"
-                className="flex items-center justify-center gap-2 bg-yellow-400 text-[#0a0a0a] px-4 py-2.5 rounded-xl text-sm font-black hover:bg-yellow-300 transition-colors"
+                className="inline-flex items-center h-10 px-5 rounded-card bg-gradient-to-r from-primary to-primary-dark text-white text-sm font-semibold shadow-elevation-1 hover:shadow-elevation-2 hover:-translate-y-0.5 transition-all duration-base"
               >
-                Commencer gratuitement
-                <ArrowRight size={15} />
+                Inscrire mon école
               </Link>
             </div>
-          </aside>
-        </div>
-      </main>
 
-      {/* ── CTA SECTION ────────────────────────────────────────────── */}
-      <section className="bg-[#0a0f0d] text-white">
-        <div className="max-w-screen-xl mx-auto px-5 py-24 grid lg:grid-cols-2 gap-16 items-center">
-          <div>
-            <p className="text-xs font-semibold tracking-[0.15em] uppercase text-emerald-400 mb-4">
-              Pour les établissements
-            </p>
-            <h2 className="text-4xl lg:text-5xl font-black leading-tight tracking-tight mb-6">
-              Votre école visible<br />dans tout le Cameroun.
-            </h2>
-            <p className="text-slate-400 text-base leading-relaxed mb-8 max-w-md">
-              Créez votre page, publiez vos tarifs, votre galerie et recevez des demandes de préinscription directement depuis la plateforme.
-            </p>
-            <Link
-              href="/auth/inscription"
-              className="inline-flex items-center gap-2 bg-yellow-400 text-[#0a0a0a] px-6 py-3.5 rounded-xl font-black text-sm hover:bg-yellow-300 transition-colors"
-            >
-              Inscrire mon établissement
-              <ArrowRight size={16} />
-            </Link>
+            <button aria-label="Menu" className="lg:hidden ml-auto p-2 text-text-primary" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            {[
-              { title: "Page dédiée", desc: "Photos, tarifs, documents, annonces" },
-              { title: "Pré-inscriptions", desc: "Recevez et gérez les dossiers en ligne" },
-              { title: "Vérification", desc: "Badge officiel pour rassurer les parents" },
-              { title: "Statistiques", desc: "Suivez vos vues et vos candidatures" },
-            ].map((item) => (
-              <div key={item.title} className="bg-white/5 border border-white/8 rounded-2xl p-4">
-                <div className="w-2 h-2 rounded-full bg-emerald-400 mb-4" />
-                <p className="font-bold text-sm mb-1">{item.title}</p>
-                <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── FOOTER ─────────────────────────────────────────────────── */}
-      <footer className="bg-accent text-white">
-        <div className="max-w-screen-xl mx-auto px-5 py-14 grid md:grid-cols-4 gap-10">
-          <div className="md:col-span-1">
-            <Link href="/" className="inline-block">
-              <Logo variant="dark" />
-            </Link>
-            <p className="text-slate-400 text-sm mt-4 leading-relaxed max-w-[220px]">
-              La plateforme camerounaise pour trouver et gérer un établissement scolaire.
-            </p>
-          </div>
-
-          <div>
-            <p className="text-xs font-semibold tracking-wider uppercase text-slate-500 mb-4">Catégories</p>
-            <div className="space-y-2.5">
+          {/* Mobile menu */}
+          {mobileMenuOpen && (
+            <div className="lg:hidden mt-2 rounded-[18px] border border-black/[0.06] bg-white/95 backdrop-blur-[20px] shadow-elevation-2 px-5 py-4 space-y-1">
               {categories.map((cat) => (
-                <Link key={cat.key} href={`/categorie/${cat.key}`} className="block text-sm text-slate-400 hover:text-white transition-colors duration-fast">
+                <Link
+                  key={cat.key}
+                  href={`/categorie/${cat.key}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-left px-3 py-2.5 text-sm font-medium rounded-lg hover:bg-muted flex items-center justify-between"
+                >
                   {cat.label}
+                  <ChevronRight size={14} className="text-text-secondary" />
                 </Link>
+              ))}
+              <div className="pt-3 border-t border-border flex flex-col gap-2 mt-2">
+                <Link href="/auth/connexion" className="px-3 py-2.5 text-sm font-semibold">Connexion</Link>
+                <Link href="/auth/inscription" className="bg-gradient-to-r from-primary to-primary-dark text-white px-4 py-2.5 rounded-card text-sm font-semibold text-center">Inscrire mon école</Link>
+              </div>
+            </div>
+          )}
+        </div>
+      </header>
+
+      {/* Compensation de hauteur pour le header fixed (72px, hauteur non réduite). */}
+      <div aria-hidden="true" className="h-[72px]" />
+
+      {/* ── CONTENEUR CENTRAL BLANC (partie 1) ─────────────────────────
+          Landing V5 : header et bandeau d'annonce restent seuls en pleine
+          largeur (fond gris #F4F3EF visible dans les marges) ; le hero vit
+          dans un conteneur centré à fond blanc, largeur cohérente avec le
+          reste du repo (1520px). Coupé en deux morceaux pour laisser le
+          bandeau d'annonce pleine largeur entre le hero et les catégories,
+          sans changer sa position actuelle dans le flux. */}
+      <div className="max-w-[1520px] mx-auto bg-surface">
+        {/* ── HERO PREMIUM V3 ──────────────────────────────────────────
+            Recherche premium (gauche) + grand carrousel (droite). Composants
+            indépendants dans src/components/hero/. */}
+        <section className="relative pt-3 pb-4 text-text-primary">
+          <div className="relative px-[18px]">
+            <div className="relative bg-white rounded-[28px] shadow-elevation-2 overflow-hidden p-6 lg:p-7">
+              <HeroBackground />
+
+              <div className="relative flex items-center gap-2 mb-5">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
+                <span className="ml-2 text-sm font-semibold tracking-[0.15em] uppercase text-text-secondary">
+                  Plateforme éducative · Cameroun
+                </span>
+              </div>
+
+              <div className="relative flex flex-col lg:flex-row items-stretch gap-4">
+                <HeroSearch
+                  totalCount={schools.length}
+                  query={query}
+                  onQueryChange={setQuery}
+                  activeCategory={activeCategory}
+                  onCategoryChange={setActiveCategory}
+                  categories={categories}
+                  city={city}
+                  onCityChange={setCity}
+                  cities={cities}
+                  radius={radius}
+                  onRadiusChange={setRadius}
+                  onLocate={handleLocationToggle}
+                  locating={locating}
+                  onSearch={() => goToRecherche()}
+                />
+                <div className="flex-1 min-w-0">
+                  <HeroCarousel slides={heroSlides} />
+                </div>
+              </div>
+              {locationError && (
+                <p className="relative mt-3 text-xs text-text-secondary">{locationError}</p>
+              )}
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <AnnouncementTicker items={tickerItems} />
+
+      {/* ── CONTENEUR CENTRAL BLANC (partie 2) ────────────────────────── */}
+      <div className="max-w-[1520px] mx-auto bg-surface">
+        {/* ── EXPLORER PAR CATÉGORIE ────────────────────────────────── */}
+        <section className="border-t border-border">
+          <div className="px-[18px] py-12 lg:py-14">
+            <div className="flex items-center justify-between mb-1">
+              <h2 className="text-lg font-bold">Explorer par catégorie</h2>
+              <Link
+                href="/categorie/garderie"
+                className="flex items-center gap-1 text-sm font-semibold text-primary hover:opacity-80 transition-opacity duration-base"
+              >
+                Voir toutes les catégories
+                <ArrowRight size={14} />
+              </Link>
+            </div>
+            <span className="block w-8 h-[3px] rounded-full bg-[#FCD116] mb-6" aria-hidden="true" />
+
+            <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 sm:overflow-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {categories.map((cat) => (
+                <CategoryCard
+                  key={cat.key}
+                  href={`/categorie/${cat.key}`}
+                  label={cat.label}
+                  description={cat.description}
+                  count={categoryCounts[cat.key] ?? 0}
+                  loading={loading}
+                  icon={cat.icon}
+                />
               ))}
             </div>
           </div>
+        </section>
 
-          <div>
-            <p className="text-xs font-semibold tracking-wider uppercase text-slate-500 mb-4">Établissements</p>
-            <div className="space-y-2.5">
-              <Link href="/auth/inscription" className="block text-sm text-slate-400 hover:text-white transition-colors duration-fast">Inscrire mon établissement</Link>
-              <Link href="/auth/connexion" className="block text-sm text-slate-400 hover:text-white transition-colors duration-fast">Connexion</Link>
+        {/* ── ÉTABLISSEMENTS À LA UNE ───────────────────────────────── */}
+        {/* Basé strictement sur establishments.is_featured (donnée réelle) —
+            section entièrement masquée s'il n'y a aucun établissement
+            réellement mis en avant, jamais de carte factice. */}
+        {!loading && featuredSchools.length > 0 && (
+          <section className="border-t border-border">
+            <div className="px-[18px] py-12 lg:py-14 grid lg:grid-cols-[1fr_300px] gap-8 items-start">
+              <div className="min-w-0">
+                <div className="flex items-center justify-between mb-1">
+                  <h2 className="text-lg font-bold">Établissements à la une</h2>
+                  <Link
+                    href="/recherche"
+                    className="flex items-center gap-1 text-sm font-semibold text-primary hover:opacity-80 transition-opacity duration-base"
+                  >
+                    Voir tout
+                    <ArrowRight size={14} />
+                  </Link>
+                </div>
+                <span className="block w-8 h-[3px] rounded-full bg-[#FCD116] mb-5" aria-hidden="true" />
+
+                <FeaturedSchoolsCarousel schools={featuredSchools} />
+              </div>
+
+              <aside className="space-y-4">
+                <PromotionCard
+                  eyebrow="Pour les établissements"
+                  title="Boostez la visibilité de votre école"
+                  description="Atteignez plus de parents et d'élèves partout au Cameroun."
+                  ctaLabel="Inscrire mon établissement"
+                  ctaHref="/auth/inscription"
+                />
+                <PartnerAdCard ads={partnerAds} />
+              </aside>
+            </div>
+          </section>
+        )}
+
+        {/* ── BANNIÈRE CTA SECONDAIRE ───────────────────────────────── */}
+        {/* Reprend le CTA déjà réel "Inscrire mon établissement" / /auth/inscription,
+            sous une forme bannière pleine largeur (du conteneur) plutôt qu'une
+            carte latérale. Photo de fond réelle (établissement à la une) si
+            disponible — repli sur le dégradé seul sinon, jamais un vide. */}
+        <SecondaryCtaBanner photo={featuredSchools[0]?.image ?? null} />
+
+        {/* ── STATISTIQUES ──────────────────────────────────────────── */}
+        {/* Chiffres réels et dynamiques uniquement. "Préinscriptions envoyées"
+            n'est pas exposable ici : la table `applications` n'a pas de policy
+            RLS de lecture pour le rôle anonyme, et en créer une sortirait du
+            périmètre Supabase de ce sprint — remplacé par "Régions couvertes",
+            dérivé des vraies villes en base via une géographie réelle. */}
+        <section className="relative border-t border-border overflow-hidden">
+          {/* Forme discrète, jamais une carte cartographique précise —
+              simple accent décoratif à faible opacité. */}
+          <div
+            aria-hidden="true"
+            className="absolute -left-24 top-1/2 -translate-y-1/2 w-[420px] h-[420px] rounded-[35%_65%_60%_40%/45%_35%_65%_55%] bg-primary-light opacity-60 pointer-events-none"
+          />
+
+          <div className="relative px-[18px] py-16 lg:py-20 grid lg:grid-cols-[260px_1fr_260px] gap-10 items-start">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight text-text-primary leading-snug">
+                L&apos;éducation camerounaise devient <span className="text-primary">plus accessible.</span>
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <LandingStatCard
+                icon={Building2}
+                value={loading ? "—" : schools.length.toLocaleString("fr-FR")}
+                label="Établissements référencés"
+                description="Dans tout le Cameroun."
+              />
+              <LandingStatCard
+                icon={MapIcon}
+                value={loading ? "—" : statRegions.toLocaleString("fr-FR")}
+                label="Régions couvertes"
+                description="Sur 10 régions au total."
+              />
+              <LandingStatCard
+                icon={CheckCircle2}
+                value={loading ? "—" : statVerified.toLocaleString("fr-FR")}
+                label="Établissements vérifiés"
+                description="Contrôlés par notre équipe."
+              />
+              <LandingStatCard
+                icon={MapPin}
+                value={loading ? "—" : statCities.toLocaleString("fr-FR")}
+                label="Villes couvertes"
+                description="Et de nouvelles chaque semaine."
+              />
+            </div>
+
+            <div>
+              <h3 className="font-bold text-text-primary mb-4">Pourquoi choisir Écoles237 ?</h3>
+              <ul className="space-y-3">
+                {[
+                  "Annuaire centralisé et à jour",
+                  "Établissements vérifiés par notre équipe",
+                  "Outils modernes pour les établissements",
+                  "Préinscription en ligne, sans déplacement",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-text-primary">
+                    <span className="shrink-0 w-4 h-4 mt-0.5 rounded-full bg-primary flex items-center justify-center" aria-hidden="true">
+                      <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                        <path d="M1 4l2 2 4-4" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
+        </section>
 
-          <div>
-            <p className="text-xs font-semibold tracking-wider uppercase text-slate-500 mb-4">Légal</p>
-            <div className="space-y-2.5">
-              <p className="text-sm text-slate-500">Confidentialité</p>
-              <p className="text-sm text-slate-500">Conditions</p>
+        {/* ── PARTENAIRES ───────────────────────────────────────────── */}
+        {/* Aucun partenariat réel n'existe aujourd'hui — emplacements par
+            catégorie générique uniquement, jamais une marque nommée sans
+            accord. Toujours étiquetés "Bientôt disponible" pour ne jamais
+            laisser croire à un partenariat actif. */}
+        <section className="border-t border-border">
+          <div className="px-[18px] py-16 lg:py-20">
+            <div className="max-w-md mb-10">
+              <h2 className="text-2xl lg:text-3xl font-bold tracking-tight text-text-primary">Partenaires</h2>
+              <p className="text-sm text-text-secondary mt-3">
+                Écoles237 s&apos;ouvre progressivement à des partenaires qui simplifient la vie des familles et des établissements.
+              </p>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+              <PartnerPlaceholder label="Banques" description="Financement des frais de scolarité" />
+              <PartnerPlaceholder label="Télécoms" description="Paiement et notifications SMS" />
+              <PartnerPlaceholder label="Librairies" description="Fournitures et manuels scolaires" />
+              <PartnerPlaceholder label="Universités" description="Passerelles vers l'enseignement supérieur" />
+              <PartnerPlaceholder label="ONG" description="Bourses et accès à l'éducation" />
+              <PartnerPlaceholder label="Assurances" description="Couverture scolaire et santé" />
             </div>
           </div>
-        </div>
+        </section>
+      </div>
 
-        <div className="border-t border-white/10 max-w-screen-xl mx-auto px-5 py-5 text-xs text-slate-500">
-          © {new Date().getFullYear()} Écoles237. Tous droits réservés.
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

@@ -24,6 +24,7 @@ import {
   BarChart3,
   LifeBuoy,
   Lock,
+  CreditCard,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -43,27 +44,28 @@ const navGroups = (isPro: boolean) => [
   {
     label: "Gestion",
     items: [
-      { href: "/dashboard/ecole/etablissement", label: "Mon établissement", icon: Building2 },
       { href: "/dashboard/ecole/admissions", label: "Admissions", icon: ClipboardList },
-      { href: isPro ? "/pro/enseignants" : "/pro/acces-restreint", label: "Enseignants", icon: GraduationCap, locked: !isPro },
+      { href: isPro ? "/pro/enseignants" : "/pro/acces-restreint", label: "Personnel", icon: GraduationCap, locked: !isPro },
       { href: isPro ? "/pro/emplois-du-temps" : "/pro/acces-restreint", label: "Emplois du temps", icon: CalendarDays, locked: !isPro },
       { href: isPro ? "/pro/pointage/historique" : "/pro/acces-restreint", label: "Présences", icon: Clock3, locked: !isPro },
+      { href: isPro ? "/pro/paie" : "/pro/acces-restreint", label: "Paie", icon: CreditCard, locked: !isPro },
     ],
   },
   {
-    label: "Contenu",
+    label: "Établissement",
     items: [
-      { href: "/dashboard/ecole/centre-documentaire", label: "Documents", icon: FileText },
+      { href: "/dashboard/ecole/etablissement", label: "Ma fiche publique", icon: Building2 },
       { href: "/dashboard/ecole/galerie", label: "Galerie", icon: ImageIcon },
       { href: "/dashboard/ecole/annonces", label: "Actualités", icon: Bell },
+      { href: "/dashboard/ecole/centre-documentaire", label: "Documents", icon: FileText },
     ],
   },
   {
-    label: "Pilotage",
+    label: "Outils",
     items: [
       { href: "/dashboard/ecole/statistiques", label: "Statistiques", icon: BarChart3 },
-      { href: "/dashboard/ecole/parametres", label: "Paramètres", icon: Settings },
       { href: "/dashboard/ecole/support", label: "Support", icon: LifeBuoy },
+      { href: "/dashboard/ecole/parametres", label: "Paramètres", icon: Settings },
     ],
   },
 ];
@@ -179,7 +181,7 @@ export default function EcoleDashboardLayout({ children }: { children: React.Rea
   );
 
   return (
-    <div className="min-h-screen bg-[#f9f7f2] flex">
+    <div className="min-h-screen bg-background flex">
       {/* Desktop sidebar */}
       <div className="hidden lg:flex w-[220px] shrink-0 flex-col fixed inset-y-0 left-0 z-40">
         <Sidebar />
@@ -198,7 +200,7 @@ export default function EcoleDashboardLayout({ children }: { children: React.Rea
       {/* Main */}
       <div className="flex-1 lg:ml-[220px] flex flex-col min-h-screen">
         {/* Top bar — mobile menu toggle + notifications, visible on all sizes */}
-        <header className="flex items-center justify-between px-5 h-14 bg-white border-b border-[#ebebeb]">
+        <header className="flex items-center justify-between px-5 h-14 bg-white border-b border-border">
           <button onClick={() => setMobileOpen(true)} className="lg:hidden">
             <Menu size={22} />
           </button>

@@ -12,7 +12,7 @@ html {
 
 body {
   margin: 0;
-  background: #FAF8F3;
+  background: #faf8f9;
   color: #0A0A0A;
   font-family: var(--font-manrope), sans-serif;
 }
@@ -45,5 +45,22 @@ body {
 
 .animate-marquee-soft {
   animation: marquee-soft 48s linear infinite;
+}
+
+/* Hero Premium V3 — zoom très lent sur la photo active du carrousel (jamais
+   de rotation/bounce). Se relance à chaque activation via un remount clé. */
+@keyframes hero-zoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.06); }
+}
+
+.animate-hero-zoom {
+  animation: hero-zoom 8s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-zoom {
+    animation: none;
+  }
 }
 

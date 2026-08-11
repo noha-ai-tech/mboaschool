@@ -4,8 +4,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { ArrowRight, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { Logo } from "@/components/branding/Logo";
+import { AuthHeader } from "@/components/layout/AuthHeader";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { AuthBranding } from "@/components/auth/AuthBranding";
 
 export default function ConnexionPage() {
   const router = useRouter();
@@ -38,124 +41,120 @@ export default function ConnexionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f9f7f2] flex">
+    <div className="min-h-screen bg-[#ECECEA] flex flex-col">
+      <AuthHeader />
 
-      {/* Left panel — image */}
-      <div className="hidden lg:flex flex-col lg:w-[52%] bg-[#0a0f0d] relative overflow-hidden">
-        <img
-          src="https://images.unsplash.com/photo-1497486751825-1233686d5d80?auto=format&fit=crop&w=1200&q=80"
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover opacity-40"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f0d] via-transparent" />
+      <div className="flex-1 flex flex-col lg:flex-row">
+        <AuthBranding />
 
-        <div className="relative z-10 p-10 flex flex-col justify-between h-full">
-          <Link href="/" className="flex items-center gap-2.5">
-            <Logo variant="dark" />
-          </Link>
-
-          <div className="mb-4">
-            <p className="text-xs font-semibold tracking-[0.15em] uppercase text-emerald-400 mb-4">
-              Plateforme éducative · Cameroun
-            </p>
-            <h2 className="text-white text-4xl font-black leading-tight tracking-tight">
-              L'avenir éducatif<br />de vos enfants<br />
-              <span className="text-emerald-400">commence ici.</span>
-            </h2>
-          </div>
-        </div>
-      </div>
-
-      {/* Right panel — form */}
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
-        <div className="w-full max-w-[380px]">
-
-          {/* Logo mobile */}
-          <div className="lg:hidden mb-10">
-            <Link href="/" className="flex items-center gap-2.5">
-            <Logo />
-          </Link>
-          </div>
-
-          <div className="mb-8">
-            <h1 className="text-3xl font-black tracking-tight text-[#0a0a0a] mb-1.5">
-              Bon retour.
-            </h1>
-            <p className="text-slate-500 text-sm">
-              Connectez-vous à votre espace Écoles237.
-            </p>
-          </div>
-
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm font-medium mb-6">
-              {error}
+        {/* Panel connexion — fond blanc, large surface épurée */}
+        <div className="flex-1 flex flex-col items-center justify-center px-6 py-10 lg:py-12">
+          {/* Bandeau image compact mobile — pas de grande image à faire défiler */}
+          <div className="lg:hidden w-full max-w-[400px] mb-6">
+            <div className="flex justify-center mb-4">
+              <Link href="/" className="inline-flex items-center">
+                <Logo size="md" priority />
+              </Link>
             </div>
-          )}
+          </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-                Adresse email
-              </label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="votre@email.com"
-                className="w-full border border-[#ddd] rounded-xl px-4 py-3 text-sm bg-white placeholder-slate-400 focus:outline-none focus:border-[#0a0a0a] transition-colors"
-              />
+          <div className="w-full max-w-[400px]">
+            <div className="mb-7">
+              <h1 className="text-2xl font-bold tracking-tight text-text-primary mb-1.5">
+                Connexion
+              </h1>
+              <p className="text-text-secondary text-sm">
+                Accédez à votre espace Écoles237.
+              </p>
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-                Mot de passe
-              </label>
-              <div className="relative">
-                <input
-                  type={showPwd ? "text" : "password"}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full border border-[#ddd] rounded-xl px-4 py-3 text-sm bg-white placeholder-slate-400 focus:outline-none focus:border-[#0a0a0a] transition-colors pr-11"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPwd(!showPwd)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                >
-                  {showPwd ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 rounded-[10px] px-4 py-3 text-sm font-medium mb-6">
+                {error}
               </div>
-            </div>
+            )}
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-[#0a0a0a] text-white py-3.5 rounded-xl font-bold text-sm hover:bg-slate-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
-            >
-              {loading ? (
-                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : (
-                <>Se connecter <ArrowRight size={15} /></>
-              )}
-            </button>
-          </form>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="email" className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">
+                  Adresse e-mail
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="votre@email.com"
+                  className="w-full h-[52px] border border-border rounded-card px-4 text-sm bg-white placeholder:text-text-secondary outline-none focus:border-primary focus:shadow-elevation-1 transition-all duration-base"
+                />
+              </div>
 
-          <div className="mt-6 pt-6 border-t border-[#ebebeb] text-center">
-            <p className="text-sm text-slate-500">
-              Pas encore de compte ?{" "}
-              <Link href="/auth/inscription" className="font-semibold text-[#0a0a0a] hover:text-emerald-700 transition-colors">
+              <div>
+                <label htmlFor="password" className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">
+                  Mot de passe
+                </label>
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPwd ? "text" : "password"}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full h-[52px] border border-border rounded-card px-4 pr-11 text-sm bg-white placeholder:text-text-secondary outline-none focus:border-primary focus:shadow-elevation-1 transition-all duration-base"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPwd(!showPwd)}
+                    aria-label={showPwd ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-primary"
+                  >
+                    {showPwd ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <Link href="/auth/mot-de-passe-oublie" className="text-xs font-semibold text-primary hover:opacity-80 transition-opacity duration-base">
+                  Mot de passe oublié ?
+                </Link>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full h-[52px] rounded-card bg-primary text-white font-bold text-sm hover:shadow-elevation-2 hover:-translate-y-0.5 transition-all duration-base disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Connexion…
+                  </>
+                ) : (
+                  <>Se connecter <ArrowRight size={15} /></>
+                )}
+              </button>
+            </form>
+
+            <div className="mt-5">
+              <Link
+                href="/auth/inscription"
+                className="w-full h-[48px] flex items-center justify-center rounded-card border border-border text-text-primary text-sm font-semibold hover:border-text-secondary transition-colors duration-base"
+              >
                 Créer un compte
               </Link>
+            </div>
+
+            <p className="mt-6 flex items-center justify-center gap-1.5 text-xs text-text-secondary">
+              <ShieldCheck size={13} className="text-primary" aria-hidden="true" />
+              Accès sécurisé à votre espace Écoles237.
             </p>
-            <Link href="/" className="block mt-3 text-xs text-slate-400 hover:text-slate-600 transition-colors">
-              ← Retour à l'accueil
-            </Link>
           </div>
         </div>
       </div>
+
+      <SiteFooter />
     </div>
   );
 }

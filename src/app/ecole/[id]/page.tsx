@@ -1,38 +1,40 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import {
   MapPin,
   Phone,
+  Mail,
+  Globe,
   FileText,
   Bell,
-  Building2,
   Wifi,
   Bus,
   Utensils,
   Monitor,
   ShieldCheck,
   MessageCircle,
-  Clock3,
-  GraduationCap,
   ClipboardList,
-  CheckCircle2,
-  Crown,
-  ArrowLeft,
+  GraduationCap,
   School,
   AlertCircle,
   BookOpen,
-  ImageIcon,
   Download,
   FlaskConical,
   Dumbbell,
   BedDouble,
   HeartPulse,
   UserCheck,
+  Share2,
+  Navigation as NavigationIcon,
 } from "lucide-react";
+import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { SchoolHeroCarousel, type SchoolHeroSlide } from "@/components/school/SchoolHeroCarousel";
+import { SchoolGallery } from "@/components/school/SchoolGallery";
 
 // Correspond aux colonnes réelles de la table infrastructures
 const INFRA_LABELS: Record<string, { label: string; icon: React.ElementType }> = {
@@ -78,8 +80,6 @@ export default function SchoolPage() {
   const [images, setImages]     = useState<any[]>([]);
   const [docsList, setDocsList] = useState<any[]>([]);
   const [loading, setLoading]   = useState(true);
-  const [activeSlide, setActiveSlide] = useState(0);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -107,30 +107,24 @@ export default function SchoolPage() {
     load();
   }, [id]);
 
-  const heroImages = useMemo(() => {
-    if (images.length > 0) return images.map((img: any) => img.url as string);
-    if (school?.cover_image_url) return [school.cover_image_url as string];
-    return [] as string[];
+  const heroSlides = useMemo<SchoolHeroSlide[]>(() => {
+    if (images.length > 0) return images.map((img: any) => ({ id: img.id, image: img.url as string }));
+    if (school?.cover_image_url) return [{ id: "cover", image: school.cover_image_url as string }];
+    return [];
   }, [images, school?.cover_image_url]);
-
-  useEffect(() => {
-    if (heroImages.length <= 1) return;
-    timerRef.current = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % heroImages.length);
-    }, 5000);
-    return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [heroImages.length]);
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#f9f7f2]">
-        <div className="h-[380px] bg-[#0a0f0d] animate-pulse" />
-        <div className="max-w-6xl mx-auto px-4 py-10 grid lg:grid-cols-[1fr_300px] gap-8">
+      <div className="min-h-screen bg-[#ECECEA]">
+        <SiteHeader />
+        <SiteHeaderSpacer />
+        <div className="h-[500px] bg-accent animate-pulse" />
+        <div className="max-w-[1520px] mx-auto px-[18px] py-10 grid lg:grid-cols-[1fr_300px] gap-8">
           <div className="space-y-4">
-            <div className="h-10 w-48 bg-slate-200 rounded" />
-            <div className="h-64 bg-white border border-[#ebebeb] rounded-2xl" />
+            <div className="h-10 w-48 bg-white rounded" />
+            <div className="h-64 bg-white border border-border rounded-card" />
           </div>
-          <div className="h-40 bg-white border border-[#ebebeb] rounded-2xl" />
+          <div className="h-40 bg-white border border-border rounded-card" />
         </div>
       </div>
     );
@@ -138,148 +132,82 @@ export default function SchoolPage() {
 
   if (!school) {
     return (
-      <div className="min-h-screen bg-[#f9f7f2] flex items-center justify-center">
-        <div className="text-center">
-          <School size={40} className="mx-auto text-slate-300 mb-4" />
-          <p className="text-slate-400 font-semibold">Établissement introuvable.</p>
-          <Link href="/" className="text-sm text-emerald-700 font-semibold mt-3 block">
-            ← Retour à l'annuaire
-          </Link>
+      <div className="min-h-screen bg-[#ECECEA] flex flex-col">
+        <SiteHeader />
+        <SiteHeaderSpacer />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <School size={40} className="mx-auto text-text-secondary/30 mb-4" />
+            <p className="text-text-secondary font-semibold">Établissement introuvable.</p>
+            <Link href="/" className="text-sm text-primary font-semibold mt-3 block">← Retour à l&apos;annuaire</Link>
+          </div>
         </div>
+        <SiteFooter />
       </div>
     );
   }
 
-  function goToSlide(i: number) {
-    setActiveSlide(i);
-    if (timerRef.current) clearInterval(timerRef.current);
-    if (heroImages.length > 1) {
-      timerRef.current = setInterval(() => {
-        setActiveSlide((prev) => (prev + 1) % heroImages.length);
-      }, 5000);
-    }
-  }
-
   const infraItems = Object.keys(INFRA_LABELS).filter((k) => infra?.[k] === true);
+  const isPremium = school.subscription_plan === "premium";
+  const preinscriptionHref = `/preinscription?ecole=${school.id}`;
+  const address = [school.address, school.neighborhood, school.city].filter(Boolean).join(", ");
+  const hasLocation = !!(school.latitude && school.longitude);
+  const mapsHref = hasLocation ? `https://www.google.com/maps?q=${school.latitude},${school.longitude}` : null;
 
-  // Ancres de navigation — la barre sticky ne change jamais de page,
-  // elle fait défiler jusqu'à la section correspondante (voir les id=
-  // posés sur chaque section plus bas).
+  // Ancres — uniquement les sections qui affichent réellement du contenu
+  // (pas d'ancre "Avis"/"FAQ"/"Résultats" : aucune donnée réelle derrière).
   const sectionNav = [
-    { id: "presentation",     label: "Présentation" },
-    { id: "admissions",       label: "Admissions" },
-    { id: "frais",            label: "Frais" },
-    { id: "infrastructures",  label: "Infrastructures" },
-    { id: "galerie",          label: "Galerie" },
-    { id: "localisation",     label: "Localisation" },
+    { id: "presentation",    label: "Présentation" },
+    { id: "admissions",      label: "Admissions" },
+    { id: "tarifs",          label: "Tarifs" },
+    { id: "infrastructures", label: "Infrastructures" },
+    { id: "galerie",         label: "Galerie" },
+    { id: "actualites",      label: "Actualités" },
+    ...(docsList.length > 0 ? [{ id: "documents", label: "Documents" }] : []),
+    { id: "contact",         label: "Contact" },
   ];
 
+  function scrollToId(anchor: string) {
+    document.getElementById(anchor)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   return (
-    <div className="min-h-screen bg-[#f9f7f2]">
+    <div className="min-h-screen bg-[#ECECEA]">
+      <SiteHeader />
 
-      {/* Hero — carrousel */}
-      <section className="relative min-h-[280px] h-[60vh] bg-[#0a0f0d] text-white overflow-hidden">
+      <SchoolHeroCarousel
+        slides={heroSlides}
+        name={school.name}
+        city={school.city}
+        neighborhood={school.neighborhood}
+        category={school.main_category}
+        verified={!!school.is_verified}
+        premium={isPremium}
+        preinscriptionHref={preinscriptionHref}
+        backHref="/"
+        backLabel="Annuaire"
+      />
 
-        {/* Slides */}
-        {heroImages.map((src, i) => (
-          <img
-            key={src}
-            src={src}
-            alt=""
-            loading={i === 0 ? "eager" : "lazy"}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-              i === activeSlide ? "opacity-100" : "opacity-0"
-            }`}
-          />
-        ))}
-
-        {/* Overlay : fort en bas pour lisibilité, léger en haut */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/15 pointer-events-none" />
-
-        {/* Contenu positionné en bas */}
-        <div className="relative z-10 max-w-6xl mx-auto px-4 h-full flex flex-col">
-
-          {/* Lien retour en haut */}
-          <div className="pt-6 shrink-0">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-white/60 hover:text-white transition-colors"
-            >
-              <ArrowLeft size={15} />
-              Annuaire
-            </Link>
-          </div>
-
-          {/* Pousse le texte vers le bas */}
-          <div className="flex-1" />
-
-          {/* Texte + badges + dots */}
-          <div className="pb-8">
-            <div className="flex items-center gap-2 flex-wrap mb-3">
-              <span className="text-[10px] font-bold tracking-widest uppercase text-emerald-400">
-                {school.main_category || "Établissement"}
-              </span>
-              {school.is_verified && (
-                <span className="flex items-center gap-1 text-[10px] font-semibold text-emerald-300 bg-emerald-900/50 border border-emerald-800 px-2 py-0.5 rounded-full">
-                  <CheckCircle2 size={9} /> Vérifié
-                </span>
-              )}
-              {school.subscription_plan === "premium" && (
-                <span className="flex items-center gap-1 text-[10px] font-bold text-yellow-300 bg-yellow-900/30 border border-yellow-800 px-2 py-0.5 rounded-full">
-                  <Crown size={9} /> Premium
-                </span>
-              )}
-            </div>
-
-            <h1 className="text-4xl md:text-6xl font-black tracking-tight mb-3 leading-none">
-              {school.name}
-            </h1>
-
-            <div className="flex flex-wrap items-center gap-4 text-sm text-white/70">
-              {school.city && (
-                <span className="flex items-center gap-1.5">
-                  <MapPin size={13} />
-                  {school.city}{school.neighborhood ? `, ${school.neighborhood}` : ""}
-                </span>
-              )}
-              {school.phone && (
-                <span className="flex items-center gap-1.5">
-                  <Phone size={13} />
-                  {school.phone}
-                </span>
-              )}
-            </div>
-
-            {/* Points de navigation — visibles seulement si plusieurs images */}
-            {heroImages.length > 1 && (
-              <div className="flex items-center gap-2 mt-5">
-                {heroImages.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => goToSlide(i)}
-                    aria-label={`Photo ${i + 1}`}
-                    className={`rounded-full transition-all duration-300 ${
-                      i === activeSlide
-                        ? "w-5 h-1.5 bg-white"
-                        : "w-1.5 h-1.5 bg-white/40 hover:bg-white/70"
-                    }`}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
+      {/* Actions rapides — uniquement celles réellement disponibles */}
+      <div className="bg-white border-b border-border">
+        <div className="max-w-[1520px] mx-auto px-[18px] py-3 flex items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <QuickAction href={preinscriptionHref} icon={ClipboardList} label="Préinscription" primary />
+          {school.phone && <QuickAction href={`tel:${school.phone}`} icon={Phone} label="Téléphone" />}
+          {school.website && <QuickAction href={school.website} icon={Globe} label="Site web" external />}
+          {mapsHref && <QuickAction href={mapsHref} icon={NavigationIcon} label="Itinéraire" external />}
+          <ShareAction schoolName={school.name} />
         </div>
-      </section>
+      </div>
 
-      {/* Navigation sticky — ancres vers les sections ci-dessous, tout reste sur la même page */}
+      {/* Navigation sticky — ancres, tout reste sur la même page */}
       <div className="border-b border-border bg-white sticky top-0 z-30 overflow-x-auto">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-[1520px] mx-auto px-[18px]">
           <div className="flex gap-0 whitespace-nowrap">
             {sectionNav.map((item) => (
               <button
                 key={item.id}
-                onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth", block: "start" })}
-                className="px-5 py-3.5 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-[#0a0a0a] hover:border-slate-200 transition-colors duration-fast shrink-0"
+                onClick={() => scrollToId(item.id)}
+                className="px-5 py-3.5 text-sm font-semibold border-b-2 border-transparent text-text-secondary hover:text-text-primary hover:border-border transition-colors duration-fast shrink-0"
               >
                 {item.label}
               </button>
@@ -288,15 +216,14 @@ export default function SchoolPage() {
         </div>
       </div>
 
-      {/* Contenu — toutes les sections empilées, jamais dispersées sur d'autres pages */}
-      <div className="max-w-6xl mx-auto px-4 py-8 grid lg:grid-cols-[1fr_300px] gap-8 items-start">
+      <div className="max-w-[1520px] mx-auto px-[18px] py-8 grid lg:grid-cols-[1fr_300px] gap-8 items-start">
 
         <div className="space-y-5 pb-16 lg:pb-0">
           <GeneralTab school={school} fees={fees} infra={infra} infraItems={infraItems} />
 
           <div id="galerie" className="scroll-mt-20">
             <h2 className="font-bold text-sm mb-3 px-1">Galerie{images.length > 0 ? ` (${images.length})` : ""}</h2>
-            <GalerieTab images={images} />
+            <SchoolGallery images={images.map((img: any) => ({ id: img.id, url: img.url, caption: img.caption }))} />
           </div>
 
           {docsList.length > 0 && (
@@ -306,31 +233,40 @@ export default function SchoolPage() {
             </div>
           )}
 
-          <div id="annonces" className="scroll-mt-20">
-            <h2 className="font-bold text-sm mb-3 px-1">Annonces</h2>
+          <div id="actualites" className="scroll-mt-20">
+            <h2 className="font-bold text-sm mb-3 px-1">Actualités</h2>
             <AnnouncementsTab schoolId={id} />
           </div>
 
-          <div id="localisation" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
-            <h2 className="font-bold text-sm mb-4">Localisation</h2>
-            {school.city || school.neighborhood || school.address ? (
-              <>
-                <p className="text-sm text-slate-600 mb-4">
-                  {[school.address, school.neighborhood, school.city].filter(Boolean).join(", ")}
-                </p>
-                {school.latitude && school.longitude && (
-                  <a
-                    href={`https://www.google.com/maps?q=${school.latitude},${school.longitude}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
-                  >
-                    <MapPin size={14} /> Voir sur la carte
-                  </a>
-                )}
-              </>
+          <div id="contact" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
+            <h2 className="font-bold text-sm mb-4">Contact</h2>
+            {!school.phone && !school.email && !address ? (
+              <p className="text-sm text-text-secondary">Coordonnées non renseignées par l&apos;établissement.</p>
             ) : (
-              <p className="text-sm text-slate-400">Localisation non renseignée par l&apos;établissement.</p>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {school.phone && (
+                  <ContactRow icon={Phone} label="Téléphone" value={school.phone} href={`tel:${school.phone}`} />
+                )}
+                {school.email && (
+                  <ContactRow icon={Mail} label="Email" value={school.email} href={`mailto:${school.email}`} />
+                )}
+                {address && (
+                  <ContactRow icon={MapPin} label="Adresse" value={address} href={mapsHref ?? undefined} />
+                )}
+                {school.website && (
+                  <ContactRow icon={Globe} label="Site web" value={school.website} href={school.website} />
+                )}
+              </div>
+            )}
+            {mapsHref && (
+              <a
+                href={mapsHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 mt-4 text-sm font-semibold text-primary hover:opacity-80 transition-opacity duration-base"
+              >
+                <MapPin size={14} /> Voir sur la carte
+              </a>
             )}
           </div>
 
@@ -338,61 +274,49 @@ export default function SchoolPage() {
         </div>
 
         {/* Sidebar */}
-        <aside className="space-y-4 lg:sticky lg:top-[53px]">
-          <div className="bg-white border border-[#ebebeb] rounded-2xl p-5">
-            <p className="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4">Intéressé ?</p>
+        <aside className="space-y-4 lg:sticky lg:top-[73px]">
+          <div className="bg-white border border-border rounded-card p-5">
+            <p className="text-xs font-bold tracking-widest uppercase text-text-secondary mb-4">Intéressé ?</p>
             <Link
-              href={`/preinscription?ecole=${school.id}`}
-              className="block w-full text-center bg-[#0a0a0a] text-white py-3 rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors"
+              href={preinscriptionHref}
+              className="block w-full text-center bg-gradient-to-r from-primary to-primary-dark text-white py-3 rounded-card text-sm font-bold hover:shadow-elevation-1 transition-all duration-base"
             >
               Préinscrire mon enfant
             </Link>
-            <p className="text-[11px] text-slate-400 text-center mt-2">Gratuit · Sans engagement</p>
+            <p className="text-[11px] text-text-secondary text-center mt-2">Gratuit · Sans engagement</p>
           </div>
 
-          <div className="bg-white border border-[#ebebeb] rounded-2xl p-5">
-            <p className="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4">Contact</p>
-            {school.phone ? (
-              <>
-                <p className="text-sm font-semibold text-[#0a0a0a] mb-3 flex items-center gap-2">
-                  <Phone size={13} className="text-slate-400" />
-                  {school.phone}
-                </p>
-                <a
-                  href={`https://wa.me/${school.phone?.replace(/\D/g, "")}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full border border-[#0a0a0a] text-[#0a0a0a] py-2.5 rounded-xl text-sm font-bold hover:bg-[#0a0a0a] hover:text-white transition-colors"
-                >
-                  <MessageCircle size={14} />
-                  WhatsApp
-                </a>
-              </>
-            ) : (
-              <p className="text-sm text-slate-400">Téléphone non renseigné.</p>
-            )}
-          </div>
-
-          <div className="bg-white border border-[#ebebeb] rounded-2xl p-5">
-            <p className="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4 flex items-center gap-2">
-              <Clock3 size={11} /> Horaires
-            </p>
-            <p className="text-sm text-slate-600">Lundi – Vendredi</p>
-            <p className="text-lg font-black text-[#0a0a0a] mt-1">07h30 – 17h00</p>
-          </div>
+          {school.phone && (
+            <div className="bg-white border border-border rounded-card p-5">
+              <p className="text-xs font-bold tracking-widest uppercase text-text-secondary mb-4">Contact rapide</p>
+              <p className="text-sm font-semibold text-text-primary mb-3 flex items-center gap-2">
+                <Phone size={13} className="text-text-secondary" />
+                {school.phone}
+              </p>
+              <a
+                href={`https://wa.me/${school.phone?.replace(/\D/g, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full border border-text-primary text-text-primary py-2.5 rounded-card text-sm font-bold hover:bg-text-primary hover:text-white transition-colors duration-base"
+              >
+                <MessageCircle size={14} />
+                WhatsApp
+              </a>
+            </div>
+          )}
 
           {!school.owner_id && (
-            <div className="bg-white border border-[#ebebeb] rounded-2xl p-5">
-              <p className="text-xs font-bold tracking-widest uppercase text-slate-400 mb-3 flex items-center gap-2">
+            <div className="bg-white border border-border rounded-card p-5">
+              <p className="text-xs font-bold tracking-widest uppercase text-text-secondary mb-3 flex items-center gap-2">
                 <UserCheck size={12} /> Vous représentez cet établissement ?
               </p>
-              <p className="text-xs text-slate-500 mb-3 leading-relaxed">
+              <p className="text-xs text-text-secondary mb-3 leading-relaxed">
                 Revendiquez cette page pour la gérer vous-même : modifier les informations, publier des photos,
                 traiter les préinscriptions.
               </p>
               <Link
                 href={`/revendiquer/${school.id}`}
-                className="block w-full text-center border border-[#0a0a0a] text-[#0a0a0a] py-2.5 rounded-xl text-sm font-bold hover:bg-[#0a0a0a] hover:text-white transition-colors"
+                className="block w-full text-center border border-text-primary text-text-primary py-2.5 rounded-card text-sm font-bold hover:bg-text-primary hover:text-white transition-colors duration-base"
               >
                 C&apos;est mon établissement
               </Link>
@@ -401,17 +325,84 @@ export default function SchoolPage() {
         </aside>
       </div>
 
-      {/* CTA sticky mobile — la préinscription reste accessible sans remonter en haut de page */}
+      <SiteFooter />
+
+      {/* CTA sticky mobile */}
       <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-border p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <Link
-          href={`/preinscription?ecole=${school.id}`}
-          className="block w-full text-center bg-[#0A0A0A] text-white py-3 rounded-[10px] text-sm font-bold"
+          href={preinscriptionHref}
+          className="block w-full text-center bg-gradient-to-r from-primary to-primary-dark text-white py-3 rounded-card text-sm font-bold"
         >
           Préinscrire mon enfant
         </Link>
       </div>
       <div className="lg:hidden h-20" aria-hidden="true" />
     </div>
+  );
+}
+
+function QuickAction({
+  href, icon: Icon, label, primary = false, external = false,
+}: {
+  href: string; icon: React.ElementType; label: string; primary?: boolean; external?: boolean;
+}) {
+  return (
+    <a
+      href={href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
+      className={`shrink-0 inline-flex items-center gap-1.5 h-9 px-3.5 rounded-card text-xs font-semibold transition-colors duration-base ${
+        primary
+          ? "bg-gradient-to-r from-primary to-primary-dark text-white"
+          : "border border-border text-text-secondary hover:text-text-primary hover:border-text-secondary"
+      }`}
+    >
+      <Icon size={13} />
+      {label}
+    </a>
+  );
+}
+
+function ShareAction({ schoolName }: { schoolName: string }) {
+  const [shared, setShared] = useState(false);
+
+  async function share() {
+    const url = typeof window !== "undefined" ? window.location.href : "";
+    if (navigator.share) {
+      try { await navigator.share({ title: schoolName, url }); } catch { /* annulé par l'utilisateur */ }
+      return;
+    }
+    await navigator.clipboard.writeText(url);
+    setShared(true);
+    setTimeout(() => setShared(false), 2000);
+  }
+
+  return (
+    <button
+      onClick={share}
+      className="shrink-0 inline-flex items-center gap-1.5 h-9 px-3.5 rounded-card text-xs font-semibold border border-border text-text-secondary hover:text-text-primary hover:border-text-secondary transition-colors duration-base"
+    >
+      <Share2 size={13} />
+      {shared ? "Lien copié" : "Partager"}
+    </button>
+  );
+}
+
+function ContactRow({ icon: Icon, label, value, href }: { icon: React.ElementType; label: string; value: string; href?: string }) {
+  const content = (
+    <div className="flex items-start gap-3">
+      <Icon size={15} className="text-text-secondary mt-0.5 shrink-0" />
+      <div className="min-w-0">
+        <p className="text-xs text-text-secondary">{label}</p>
+        <p className="text-sm font-semibold text-text-primary truncate">{value}</p>
+      </div>
+    </div>
+  );
+  if (!href) return content;
+  return (
+    <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined} className="hover:opacity-80 transition-opacity duration-base">
+      {content}
+    </a>
   );
 }
 
@@ -430,7 +421,7 @@ function GeneralTab({ school, fees, infra, infraItems }: {
     <div className="space-y-5">
       <div id="presentation" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
         <h2 className="font-bold text-sm mb-4">Présentation</h2>
-        <p className="text-slate-600 text-sm leading-relaxed">
+        <p className="text-text-secondary text-sm leading-relaxed">
           {school.description || "Aucune description disponible pour le moment."}
         </p>
         <div className="grid sm:grid-cols-2 gap-3 mt-6">
@@ -441,23 +432,23 @@ function GeneralTab({ school, fees, infra, infraItems }: {
             { label: "Téléphone", value: school.phone },
           ].filter((r) => r.value).map((row) => (
             <div key={row.label} className="bg-muted rounded-xl p-4">
-              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">{row.label}</p>
-              <p className="font-bold text-[#0a0a0a] mt-1 text-sm">{row.value}</p>
+              <p className="text-[10px] font-semibold text-text-secondary uppercase tracking-wider">{row.label}</p>
+              <p className="font-bold text-text-primary mt-1 text-sm">{row.value}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div id="frais" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
-        <h2 className="font-bold text-sm mb-4">Frais de scolarité</h2>
+      <div id="tarifs" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
+        <h2 className="font-bold text-sm mb-4">Tarifs</h2>
         {feeRows.length === 0 ? (
-          <p className="text-sm text-slate-400">Frais non renseignés par l'établissement.</p>
+          <p className="text-sm text-text-secondary">Tarifs non renseignés par l&apos;établissement.</p>
         ) : (
-          <div className="divide-y divide-[#f5f5f5]">
+          <div className="divide-y divide-border">
             {feeRows.map((f) => (
               <div key={f.key} className="flex items-center justify-between py-3">
-                <span className="text-sm text-slate-600">{f.label}</span>
-                <span className="text-sm font-bold text-[#0a0a0a]">
+                <span className="text-sm text-text-secondary">{f.label}</span>
+                <span className="text-sm font-bold text-text-primary">
                   {Number(fees[f.key]).toLocaleString("fr-FR")} {currency}
                 </span>
               </div>
@@ -469,7 +460,7 @@ function GeneralTab({ school, fees, infra, infraItems }: {
       <div id="infrastructures" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
         <h2 className="font-bold text-sm mb-4">Infrastructures</h2>
         {infraItems.length === 0 ? (
-          <p className="text-sm text-slate-400">Infrastructures non renseignées par l&apos;établissement.</p>
+          <p className="text-sm text-text-secondary">Infrastructures non renseignées par l&apos;établissement.</p>
         ) : (
           <div className="grid sm:grid-cols-2 gap-3">
             {infraItems.map((key) => {
@@ -478,7 +469,7 @@ function GeneralTab({ school, fees, infra, infraItems }: {
               return (
                 <div key={key} className="flex items-center gap-3 bg-muted rounded-xl p-3">
                   <Icon size={15} className="text-primary shrink-0" />
-                  <span className="text-sm font-semibold text-[#0a0a0a]">{item.label}</span>
+                  <span className="text-sm font-semibold text-text-primary">{item.label}</span>
                 </div>
               );
             })}
@@ -489,88 +480,25 @@ function GeneralTab({ school, fees, infra, infraItems }: {
   );
 }
 
-function GalerieTab({ images }: { images: any[] }) {
-  const [lightbox, setLightbox] = useState<string | null>(null);
-
-  if (images.length === 0) {
-    return (
-      <div className="bg-white border border-[#ebebeb] rounded-2xl py-16 text-center">
-        <ImageIcon size={28} className="mx-auto text-slate-200 mb-4" />
-        <p className="text-sm text-slate-400">Aucune photo publiée.</p>
-      </div>
-    );
-  }
-
-  return (
-    <>
-      <div className="grid sm:grid-cols-2 gap-4">
-        {images.map((img) => (
-          <button
-            key={img.id}
-            onClick={() => setLightbox(img.url)}
-            className="group bg-white border border-[#ebebeb] rounded-2xl overflow-hidden text-left hover:border-[#ccc] transition-colors"
-          >
-            <img
-              src={img.url}
-              alt={img.caption ?? "Photo"}
-              className="w-full aspect-[4/3] object-cover group-hover:scale-[1.02] transition-transform duration-300"
-            />
-            {img.caption && (
-              <p className="text-xs text-slate-500 px-4 py-3">{img.caption}</p>
-            )}
-          </button>
-        ))}
-      </div>
-
-      {/* Lightbox */}
-      {lightbox && (
-        <div
-          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
-          onClick={() => setLightbox(null)}
-        >
-          <img
-            src={lightbox}
-            alt="Photo agrandie"
-            className="max-w-full max-h-[90vh] rounded-xl object-contain"
-            onClick={(e) => e.stopPropagation()}
-          />
-        </div>
-      )}
-    </>
-  );
-}
-
 function DocumentsTab({ docs }: { docs: any[] }) {
-  if (docs.length === 0) {
-    return (
-      <div className="bg-white border border-[#ebebeb] rounded-2xl py-16 text-center">
-        <FileText size={28} className="mx-auto text-slate-200 mb-4" />
-        <p className="text-sm text-slate-400">Aucun document disponible.</p>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-3">
       {docs.map((doc) => {
         const typeLabel = DOC_TYPE_LABELS[doc.type] ?? doc.type;
         return (
-          <div
-            key={doc.id}
-            className="bg-white border border-[#ebebeb] rounded-2xl p-4 flex items-center gap-4"
-          >
-            <div className="w-10 h-10 rounded-xl bg-slate-50 border border-[#ebebeb] flex items-center justify-center shrink-0">
-              <FileText size={16} className="text-slate-400" />
+          <div key={doc.id} className="bg-white border border-border rounded-card p-4 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center shrink-0">
+              <FileText size={16} className="text-text-secondary" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-semibold text-sm text-[#0a0a0a] truncate">{doc.name}</p>
-              <p className="text-xs text-slate-400 mt-0.5">{typeLabel}</p>
+              <p className="font-semibold text-sm text-text-primary truncate">{doc.name}</p>
+              <p className="text-xs text-text-secondary mt-0.5">{typeLabel}</p>
             </div>
             <a
               href={doc.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="shrink-0 flex items-center gap-1.5 text-xs font-bold text-emerald-700 border border-emerald-200 bg-emerald-50 px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition-colors"
+              className="shrink-0 flex items-center gap-1.5 text-xs font-bold text-primary border border-primary/30 bg-primary-light px-3 py-1.5 rounded-lg hover:bg-primary/10 transition-colors duration-base"
             >
               <Download size={12} />
               Télécharger
@@ -602,7 +530,7 @@ function AnnouncementsTab({ schoolId }: { schoolId: string }) {
     return (
       <div className="space-y-3">
         {[1, 2].map((i) => (
-          <div key={i} className="h-24 bg-white border border-[#ebebeb] rounded-2xl animate-pulse" />
+          <div key={i} className="h-24 bg-white border border-border rounded-card animate-pulse" />
         ))}
       </div>
     );
@@ -611,28 +539,25 @@ function AnnouncementsTab({ schoolId }: { schoolId: string }) {
   return (
     <div className="space-y-3">
       {announcements.length === 0 ? (
-        <div className="bg-white border border-[#ebebeb] rounded-2xl py-14 text-center">
-          <Bell size={28} className="mx-auto text-slate-200 mb-4" />
-          <p className="text-sm text-slate-400">Aucune annonce publiée.</p>
+        <div className="bg-white border border-border rounded-card py-14 text-center">
+          <Bell size={28} className="mx-auto text-text-secondary/30 mb-4" />
+          <p className="text-sm text-text-secondary">Aucune actualité publiée.</p>
         </div>
       ) : (
         announcements.map((a) => (
-          <div
-            key={a.id}
-            className={`bg-white border rounded-2xl p-5 ${a.is_important ? "border-red-200" : "border-[#ebebeb]"}`}
-          >
+          <div key={a.id} className={`bg-white border rounded-card p-5 ${a.is_important ? "border-danger/30" : "border-border"}`}>
             <div className="flex items-center gap-2 mb-2 flex-wrap">
               {a.is_important && (
-                <span className="flex items-center gap-1 text-[10px] font-bold text-red-600 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full">
+                <span className="flex items-center gap-1 text-[10px] font-bold text-danger bg-red-50 border border-red-200 px-2 py-0.5 rounded-full">
                   <AlertCircle size={9} /> Important
                 </span>
               )}
-              <span className="text-[10px] text-slate-400 font-medium">
+              <span className="text-[10px] text-text-secondary font-medium">
                 {new Date(a.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
               </span>
             </div>
-            <h3 className="font-bold text-[#0a0a0a] mb-1">{a.title}</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">{a.content}</p>
+            <h3 className="font-bold text-text-primary mb-1">{a.title}</h3>
+            <p className="text-sm text-text-secondary leading-relaxed">{a.content}</p>
           </div>
         ))
       )}
@@ -651,22 +576,22 @@ function ParentTab({ schoolId }: { schoolId: string }) {
   return (
     <div id="admissions" className="bg-accent text-white rounded-card p-6 scroll-mt-20">
       <h2 className="font-black text-2xl mb-2">Admissions</h2>
-      <p className="text-slate-400 text-sm mb-6 leading-relaxed">
+      <p className="text-white/60 text-sm mb-6 leading-relaxed">
         Préinscrivez votre enfant en ligne. Une fois le dossier accepté, cet
-        espace devient le lien entre le parent, l'élève et l'école.
+        espace devient le lien entre le parent, l&apos;élève et l&apos;école.
       </p>
       <div className="grid sm:grid-cols-2 gap-3 mb-6">
         {cards.map(({ icon: Icon, title, text }) => (
           <div key={title} className="bg-white/5 rounded-xl p-4 border border-white/8">
-            <Icon size={15} className="text-emerald-400 mb-3" />
+            <Icon size={15} className="text-primary-light mb-3" />
             <h3 className="font-bold text-sm text-white mb-1">{title}</h3>
-            <p className="text-xs text-slate-400 leading-relaxed">{text}</p>
+            <p className="text-xs text-white/60 leading-relaxed">{text}</p>
           </div>
         ))}
       </div>
       <Link
         href={`/preinscription?ecole=${schoolId}`}
-        className="inline-block bg-yellow-400 text-black px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-yellow-300 transition-colors"
+        className="inline-block bg-[#FCD116] text-[#0A0A0A] px-5 py-2.5 rounded-card text-sm font-bold hover:bg-[#FCD116]/90 transition-colors duration-base"
       >
         Préinscrire mon enfant
       </Link>

@@ -12,7 +12,7 @@ export type AdmissionStatus =
   | "cancelled";
 
 export const ADMISSION_STATUSES: { value: AdmissionStatus; label: string; cls: string }[] = [
-  { value: "submitted",           label: "Nouvelle",          cls: "text-slate-700 bg-slate-100 border-slate-200" },
+  { value: "submitted",           label: "Demande reçue",     cls: "text-slate-700 bg-slate-100 border-slate-200" },
   { value: "in_review",           label: "En analyse",        cls: "text-blue-700 bg-blue-50 border-blue-200" },
   { value: "documents_required",  label: "Documents requis",  cls: "text-orange-700 bg-orange-50 border-orange-200" },
   { value: "interview",           label: "Entretien",         cls: "text-purple-700 bg-purple-50 border-purple-200" },

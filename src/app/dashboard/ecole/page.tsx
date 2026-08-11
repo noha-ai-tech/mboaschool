@@ -11,14 +11,25 @@ import {
   CheckCircle,
   ArrowRight,
   School,
-  Lock,
   Sparkles,
   Gauge,
   Bell,
   FileText,
   ImageIcon,
   CreditCard,
+  Clock3,
+  CalendarDays,
+  AlertCircle,
 } from "lucide-react";
+
+const ANNEE_SCOLAIRE_COURANTE = "2026-2027";
+
+const PAIE_STATUT_LABELS: Record<string, string> = {
+  brouillon: "Brouillon",
+  valide_rh: "Validé RH",
+  valide_direction: "Validé Direction",
+  paie_validee: "Paie validée",
+};
 
 export default function DashboardEcoleHome() {
   const { school, loading: schoolLoading } = useSchool();
@@ -32,14 +43,20 @@ export default function DashboardEcoleHome() {
     imageCount: number;
     latestAnnouncement: string | null;
   } | null>(null);
+  const [pro, setPro] = useState<{
+    teacherCount: number;
+    clockedInToday: number;
+    scheduledClasses: number;
+    paieCounts: Record<string, number>;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!school) return;
-    loadData(school.id);
+    loadData(school.id, school.forfait === "pro");
   }, [school]);
 
-  async function loadData(schoolId: string) {
+  async function loadData(schoolId: string, isPro: boolean) {
     setLoading(true);
     const [{ data: apps }, { data: cls }, estRes, feesRes, infraRes, imagesRes, annRes] = await Promise.all([
       supabase
@@ -74,6 +91,39 @@ export default function DashboardEcoleHome() {
       imageCount: imagesRes.count ?? 0,
       latestAnnouncement: annRes.data?.[0]?.created_at ?? null,
     });
+
+    // Widgets Écoles237 Pro — uniquement si le forfait est réellement actif,
+    // lecture seule sur les mêmes tables que le module Pro existant.
+    if (isPro) {
+      const startOfDay = new Date();
+      startOfDay.setHours(0, 0, 0, 0);
+
+      const [{ data: teachers }, { count: clockedCount }, { count: scheduleCount }, { data: bulletins }] = await Promise.all([
+        supabase.from("enseignants").select("id").eq("etablissement_id", schoolId),
+        supabase
+          .from("pointages")
+          .select("enseignant_id", { count: "exact", head: true })
+          .eq("etablissement_id", schoolId)
+          .gte("horodatage", startOfDay.toISOString()),
+        supabase
+          .from("emplois_du_temps")
+          .select("classe_id", { count: "exact", head: true })
+          .eq("etablissement_id", schoolId)
+          .eq("annee_scolaire", ANNEE_SCOLAIRE_COURANTE),
+        supabase.from("bulletins_paie").select("statut").eq("etablissement_id", schoolId),
+      ]);
+
+      const paieCounts: Record<string, number> = {};
+      (bulletins ?? []).forEach((b: any) => { paieCounts[b.statut] = (paieCounts[b.statut] ?? 0) + 1; });
+
+      setPro({
+        teacherCount: teachers?.length ?? 0,
+        clockedInToday: clockedCount ?? 0,
+        scheduledClasses: scheduleCount ?? 0,
+        paieCounts,
+      });
+    }
+
     setLoading(false);
   }
 
@@ -93,16 +143,34 @@ export default function DashboardEcoleHome() {
     { label: "Ajouter les contacts", done: !!(school.phone || school.email), href: "/dashboard/ecole/parametres" },
     { label: "Compléter la description", done: !!profile.description && profile.description.length > 20, href: "/dashboard/ecole/parametres" },
   ] : [];
+  const incomplete = checklist.filter((c) => !c.done);
   const completionPct = checklist.length > 0
     ? Math.round((checklist.filter((c) => c.done).length / checklist.length) * 100)
     : 0;
 
+  // "À traiter" — uniquement des éléments réellement actionnables, jamais
+  // une alerte inventée pour remplir l'écran.
+  const attentionItems = !loading ? [
+    ...(pending > 0 ? [{
+      label: `${pending} admission${pending !== 1 ? "s" : ""} en attente`,
+      href: "/dashboard/ecole/admissions",
+    }] : []),
+    ...((pro?.paieCounts.brouillon ?? 0) > 0 ? [{
+      label: `${pro!.paieCounts.brouillon} bulletin${pro!.paieCounts.brouillon !== 1 ? "s" : ""} de paie en brouillon`,
+      href: "/pro/paie",
+    }] : []),
+    ...(incomplete.length > 0 ? [{
+      label: `Fiche établissement incomplète (${completionPct}%)`,
+      href: incomplete[0].href,
+    }] : []),
+  ] : [];
+
   if (schoolLoading) {
     return (
       <div className="space-y-4 animate-pulse">
-        <div className="h-8 bg-white rounded-xl w-1/3" />
+        <div className="h-8 bg-white rounded-card w-1/3" />
         <div className="grid grid-cols-4 gap-4">
-          {[1,2,3,4].map(i => <div key={i} className="h-24 bg-white rounded-xl" />)}
+          {[1,2,3,4].map(i => <div key={i} className="h-24 bg-white rounded-card" />)}
         </div>
       </div>
     );
@@ -111,155 +179,108 @@ export default function DashboardEcoleHome() {
   if (!school) {
     return (
       <div className="max-w-md mx-auto text-center py-20">
-        <div className="w-14 h-14 rounded-2xl bg-white border border-[#ebebeb] flex items-center justify-center mx-auto mb-5">
-          <School size={24} className="text-slate-400" />
+        <div className="w-14 h-14 rounded-2xl bg-white border border-border flex items-center justify-center mx-auto mb-5">
+          <School size={24} className="text-text-secondary" />
         </div>
         <h2 className="text-xl font-bold mb-2">Aucun établissement lié</h2>
-        <p className="text-slate-500 text-sm mb-6">
-          Votre compte n'est pas encore associé à un établissement. Contactez l'administrateur de la plateforme.
+        <p className="text-text-secondary text-sm mb-6">
+          Votre compte n&apos;est pas encore associé à un établissement. Contactez l&apos;administrateur de la plateforme.
         </p>
-        <Link href="/" className="text-sm font-semibold text-emerald-700 hover:underline">
-          Retour à l'accueil
+        <Link href="/" className="text-sm font-semibold text-primary hover:underline">
+          Retour à l&apos;accueil
         </Link>
       </div>
     );
   }
 
+  const isPro = school.forfait === "pro";
+
   return (
-    <div className="max-w-5xl">
+    <div className="max-w-6xl">
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center gap-2 mb-2">
-          <p className="text-xs font-semibold tracking-widest uppercase text-slate-400">Tableau de bord</p>
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <h1 className="text-2xl font-bold tracking-tight text-text-primary">{school.name}</h1>
           {school.is_verified && (
-            <span className="flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+            <span className="flex items-center gap-1 text-[10px] font-semibold text-primary bg-primary-light border border-primary/20 px-2 py-0.5 rounded-full">
               <CheckCircle size={9} /> Vérifié
             </span>
           )}
+          {isPro && (
+            <span className="flex items-center gap-1 text-[10px] font-bold text-[#0A0A0A] bg-[#FCD116] px-2 py-0.5 rounded-full">
+              <Sparkles size={9} /> Pro
+            </span>
+          )}
         </div>
-        <h1 className="text-3xl font-black tracking-tight text-[#0a0a0a]">{school.name}</h1>
-        <p className="text-slate-500 text-sm mt-1">{school.city} · {school.main_category}</p>
+        <p className="text-text-secondary text-sm">{school.city} · {school.main_category}</p>
       </div>
 
-      {/* KPI — 4 maximum, données réelles uniquement (Design Freeze V1, Section 8) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white border border-border rounded-card p-5">
-          <ClipboardList size={18} className="text-primary mb-3" />
-          <p className="text-3xl font-extrabold text-text-primary">{loading ? "—" : pending}</p>
-          <p className="text-xs text-text-secondary font-medium mt-1">Admissions en attente</p>
-        </div>
-        <div className="bg-white border border-border rounded-card p-5">
-          <Gauge size={18} className="text-primary mb-3" />
-          <p className="text-3xl font-extrabold text-text-primary">{loading ? "—" : `${completionPct}%`}</p>
-          <p className="text-xs text-text-secondary font-medium mt-1">Profil complété</p>
-        </div>
-        <div className="bg-white border border-border rounded-card p-5">
-          <GraduationCap size={18} className="text-primary mb-3" />
-          <p className="text-3xl font-extrabold text-text-primary">{loading ? "—" : classes.length}</p>
-          <p className="text-xs text-text-secondary font-medium mt-1">Classes</p>
-        </div>
-        <div className="bg-white border border-border rounded-card p-5">
-          <CheckCircle size={18} className="text-primary mb-3" />
-          <p className="text-3xl font-extrabold text-text-primary">{loading ? "—" : accepted}</p>
-          <p className="text-xs text-text-secondary font-medium mt-1">Admissions acceptées</p>
-        </div>
+      {/* KPI — 4 maximum, données réelles uniquement */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <KpiCard icon={ClipboardList} value={loading ? "—" : pending} label="Admissions en attente" />
+        <KpiCard icon={Gauge} value={loading ? "—" : `${completionPct}%`} label="Profil complété" />
+        <KpiCard icon={GraduationCap} value={loading ? "—" : classes.length} label="Classes" />
+        <KpiCard icon={CheckCircle} value={loading ? "—" : accepted} label="Admissions acceptées" />
       </div>
 
-      {/* Checklist de complétion */}
-      {!loading && checklist.some((c) => !c.done) && (
-        <div className="bg-white border border-[#ebebeb] rounded-2xl p-5 mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <p className="font-bold text-sm">Complétez votre fiche</p>
-            <span className="text-xs font-bold text-emerald-700">{completionPct}%</span>
-          </div>
-          <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden mb-4">
-            <div className="h-full bg-emerald-500 transition-all" style={{ width: `${completionPct}%` }} />
-          </div>
-          <div className="grid sm:grid-cols-2 gap-2">
-            {checklist.filter((c) => !c.done).map((c) => (
+      {/* À traiter */}
+      <div className="bg-white border border-border rounded-card p-5 mb-6">
+        <p className="font-bold text-sm text-text-primary mb-3">À traiter</p>
+        {loading ? (
+          <div className="h-10 bg-muted rounded-lg animate-pulse" />
+        ) : attentionItems.length === 0 ? (
+          <p className="text-sm text-text-secondary">Rien ne nécessite votre attention.</p>
+        ) : (
+          <div className="space-y-1.5">
+            {attentionItems.map((item) => (
               <Link
-                key={c.label}
-                href={c.href}
-                className="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-50 transition-colors border border-slate-100"
+                key={item.label}
+                href={item.href}
+                className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm text-text-primary hover:bg-muted transition-colors duration-base"
               >
-                {c.label}
-                <ArrowRight size={13} className="text-slate-300" />
+                <span className="flex items-center gap-2.5">
+                  <AlertCircle size={14} className="text-warning shrink-0" />
+                  {item.label}
+                </span>
+                <ArrowRight size={13} className="text-text-secondary shrink-0" />
               </Link>
             ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
-      {/* Module Pro */}
-      {school.forfait === "pro" ? (
-        <Link
-          href="/pro/emplois-du-temps"
-          className="flex items-center justify-between mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-6 py-4 hover:bg-emerald-100 transition-colors"
-        >
-          <div className="flex items-center gap-3">
-            <Sparkles size={18} className="text-emerald-600" />
-            <div>
-              <p className="text-sm font-bold text-emerald-900">Écoles237 Pro</p>
-              <p className="text-xs text-emerald-700">Emplois du temps · Pointage · Messagerie interne</p>
-            </div>
-          </div>
-          <ArrowRight size={16} className="text-emerald-600 shrink-0" />
-        </Link>
-      ) : (
-        <div className="flex items-start justify-between mb-6 rounded-2xl border border-[#ebebeb] bg-white px-6 py-4">
-          <div className="flex items-start gap-3">
-            <Lock size={18} className="text-slate-300 mt-0.5 shrink-0" />
-            <div>
-              <p className="text-sm font-bold text-[#0a0a0a]">Écoles237 Pro</p>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Emplois du temps, pointage des enseignants et messagerie interne.
-              </p>
-              <p className="text-xs text-slate-400 mt-1">
-                Contactez-nous pour activer le <strong className="text-slate-600">forfait Pro</strong>.
-              </p>
-            </div>
-          </div>
-          <span className="shrink-0 text-[10px] font-bold tracking-wide uppercase bg-slate-100 text-slate-400 px-2.5 py-1 rounded-full ml-4">
-            Pro
-          </span>
-        </div>
-      )}
-
-      <div className="grid lg:grid-cols-3 gap-6">
-        {/* Recent applications */}
-        <div className="lg:col-span-2 bg-white border border-[#ebebeb] rounded-2xl overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-[#ebebeb]">
-            <h2 className="font-bold text-sm">Dernières préinscriptions</h2>
-            <Link href="/dashboard/ecole/admissions" className="text-xs font-semibold text-emerald-700 hover:text-emerald-600 flex items-center gap-1">
+      <div className="grid lg:grid-cols-2 gap-5 mb-6">
+        {/* Admissions */}
+        <div className="bg-white border border-border rounded-card overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+            <h2 className="font-bold text-sm">Admissions récentes</h2>
+            <Link href="/dashboard/ecole/admissions" className="text-xs font-semibold text-primary hover:opacity-80 flex items-center gap-1">
               Voir tout <ArrowRight size={12} />
             </Link>
           </div>
-
           {loading ? (
-            <div className="p-6 space-y-3">
-              {[1,2,3].map(i => <div key={i} className="h-12 bg-slate-50 rounded-lg animate-pulse" />)}
+            <div className="p-5 space-y-3">
+              {[1, 2, 3].map((i) => <div key={i} className="h-10 bg-muted rounded-lg animate-pulse" />)}
             </div>
           ) : applications.length === 0 ? (
-            <div className="px-6 py-12 text-center">
-              <ClipboardList size={28} className="mx-auto text-slate-200 mb-3" />
-              <p className="text-sm text-slate-400">Aucune préinscription reçue</p>
+            <div className="px-5 py-10 text-center">
+              <ClipboardList size={24} className="mx-auto text-text-secondary/30 mb-3" />
+              <p className="text-sm text-text-secondary">Aucune préinscription reçue</p>
             </div>
           ) : (
-            <div className="divide-y divide-[#f5f5f5]">
-              {applications.slice(0, 6).map((app) => {
+            <div className="divide-y divide-border">
+              {applications.slice(0, 5).map((app) => {
                 const name = app.full_student_name || `${app.student_first_name ?? ""} ${app.student_last_name ?? ""}`.trim() || "—";
                 const s = admissionStatusConfig(app.admission_status);
                 return (
-                  <div key={app.id} className="flex items-center justify-between px-6 py-3.5 hover:bg-slate-50/50 transition-colors">
+                  <div key={app.id} className="flex items-center justify-between px-5 py-3">
                     <div className="min-w-0">
-                      <p className="font-semibold text-sm text-[#0a0a0a] truncate">{name}</p>
-                      <p className="text-xs text-slate-400 mt-0.5">
-                        Parent : {app.parent_name ?? "—"} · {app.desired_level ?? "Niveau non précisé"}
+                      <p className="font-semibold text-sm text-text-primary truncate">{name}</p>
+                      <p className="text-xs text-text-secondary mt-0.5">
+                        {app.desired_level ?? "Niveau non précisé"} · {new Date(app.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "short" })}
                       </p>
                     </div>
-                    <span className={`ml-4 shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-full border ${s.cls}`}>
-                      {s.label}
-                    </span>
+                    <span className={`ml-4 shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-full border ${s.cls}`}>{s.label}</span>
                   </div>
                 );
               })}
@@ -267,57 +288,134 @@ export default function DashboardEcoleHome() {
           )}
         </div>
 
-        {/* Right column */}
-        <div className="space-y-4">
-          {/* Classes */}
-          <div className="bg-white border border-[#ebebeb] rounded-2xl overflow-hidden">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[#ebebeb]">
-              <h2 className="font-bold text-sm">Classes</h2>
-              <Link href="/dashboard/ecole/classes" className="text-xs font-semibold text-emerald-700 hover:text-emerald-600 flex items-center gap-1">
-                Gérer <ArrowRight size={12} />
+        {/* Personnel / Présences */}
+        {isPro ? (
+          <div className="bg-white border border-border rounded-card overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+              <h2 className="font-bold text-sm">Personnel aujourd&apos;hui</h2>
+              <Link href="/pro/pointage/historique" className="text-xs font-semibold text-primary hover:opacity-80 flex items-center gap-1">
+                Voir tout <ArrowRight size={12} />
               </Link>
             </div>
-            <div className="p-4">
-              {loading ? (
-                <div className="h-8 bg-slate-50 rounded-lg animate-pulse" />
-              ) : classes.length === 0 ? (
-                <p className="text-xs text-slate-400 text-center py-3">Aucune classe créée</p>
+            <div className="p-5 flex items-center gap-6">
+              <div>
+                <p className="text-2xl font-extrabold text-text-primary">{loading || !pro ? "—" : pro.clockedInToday}</p>
+                <p className="text-xs text-text-secondary mt-0.5">Pointés aujourd&apos;hui</p>
+              </div>
+              <div className="h-8 w-px bg-border" />
+              <div>
+                <p className="text-2xl font-extrabold text-text-primary">{loading || !pro ? "—" : pro.teacherCount}</p>
+                <p className="text-xs text-text-secondary mt-0.5">Enseignants au total</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <ProLockedCard
+            icon={Clock3}
+            title="Personnel & présences"
+            description="Suivez le pointage de vos enseignants en temps réel."
+          />
+        )}
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-5 mb-6">
+        {/* Emploi du temps */}
+        {isPro ? (
+          <div className="bg-white border border-border rounded-card overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+              <h2 className="font-bold text-sm">Emploi du temps</h2>
+              <Link href="/pro/emplois-du-temps" className="text-xs font-semibold text-primary hover:opacity-80 flex items-center gap-1">
+                Voir tout <ArrowRight size={12} />
+              </Link>
+            </div>
+            <div className="p-5">
+              <p className="text-2xl font-extrabold text-text-primary">{loading || !pro ? "—" : pro.scheduledClasses}</p>
+              <p className="text-xs text-text-secondary mt-0.5">Classes avec un emploi du temps publié ({ANNEE_SCOLAIRE_COURANTE})</p>
+            </div>
+          </div>
+        ) : (
+          <ProLockedCard
+            icon={CalendarDays}
+            title="Emplois du temps"
+            description="Créez et publiez les emplois du temps de vos classes."
+          />
+        )}
+
+        {/* Paie */}
+        {isPro ? (
+          <div className="bg-white border border-border rounded-card overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+              <h2 className="font-bold text-sm">Paie</h2>
+              <Link href="/pro/paie" className="text-xs font-semibold text-primary hover:opacity-80 flex items-center gap-1">
+                Voir tout <ArrowRight size={12} />
+              </Link>
+            </div>
+            <div className="p-5">
+              {loading || !pro || Object.keys(pro.paieCounts).length === 0 ? (
+                <p className="text-sm text-text-secondary">Aucun bulletin de paie généré.</p>
               ) : (
-                <div className="space-y-2">
-                  {classes.slice(0, 4).map((c) => (
-                    <div key={c.id} className="flex items-center justify-between py-1.5">
-                      <div>
-                        <p className="text-sm font-semibold">{c.name}</p>
-                        <p className="text-xs text-slate-400">{c.level}</p>
-                      </div>
-                      <GraduationCap size={14} className="text-slate-300" />
-                    </div>
+                <div className="flex flex-wrap gap-2">
+                  {Object.entries(pro.paieCounts).map(([statut, count]) => (
+                    <span key={statut} className="text-xs font-semibold bg-muted text-text-primary px-2.5 py-1 rounded-full">
+                      {count} {PAIE_STATUT_LABELS[statut] ?? statut}
+                    </span>
                   ))}
-                  {classes.length > 4 && (
-                    <p className="text-xs text-slate-400 pt-1">+{classes.length - 4} autres</p>
-                  )}
                 </div>
               )}
             </div>
           </div>
+        ) : (
+          <ProLockedCard
+            icon={CreditCard}
+            title="Paie"
+            description="Calculez et validez la paie de votre personnel."
+          />
+        )}
+      </div>
 
-          {/* Quick links */}
-          <div className="bg-white border border-[#ebebeb] rounded-2xl p-4 space-y-1">
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-slate-400 px-2 mb-3">Accès rapide</p>
+      <div className="grid lg:grid-cols-2 gap-5">
+        {/* Profil établissement */}
+        {!loading && incomplete.length > 0 && (
+          <div className="bg-white border border-border rounded-card p-5">
+            <div className="flex items-center justify-between mb-3">
+              <p className="font-bold text-sm text-text-primary">Votre fiche est complétée à {completionPct}%</p>
+            </div>
+            <div className="h-1.5 bg-muted rounded-full overflow-hidden mb-4">
+              <div className="h-full bg-primary transition-all" style={{ width: `${completionPct}%` }} />
+            </div>
+            <div className="space-y-1">
+              {incomplete.slice(0, 2).map((c) => (
+                <Link
+                  key={c.label}
+                  href={c.href}
+                  className="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-text-secondary hover:bg-muted hover:text-text-primary transition-colors duration-base"
+                >
+                  {c.label}
+                  <ArrowRight size={13} className="text-text-secondary" />
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Quick actions */}
+        <div className="bg-white border border-border rounded-card p-4">
+          <p className="text-[10px] font-semibold tracking-widest uppercase text-text-secondary px-2 mb-2">Accès rapide</p>
+          <div className="space-y-0.5">
             {[
               { href: "/dashboard/ecole/annonces", label: "Publier une annonce", icon: Bell },
-              { href: "/dashboard/ecole/documents", label: "Ajouter un document", icon: FileText },
-              { href: "/dashboard/ecole/galerie", label: "Galerie photos", icon: ImageIcon },
-              { href: "/dashboard/ecole/paiements", label: "Suivre les paiements", icon: CreditCard },
+              { href: "/dashboard/ecole/galerie", label: "Ajouter des photos", icon: ImageIcon },
+              { href: "/dashboard/ecole/admissions", label: "Voir les admissions", icon: ClipboardList },
+              { href: "/dashboard/ecole/etablissement", label: "Publier ma fiche", icon: FileText },
             ].map((l) => {
               const Icon = l.icon;
               return (
                 <Link
                   key={l.href}
                   href={l.href}
-                  className="flex items-center gap-3 px-2 py-2.5 rounded-lg text-sm text-slate-600 hover:text-[#0a0a0a] hover:bg-slate-50 transition-colors"
+                  className="flex items-center gap-3 px-2 py-2.5 rounded-lg text-sm text-text-secondary hover:text-text-primary hover:bg-muted transition-colors duration-base"
                 >
-                  <Icon size={15} className="text-slate-400" />
+                  <Icon size={15} className="text-text-secondary" />
                   {l.label}
                 </Link>
               );
@@ -325,6 +423,36 @@ export default function DashboardEcoleHome() {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function KpiCard({ icon: Icon, value, label }: { icon: React.ElementType; value: React.ReactNode; label: string }) {
+  return (
+    <div className="bg-white border border-border rounded-[18px] p-5 shadow-[0_1px_2px_rgba(10,15,13,0.04)]">
+      <Icon size={16} className="text-primary mb-3" />
+      <p className="text-2xl font-extrabold text-text-primary">{value}</p>
+      <p className="text-xs text-text-secondary font-medium mt-1">{label}</p>
+    </div>
+  );
+}
+
+function ProLockedCard({ icon: Icon, title, description }: { icon: React.ElementType; title: string; description: string }) {
+  return (
+    <div className="bg-white border border-border rounded-card p-5 flex items-start justify-between gap-4">
+      <div className="flex items-start gap-3">
+        <Icon size={18} className="text-text-secondary/40 mt-0.5 shrink-0" />
+        <div>
+          <p className="text-sm font-bold text-text-primary">{title}</p>
+          <p className="text-xs text-text-secondary mt-0.5">{description}</p>
+          <p className="text-xs text-text-secondary mt-1">
+            Contactez-nous pour activer le <strong className="text-text-primary">forfait Pro</strong>.
+          </p>
+        </div>
+      </div>
+      <span className="shrink-0 text-[10px] font-bold tracking-wide uppercase bg-muted text-text-secondary px-2.5 py-1 rounded-full">
+        Pro
+      </span>
     </div>
   );
 }
