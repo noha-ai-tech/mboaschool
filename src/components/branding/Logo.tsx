@@ -1,23 +1,27 @@
-// Logo officiel Écoles237. Composant UNIQUE de rendu du logo — utilise
-// désormais le badge carré (favicon.png) partout, sur fond clair comme
-// sombre : les anciens fichiers horizontaux (logo-light.png/logo-dark.png)
-// ne sont plus référencés. `variant` reste dans la signature pour ne pas
-// casser les appels existants, mais les deux valeurs pointent vers le même
-// fichier — le badge n'a qu'une seule version.
+// Logo officiel Écoles237 (retour au logo horizontal complet — icône +
+// texte "Écoles237" déjà intégré à l'image, deux variantes fournies :
+// logo-light.png pour les fonds clairs (texte foncé), logo-dark.png pour
+// les fonds sombres (texte blanc). Le badge carré favicon.png reste
+// réservé à l'onglet du navigateur (voir Favicon.tsx) — plus utilisé ici.
 //
-// `next/image` n'est volontairement pas utilisé ici : ce composant est
-// rendu dans un header en position fixed dès le premier paint (LCP), un
-// <img> classique évite toute dépendance à l'optimiseur d'image.
+// `next/image` n'est volontairement pas utilisé ici : les dimensions
+// réelles du fichier horizontal ne sont pas fixes, et ce composant est
+// rendu dans des headers en position fixed dès le premier paint (LCP) —
+// un <img> classique avec hauteur fixe/largeur auto évite toute
+// dépendance à l'optimiseur d'image tout en préservant le ratio réel.
 
-const SIZES = { sm: 32, md: 48, lg: 72, header: 40 } as const;
+const HEIGHTS = { sm: 32, md: 48, lg: 72, header: 40, xl: 60 } as const;
 
-export type LogoSize = keyof typeof SIZES;
+export type LogoSize = keyof typeof HEIGHTS;
 export type LogoVariant = "light" | "dark";
 
-const SOURCE = "/branding/favicon.png";
+const SOURCES: Record<LogoVariant, string> = {
+  light: "/branding/logo-light.png",
+  dark: "/branding/logo-dark.png",
+};
 
 export function Logo({
-  variant: _variant = "light",
+  variant = "light",
   size = "md",
   priority = false,
   className = "",
@@ -27,18 +31,17 @@ export function Logo({
   priority?: boolean;
   className?: string;
 }) {
-  const px = SIZES[size];
+  const height = HEIGHTS[size];
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={SOURCE}
+      src={SOURCES[variant]}
       alt="Écoles237"
-      width={px}
-      height={px}
-      style={{ width: px, height: px }}
+      height={height}
+      style={{ height, width: "auto" }}
       loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : undefined}
-      className={`rounded-xl ${className}`}
+      className={className}
     />
   );
 }

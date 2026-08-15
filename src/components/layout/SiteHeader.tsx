@@ -3,23 +3,26 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Menu, X, ChevronRight } from "lucide-react";
+import { Search, Menu, X, ChevronRight, ChevronDown } from "lucide-react";
 import { Logo } from "@/components/branding/Logo";
 import { categories } from "@/lib/categories";
 
 // Header public — même grammaire visuelle exacte que le Header de la
-// Landing (pilule flottante translucide, logo réel, nav, recherche,
-// Connexion/Inscrire mon école). Instance autonome (pas d'état partagé
-// avec la Landing) pour ne jamais risquer de régresser le comportement de
-// la page d'accueil elle-même : la recherche ici navigue vers l'accueil
-// plutôt que de filtrer en place.
+// Landing (barre noire pleine largeur, icône favicon + logo, nav
+// simplifiée à 3 entrées, menu déroulant catégories, Connexion/Inscrire mon
+// école). Instance autonome (pas d'état partagé avec la Landing) pour ne
+// jamais risquer de régresser le comportement de la page d'accueil
+// elle-même : la recherche ici navigue vers /recherche plutôt que de
+// filtrer en place.
 export function SiteHeader() {
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [headerSearchOpen, setHeaderSearchOpen] = useState(false);
   const [headerScrolled, setHeaderScrolled] = useState(false);
+  const [categoriesMenuOpen, setCategoriesMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
   const headerSearchRef = useRef<HTMLDivElement | null>(null);
+  const categoriesMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const onScroll = () => setHeaderScrolled(window.scrollY > 24);
@@ -46,43 +49,87 @@ export function SiteHeader() {
     };
   }, [headerSearchOpen]);
 
+  useEffect(() => {
+    if (!categoriesMenuOpen) return;
+    function handleClick(e: MouseEvent) {
+      if (categoriesMenuRef.current && !categoriesMenuRef.current.contains(e.target as Node)) {
+        setCategoriesMenuOpen(false);
+      }
+    }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setCategoriesMenuOpen(false);
+    }
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [categoriesMenuOpen]);
+
   function submitSearch() {
     router.push(query.trim() ? `/recherche?q=${encodeURIComponent(query.trim())}` : "/recherche");
     setHeaderSearchOpen(false);
   }
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-white border-b border-border">
-      <div className="max-w-[1520px] mx-auto px-4 sm:px-6">
+    <header className="fixed inset-x-0 top-0 z-50 bg-[#0A0A0A]">
+      <div className="max-w-[1500px] mx-auto px-4 sm:px-6">
         <div
           className={`relative flex items-center gap-8 transition-all duration-300 ease-out ${
-            headerScrolled ? "h-14" : "h-[72px]"
+            headerScrolled ? "h-14" : "h-[76px]"
           }`}
         >
-          <Link href="/" className="shrink-0 flex flex-col justify-center">
-            <Logo size={headerScrolled ? "sm" : "header"} priority />
-            {!headerScrolled && (
-              <span className="hidden sm:block text-[10px] leading-tight text-text-secondary mt-1 whitespace-nowrap">
-                L&apos;éducation du Cameroun en un clic
-              </span>
-            )}
+          <Link href="/" className="shrink-0 flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/branding/favicon.png"
+              alt=""
+              className="rounded-xl shrink-0"
+              style={headerScrolled ? { height: 48, width: 48 } : { height: 64, width: 64 }}
+            />
+            <Logo variant="dark" size={headerScrolled ? "md" : "xl"} priority />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-1">
-            <Link href="/" className="group relative px-3 py-2 text-sm font-medium text-text-secondary hover:text-primary transition-colors duration-base">
-              Toutes les écoles
-              <span className="absolute left-3 right-3 -bottom-0.5 h-[2px] bg-primary origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-base" />
-            </Link>
-            {categories.map((cat) => (
-              <Link
-                key={cat.key}
-                href={`/categorie/${cat.key}`}
-                className="group relative px-3 py-2 text-sm font-medium text-text-secondary hover:text-primary transition-colors duration-base"
+            <div ref={categoriesMenuRef} className="relative">
+              <button
+                onClick={() => setCategoriesMenuOpen((v) => !v)}
+                aria-expanded={categoriesMenuOpen}
+                className="group relative flex items-center gap-1 px-3 py-2 text-base font-medium text-white/80 hover:text-white transition-colors duration-base"
               >
-                {cat.label}
-                <span className="absolute left-3 right-3 -bottom-0.5 h-[2px] bg-primary origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-base" />
-              </Link>
-            ))}
+                Toutes les écoles
+                <ChevronDown size={15} className={`transition-transform duration-base ${categoriesMenuOpen ? "rotate-180" : ""}`} />
+              </button>
+              {categoriesMenuOpen && (
+                <div className="absolute left-0 top-[calc(100%+10px)] w-64 bg-white rounded-[16px] border border-border shadow-elevation-3 p-2">
+                  <Link
+                    href="/recherche"
+                    onClick={() => setCategoriesMenuOpen(false)}
+                    className="flex items-center justify-between px-3 py-2.5 text-sm font-semibold text-text-primary rounded-lg hover:bg-muted transition-colors duration-base"
+                  >
+                    Toutes les écoles
+                  </Link>
+                  <div className="my-1 border-t border-border" />
+                  {categories.map((cat) => (
+                    <Link
+                      key={cat.key}
+                      href={`/categorie/${cat.key}`}
+                      onClick={() => setCategoriesMenuOpen(false)}
+                      className="flex items-center justify-between px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-muted hover:text-text-primary transition-colors duration-base"
+                    >
+                      {cat.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+            <Link href="/qui-sommes-nous" className="group relative px-3 py-2 text-base font-medium text-white/80 hover:text-white transition-colors duration-base">
+              Qui sommes-nous
+            </Link>
+            <Link href="/contact" className="group relative px-3 py-2 text-base font-medium text-white/80 hover:text-white transition-colors duration-base">
+              Contact
+            </Link>
           </nav>
 
           <div className="hidden md:flex items-center gap-2 ml-auto">
@@ -92,7 +139,7 @@ export function SiteHeader() {
                 aria-expanded={headerSearchOpen}
                 onClick={() => setHeaderSearchOpen((v) => !v)}
                 className={`w-10 h-10 flex items-center justify-center rounded-full transition-colors duration-base ${
-                  headerSearchOpen ? "bg-primary/10 text-primary" : "text-text-secondary hover:text-primary hover:bg-primary/5"
+                  headerSearchOpen ? "bg-white/15 text-white" : "text-white/70 hover:text-white hover:bg-white/10"
                 }`}
               >
                 <Search size={18} />
@@ -127,7 +174,7 @@ export function SiteHeader() {
               )}
             </div>
 
-            <Link href="/auth/connexion" className="px-2 text-sm font-semibold text-text-secondary hover:text-text-primary transition-colors duration-base">
+            <Link href="/auth/connexion" className="px-2 text-sm font-semibold text-white/80 hover:text-white transition-colors duration-base">
               Connexion
             </Link>
             <Link
@@ -138,26 +185,33 @@ export function SiteHeader() {
             </Link>
           </div>
 
-          <button aria-label="Menu" className="lg:hidden ml-auto p-2 text-text-primary" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <button aria-label="Menu" className="lg:hidden ml-auto p-2 text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
 
         {mobileMenuOpen && (
-          <div className="lg:hidden mt-2 rounded-[18px] border border-black/[0.06] bg-white/95 backdrop-blur-[20px] shadow-elevation-2 px-5 py-4 space-y-1">
+          <div className="lg:hidden mt-2 rounded-[18px] border border-white/10 bg-[#111]/98 backdrop-blur-[20px] shadow-elevation-2 px-5 py-4 space-y-1">
+            <Link href="/recherche" onClick={() => setMobileMenuOpen(false)} className="w-full text-left px-3 py-2.5 text-sm font-semibold text-white rounded-lg hover:bg-white/5 flex items-center justify-between">
+              Toutes les écoles
+            </Link>
             {categories.map((cat) => (
               <Link
                 key={cat.key}
                 href={`/categorie/${cat.key}`}
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-left px-3 py-2.5 text-sm font-medium rounded-lg hover:bg-muted flex items-center justify-between"
+                className="w-full text-left px-3 py-2.5 pl-6 text-sm font-medium text-white/70 rounded-lg hover:bg-white/5 hover:text-white flex items-center justify-between"
               >
                 {cat.label}
-                <ChevronRight size={14} className="text-text-secondary" />
+                <ChevronRight size={14} className="text-white/40" />
               </Link>
             ))}
-            <div className="pt-3 border-t border-border flex flex-col gap-2 mt-2">
-              <Link href="/auth/connexion" className="px-3 py-2.5 text-sm font-semibold">Connexion</Link>
+            <div className="pt-1 border-t border-white/10 mt-1">
+              <Link href="/qui-sommes-nous" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2.5 text-sm font-semibold text-white rounded-lg hover:bg-white/5">Qui sommes-nous</Link>
+              <Link href="/contact" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2.5 text-sm font-semibold text-white rounded-lg hover:bg-white/5">Contact</Link>
+            </div>
+            <div className="pt-3 border-t border-white/10 flex flex-col gap-2 mt-2">
+              <Link href="/auth/connexion" className="px-3 py-2.5 text-sm font-semibold text-white">Connexion</Link>
               <Link href="/auth/inscription" className="bg-gradient-to-r from-primary to-primary-dark text-white px-4 py-2.5 rounded-card text-sm font-semibold text-center">Inscrire mon école</Link>
             </div>
           </div>
@@ -167,7 +221,7 @@ export function SiteHeader() {
   );
 }
 
-// Compensation de hauteur pour le header fixed (barre pleine largeur, 72px).
+// Compensation de hauteur pour le header fixed (barre pleine largeur, 76px).
 export function SiteHeaderSpacer() {
-  return <div aria-hidden="true" className="h-[72px]" />;
+  return <div aria-hidden="true" className="h-[76px]" />;
 }

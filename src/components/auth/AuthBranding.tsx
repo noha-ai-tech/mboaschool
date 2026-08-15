@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
-import { Logo } from "@/components/branding/Logo";
 import { useShowcasePhotos } from "@/lib/useShowcasePhotos";
 
 // Panneau de branding partagé par les pages d'authentification (Connexion,
@@ -60,10 +58,9 @@ export function AuthBranding({
         <div className="absolute inset-0 bg-gradient-to-t from-[#06231A] via-[#06231A]/70 to-[#06231A]/30" />
       </div>
 
+      {/* Pas de logo ici : déjà affiché dans AuthHeader au-dessus — un seul
+          logo par page plutôt qu'un doublon dans ce panneau. */}
       <div className="relative z-10 flex flex-col gap-6">
-        <Link href="/" className="inline-flex items-center">
-          <Logo variant="dark" size="md" priority />
-        </Link>
         <p className="text-white/70 text-sm leading-relaxed max-w-[320px]">{tagline}</p>
       </div>
 

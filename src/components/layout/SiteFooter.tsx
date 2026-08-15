@@ -2,21 +2,23 @@
 
 import Link from "next/link";
 import { Logo } from "@/components/branding/Logo";
-import { Newsletter } from "@/components/landing/Newsletter";
 import { categories } from "@/lib/categories";
 
 // Footer public partagé — Landing V4 et pages d'authentification l'utilisent
 // tel quel (jamais un footer dupliqué/différent par page). Deux zones de
-// couleur : vert très sombre (nav + newsletter), noir profond (copyright).
-// Support/Téléchargements/Contacts/Réseaux sociaux ne sont pas construits :
-// aucune page d'aide, aucune app mobile, aucune adresse de contact ni compte
-// social réels n'existent aujourd'hui dans le produit — mieux vaut l'absence
-// qu'un lien mort ou inventé.
+// couleur : vert très sombre (nav), noir profond (copyright).
+//
+// Colonne "Nous contacter" : structure demandée explicitement, mais AUCUN
+// email/téléphone/adresse réel n'existe aujourd'hui dans le produit ni dans
+// les variables d'environnement — plutôt qu'inventer des coordonnées
+// (comme le fait la maquette de référence avec un numéro et un email
+// fictifs), la colonne l'indique honnêtement. À remplacer dès qu'Eddy
+// fournit de vraies coordonnées.
 export function SiteFooter() {
   return (
     <>
       <footer className="bg-[#062018] text-white">
-        <div className="max-w-[1520px] mx-auto px-[18px] py-16 grid md:grid-cols-5 gap-10">
+        <div className="max-w-[1520px] mx-auto px-[18px] py-16 grid md:grid-cols-6 gap-10">
           <div className="md:col-span-2">
             <Link href="/" className="inline-block">
               <Logo variant="dark" />
@@ -53,13 +55,10 @@ export function SiteFooter() {
               <Link href="/auth/connexion" className="block text-sm text-white/60 hover:text-white transition-colors duration-base">Connexion</Link>
             </div>
           </div>
-        </div>
 
-        <div className="border-t border-white/10">
-          <div className="max-w-[1520px] mx-auto px-[18px] py-10">
-            <div className="max-w-sm">
-              <Newsletter />
-            </div>
+          <div>
+            <p className="text-xs font-semibold tracking-wider uppercase text-[#FCD116]/80 mb-4">Nous contacter</p>
+            <p className="text-sm text-white/40 leading-relaxed">Coordonnées à venir.</p>
           </div>
         </div>
       </footer>

@@ -554,7 +554,7 @@ function RecherchePageInner() {
           </div>
 
           {/* Sidebar compare */}
-          <aside className="hidden lg:block sticky top-[88px]">
+          <aside className="hidden lg:block sticky top-[94px]">
             <div className="bg-white border border-[#ebebeb] rounded-2xl overflow-hidden">
               <div className="px-5 py-4 border-b border-[#ebebeb]">
                 <div className="flex items-center justify-between">
@@ -633,7 +633,7 @@ function RecherchePageInner() {
         {/* Vue Carte */}
         {view === "carte" && (
         <div className="grid lg:grid-cols-[3fr_2fr] gap-6 items-start">
-          <div className="hidden lg:block space-y-3 lg:max-h-[calc(100vh-140px)] lg:overflow-y-auto lg:pr-1">
+          <div className="hidden lg:block space-y-3 lg:max-h-[calc(100vh-144px)] lg:overflow-y-auto lg:pr-1">
             {loading && (
               <div className="space-y-3">
                 {[1, 2, 3].map((i) => (
@@ -653,7 +653,7 @@ function RecherchePageInner() {
             ))}
           </div>
 
-          <div className="relative sticky top-[88px] h-[65vh] lg:h-[calc(100vh-140px)] rounded-card overflow-hidden border border-border">
+          <div className="relative sticky top-[94px] h-[65vh] lg:h-[calc(100vh-144px)] rounded-card overflow-hidden border border-border">
             <LocalSchoolMap center={mapCenter} userLocation={userLocation} radiusKm={Number(radius)} schools={mapSchools} />
             {!loading && mapSchools.length === 0 && (
               <div className="absolute inset-0 flex items-center justify-center bg-white/85 pointer-events-none px-6 text-center">

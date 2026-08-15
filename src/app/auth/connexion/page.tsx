@@ -5,9 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { ArrowRight, Eye, EyeOff, ShieldCheck } from "lucide-react";
-import { Logo } from "@/components/branding/Logo";
 import { AuthHeader } from "@/components/layout/AuthHeader";
-import { SiteFooter } from "@/components/layout/SiteFooter";
 import { AuthBranding } from "@/components/auth/AuthBranding";
 
 export default function ConnexionPage() {
@@ -49,15 +47,6 @@ export default function ConnexionPage() {
 
         {/* Panel connexion — fond blanc, large surface épurée */}
         <div className="flex-1 flex flex-col items-center justify-center px-6 py-10 lg:py-12">
-          {/* Bandeau image compact mobile — pas de grande image à faire défiler */}
-          <div className="lg:hidden w-full max-w-[400px] mb-6">
-            <div className="flex justify-center mb-4">
-              <Link href="/" className="inline-flex items-center">
-                <Logo size="md" priority />
-              </Link>
-            </div>
-          </div>
-
           <div className="w-full max-w-[400px]">
             <div className="mb-7">
               <h1 className="text-2xl font-bold tracking-tight text-text-primary mb-1.5">
@@ -153,8 +142,6 @@ export default function ConnexionPage() {
           </div>
         </div>
       </div>
-
-      <SiteFooter />
     </div>
   );
 }

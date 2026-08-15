@@ -12,14 +12,13 @@ import {
   Menu,
   X,
   ChevronRight,
+  ChevronDown,
   Map as MapIcon,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { Logo } from "@/components/branding/Logo";
-import { HeroBackground } from "@/components/hero/HeroBackground";
 import { HeroSearch } from "@/components/hero/HeroSearch";
-import { HeroCarousel } from "@/components/hero/HeroCarousel";
-import type { HeroSlideData } from "@/components/hero/HeroSlide";
+import { HeroPhotoCard, type HeroPhoto } from "@/components/hero/HeroPhotoCard";
 import { AnnouncementTicker, type TickerItem } from "@/components/hero/AnnouncementTicker";
 import { CategoryCard } from "@/components/categories/CategoryCard";
 import { FeaturedSchoolsCarousel } from "@/components/schools/FeaturedSchoolsCarousel";
@@ -30,6 +29,13 @@ import { PartnerPlaceholder } from "@/components/landing/PartnerPlaceholder";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { getCameroonRegion } from "@/lib/cameroonRegions";
 import { categories } from "@/lib/categories";
+
+// Photos réelles fournies pour le panneau Hero (déposées dans public/hero/).
+const HERO_PHOTOS: HeroPhoto[] = [
+  { id: "hero-1", url: "/hero/ecole%20vu%20de%20haut.png" },
+  { id: "hero-2", url: "/hero/cours%20ecole.png" },
+  { id: "hero-3", url: "/hero/lab.png" },
+];
 
 // ─── Data & Types ────────────────────────────────────────────────────────────
 
@@ -121,7 +127,7 @@ function SecondaryCtaBanner({ photo }: { photo: string | null }) {
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/95 to-primary-dark/95" />
-      <div className="relative max-w-[1520px] mx-auto px-[18px] py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+      <div className="relative max-w-[1500px] mx-auto px-[18px] py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
         <div>
           <p className="text-white font-bold text-lg">Votre établissement mérite plus de visibilité.</p>
           <p className="text-white/75 text-sm mt-0.5">Rejoignez Écoles237 et développez votre communauté.</p>
@@ -154,7 +160,9 @@ export default function HomePage() {
   const [locationError, setLocationError] = useState<string | null>(null);
   const [headerSearchOpen, setHeaderSearchOpen] = useState(false);
   const [headerScrolled, setHeaderScrolled] = useState(false);
+  const [categoriesMenuOpen, setCategoriesMenuOpen] = useState(false);
   const headerSearchRef = useRef<HTMLDivElement | null>(null);
+  const categoriesMenuRef = useRef<HTMLDivElement | null>(null);
 
   // Header flottant Premium V2 — réduction de hauteur douce au scroll.
   useEffect(() => {
@@ -182,6 +190,25 @@ export default function HomePage() {
       document.removeEventListener("keydown", handleKey);
     };
   }, [headerSearchOpen]);
+
+  // Fermeture du menu déroulant "Toutes les écoles" au clic extérieur / Échap.
+  useEffect(() => {
+    if (!categoriesMenuOpen) return;
+    function handleClick(e: MouseEvent) {
+      if (categoriesMenuRef.current && !categoriesMenuRef.current.contains(e.target as Node)) {
+        setCategoriesMenuOpen(false);
+      }
+    }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setCategoriesMenuOpen(false);
+    }
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleKey);
+    };
+  }, [categoriesMenuOpen]);
 
   useEffect(() => {
     async function load() {
@@ -270,38 +297,11 @@ export default function HomePage() {
   // Aucune donnée annonceur réelle n'existe encore — le panneau reste masqué.
   const partnerAds: PartnerAd[] = [];
 
-  // Slides du Hero — écoles réellement "à la une" (is_featured, photo réelle)
-  // en tête, puis des slides produit réels (aucune photo stock/IA, aucune
-  // marque tierce non partenaire, aucune annonce institutionnelle fabriquée).
-  const heroSlides = useMemo<HeroSlideData[]>(() => {
-    const slides: HeroSlideData[] = [];
-
-    // Jusqu'à 4 candidats réels (au lieu de 2) : si une photo est cassée,
-    // HeroSlide bascule sur un repli propre plutôt que de laisser un vide —
-    // élargir le pool réduit la probabilité que le carrousel ne montre que
-    // des replis quand une ou deux URL sont mortes.
-    for (const s of featuredSchools.slice(0, 4)) {
-      if (!s.image) continue;
-      slides.push({
-        id: `school-${s.id}`,
-        type: "school",
-        image: s.image,
-        badge: "École Premium",
-        eyebrow: `${s.city}${s.subcategory ? ` · ${s.subcategory}` : ""}`,
-        title: s.name,
-        ctaLabel: "Découvrir cette école",
-        ctaHref: s.isClaimed ? `/ecole/${s.id}` : `/auth/inscription?ecole=${s.id}`,
-        sponsor: s.name,
-      });
-    }
-
-    // Landing V4 §12/§19-20 : chaque slide du carrousel Hero doit porter une
-    // vraie image — les anciennes slides "produit" en dégradé sans photo ont
-    // été retirées d'ici. Ce même contenu reste accessible ailleurs sur la
-    // page (PromotionCard, bannière CTA, bande d'annonces), donc rien n'est
-    // perdu, seul le carrousel devient strictement photo-only.
-    return slides;
-  }, [featuredSchools]);
+  // Photos du panneau Hero — fournies par Eddy (public/hero/), affichées
+  // sans nom/badge/CTA puisque ce panneau illustre la plateforme dans son
+  // ensemble, pas un établissement précis. Pas de repli Supabase : ce sont
+  // les photos explicitement choisies pour cet emplacement.
+  const heroPhotos: HeroPhoto[] = HERO_PHOTOS;
 
   // Bande d'annonces — chaque entrée est un vrai lien vers une fonctionnalité
   // ou une page existante, jamais un message inventé.
@@ -327,47 +327,77 @@ export default function HomePage() {
   }, [loading, schools.length, featuredSchools]);
 
   return (
-    <div className="min-h-screen bg-muted text-[#0a0a0a]">
+    <div className="min-h-screen bg-[#4B5563] text-[#0a0a0a]">
 
       {/* ── HEADER ─────────────────────────────────────────────────────
-          Barre pleine largeur, collée en haut, fond blanc opaque — plus
-          de pilule flottante/marge/coins arrondis (Landing V5, pattern
-          jw.org). Rétrécit doucement au scroll. */}
-      <header className="fixed inset-x-0 top-0 z-50 bg-white border-b border-border">
-        <div className="max-w-[1520px] mx-auto px-4 sm:px-6">
+          Barre pleine largeur, collée en haut, fond noir — icône (favicon)
+          + logo, nav simplifiée à 3 entrées (Toutes les écoles avec menu
+          déroulant des catégories réelles, Qui sommes-nous, Contact).
+          Rétrécit doucement au scroll. */}
+      <header className="fixed inset-x-0 top-0 z-50 bg-[#0A0A0A]">
+        <div className="max-w-[1500px] mx-auto px-4 sm:px-6">
           <div
             className={`relative flex items-center gap-8 transition-all duration-300 ease-out ${
-              headerScrolled ? "h-14" : "h-[72px]"
+              headerScrolled ? "h-14" : "h-[76px]"
             }`}
           >
-            <Link href="/" className="shrink-0 flex flex-col justify-center">
-              <Logo size={headerScrolled ? "sm" : "header"} priority />
-              {!headerScrolled && (
-                <span className="hidden sm:block text-[10px] leading-tight text-text-secondary mt-1 whitespace-nowrap">
-                  L&apos;éducation du Cameroun en un clic
-                </span>
-              )}
+            <Link href="/" className="shrink-0 flex items-center gap-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/branding/favicon.png"
+                alt=""
+                className="rounded-xl shrink-0"
+                style={headerScrolled ? { height: 48, width: 48 } : { height: 64, width: 64 }}
+              />
+              <Logo variant="dark" size={headerScrolled ? "md" : "xl"} priority />
             </Link>
 
             {/* Navigation — hover : texte vert + barre animée 200ms */}
             <nav className="hidden lg:flex items-center gap-1">
-              <Link
-                href="/recherche"
-                className="group relative px-3 py-2 text-sm font-medium text-text-secondary hover:text-primary transition-colors duration-base"
-              >
-                Toutes les écoles
-                <span className="absolute left-3 right-3 -bottom-0.5 h-[2px] bg-primary origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-base" />
-              </Link>
-              {categories.map((cat) => (
-                <Link
-                  key={cat.key}
-                  href={`/categorie/${cat.key}`}
-                  className="group relative px-3 py-2 text-sm font-medium text-text-secondary hover:text-primary transition-colors duration-base"
+              <div ref={categoriesMenuRef} className="relative">
+                <button
+                  onClick={() => setCategoriesMenuOpen((v) => !v)}
+                  aria-expanded={categoriesMenuOpen}
+                  className="group relative flex items-center gap-1 px-3 py-2 text-base font-medium text-white/80 hover:text-white transition-colors duration-base"
                 >
-                  {cat.label}
-                  <span className="absolute left-3 right-3 -bottom-0.5 h-[2px] bg-primary origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-base" />
-                </Link>
-              ))}
+                  Toutes les écoles
+                  <ChevronDown size={15} className={`transition-transform duration-base ${categoriesMenuOpen ? "rotate-180" : ""}`} />
+                </button>
+                {categoriesMenuOpen && (
+                  <div className="absolute left-0 top-[calc(100%+10px)] w-64 bg-white rounded-[16px] border border-border shadow-elevation-3 p-2">
+                    <Link
+                      href="/recherche"
+                      onClick={() => setCategoriesMenuOpen(false)}
+                      className="flex items-center justify-between px-3 py-2.5 text-sm font-semibold text-text-primary rounded-lg hover:bg-muted transition-colors duration-base"
+                    >
+                      Toutes les écoles
+                    </Link>
+                    <div className="my-1 border-t border-border" />
+                    {categories.map((cat) => (
+                      <Link
+                        key={cat.key}
+                        href={`/categorie/${cat.key}`}
+                        onClick={() => setCategoriesMenuOpen(false)}
+                        className="flex items-center justify-between px-3 py-2.5 text-sm font-medium text-text-secondary rounded-lg hover:bg-muted hover:text-text-primary transition-colors duration-base"
+                      >
+                        {cat.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <Link
+                href="/qui-sommes-nous"
+                className="group relative px-3 py-2 text-base font-medium text-white/80 hover:text-white transition-colors duration-base"
+              >
+                Qui sommes-nous
+              </Link>
+              <Link
+                href="/contact"
+                className="group relative px-3 py-2 text-base font-medium text-white/80 hover:text-white transition-colors duration-base"
+              >
+                Contact
+              </Link>
             </nav>
 
             <div className="hidden md:flex items-center gap-2 ml-auto">
@@ -377,7 +407,7 @@ export default function HomePage() {
                   aria-expanded={headerSearchOpen}
                   onClick={() => setHeaderSearchOpen((v) => !v)}
                   className={`w-10 h-10 flex items-center justify-center rounded-full transition-colors duration-base ${
-                    headerSearchOpen ? "bg-primary/10 text-primary" : "text-text-secondary hover:text-primary hover:bg-primary/5"
+                    headerSearchOpen ? "bg-white/15 text-white" : "text-white/70 hover:text-white hover:bg-white/10"
                   }`}
                 >
                   <Search size={18} />
@@ -421,7 +451,7 @@ export default function HomePage() {
                 )}
               </div>
 
-              <Link href="/auth/connexion" className="px-2 text-sm font-semibold text-text-secondary hover:text-text-primary transition-colors duration-base">
+              <Link href="/auth/connexion" className="px-2 text-sm font-semibold text-white/80 hover:text-white transition-colors duration-base">
                 Connexion
               </Link>
               <Link
@@ -432,27 +462,34 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <button aria-label="Menu" className="lg:hidden ml-auto p-2 text-text-primary" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            <button aria-label="Menu" className="lg:hidden ml-auto p-2 text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
 
           {/* Mobile menu */}
           {mobileMenuOpen && (
-            <div className="lg:hidden mt-2 rounded-[18px] border border-black/[0.06] bg-white/95 backdrop-blur-[20px] shadow-elevation-2 px-5 py-4 space-y-1">
+            <div className="lg:hidden mt-2 rounded-[18px] border border-white/10 bg-[#111]/98 backdrop-blur-[20px] shadow-elevation-2 px-5 py-4 space-y-1">
+              <Link href="/recherche" onClick={() => setMobileMenuOpen(false)} className="w-full text-left px-3 py-2.5 text-sm font-semibold text-white rounded-lg hover:bg-white/5 flex items-center justify-between">
+                Toutes les écoles
+              </Link>
               {categories.map((cat) => (
                 <Link
                   key={cat.key}
                   href={`/categorie/${cat.key}`}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-left px-3 py-2.5 text-sm font-medium rounded-lg hover:bg-muted flex items-center justify-between"
+                  className="w-full text-left px-3 py-2.5 pl-6 text-sm font-medium text-white/70 rounded-lg hover:bg-white/5 hover:text-white flex items-center justify-between"
                 >
                   {cat.label}
-                  <ChevronRight size={14} className="text-text-secondary" />
+                  <ChevronRight size={14} className="text-white/40" />
                 </Link>
               ))}
-              <div className="pt-3 border-t border-border flex flex-col gap-2 mt-2">
-                <Link href="/auth/connexion" className="px-3 py-2.5 text-sm font-semibold">Connexion</Link>
+              <div className="pt-1 border-t border-white/10 mt-1">
+                <Link href="/qui-sommes-nous" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2.5 text-sm font-semibold text-white rounded-lg hover:bg-white/5">Qui sommes-nous</Link>
+                <Link href="/contact" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2.5 text-sm font-semibold text-white rounded-lg hover:bg-white/5">Contact</Link>
+              </div>
+              <div className="pt-3 border-t border-white/10 flex flex-col gap-2 mt-2">
+                <Link href="/auth/connexion" className="px-3 py-2.5 text-sm font-semibold text-white">Connexion</Link>
                 <Link href="/auth/inscription" className="bg-gradient-to-r from-primary to-primary-dark text-white px-4 py-2.5 rounded-card text-sm font-semibold text-center">Inscrire mon école</Link>
               </div>
             </div>
@@ -461,7 +498,7 @@ export default function HomePage() {
       </header>
 
       {/* Compensation de hauteur pour le header fixed (72px, hauteur non réduite). */}
-      <div aria-hidden="true" className="h-[72px]" />
+      <div aria-hidden="true" className="h-[76px]" />
 
       {/* ── CONTENEUR CENTRAL BLANC (partie 1) ─────────────────────────
           Landing V5 : header et bandeau d'annonce restent seuls en pleine
@@ -470,27 +507,30 @@ export default function HomePage() {
           reste du repo (1520px). Coupé en deux morceaux pour laisser le
           bandeau d'annonce pleine largeur entre le hero et les catégories,
           sans changer sa position actuelle dans le flux. */}
-      <div className="max-w-[1520px] mx-auto bg-surface">
-        {/* ── HERO PREMIUM V3 ──────────────────────────────────────────
-            Recherche premium (gauche) + grand carrousel (droite). Composants
-            indépendants dans src/components/hero/. */}
+      <div className="max-w-[1500px] mx-auto bg-[#FDF5F5]">
+        {/* ── HERO PREMIUM V8 ──────────────────────────────────────────
+            Deux cartes vertes indépendantes (pas de panneau vert commun) :
+            bloc recherche (plus étroit) + bloc photo (plus large), posées
+            directement sur le fond #FDF5F5 du conteneur — l'espace entre
+            les deux cartes doit rester blanc/pâle, jamais vert. Logo
+            uniquement dans le header du site — pas de doublon ici. */}
         <section className="relative pt-3 pb-4 text-text-primary">
           <div className="relative px-[18px]">
-            <div className="relative bg-white rounded-[28px] shadow-elevation-2 overflow-hidden p-6 lg:p-7">
-              <HeroBackground />
+            <div className="relative flex flex-col lg:flex-row items-stretch gap-4 lg:gap-5 min-h-[520px]">
+              {/* Bloc recherche (vert, plus étroit) */}
+              <div className="relative rounded-[22px] shadow-elevation-2 overflow-hidden bg-gradient-to-br from-[#0d5c30] to-[#07301a] p-7 lg:p-8 flex flex-col justify-center gap-6 lg:w-[38%] shrink-0">
+                <div>
+                  <h1 className="text-[26px] lg:text-[32px] font-bold leading-[1.15] text-white">
+                    Trouvez l&apos;école idéale pour votre enfant, en toute{" "}
+                    <span className="text-[#f5c518]">confiance.</span>
+                  </h1>
+                  <p className="text-[15px] text-[#bacfc2] mt-3">
+                    Plus de {schools.length.toLocaleString("fr-FR")} établissement{schools.length !== 1 ? "s" : ""} référencé
+                    {schools.length !== 1 ? "s" : ""} dans tout le Cameroun.
+                  </p>
+                </div>
 
-              <div className="relative flex items-center gap-2 mb-5">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                <span className="w-1.5 h-1.5 rounded-full bg-[#CE1126]" />
-                <span className="w-1.5 h-1.5 rounded-full bg-[#FCD116]" />
-                <span className="ml-2 text-sm font-semibold tracking-[0.15em] uppercase text-text-secondary">
-                  Plateforme éducative · Cameroun
-                </span>
-              </div>
-
-              <div className="relative flex flex-col lg:flex-row items-stretch gap-4">
                 <HeroSearch
-                  totalCount={schools.length}
                   query={query}
                   onQueryChange={setQuery}
                   activeCategory={activeCategory}
@@ -504,14 +544,17 @@ export default function HomePage() {
                   onLocate={handleLocationToggle}
                   locating={locating}
                   onSearch={() => goToRecherche()}
+                  tone="dark"
                 />
-                <div className="flex-1 min-w-0">
-                  <HeroCarousel slides={heroSlides} />
-                </div>
+                {locationError && (
+                  <p className="text-xs text-white/60 -mt-2">{locationError}</p>
+                )}
               </div>
-              {locationError && (
-                <p className="relative mt-3 text-xs text-text-secondary">{locationError}</p>
-              )}
+
+              {/* Bloc photo (vert, plus large) */}
+              <div className="relative flex-1 min-w-0 min-h-[260px] lg:min-h-0 rounded-[22px] shadow-elevation-2 overflow-hidden">
+                <HeroPhotoCard photos={heroPhotos} />
+              </div>
             </div>
           </div>
         </section>
@@ -520,7 +563,7 @@ export default function HomePage() {
       <AnnouncementTicker items={tickerItems} />
 
       {/* ── CONTENEUR CENTRAL BLANC (partie 2) ────────────────────────── */}
-      <div className="max-w-[1520px] mx-auto bg-surface">
+      <div className="max-w-[1500px] mx-auto bg-[#FDF5F5]">
         {/* ── EXPLORER PAR CATÉGORIE ────────────────────────────────── */}
         <section className="border-t border-border">
           <div className="px-[18px] py-12 lg:py-14">

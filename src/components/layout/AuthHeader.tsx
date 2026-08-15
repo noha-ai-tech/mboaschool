@@ -12,9 +12,9 @@ import { categories } from "@/lib/categories";
 export function AuthHeader() {
   return (
     <header className="bg-[#0A0A0A]">
-      <div className="max-w-[1520px] mx-auto px-[18px] h-16 flex items-center gap-8">
+      <div className="max-w-[1520px] mx-auto px-[18px] h-24 flex items-center gap-8">
         <Link href="/" className="shrink-0 flex items-center">
-          <Logo variant="dark" size="sm" priority />
+          <Logo variant="dark" size="lg" priority />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-1 ml-4">
