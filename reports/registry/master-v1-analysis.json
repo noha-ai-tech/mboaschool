@@ -1,0 +1,30 @@
+{
+  "generatedAt": "2026-08-16T04:44:24.734Z",
+  "masterTotal": 1251,
+  "geographicEnrichment": {
+    "regionCoveragePct": 100,
+    "departmentCoveragePctRaw": 0,
+    "arrondissementCoveragePctRaw": 0,
+    "localityRawCoveragePct": 88,
+    "validLocalityCoveragePct": 83.8,
+    "departmentInferredFromLocalityPct": 12.3,
+    "departmentInferredFromLocalityCount": 154
+  },
+  "quality": {
+    "categoryCoveragePct": 100,
+    "invalidRows": 0,
+    "ambiguousGeography": 0,
+    "suspiciousLocalitiesCount": 53
+  },
+  "matchingCurrentDb": {
+    "currentEstablishments": 721,
+    "exactMatches": 674,
+    "probableMatches": 17,
+    "ambiguousMatches": 0,
+    "newCandidates": 560
+  },
+  "staging": {
+    "exists": true,
+    "detail": "HTTP 200"
+  }
+}

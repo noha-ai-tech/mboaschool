@@ -1,0 +1,19 @@
+{
+  "generatedAt": "2026-08-16T04:31:26.653Z",
+  "sources": [
+    "minesec-centre-littoral-2026-08-16.json",
+    "minesec-ouest-grand-nord-2026-08-16.json"
+  ],
+  "totalRaw": 1251,
+  "totalUnique": 1251,
+  "crossBatchExactDuplicates": 0,
+  "crossBatchPotentialDuplicates": 0,
+  "byRegion": {
+    "CENTRE": 345,
+    "LITTORAL": 149,
+    "OUEST": 251,
+    "ADAMAOUA": 96,
+    "NORD": 141,
+    "EXTREME-NORD": 269
+  }
+}
