@@ -1,0 +1,5 @@
+name,city,category,candidate_region,confidence,note
+"ecole les sources","douala","garderie","Littoral","high",""
+"ecole de manc","douala","primaire","Littoral","high",""
+"MON ECOLE","YAOUNDÉ","garderie","Centre","high",""
+"QA Test Ecole Pointage Paie","Yaounde","primaire","Centre","high","DONNEE DE TEST (mission QA precedente) — a supprimer, pas un vrai etablissement"

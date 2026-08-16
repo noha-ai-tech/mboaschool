@@ -1,0 +1,165 @@
+{
+  "_meta": {
+    "description": "Hiérarchie géographique officielle (régions/départements/arrondissements) pour les régions Centre et Littoral du Cameroun. Sert de seed pour supabase/migrations/0016_geographic_hierarchy.sql (préparée, non exécutée) — SPRINT N, Batch 001.",
+    "sources": [
+      {
+        "label": "Liste des communes de la région du Centre au Cameroun (Wikipédia, citant Institut National de la Statistique du Cameroun — Annuaire statistique 2013)",
+        "url": "https://fr.wikipedia.org/wiki/Liste_des_communes_de_la_r%C3%A9gion_du_Centre_au_Cameroun",
+        "fetchedAt": "2026-08-15",
+        "note": "70 arrondissements/communes confirmés (somme des sous-totaux par département = 70, cohérent avec le total annoncé en tête de page)."
+      },
+      {
+        "label": "Liste des communes de la région du Littoral au Cameroun (Wikipédia, citant Institut National de la Statistique du Cameroun — Annuaire statistique 2013)",
+        "url": "https://fr.wikipedia.org/wiki/Liste_des_communes_de_la_r%C3%A9gion_du_Littoral_au_Cameroun",
+        "fetchedAt": "2026-08-15",
+        "note": "34 arrondissements/communes confirmés (somme = 34, cohérent avec le total annoncé). La page source contient une modification vandale isolée sur le champ 'chef-lieu' de la commune de Loum — ce champ n'a PAS été repris ici ; seul le nom de la commune (non affecté) a été conservé."
+      },
+      {
+        "label": "Confirmation du nombre de départements/arrondissements par région (MINAT, INS)",
+        "url": "https://minat.gov.cm/presentation/carte-des-regions/centre/",
+        "fetchedAt": "2026-08-15",
+        "note": "10 départements / 70 arrondissements pour le Centre — recoupe la source Wikipédia."
+      }
+    ],
+    "warning": "Seed de calibration (Batch 001). Les 8 autres régions du Cameroun ne sont volontairement PAS incluses ici — hors périmètre de ce batch."
+  },
+  "regions": [
+    { "id": "region-centre", "name": "Centre" },
+    { "id": "region-littoral", "name": "Littoral" }
+  ],
+  "departments": [
+    { "id": "dept-haute-sanaga", "regionId": "region-centre", "name": "Haute-Sanaga" },
+    { "id": "dept-lekie", "regionId": "region-centre", "name": "Lekié" },
+    { "id": "dept-mbam-et-inoubou", "regionId": "region-centre", "name": "Mbam-et-Inoubou" },
+    { "id": "dept-mbam-et-kim", "regionId": "region-centre", "name": "Mbam-et-Kim" },
+    { "id": "dept-mefou-et-afamba", "regionId": "region-centre", "name": "Méfou-et-Afamba" },
+    { "id": "dept-mefou-et-akono", "regionId": "region-centre", "name": "Méfou-et-Akono" },
+    { "id": "dept-mfoundi", "regionId": "region-centre", "name": "Mfoundi" },
+    { "id": "dept-nyong-et-kelle", "regionId": "region-centre", "name": "Nyong-et-Kéllé" },
+    { "id": "dept-nyong-et-mfoumou", "regionId": "region-centre", "name": "Nyong-et-Mfoumou" },
+    { "id": "dept-nyong-et-soo", "regionId": "region-centre", "name": "Nyong-et-So'o" },
+    { "id": "dept-moungo", "regionId": "region-littoral", "name": "Moungo" },
+    { "id": "dept-nkam", "regionId": "region-littoral", "name": "Nkam" },
+    { "id": "dept-sanaga-maritime", "regionId": "region-littoral", "name": "Sanaga-Maritime" },
+    { "id": "dept-wouri", "regionId": "region-littoral", "name": "Wouri" }
+  ],
+  "arrondissements": [
+    { "departmentId": "dept-haute-sanaga", "name": "Bibey" },
+    { "departmentId": "dept-haute-sanaga", "name": "Lembe-Yezoum" },
+    { "departmentId": "dept-haute-sanaga", "name": "Mbandjock" },
+    { "departmentId": "dept-haute-sanaga", "name": "Minta" },
+    { "departmentId": "dept-haute-sanaga", "name": "Nanga-Eboko" },
+    { "departmentId": "dept-haute-sanaga", "name": "Nkoteng" },
+    { "departmentId": "dept-haute-sanaga", "name": "Nsem" },
+
+    { "departmentId": "dept-lekie", "name": "Batchenga" },
+    { "departmentId": "dept-lekie", "name": "Ebebda" },
+    { "departmentId": "dept-lekie", "name": "Elig-Mfomo" },
+    { "departmentId": "dept-lekie", "name": "Evodoula" },
+    { "departmentId": "dept-lekie", "name": "Lobo" },
+    { "departmentId": "dept-lekie", "name": "Monatélé" },
+    { "departmentId": "dept-lekie", "name": "Obala" },
+    { "departmentId": "dept-lekie", "name": "Okola" },
+    { "departmentId": "dept-lekie", "name": "Sa'a" },
+
+    { "departmentId": "dept-mbam-et-inoubou", "name": "Bafia" },
+    { "departmentId": "dept-mbam-et-inoubou", "name": "Bokito" },
+    { "departmentId": "dept-mbam-et-inoubou", "name": "Deuk" },
+    { "departmentId": "dept-mbam-et-inoubou", "name": "Kiiki" },
+    { "departmentId": "dept-mbam-et-inoubou", "name": "Kon-Yambetta" },
+    { "departmentId": "dept-mbam-et-inoubou", "name": "Makénéné" },
+    { "departmentId": "dept-mbam-et-inoubou", "name": "Ndikiniméki" },
+    { "departmentId": "dept-mbam-et-inoubou", "name": "Nitoukou" },
+    { "departmentId": "dept-mbam-et-inoubou", "name": "Ombessa" },
+
+    { "departmentId": "dept-mbam-et-kim", "name": "Mbangassina" },
+    { "departmentId": "dept-mbam-et-kim", "name": "Ngambè-Tikar" },
+    { "departmentId": "dept-mbam-et-kim", "name": "Ngoro" },
+    { "departmentId": "dept-mbam-et-kim", "name": "Ntui" },
+    { "departmentId": "dept-mbam-et-kim", "name": "Yoko" },
+
+    { "departmentId": "dept-mefou-et-afamba", "name": "Afanloum" },
+    { "departmentId": "dept-mefou-et-afamba", "name": "Awaé" },
+    { "departmentId": "dept-mefou-et-afamba", "name": "Edzendouan" },
+    { "departmentId": "dept-mefou-et-afamba", "name": "Esse" },
+    { "departmentId": "dept-mefou-et-afamba", "name": "Mfou" },
+    { "departmentId": "dept-mefou-et-afamba", "name": "Nkolafamba" },
+    { "departmentId": "dept-mefou-et-afamba", "name": "Olanguina" },
+    { "departmentId": "dept-mefou-et-afamba", "name": "Soa" },
+
+    { "departmentId": "dept-mefou-et-akono", "name": "Akono" },
+    { "departmentId": "dept-mefou-et-akono", "name": "Bikok" },
+    { "departmentId": "dept-mefou-et-akono", "name": "Mbankomo" },
+    { "departmentId": "dept-mefou-et-akono", "name": "Ngoumou" },
+
+    { "departmentId": "dept-mfoundi", "name": "Yaoundé 1er" },
+    { "departmentId": "dept-mfoundi", "name": "Yaoundé 2e" },
+    { "departmentId": "dept-mfoundi", "name": "Yaoundé 3e" },
+    { "departmentId": "dept-mfoundi", "name": "Yaoundé 4e" },
+    { "departmentId": "dept-mfoundi", "name": "Yaoundé 5e" },
+    { "departmentId": "dept-mfoundi", "name": "Yaoundé 6e" },
+    { "departmentId": "dept-mfoundi", "name": "Yaoundé 7e" },
+
+    { "departmentId": "dept-nyong-et-kelle", "name": "Biyouha" },
+    { "departmentId": "dept-nyong-et-kelle", "name": "Bondjock" },
+    { "departmentId": "dept-nyong-et-kelle", "name": "Bot-Makak" },
+    { "departmentId": "dept-nyong-et-kelle", "name": "Dibang" },
+    { "departmentId": "dept-nyong-et-kelle", "name": "Éséka" },
+    { "departmentId": "dept-nyong-et-kelle", "name": "Makak" },
+    { "departmentId": "dept-nyong-et-kelle", "name": "Matomb" },
+    { "departmentId": "dept-nyong-et-kelle", "name": "Messondo" },
+    { "departmentId": "dept-nyong-et-kelle", "name": "Ngog-Mapubi" },
+    { "departmentId": "dept-nyong-et-kelle", "name": "Nguibassal" },
+
+    { "departmentId": "dept-nyong-et-mfoumou", "name": "Akonolinga" },
+    { "departmentId": "dept-nyong-et-mfoumou", "name": "Ayos" },
+    { "departmentId": "dept-nyong-et-mfoumou", "name": "Endom" },
+    { "departmentId": "dept-nyong-et-mfoumou", "name": "Kobdombo" },
+    { "departmentId": "dept-nyong-et-mfoumou", "name": "Mengang" },
+
+    { "departmentId": "dept-nyong-et-soo", "name": "Akoeman" },
+    { "departmentId": "dept-nyong-et-soo", "name": "Dzeng" },
+    { "departmentId": "dept-nyong-et-soo", "name": "Mbalmayo" },
+    { "departmentId": "dept-nyong-et-soo", "name": "Mengueme" },
+    { "departmentId": "dept-nyong-et-soo", "name": "Ngomedzap" },
+    { "departmentId": "dept-nyong-et-soo", "name": "Nkolmetet" },
+
+    { "departmentId": "dept-moungo", "name": "Bonaléa" },
+    { "departmentId": "dept-moungo", "name": "Baré-Bakem" },
+    { "departmentId": "dept-moungo", "name": "Dibombari" },
+    { "departmentId": "dept-moungo", "name": "Loum" },
+    { "departmentId": "dept-moungo", "name": "Manjo" },
+    { "departmentId": "dept-moungo", "name": "Mbanga" },
+    { "departmentId": "dept-moungo", "name": "Melong" },
+    { "departmentId": "dept-moungo", "name": "Mombo" },
+    { "departmentId": "dept-moungo", "name": "Njombé-Penja" },
+    { "departmentId": "dept-moungo", "name": "Nkongsamba Ier" },
+    { "departmentId": "dept-moungo", "name": "Nkongsamba IIe" },
+    { "departmentId": "dept-moungo", "name": "Nkongsamba IIIe" },
+    { "departmentId": "dept-moungo", "name": "Eboné" },
+
+    { "departmentId": "dept-nkam", "name": "Nkondjock" },
+    { "departmentId": "dept-nkam", "name": "Nord-Makombé" },
+    { "departmentId": "dept-nkam", "name": "Yabassi" },
+    { "departmentId": "dept-nkam", "name": "Yingui" },
+
+    { "departmentId": "dept-sanaga-maritime", "name": "Dibamba" },
+    { "departmentId": "dept-sanaga-maritime", "name": "Dizangué" },
+    { "departmentId": "dept-sanaga-maritime", "name": "Édéa Ier" },
+    { "departmentId": "dept-sanaga-maritime", "name": "Édéa IIe" },
+    { "departmentId": "dept-sanaga-maritime", "name": "Massock-Songloulou" },
+    { "departmentId": "dept-sanaga-maritime", "name": "Mouanko" },
+    { "departmentId": "dept-sanaga-maritime", "name": "Ndom" },
+    { "departmentId": "dept-sanaga-maritime", "name": "Ngambe" },
+    { "departmentId": "dept-sanaga-maritime", "name": "Ngwei" },
+    { "departmentId": "dept-sanaga-maritime", "name": "Nyanon" },
+    { "departmentId": "dept-sanaga-maritime", "name": "Pouma" },
+
+    { "departmentId": "dept-wouri", "name": "Douala I" },
+    { "departmentId": "dept-wouri", "name": "Douala II" },
+    { "departmentId": "dept-wouri", "name": "Douala III" },
+    { "departmentId": "dept-wouri", "name": "Douala IV" },
+    { "departmentId": "dept-wouri", "name": "Douala V" },
+    { "departmentId": "dept-wouri", "name": "Douala VI" }
+  ]
+}

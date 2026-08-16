@@ -6,6 +6,14 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Logo } from "@/components/branding/Logo";
 import {
+  useSidebarState,
+  SidebarShell,
+  SidebarToggleButton,
+  SidebarNavItem,
+  SIDEBAR_WIDTH_EXPANDED,
+  SIDEBAR_WIDTH_COLLAPSED,
+} from "@/components/layout/CollapsibleSidebar";
+import {
   LayoutDashboard,
   CalendarDays,
   Users,
@@ -20,7 +28,8 @@ import {
 // Shell enseignant — toutes les sections vivent aujourd'hui sur UNE seule
 // page (/enseignant/mon-espace, ancres #salaire/#horaire/...), il n'existe
 // pas de route distincte par section. La sidebar reflète cette réalité :
-// des liens vers des ancres, jamais des pages inexistantes.
+// des liens vers des ancres, jamais des pages inexistantes. Sidebar
+// réductible (Sprint M) via les primitives partagées CollapsibleSidebar.
 const NAV = [
   { href: "/enseignant/mon-espace", label: "Aujourd'hui", icon: LayoutDashboard },
   { group: "Mon travail" },
@@ -38,72 +47,103 @@ export default function EnseignantLayout({ children }: { children: React.ReactNo
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { collapsed, toggle, hydrated } = useSidebarState();
+  const effectiveCollapsed = hydrated && collapsed;
 
   async function signOut() {
     await supabase.auth.signOut();
     router.push("/");
   }
 
-  const Sidebar = () => (
-    <aside className="flex flex-col h-full bg-accent text-white w-full">
-      <div className="px-5 py-5 border-b border-white/8">
-        <Link href="/" className="flex items-center">
-          <Logo variant="dark" size="lg" />
-        </Link>
-      </div>
+  const SidebarContent = ({ forceExpanded = false }: { forceExpanded?: boolean }) => {
+    const c = forceExpanded ? false : effectiveCollapsed;
+    return (
+      <>
+        <div className={`shrink-0 border-b border-white/8 ${c ? "px-0 py-5 flex justify-center" : "px-5 py-5"}`}>
+          <Link href="/" className="flex items-center">
+            {c ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src="/branding/favicon.png" alt="Écoles237" className="w-9 h-9 rounded-lg" />
+            ) : (
+              <Logo variant="dark" size="lg" />
+            )}
+          </Link>
+        </div>
 
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        {NAV.map((item, i) =>
-          "group" in item ? (
-            <p key={i} className="px-3 pt-4 pb-1 text-[10px] font-semibold tracking-widest uppercase text-slate-600 first:pt-0">
-              {item.group}
-            </p>
-          ) : (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setMobileOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-fast ${
-                pathname === "/enseignant/mon-espace" && item.href === "/enseignant/mon-espace"
-                  ? "bg-emerald-600/20 text-emerald-400"
-                  : "text-slate-400 hover:text-white hover:bg-white/5"
-              }`}
-            >
-              <item.icon size={16} />
-              {item.label}
-            </Link>
-          )
-        )}
-      </nav>
+        <nav className={`sidebar-scroll flex-1 py-4 space-y-1 overflow-y-auto ${c ? "px-2" : "px-3"}`}>
+          {NAV.map((item, i) =>
+            "group" in item ? (
+              c ? (
+                <div key={i} className="h-px bg-white/8 mx-2 my-2 first:mt-0" aria-hidden="true" />
+              ) : (
+                <p key={i} className="px-3 pt-4 pb-1 text-[10px] font-semibold tracking-widest uppercase text-slate-600 first:pt-0">
+                  {item.group}
+                </p>
+              )
+            ) : (
+              <SidebarNavItem
+                key={item.href}
+                href={item.href}
+                label={item.label}
+                icon={item.icon}
+                active={pathname === "/enseignant/mon-espace" && item.href === "/enseignant/mon-espace"}
+                collapsed={c}
+                onClick={() => setMobileOpen(false)}
+              />
+            )
+          )}
+        </nav>
 
-      <div className="px-3 py-4 border-t border-white/8">
-        <button
-          onClick={signOut}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-colors duration-fast w-full"
-        >
-          <LogOut size={16} />
-          Se déconnecter
-        </button>
-      </div>
-    </aside>
-  );
+        <div className={`shrink-0 border-t border-white/8 ${c ? "px-2 py-4" : "px-3 py-4"}`}>
+          <button
+            onClick={signOut}
+            aria-label="Se déconnecter"
+            className={`group/item relative flex items-center rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition-colors w-full ${
+              c ? "justify-center px-0 py-2.5" : "gap-3 px-3 py-2.5"
+            }`}
+          >
+            <LogOut size={16} className="shrink-0" />
+            {!c && "Se déconnecter"}
+            {c && (
+              <span
+                role="tooltip"
+                className="pointer-events-none absolute left-full ml-3 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-md bg-[#0a0a0a] px-2.5 py-1.5 text-xs font-medium text-white opacity-0 shadow-elevation-2 transition-opacity duration-150 group-hover/item:opacity-100 group-focus-visible/item:opacity-100 z-50"
+              >
+                Se déconnecter
+              </span>
+            )}
+          </button>
+        </div>
+      </>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-background flex">
-      <div className="hidden lg:flex w-[220px] shrink-0 flex-col fixed inset-y-0 left-0 z-40">
-        <Sidebar />
+      <div
+        className="hidden lg:flex shrink-0 fixed inset-y-0 left-0 z-40 h-[100dvh] transition-[width] duration-200 ease-out"
+        style={{ width: effectiveCollapsed ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH_EXPANDED }}
+      >
+        <SidebarShell collapsed={effectiveCollapsed}>
+          <SidebarContent />
+        </SidebarShell>
+        <SidebarToggleButton collapsed={effectiveCollapsed} onClick={toggle} />
       </div>
 
       {mobileOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
-          <div className="w-[220px] flex flex-col">
-            <Sidebar />
+          <div className="w-[280px] h-[100dvh] flex flex-col bg-accent text-white">
+            <SidebarContent forceExpanded />
           </div>
           <div className="flex-1 bg-black/50" onClick={() => setMobileOpen(false)} />
         </div>
       )}
 
-      <div className="flex-1 lg:ml-[220px] flex flex-col min-h-screen">
+      <div
+        className={`flex-1 flex flex-col min-h-screen transition-[margin-left] duration-200 ease-out ${
+          effectiveCollapsed ? "lg:ml-[76px]" : "lg:ml-[288px]"
+        }`}
+      >
         <header className="flex items-center justify-between px-5 h-14 bg-white border-b border-border">
           <button onClick={() => setMobileOpen(true)} className="lg:hidden" aria-label="Menu">
             <Menu size={22} />

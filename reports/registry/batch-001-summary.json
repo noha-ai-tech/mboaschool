@@ -1,0 +1,31 @@
+{
+  "generatedAt": "2026-08-16T02:19:38.026Z",
+  "centre": {
+    "raw": 345,
+    "valid": 345,
+    "unique": 345,
+    "matches": 4,
+    "ambiguous": 0
+  },
+  "littoral": {
+    "raw": 149,
+    "valid": 149,
+    "unique": 149,
+    "matches": 2,
+    "ambiguous": 0
+  },
+  "matching": {
+    "exactMatches": 1,
+    "probableMatches": 5,
+    "noMatch": 488,
+    "currentEstablishments": 44
+  },
+  "quality": {
+    "totalRecords": 494,
+    "officialIdCoveragePct": 100,
+    "departmentCoveragePct": 0,
+    "arrondissementCoveragePct": 0,
+    "localityCoveragePct": 86.6,
+    "categoryMappingPct": 100
+  }
+}

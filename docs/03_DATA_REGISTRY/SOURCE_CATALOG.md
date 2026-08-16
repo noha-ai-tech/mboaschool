@@ -8,21 +8,23 @@ importée en masse ; seul MINESEC a été vérifié et fait l'objet d'un adaptat
 
 ## MINESEC — Ministère des Enseignements Secondaires
 
-**Statut : source identifiée et vérifiée, adaptateur fonctionnel (couverture partielle).**
+**Statut : source identifiée, vérifiée ET collectée en réel — SPRINT N, Batch 001 (2026-08-16).**
 
 | Aspect | Constat |
 |---|---|
-| URL | `https://www.minesec.gov.cm/web/index.php/fr/15-pages/350-repertoire-des-etablissements-esg` |
-| Nom officiel | Répertoire des Établissements ESG (Enseignement Secondaire Général) |
-| Base légale mentionnée | Décision n° 90/11/MINESEC/CAB du 21 mars 2011 ouvrant un Répertoire National des Établissements (RNE) |
-| Couverture | **Secondaire général uniquement.** Aucune source MINESEC pour le secondaire technique identifiée à ce stade |
-| Colonnes par ligne | Nom Établissement, Localité, Cycles, Sous Système, Matricule |
-| Région/Département/Arrondissement | Disponibles comme **critères de filtre**, absents des lignes du tableau — voir `FIELD_MAPPING.md` §2 |
-| Pagination | Paramètre `limitstart13`, environ 98 pages au moment de la consultation (2026-08-07) |
-| `robots.txt` | **Absent** (404) — aucune restriction déclarée sur l'accès automatisé |
-| Mentions légales visibles | "Copyright © 2020 by MINESEC, Tous droits réservés" en pied de page — pas de clause anti-scraping explicite, mais une réutilisation à grande échelle mérite une confirmation directe auprès du ministère avant mise en production (recommandation, pas un blocage technique) |
-| **Accessibilité technique depuis cet environnement** | **Timeout systématique** en `curl` direct depuis le sandbox d'exécution de cette mission (connexion TLS établie, puis aucune réponse HTTP reçue après 15s), alors que la connectivité internet générale du sandbox fonctionne (test sur google.com : succès). L'outil de consultation web de cette session (WebFetch) a néanmoins pu récupérer le contenu. **Cause probable : rendu serveur Joomla lourd sur cette page précise (résultats paginés dynamiques), pas un blocage anti-bot actif — à confirmer par un test depuis un réseau différent avant tout crawl réel.** |
-| Adaptateur | `scripts/school-registry/sources/minesec.ts` — fonctionnel, testé contre une fixture locale (voir `IMPORT_RUNBOOK.md`). **Les sélecteurs de parsing HTML sont un best-effort basé sur la structure Joomla standard, pas verifiés contre le HTML brut réel** (l'accès direct ayant échoué depuis cet environnement) — à valider avant un premier crawl réel |
+| URL (courante, vérifiée) | `https://www.minesec.gov.cm/web/index.php/fr/carte-scolaire/immatriculation-fr` ("carte scolaire numérique") |
+| Ancienne URL cataloguée | `https://www.minesec.gov.cm/web/index.php/fr/15-pages/350-repertoire-des-etablissements-esg` — répond toujours HTTP 200 mais n'a pas été revérifiée depuis la migration vers la carte scolaire numérique ; ne plus utiliser comme référence |
+| Nom officiel | Registre National des Établissements (RNE) — "carte scolaire numérique" |
+| Base légale mentionnée | Décision n° 90/11/MINESEC/CAB du 21 mars 2011 ouvrant le RNE |
+| Couverture | 3 tables Fabrik sur la même page : **ESG** (secondaire général — celle collectée), **ESTP** (technique), **ENI** (écoles normales). Seule ESG a été collectée dans ce batch — voir `IMPORT_RUNBOOK.md` |
+| Colonnes par ligne (ESG) | Nom Établissement, Localité, Cycles, Sous Système, Matricule — confirmé par inspection directe du HTML (classes `esg___nom_etablissement_esg`, etc.) |
+| Région/Département/Arrondissement | Confirmé : **filtres serveur** (`esg.region_esg`, `esg.departement_esg`, `esg.arrondissement_esg`), absents des colonnes affichées. Le filtre région a été exploité (POST Fabrik) pour ce batch ; département/arrondissement non exploités (reporté à un batch ultérieur) |
+| Pagination | Paramètre `limitstart13`, taille de page jusqu'à 100 (`limit13`) |
+| `robots.txt` | **Absent** (404), reconfirmé 2026-08-16 |
+| Mentions légales | Inchangé — pas de clause anti-scraping explicite |
+| **Accessibilité technique** | **Corrigé** : accès réseau direct (`curl`) fonctionnel depuis cet environnement (contrairement à la mission DATA-REGISTRY-01 précédente). 494 lignes ESG collectées en réel pour Centre (345) + Littoral (149), ~6 requêtes au total, délai poli respecté (voir `politeFetch.ts` / `fabrikFilterFetch.ts`) |
+| Adaptateur | `scripts/school-registry/sources/minesec.ts` — réécrit pour SPRINT N. Sélecteurs vérifiés contre le HTML réel (plus un best-effort). Ajout de `scripts/school-registry/lib/fabrikFilterFetch.ts` (session + filtre POST Fabrik) |
+| Constat qualité notable | Le nom officiel source orthographie parfois "Lycée" sans accent ni "e" final ("Lyce ...") — écart interne à la donnée MINESEC elle-même, pas une erreur d'extraction. Impacte le matching par nom normalisé (corrigé dans `match-batch-001.ts` par une normalisation dédiée) |
 
 ---
 

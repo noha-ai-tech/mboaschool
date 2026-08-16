@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Logo } from "@/components/branding/Logo";
 
 const NAV = [
+  { href: "/pro/configurer-etablissement",     label: "Configurer mon établissement" },
   { href: "/pro/personnel",                    label: "Personnel" },
   { href: "/pro/emplois-du-temps",             label: "Emplois du temps" },
   { href: "/pro/matieres",                     label: "Matières" },
