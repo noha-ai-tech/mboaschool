@@ -1,0 +1,45 @@
+{
+  "generatedAt": "2026-08-16T03:10:01.870Z",
+  "ouest": {
+    "raw": 251,
+    "valid": 251,
+    "unique": 251,
+    "matches": 0,
+    "ambiguous": 0
+  },
+  "adamaoua": {
+    "raw": 96,
+    "valid": 96,
+    "unique": 96,
+    "matches": 0,
+    "ambiguous": 0
+  },
+  "nord": {
+    "raw": 141,
+    "valid": 141,
+    "unique": 141,
+    "matches": 0,
+    "ambiguous": 0
+  },
+  "extremeNord": {
+    "raw": 269,
+    "valid": 269,
+    "unique": 269,
+    "matches": 0,
+    "ambiguous": 0
+  },
+  "matching": {
+    "exactMatches": 0,
+    "probableMatches": 0,
+    "noMatch": 757,
+    "currentEstablishments": 0
+  },
+  "quality": {
+    "totalRecords": 757,
+    "officialIdCoveragePct": 100,
+    "departmentCoveragePct": 0,
+    "arrondissementCoveragePct": 0,
+    "localityCoveragePct": 88.9,
+    "categoryMappingPct": 100
+  }
+}

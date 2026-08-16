@@ -8,7 +8,12 @@ importée en masse ; seul MINESEC a été vérifié et fait l'objet d'un adaptat
 
 ## MINESEC — Ministère des Enseignements Secondaires
 
-**Statut : source identifiée, vérifiée ET collectée en réel — SPRINT N, Batch 001 (2026-08-16).**
+**Statut : source identifiée, vérifiée ET collectée en réel — SPRINT N, Batch 001 (2026-08-16) ; étendue SPRINT O, Batch 002 (Ouest, Adamaoua, Nord, Extrême-Nord).**
+
+Batch 002 (SPRINT O) réutilise intégralement l'adaptateur, le normalizer et le dédoublonneur de Batch 001 sans
+modification — seule la liste de régions passées au filtre serveur change (`OUEST`, `ADAMAOUA`, `NORD`,
+`EXTREME-NORD`, valeurs exactes confirmées par inspection du `<select>` du filtre région). Voir
+`scripts/school-registry/collect-batch-002.ts` et `match-batch-002.ts`.
 
 | Aspect | Constat |
 |---|---|

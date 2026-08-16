@@ -1,0 +1,251 @@
+{
+  "_meta": {
+    "description": "Hiérarchie géographique officielle (régions/départements/arrondissements) pour les régions Ouest, Adamaoua, Nord et Extrême-Nord du Cameroun. Sert de seed pour supabase/migrations/0016_geographic_hierarchy.sql (préparée, non exécutée) — SPRINT O, Batch 002. Introduit le regroupement 'macro-zone' (voir `macroZones` ci-dessous) : un simple tag d'affichage/agrégation, jamais une substitution aux régions canoniques MINESEC/MINAT qui restent la seule source de vérité pour `region` sur chaque établissement.",
+    "sources": [
+      {
+        "label": "Liste des communes de la région de l'Ouest au Cameroun (Wikipédia, citant Institut National de la Statistique du Cameroun)",
+        "url": "https://fr.wikipedia.org/wiki/Liste_des_communes_de_la_r%C3%A9gion_de_l%27Ouest_au_Cameroun",
+        "fetchedAt": "2026-08-15",
+        "note": "8 départements confirmés, 40 communes annoncées. ANOMALIE DE SOURCE : le tableau du département Hauts-Plateaux liste 5 noms (Baham, Bamendjou, Bangou, Batié, Badenkop) alors que le total en tête de section indique 4 — incohérence interne à la page. La 5e entrée ('Badenkop') a été EXCLUE de ce seed : sans elle, la somme des 8 départements (4+7+4+3+6+3+4+9=40) reconcilie exactement le total de 40 communes annoncé par MINAT (voir source suivante) ; avec elle, le total serait 41. Aucune tentative de deviner le nom correct du 5e arrondissement — voir DEDUPLICATION_RULES.md, principe 'ne jamais inventer une valeur'."
+      },
+      {
+        "label": "Carte des régions — Ouest (MINAT)",
+        "url": "https://minat.gov.cm/presentation/carte-des-regions/ouest/",
+        "fetchedAt": "2026-08-15",
+        "note": "Confirme 8 départements, 39 arrondissements, 40 communes (01 communauté urbaine Bafoussam + 03 communes d'arrondissement + 36 communes). Recoupe le total Wikipédia après exclusion de l'anomalie ci-dessus."
+      },
+      {
+        "label": "Liste des communes de la région de l'Adamaoua au Cameroun (Wikipédia, citant INS)",
+        "url": "https://fr.wikipedia.org/wiki/Liste_des_communes_de_la_r%C3%A9gion_de_l%27Adamaoua_au_Cameroun",
+        "fetchedAt": "2026-08-15",
+        "note": "5 départements confirmés, 21 communes listées (somme des sous-totaux = 21, cohérent en interne)."
+      },
+      {
+        "label": "Carte des régions — Adamaoua (MINAT)",
+        "url": "https://minat.gov.cm/presentation/carte-des-regions/adamaoua/",
+        "fetchedAt": "2026-08-15",
+        "note": "ÉCART NON RÉSOLU : MINAT annonce 22 communes (01 communauté urbaine Ngaoundéré + 03 communes d'arrondissement + 18 communes) contre 21 arrondissements listés nommément par Wikipédia. Hypothèse la plus probable : la 'communauté urbaine de Ngaoundéré' est comptée comme une entité distincte des 3 arrondissements Ngaoundéré I/II/III déjà listés, plutôt qu'une 22e commune géographiquement distincte — mais ceci N'A PAS été vérifié par une 3e source et n'est donc PAS reflété dans ce seed (21 arrondissements retenus, pas 22). À corriger avant toute promotion en base."
+      },
+      {
+        "label": "Liste des communes de la région du Nord au Cameroun (Wikipédia, citant INS)",
+        "url": "https://fr.wikipedia.org/wiki/Liste_des_communes_de_la_r%C3%A9gion_du_Nord_au_Cameroun",
+        "fetchedAt": "2026-08-15",
+        "note": "4 départements confirmés (Bénoué, Faro, Mayo-Louti, Mayo-Rey), 21 communes listées (12+2+3+4=21, cohérent en interne avec le total annoncé)."
+      },
+      {
+        "label": "Carte des régions — Nord (MINAT)",
+        "url": "https://minat.gov.cm/presentation/carte-des-regions/nord/",
+        "fetchedAt": "2026-08-15",
+        "note": "NON RETENU comme source de la liste des départements : la page contient une incohérence interne (mentionne d'abord 4 départements puis un tableau qui en liste 5, incluant 'Mayo-Kani' — département qui appartient en réalité à la région Extrême-Nord, pas au Nord). Le découpage Wikipédia (4 départements, cohérent en interne) a été retenu à la place. Écart documenté ici, pas silencieusement corrigé."
+      },
+      {
+        "label": "Liste des communes de la région de l'Extrême-Nord au Cameroun (Wikipédia, citant INS)",
+        "url": "https://fr.wikipedia.org/wiki/Liste_des_communes_de_la_r%C3%A9gion_de_l%27Extr%C3%AAme-Nord_au_Cameroun",
+        "fetchedAt": "2026-08-15",
+        "note": "6 départements confirmés, 47 communes listées (9+10+11+7+3+7=47, cohérent avec le total annoncé)."
+      },
+      {
+        "label": "Carte des régions — Extrême-Nord (MINAT)",
+        "url": "https://minat.gov.cm/presentation/carte-des-regions/extreme-nord/",
+        "fetchedAt": "2026-08-15",
+        "note": "Confirme 47 arrondissements (01 communauté urbaine Maroua + 03 communes d'arrondissement + 44 communes). Recoupe exactement le total Wikipédia."
+      }
+    ],
+    "warning": "Seed de calibration (Batch 002, SPRINT O). Les régions Sud, Est, Nord-Ouest et Sud-Ouest restent hors périmètre — voir rapport SPRINT O, recommandation de suite. Écarts de source documentés ci-dessus (Adamaoua, Nord) NON résolus : ne pas promouvoir en base sans validation humaine explicite."
+  },
+  "macroZones": [
+    {
+      "id": "macrozone-grand-nord",
+      "name": "Grand Nord",
+      "regionIds": ["region-adamaoua", "region-nord", "region-extreme-nord"],
+      "note": "Regroupement d'usage courant (commercial/logistique), pas une entité administrative MINAT. N'affecte jamais la valeur canonique de `region` sur un établissement — champ d'agrégation additif uniquement."
+    }
+  ],
+  "regions": [
+    { "id": "region-ouest", "name": "Ouest" },
+    { "id": "region-adamaoua", "name": "Adamaoua" },
+    { "id": "region-nord", "name": "Nord" },
+    { "id": "region-extreme-nord", "name": "Extrême-Nord" }
+  ],
+  "departments": [
+    { "id": "dept-bamboutos", "regionId": "region-ouest", "name": "Bamboutos" },
+    { "id": "dept-haut-nkam", "regionId": "region-ouest", "name": "Haut-Nkam" },
+    { "id": "dept-hauts-plateaux", "regionId": "region-ouest", "name": "Hauts-Plateaux" },
+    { "id": "dept-koung-khi", "regionId": "region-ouest", "name": "Koung-Khi" },
+    { "id": "dept-menoua", "regionId": "region-ouest", "name": "Menoua" },
+    { "id": "dept-mifi", "regionId": "region-ouest", "name": "Mifi" },
+    { "id": "dept-nde", "regionId": "region-ouest", "name": "Ndé" },
+    { "id": "dept-noun", "regionId": "region-ouest", "name": "Noun" },
+
+    { "id": "dept-djerem", "regionId": "region-adamaoua", "name": "Djérem" },
+    { "id": "dept-faro-et-deo", "regionId": "region-adamaoua", "name": "Faro-et-Déo" },
+    { "id": "dept-mayo-banyo", "regionId": "region-adamaoua", "name": "Mayo-Banyo" },
+    { "id": "dept-mbere", "regionId": "region-adamaoua", "name": "Mbéré" },
+    { "id": "dept-vina", "regionId": "region-adamaoua", "name": "Vina" },
+
+    { "id": "dept-benoue", "regionId": "region-nord", "name": "Bénoué" },
+    { "id": "dept-faro", "regionId": "region-nord", "name": "Faro" },
+    { "id": "dept-mayo-louti", "regionId": "region-nord", "name": "Mayo-Louti" },
+    { "id": "dept-mayo-rey", "regionId": "region-nord", "name": "Mayo-Rey" },
+
+    { "id": "dept-diamare", "regionId": "region-extreme-nord", "name": "Diamaré" },
+    { "id": "dept-logone-et-chari", "regionId": "region-extreme-nord", "name": "Logone-et-Chari" },
+    { "id": "dept-mayo-danay", "regionId": "region-extreme-nord", "name": "Mayo-Danay" },
+    { "id": "dept-mayo-kani", "regionId": "region-extreme-nord", "name": "Mayo-Kani" },
+    { "id": "dept-mayo-sava", "regionId": "region-extreme-nord", "name": "Mayo-Sava" },
+    { "id": "dept-mayo-tsanaga", "regionId": "region-extreme-nord", "name": "Mayo-Tsanaga" }
+  ],
+  "arrondissements": [
+    { "departmentId": "dept-bamboutos", "name": "Babadjou" },
+    { "departmentId": "dept-bamboutos", "name": "Batcham" },
+    { "departmentId": "dept-bamboutos", "name": "Galim" },
+    { "departmentId": "dept-bamboutos", "name": "Mbouda" },
+
+    { "departmentId": "dept-haut-nkam", "name": "Bafang" },
+    { "departmentId": "dept-haut-nkam", "name": "Bakou" },
+    { "departmentId": "dept-haut-nkam", "name": "Bana" },
+    { "departmentId": "dept-haut-nkam", "name": "Bandja" },
+    { "departmentId": "dept-haut-nkam", "name": "Banka" },
+    { "departmentId": "dept-haut-nkam", "name": "Banwa" },
+    { "departmentId": "dept-haut-nkam", "name": "Kekem" },
+
+    { "departmentId": "dept-hauts-plateaux", "name": "Baham" },
+    { "departmentId": "dept-hauts-plateaux", "name": "Bamendjou" },
+    { "departmentId": "dept-hauts-plateaux", "name": "Bangou" },
+    { "departmentId": "dept-hauts-plateaux", "name": "Batié" },
+
+    { "departmentId": "dept-koung-khi", "name": "Bayangam" },
+    { "departmentId": "dept-koung-khi", "name": "Demdeng" },
+    { "departmentId": "dept-koung-khi", "name": "Pète-Bandjoun" },
+
+    { "departmentId": "dept-menoua", "name": "Dschang" },
+    { "departmentId": "dept-menoua", "name": "Fokoué" },
+    { "departmentId": "dept-menoua", "name": "Fongo-Tongo" },
+    { "departmentId": "dept-menoua", "name": "Nkong-Zem" },
+    { "departmentId": "dept-menoua", "name": "Penka-Michel" },
+    { "departmentId": "dept-menoua", "name": "Santchou" },
+
+    { "departmentId": "dept-mifi", "name": "Bafoussam Ier" },
+    { "departmentId": "dept-mifi", "name": "Bafoussam IIe" },
+    { "departmentId": "dept-mifi", "name": "Bafoussam IIIe" },
+
+    { "departmentId": "dept-nde", "name": "Bangangté" },
+    { "departmentId": "dept-nde", "name": "Bassamba" },
+    { "departmentId": "dept-nde", "name": "Bazou" },
+    { "departmentId": "dept-nde", "name": "Tonga" },
+
+    { "departmentId": "dept-noun", "name": "Bangourain" },
+    { "departmentId": "dept-noun", "name": "Foumban" },
+    { "departmentId": "dept-noun", "name": "Foumbot" },
+    { "departmentId": "dept-noun", "name": "Kouoptamo" },
+    { "departmentId": "dept-noun", "name": "Koutaba" },
+    { "departmentId": "dept-noun", "name": "Magba" },
+    { "departmentId": "dept-noun", "name": "Malentouen" },
+    { "departmentId": "dept-noun", "name": "Massangam" },
+    { "departmentId": "dept-noun", "name": "Njimom" },
+
+    { "departmentId": "dept-djerem", "name": "Ngaoundal" },
+    { "departmentId": "dept-djerem", "name": "Tibati" },
+
+    { "departmentId": "dept-faro-et-deo", "name": "Galim-Tignère" },
+    { "departmentId": "dept-faro-et-deo", "name": "Kontcha" },
+    { "departmentId": "dept-faro-et-deo", "name": "Mayo-Baléo" },
+    { "departmentId": "dept-faro-et-deo", "name": "Tignère" },
+
+    { "departmentId": "dept-mayo-banyo", "name": "Bankim" },
+    { "departmentId": "dept-mayo-banyo", "name": "Banyo" },
+    { "departmentId": "dept-mayo-banyo", "name": "Mayo-Darlé" },
+
+    { "departmentId": "dept-mbere", "name": "Dir" },
+    { "departmentId": "dept-mbere", "name": "Djohong" },
+    { "departmentId": "dept-mbere", "name": "Meiganga" },
+    { "departmentId": "dept-mbere", "name": "Ngaoui" },
+
+    { "departmentId": "dept-vina", "name": "Belel" },
+    { "departmentId": "dept-vina", "name": "Ngaoundéré Ier" },
+    { "departmentId": "dept-vina", "name": "Ngaoundéré IIe" },
+    { "departmentId": "dept-vina", "name": "Ngaoundéré IIIe" },
+    { "departmentId": "dept-vina", "name": "Nyambaka" },
+    { "departmentId": "dept-vina", "name": "Martap" },
+    { "departmentId": "dept-vina", "name": "Mbé" },
+    { "departmentId": "dept-vina", "name": "Ngan-Ha" },
+
+    { "departmentId": "dept-benoue", "name": "Barndaké" },
+    { "departmentId": "dept-benoue", "name": "Bascheo" },
+    { "departmentId": "dept-benoue", "name": "Bibemi" },
+    { "departmentId": "dept-benoue", "name": "Dembo" },
+    { "departmentId": "dept-benoue", "name": "Garoua Ier" },
+    { "departmentId": "dept-benoue", "name": "Garoua IIe" },
+    { "departmentId": "dept-benoue", "name": "Garoua IIIe" },
+    { "departmentId": "dept-benoue", "name": "Gashiga" },
+    { "departmentId": "dept-benoue", "name": "Lagdo" },
+    { "departmentId": "dept-benoue", "name": "Ngong" },
+    { "departmentId": "dept-benoue", "name": "Pitoa" },
+    { "departmentId": "dept-benoue", "name": "Touroua" },
+
+    { "departmentId": "dept-faro", "name": "Beka" },
+    { "departmentId": "dept-faro", "name": "Poli" },
+
+    { "departmentId": "dept-mayo-louti", "name": "Figuil" },
+    { "departmentId": "dept-mayo-louti", "name": "Guider" },
+    { "departmentId": "dept-mayo-louti", "name": "Mayo-Oulo" },
+
+    { "departmentId": "dept-mayo-rey", "name": "Madingring" },
+    { "departmentId": "dept-mayo-rey", "name": "Rey-Bouba" },
+    { "departmentId": "dept-mayo-rey", "name": "Tcholliré" },
+    { "departmentId": "dept-mayo-rey", "name": "Touboro" },
+
+    { "departmentId": "dept-diamare", "name": "Bogo" },
+    { "departmentId": "dept-diamare", "name": "Dargala" },
+    { "departmentId": "dept-diamare", "name": "Gazawa" },
+    { "departmentId": "dept-diamare", "name": "Maroua Ier" },
+    { "departmentId": "dept-diamare", "name": "Maroua IIe" },
+    { "departmentId": "dept-diamare", "name": "Maroua IIIe" },
+    { "departmentId": "dept-diamare", "name": "Meri" },
+    { "departmentId": "dept-diamare", "name": "Ndoukoula" },
+    { "departmentId": "dept-diamare", "name": "Petté" },
+
+    { "departmentId": "dept-logone-et-chari", "name": "Blangoua" },
+    { "departmentId": "dept-logone-et-chari", "name": "Darak" },
+    { "departmentId": "dept-logone-et-chari", "name": "Fotokol" },
+    { "departmentId": "dept-logone-et-chari", "name": "Goulfey" },
+    { "departmentId": "dept-logone-et-chari", "name": "Hile-Alifa" },
+    { "departmentId": "dept-logone-et-chari", "name": "Kousseri" },
+    { "departmentId": "dept-logone-et-chari", "name": "Logone-Birni" },
+    { "departmentId": "dept-logone-et-chari", "name": "Makary" },
+    { "departmentId": "dept-logone-et-chari", "name": "Waza" },
+    { "departmentId": "dept-logone-et-chari", "name": "Zina" },
+
+    { "departmentId": "dept-mayo-danay", "name": "Datcheka" },
+    { "departmentId": "dept-mayo-danay", "name": "Gobo" },
+    { "departmentId": "dept-mayo-danay", "name": "Guémé" },
+    { "departmentId": "dept-mayo-danay", "name": "Guéré" },
+    { "departmentId": "dept-mayo-danay", "name": "Kai-Kai" },
+    { "departmentId": "dept-mayo-danay", "name": "Kalfou" },
+    { "departmentId": "dept-mayo-danay", "name": "Kar-Hay" },
+    { "departmentId": "dept-mayo-danay", "name": "Maga" },
+    { "departmentId": "dept-mayo-danay", "name": "Tchati-Bali" },
+    { "departmentId": "dept-mayo-danay", "name": "Wina" },
+    { "departmentId": "dept-mayo-danay", "name": "Yagoua" },
+
+    { "departmentId": "dept-mayo-kani", "name": "Dziguilao" },
+    { "departmentId": "dept-mayo-kani", "name": "Guidiguis" },
+    { "departmentId": "dept-mayo-kani", "name": "Kaélé" },
+    { "departmentId": "dept-mayo-kani", "name": "Mindif" },
+    { "departmentId": "dept-mayo-kani", "name": "Moulvoudaye" },
+    { "departmentId": "dept-mayo-kani", "name": "Moutourwa" },
+    { "departmentId": "dept-mayo-kani", "name": "Touloum" },
+
+    { "departmentId": "dept-mayo-sava", "name": "Kolofata" },
+    { "departmentId": "dept-mayo-sava", "name": "Mora" },
+    { "departmentId": "dept-mayo-sava", "name": "Tokombéré" },
+
+    { "departmentId": "dept-mayo-tsanaga", "name": "Bourha" },
+    { "departmentId": "dept-mayo-tsanaga", "name": "Hina" },
+    { "departmentId": "dept-mayo-tsanaga", "name": "Koza" },
+    { "departmentId": "dept-mayo-tsanaga", "name": "Mogodé" },
+    { "departmentId": "dept-mayo-tsanaga", "name": "Mokolo" },
+    { "departmentId": "dept-mayo-tsanaga", "name": "Mozogo" },
+    { "departmentId": "dept-mayo-tsanaga", "name": "Soulédé-Roua" }
+  ]
+}
