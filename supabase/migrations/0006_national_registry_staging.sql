@@ -1,10 +1,13 @@
 -- ============================================================================
 -- 0006_national_registry_staging.sql
 --
--- PRÉPARÉE MAIS NON EXÉCUTÉE.
+-- EXÉCUTÉE EN PRODUCTION (constaté SPRINT P.1, 2026-08-16 — les tables
+-- `establishment_data_sources` et `establishment_import_staging` existent
+-- et sont interrogeables ; toutes deux vides à ce jour, aucune ligne
+-- écrite). Ce commentaire indiquait auparavant "non exécutée" : obsolète,
+-- corrigé après audit. Voir docs/03_DATA_REGISTRY/PRODUCTION_MIGRATION_STATE.md.
 -- Fait partie de la mission DATA-REGISTRY-01 (fondation du répertoire national).
--- Ne pas exécuter dans Supabase SQL Editor sans validation explicite d'Eddy.
--- Voir docs/03_DATA_REGISTRY/IMPORT_RUNBOOK.md pour la procédure d'exécution.
+-- Voir docs/03_DATA_REGISTRY/IMPORT_RUNBOOK.md pour la procédure d'exécution du staging lui-même.
 --
 -- Objectif : fournir un espace de staging pour les établissements importés
 -- depuis des sources ministérielles officielles (MINESEC, MINEDUB, MINESUP,

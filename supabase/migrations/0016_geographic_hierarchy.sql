@@ -1,11 +1,15 @@
 -- ============================================================================
 -- 0016_geographic_hierarchy.sql
 --
--- PRÉPARÉE MAIS NON EXÉCUTÉE.
+-- EXÉCUTÉE EN PRODUCTION (constaté SPRINT P.1, 2026-08-16 — tables
+-- `geo_regions`/`geo_departments`/`geo_arrondissements` et colonnes
+-- `region_id`/`department_id`/`arrondissement_id` sur `establishments`
+-- toutes présentes ; tables de référence vides, aucun seed inséré, aucun
+-- établissement rattaché). Ce commentaire indiquait auparavant "non
+-- exécutée" : obsolète, corrigé après audit. Voir
+-- docs/03_DATA_REGISTRY/PRODUCTION_MIGRATION_STATE.md.
 -- Fait partie de SPRINT M — Partie B (registre national des établissements).
--- Ne pas exécuter dans Supabase SQL Editor sans validation explicite d'Eddy
--- et de l'architecte. Voir le rapport "SPRINT M — SIDEBAR + NATIONAL
--- REGISTRY" pour le contexte complet.
+-- Voir le rapport "SPRINT M — SIDEBAR + NATIONAL REGISTRY" pour le contexte complet.
 --
 -- Objectif : introduire une hiérarchie géographique NORMALISÉE (Région →
 -- Département → Arrondissement) fondée sur la nomenclature officielle
