@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
-export type ShowcasePhoto = { id: string; url: string; name: string; city: string };
+export type ShowcasePhoto = { id: string; url: string; name: string; city: string | null };
 
 // Photos réelles d'établissements vérifiés/mis en avant, pour les panneaux
 // de branding des pages d'authentification/inscription/revendication.
@@ -25,7 +25,7 @@ export function useShowcasePhotos(limit: number): ShowcasePhoto[] {
         .map((s: any) => ({
           id: s.id,
           name: s.name as string,
-          city: s.city as string,
+          city: (s.city ?? null) as string | null,
           url: (s.school_images?.[0]?.url ?? s.cover_image_url ?? null) as string | null,
         }))
         .filter((s): s is ShowcasePhoto => !!s.url)

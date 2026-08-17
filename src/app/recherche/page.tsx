@@ -349,7 +349,7 @@ function RecherchePageInner() {
   }
 
   const cities = useMemo(
-    () => ["all", ...Array.from(new Set(schools.map((s) => s.city)))],
+    () => ["all", ...Array.from(new Set(schools.map((s) => s.city).filter((c) => c.trim().length > 0)))],
     [schools]
   );
 

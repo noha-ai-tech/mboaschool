@@ -19,6 +19,7 @@ import {
   History,
   CreditCard,
 } from "lucide-react";
+import { joinWithSeparator } from "@/lib/formatSchoolLocation";
 
 const CATEGORIES = ["garderie", "primaire", "secondaire", "superieur", "autres"];
 const PLANS = ["free", "standard", "premium", "business"];
@@ -242,7 +243,7 @@ export default function AdminSchoolPage() {
               )}
             </div>
             <h1 className="text-3xl font-black tracking-tight text-[#0a0a0a]">{school.name}</h1>
-            <p className="text-slate-500 text-sm mt-1">{school.city} · {school.main_category}</p>
+            <p className="text-slate-500 text-sm mt-1">{joinWithSeparator(school.city, school.main_category)}</p>
           </div>
 
           <Link

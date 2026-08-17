@@ -6,7 +6,7 @@ import { supabase } from "./supabase";
 export type SchoolData = {
   id: string;
   name: string;
-  city: string;
+  city: string | null;
   neighborhood?: string | null;
   phone?: string | null;
   email?: string | null;

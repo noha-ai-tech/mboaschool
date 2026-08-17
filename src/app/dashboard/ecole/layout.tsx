@@ -122,7 +122,7 @@ export default function EcoleDashboardLayout({ children }: { children: React.Rea
                 <div className="flex items-start gap-2">
                   <div className="flex-1 min-w-0">
                     <p className="font-bold text-sm leading-snug truncate">{school.name}</p>
-                    <p className="text-xs text-slate-400">{school.city}</p>
+                    <p className="text-xs text-slate-400">{school.city || "—"}</p>
                   </div>
                   {school.is_verified && (
                     <CheckCircle2 size={14} className="text-emerald-400 mt-0.5 shrink-0" />

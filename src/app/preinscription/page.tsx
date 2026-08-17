@@ -9,11 +9,12 @@ import { dispatchAdmissionNotification } from "@/lib/notifications/admissionNoti
 import { ArrowLeft, ArrowRight, CheckCircle2, Copy, Check, MapPin } from "lucide-react";
 import { AuthHeader } from "@/components/layout/AuthHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { joinWithSeparator } from "@/lib/formatSchoolLocation";
 
 type SchoolOption = {
   id: string;
   name: string;
-  city: string;
+  city: string | null;
   category: string | null;
   verified: boolean;
   images: string[];
@@ -257,7 +258,7 @@ function PreinscriptionForm() {
               >
                 <option value="">— Choisir un établissement —</option>
                 {schools.map((s) => (
-                  <option key={s.id} value={s.id}>{s.name} — {s.city}</option>
+                  <option key={s.id} value={s.id}>{s.city ? `${s.name} — ${s.city}` : s.name}</option>
                 ))}
               </select>
             </div>
@@ -277,7 +278,7 @@ function PreinscriptionForm() {
                     <p className="font-bold text-text-primary truncate">{selectedSchool.name}</p>
                     <p className="text-sm text-text-secondary flex items-center gap-1">
                       <MapPin size={11} />
-                      {selectedSchool.city}{selectedSchool.category ? ` · ${selectedSchool.category}` : ""}
+                      {joinWithSeparator(selectedSchool.city, selectedSchool.category)}
                     </p>
                   </div>
                   {selectedSchool.verified && (

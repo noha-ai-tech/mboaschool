@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { CheckCircle2, Heart } from "lucide-react";
+import { formatQuartierCity } from "@/lib/formatSchoolLocation";
 
 // Carte établissement "premium" — utilisée par le carrousel Établissements à
 // la une. Volontairement plus légère que la carte des résultats principaux
@@ -14,8 +15,8 @@ import { CheckCircle2, Heart } from "lucide-react";
 export type FeaturedSchool = {
   id: string;
   name: string;
-  city: string;
-  quartier: string;
+  city: string | null;
+  quartier: string | null;
   category: string;
   subcategory: string;
   image: string | null;
@@ -79,9 +80,10 @@ export function SchoolCard({ school, priority = false }: { school: FeaturedSchoo
 
       <div className="p-3.5">
         <p className="font-bold text-sm leading-snug line-clamp-1">{school.name}</p>
-        <p className="text-xs text-text-secondary mt-1">
-          {school.quartier ? `${school.quartier}, ` : ""}{school.city}
-        </p>
+        {(() => {
+          const location = formatQuartierCity(school.quartier, school.city);
+          return location ? <p className="text-xs text-text-secondary mt-1">{location}</p> : null;
+        })()}
         {(school.category || school.subcategory) && (
           <div className="flex flex-wrap gap-1.5 mt-2">
             {school.category && (

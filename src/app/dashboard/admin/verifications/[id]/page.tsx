@@ -13,6 +13,7 @@ import {
   Download,
   Loader2,
 } from "lucide-react";
+import { joinWithSeparator } from "@/lib/formatSchoolLocation";
 
 type ClaimDetail = {
   id: string;
@@ -26,7 +27,7 @@ type ClaimDetail = {
   admin_comment: string | null;
   created_at: string;
   establishment_id: string;
-  establishments: { name: string; city: string; main_category: string } | null;
+  establishments: { name: string; city: string | null; main_category: string } | null;
 };
 
 type DocRow = { id: string; file_name: string; storage_path: string };
@@ -133,7 +134,7 @@ export default function VerificationDetailPage() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
-                {claim.establishments?.city} · {claim.establishments?.main_category}
+                {joinWithSeparator(claim.establishments?.city, claim.establishments?.main_category)}
               </p>
               <h1 className="text-xl font-black text-[#0a0a0a]">{claim.establishments?.name ?? "Établissement"}</h1>
             </div>

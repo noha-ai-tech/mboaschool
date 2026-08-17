@@ -21,7 +21,7 @@ const userIcon = new L.DivIcon({
   iconAnchor: [8, 8],
 });
 
-type MapSchool = { id: string; name: string; city: string; lat: number; lng: number };
+type MapSchool = { id: string; name: string; city: string | null; lat: number; lng: number };
 
 export default function LocalSchoolMap({
   center,
@@ -81,9 +81,10 @@ export default function LocalSchoolMap({
     }
 
     schools.forEach((s) => {
-      L.marker([s.lat, s.lng], { icon: schoolIcon })
-        .bindPopup(`<strong>${s.name}</strong><br/>${s.city}`)
-        .addTo(layer);
+      const popupHtml = s.city
+        ? `<strong>${s.name}</strong><br/>${s.city}`
+        : `<strong>${s.name}</strong>`;
+      L.marker([s.lat, s.lng], { icon: schoolIcon }).bindPopup(popupHtml).addTo(layer);
     });
 
     map.setView([center.lat, center.lng], userLocation ? 13 : 12);

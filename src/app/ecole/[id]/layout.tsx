@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { supabase } from "@/lib/supabase";
+import { formatSchoolLocation } from "@/lib/formatSchoolLocation";
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 
 async function fetchSchool(id: string) {
   const { data } = await supabase
     .from("establishments")
-    .select("name, city, neighborhood, address, phone, main_category, description, cover_image_url, latitude, longitude")
+    .select("name, city, region, neighborhood, address, phone, main_category, description, cover_image_url, latitude, longitude")
     .eq("id", id)
     .single();
   return data;
@@ -23,10 +24,13 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     };
   }
 
-  const title = `${data.name} — ${data.city} | Écoles237`;
+  const location = formatSchoolLocation({ city: data.city, region: data.region });
+  const title = location ? `${data.name} — ${location} | Écoles237` : `${data.name} | Écoles237`;
   const description = data.description
     ? data.description.slice(0, 155)
-    : `Découvrez ${data.name}, établissement ${data.main_category} à ${data.city}. Préinscription en ligne sur Écoles237.`;
+    : location
+      ? `Découvrez ${data.name}, établissement ${data.main_category} à ${location}. Préinscription en ligne sur Écoles237.`
+      : `Découvrez ${data.name}, établissement ${data.main_category} référencé sur Écoles237. Préinscription en ligne.`;
 
   return {
     title,
@@ -75,7 +79,7 @@ export default async function SchoolLayout({
     ...(data.cover_image_url ? { image: data.cover_image_url } : {}),
     address: {
       "@type": "PostalAddress",
-      addressLocality: data.city,
+      ...(data.city ? { addressLocality: data.city } : {}),
       addressCountry: "CM",
       ...(data.neighborhood ? { addressRegion: data.neighborhood } : {}),
       ...(data.address ? { streetAddress: data.address } : {}),

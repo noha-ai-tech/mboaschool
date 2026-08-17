@@ -45,7 +45,7 @@ export default function AdminCrmPage() {
     return rows.filter((r) => {
       const crmStatus = r.establishment_crm?.[0]?.status ?? "prospect";
       if (statusFilter !== "all" && crmStatus !== statusFilter) return false;
-      if (query && !`${r.name} ${r.city}`.toLowerCase().includes(query.toLowerCase())) return false;
+      if (query && !`${r.name} ${r.city ?? ""}`.toLowerCase().includes(query.toLowerCase())) return false;
       return true;
     });
   }, [rows, query, statusFilter]);

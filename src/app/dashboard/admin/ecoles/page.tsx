@@ -58,7 +58,7 @@ export default function AdminEcolesPage() {
     let list = schools.filter((s) => {
       if (query) {
         const q = query.toLowerCase();
-        if (!`${s.name} ${s.city} ${s.main_category}`.toLowerCase().includes(q)) return false;
+        if (!`${s.name} ${s.city ?? ""} ${s.main_category ?? ""}`.toLowerCase().includes(q)) return false;
       }
       if (statusFilter !== "all" && (s.verification_status ?? "referenced") !== statusFilter) return false;
       if (planFilter !== "all" && s.forfait !== planFilter) return false;

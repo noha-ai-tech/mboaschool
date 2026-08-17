@@ -7,6 +7,7 @@
 
 import Link from "next/link";
 import { useSchool } from "@/lib/useSchool";
+import { joinWithSeparator } from "@/lib/formatSchoolLocation";
 import {
   Settings,
   DollarSign,
@@ -56,7 +57,7 @@ export default function MonEtablissementPage() {
 
       <div className="bg-white border border-[#ebebeb] rounded-2xl p-6 mb-6">
         <p className="font-black text-lg text-[#0a0a0a]">{school.name}</p>
-        <p className="text-sm text-slate-500">{school.city} · {school.main_category}</p>
+        <p className="text-sm text-slate-500">{joinWithSeparator(school.city, school.main_category)}</p>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-4">

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { ChevronRight, Inbox } from "lucide-react";
+import { joinWithSeparator } from "@/lib/formatSchoolLocation";
 
 type ClaimRow = {
   id: string;
@@ -12,7 +13,7 @@ type ClaimRow = {
   last_name: string;
   role_title: string;
   created_at: string;
-  establishments: { name: string; city: string } | null;
+  establishments: { name: string; city: string | null } | null;
 };
 
 const TABS: { key: ClaimRow["status"]; label: string }[] = [
@@ -87,7 +88,10 @@ export default function VerificationsPage() {
                 <div>
                   <p className="font-bold text-[#0a0a0a]">{claim.establishments?.name ?? "Établissement inconnu"}</p>
                   <p className="text-xs text-slate-400 mt-0.5">
-                    {claim.establishments?.city} · Demandé par {claim.first_name} {claim.last_name} ({claim.role_title})
+                    {joinWithSeparator(
+                      claim.establishments?.city,
+                      `Demandé par ${claim.first_name} ${claim.last_name} (${claim.role_title})`
+                    )}
                   </p>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">

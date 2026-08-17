@@ -45,7 +45,11 @@ interface LiveEstablishment {
   region: string | null;
   description: string | null;
   created_at: string;
-  official_id?: string | null; // n'existera qu'après migration 0018
+  official_id: string | null;
+  source_ministry: string | null;
+  source_reference: string | null;
+  source_url: string | null;
+  registry_import_batch: string | null;
 }
 
 function readEnvVar(env: string, key: string): string | null {
@@ -74,7 +78,7 @@ async function main() {
   if (!readKey) throw new Error("Aucune clé Supabase disponible (ni service-role, ni anon).");
 
   const res = await fetch(
-    `${url}/rest/v1/establishments?select=id,name,region,description,created_at&created_at=gte.2026-08-16T00:00:00&created_at=lt.2026-08-17T00:00:00`,
+    `${url}/rest/v1/establishments?select=id,name,region,description,created_at,official_id,source_ministry,source_reference,source_url,registry_import_batch&created_at=gte.2026-08-16T00:00:00&created_at=lt.2026-08-17T00:00:00`,
     { headers: { apikey: readKey, Authorization: `Bearer ${readKey}` } }
   );
   if (!res.ok) throw new Error(`Lecture establishments -> HTTP ${res.status}`);
@@ -101,6 +105,7 @@ async function main() {
   const updates: Update[] = [];
   let parsedCount = 0;
   let missingCount = 0;
+  let alreadyCurrentCount = 0;
   const missing: string[] = [];
   const touchedFieldsOutsideScope = 0; // par construction : le payload ci-dessous ne contient jamais que les 5 champs listés
 
@@ -117,7 +122,7 @@ async function main() {
       continue;
     }
 
-    updates.push({
+    const target: Update = {
       id: e.id,
       name: e.name,
       official_id: parsedId,
@@ -125,13 +130,31 @@ async function main() {
       source_reference: "carte scolaire numérique — table ESG",
       source_url: SOURCE_URL,
       registry_import_batch: IMPORT_BATCH,
-    });
+    };
+
+    // Idempotence (SPRINT P.2B.1 §20) : si les 4 champs registry sont déjà
+    // exactement la valeur cible, la ligne n'a rien à gagner d'un PATCH —
+    // on la compte séparément plutôt que de la replanifier inutilement.
+    const alreadyCurrent =
+      e.official_id === target.official_id &&
+      e.source_ministry === target.source_ministry &&
+      e.source_reference === target.source_reference &&
+      e.source_url === target.source_url &&
+      e.registry_import_batch === target.registry_import_batch;
+
+    if (alreadyCurrent) {
+      alreadyCurrentCount++;
+      continue;
+    }
+
+    updates.push(target);
   }
 
   console.log("=== DRY RUN — backfill-minesec-official-ids.ts ===");
   console.log(`Candidates: ${candidates.length}`);
   console.log(`Parsed IDs: ${parsedCount}`);
-  console.log(`Matched Master: ${updates.length}`);
+  console.log(`Matched Master: ${parsedCount - missingCount}`);
+  console.log(`Already up to date: ${alreadyCurrentCount}`);
   console.log(`Missing: ${missingCount}`);
   console.log(`Conflicts: 0`); // aucun conflit possible ici : un seul candidat par matricule, pas de collision détectée en amont (voir audit §7)
   console.log(`Would update: ${updates.length}`);
@@ -141,7 +164,11 @@ async function main() {
   const dryRunPath = join(rootDir, "reports", "registry", "backfill-batch-002-dryrun.json");
   writeFileSync(
     dryRunPath,
-    JSON.stringify({ generatedAt: new Date().toISOString(), candidates: candidates.length, parsedCount, matched: updates.length, missingCount, missing, updates }, null, 2),
+    JSON.stringify(
+      { generatedAt: new Date().toISOString(), candidates: candidates.length, parsedCount, alreadyCurrentCount, matched: parsedCount - missingCount, missingCount, missing, updates },
+      null,
+      2
+    ),
     "utf-8"
   );
   console.log(`Plan détaillé écrit (dry-run) : ${dryRunPath}`);

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useSchool } from "@/lib/useSchool";
 import { admissionStatusConfig } from "@/lib/admissions/status";
+import { joinWithSeparator } from "@/lib/formatSchoolLocation";
 import {
   ClipboardList,
   GraduationCap,
@@ -212,7 +213,7 @@ export default function DashboardEcoleHome() {
             </span>
           )}
         </div>
-        <p className="text-text-secondary text-sm">{school.city} · {school.main_category}</p>
+        <p className="text-text-secondary text-sm">{joinWithSeparator(school.city, school.main_category)}</p>
       </div>
 
       {/* KPI — 4 maximum, données réelles uniquement */}

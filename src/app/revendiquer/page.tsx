@@ -8,6 +8,7 @@ import { Search, CheckCircle2, ArrowRight, Building2, FilePlus2 } from "lucide-r
 import { AuthHeader } from "@/components/layout/AuthHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ClaimBranding } from "@/components/claim/ClaimBranding";
+import { joinWithSeparator } from "@/lib/formatSchoolLocation";
 
 // Recherche nationale limitée à nom/ville : `establishments` n'a pas encore
 // de colonnes région/département/arrondissement normalisées (voir le GAP
@@ -16,7 +17,7 @@ import { ClaimBranding } from "@/components/claim/ClaimBranding";
 type SearchResult = {
   id: string;
   name: string;
-  city: string;
+  city: string | null;
   category: string | null;
   verified: boolean;
   ownerId: string | null;
@@ -149,7 +150,7 @@ export default function RevendiquerInscrirePage() {
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="font-bold text-sm text-text-primary truncate">{r.name}</p>
-                        <p className="text-xs text-text-secondary">{r.city}{r.category ? ` · ${r.category}` : ""}</p>
+                        <p className="text-xs text-text-secondary">{joinWithSeparator(r.city, r.category)}</p>
                         <div className="flex items-center gap-1.5 mt-1">
                           {r.verified && (
                             <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-primary-light text-primary px-2 py-0.5 rounded-full">
@@ -246,11 +247,11 @@ export default function RevendiquerInscrirePage() {
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+function Row({ label, value }: { label: string; value: string | null }) {
   return (
     <div className="flex items-center justify-between gap-3 border-b border-border pb-2 last:border-0">
       <span className="text-text-secondary text-sm shrink-0">{label}</span>
-      <span className="font-semibold text-text-primary text-sm text-right truncate">{value}</span>
+      <span className="font-semibold text-text-primary text-sm text-right truncate">{value ?? "—"}</span>
     </div>
   );
 }

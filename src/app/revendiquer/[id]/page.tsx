@@ -16,6 +16,7 @@ import {
 import { ClaimBranding } from "@/components/claim/ClaimBranding";
 import { AuthHeader } from "@/components/layout/AuthHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { joinWithSeparator } from "@/lib/formatSchoolLocation";
 
 const CLAIM_BRANDING_PROPS = {
   title: "Votre établissement est déjà sur Écoles237.",
@@ -25,7 +26,7 @@ const CLAIM_BRANDING_PROPS = {
 type EstablishmentSummary = {
   id: string;
   name: string;
-  city: string;
+  city: string | null;
   owner_id: string | null;
   main_category: string | null;
   is_verified: boolean;
@@ -256,7 +257,7 @@ export default function RevendiquerPage() {
           </p>
 
           <div className="bg-muted rounded-[14px] p-4 text-left space-y-2 mb-6">
-            <Row label="Établissement" value={`${establishment.name} · ${establishment.city}`} />
+            <Row label="Établissement" value={joinWithSeparator(establishment.name, establishment.city) ?? establishment.name} />
             {claimId && <Row label="N° de demande" value={claimId} mono />}
             <Row label="Statut" value="En vérification" />
           </div>
@@ -397,8 +398,7 @@ export default function RevendiquerPage() {
                 <div className="min-w-0">
                   <p className="font-bold text-text-primary truncate">{establishment.name}</p>
                   <p className="text-sm text-text-secondary">
-                    {establishment.city}
-                    {establishment.main_category ? ` · ${establishment.main_category}` : ""}
+                    {joinWithSeparator(establishment.city, establishment.main_category)}
                   </p>
                   <div className="flex items-center gap-1.5 mt-1.5">
                     <span className="text-[10px] font-semibold bg-white text-text-secondary border border-border px-2 py-0.5 rounded-full">
