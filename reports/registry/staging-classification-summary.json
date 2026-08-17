@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-08-17T22:39:06.749Z",
+  "totalStaging": 1251,
+  "counts": {
+    "EXISTING_OFFICIAL_ID": 673,
+    "EXISTING_LEGACY_CONFIRMED": 0,
+    "EXISTING_PROBABLE": 1,
+    "EXISTING_AMBIGUOUS": 5,
+    "CLEAN_NEW_CANDIDATE": 556,
+    "NEW_CANDIDATE_REVIEW_REQUIRED": 16
+  },
+  "cleanCandidates": 556,
+  "alreadyApproved": 556,
+  "pendingApproval": 0,
+  "reviewRequiredCount": 16,
+  "doubtfulCount": 6
+}
