@@ -4,6 +4,17 @@ import { fileURLToPath } from "node:url";
 import { normalizeName } from "./lib/normalize";
 import type { NormalizedStagingRecord } from "./types";
 
+/** Lignes de data/registry/master/minesec-master-v1-clean.json (SPRINT P.2A
+ *  §16) — NormalizedStagingRecord + le statut de localité par ligne, qui
+ *  n'existe pas comme colonne dédiée sur establishment_import_staging
+ *  (migration 0006). Conservé dans raw_data (jsonb, déjà prévu pour capturer
+ *  toute donnée source) plutôt que perdu — voir SPRINT P.2B §14. */
+type CleanRecord = NormalizedStagingRecord & {
+  rawLocality: string | null;
+  normalizedLocality: string | null;
+  localityStatus: "VALID" | "MISSING" | "CLEARLY_INVALID" | "POSSIBLE_REAL_LOCALITY" | "NEEDS_REVIEW";
+};
+
 /**
  * SPRINT P — Import du dataset MINESEC Master V1 vers
  * `establishment_import_staging`.
@@ -64,8 +75,10 @@ async function main() {
   const url = readEnvVar(env, "NEXT_PUBLIC_SUPABASE_URL");
   const serviceKey = readEnvVar(env, "SUPABASE_SERVICE_ROLE_KEY");
 
-  const master: NormalizedStagingRecord[] = JSON.parse(
-    readFileSync(join(rootDir, "data", "registry", "master", "minesec-master-v1.json"), "utf-8")
+  // SPRINT P.2B §14-15 : source = dataset "clean" (statut de localité par
+  // ligne), pas le snapshot maître original (jamais modifié, voir §15).
+  const master: CleanRecord[] = JSON.parse(
+    readFileSync(join(rootDir, "data", "registry", "master", "minesec-master-v1-clean.json"), "utf-8")
   );
 
   // ── Correspondance avec la base réelle (pour duplicate_of_establishment_id) ──
@@ -148,7 +161,17 @@ async function main() {
       source_url: r.sourceUrl,
       source_year: r.sourceYear,
       official_identifier: r.officialIdentifier,
-      raw_data: r.raw,
+      // raw_data reste la ligne source intacte (r.raw) + le statut de
+      // localité calculé en P.2A, sous une clé séparée jamais confondue avec
+      // les champs bruts MINESEC eux-mêmes (§14 : rien n'est perdu).
+      raw_data: {
+        ...r.raw,
+        _localityAudit: {
+          rawLocality: r.rawLocality,
+          normalizedLocality: r.normalizedLocality,
+          localityStatus: r.localityStatus,
+        },
+      },
       name_raw: r.nameRaw,
       name_normalized: r.nameNormalized,
       education_family: r.educationFamily,
