@@ -1,0 +1,52 @@
+{
+  "timestamp": "2026-08-17T21:43:46.301Z",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "master_version": "minesec-master-v1-clean.json",
+  "master_count": 1251,
+  "source_record": "MINESEC Master V1 (consolidation Batch 001 + Batch 002)",
+  "official_id_matches": 673,
+  "legacy_matches": {
+    "confirmed": 0,
+    "probable": 1
+  },
+  "probable_matches": 1,
+  "ambiguous_matches": 5,
+  "new_candidates": {
+    "total": 572,
+    "clean": 556,
+    "review_required": 16
+  },
+  "review_flags": {
+    "probable_existing_matches": 1,
+    "ambiguous_existing_matches": 5,
+    "clearly_invalid_locality": 37,
+    "possible_real_locality": 5,
+    "needs_review_locality": 11,
+    "missing_locality": 150
+  },
+  "inserted": 1251,
+  "skipped": 0,
+  "failed": 0,
+  "staging_before": 0,
+  "staging_after": 1251,
+  "production_before": 721,
+  "production_after": 721,
+  "new_candidates_by_region": {
+    "Centre": 341,
+    "Littoral": 147,
+    "Ouest": 23,
+    "Adamaoua": 11,
+    "Nord": 27,
+    "Extrême-Nord": 23
+  },
+  "batch_002_invariant": {
+    "expected": 673,
+    "matched": 673,
+    "status": "PASS"
+  },
+  "lycee_general_leclerc": {
+    "verdict": "REVIEW_REQUIRED",
+    "reason": "nom + region concordants, localite Master absente pour corroborer contre la fiche production existante"
+  },
+  "idempotence_bug_found_and_fixed": "Lecture non paginee des fingerprints/establishments plafonnee a 1000 lignes par PostgREST (db-max-rows) -> sous-comptage silencieux detecte par le second dry-run, corrige par pagination explicite avant toute nouvelle ecriture."
+}
