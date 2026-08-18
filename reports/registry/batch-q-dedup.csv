@@ -1,0 +1,692 @@
+official_id,official_name,region,locality,status,duplicate_of_establishment_id,match_type,match_reason
+8CC1GSBD123147118,CES Bilingue de BENGBIS,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CC1GSFD100010107,CES de MEKAS,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CC1GSFD100028109,CES de MINLA'A,SUD,MINLA'A,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CC1GSFD101940109,CES de NGONEBEME,SUD,NGONEBEME,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CC1GSFD111856092,Lyce Mixte de BENGBIS,SUD,MEKA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CE1GSFD101871104,CES d'ESSONG (Djoum),SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CE1GSBD110167107,Lyce Bilingue de DJOUM,SUD,ADJAP,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CE1GSFD100357110,Lyce de MVENG,SUD,MVENG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CH1GSBD101950112,CES Bilingue de MEYOMESSALA,SUD,NGAT,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CH1GSFD102157109,CES de MEBAME,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CH1GSFD100347112,CES de MEGUEME,SUD,YEKOE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CH1GSFD102316113,CES de MESSOK,SUD,Messok,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CH1GSFD101982105,CES de NGOASSE,SUD,Ngoasse,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CH1GSFD101925106,CES de NKOLENYENG,SUD,NKOLENYENG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CH1GSFD100409105,CES de NKOMO,SUD,NKOMO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CH1GSFD102312113,CES de TATCHING II,SUD,Tatching 2,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CH1GSFD101944105,CES de TEKMO,SUD,Tekmo,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CH1GSFD102251100,CES de YEM-YEMFEK,SUD,BIBA &YEM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CH1GSBD110580107,Lyce Bilingue de KOUM-YETOTAN,SUD,KOUM YETOTAN,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CH1GSFD110091090,Lyce Classique et Moderne de MVOMEKA'A,SUD,MVOMEKAA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CI1GSBD101833112,CES Bilingue de MEYOMESSI,SUD,Kongo,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CI1GSFD102314113,CES d'ELOM-YEMFEK,SUD,ELOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CI1GSFD100629103,CES d'OLOUNOU,SUD,OLOUNOU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CI1GSFD110157110,Lyce de MEYOMESSI,SUD,KONGO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CJ1GSFD112008110,Lyce de MINTOM,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CK1GSFD110153111,Lyce d'OVENG,SUD,MVAM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CL1GSFD100618109,CES de NDJANTOM,SUD,NDJANTOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CL1GSFD102002096,CES de NSIMALEN-YEMVAK,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CL1GSBD110279106,Lyce Bilingue de SANGMELIMA,SUD,ETUNELINGA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CL1GSFD111825069,Lyce Classique et Moderne de SANGMELIMA,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CL1GSFD112111113,Lyce d'AVEBE-ESSE,SUD,Avebe esse,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CL1GSFD111544112,Lyce de MEYOMADJOM,SUD,MEYOMADJOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CL1GSFD110992111,Lyce de NKOLOTOU'OUTOU,SUD,NKOLOTOU'OUTOU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CL1GSFD110995112,Lyce de NKPWANG,SUD,NKPWANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CL1GSFD111998107,Lyce de SANGMELIMA-AVEBE,SUD,MONAVEBE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CM1GSFD101531110,CES de MEBA,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CM1GSFD102176102,CES de MVOUTESSI,SUD,MVOUTESSI I,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CM1GSFD100965103,CES de NKILZOK,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CM1GSFD101991105,CES de NSIMI-MEYILA,SUD,MEYILA-NDONG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CM1GSBD111650114,Lyce Bilingue de ZOETELE,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CM1GSFD110973109,Lyce de FIBOT,SUD,FIBOT,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8CM1GSFD110960107,Lyce de NKOUMADJAP-FONG,SUD,NKOUMADJAP,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EC1GSFD111956097,Lyce de BIWONG-BANE,SUD,BIWONG-BANE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EC1GSFD112060107,Lyce de MELANGUE I,SUD,MELANGUE I,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EC1GSFD110229114,Lyce de NGOAZIP,SUD,NGOAZIP I,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EE1GSFD100414098,CES d'ESSANGONG,SUD,ESSANGONG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EE1GSFD100566099,CES de MANG-YEMISSEM,SUD,MANG-YEMISSEM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EE1GSFD103162118,CES de MOMEBILI,SUD,MOMEBILI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EE1GSFD110419111,Lyce de BIWONG-BULU,SUD,BIWONG-BULU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EE1GSFD110200109,Lyce de NSELANG,SUD,NSELANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EH1GSFD100317108,CES d'AZEM-ESSAKOE,SUD,AZEM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EH1GSFD100558103,CES de MEYO-VILLE,SUD,MEY0-VILLE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EH1GSBD111894092,Lyce Bilingue d'EBOLOWA,SUD,NKO'OVOS,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EI1GSBD110205115,Lyce Bilingue d'EBOLOWA II,SUD,ESSINGUILI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EH1GSFD110181105,Lyce d'EBOLOWA-RURAL,SUD,Adoum,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EH1GSFD111968114,Lyce de MVIENG,SUD,MVIENG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EH1GSFD110516112,Lyce de NYANGONG,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8JI1GSFD102724114,CES d'ADJAB II,SUD,ADJAB II,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EI1GSFD102691114,CES de BITYILI,SUD,BITYILI III,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EI1GSFD101975102,CES de MEFO,SUD,MEFO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EI1GSFD100759108,CES de MEYOS-YENDJOCK,SUD,MEYOS-YENDJOCK,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EI1GSFD112446074,Lyce Classique et Moderne d'EBOLOWA,SUD,MEKALAT,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EI1GSFD112440107,Lyce d'EBOLOWA,SUD,MEKALAT YEMVENG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EI1GSFD110212113,Lyce de BIBA I,SUD,BIBA I,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EI1GSFD110755113,Lyce de MEKOMO,SUD,Mekomo,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EI1GSFD112024107,Lyce de NKOEMVONE,SUD,NKOEMVONE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EJ1GSFD100831106,CES d'ONDONG-ADJAP,SUD,ONDONG-ADJAP,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EJ1GSFD102361109,CES de NKOK-EKOUK,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EJ1GSFD110835110,Lyce d'EFOULANE,SUD,EFOULANE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EK1GSBD102701114,CES Bilingue de MENGONG,SUD,BBULU NORD,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EK1GSFD102928114,CES d'EKOUK,SUD,EKOUK,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EK1GSFD110187110,Lyce d'ATO'OVENG,SUD,ATO'OVENG II,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EK1GSFD111914112,Lyce de MELANE,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EK1GSFD110257099,Lyce de MENGONG,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EL1GSFD102367113,CES d'AMVOM,SUD,AMVOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EL1GSFD102044111,CES d'ENDENGUE,SUD,2e DEGRE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EL1GSFD110184092,Lyce Bilingue de MVANGANE,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EM1GSFD101901100,CES d'ENAMGAL,SUD,ENAMGAL,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EM1GSFD100179109,CES de BITSOGMAM,SUD,BITSOGMAM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EM1GSFD101851102,CES de DOUM-CHEFFERIE,SUD,DOUM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EM1GSFD100531100,CES de SOUMOU,SUD,SOUMOU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EM1GSFD101929103,CES Pilote d'EBOTENKOU,SUD,FONG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8EM1GSFD110172096,Lyce Bilingue de NGOULEMAKONG,SUD,NGOULEMAKONG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HC1GSBD100310114,CES Bilingue de NYABITANDE,SUD,NYABITANDE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HC1GSFD101026105,CES de MVIE,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HC1GSFD110259092,Lyce Mixte d'AKOM II,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HE1GSFD101150104,CES d'ATOG-BOGA,SUD,ATOG-BOGA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HE1GSFD103165118,CES d'EBIMIMBANG,SUD,EBIMIMBANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HE1GSFD101212110,CES de BIDJOUKA-ATLANTIQUE,SUD,BIDJOUKA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HE1GSFD100367110,CES de GRAND-ZAMBI,SUD,3e degre de Grand Zambi,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HE1GSFD110090098,Lyce de BIPINDI,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HH1GSFD101865110,CES d'EBODJE,SUD,EBODJE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HH1GSFD111374098,Lyce de CAMPO,SUD,TONDEFOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HI1GSFD110375113,Lyce Bilingue de KRIBI-URBAIN,SUD,TALLA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HI1GSFD110421106,Lyce de GRAND-BATANGA,SUD,LUMA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HJ1GSFD100203111,CES de MPALLA,SUD,Mpalla,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HJ1GSFD110675113,Lyce Bilingue de DOMBE,SUD,DOMBE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HJ1GSBD111964100,Lyce Bilingue de KRIBI,SUD,NGOE NZAMBI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HK1GSFD102929114,CES d'EBONDI,SUD,Ebondi,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HK1GSFD100734108,CES de BELLA,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HK1GSFD102321113,CES de BONGUEN,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HK1GSFD102862115,CES de FIFINDA,SUD,FIFINDA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HK1GSFD100741100,CES de MAKOURE,SUD,MAKOURE II,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HK1GSFD100748112,CES de MBOKE,SUD,MBOKE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HK1GSFD102318113,CES de NKOLLO,SUD,3,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HK1GSBD111317110,Lyce Bilingue de KRIBI-RURAL,SUD,V 01 Socalpalm KEINK,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HK1GSFD111165106,Lyce d'ELOGBATINDI,SUD,YALPENDA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HL1GSFD102193113,CES de BANGO-BOULOU,SUD,Mbango-Boulou,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HL1GSFD101882110,CES de BIKALLA,SUD,BIKALLA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HL1GSFD101265110,CES de BIKOKA,SUD,35,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HL1GSFD102728114,CES de NKOUMBALA,SUD,Nkouambpoer I,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HL1GSFD112033091,Lyce Bilingue de LOLODORF,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HM1GSFD102085105,CES de MELONDO,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HM1GSFD102736114,CES de WOM,SUD,WOM 1,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HM1GSFD112077095,Lyce Mixte de MVENGUE,SUD,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HN1GSFD100660107,CES d'ADJAP-YESSOK,SUD,ADJAP,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8HN1GSBD111919112,Lyce Bilingue de NIETE,SUD,V7,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8IC1GSFD100381112,CES de MBAM-ESSAOBAM,SUD,MBAM ESSA OBAM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8IC1GSFD100019109,CES de MEYO-ELIE,SUD,MEYO-ELIE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8IC1GSFD100827109,CES de MINDI-MI-OVENG,SUD,MINDI-MI-OVENG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8IC1GSFD100352112,CES de THO II,SUD,THO II,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8IC1GSBD112069108,Lyce Bilingue d'AMBAM,SUD,1,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8IC1GSFD112102108,Lyce d'ABANG-MINKO,SUD,ABANG-MINKO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8IC1GSFD110195110,Lyce d'ASSANDJIK,SUD,Assandjik,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8IC1GSFD111168107,Lyce de MEYO-CENTRE,SUD,MEYO-CENTRE I,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8IE1GSBD112155108,Lyce Bilingue de KYE-OSSI,SUD,AKOMBANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8IH1GSFD100444108,CES d'EKEKE,SUD,EKEKE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8IH1GSFD102719114,CES d'ENDENDEM,SUD,ENDENDEM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8IH1GSFD102159107,CES de MEBEM,SUD,MEBEM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8IH1GSFD110624099,Lyce Bilingue de MA'AN,SUD,Ma'an-village,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8IH1GSFD110369110,Lyce de NYABESSANG,SUD,NYABESSANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8II1GSBD100170118,CES Bilingue de BIYI-AKOUM-ESEJEE,SUD,3e dgr de BIYI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8II1GSFD102037108,CES de MEKOKMENGONA,SUD,MEKOMENGONA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8II1GSFD102325113,CES de MEYO-BIBOULOU,SUD,Meyo - Bioulou,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+8II1GSFD112021100,Lyce Bilingue d'OLAMZE,SUD,MEKO'OSSI II,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CC1GSFD102000108,CES de GRIBI,EST,Gribi,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CC1GSFD110202103,Lyce Bilingue de GARI-GOMBO,EST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CC1GSFD102047112,CES de KIKA,EST,KIKA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CE1GSFD102194113,CES de NDONGO,EST,Ndongo,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CE1GSFD100578109,CES de YENGA,EST,Yenga,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CE1GSBD110055114,Lyce Bilingue de MOLOUNDOU,EST,MOLOUNDOU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CH1GSFD100182110,CES de LIBONGO,EST,LIBONGO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CH1GSFD102846115,CES de MIKEL,EST,3eme degre mikel,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CH1GSFD110574108,Lyce de SALAPOUMBE,EST,SALAPOUMBE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CI1GSFD100071112,CES de MASSEA,EST,MASSEA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CI1GSFD100054106,CES de MBOY I,EST,MBOY 1,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CI1GSFD102165112,CES de MENDOUNGUE-VILLE,EST,MENDOUNGUE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CI1GSFD102205107,CES de MOAMPACK,EST,MOAMPACK,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CI1GSFD102845115,CES de MOPOUO-BIDJOUKI,EST,MOPOUO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CI1GSFD100062110,CES de NGOLLA 20,EST,NGOLLA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CI1GSFD100707111,CES de YOKADOUMA-BIENEMAMA,EST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CI1GSBD112210110,Lyce Bilingue de NGATTO,EST,NGATTO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CI1GSBD110701112,Lyce Bilingue de YOKADOUMA,EST,QUARTIER PARADIS,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9CI1GSFD112390076,Lyce Classique de YOKADOUMA,EST,Quartier RELAIS,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EC1GSFD100024111,CES d'ABONG-DOUM,EST,Abong-doum,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EC1GSFD103160118,CES d'ABONG-MBANG II,EST,ZALOUM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EC1GSFD100447111,CES de MAZABE,EST,MAZABE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EC1GSBD110359100,Lyce Bilingue d'ABONG-MBANG,EST,MADOUMA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EC1GSFD111148106,Lyce Classique d'ABONG-MBANG,EST,MBOULE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EQ1GSFD100216110,CES d'ANKOM,EST,ANKOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EQ1GSFD101206111,CES de BEUL,EST,BEUL,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EQ1GSFD110264106,Lyce d'ANGOSSAS,EST,ANGOSSAS I,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EI1GSFD102178113,CES de BIGOENS,EST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EI1GSFD112408112,Lyce d'ATOK,EST,ATOK,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EJ1GSFD110213096,Lyce Bilingue de DIMAKO,EST,SOURCE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EJ1GSFD110194115,Lyce de GRAND-POL,EST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EK1GSFD102914114,CES de DJAPOSTEN,EST,DIOULA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EK1GSFD110173107,Lyce Bilingue de MINDOUROU-DJA,EST,MINDOUROU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EL1GSFD100190112,CES de BADITOUM,EST,Mboanz,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EL1GSFD111896112,Lyce de DOUMAINTANG,EST,DOUMAINTANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EM1GSFD102989117,CES d'AMBAKA,EST,AMBAKA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EM1GSBD110177114,Lyce Bilingue de DOUME,EST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EM1GSFD110186118,Lyce de MOTCHEBOUM,EST,MOTCHEBOUM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EN1GSFD102191113,CES de MINTOM,EST,Mintoum,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EN1GSFD100258110,CES de ZOULABOT I,EST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EN1GSBD112239114,Lyce Bilingue de LOMIE,EST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9ER1GSBD100732112,CES Bilingue de KAGNOL II,EST,KAGNOL II,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9ER1GSFD110208107,Lyce de MBOMA,EST,MBOMA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9ES1GSFD100646111,CES de DIMPAM,EST,LEHE ETMPOUHO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9ES1GSFD102681114,CES de DOUMO-MAMA,EST,DOUMOU-MAMA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9ES1GSFD102686114,CES de KOA,EST,KOUA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9ES1GSFD102061113,CES de NGOULEMAKONG-MESSAMENA,EST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9ES1GSFD110256092,Lyce Bilingue de MESSAMENA,EST,MOKOLO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9ET1GSFD101141104,Lyce de MESSOK,EST,MESSOK,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EX1GSFD110591111,Lyce de NGOYLA,EST,LYCEE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EY1GSFD102208111,CES de BIKA,EST,BIKA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EY1GSFD100654107,CES de MVANDA II,EST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EY1GSFD110587118,Lyce d'AZOMEKOUT,EST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EY1GSFD110206091,Lyce de NGUELEMEDOUKA,EST,ELONO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9EZ1GSFD111978112,Lyce de SOMALOMO,EST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HC1GSFD102066108,CES de GADJI,EST,3me,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HC1GSFD102011108,CES de MBOUNOU,EST,MBOUNOU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HC1GSFD100394112,CES de NYABI,EST,NYABI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HC1GSFD101318112,CES de TAPARE,EST,3eme DEGR,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HC1GSBD112198099,Lyce Bilingue de BATOURI,EST,SAMBO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HC1GSFD110171114,Lyce de BATOURI-TRYPANO,EST,TRYPANO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HC1GSFD110339115,Lyce de MONGO-NAM,EST,Mongo nam,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HC1GSFD110008111,Lyce de SAMBO,EST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HE1GSFD112248106,Lyce Bilingue de KENTZOU,EST,BOMBE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HH1GSFD100776112,CES de GBITI,EST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HH1GSBD110450107,Lyce Bilingue de KETTE,EST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HH1GSFD112017112,Lyce de BOUBARA,EST,BOUBARA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HI1GSFD102698114,CES de DJAMPIEL,EST,DJAMPIEL,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HI1GSFD102915115,CES de KAGNOL I,EST,KAGNOL I,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HI1GSBD111151107,Lyce Bilingue de MBANG,EST,MBANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HJ1GSFD100494107,CES d'OULI,EST,OULI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HK1GSBD111907114,Lyce Bilingue de NDELELE,EST,NDELELE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HK1GSFD110188112,Lyce de MINDOUROU-NDELELE,EST,KAKO MBESSEMBO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HL1GSFD101992109,CES de GOUNTE,EST,GOUNTE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9HL1GSBD112007113,Lyce Bilingue de NGUELEBOK,EST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IC1GSFD100407111,CES de DENG-DENG,EST,DENG DENG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IC1GSFD100106108,CES de DONDI,EST,DONDI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IC1GSFD102421111,CES de GOYOUM,EST,Goyoum,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IC1GSBD110069113,Lyce Bilingue de BELABO,EST,BELABO VILLAGE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IC1GSFD110073091,Lyce de BELABO,EST,SAPPELI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IC1GSFD110011113,Lyce de NDEMBA I,EST,NDEMBA 1,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IE1GSFD102844115,CES de BIRPONDO,EST,CHEFFERIE DE BIRPONDO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IE1GSFD102916114,CES de NKOLBIKON,EST,Nkolbikon II,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IE1GSFD110321105,Lyce de MOKOLO 4-BERTOUA,EST,MOKOLO 4,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IE1GSFD110314111,Lyce de TIGAZA,EST,Tigaza,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IH1GSFD102370113,CES de BERTOUA II,EST,Bertoua 2,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IH1GSFD102394113,CES de NGAIKADA,EST,NGAKADA 1,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IH1GSBD112387092,Lyce Bilingue de BERTOUA,EST,NGAIKANDA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IE1GSFD110165111,Lyce Bilingue de BONIS,EST,BONIS,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IH1GSFD012203104,Lyce Scientifique de BERTOUA,EST,TIDAMBA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9II1GSFD100773108,CES de BORONGO,EST,BORONGO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+,CES de DANG-PATOU,EST,DANG-PATOU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9II1GSFD102051113,CES de NDOKAYO,EST,NDOKAYO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9II1GSBD112396114,Lyce Bilingue de BETARE-OYA,EST,Kpawara,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9II1GSFD110064111,Lyce de BOULI,EST,BOULI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9II1GSFD110335115,Lyce de MBITOM,EST,DEUXIEME DEGRE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IJ1GSFD100065111,CES de BOUAM,EST,BOUAM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IJ1GSFD110196100,Lyce de DIANG,EST,BINGOMO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IK1GSFD102724114,CES de BINDIBA,EST,BINDIBA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IK1GSFD102228109,CES de GADO-BADJERE,EST,GADO-BADZERE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IK1GSBD102376113,Lyce Bilingue de GAROUA-BOULAI,EST,SABONGARI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IL1GSFD102027113,CES de BAZZAMA,EST,BAZZAMA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IL1GSFD100522104,CES de LETTA,EST,LETTA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IL1GSFD112411111,Lyce de MANDJOU,EST,BINDIA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IM1GSFD100532110,CES de BOHANTO,EST,BOHANTO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IC1GSFD101876109,CES de KOLLOMINE,EST,COLOMINE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IM1GSFD102115102,CES de NGOURA,EST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+9IM1GSFD110151111,Lyce de YANGAMO,EST,YANGAMO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CC1GSAD100049109,CES d'IBAL-ANJIN,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CC1GSAD100097111,CES de BAINGO,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CC1GSBD110178110,Lyce Bilingue de BELO,NORD-OUEST,2,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CC1GSAD110899111,Lyce d'ANYAJUA,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CC1GSAD110032115,Lyce d'IBAL-ACHA,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CC1GSAD110161107,Lyce de MBESSA,NORD-OUEST,MBESSA FONDOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CC1GSAD110892111,Lyce de MBINGO,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CE1GSAD100991110,CES de CHONGKANG-BUABUA,NORD-OUEST,BUM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CE1GSAD102824115,CES de KICHOWI,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CE1GSAD100979107,CES de KONENE,NORD-OUEST,BUM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CE1GSAD102703114,CES de SAFF,NORD-OUEST,SAFF,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CE1GSBD110961115,Lyce Bilingue de FONFUKA,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CH1GSAD101644110,CES d'ACHAIN,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CH1GSAD101640110,CES d'AJUNG,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CH1GSAD100938100,CES d'ILUNG,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CH1GSAD102687114,CES de FUJUA-LAIKOM,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CH1GSAD100248109,CES de NGOLAIN,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CH1GSAD100243110,CES de NGWAH-EBOSUNG,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CH1GSBD110289079,Lyce Bilingue de FUNDONG,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CH1GSAD110272110,Lyce d'ABUH-FUNDONG,NORD-OUEST,ABUH-Kom,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CH1GSAD110214109,Lyce d'ADUK,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CH1GSAD101646109,Lyce d'AKEH,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CH1GSAD110204111,Lyce de MELI,NORD-OUEST,Meli,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CI1GSAD100964109,CES de CHUAKU-MULOIN,NORD-OUEST,Muloin,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CI1GSAD100986107,CES de KIKFUINI,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CI1GSAD100968110,CES de YANG (Njinikom),NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3CI1GSAD111916107,Lyce de NJINIKOM,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EC1GSBD101253107,CES Bilingue de WASI-BER,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EC1GSAD102346113,CES de MBOKAM,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EC1GSAD102344113,CES de NOI-VISOMBO,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EC1GSAD101242110,CES de VEKOVI,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EC1GSAD101244107,CES de WVEM,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EC1GSBD111822105,Lyce Bilingue de JAKIRI,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EC1GSAD111232110,Lyce de NKAR,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EC1GSAD111264107,Lyce de SOB,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EC1GSAD111258113,Lyce de WAINAMAH,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EE1GSAD101858107,CES de KAI-KUMBO,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EE1GSAD102823115,CES de KINGOMEN,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EE1GSAD102349113,CES de MBVEH,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EE1GSAD102821115,CES de MELUF,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EE1GSBD112127107,Lyce Bilingue de KIKAIKOM,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EE1GSBD111458112,Lyce Bilingue de KIMBO,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EE1GSBD111664098,Lyce Bilingue de KUMBO,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EE1GSAD111163112,Lyce de KIKAIKELAKI,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EE1GSAD111698106,Lyce de KITIWUM,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EE1GSAD111279112,Lyce de KIYAN,NORD-OUEST,Nso,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EE1GSAD111527112,Lyce de MELIM,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EE1GSAD111238114,Lyce de SHISONG,NORD-OUEST,NSO CHIEFDOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EE1GSAD111252115,Lyce de TADU-KUMBO,NORD-OUEST,Nso,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EH1GSBD101283111,CES Bilingue de LIP,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EH1GSBD101517106,CES Bilingue de MBOHNSO,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EH1GSAD102822115,CES de KOVKI-MBIAME,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EH1GSAD111520106,Lyce de MBIAME,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EI1GSAD101202110,CES de BANTEN,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EI1GSAD101183111,CES de BUH,NORD-OUEST,Buh,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EI1GSAD101149106,CES de DZENG-NKUM,NORD-OUEST,DZENG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EI1GSAD101205110,CES de KIFEM-MBAM,NORD-OUEST,KIFEM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EI1GSAD101194108,CES de KUINTAR-MBAM,NORD-OUEST,MBAM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EI1GSAD101218110,CES de KUVLU,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EI1GSAD101180110,CES de NGENDZEN,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EI1GSBD111855101,Lyce Bilingue de TATUM,NORD-OUEST,TATUM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EI1GSAD111198113,Lyce de MAH,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EI1GSAD111191110,Lyce de NSEH,NORD-OUEST,NSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EJ1GSAD101136106,CES de DIN-NONI,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EJ1GSAD101139109,CES de LASSIN,NORD-OUEST,LASSIN,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EJ1GSAD102712114,CES de NGAI-DIN,NORD-OUEST,DIN,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EJ1GSAD101467110,CES de NGEPTANG-DIN,NORD-OUEST,DIN,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EJ1GSAD111463112,Lyce de LAFELE-DJOTTIN,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EJ1GSAD111524115,Lyce de MBINON-NONI,NORD-OUEST,NONI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EJ1GSAD111829101,Lyce de NKOR-NONI,NORD-OUEST,NKOR,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EK1GSAD102348113,CES d'ELUNG,NORD-OUEST,Oku,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EK1GSAD101174109,CES d'ICHIM,NORD-OUEST,ICHIM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EK1GSAD101530110,CES de MBOH-OKU,NORD-OUEST,OKU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EK1GSAD102301113,CES de NGEMSIBA I,NORD-OUEST,NGEMSIBA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EK1GSAD102811115,CES de NGVUINKEI I,NORD-OUEST,OKU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EK1GSAD102143110,CES de TANKIY-OKU,NORD-OUEST,OKU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EK1GSBD111177114,Lyce Bilingue de LANG-OKU,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EK1GSBD101158110,Lyce Bilingue de LUI-OKU,NORD-OUEST,LUI-OKU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EK1GSBD111659109,Lyce Bilingue de TOLON,NORD-OUEST,JIKEJEM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EK1GSAD111661097,Lyce d'ELAK-OKU,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EK1GSAD111485110,Lyce d'IBAL-OKU,NORD-OUEST,Ibal-Oku,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EK1GSAD111493114,Lyce de JIYANE-OKU,NORD-OUEST,OKU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EK1GSAD111505113,Lyce de MBAM-OKU,NORD-OUEST,OKU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3EK1GSAD111477113,Lyce de SIMONKOV,NORD-OUEST,SIMONKOV,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HC1GSAD101835111,CES d'AKWAJA,NORD-OUEST,AKWAJA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HC1GSAD102812115,CES d'ASSA,NORD-OUEST,Assa,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HC1GSAD101368110,CES de BUKU,NORD-OUEST,BUKU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HC1GSAD101511109,CES de DUMBO-BERABE,NORD-OUEST,BERABE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HC1GSAD101404106,CES de KUTA,NORD-OUEST,KUTA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HC1GSAD101406109,CES de MBANDE,NORD-OUEST,MBANDE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HC1GSAD101394111,CES de NZIBIE,NORD-OUEST,BERABE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HC1GSBD111696115,Lyce Bilingue d'AKO,NORD-OUEST,AKO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HE1GSAD100880110,CES d'AKWETO,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HE1GSAD103161118,CES de KAMINE,NORD-OUEST,KAMINE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HE1GSAD102716114,CES de SABONGIDA,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HE1GSBD111525111,Lyce Bilingue de MISAJE,NORD-OUEST,MISEJE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HE1GSAD111088114,Lyce de CHUNGHE,NORD-OUEST,CHUNGHE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HE1GSAD111693114,Lyce de DUMBU,NORD-OUEST,DUMBU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HH1GSAD101716104,CES de MBAWRONG,NORD-OUEST,Njirong,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HH1GSAD101528109,CES de NJILAH,NORD-OUEST,NJILAH,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HH1GSAD102819115,CES de NTABA,NORD-OUEST,SOP,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HH1GSAD101710108,CES de NTAMRUH,NORD-OUEST,NDU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HH1GSAD101409112,CES de NTUNDIP,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HH1GSBD110840107,Lyce Bilingue de NDU,NORD-OUEST,NDU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HH1GSAD111721113,Lyce de KAKAR,NORD-OUEST,KAKAR,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HH1GSAD111522115,Lyce de MBIPLAH,NORD-OUEST,NDU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HH1GSAD110038107,Lyce de NTUMBAW,NORD-OUEST,NTUMBAW,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HH1GSAD110922110,Lyce de TAKU,NORD-OUEST,TAKU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HH1GSAD110047111,Lyce de TALLA,NORD-OUEST,TALLA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HI1GSAD100107110,CES de BINSHUA,NORD-OUEST,NKAMBE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HI1GSAD102820115,CES de KUNGI,NORD-OUEST,KUNGI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HI1GSAD100901110,CES de NYANJI-NKAMBE,NORD-OUEST,NKAMBE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HI1GSBD111725098,Lyce Bilingue de NKAMBE,NORD-OUEST,NKAMBE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HI1GSAD110936112,Lyce de BINKA,NORD-OUEST,BINKA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HI1GSAD110872111,Lyce de MBU-WAAR,NORD-OUEST,WAT,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HI1GSAD110855109,Lyce de TABENKEN,NORD-OUEST,TABENKEN,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HJ1GSAD100818108,CES de DZEMBUCK,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HJ1GSAD100890111,CES de GOM,NORD-OUEST,GOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HJ1GSAD101730110,CES de MBUHGOM-ROM,NORD-OUEST,ROM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HJ1GSAD101296111,CES de NTEM,NORD-OUEST,NTEM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HJ1GSAD101092109,CES de NTONG,NORD-OUEST,ABAAR,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HJ1GSAD101642106,CES de SIH,NORD-OUEST,SIH,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HJ1GSAD102818115,CES de YANG (Nwa),NORD-OUEST,YANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HJ1GSAD111314112,Lyce de KOM-MFUMTE,NORD-OUEST,KOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HJ1GSAD111298112,Lyce de LUS,NORD-OUEST,LUS,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HJ1GSAD111817092,Lyce de NWA,NORD-OUEST,NWA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3HJ1GSAD111286111,Lyce de SABONGARI (Nwa),NORD-OUEST,NGOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3IC1GSAD101719111,CES d'AKANG,NORD-OUEST,MMEM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3IC1GSAD101373110,CES d'ISE,NORD-OUEST,MMEN,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3IC1GSAD102350113,CES de BEKULANG,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3IC1GSAD101518110,CES de KUK,NORD-OUEST,Kuk,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3IC1GSAD101770110,CES LOWER FUNGOM AT ABAR,NORD-OUEST,ABAAR,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3IC1GSAD112012106,Lyce d'ESU,NORD-OUEST,ESU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3IC1GSAD112023100,Lyce de BAFMENG,NORD-OUEST,BAFMENG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3IC1GSAD111763111,Lyce de WEH,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3IC1GSAD111765111,Lyce de ZHOA,NORD-OUEST,ZHOA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3IE1GSAD100847111,CES d'UPKWACK-AKUM,NORD-OUEST,AKUM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3IE1GSAD110146112,Lyce de FURU-AWA,NORD-OUEST,FURUAWA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3IH1GSAD100128108,CES de BAWORO,NORD-OUEST,BAWORO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3IH1GSAD100025109,CES de MBAMBA,NORD-OUEST,MBAMBA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3IH1GSAD100798110,CES de MODELLE,NORD-OUEST,MODELLE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3IH1GSAD110927114,Lyce de BEFANG,NORD-OUEST,BEFANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3IH1GSAD111972103,Lyce de BENAKUMA,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3II1GSAD100801111,CES d'UPKWA,NORD-OUEST,UPKWA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3II1GSAD101044107,CES de BANGWE,NORD-OUEST,BANGWE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3II1GSAD101510108,CES de BU,NORD-OUEST,BU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3II1GSBD110879103,Lyce Bilingue de WUM,NORD-OUEST,GHEDZE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3II1GSAD112453091,Lyce Classique de WUM,NORD-OUEST,AGHEM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JC1GSBD100012111,CES Bilingue de BAWUM,NORD-OUEST,BAFUT,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JC1GSBD101037109,CES Bilingue de MANKWI,NORD-OUEST,MANKWI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JC1GSAD101751111,CES d'AKOFUNGUBA,NORD-OUEST,BAFUT,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JC1GSAD101747112,CES de NCHUM,NORD-OUEST,Nchum,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JC1GSAD111072115,Lyce d'AGYATI,NORD-OUEST,BAFUT,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JC1GSAD111051110,Lyce d'OBANG,NORD-OUEST,OBANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JC1GSAD110230098,Lyce de BAFUT,NORD-OUEST,BAFUT,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JC1GSAD111111111,Lyce de MAMBU,NORD-OUEST,BAFUT,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JC1GSAD111056108,Lyce de MUNDUM,NORD-OUEST,BAFUT,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JE1GSAD100066112,CES de BOSSA,NORD-OUEST,0,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JE1GSBD111110115,Lyce Bilingue d'ETOMA,NORD-OUEST,Bali,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JE1GSBD111754108,Lyce Bilingue de BALI,NORD-OUEST,BALI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JE1GSBD111041113,Lyce Bilingue de BAWOCK,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JH1GSAD102925114,CES d'ABANGOH-MENDANKWE,NORD-OUEST,Bamenda Nkwen,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JH1GSAD101062112,CES de BANGSHIE,NORD-OUEST,BDAKWE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JH1GSBD112147098,Lyce Bilingue de BAMENDANKWE,NORD-OUEST,BAMENDANKWE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JI1GSBD102724114,CES Bilingue de NGOMGHAM,NORD-OUEST,MANKON,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JI1GSAD102926114,CES d'ALAHNKI-MANKON,NORD-OUEST,MANKON,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JI1GSAD102991117,CES de MULANG,NORD-OUEST,MANKON,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JI1GSBD112079095,Lyce Bilingue de BAMENDA,NORD-OUEST,Mankon,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JI1GSBD111067105,Lyce Bilingue de BAMENDA-DOWN-TOWN,NORD-OUEST,MANKON,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JI1GSBD112001096,Lyce Bilingue de BAMENDA-MBATU,NORD-OUEST,MBATU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JI1GSBD112041110,Lyce Bilingue de MANKON,NORD-OUEST,MANKON,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JI1GSBD110712113,Lyce Bilingue de NITOB,NORD-OUEST,MANKON,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JI1GSAD111214113,Lyce de NEKWEHNE-NSONGWA,NORD-OUEST,NSONGWA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JJ1GSBD112048108,Lyce Bilingue d'ATIELA,NORD-OUEST,Nkwen,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JJ1GSBD111020113,Lyce Bilingue de BAYELLE-NKWEN,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JK1GSAD101027109,CES d'ALATENING,NORD-OUEST,ALATENING,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JK1GSAD101418112,CES d'AWING,NORD-OUEST,AWING,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JK1GSAD102730114,CES de MBENDJOM,NORD-OUEST,AWING,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JK1GSAD100251110,CES de NJONG,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JK1GSBD110215102,Lyce Bilingue de SANTA,NORD-OUEST,MBEI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JK1GSAD110210106,Lyce d'AKUM,NORD-OUEST,AKUM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JK1GSAD111414114,Lyce de BALIGHAM-VILLAGE,NORD-OUEST,BALIGHAM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JK1GSAD111430115,Lyce de BUCHI,NORD-OUEST,BUCHI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JK1GSAD110785109,Lyce de CHOUBOU-MBU,NORD-OUEST,MBU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JK1GSAD110689099,Lyce de KWANG-PINYIN,NORD-OUEST,PINYIN,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JK1GSAD111427114,Lyce de MENKA,NORD-OUEST,MENKA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JK1GSAD110076101,Lyce de MEWUNGNE-AWING,NORD-OUEST,AWING,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JK1GSAD111424114,Lyce de NDAPANG,NORD-OUEST,NDAPANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JL1GSAD111847062,C.C.A.S.T. de BAMBILI,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JL1GSBD100703111,CES Bilingue de SABGA,NORD-OUEST,SABGA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JL1GSBD101421111,CES Bilingue de TECHU-KEDJOM-KETINGUH,NORD-OUEST,KEDJOM -KETINGOH,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JL1GSAD102347113,CES de BAFORKUM-BAMBUI,NORD-OUEST,BAFORKUM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JL1GSAD111883110,Lyce de KEDJOM-KEKU,NORD-OUEST,KEDJOM-KEKU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JL1GSAD111842109,Lyce de KEDJOM-KETINGUH,NORD-OUEST,BABAKI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3JL1GSAD110824114,Lyce de MACHA-BAMBUI,NORD-OUEST,BAMBUI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KC1GSAD101727107,CES d'ANONG,NORD-OUEST,ANONG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KC1GSAD102059104,CES de KURUBEI,NORD-OUEST,KURUBEI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KC1GSBD111436114,Lyce Bilingue de BATIBO-NJIFAH,NORD-OUEST,Batibo,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KC1GSBD111735112,Lyce Bilingue de WUMUNDENG,NORD-OUEST,Ashong,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KC1GSAD111081115,Lyce d'ANGIE,NORD-OUEST,ANGIE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KC1GSAD111331109,Lyce d'ASHONG,NORD-OUEST,ASHONG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KC1GSAD111682104,Lyce d'ENYOH,NORD-OUEST,ENYOH,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KC1GSAD111743109,Lyce d'EWOH,NORD-OUEST,EWOH,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KC1GSAD111515111,Lyce d'OGIM,NORD-OUEST,EFAH/KUGWE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KC1GSAD111866092,Lyce de BATIBO,NORD-OUEST,Batibo,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KC1GSAD111235112,Lyce de BESSI-AWUM,NORD-OUEST,BESSI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KC1GSAD110904111,Lyce de GUZANG,NORD-OUEST,GUZANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KC1GSAD111740109,Lyce de NGYEN-MUWAH,NORD-OUEST,NGYENMUWAH,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KE1GSAD101746108,CES de BOME,NORD-OUEST,FUNAM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KE1GSAD101736106,CES de GUNEKU,NORD-OUEST,GUNEKU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KE1GSAD101438109,CES de MBENGWI-RURAL,NORD-OUEST,MBENGWI RURAL,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KE1GSAD101733112,CES de NGAMUNGUH,NORD-OUEST,NGAMINUGUH,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KE1GSAD100974111,CES de NJAAH,NORD-OUEST,NJAAH,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KE1GSAD100004107,CES de NJINDOM,NORD-OUEST,NJINDOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KE1GSBD112223095,Lyce Bilingue de MBENGWI,NORD-OUEST,MBENGWI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KE1GSAD110046110,Lyce de TUDIG,NORD-OUEST,TUDIG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KH1GSBD100156112,CES Bilingue d'ABEBUNG,NORD-OUEST,ABEBUNG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KH1GSBD102817115,CES Bilingue de TEZE-NGIE,NORD-OUEST,TEZE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KH1GSAD100074109,CES d'AJEI,NORD-OUEST,AJEI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KH1GSAD100613110,CES d'AZEM,NORD-OUEST,AZEM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KH1GSAD100605106,CES de TINETCHUNG-VILLAGE,NORD-OUEST,TINETCHUNG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KH1GSAD112029099,Lyce d'ANDEK-NGIE,NORD-OUEST,ANDEK,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KI1GSAD100949110,CES de BASSA,NORD-OUEST,BASSA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KI1GSAD101580109,CES de KONDA,NORD-OUEST,KONDA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KI1GSAD101568110,CES de NGWO,NORD-OUEST,NGWO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KI1GSAD110168111,Lyce d'OSHIE,NORD-OUEST,OSHIE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KI1GSAD111986091,Lyce de NJIKWA,NORD-OUEST,NJIKWA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KJ1GSAD100946098,CES d'AKANUNKU-MENKA,NORD-OUEST,AKANUNKU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KJ1GSAD100911109,CES d'EKA,NORD-OUEST,AMBELE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KJ1GSAD101563109,CES d'OLORUNTI,NORD-OUEST,Ambele,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KJ1GSAD111572113,Lyce de BIFANG,NORD-OUEST,WIDIKUM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3KJ1GSAD111756100,Lyce de WIDIKUM,NORD-OUEST,ABEGUM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LC1GSBD102299113,CES Bilingue de MAMBIM,NORD-OUEST,BABESSI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LC1GSAD102740114,CES de FONGOH,NORD-OUEST,Bangolan,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LC1GSAD102320113,CES de KAKETULOH-WUSHI,NORD-OUEST,BBABESSI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LC1GSAD102307113,CES de KEFEUNG,NORD-OUEST,BABA 1,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LC1GSAD102351113,CES de KOKIBUE,NORD-OUEST,BABESSI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LC1GSAD100201111,CES de MBINZU,NORD-OUEST,Babessi,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LC1GSAD101057111,CES de PAPIAKKUM,NORD-OUEST,PAPIAKKUM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LC1GSAD101030111,CES de VENGO,NORD-OUEST,BABUNGO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LC1GSBD112230107,Lyce Bilingue de BABESSI,NORD-OUEST,BABESSI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LC1GSBD110787112,Lyce Bilingue de BANGOLAN,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LC1GSAD111076107,Lyce de BABA I,NORD-OUEST,BABA I,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LC1GSAD111053111,Lyce de BABUNGO,NORD-OUEST,BABUNGO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LC1GSAD111032115,Lyce de VEMNGANG,NORD-OUEST,BABA I,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LE1GSAD101399112,CES de JOGURU,NORD-OUEST,BALIKUMBAT,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LE1GSAD102734114,CES de NJANUNG-BAFANJI,NORD-OUEST,BAFANJI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LE1GSAD101434110,CES de NYUGU-BACKYIT,NORD-OUEST,BALIKUMBAT,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LE1GSBD111377109,Lyce Bilingue de BAFANJI,NORD-OUEST,LUNG-LUE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LE1GSBD111060113,Lyce Bilingue de BALIKUMBAT,NORD-OUEST,BALIKUMBAT,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LE1GSAD111115098,Lyce de BALIKUMBAT,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LE1GSAD111045112,Lyce de BAMUNKUMBIT,NORD-OUEST,BALIKUMBAT,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LI1GSBD101125111,CES Bilingue de MBISSA-ISLAND,NORD-OUEST,BAMBALANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LC1GSAD100198110,CES de KOMUE,NORD-OUEST,BAMESSING,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LI1GSFD102744114,CES de MBELUE-BAMESSING,NORD-OUEST,BAMESSING,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LI1GSAD102305113,CES de MIGHANG-BAMBALANG,NORD-OUEST,BAMBALANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LI1GSAD102324113,CES de NTENKON-BAMUNKA,NORD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LI1GSBD111432111,Lyce Bilingue de BAMALI-NDOP,NORD-OUEST,BAMALI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LI1GSBD110989104,Lyce Bilingue de BAMESSING-NDOP,NORD-OUEST,BAMESSING,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LI1GSBD111342114,Lyce Bilingue de MBANKUONG,NORD-OUEST,BAMBALANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LI1GSBD111017113,Lyce Bilingue de MBEUNKONG,NORD-OUEST,BAMUNKA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LI1GSBD111760095,Lyce Bilingue de NDOP,NORD-OUEST,BAMUNKA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LI1GSAD110996106,Lyce de BAMBALANG,NORD-OUEST,Bambalang,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+3LI1GSAD111104115,Lyce de BAMUNKA-RURAL,NORD-OUEST,BAMUNKA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CC1GSAD100908103,CES de BWIYUKU-BUEA,SUD-OUEST,BWIYUKU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CC1GSAD102731114,CES de DIBANDA,SUD-OUEST,DIBANDA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CC1GSAD100502113,CES de LIONGO,SUD-OUEST,LIONGO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CC1GSAD100849111,CES de WOKEKA,SUD-OUEST,Wokeka,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CC1GSBD111860071,Lyce Bilingue de MOLYKO-BUEA,SUD-OUEST,MOLYKO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CC1GSBD110152111,Lyce Bilingue de MUEA-BUEA,SUD-OUEST,MUEA COURT AREA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CC1GSAD110903114,Lyce de BOLIFAMBA-MILE 16,SUD-OUEST,KUMBO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CC1GSAD110829118,Lyce de BOMAKA-BUEA,SUD-OUEST,BOMAKA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CC1GSAD110371105,Lyce de BONJONGO-BUEA,SUD-OUEST,Bojoke,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CC1GSAD110406096,Lyce de BUEA,SUD-OUEST,LIKOKO MEMBEA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CC1GSAD110449111,Lyce de BUEA-RURAL,SUD-OUEST,BOKOVA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CC1GSAD111844112,Lyce de BUEA-TOWN,SUD-OUEST,BUEA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CC1GSAD110858118,Lyce de GREAT-SOPPO-BUEA,SUD-OUEST,GREAT SOPPO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CE1GSAD101935112,CES de MABETA,SUD-OUEST,DIKOLO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CE1GSBD110461092,Lyce Bilingue de LIMBE,SUD-OUEST,LIMBE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CE1GSAD110041107,Lyce de BATOKE,SUD-OUEST,BATOK,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CE1GSAD110479113,Lyce de BONADIKOMBO-MILE 4,SUD-OUEST,BONADIKOMBO MILE 4,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CE1GSAD111852082,Lyce de LIMBE,SUD-OUEST,LIMBE 1,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CE1GSAD110491113,Lyce de MBONJO-LIMBE,SUD-OUEST,LIMBE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CH1GSAD100386113,CES d'OWE-ROAD,SUD-OUEST,OWE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CH1GSBD110428090,Lyce Bilingue de MUYUKA,SUD-OUEST,Muyuka,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CH1GSAD112153110,Lyce d'EKONA,SUD-OUEST,EKONA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CH1GSAD110435109,Lyce de BAFIA-MUYUKA,SUD-OUEST,BALONG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CH1GSAD110020104,Lyce de MALENDE-MUYUKA,SUD-OUEST,MALENDE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CH1GSAD111948115,Lyce de MUNYENGE-MUYUKA,SUD-OUEST,MUNYENGE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CI1GSBD110681113,Lyce Bilingue de MUDEKA,SUD-OUEST,Mudeka,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CI1GSBD110440106,Lyce Bilingue de MUTENGENE,SUD-OUEST,MUTENGENE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CI1GSBD110485100,Lyce Bilingue de TIKO,SUD-OUEST,LIKOMBA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CI1GSAD110140113,Lyce de MOTOMBOLOMBO,SUD-OUEST,TIKO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6CJ1GSAD110693107,Lyce d'IDENAU,SUD-OUEST,Idenau,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EC1GSBD102323113,CES Bilingue de MUANGWEKAN,SUD-OUEST,MUANGWEKAN,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EH1GSBD101832104,CES Bilingue de NDOM-MUASUNDEM,SUD-OUEST,NDOM-MUASUNDEM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EC1GSAD101679110,CES d'EKANJOH-BAJOH,SUD-OUEST,BANGEM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EC1GSAD101171110,CES de MUABI,SUD-OUEST,MUABI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EC1GSAD101668097,CES de MUEBA-NNINONG,SUD-OUEST,MUEBAH,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EC1GSAD102310113,CES de NDIBSI,SUD-OUEST,NDIBSE I,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EC1GSBD112054098,Lyce Bilingue de BANGEM,SUD-OUEST,BANGEM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EC1GSBD112075108,Lyce Bilingue de MUAMBONG,SUD-OUEST,Muambong,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EE1GSAD101987097,CES d'ELUMBA-MBO,SUD-OUEST,ETODI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EE1GSAD102322113,CES de BABENSI I,SUD-OUEST,Babensi 1,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EE1GSAD101108107,CES de BERMIN,SUD-OUEST,BERMIN,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EE1GSAD101122108,CES de MANYEMEN,SUD-OUEST,Manyemen,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EE1GSAD102025108,CES de MBETTA,SUD-OUEST,MBETTA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EE1GSAD100822109,CES de NTALE,SUD-OUEST,Ntale,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EE1GSBD110678115,Lyce Bilingue de NGUTI,SUD-OUEST,NGUTI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EE1GSAD110614107,Lyce de NJUNGO,SUD-OUEST,NJUNGO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EH1GSBD100725108,CES Bilingue de BUBA,SUD-OUEST,Buba,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EH1GSAD100713107,CES d'ETAM,SUD-OUEST,ETAM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EH1GSAD102813115,CES de NGOBENYOE,SUD-OUEST,0,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EH1GSAD100608097,CES de NYANDONG,SUD-OUEST,NYANDONG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EH1GSBD110147103,Lyce Bilingue de TOMBEL,SUD-OUEST,NGAB,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EH1GSAD110467109,Lyce d'EBONJI,SUD-OUEST,Ebonji,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EH1GSAD110411112,Lyce de NGUSI,SUD-OUEST,NGUSI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6EH1GSAD110026092,Lyce de NYASOSO,SUD-OUEST,NYASOSO II,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HC1GSBD101117109,CES Bilingue d'EMOLAH-NWANGONG,SUD-OUEST,NWANGONG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HC1GSBD101103107,CES Bilingue de MBELENKA,SUD-OUEST,M'MUOCK NGIE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HC1GSAD102735114,CES d'EFONG,SUD-OUEST,LEWOH,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HC1GSAD102225113,CES de NDUMBIN-NDUNGATED,SUD-OUEST,NDUNGATED,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HC1GSBD111197114,Lyce Bilingue d'ALOU,SUD-OUEST,NDUNGATED,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HC1GSBD111123111,Lyce Bilingue de NDUNG-NWA,SUD-OUEST,Nwasah,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HC1GSAD110674108,Lyce d'ANYA-LEWOH,SUD-OUEST,LEWOH,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HC1GSAD110706107,Lyce de M'MUOCK,SUD-OUEST,Fossimondi,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HC1GSAD112184114,Lyce de M'MUOCK-MBIE,SUD-OUEST,Mmuockmbie,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HE1GSBD100649106,CES Bilingue d'ATULIA,SUD-OUEST,LEBANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HE1GSAD100602108,CES de LEBUH-MBI-FOSSUNG,SUD-OUEST,FOSSUNG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HE1GSBD111918110,Lyce Bilingue de FONTEM,SUD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HE1GSAD112063107,Lyce Classique de FONTEM,SUD-OUEST,FONTEM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HE1GSAD110488110,Lyce de NGOH-ESSOH-ATTAH,SUD-OUEST,ESSOH-ATTAH,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HH1GSAD100144111,CES de BECHATI,SUD-OUEST,BECHATI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HH1GSAD100481108,CES de M'MUOCK-LETEH,SUD-OUEST,Leteh,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HH1GSAD102461110,CES de NKONG,SUD-OUEST,NKONG FONDOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HH1GSAD110553113,Lyce de BANTENG,SUD-OUEST,BAHNE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HH1GSAD110475108,Lyce de BESALI,SUD-OUEST,BESALI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HH1GSAD110671114,Lyce de MAGHA,SUD-OUEST,BAMUMBU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6HH1GSAD110021107,Lyce de MUNDANI-WABANE,SUD-OUEST,BAMUMBU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IC1GSAD101926107,CES d'AKWA-AKWAYA,SUD-OUEST,AKWA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IC1GSAD101091099,CES de BACHE,SUD-OUEST,AKWAYA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IC1GSAD101087106,CES de BALLIN,SUD-OUEST,BALLIN,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IC1GSAD102292113,CES de BANGTAKPA,SUD-OUEST,3RD CLASS BANTAKPA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IC1GSAD102130104,CES de BODAM,SUD-OUEST,3RD CLASS BODAM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IC1GSAD102246113,CES de TAKAMANDA,SUD-OUEST,TAKAMANDA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IC1GSAD111824107,Lyce d'AKWAYA,SUD-OUEST,AKWAYA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IC1GSAD111360111,Lyce de KAJIFU,SUD-OUEST,3RD CLASS KAJIFU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IE1GSBD101648109,CES Bilingue d'OKOROBA,SUD-OUEST,OKOROBA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IEGSBD102697114,CES Bilingue de NTENAKO,SUD-OUEST,NTENAKO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IE1GSAD102252113,CES d'ABAT,SUD-OUEST,ABAT,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IE1GSAD100116113,CES d'AKAK,SUD-OUEST,AKAK,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IE1GSAD101162108,CES d'AYUKABA,SUD-OUEST,AYUKABA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IE1GSAD101157110,CES d'EKOK,SUD-OUEST,3RD CLASS CHIEFDOM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IE1GSAD102293113,CES d'OTU,SUD-OUEST,OTU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IE1GSAD101169112,CES de BABI,SUD-OUEST,BABI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IE1GSAD101838102,CES de BAKOGO,SUD-OUEST,BAKOGO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IC1GSAD101210108,CES de BATABI-BALU,SUD-OUEST,BATIBI-BALU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IE1GSAD101848112,CES de MFUNI,SUD-OUEST,MFUNI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IE1GSBD112050098,Lyce Bilingue d'EYUMOJOCK,SUD-OUEST,EYUMOJOCK,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IE1GSAD111651113,Lyce d'AFAB,SUD-OUEST,AFAB,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IE1GSAD111994107,Lyce d'OSSING,SUD-OUEST,OSSING,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IE1GSAD112042099,Lyce de KEMBONG,SUD-OUEST,KEMBONG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IH1GSAD101112112,CES d'EGBEKAW,SUD-OUEST,3RD CLASS Mamfe,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IH1GSAD101034110,CES d'ESHOBI,SUD-OUEST,ESHOBI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IH1GSBD111868099,Lyce Bilingue de MAMFE,SUD-OUEST,MAMFE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IH1GSAD111951107,Lyce de BACHUO-NTAI,SUD-OUEST,BACHUO NTAI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IH1GSAD111900076,Lyce de MAMFE,SUD-OUEST,MAMFE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6IH1GSAD111023115,Lyce de NCHANG,SUD-OUEST,NCHANG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6II1GSBD100656110,CES Bilingue de BAKEBE,SUD-OUEST,BAKEBE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6II1GSAD100652110,CES d'AKATATI-TALI II,SUD-OUEST,TALI II,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6II1GSAD101878112,CES d'AYUKABA-BETIEKU,SUD-OUEST,3RD CLASS AYUKABA-BETIEKU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6II1GSAD100520106,CES d'EBEAGWA,SUD-OUEST,EBEAGWA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6II1GSAD101957104,CES de MBINJONG,SUD-OUEST,MBINJONG,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6II1GSAD100628108,CES de MFAITOK-1A,SUD-OUEST,3RD CLASS MFAITOK-IA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6II1GSAD100138111,CES de NCHEMBA II,SUD-OUEST,NCHEMBA II,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6II1GSAD100100109,CES de NYENEBA,SUD-OUEST,NYENEBA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6II1GSAD100500109,CES de SABES,SUD-OUEST,SABES,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6II1GSAD100523109,CES de SUMBE,SUD-OUEST,SUMBE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6II1GSAD110050112,Lyce de KENDEM,SUD-OUEST,KENDEM,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6II1GSAD110027099,Lyce de TINTO,SUD-OUEST,TINTO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JC1GSAD101712112,CES d'EDIKI-BEKOLI,SUD-OUEST,KONYE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JC1GSAD102431109,CES d'IBEMI,SUD-OUEST,IBEMI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JC1GSAD102435110,CES d'ILLEH-LOBANGE,SUD-OUEST,Konye,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JC1GSAD100584111,CES de BADUMA,SUD-OUEST,BADUMA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JC1GSAD100539108,CES de KOBA,SUD-OUEST,KOBA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JC1GSAD100559107,CES de MBAKWA-SUPE,SUD-OUEST,MBAKWA SUPE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JC1GSAD100470112,CES de WONE,SUD-OUEST,KONYE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JC1GSAD110597115,Lyce de DIONGO,SUD-OUEST,Diongo,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JC1GSAD110418103,Lyce de KONYE,SUD-OUEST,KONYE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JC1GSAD110110113,Lyce de MATOH,SUD-OUEST,MATOH,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JE1GSBD111888105,Lyce Bilingue de KUMBA,SUD-OUEST,KUMBA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JE1GSAD111961108,Lyce de KAKE,SUD-OUEST,KAKE I,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JI1GSAD111737113,Lyce de KUMBA-MBENG,SUD-OUEST,BAFAW,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JE1GSAD110465113,Lyce de NKAMLIKUM,SUD-OUEST,BAFAW,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JH1GSAD100457111,CES de FIANGO,SUD-OUEST,EKEMBA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JH1GSBD110473109,Lyce Bilingue de KOSALA,SUD-OUEST,Kosala,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JI1GSAD111818082,C.C.A.S. de KUMBA,SUD-OUEST,3RD CLASS,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JI1GSAD101744111,CES de KANG-BAROMBI,SUD-OUEST,BAROMBI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JI1GSBD112035111,Lyce Bilingue de MAMBANDA-KUMBA,SUD-OUEST,MAMBANDA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JI1GSAD111732112,Lyce de MALENDE-KUMBA,SUD-OUEST,MALENDE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSBD102714114,CES Bilingue de BEKONDO,SUD-OUEST,BEKONDO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD100889110,CES de BAI-KUKE,SUD-OUEST,MBONGE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD100955110,CES de BAI-MANYA,SUD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD100817110,CES de BAI-PANYA,SUD-OUEST,BAI-KUKE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD100881110,CES de BAKUMBA,SUD-OUEST,Bakumba,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD100884109,CES de BIG-BUTU,SUD-OUEST,BIG BUTU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD101863104,CES de BIG-NGANJO,SUD-OUEST,BIG NGANJO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD100915110,CES de BOA-BAKUNDU,SUD-OUEST,MBONGE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD100828107,CES de BOKOSSO,SUD-OUEST,BOKOSSO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD100943110,CES de BOLE,SUD-OUEST,BOLE BAKUNDU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD100813110,CES de BOMBELE-MBONGE,SUD-OUEST,MBONGE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD100767106,CES de KOTTO-BAROMBI,SUD-OUEST,KOTTO BAROMBI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD101189110,CES de MARUMBA II,SUD-OUEST,MARUMBA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD100635111,CES de MBALANGI,SUD-OUEST,MBALANGI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD101906100,CES de NGWANDI,SUD-OUEST,NGWANDI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD100738109,CES de SMALL-EKOMBE,SUD-OUEST,SMALL EKOMBE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSBD110698115,Lyce Bilingue de BOMBE-BAKUNDU,SUD-OUEST,BOMBE-BAKUNDU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSBD110022111,Lyce Bilingue de MBONGE,SUD-OUEST,MBONGE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD111717113,Lyce d'EKOMBE-BONJI,SUD-OUEST,MBONGE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD110951115,Lyce de BANGA-BAKUNDU,SUD-OUEST,BANGA BAKUNDU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD111319111,Lyce de BEKONDO-MBONGE,SUD-OUEST,BEKONDO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD111892112,Lyce de FOE-BAKUNDU,SUD-OUEST,Foe Bakumdu,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6JJ1GSAD110423106,Lyce de KOMBONE-MBONGE,SUD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KC1GSAD101048110,CES de BEKUMU I,SUD-OUEST,Bamusso,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KE1GSAD110221108,Lyce de DIKOME-BALUE,SUD-OUEST,DIKUME BALUE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KE1GSAD101098110,CES de BETENGE-BALUE,SUD-OUEST,BETENGE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KE1GSAD100878106,CES de BONJI-BALUE,SUD-OUEST,BONJI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KE1GSAD100498109,CES de DIFENDA-BALUE,SUD-OUEST,BALUE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KH1GSAD102068109,CES de KUMBE-BALUE,SUD-OUEST,KUMBE-BALUE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KH1GSAD100871109,CES de BONGONGO I,SUD-OUEST,BONGONGO I,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KH1GSAD101304109,CES de FUNGE-BALOND,SUD-OUEST,BALONDO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KH1GSAD100042110,CES de KITA-BALUE,SUD-OUEST,LOWER BALUE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KH1GSAD100134112,CES de LOBE-ESTATE,SUD-OUEST,BALONDO -ESTATE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KH1GSAD100452110,CES de LOBE-TOWN,SUD-OUEST,BAKUNDU,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KH1GSBD111323098,Lyce Bilingue d'EKONDO-TITI,SUD-OUEST,BALONDO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KH1GSAD111327113,Lyce de BAFAKA-BALUE,SUD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KC1GSAD112106100,Lyce de BAMUSSO,SUD-OUEST,MBONGO BALONDO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KH1GSAD110400111,Lyce de BEKORA-BAROMBI,SUD-OUEST,BEKORA BAROMBI,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KH1GSAD110940107,Lyce de BISORO-BALUE,SUD-OUEST,BISSORO BALUE,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KI1GSAD100838109,CES d'IDABATO,SUD-OUEST,IDABATO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KJ1GSBD110661109,Lyce Bilingue d'ISANGUELE,SUD-OUEST,AMOTO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KK1GSAD102125110,CES de BARACKS,SUD-OUEST,BARRACKS,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KL1GSAD100513107,CES d'EKON II,SUD-OUEST,ERAD,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KL1GSAD100130107,CES de BULU-CAMP,SUD-OUEST,,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KL1GSAD100507103,CES de MEKA-NGOLO,SUD-OUEST,MEKA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KL1GSBD112466103,Lyce Bilingue de MUNDEMBA,SUD-OUEST,MANJA,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KM1GSAD100529110,CES de MADIE-NGOLO,SUD-OUEST,NGOLO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée
+6KM1GSAD100934098,CES de TOKO,SUD-OUEST,NGOLO,ready,,NEW_CANDIDATE,aucune correspondance production trouvée

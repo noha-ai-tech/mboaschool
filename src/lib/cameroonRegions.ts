@@ -73,3 +73,19 @@ export function getCameroonRegion(city: string | null | undefined): string | nul
   if (!city) return null;
   return CAMEROON_CITY_REGIONS[city.trim()] ?? null;
 }
+
+// Macro-zones produit (SPRINT Q) — navigation, filtres, statistiques
+// UNIQUEMENT. Jamais une valeur de `region` en base : Nord-Ouest et
+// Sud-Ouest (comme Adamaoua/Nord/Extrême-Nord) restent des régions
+// administratives canoniques distinctes. Un regroupement produit ne doit
+// jamais réécrire une donnée géographique réelle.
+export const GRAND_NORD = ["Adamaoua", "Nord", "Extrême-Nord"] as const;
+export const ZONE_ANGLOPHONE = ["Nord-Ouest", "Sud-Ouest"] as const;
+
+export function isInGrandNord(region: string | null | undefined): boolean {
+  return Boolean(region) && (GRAND_NORD as readonly string[]).includes(region!);
+}
+
+export function isInZoneAnglophone(region: string | null | undefined): boolean {
+  return Boolean(region) && (ZONE_ANGLOPHONE as readonly string[]).includes(region!);
+}

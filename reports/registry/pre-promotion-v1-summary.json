@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-08-18T03:34:29.867Z",
+  "timestamp": "2026-08-18T04:03:55.636Z",
   "project_ref": "umcwwynrftidytxgqkwi",
   "establishments_count": 1277,
-  "staging_count": 1251,
+  "staging_count": 1942,
   "approved_count": 556,
   "review_count": 6,
   "review_breakdown": {
@@ -14,5 +14,6 @@
     "MINESEC"
   ],
   "reconstructed_after_execution": true,
-  "reconciliation_date": "2026-08-18T03:36:58.642Z"
+  "reconciliation_date": "2026-08-18T03:36:58.642Z",
+  "note": "Champs establishments_count/staging_count ci-dessus recalculés en direct à chaque exécution de pre-promotion-snapshot.ts (dernière lecture : voir 'timestamp') — ce fichier ne représente donc plus un instantané figé du moment de la promotion P.3, mais l'état courant au moment de la dernière lecture. reconciliation_date reste la date de la réparation d'audit trail P.5 elle-même (556 liens staging->establishments), qui n'a pas changé."
 }

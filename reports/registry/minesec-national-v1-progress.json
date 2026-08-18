@@ -1,0 +1,87 @@
+{
+  "generated_at": "2026-08-18T04:03:35.667Z",
+  "operator": "jean-merlain",
+  "regions": [
+    {
+      "region": "Centre",
+      "staging": 345,
+      "live": 328
+    },
+    {
+      "region": "Littoral",
+      "staging": 149,
+      "live": 144
+    },
+    {
+      "region": "Ouest",
+      "staging": 251,
+      "live": 251
+    },
+    {
+      "region": "Adamaoua",
+      "staging": 96,
+      "live": 96
+    },
+    {
+      "region": "Nord",
+      "staging": 141,
+      "live": 141
+    },
+    {
+      "region": "Extrême-Nord",
+      "staging": 269,
+      "live": 269
+    },
+    {
+      "region": "Sud",
+      "staging": 135,
+      "live": 0
+    },
+    {
+      "region": "Est",
+      "staging": 108,
+      "live": 0
+    },
+    {
+      "region": "Nord-Ouest",
+      "staging": 264,
+      "live": 0
+    },
+    {
+      "region": "Sud-Ouest",
+      "staging": 184,
+      "live": 0
+    }
+  ],
+  "total_unique_minesec_staging": 1942,
+  "live_minesec_total": 1229,
+  "staging_total": 1942,
+  "promoted": 556,
+  "ready": 707,
+  "duplicate_exact": 673,
+  "duplicate_review": 6,
+  "macro_zones": {
+    "grand_nord": {
+      "regions": [
+        "Adamaoua",
+        "Nord",
+        "Extrême-Nord"
+      ],
+      "staging": 506,
+      "live": 506
+    },
+    "zone_anglophone": {
+      "regions": [
+        "Nord-Ouest",
+        "Sud-Ouest"
+      ],
+      "staging": 448,
+      "live": 0
+    }
+  },
+  "quality": {
+    "official_id_coverage_staging": "1941/1942",
+    "region_coverage": "10/10"
+  },
+  "known_data_quality_issue": "ATTENTION — data quality pré-existante (non causée par SPRINT Q, non corrigée ici — modifier les 1277 établissements live est interdit ce sprint) : certaines lignes establishments.region sont en casse brute (ex. \"CENTRE\") au lieu de la forme canonique (\"Centre\"). Agrégation ci-dessus faite en ignorant la casse pour un chiffre honnête ; la colonne elle-même reste incohérente en base."
+}

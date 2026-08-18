@@ -92,7 +92,22 @@ async function main() {
   };
 
   mkdirSync(join(rootDir, "reports", "registry"), { recursive: true });
-  writeFileSync(join(rootDir, "reports", "registry", "pre-promotion-v1-summary.json"), JSON.stringify(summary, null, 2), "utf-8");
+  const outPath = join(rootDir, "reports", "registry", "pre-promotion-v1-summary.json");
+  // Préserve les champs de provenance ajoutés par reconcile-promotion-p3.ts
+  // (SPRINT P.5) — ce script recalcule des comptages courants, jamais la
+  // trace de la réconciliation d'audit trail elle-même. Écraser ces champs
+  // silencieusement a déjà causé une régression (SPRINT P.6/Q).
+  let previous: Record<string, unknown> = {};
+  try {
+    previous = JSON.parse(readFileSync(outPath, "utf-8"));
+  } catch {
+    // absent au premier run, rien à préserver
+  }
+  const preserved =
+    "reconstructed_after_execution" in previous
+      ? { reconstructed_after_execution: previous.reconstructed_after_execution, reconciliation_date: previous.reconciliation_date }
+      : {};
+  writeFileSync(outPath, JSON.stringify({ ...summary, ...preserved }, null, 2), "utf-8");
 
   console.log(JSON.stringify(summary, null, 2));
 }
