@@ -69,7 +69,15 @@ export const CAMEROON_CITY_REGIONS: Record<string, string> = {
   "Muyuka": "Sud-Ouest",
 };
 
+import { normalizeForSearch } from "./textSearch";
+
+// Index normalisé (accents/casse indifférents) construit une seule fois —
+// "Douala", "douala", "DOUALA" doivent tous retrouver "Littoral".
+const NORMALIZED_CITY_REGIONS: Record<string, string> = Object.fromEntries(
+  Object.entries(CAMEROON_CITY_REGIONS).map(([city, region]) => [normalizeForSearch(city), region])
+);
+
 export function getCameroonRegion(city: string | null | undefined): string | null {
   if (!city) return null;
-  return CAMEROON_CITY_REGIONS[city.trim()] ?? null;
+  return NORMALIZED_CITY_REGIONS[normalizeForSearch(city)] ?? null;
 }

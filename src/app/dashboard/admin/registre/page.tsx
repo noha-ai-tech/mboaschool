@@ -22,6 +22,7 @@ import {
   HelpCircle,
   Loader2,
 } from "lucide-react";
+import { includesInsensitive, normalizeForSearch, dedupeInsensitive } from "@/lib/textSearch";
 
 type MatchType =
   | "EXISTING_OFFICIAL_ID"
@@ -172,16 +173,15 @@ export default function RegistreNationalPage() {
     () => classified.filter((c) => c.classification === "CLEAN_NEW_CANDIDATE" || c.classification === "NEW_CANDIDATE_REVIEW_REQUIRED"),
     [classified]
   );
-  const regions = useMemo(() => Array.from(new Set(newCandidates.map((c) => c.row.region).filter(Boolean))).sort() as string[], [newCandidates]);
-  const categories = useMemo(() => Array.from(new Set(newCandidates.map((c) => c.row.education_family).filter(Boolean))).sort() as string[], [newCandidates]);
+  const regions = useMemo(() => dedupeInsensitive(newCandidates.map((c) => c.row.region)), [newCandidates]);
+  const categories = useMemo(() => dedupeInsensitive(newCandidates.map((c) => c.row.education_family)), [newCandidates]);
 
   const filteredNewCandidates = useMemo(() => {
     return newCandidates.filter((c) => {
-      if (regionFilter !== "all" && c.row.region !== regionFilter) return false;
-      if (categoryFilter !== "all" && c.row.education_family !== categoryFilter) return false;
-      if (query) {
-        const q = query.toLowerCase();
-        if (!`${c.row.name_raw} ${c.row.official_identifier ?? ""} ${c.row.locality ?? ""}`.toLowerCase().includes(q)) return false;
+      if (regionFilter !== "all" && normalizeForSearch(c.row.region) !== normalizeForSearch(regionFilter)) return false;
+      if (categoryFilter !== "all" && normalizeForSearch(c.row.education_family) !== normalizeForSearch(categoryFilter)) return false;
+      if (query && !includesInsensitive(`${c.row.name_raw} ${c.row.official_identifier ?? ""} ${c.row.locality ?? ""}`, query)) {
+        return false;
       }
       return true;
     });

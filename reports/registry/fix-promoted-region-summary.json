@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-08-18T04:01:41.471Z",
+  "batch": "minesec-master-v1-promotion-p3",
+  "totalInBatch": 556,
+  "toFix": 109,
+  "fixed": 109,
+  "failed": 0,
+  "byRegion": {
+    "OUEST": 11,
+    "ADAMAOUA": 6,
+    "LITTORAL": 20,
+    "NORD": 21,
+    "EXTREME-NORD": 20,
+    "CENTRE": 31
+  }
+}

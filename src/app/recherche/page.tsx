@@ -24,6 +24,7 @@ import { supabase } from "@/lib/supabase";
 import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { categories } from "@/lib/categories";
+import { normalizeForSearch, includesInsensitive, dedupeInsensitive } from "@/lib/textSearch";
 
 const LocalSchoolMap = dynamic(() => import("@/components/LocalSchoolMap"), {
   ssr: false,
@@ -348,23 +349,23 @@ function RecherchePageInner() {
     });
   }
 
-  const cities = useMemo(
-    () => ["all", ...Array.from(new Set(schools.map((s) => s.city).filter((c) => c.trim().length > 0)))],
-    [schools]
-  );
+  // Dédoublonnage insensible à la casse/accents — "Douala", "douala",
+  // "DOUALA" comptent comme une seule ville dans le filtre.
+  const cities = useMemo(() => ["all", ...dedupeInsensitive(schools.map((s) => s.city))], [schools]);
 
   const mapCenter = userLocation ?? DEFAULT_CENTER;
 
   const filtered = schools.filter((s) => {
     if (activeCategory !== "all" && s.category !== activeCategory) return false;
-    if (city !== "all" && s.city !== city) return false;
+    // Comparaison insensible à la casse/accents — "Douala" sélectionné doit
+    // retrouver "DOUALA", "douala", etc.
+    if (city !== "all" && normalizeForSearch(s.city) !== normalizeForSearch(city)) return false;
     if (useLocation && userLocation) {
       if (!s.lat || !s.lng) return false;
       if (haversineKm(userLocation.lat, userLocation.lng, s.lat, s.lng) > Number(radius)) return false;
     }
-    if (query) {
-      const t = `${s.name} ${s.city} ${s.quartier} ${s.category} ${s.subcategory}`.toLowerCase();
-      if (!t.includes(query.toLowerCase())) return false;
+    if (query && !includesInsensitive(`${s.name} ${s.city} ${s.quartier} ${s.category} ${s.subcategory}`, query)) {
+      return false;
     }
     return true;
   });

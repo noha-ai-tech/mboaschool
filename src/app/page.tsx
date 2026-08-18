@@ -29,6 +29,7 @@ import { PartnerPlaceholder } from "@/components/landing/PartnerPlaceholder";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { getCameroonRegion } from "@/lib/cameroonRegions";
 import { categories } from "@/lib/categories";
+import { normalizeForSearch, dedupeInsensitive } from "@/lib/textSearch";
 
 // Photos réelles fournies pour le panneau Hero (déposées dans public/hero/).
 const HERO_PHOTOS: HeroPhoto[] = [
@@ -270,8 +271,10 @@ export default function HomePage() {
     router.push(qs ? `/recherche?${qs}` : "/recherche");
   }
 
+  // Dédoublonnage insensible à la casse/accents — "Douala", "douala",
+  // "DOUALA" comptent comme une seule ville dans le filtre.
   const cities = useMemo(
-    () => ["all", ...Array.from(new Set(schools.map((s) => s.city).filter((c) => c.trim().length > 0)))],
+    () => ["all", ...dedupeInsensitive(schools.map((s) => s.city))],
     [schools]
   );
 
