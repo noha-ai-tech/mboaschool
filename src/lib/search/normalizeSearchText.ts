@@ -44,6 +44,53 @@ export function searchWordVariants(word: string): readonly string[] {
   return extra ? [word, ...extra] : [word];
 }
 
+// SPRINT R.2-B §9 — variantes accentuées CONFIRMÉES par les cas d'usage
+// documentés (§9/§15/§45), pour la recherche CÔTÉ SERVEUR (PostgREST ILIKE
+// ne fait pas de repli d'accents — contrairement à normalizeSearchText() qui
+// compare deux chaînes déjà en mémoire côté client, une requête serveur doit
+// comparer le mot tapé à une colonne stockée AVEC ses accents d'origine).
+//
+// Portée volontairement bornée à des paires confirmées, pas un repli Unicode
+// général (qui nécessiterait l'extension Postgres `unaccent` — migration
+// préparée mais non exécutée, voir supabase/migrations/0020_search_v2_unaccent_rpc.sql
+// et REGISTRY_EXTRACTION_SAFETY §35 pour la même logique appliquée à ce
+// sprint : une migration additive est autorisée à être préparée, pas
+// nécessairement exécutée par cet agent — pas d'accès direct à la base au-delà
+// de PostgREST dans cet environnement). Étendre cette liste à la main au fur
+// et à mesure de nouveaux cas confirmés, jamais deviner un mot absent d'ici.
+const ACCENT_VARIANT_PAIRS: readonly (readonly [string, string])[] = [
+  ["ecole", "école"],
+  ["college", "collège"],
+  ["prive", "privé"],
+  ["superieur", "supérieur"],
+  ["yaounde", "yaoundé"],
+  ["ngaoundere", "ngaoundéré"],
+  ["edea", "edéa"],
+  ["kousseri", "kousséri"],
+  ["bangangte", "bangangté"],
+];
+const ACCENT_VARIANTS: ReadonlyMap<string, readonly string[]> = (() => {
+  const map = new Map<string, string[]>();
+  for (const [plain, accented] of ACCENT_VARIANT_PAIRS) {
+    map.set(plain, [plain, accented]);
+    map.set(accented, [plain, accented]);
+  }
+  return map;
+})();
+
+/**
+ * Toutes les formes connues d'un mot NORMALISÉ (déjà passé par
+ * normalizeSearchText, donc en minuscules sans accents) à utiliser pour
+ * construire une requête serveur (ILIKE OR) — combine l'alias lycée/lyce
+ * (§10) et les paires accentuées confirmées (§9/§15) ci-dessus. Le mot
+ * d'origine est toujours inclus.
+ */
+export function serverSearchWordForms(normalizedWord: string): readonly string[] {
+  const lyceeForms = searchWordVariants(normalizedWord);
+  const accentForms = ACCENT_VARIANTS.get(normalizedWord) ?? [normalizedWord];
+  return Array.from(new Set([...lyceeForms, ...accentForms]));
+}
+
 /**
  * Découpe une requête normalisée en mots, chacun étendu à ses variantes —
  * `wordsForQuery("lycée bafoussam")` -> [["lycee","lyce"], ["bafoussam"]].

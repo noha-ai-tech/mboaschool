@@ -1,30 +1,36 @@
 "use client";
 
 // Page de résultats / annuaire général (Landing V5, Sprint page-split).
-// Héberge la liste/carte/comparaison qui vivait auparavant directement sur
-// la landing (/) sous #resultats — déplacée ici pour que la page d'accueil
-// reste une vraie page de présentation (hero → catégories → à la une → CTA →
-// stats → partenaires → footer), sans scroll vers un bloc de résultats.
 //
-// Contenu et logique inchangés par rapport à l'ancien bloc de la landing :
-// mêmes champs Supabase, même filtrage, mêmes cartes "Non revendiquée" /
-// "Revendiquer cette page", même panneau de comparaison (max 3), même bascule
-// Liste/Carte. Seule différence : les filtres initiaux peuvent être fournis
-// par l'URL (q, categorie, ville, lat, lng, rayon) depuis le Hero de la
-// landing ou la recherche rapide du header.
+// SPRINT R.2-B — réécriture de la source de données : la page ne charge plus
+// jamais toute la table `establishments` au montage. Chaque changement de
+// filtre/page appelle /api/recherche avec page/page_size, qui retourne au
+// plus page_size lignes + un total_count exact (§3/§4). Le design des
+// cartes, le panneau de comparaison et la bascule Liste/Carte sont inchangés
+// (§29) — seule la source des données change.
+//
+// Portée volontairement réduite par rapport à l'ancienne page : la vue Carte
+// et le filtre géolocalisé "Près de moi" opèrent maintenant sur la PAGE de
+// résultats courante (≤ page_size établissements), pas sur la base entière —
+// une recherche par rayon réellement server-side (bounding box + distance en
+// base) sortirait du contrat §4 (q/region/city/category/page/page_size) et
+// n'est pas demandée par ce sprint. Documenté dans le rapport final R.2-B.
 
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Search, MapPin, Phone, CheckCircle2, ArrowRight, Scale, Heart, X, List, Map as MapIcon,
+  ChevronLeft, ChevronRight, AlertTriangle,
 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
 import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { categories } from "@/lib/categories";
-import { normalizeForSearch, includesInsensitive, dedupeInsensitive } from "@/lib/textSearch";
+import { MAJOR_CITIES } from "@/lib/cameroonMajorCities";
+import { CANONICAL_REGIONS } from "@/lib/cameroonRegions";
+import type { SchoolSearchResponse, SchoolSearchResult } from "@/lib/search/types";
+import { DEFAULT_PAGE_SIZE, MOBILE_PAGE_SIZE } from "@/lib/search/types";
 
 const LocalSchoolMap = dynamic(() => import("@/components/LocalSchoolMap"), {
   ssr: false,
@@ -36,8 +42,15 @@ const LocalSchoolMap = dynamic(() => import("@/components/LocalSchoolMap"), {
 });
 
 const DEFAULT_CENTER = { lat: 4.0511, lng: 9.7679 }; // Douala
+const REGION_OPTIONS = [
+  { value: "all", label: "Toutes les régions" },
+  { value: "grand-nord", label: "Grand Nord (Adamaoua, Nord, Extrême-Nord)" },
+  { value: "zone-anglophone", label: "Zone anglophone (Nord-Ouest, Sud-Ouest)" },
+  ...CANONICAL_REGIONS.map((r) => ({ value: r, label: r })),
+];
+const CITY_OPTIONS = ["all", ...MAJOR_CITIES.map((c) => c.name)];
 
-// ─── Data & Types (identiques à l'ancien bloc landing) ────────────────────────
+// ─── Data & Types ──────────────────────────────────────────────────────────
 
 type School = {
   id: string;
@@ -75,10 +88,10 @@ const INFRA_LABELS: Record<string, string> = {
   infirmary: "Infirmerie",
 };
 
-function transformSchool(raw: any): School {
+function transformSchool(raw: SchoolSearchResult): School {
   const infra = raw.infrastructures?.[0] ?? {};
-  const fee = raw.fees?.[0] ?? {};
-  const infrastructure = Object.entries(infra as Record<string, unknown>)
+  const fee = raw.fees?.[0] ?? { registration_fee: null, tuition_fee: null };
+  const infrastructure = Object.entries(infra)
     .filter(([key, val]) => val === true && key in INFRA_LABELS)
     .map(([key]) => INFRA_LABELS[key]);
 
@@ -125,7 +138,7 @@ function Money({ value }: { value: number }) {
   return <>{value.toLocaleString("fr-FR")} FCFA</>;
 }
 
-// ─── Sub-components ──────────────────────────────────────────────────────────
+// ─── Sub-components ────────────────────────────────────────────────────────
 
 function SchoolCard({
   school,
@@ -274,51 +287,125 @@ function SchoolCard({
   );
 }
 
-// ─── Page ────────────────────────────────────────────────────────────────────
+function Pagination({ page, totalPages, onChange }: { page: number; totalPages: number; onChange: (p: number) => void }) {
+  if (totalPages <= 1) return null;
+  return (
+    <nav aria-label="Pagination des résultats" className="flex items-center justify-center gap-2 mt-10">
+      <button
+        onClick={() => onChange(page - 1)}
+        disabled={page <= 1}
+        aria-label="Page précédente"
+        className="flex items-center justify-center w-9 h-9 rounded-lg border border-border bg-white text-slate-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-muted transition-colors"
+      >
+        <ChevronLeft size={16} />
+      </button>
+      <span className="text-sm font-semibold text-slate-600 px-2" aria-live="polite">
+        Page {page} / {totalPages}
+      </span>
+      <button
+        onClick={() => onChange(page + 1)}
+        disabled={page >= totalPages}
+        aria-label="Page suivante"
+        className="flex items-center justify-center w-9 h-9 rounded-lg border border-border bg-white text-slate-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-muted transition-colors"
+      >
+        <ChevronRight size={16} />
+      </button>
+    </nav>
+  );
+}
+
+// ─── Page ──────────────────────────────────────────────────────────────────
 
 function RecherchePageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [schools, setSchools] = useState<School[]>([]);
+  // §22-23 — état d'URL comme source de vérité pour q/region/city/category/page.
+  const urlQuery = searchParams.get("q") ?? "";
+  const urlRegion = searchParams.get("region") ?? "all";
+  const urlCity = searchParams.get("ville") ?? "all";
+  const urlCategory = searchParams.get("categorie") ?? "all";
+  const urlPage = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10) || 1);
+
+  // Champ texte local — débattu (§24) avant de répercuter dans l'URL/la requête.
+  const [queryInput, setQueryInput] = useState(urlQuery);
+  useEffect(() => setQueryInput(urlQuery), [urlQuery]);
+
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
+  useEffect(() => {
+    function applyPageSize() {
+      setPageSize(window.innerWidth < 768 ? MOBILE_PAGE_SIZE : DEFAULT_PAGE_SIZE);
+    }
+    applyPageSize();
+    window.addEventListener("resize", applyPageSize);
+    return () => window.removeEventListener("resize", applyPageSize);
+  }, []);
+
+  const [response, setResponse] = useState<SchoolSearchResponse | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState(searchParams.get("categorie") ?? "all");
-  const [query, setQuery] = useState(searchParams.get("q") ?? "");
-  const [city, setCity] = useState(searchParams.get("ville") ?? "all");
-  const initialLat = searchParams.get("lat");
-  const initialLng = searchParams.get("lng");
-  const [useLocation, setUseLocation] = useState(Boolean(initialLat && initialLng));
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(
-    initialLat && initialLng ? { lat: Number(initialLat), lng: Number(initialLng) } : null
-  );
-  const [radius, setRadius] = useState(searchParams.get("rayon") ?? "5");
+  const [errored, setErrored] = useState(false);
+
   const [compare, setCompare] = useState<string[]>([]);
-  const [view, setView] = useState<"liste" | "carte">(useLocation ? "carte" : "liste");
+  const [view, setView] = useState<"liste" | "carte">("liste");
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [useLocation, setUseLocation] = useState(false);
+  const [radius, setRadius] = useState("5");
   const [locating, setLocating] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function load() {
-      setLoading(true);
-      const { data } = await supabase
-        .from("establishments")
-        .select(`
-          id, name, main_category, sub_category,
-          city, quartier, neighborhood, phone,
-          cover_image_url, is_verified, is_claimed,
-          accepts_online_payment, is_featured,
-          couleur_primaire, couleur_secondaire, emoji_logo,
-          latitude, longitude,
-          fees(registration_fee, tuition_fee),
-          infrastructures(library, laboratory, computer_room, sports_field, canteen, transport, wifi, boarding, security, infirmary),
-          school_images(url)
-        `)
-        .order("is_featured", { ascending: false });
-      if (data) setSchools(data.map(transformSchool));
-      setLoading(false);
+  function updateParams(next: Record<string, string | null>) {
+    const params = new URLSearchParams(searchParams.toString());
+    for (const [key, value] of Object.entries(next)) {
+      if (!value || value === "all" || value === "") params.delete(key);
+      else params.set(key, value);
     }
-    load();
-  }, []);
+    // §23 — tout changement de filtre (hors page elle-même) revient à la page 1.
+    if (!("page" in next)) params.delete("page");
+    router.replace(`/recherche${params.toString() ? `?${params}` : ""}`);
+  }
+
+  // §24 — debounce texte : la frappe met à jour l'URL 350ms après la dernière touche.
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  function handleQueryChange(value: string) {
+    setQueryInput(value);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => updateParams({ q: value.trim() || null }), 350);
+  }
+
+  // §25 — protection contre les courses : seule la réponse de la DERNIÈRE requête émise est appliquée.
+  const requestIdRef = useRef(0);
+  const fetchResults = useCallback(() => {
+    const requestId = ++requestIdRef.current;
+    setLoading(true);
+    setErrored(false);
+
+    const params = new URLSearchParams();
+    if (urlQuery) params.set("q", urlQuery);
+    if (urlRegion !== "all") params.set("region", urlRegion);
+    if (urlCity !== "all") params.set("city", urlCity);
+    if (urlCategory !== "all") params.set("category", urlCategory);
+    params.set("page", String(urlPage));
+    params.set("page_size", String(pageSize));
+
+    fetch(`/api/recherche?${params.toString()}`)
+      .then(async (res) => {
+        if (requestId !== requestIdRef.current) return; // réponse obsolète — ignorée
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = (await res.json()) as SchoolSearchResponse;
+        setResponse(json);
+        setLoading(false);
+      })
+      .catch((error) => {
+        if (requestId !== requestIdRef.current) return;
+        console.error("[/recherche] fetch failed:", error);
+        setErrored(true);
+        setLoading(false);
+      });
+  }, [urlQuery, urlRegion, urlCity, urlCategory, urlPage, pageSize]);
+
+  useEffect(() => {
+    fetchResults();
+  }, [fetchResults]);
 
   function handleLocationToggle() {
     setLocationError(null);
@@ -349,47 +436,35 @@ function RecherchePageInner() {
     });
   }
 
-  // Dédoublonnage insensible à la casse/accents — "Douala", "douala",
-  // "DOUALA" comptent comme une seule ville dans le filtre.
-  const cities = useMemo(() => ["all", ...dedupeInsensitive(schools.map((s) => s.city))], [schools]);
+  const schools = useMemo(() => (response?.results ?? []).map(transformSchool), [response]);
+  const totalCount = response?.total_count ?? 0;
+  const totalPages = response?.total_pages ?? 0;
 
   const mapCenter = userLocation ?? DEFAULT_CENTER;
 
-  const filtered = schools.filter((s) => {
-    if (activeCategory !== "all" && s.category !== activeCategory) return false;
-    // Comparaison insensible à la casse/accents — "Douala" sélectionné doit
-    // retrouver "DOUALA", "douala", etc.
-    if (city !== "all" && normalizeForSearch(s.city) !== normalizeForSearch(city)) return false;
-    if (useLocation && userLocation) {
+  // "Près de moi" filtre la PAGE courante uniquement (§ note d'en-tête) — pas
+  // une recherche par rayon server-side, hors du contrat §4 de ce sprint.
+  const displayedSchools = useMemo(() => {
+    if (!useLocation || !userLocation) return schools;
+    return schools.filter((s) => {
       if (!s.lat || !s.lng) return false;
-      if (haversineKm(userLocation.lat, userLocation.lng, s.lat, s.lng) > Number(radius)) return false;
-    }
-    if (query && !includesInsensitive(`${s.name} ${s.city} ${s.quartier} ${s.category} ${s.subcategory}`, query)) {
-      return false;
-    }
-    return true;
-  });
+      return haversineKm(userLocation.lat, userLocation.lng, s.lat, s.lng) <= Number(radius);
+    });
+  }, [schools, useLocation, userLocation, radius]);
 
   const compareSchools = schools.filter((s) => compare.includes(s.id)).slice(0, 3);
 
   const mapSchools = useMemo(
-    () => filtered.filter((s): s is School & { lat: number; lng: number } => s.lat != null && s.lng != null),
-    [filtered]
+    () => displayedSchools.filter((s): s is School & { lat: number; lng: number } => s.lat != null && s.lng != null),
+    [displayedSchools]
   );
 
-  const groupedByCategory = useMemo(() => {
-    if (activeCategory !== "all") return null;
-    return categories
-      .map((cat) => ({ cat, items: filtered.filter((s) => s.category === cat.key).slice(0, 3) }))
-      .filter((group) => group.items.length > 0);
-  }, [filtered, activeCategory]);
-
-  function updateCategory(v: string) {
-    setActiveCategory(v);
+  function goToPage(p: number) {
+    if (p < 1 || (totalPages > 0 && p > totalPages)) return;
     const params = new URLSearchParams(searchParams.toString());
-    if (v === "all") params.delete("categorie");
-    else params.set("categorie", v);
-    router.replace(`/recherche?${params.toString()}`);
+    params.set("page", String(p));
+    router.push(`/recherche?${params.toString()}`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   return (
@@ -408,19 +483,23 @@ function RecherchePageInner() {
           <div className="flex items-center gap-2 bg-white border border-border rounded-[10px] px-3 h-10 flex-1 min-w-[220px] max-w-sm focus-within:border-primary transition-colors">
             <Search size={15} className="text-slate-400 shrink-0" />
             <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              value={queryInput}
+              onChange={(e) => handleQueryChange(e.target.value)}
               placeholder="Nom, ville, niveau…"
+              aria-label="Rechercher un établissement"
               className="bg-transparent outline-none text-sm flex-1 min-w-0 placeholder-slate-400"
             />
-            {query && (
-              <button onClick={() => setQuery("")} aria-label="Effacer"><X size={13} className="text-slate-400" /></button>
+            {queryInput && (
+              <button onClick={() => { setQueryInput(""); updateParams({ q: null }); }} aria-label="Effacer la recherche">
+                <X size={13} className="text-slate-400" />
+              </button>
             )}
           </div>
 
           <select
-            value={activeCategory}
-            onChange={(e) => updateCategory(e.target.value)}
+            value={urlCategory}
+            onChange={(e) => updateParams({ categorie: e.target.value })}
+            aria-label="Filtrer par catégorie"
             className="border border-border rounded-[10px] px-3 h-10 text-sm font-medium bg-white"
           >
             <option value="all">Toutes catégories</option>
@@ -430,11 +509,23 @@ function RecherchePageInner() {
           </select>
 
           <select
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
+            value={urlRegion}
+            onChange={(e) => updateParams({ region: e.target.value })}
+            aria-label="Filtrer par région"
             className="border border-border rounded-[10px] px-3 h-10 text-sm font-medium bg-white"
           >
-            {cities.map((c) => (
+            {REGION_OPTIONS.map((r) => (
+              <option key={r.value} value={r.value}>{r.label}</option>
+            ))}
+          </select>
+
+          <select
+            value={urlCity}
+            onChange={(e) => updateParams({ ville: e.target.value })}
+            aria-label="Filtrer par ville"
+            className="border border-border rounded-[10px] px-3 h-10 text-sm font-medium bg-white"
+          >
+            {CITY_OPTIONS.map((c) => (
               <option key={c} value={c}>{c === "all" ? "Toutes les villes" : c}</option>
             ))}
           </select>
@@ -448,27 +539,21 @@ function RecherchePageInner() {
             {locating ? "Localisation…" : "Près de moi"}
           </button>
 
-          {city !== "all" && (
-            <span className="flex items-center gap-2 px-3 py-2 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-semibold border border-emerald-200">
-              {city}
-              <button onClick={() => setCity("all")}><X size={13} /></button>
-            </span>
-          )}
-
           {useLocation && (
             <span className="flex items-center gap-2 px-3 py-2 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-semibold border border-emerald-200">
-              À moins de {radius} km
-              <button onClick={() => { setUseLocation(false); setUserLocation(null); }}><X size={13} /></button>
+              À moins de {radius} km (sur cette page)
+              <button onClick={() => { setUseLocation(false); setUserLocation(null); }} aria-label="Retirer le filtre de proximité"><X size={13} /></button>
             </span>
           )}
 
-          <span className="ml-auto text-sm text-slate-400 font-medium">
-            {loading ? "Chargement…" : <><span className="text-[#0a0a0a] font-bold">{filtered.length}</span> résultat{filtered.length !== 1 ? "s" : ""}</>}
+          <span className="ml-auto text-sm text-slate-400 font-medium" aria-live="polite">
+            {loading ? "Chargement…" : errored ? "" : <><span className="text-[#0a0a0a] font-bold">{totalCount}</span> résultat{totalCount !== 1 ? "s" : ""}</>}
           </span>
 
           <div className="flex items-center rounded-[10px] border border-border overflow-hidden shrink-0">
             <button
               onClick={() => setView("liste")}
+              aria-pressed={view === "liste"}
               className={`flex items-center gap-1.5 px-3 h-9 text-sm font-semibold transition-colors ${view === "liste" ? "bg-[#0A0A0A] text-white" : "bg-white text-slate-500 hover:text-[#0a0a0a]"}`}
             >
               <List size={14} />
@@ -476,6 +561,7 @@ function RecherchePageInner() {
             </button>
             <button
               onClick={() => setView("carte")}
+              aria-pressed={view === "carte"}
               className={`flex items-center gap-1.5 px-3 h-9 text-sm font-semibold border-l border-border transition-colors ${view === "carte" ? "bg-[#0A0A0A] text-white" : "bg-white text-slate-500 hover:text-[#0a0a0a]"}`}
             >
               <MapIcon size={14} />
@@ -493,14 +579,29 @@ function RecherchePageInner() {
           </div>
         )}
 
+        {/* §28 — erreur réseau/serveur distincte de "0 résultat" */}
+        {errored && (
+          <div className="py-20 text-center">
+            <AlertTriangle size={36} className="mx-auto text-red-300 mb-4" />
+            <h3 className="text-xl font-bold mb-2">Impossible de charger les résultats</h3>
+            <p className="text-slate-500 text-sm mb-4">Une erreur est survenue. Réessayez dans un instant.</p>
+            <button
+              onClick={() => fetchResults()}
+              className="inline-flex items-center gap-1.5 bg-[#0a0a0a] text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors"
+            >
+              Réessayer
+            </button>
+          </div>
+        )}
+
         {/* Vue Liste */}
-        {view === "liste" && (
+        {!errored && view === "liste" && (
         <div className="grid lg:grid-cols-[1fr_280px] gap-8 items-start">
           <div>
             {loading && (
               <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="bg-white rounded-xl overflow-hidden border border-[#ebebeb] animate-pulse">
+                  <div key={i} className="bg-white rounded-xl overflow-hidden border border-[#ebebeb] animate-pulse" role="status" aria-label="Chargement des résultats">
                     <div className="h-48 bg-slate-100" />
                     <div className="p-4 space-y-3">
                       <div className="h-4 bg-slate-100 rounded w-1/3" />
@@ -513,45 +614,23 @@ function RecherchePageInner() {
               </div>
             )}
 
-            {!loading && groupedByCategory && (
-              <div className="space-y-10">
-                {groupedByCategory.map(({ cat, items }) => (
-                  <div key={cat.key} className="border border-border rounded-xl p-5">
-                    <div className="flex items-center justify-between mb-4">
-                      <h2 className="text-[20px] font-bold tracking-tight text-[#0a0a0a]">{cat.label}</h2>
-                      <Link
-                        href={`/categorie/${cat.key}`}
-                        className="flex items-center gap-1 text-sm font-semibold text-emerald-700 hover:text-emerald-600 transition-colors"
-                      >
-                        Voir tout
-                        <ArrowRight size={14} />
-                      </Link>
-                    </div>
-                    <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                      {items.map((school) => (
-                        <SchoolCard key={school.id} school={school} userLocation={userLocation} compare={compare} toggleCompare={toggleCompare} />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {!loading && !groupedByCategory && (
+            {!loading && displayedSchools.length > 0 && (
               <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
-                {filtered.map((school) => (
+                {displayedSchools.map((school) => (
                   <SchoolCard key={school.id} school={school} userLocation={userLocation} compare={compare} toggleCompare={toggleCompare} />
                 ))}
               </div>
             )}
 
-            {!loading && filtered.length === 0 && (
+            {!loading && displayedSchools.length === 0 && (
               <div className="py-20 text-center">
                 <Search size={36} className="mx-auto text-slate-300 mb-4" />
-                <h3 className="text-xl font-bold mb-2">Aucun résultat</h3>
+                <h3 className="text-xl font-bold mb-2">Aucun établissement trouvé</h3>
                 <p className="text-slate-500 text-sm">Modifiez vos filtres ou élargissez votre recherche.</p>
               </div>
             )}
+
+            {!loading && <Pagination page={urlPage} totalPages={totalPages} onChange={goToPage} />}
           </div>
 
           {/* Sidebar compare */}
@@ -631,27 +710,28 @@ function RecherchePageInner() {
         </div>
         )}
 
-        {/* Vue Carte */}
-        {view === "carte" && (
+        {/* Vue Carte — limitée à la page courante (voir note d'en-tête) */}
+        {!errored && view === "carte" && (
         <div className="grid lg:grid-cols-[3fr_2fr] gap-6 items-start">
           <div className="hidden lg:block space-y-3 lg:max-h-[calc(100vh-144px)] lg:overflow-y-auto lg:pr-1">
             {loading && (
               <div className="space-y-3">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-24 bg-white rounded-xl border border-[#ebebeb] animate-pulse" />
+                  <div key={i} className="h-24 bg-white rounded-xl border border-[#ebebeb] animate-pulse" role="status" aria-label="Chargement des résultats" />
                 ))}
               </div>
             )}
-            {!loading && filtered.length === 0 && (
+            {!loading && displayedSchools.length === 0 && (
               <div className="py-16 text-center">
                 <Search size={32} className="mx-auto text-slate-300 mb-3" />
-                <h3 className="font-bold mb-1">Aucun résultat</h3>
+                <h3 className="font-bold mb-1">Aucun établissement trouvé</h3>
                 <p className="text-slate-500 text-sm">Modifiez vos filtres ou élargissez votre recherche.</p>
               </div>
             )}
-            {!loading && filtered.map((school) => (
+            {!loading && displayedSchools.map((school) => (
               <SchoolCard key={school.id} school={school} userLocation={userLocation} compare={compare} toggleCompare={toggleCompare} />
             ))}
+            {!loading && <Pagination page={urlPage} totalPages={totalPages} onChange={goToPage} />}
           </div>
 
           <div className="relative sticky top-[94px] h-[65vh] lg:h-[calc(100vh-144px)] rounded-card overflow-hidden border border-border">

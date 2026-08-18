@@ -28,6 +28,7 @@ import { StatCard as LandingStatCard } from "@/components/landing/StatCard";
 import { PartnerPlaceholder } from "@/components/landing/PartnerPlaceholder";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { getCameroonRegion } from "@/lib/cameroonRegions";
+import { MAJOR_CITIES } from "@/lib/cameroonMajorCities";
 import { categories } from "@/lib/categories";
 import { normalizeForSearch, dedupeInsensitive } from "@/lib/textSearch";
 
@@ -272,11 +273,18 @@ export default function HomePage() {
   }
 
   // Dédoublonnage insensible à la casse/accents — "Douala", "douala",
-  // "DOUALA" comptent comme une seule ville dans le filtre.
+  // "DOUALA" comptent comme une seule ville dans le filtre. Sert uniquement
+  // au stat "villes couvertes" (donnée réelle) ci-dessous, PAS au formulaire
+  // de recherche du Hero (voir heroSearchCities, SPRINT R.2-B §31).
   const cities = useMemo(
     () => ["all", ...dedupeInsensitive(schools.map((s) => s.city))],
     [schools]
   );
+
+  // SPRINT R.2-B §31 — le sélecteur de ville du Hero ne doit pas dépendre du
+  // chargement de toute la table `establishments` : liste statique produit
+  // (déjà utilisée par /recherche et le Review Center), zéro coût réseau.
+  const heroSearchCities = useMemo(() => ["all", ...MAJOR_CITIES.map((c) => c.name)], []);
 
   // Données réelles pour Catégories / À la une / Statistiques — aucune valeur inventée.
   const featuredSchools = useMemo(() => schools.filter((s) => s.isFeatured), [schools]);
@@ -541,7 +549,7 @@ export default function HomePage() {
                   categories={categories}
                   city={city}
                   onCityChange={setCity}
-                  cities={cities}
+                  cities={heroSearchCities}
                   radius={radius}
                   onRadiusChange={setRadius}
                   onLocate={handleLocationToggle}
