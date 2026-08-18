@@ -9,6 +9,7 @@ import {
   Search, X, ArrowRight, School,
 } from "lucide-react";
 import { CAT_META } from "./catMeta";
+import { includesInsensitive } from "@/lib/textSearch";
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
@@ -81,9 +82,8 @@ function CategoryPageInner() {
   // Filtered list
   const filtered = schools.filter((s) => {
     if (activeSub !== "all" && (s.sub_category ?? "").toLowerCase() !== activeSub.toLowerCase()) return false;
-    if (query) {
-      const t = `${s.name} ${s.city ?? ""} ${s.neighborhood ?? ""} ${s.sub_category ?? ""}`.toLowerCase();
-      if (!t.includes(query.toLowerCase())) return false;
+    if (query && !includesInsensitive(`${s.name} ${s.city ?? ""} ${s.neighborhood ?? ""} ${s.sub_category ?? ""}`, query)) {
+      return false;
     }
     return true;
   });

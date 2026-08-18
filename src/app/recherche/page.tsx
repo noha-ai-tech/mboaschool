@@ -24,9 +24,7 @@ import { supabase } from "@/lib/supabase";
 import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { categories } from "@/lib/categories";
-import { GRAND_NORD, ZONE_ANGLOPHONE, normalizeRegionCasing } from "@/lib/cameroonRegions";
-import { formatQuartierCity } from "@/lib/formatSchoolLocation";
-import { normalizeSearchText, matchesSearchQuery } from "@/lib/search/normalizeSearchText";
+import { normalizeForSearch, includesInsensitive, dedupeInsensitive } from "@/lib/textSearch";
 
 const LocalSchoolMap = dynamic(() => import("@/components/LocalSchoolMap"), {
   ssr: false,
@@ -47,7 +45,6 @@ type School = {
   category: string;
   subcategory: string;
   city: string;
-  region: string;
   quartier: string;
   phone: string;
   fees: number;
@@ -94,7 +91,6 @@ function transformSchool(raw: any): School {
     category: raw.main_category ?? "",
     subcategory: raw.sub_category ?? "",
     city: raw.city ?? "",
-    region: raw.region ?? "",
     quartier: raw.quartier ?? raw.neighborhood ?? "",
     phone: raw.phone ?? "",
     fees: fee.tuition_fee ?? 0,
@@ -216,7 +212,7 @@ function SchoolCard({
 
         <p className="flex items-center gap-1 text-xs text-slate-500 mb-1">
           <MapPin size={11} />
-          {formatQuartierCity(school.quartier, school.city) || school.region || "Localisation à préciser"}
+          {school.quartier ? `${school.quartier}, ` : ""}{school.city}
           {dist !== null && (
             <span className="ml-1 text-emerald-600 font-semibold">· {dist.toFixed(1)} km</span>
           )}
@@ -304,35 +300,21 @@ function RecherchePageInner() {
   useEffect(() => {
     async function load() {
       setLoading(true);
-      // Paginé — establishments a dépassé 1000 lignes (SPRINT R : 1942 au
-      // total), plafond par défaut PostgREST. Un .select() sans .range()
-      // masquait silencieusement ~942 établissements aux visiteurs.
-      const all: any[] = [];
-      const pageSize = 1000;
-      let from = 0;
-      // eslint-disable-next-line no-constant-condition
-      while (true) {
-        const { data } = await supabase
-          .from("establishments")
-          .select(`
-            id, name, main_category, sub_category,
-            city, region, quartier, neighborhood, phone,
-            cover_image_url, is_verified, is_claimed,
-            accepts_online_payment, is_featured,
-            couleur_primaire, couleur_secondaire, emoji_logo,
-            latitude, longitude,
-            fees(registration_fee, tuition_fee),
-            infrastructures(library, laboratory, computer_room, sports_field, canteen, transport, wifi, boarding, security, infirmary),
-            school_images(url)
-          `)
-          .order("is_featured", { ascending: false })
-          .range(from, from + pageSize - 1);
-        if (!data || data.length === 0) break;
-        all.push(...data);
-        if (data.length < pageSize) break;
-        from += pageSize;
-      }
-      setSchools(all.map(transformSchool));
+      const { data } = await supabase
+        .from("establishments")
+        .select(`
+          id, name, main_category, sub_category,
+          city, quartier, neighborhood, phone,
+          cover_image_url, is_verified, is_claimed,
+          accepts_online_payment, is_featured,
+          couleur_primaire, couleur_secondaire, emoji_logo,
+          latitude, longitude,
+          fees(registration_fee, tuition_fee),
+          infrastructures(library, laboratory, computer_room, sports_field, canteen, transport, wifi, boarding, security, infirmary),
+          school_images(url)
+        `)
+        .order("is_featured", { ascending: false });
+      if (data) setSchools(data.map(transformSchool));
       setLoading(false);
     }
     load();
@@ -367,44 +349,23 @@ function RecherchePageInner() {
     });
   }
 
-  const cities = useMemo(
-    () => ["all", ...Array.from(new Set(schools.map((s) => s.city).filter((c) => c.trim().length > 0)))],
-    [schools]
-  );
+  // Dédoublonnage insensible à la casse/accents — "Douala", "douala",
+  // "DOUALA" comptent comme une seule ville dans le filtre.
+  const cities = useMemo(() => ["all", ...dedupeInsensitive(schools.map((s) => s.city))], [schools]);
 
   const mapCenter = userLocation ?? DEFAULT_CENTER;
 
-  // SPRINT R.1 §9 — calculé une seule fois par chargement de `schools`
-  // (pas à chaque frappe), jamais un aller-retour réseau supplémentaire
-  // juste pour normaliser : le jeu de 1942 établissements est déjà en
-  // mémoire côté client (architecture existante, inchangée ce sprint).
-  const searchHaystackById = useMemo(() => {
-    const map = new Map<string, string>();
-    for (const s of schools) {
-      const canonicalRegion = normalizeRegionCasing(s.region);
-      const macroZoneWords = [
-        ...(canonicalRegion && (GRAND_NORD as readonly string[]).includes(canonicalRegion) ? ["grand nord"] : []),
-        ...(canonicalRegion && (ZONE_ANGLOPHONE as readonly string[]).includes(canonicalRegion) ? ["zone anglophone"] : []),
-      ];
-      // SPRINT R.1 §3-6 — normalizeSearchText() insensible aux accents pour
-      // la comparaison ; official_name / name en base restent intacts,
-      // seule cette copie de travail est transformée.
-      map.set(s.id, normalizeSearchText(`${s.name} ${s.city} ${s.region} ${s.quartier} ${s.category} ${s.subcategory} ${macroZoneWords.join(" ")}`));
-    }
-    return map;
-  }, [schools]);
-
   const filtered = schools.filter((s) => {
     if (activeCategory !== "all" && s.category !== activeCategory) return false;
-    if (city !== "all" && s.city !== city) return false;
+    // Comparaison insensible à la casse/accents — "Douala" sélectionné doit
+    // retrouver "DOUALA", "douala", etc.
+    if (city !== "all" && normalizeForSearch(s.city) !== normalizeForSearch(city)) return false;
     if (useLocation && userLocation) {
       if (!s.lat || !s.lng) return false;
       if (haversineKm(userLocation.lat, userLocation.lng, s.lat, s.lng) > Number(radius)) return false;
     }
-    if (query) {
-      // Mot par mot (ET logique) + alias lycée/lyce + insensible aux accents.
-      const haystack = searchHaystackById.get(s.id) ?? "";
-      if (!matchesSearchQuery(haystack, query)) return false;
+    if (query && !includesInsensitive(`${s.name} ${s.city} ${s.quartier} ${s.category} ${s.subcategory}`, query)) {
+      return false;
     }
     return true;
   });
@@ -623,7 +584,7 @@ function RecherchePageInner() {
                             <X size={13} />
                           </button>
                         </div>
-                        <p className="text-xs text-slate-400 mb-2">{school.city || school.region || "—"}{school.subcategory ? ` · ${school.subcategory}` : ""}</p>
+                        <p className="text-xs text-slate-400 mb-2">{school.city}{school.subcategory ? ` · ${school.subcategory}` : ""}</p>
                         <div className="grid grid-cols-2 gap-2 text-xs">
                           <div className="bg-slate-50 rounded-lg p-2">
                             <p className="text-slate-400 mb-0.5">Inscription</p>

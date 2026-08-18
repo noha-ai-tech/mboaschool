@@ -10,6 +10,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { Users2, ArrowRight, Search } from "lucide-react";
+import { includesInsensitive } from "@/lib/textSearch";
 
 const CRM_LABELS: Record<string, { label: string; cls: string }> = {
   prospect:      { label: "Prospect",      cls: "text-slate-600 bg-slate-100 border-slate-200" },
@@ -45,7 +46,7 @@ export default function AdminCrmPage() {
     return rows.filter((r) => {
       const crmStatus = r.establishment_crm?.[0]?.status ?? "prospect";
       if (statusFilter !== "all" && crmStatus !== statusFilter) return false;
-      if (query && !`${r.name} ${r.city ?? ""}`.toLowerCase().includes(query.toLowerCase())) return false;
+      if (query && !includesInsensitive(`${r.name} ${r.city ?? ""}`, query)) return false;
       return true;
     });
   }, [rows, query, statusFilter]);

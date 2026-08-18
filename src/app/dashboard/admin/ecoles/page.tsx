@@ -14,6 +14,7 @@ import {
   School, MapPin, Search, CheckCircle2, Crown, ArrowRight,
   ShieldOff, ShieldCheck, RotateCcw, Loader2,
 } from "lucide-react";
+import { includesInsensitive, normalizeForSearch, dedupeInsensitive } from "@/lib/textSearch";
 
 const VERIFICATION_LABELS: Record<string, { label: string; cls: string }> = {
   referenced:      { label: "Référencée",   cls: "text-slate-600 bg-slate-100 border-slate-200" },
@@ -50,19 +51,16 @@ export default function AdminEcolesPage() {
   }
 
   const regions = useMemo(
-    () => Array.from(new Set(schools.map((s) => s.region).filter(Boolean))).sort(),
+    () => dedupeInsensitive(schools.map((s) => s.region)),
     [schools]
   );
 
   const filtered = useMemo(() => {
     let list = schools.filter((s) => {
-      if (query) {
-        const q = query.toLowerCase();
-        if (!`${s.name} ${s.city ?? ""} ${s.main_category ?? ""}`.toLowerCase().includes(q)) return false;
-      }
+      if (query && !includesInsensitive(`${s.name} ${s.city ?? ""} ${s.main_category ?? ""}`, query)) return false;
       if (statusFilter !== "all" && (s.verification_status ?? "referenced") !== statusFilter) return false;
       if (planFilter !== "all" && s.forfait !== planFilter) return false;
-      if (regionFilter !== "all" && s.region !== regionFilter) return false;
+      if (regionFilter !== "all" && normalizeForSearch(s.region) !== normalizeForSearch(regionFilter)) return false;
       return true;
     });
     if (sort === "name") list = [...list].sort((a, b) => a.name.localeCompare(b.name));
