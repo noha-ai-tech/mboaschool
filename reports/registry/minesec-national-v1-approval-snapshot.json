@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T04:48:14.843Z",
+  "generated_at": "2026-08-18T05:03:42.302Z",
   "checksum_source": "sha256(sorted staging_id|official_id|CLEAN_APPROVABLE)",
   "approval_checksum": "5e412ed77e3efa2ca82c3c6b4656f2356e340d2cdf221a4c5b75c707cdf8d058",
   "count": 3,

@@ -127,7 +127,10 @@ async function main() {
 
   // ── §7-8 : couverture régionale + décompte ──────────────────────────────
   const regionCounts: Record<string, number> = {};
-  for (const r of staging) regionCounts[r.region ?? "(inconnue)"] = (regionCounts[r.region ?? "(inconnue)"] ?? 0) + 1;
+  for (const r of staging) {
+    const key = normalizeRegionCasing(r.region) ?? r.region ?? "(inconnue)";
+    regionCounts[key] = (regionCounts[key] ?? 0) + 1;
+  }
 
   // ── §13 : audit duplicate_exact (673 historiques + 1 Deido confirmé = 674) ─
   const dupExact = staging.filter((r) => r.status === "duplicate_exact");

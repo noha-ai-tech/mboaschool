@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T04:48:14.848Z",
+  "generated_at": "2026-08-18T05:03:42.309Z",
   "operator": "jean-merlain",
   "total_unique": 1942,
   "official_id_coverage": "1941/1942",
@@ -18,20 +18,20 @@
     "duplicate_review": 2
   },
   "region_counts": {
-    "CENTRE": 345,
-    "SUD": 135,
-    "EST": 108,
-    "LITTORAL": 149,
-    "SUD-OUEST": 184,
-    "NORD": 141,
-    "OUEST": 251,
-    "EXTREME-NORD": 269,
-    "ADAMAOUA": 96,
-    "NORD-OUEST": 264
+    "Centre": 345,
+    "Sud": 135,
+    "Est": 108,
+    "Littoral": 149,
+    "Sud-Ouest": 184,
+    "Nord": 141,
+    "Ouest": 251,
+    "Extrême-Nord": 269,
+    "Adamaoua": 96,
+    "Nord-Ouest": 264
   },
   "macro_zone_counts": {
-    "grand_nord": 0,
-    "zone_anglophone": 0
+    "grand_nord": 506,
+    "zone_anglophone": 448
   },
   "clean_approvable": 3,
   "review_required": 42,

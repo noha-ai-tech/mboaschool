@@ -17648,6 +17648,22 @@
     "batch_origin": "MINESEC Batch 003 (Sud, Est, Nord-Ouest, Sud-Ouest)"
   },
   {
+    "official_id": null,
+    "official_name": "CES de DANG-PATOU",
+    "normalized_name": "dang patou",
+    "category": "secondary_general",
+    "region": "EST",
+    "raw_locality": "DANG-PATOU",
+    "normalized_locality": "DANG-PATOU",
+    "locality_quality": "VALID",
+    "source_ministry": "MINESEC",
+    "source_reference": null,
+    "staging_status": "ready",
+    "existing_establishment_id": null,
+    "review_status": "needs_more_review",
+    "batch_origin": "MINESEC Batch 003 (Sud, Est, Nord-Ouest, Sud-Ouest)"
+  },
+  {
     "official_id": "9IJ1GSFD100065111",
     "official_name": "CES de BOUAM",
     "normalized_name": "bouam",
@@ -17677,22 +17693,6 @@
     "staging_status": "ready",
     "existing_establishment_id": null,
     "review_status": null,
-    "batch_origin": "MINESEC Batch 003 (Sud, Est, Nord-Ouest, Sud-Ouest)"
-  },
-  {
-    "official_id": null,
-    "official_name": "CES de DANG-PATOU",
-    "normalized_name": "dang patou",
-    "category": "secondary_general",
-    "region": "EST",
-    "raw_locality": "DANG-PATOU",
-    "normalized_locality": "DANG-PATOU",
-    "locality_quality": "VALID",
-    "source_ministry": "MINESEC",
-    "source_reference": null,
-    "staging_status": "ready",
-    "existing_establishment_id": null,
-    "review_status": "approved_for_promotion",
     "batch_origin": "MINESEC Batch 003 (Sud, Est, Nord-Ouest, Sud-Ouest)"
   },
   {
