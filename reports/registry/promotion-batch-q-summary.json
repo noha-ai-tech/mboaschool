@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-08-18T04:29:23.705Z",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "registry_import_batch": "minesec-batch-q-promotion",
+  "approval_checksum": "580d88844f41c0c2fcc02cf00b05c4485151907c6855b9414c82a0c9b07732c4",
+  "eligible": 665,
+  "inserted": 665,
+  "skipped": 0,
+  "failed": 0,
+  "failed_rows": [],
+  "outcome": "SUCCESS"
+}

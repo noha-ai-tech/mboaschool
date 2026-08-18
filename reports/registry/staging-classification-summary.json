@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-08-17T22:39:06.749Z",
-  "totalStaging": 1251,
+  "generatedAt": "2026-08-18T04:23:25.645Z",
+  "totalStaging": 1942,
   "counts": {
     "EXISTING_OFFICIAL_ID": 673,
     "EXISTING_LEGACY_CONFIRMED": 0,
     "EXISTING_PROBABLE": 1,
     "EXISTING_AMBIGUOUS": 5,
-    "CLEAN_NEW_CANDIDATE": 556,
-    "NEW_CANDIDATE_REVIEW_REQUIRED": 16
+    "CLEAN_NEW_CANDIDATE": 1222,
+    "NEW_CANDIDATE_REVIEW_REQUIRED": 41
   },
-  "cleanCandidates": 556,
-  "alreadyApproved": 556,
+  "cleanCandidates": 1222,
+  "alreadyApproved": 1222,
   "pendingApproval": 0,
-  "reviewRequiredCount": 16,
+  "reviewRequiredCount": 41,
   "doubtfulCount": 6
 }
