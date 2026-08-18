@@ -1,0 +1,3344 @@
+{
+  "reconstructed_after_execution": true,
+  "reconciliation_date": "2026-08-18T03:20:16.368Z",
+  "registry_import_batch": "minesec-master-v1-promotion-p3",
+  "count": 556,
+  "establishments": [
+    {
+      "establishment_id": "cac922db-2a3a-4848-896a-f1c7819edebd",
+      "official_id": "0CH1GSFD110296107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "2bf6a34c-94aa-4710-9d60-3ba03644fb45",
+      "official_id": "0CJ1GSFD111936113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "fbb96df4-46e1-4a8f-a06e-a2d68a820ff0",
+      "official_id": "0CK1GSBD111236092",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "ed7217ec-477b-4308-a86c-5631077f927e",
+      "official_id": "0EK1GSFD103230120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "2d88e6ec-16c9-464c-9394-f241975a70d4",
+      "official_id": "0EM1GSFD102074099",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "9d960a94-a4ae-4f16-ad8a-fdfba9732675",
+      "official_id": "0HC1GSBD103236120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "63569e63-caaa-4fb9-b202-716590ee8299",
+      "official_id": "0HE1GSFD110346111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "e14c7535-d76d-4994-81cd-9abb6ae40d1b",
+      "official_id": "0HE1GSFD112189115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "e143f487-439a-479b-9812-adcdbf59324c",
+      "official_id": "0HH1GSFD112080107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "3a0ea4c5-1e07-4aef-8718-0479961c25ce",
+      "official_id": "0HJ1GSFD102840116",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "5f72a4f2-02f5-4133-8bf5-3bfce1745829",
+      "official_id": "0HK1GSFD102214113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "f7342ad5-a076-4cf4-a296-b0e6b63bfa95",
+      "official_id": "0HK1GSFD102841116",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "9d031d74-c554-48a9-8b99-bf5a460bbe23",
+      "official_id": "0HM1GSBD103237120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "026a7af3-27ea-4d7a-b9db-8bdc16e09747",
+      "official_id": "0HM1GSFD112122103",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "059027ef-ff6c-43a7-bdbc-6cd3b1e422db",
+      "official_id": "0HQ1GSFD111100113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "f36a1e07-3ba5-4c2d-b432-c88ec39a20a5",
+      "official_id": "0HR1GSFD112467078",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "8e9eea46-57ec-4cdf-993c-6d07a9602541",
+      "official_id": "0IC1GSFD100441112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "e66dd724-3d17-4b43-a776-bf72383bb008",
+      "official_id": "0IE1GSBD112065104",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "00adf683-c14a-433b-ae0f-e5c8eda6347f",
+      "official_id": "0IH1GSBD112105114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "f10374e7-749c-4fa7-b829-cdd280f44e0d",
+      "official_id": "0IJ1GSFD110174111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "cb323aa2-38ed-45fb-9b73-ef2025659304",
+      "official_id": "0KE1GSFD110570115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "1e9365b6-21c7-4275-ad3c-ed1d74e865be",
+      "official_id": "0KH1GSBD110579110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "beb62b0f-1f11-4583-91fa-1654e14fa688",
+      "official_id": "0KK1GSFD110284113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "27f24395-21fd-4a3f-bae2-f8fffdd4480b",
+      "official_id": "1CE1GSFD102830115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "735e32b4-5982-4b17-90fa-b48af42e1b5e",
+      "official_id": "1CJ1GSFD110833098",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "e39da0b6-bf91-445d-8b8f-e24c9a259f26",
+      "official_id": "1CL1GSFD102696114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "77c6cfbe-5959-4e06-9560-0cfa21056251",
+      "official_id": "1CL1GSFD102867115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "9a144aeb-e649-4d3b-ba4f-c601dee06865",
+      "official_id": "1CM1GSFD101470112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "c7406c37-333c-4f3f-bcc5-e2d7b818e93d",
+      "official_id": "1CM1GSFD112222098",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "9fe7fe52-50f5-478a-a7da-f408690eee68",
+      "official_id": "1CN1GSFD111233109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "b7dcd283-49a9-4518-b77c-5547487fbe6c",
+      "official_id": "1CR1GSBD111260113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "a9b74bec-8b87-4245-b371-5a470c4cde7e",
+      "official_id": "1CR1GSFD112036108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "ac6e8cb4-9235-48a2-b54c-8dbf44186008",
+      "official_id": "1CT1GSFD111213107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "a45641fa-78f4-4ff8-9275-0aa639974d84",
+      "official_id": "1EC1GSFD111160110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "16aaa5cc-1e76-44b3-a910-1290c03ab026",
+      "official_id": "1EE1GSFD100775110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "fd67dc40-66db-478e-a7a9-b5892b4903b1",
+      "official_id": "1EE1GSFD102330113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "62c8fd7e-79cf-49ee-b336-788d9635f26a",
+      "official_id": "1HC1GSFD100950112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "26fe2f21-aa56-47d9-a6bf-1536c31031b7",
+      "official_id": "1HC1GSFD101069110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "85a337e1-85b3-4471-a971-92a93ea4616c",
+      "official_id": "1HC1GSFD102678114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "691fb1ed-5620-4ac5-a2c4-2e2ab487affb",
+      "official_id": "1HC1GSFD102866115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "ebc8d9de-2436-4633-a733-e870b7bcfe25",
+      "official_id": "1HE1GSFD101315112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "50670496-5136-4a66-8f0a-855e3cd05da0",
+      "official_id": "1HE1GSFD102334113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "e4cbb49c-1f97-4850-93f0-471e78fa171a",
+      "official_id": "1HH1GSBD103240120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "b5a320a9-7744-4d4f-856e-248a9fd891a9",
+      "official_id": "1HH1GSBD111073115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "3940e88b-46e7-430e-967e-bbf6fcabdec3",
+      "official_id": "1IC1GSFD110800113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "727617f1-6327-45ad-af61-1f0f6d016357",
+      "official_id": "1IC1GSFD110864106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "690de07a-b746-434e-964f-6bc02b8e4d8b",
+      "official_id": "1IE1GSFD110704108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "a220e2d8-2163-4425-841a-4a332acbccc1",
+      "official_id": "1IE1GSFD110868115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "1425f89f-8a69-4198-81d7-21ebc961ab45",
+      "official_id": "1IH1GSFD102699114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "8903141e-cee6-4421-88b7-a84e2de8bef3",
+      "official_id": "1II1GSFD102924114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "626e6bc4-ecf9-4997-9b67-4f579803f144",
+      "official_id": "2CE1GSFD102249108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "41969c6d-8142-45e9-958f-7b30f916af09",
+      "official_id": "2HC1GSBD112409108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "a2c92897-9c61-4ffa-9ce2-4a2a1461f7d3",
+      "official_id": "2HC1GSFD110029109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "9c52dab9-f974-426a-aecf-1416bbfa4e9a",
+      "official_id": "2HE1GSBD103231120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "7ce09204-d7d0-46d4-afbe-93f9aab16376",
+      "official_id": "2HE1GSBD103232120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "3d48b370-9fc6-4bb8-a373-5446e33d2077",
+      "official_id": "2HE1GSBD110503107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "5205b086-2cfd-4305-822d-d84d64261fd6",
+      "official_id": "2HH1GSBD103233120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "83918558-c453-4ed2-a4fb-78749776a512",
+      "official_id": "2JC1GSFD100338111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "0321de00-f7cc-4485-9cfa-83397cd17e0e",
+      "official_id": "2JC1GSFD110093108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "dc442980-f019-4335-b0b5-ddde6295b39d",
+      "official_id": "2JH1GSFD111480114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "b33476bc-cd42-4326-93fb-d5ccecaea470",
+      "official_id": "2JJ1GSFD111840074",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "496d524e-45e9-4d37-a476-fa66b8cac7ba",
+      "official_id": "4CE1GSFD101616111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "9a94663d-3dc4-4669-aed7-f013a61d15dc",
+      "official_id": "4CI1GSBD103242120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "1ab03ec8-b966-4dab-b04e-856015a514bf",
+      "official_id": "4CI1GSFD111795110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "1bb45a5f-1e96-4e33-beea-1aa82b056ed2",
+      "official_id": "4EC1GSBD111504105",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "cc18a73a-479f-477b-9136-9d3df698d651",
+      "official_id": "4EC1GSFD111803106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "5ce7209d-a592-4d8a-8efa-92676b72a067",
+      "official_id": "4EE1GSFD101181110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "601307cc-a8a3-4a8b-a34e-e3531c7e6ec4",
+      "official_id": "4HE1GSFD110791110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "78894d31-4bd6-4a5c-887e-880d9a51b80f",
+      "official_id": "4HI1GSBD100487112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "f89c710a-37a8-450b-8642-b7870ff6553e",
+      "official_id": "4IE1GSBD110474115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "a0acca99-9633-4444-af2f-04ddb6b2fe80",
+      "official_id": "4IE1GSFD100476109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "d27567c0-1723-4ff5-85d9-e72c16101189",
+      "official_id": "4JJ1GSBD103243120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "ae960b89-d810-494f-a5d3-27b02238ed88",
+      "official_id": "4JK1GSBD101308111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "a3bc4ee1-b33e-45bd-924f-85cf2950de09",
+      "official_id": "4KC1GSBD103244120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "881fa13f-2786-4eb2-8ab3-ffe3df3533ed",
+      "official_id": "4KH1GSFD112398107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "9fd96b55-18c2-4fae-abcf-35bd9df4a52c",
+      "official_id": "4LC1GSBD103245120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "b9da8437-2664-44ec-9dc9-2f1f4f104781",
+      "official_id": "4LC1GSBD103246120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "105e0b4a-1203-48c6-9a8f-838fdc6eded1",
+      "official_id": "4LC1GSFD111626110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "9a6c5101-9bef-4b19-8103-762069656399",
+      "official_id": "4ME1GSBD112138097",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "c11f691f-c845-4622-b620-9ac9a57408dc",
+      "official_id": "4ME1GSFD112233107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "4eab90b7-98da-42f0-a65e-486d5a63555e",
+      "official_id": "4MI1GSFD101512108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "afa953e3-a883-48c5-aca6-9e685d825efd",
+      "official_id": "4MK1GSBD111937100",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "f6238969-0f32-4ed7-8632-ee4b77c410e8",
+      "official_id": "4ML1GSBD103247120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "5f7c007e-d5cc-4818-b495-53356bb86979",
+      "official_id": "4MN1GSBD103248120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.73463+00:00"
+    },
+    {
+      "establishment_id": "1214639b-7329-4af4-81e0-eb638cfaa4b2",
+      "official_id": "5CC1GSFD102014103",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "2a215aff-18d3-421d-8433-6111b369fd80",
+      "official_id": "5CC1GSFD110596107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "8f888f65-241a-405f-a681-63075779d08f",
+      "official_id": "5CE1GSFD100593111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "2063c5ed-76c2-4f67-8840-74055b381ba9",
+      "official_id": "5CE1GSFD100766112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "590ec97b-3f0e-49da-b06f-07744c1a0bb7",
+      "official_id": "5CE1GSFD110124108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "d6c43cd4-eced-434f-a9af-46e8387d4269",
+      "official_id": "5CH1GSBD110468106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "0494a421-e5c2-4cf1-879b-1fc9e8babeee",
+      "official_id": "5CH1GSFD102443109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "41cc2109-3d7c-4359-a592-baa59f3c7353",
+      "official_id": "5CI1GSBD112087112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "a7a30c43-26e1-4348-a302-5d78b47eb6e9",
+      "official_id": "5CI1GSFD100114108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "c4cb6650-75a3-416d-a1a0-558b27b5d033",
+      "official_id": "5CI1GSFD100480106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "a4af6e4e-655e-4976-bf4b-63042822033d",
+      "official_id": "5CI1GSFD102464099",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "151e5302-d734-4f5a-80d6-70bc87f6aa2e",
+      "official_id": "5CI1GSFD110426111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "784dc676-ca93-4c69-bb24-914da13befd8",
+      "official_id": "5CJ1GSFD100378107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "022bad83-8e38-4f89-be1c-863ef9cd35d9",
+      "official_id": "5CJ1GSFD100415107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "0c940074-5861-4e18-94da-21f97cbede6d",
+      "official_id": "5CJ1GSFD110432114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "daaed515-3023-4fab-9829-cf02a73aa41f",
+      "official_id": "5CJ1GSFD111355078",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "2462fc27-9abb-40bf-9ca9-77c7a94620c0",
+      "official_id": "5CK1GSBD110390109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "48b21cc1-5842-4153-a3f5-8c795ca0faf9",
+      "official_id": "5CK1GSFD101633112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "9d43b4e8-2724-4404-bcb1-6c9bcfd0a79e",
+      "official_id": "5CL1GSFD110015112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "2162eab2-32a4-41fe-a0ce-f296f73fd60d",
+      "official_id": "5EC1GSFD102379110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "8020a83b-2ee8-442b-bf5f-9ada638330b6",
+      "official_id": "5EC1GSFD110571100",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "548e2e6a-91e0-4e67-bc68-7b3147c9789e",
+      "official_id": "5EE1GSFD100668107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "734ac3ca-a915-4d3b-ba65-a2e82c58dc60",
+      "official_id": "5EE1GSFD100863110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "ca35b4b1-4fbf-4d19-ab85-e4c8868222da",
+      "official_id": "5EE1GSFD101075109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "52c24d70-473c-4acc-8f60-218cc7702c1f",
+      "official_id": "5EE1GSFD101942112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "6b232b18-6027-4b75-986e-5f116e656e6e",
+      "official_id": "5EE1GSFD112081101",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "e291e0e7-8720-4b1c-b53c-9bd79ee33b1a",
+      "official_id": "5EH1GSFD110627111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "10f10d71-90d5-4ccc-bd8a-20c85d809775",
+      "official_id": "5EH1GSFD112402105",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "a9123b83-a1dd-43d8-81e5-e158f4056570",
+      "official_id": "5EI1GSBD111909115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "d94cd127-1cd4-4dbe-9748-fc0baaf2d951",
+      "official_id": "5EI1GSFD100585109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "6c276420-dcdf-4ba4-b6f0-afd452217d02",
+      "official_id": "5EI1GSFD101079110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "3bf12354-b1bc-4b69-b992-cffb91dd8d2b",
+      "official_id": "5EI1GSFD110176111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "4857e709-f3a2-4d17-b6fa-f05bda760abd",
+      "official_id": "5EI1GSFD111913112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "219d7f06-8ec1-48b0-865a-ca452f5115b3",
+      "official_id": "5EI1GSFD112406111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "dd5e651d-5e9b-4d5a-b146-671d1e22046e",
+      "official_id": "5EJ1GSFD100844111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "9e9e2445-3d5e-4c43-aff9-aabd24f092ae",
+      "official_id": "5EJ1GSFD101063110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "e9751a7e-8aea-44fa-916e-dda807e3149c",
+      "official_id": "5EJ1GSFD111068108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "5da81c99-9e4f-4968-b7e7-8bc353450f63",
+      "official_id": "5EJ1GSFD112136099",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "01c23bd9-a325-4076-ba9f-940e26921189",
+      "official_id": "5EK1GSBD102460112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "9528f7a4-e453-4b11-854a-8b83182a611b",
+      "official_id": "5EK1GSFD102359110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "87fd3ec7-2dbd-47fa-a07f-398e928a6f33",
+      "official_id": "5EK1GSFD102362110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "a2ab0d06-d636-40fc-bb40-f383bd3eda3d",
+      "official_id": "5EK1GSFD110163112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "6af2777c-bf03-4781-ae6c-3e0a323df533",
+      "official_id": "5EK1GSFD111867112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "c85a7d9e-d4e4-4a38-b4ed-b30943a56a63",
+      "official_id": "5EK1GSFD112455078",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "beafdf87-984b-4da4-a7c7-2cdde7d43992",
+      "official_id": "5EL1GSBD110715109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "42822517-eb59-4b0a-897f-b7880b80d93c",
+      "official_id": "5EL1GSFD100133109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "fe1889f0-611a-413b-8163-c5d5f6434c7c",
+      "official_id": "5EL1GSFD100193106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "788587eb-6804-4509-9518-f18653cf6c9c",
+      "official_id": "5EL1GSFD102434109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "e695bca5-b1d8-4d42-9323-ea079e122ed7",
+      "official_id": "5EL1GSFD102441111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "1974ed51-ab8a-4b4f-b558-8a849b72516f",
+      "official_id": "5EL1GSFD102447106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "c248c28f-7131-4cb5-8f16-d15fbba0ad05",
+      "official_id": "5EL1GSFD110017109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "13653654-0937-4cac-a507-e56dd398ef0c",
+      "official_id": "5EL1GSFD110185111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "cd7b76e1-0c37-4a9c-8fec-358280b83a76",
+      "official_id": "5EL1GSFD110311110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "722b5f50-952d-44ed-9b6e-86d80e3516fe",
+      "official_id": "5EL1GSFD110340097",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "67f926ad-580b-42b2-b3fd-54fdf0de963d",
+      "official_id": "5EL1GSFD110363111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "cabe17db-464e-40d2-a1a0-dac60ed50238",
+      "official_id": "5EL1GSFD110377112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "7efc81cf-7307-4315-88df-095e0a96d38d",
+      "official_id": "5EL1GSFD112458074",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "b0709bc1-8c7f-4a47-abdb-83cca6b82990",
+      "official_id": "5EM1GSFD100806109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "d7307c28-4eae-4fde-aa9d-de264bd43cf6",
+      "official_id": "5EM1GSFD102386112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "1fd7ffae-91e4-4def-8376-38ab96c06d52",
+      "official_id": "5EM1GSFD102420111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "728af060-ce95-40f1-ad37-ad1e97463e17",
+      "official_id": "5EM1GSFD102423111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "ebc4bc2d-e8d3-4b2b-8956-51ecad1762f7",
+      "official_id": "5EM1GSFD102429112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "5f26956c-ad26-4e01-a045-cafbd8477549",
+      "official_id": "5EM1GSFD102451112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "4d435e05-3fd4-4ace-ab7a-ddb2ebf00cbf",
+      "official_id": "5EM1GSFD102454109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "7f1628b7-33f3-4723-b8b8-1473824bf3df",
+      "official_id": "5EM1GSFD110103106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "4415038f-79c6-47b5-a794-6ddeabbd651b",
+      "official_id": "5EM1GSFD110122091",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "0461aab3-2580-4e34-a4ec-8d21fff9a646",
+      "official_id": "5EM1GSFD110549111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "dcff9666-8962-4fce-ae70-0a9d15de1dea",
+      "official_id": "5EM1GSFD112245109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "a59288e7-3d29-46ad-9951-63c468059b14",
+      "official_id": "5EN1GSBD100778113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "b392326c-12d5-44eb-93b6-b7d2f5d787be",
+      "official_id": "5EN1GSFD100127107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "d62d8623-01eb-4928-a8e6-a8b00eb66453",
+      "official_id": "5EN1GSFD100139110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "aafb184c-0512-48af-861b-9e67c0640993",
+      "official_id": "5EN1GSFD100160106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "beabbf37-ae33-403e-ab31-3a59faf7f35f",
+      "official_id": "5EN1GSFD100736108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "52867b65-7cda-48f5-aae6-1e49eb91571c",
+      "official_id": "5EN1GSFD102366109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "be600ecf-5513-4577-a8d3-d509f57e0827",
+      "official_id": "5EN1GSFD110769115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "4957af67-9be1-40ad-baac-e52e63b8356d",
+      "official_id": "5EN1GSFD111938106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "bed65742-bca0-464b-b6b5-29bf7609806a",
+      "official_id": "5EN1GSFD112128110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "2b78a11c-d921-40ca-9054-3b62d82b1783",
+      "official_id": "5EN1GSFD112179100",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "f1a05975-c7cf-4c4f-a593-7944ac62ba49",
+      "official_id": "5EN1GSFD112395091",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "1a203908-b147-46a1-bc0e-77b636d8aff0",
+      "official_id": "5HC1GSBD111839105",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "36464fbe-18e8-4f8d-a458-aca6f5c6c710",
+      "official_id": "5HC1GSFD100893109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "004d653e-1aaa-4bbf-ac1d-e87b5fdf2550",
+      "official_id": "5HC1GSFD100920104",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "c6ebc04d-99f4-4203-ac39-5a8f2b91609a",
+      "official_id": "5HC1GSFD101873111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "019776c1-a83b-49f1-91b0-e0a8308a3aa0",
+      "official_id": "5HC1GSFD102850115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "88301cfd-6309-49b6-9885-e495280a043b",
+      "official_id": "5HC1GSFD112342106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "787e2647-c03f-4486-ada6-dddf8d6b80cd",
+      "official_id": "5HE1GSBD111897115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "5c9fdbde-1f36-41fc-b4c5-1aadb2a7b8dc",
+      "official_id": "5HE1GSFD100402113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "bf78102e-56bb-480b-9992-e6ac93700983",
+      "official_id": "5HE1GSFD101052110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "c4db4cc8-cc39-4eb3-b56d-3b45f4339cfe",
+      "official_id": "5HE1GSFD102690114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "0aa40fec-7157-4a79-9c02-f746af6d18b9",
+      "official_id": "5HE1GSFD102851115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "8ed39d48-baa7-4b68-b257-9a730b0c0fc4",
+      "official_id": "5HE1GSFD110592111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "95ff2e5d-01ba-4411-b5bb-247e79aba555",
+      "official_id": "5HE1GSFD110826111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "5301ec50-65fb-4832-a55e-e3f6a2acc45b",
+      "official_id": "5HH1GSFD100136105",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "d4f72d5a-3d30-4f30-b2a0-a3e1f87cea81",
+      "official_id": "5HH1GSFD100540110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "3f5926f9-acc6-4646-a939-bc769f250cf5",
+      "official_id": "5HH1GSFD110385110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "992ea313-04d4-4047-93bc-8768e587b687",
+      "official_id": "5HI1GSBD103234120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "67a285df-f8d7-4786-a8a9-3807153b93e3",
+      "official_id": "5HI1GSFD100118110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "a4715e57-d9de-4dc9-94be-dbbb323a5c02",
+      "official_id": "5HI1GSFD100383109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "836206f9-237c-4695-8464-49d66f01cfff",
+      "official_id": "5HI1GSFD101969110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "4624b9e5-d7ff-4892-8007-0d66f8b7aa63",
+      "official_id": "5HI1GSFD110364107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "78db5233-c3a6-4882-bc7f-e86e7162548a",
+      "official_id": "5HJ1GSFD100112097",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "4f0ba305-c5ce-47c2-8acd-5ac4e7da6d14",
+      "official_id": "5HJ1GSFD101965100",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "cc85dcfa-168f-4250-9804-cf92651491a2",
+      "official_id": "5HJ1GSFD102445109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "e902d7e6-b4e3-40e1-8b39-60b539f411b4",
+      "official_id": "5HJ1GSFD110451113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "d4230c76-0130-4a7a-9d5e-0b70ca5de187",
+      "official_id": "5HK1GSBD102369112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "deea5d0b-b9bc-4f17-a975-44015072e998",
+      "official_id": "5HK1GSBD103235120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "42ff58ab-aec6-48ae-8f2a-9d391649df6c",
+      "official_id": "5HK1GSFD110404097",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "133ff772-a966-4699-9149-0e7209145d5f",
+      "official_id": "5HK1GSFD110446112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "43c11fe7-a549-4a72-afea-67f14212f384",
+      "official_id": "5HL1GSBD111917109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "825ad97d-2b44-410c-8313-72ea2009b79b",
+      "official_id": "5HL1GSFD100482108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "3e2da9ed-e176-4b57-96a8-66f5593a52a2",
+      "official_id": "5HL1GSFD101960102",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "8b75aeb7-0aaa-469c-91b3-ed635bb33f69",
+      "official_id": "5HL1GSFD110633107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "3af7dba1-1f75-4923-ac6f-832c54160118",
+      "official_id": "5HM1GSFD100501109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "f1fc5fc4-847d-413c-8533-9b06f9426893",
+      "official_id": "5HM1GSFD111928102",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "3ebc37ee-852d-4ad7-9c29-018923027db1",
+      "official_id": "5HN1GSBD100458111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "9789201a-62fb-484d-9b3a-e6b6c8446b2e",
+      "official_id": "5HN1GSFD110437115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "cd32d788-9159-4565-9668-759332c0dd51",
+      "official_id": "5HN1GSFD110439118",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "6b2ba23d-e700-46b2-852a-87d98db2cb72",
+      "official_id": "5HN1GSFD110626091",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "4b0b1471-e435-4b8f-b31a-010baaeb3ba9",
+      "official_id": "5HN1GSFD112360112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "b094015d-7262-4941-b786-efb39671fc4a",
+      "official_id": "5IC1GSFD100456111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "19dac7b4-f75f-4f17-9f66-0b3ad06fec97",
+      "official_id": "5IC1GSFD100923110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "41de22b2-c6bd-428e-9a53-298507440360",
+      "official_id": "5IC1GSFD101058107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "c4b70f4f-d5fc-4af8-ae72-abef9a9217cb",
+      "official_id": "5IC1GSFD110132114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "9f3b17e9-5303-4874-b567-8b957e6a566c",
+      "official_id": "5IC1GSFD111954106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "8fce80bb-d5c7-40df-85d6-c36aa6c87cd9",
+      "official_id": "5IE1GSFD100477110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "009967d7-2863-49a8-a5f3-e4dfd79755af",
+      "official_id": "5IE1GSFD100845111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "72b94059-a936-48cf-a0c3-c12fa25d49cb",
+      "official_id": "5IE1GSFD102043112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "99fc859e-5a6f-4555-a11f-4aed36d11851",
+      "official_id": "5IE1GSFD102983117",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "3d28e9a6-fc0a-4d7e-83e4-4d627e56d229",
+      "official_id": "5IH1GSBD100192109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "2d940880-83e1-4286-85fc-9361b9b5a507",
+      "official_id": "5IH1GSFD101990109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "1a3009fa-4840-488d-b923-fd9dfd2f2326",
+      "official_id": "5IH1GSFD110401110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "006a8ab0-2936-4579-8b4a-a0d2ae9a9f21",
+      "official_id": "5IH1GSFD112213103",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "4d11b5d2-28a3-413f-ae05-65ebbbe25031",
+      "official_id": "5II1GSBD110413111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "e3ae73a1-2ab3-475e-bb1f-9ad8caf5f8f5",
+      "official_id": "5II1GSBD110852111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "a9110c15-f584-4394-bac5-a2c305686854",
+      "official_id": "5II1GSFD100113112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "f9d6f38e-8cdb-4af3-a7e3-528cb49a5206",
+      "official_id": "5II1GSFD102032112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "b4c8c123-f4c5-46f2-8d8c-8d290668159a",
+      "official_id": "5II1GSFD110372092",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "9bd9cb40-a6f0-47c2-a382-bea9839be906",
+      "official_id": "5IJ1GSFD100387110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "af76f97c-5b99-4f7e-9872-15becfc576af",
+      "official_id": "5IJ1GSFD100462110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "2fec2b17-172b-497d-94ac-aee4b8555d95",
+      "official_id": "5IJ1GSFD102200110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "b63d5af3-c02c-46c4-8478-946a0170f97e",
+      "official_id": "5IJ1GSFD102436111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "070ba328-6135-4610-a202-54233e5a10a9",
+      "official_id": "5IJ1GSFD103027115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "8196d4fd-223c-4da5-99d9-695bad423b89",
+      "official_id": "5IJ1GSFD110811092",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "277abdd9-548e-4e5d-9c36-5bde3bae63b2",
+      "official_id": "5JC1GSFD101134100",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "f3aabbe2-1d7d-4fb1-bcbd-938b86081a5d",
+      "official_id": "5JE1GSFD101629108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "f66ea928-8f23-49b0-8d0c-69a0b38ad1df",
+      "official_id": "5JE1GSFD111845105",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "33d0e665-00fd-46a5-9eea-b94a80dcb1a3",
+      "official_id": "5JH1GSBD101724109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "35080fa3-ac3b-4691-8f5c-53395b1dd8d2",
+      "official_id": "5JH1GSFD101182108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "34433ab4-75ee-405d-a19d-bf80930d49eb",
+      "official_id": "5JH1GSFD101185105",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "74de36ee-b67f-42a7-9e1b-f64cc71bd664",
+      "official_id": "5JH1GSFD101729108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "ba383cd0-a539-4fbd-9f7d-66b9ecca39d0",
+      "official_id": "5JH1GSFD111172105",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "26708ae4-532a-4e2d-be84-c92d2871f1c5",
+      "official_id": "5JH1GSFD111977092",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "c59ff0d1-4875-4192-9372-6c7a11ff6420",
+      "official_id": "5JI1GSFD100765100",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "83b28028-6e53-41ff-adfe-d682ebe48826",
+      "official_id": "5JI1GSFD110672114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "1fbb9c2a-db83-4323-9b70-ed3fc17da878",
+      "official_id": "5JJ1GSBD111359115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "039077a3-f1c2-468c-a438-cc9cf1d0b0a5",
+      "official_id": "5JJ1GSFD100647107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "73911c4b-5c01-4d74-abb9-9baa0e06303c",
+      "official_id": "5JJ1GSFD100666106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "848031b6-6f2e-4968-aa38-8df7f44ab705",
+      "official_id": "5JJ1GSFD100688113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "87dc2d31-dad2-4282-bbd1-aae6428fb3bd",
+      "official_id": "5JJ1GSFD100727110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "fc85c2ea-e3b4-4a7b-b400-6cca60b3744f",
+      "official_id": "5JJ1GSFD102187105",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "63357785-526a-456f-a2ba-e8524453184d",
+      "official_id": "5JK1GSBD110733104",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "c88a851f-a920-464e-8cab-b9b336e46a02",
+      "official_id": "5JK1GSFD100126108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "ff300481-a03e-4a0f-9762-50697903611e",
+      "official_id": "5JK1GSFD100142107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "8b338a2c-8bb5-468e-bd98-047e945cc48b",
+      "official_id": "5JK1GSFD102418106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "cf4444fc-7809-4ebf-bb6b-6d59769b2ae8",
+      "official_id": "5JK1GSFD102427103",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "3fe422ce-a139-44ec-9c81-f4bb5ba0f885",
+      "official_id": "5JK1GSFD102432107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "ff6ef0a8-2360-4aec-8776-a9da128ce0c3",
+      "official_id": "5JK1GSFD102438106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "e19e32b1-fcf0-4731-b38f-6b9b24af2620",
+      "official_id": "5JK1GSFD110714099",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "d591ed4a-5027-4896-84e8-c7b7f26a41f2",
+      "official_id": "5JK1GSFD110726107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "c7f9ece6-bc4c-4be2-9e7b-80f87eabb9c8",
+      "official_id": "5JK1GSFD110757115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "50b6ba19-a466-4c72-b00e-a89405bae78c",
+      "official_id": "5JK1GSFD110763107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "67d8e9f4-7f2d-4ac6-8d0d-d17bbea59b04",
+      "official_id": "5JK1GSFD112168079",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "851449a5-77a6-4004-84df-dd56bd197fb7",
+      "official_id": "5JL1GSFD100101105",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "c877d6a0-813d-4963-9195-4062ddb4f6ab",
+      "official_id": "5JL1GSFD100761112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "aac228f7-26a7-4e3a-9b70-9a0453b0eb58",
+      "official_id": "5JL1GSFD102413100",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "8983e4c3-b548-42dd-b286-441ccb7cb261",
+      "official_id": "5JL1GSFD102415103",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "09b41c27-a27c-470d-9b65-0b9a9dce459b",
+      "official_id": "5JL1GSFD110739105",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "c83ff862-e314-4b88-b512-6dda32efb555",
+      "official_id": "5JL1GSFD110746098",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "62c190a0-8ac7-4992-a83b-2fda1ce23721",
+      "official_id": "5JN1GSBD102705114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "b03ba2e6-e927-4237-a47d-c5a1f5224d60",
+      "official_id": "5JN1GSBD102810115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "14f84386-3543-4023-a283-1022650ec97e",
+      "official_id": "5JN1GSFD100695113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "c9851089-a39e-427a-b5c8-5a4fccdbbe3b",
+      "official_id": "5JN1GSFD110014091",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "0e628131-9fe7-47cb-861d-6b344b48a646",
+      "official_id": "5JN1GSFD110333112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "9f138bb2-a403-456a-85e9-f8b0b9d3fce6",
+      "official_id": "5JN1GSFD110417111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "17698bc2-7f6a-4d90-b5a3-26b2b1cccbdf",
+      "official_id": "5JN1GSFD110425115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "88987a72-10b8-4da1-8356-377aa4e02000",
+      "official_id": "5JN1GSFD110472109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:26.944782+00:00"
+    },
+    {
+      "establishment_id": "161c4fe9-87f0-488b-8e79-30131e22edc0",
+      "official_id": "5KC1GSBD110298113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "6212dfd0-37fb-4596-b863-b278cf18584d",
+      "official_id": "5KC1GSFD100304109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "aa58fc54-202d-4156-8651-daba8fbb9194",
+      "official_id": "5KC1GSFD102449110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "54f90f62-fc0a-473d-822a-b4afc4d90b1e",
+      "official_id": "5KE1GSBD110265115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "98d941b4-9f29-4ce5-938f-b0730be41eca",
+      "official_id": "5KE1GSFD100261099",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "128c5fd0-0048-44a1-9c07-befbb05ce7a1",
+      "official_id": "5KE1GSFD100274110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "abb72a08-9d60-46ea-a5b4-9892d3fb6232",
+      "official_id": "5KE1GSFD100455100",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "7bdd16d7-0e65-450b-b542-5cb187363e7b",
+      "official_id": "5KE1GSFD102430111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "706f78d9-035d-47b4-9b76-2f38dad60b37",
+      "official_id": "5KE1GSFD102442110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "0a322e5b-df8a-4ae6-b3fb-944790b0aaa4",
+      "official_id": "5KE1GSFD110254111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "2ec235e4-25d8-4fc7-b8da-8746fbccb436",
+      "official_id": "5KH1GSBD110016114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "84fca479-ae33-40e9-982a-f077a9438f8f",
+      "official_id": "5KH1GSBD110309112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "46121dac-87ca-418e-9c3d-3111b4b03ba5",
+      "official_id": "5KH1GSFD110143111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "6512783b-1331-4668-9c86-c927303d4f90",
+      "official_id": "5KH1GSFD110374106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "4fe77a9d-3ec9-4c73-b47e-cd67b730c963",
+      "official_id": "5KH1GSFD111947107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "181d97b6-796b-405f-9141-b4dc0fbfbfde",
+      "official_id": "5KH1GSFD112202109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "5122b130-69dc-43bd-95d4-b95faa09dc8e",
+      "official_id": "5KH1GSFD112410111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "6ed86114-2a15-4b2d-8cab-2755d7c7600d",
+      "official_id": "5KH1GSFD112422115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "f57fe219-6e37-49b1-95fa-23f1152fbb92",
+      "official_id": "5KI1GSBD100285112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "cb849835-0222-44b1-bb17-34b97607488e",
+      "official_id": "5KI1GSFD100281106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "47c0842c-9a2e-470b-9ab6-ed887488c014",
+      "official_id": "5KI1GSFD110250107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "209c8fac-07eb-40e5-a71f-4a06ceddfe5b",
+      "official_id": "5KI1GSFD112473074",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "15214cde-b20f-4a1d-be43-a6370c2459ea",
+      "official_id": "5LC1GSBD110334112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "940dd7aa-f1ba-425c-9abd-caf6fd43ce31",
+      "official_id": "5LC1GSBD112381112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "2b63495a-86bd-4c70-b19f-e9c31060e2bc",
+      "official_id": "5LC1GSFD102847115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "baf0fa09-6ac8-431b-a762-e80848e040a9",
+      "official_id": "5LC1GSFD102848115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "3ebb89b8-4499-41e5-890a-5000f6d2ef06",
+      "official_id": "5LC1GSFD110189091",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "19c4fbd7-ff89-4b33-a137-d2207e986fb7",
+      "official_id": "5LC1GSFD110673115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "6e9cbd22-bc91-4406-8357-0a01e6a4fbb9",
+      "official_id": "5LC1GSFD110699105",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "cdf443d3-b716-469c-818b-a76945d40f8c",
+      "official_id": "5LC1GSFD111859091",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "8a344675-ad08-4d7e-9d72-ac48fccef02d",
+      "official_id": "5LE1GSFD110120091",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "05af223b-a1df-4806-b3a7-e9c2e8f9a51a",
+      "official_id": "5LE1GSFD110141092",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "e37de21c-061d-4088-b2a7-e532fa955bf1",
+      "official_id": "5LH1GSBD112399092",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "dc5d14d7-592e-473f-974a-e768a85c7f40",
+      "official_id": "5LH1GSFD110108097",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "7281fbc5-dedf-44e7-8c85-01e8482a436b",
+      "official_id": "5LH1GSFD110685106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "457e51dd-6c32-43c8-b62e-a576d4bc08b6",
+      "official_id": "5LH1GSFD111196113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "00a22851-1db1-4123-9127-075b8b2f556d",
+      "official_id": "5LH1GSFD111709087",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "2af7d5f5-57a7-473e-b3ea-4ed6c32bdb3f",
+      "official_id": "5LH1GSFD111749110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "0b9e052c-5e41-46e4-b810-0ef769751103",
+      "official_id": "5LI1GSBD110009112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "3021a718-28fd-4f62-8cce-b1a68191e26f",
+      "official_id": "5LI1GSBD110135110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "09bd9a17-470f-43c4-8e4f-e8c39af0240a",
+      "official_id": "5LI1GSFD110155106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "5d00b608-c002-411a-a367-104e2be58f99",
+      "official_id": "5LI1GSFD110382091",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "89a0de36-816d-4217-a2f6-e96083fa7060",
+      "official_id": "5LI1GSFD110412112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "e850a2b7-3caa-47d5-bae1-1728fcca503b",
+      "official_id": "5LJ1GSFD110037104",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "bd213c43-dda1-489b-9848-3830da7b052d",
+      "official_id": "5LJ1GSFD112791114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "7277a39c-f8bf-44cc-ad86-663255cc817e",
+      "official_id": "5LK1GSBD110117098",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "5f381d89-d805-4018-a7ce-435ea6c7b8a0",
+      "official_id": "5LK1GSFD103118118",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "cc88a27e-f4a5-4242-b1b8-93186e29e441",
+      "official_id": "5LL1GSBD110373110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "bcb10eca-8128-4147-89cf-da2b9f05002c",
+      "official_id": "5MC1GSFD111676112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "350ba4b3-4e68-44fe-8181-b1d682b16274",
+      "official_id": "5ME1GSFD100552107A",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "3ca6bb83-b452-4a28-bb6b-a18664724d75",
+      "official_id": "5ME1GSFD112151110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "57fc1cb8-cdc0-4a2f-b377-2b8b01f2aa2f",
+      "official_id": "5MH1GSFD100129109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "266ff5ec-c990-4e68-a3b9-6ed27a8dc37d",
+      "official_id": "5MH1GSFD100403109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "3af59b19-137b-4d93-a253-c82f2a356a0a",
+      "official_id": "5MH1GSFD100438111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "f70a7303-a693-4a96-819c-d855d9ba92c5",
+      "official_id": "5MH1GSFD100514106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "b3faaef6-d9b7-42ef-8851-9d5c5038459c",
+      "official_id": "5MH1GSFD102197110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "d55789d2-b82e-4e6f-9584-6b896cff6d44",
+      "official_id": "5MH1GSFD102365107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "a968ef82-7aca-4c39-8fb3-83d3deddab94",
+      "official_id": "5MH1GSFD102448108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "41a9ab88-66b3-46db-b7d3-e33e4b5948a5",
+      "official_id": "5MH1GSFD110519107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "d8af02e1-a96b-4e9d-84bf-8c16dda67c58",
+      "official_id": "5MH1GSFD111175111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "edfd7a4e-fcff-4afd-8cd9-ad2fbc2460b0",
+      "official_id": "5MH1GSFD112388092",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "312cca34-3b5a-46b7-8fac-432b0539908b",
+      "official_id": "5MI1GSBD111665112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "d1176943-2a94-43a1-be69-006cdad66760",
+      "official_id": "5MI1GSFD101239107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "4c12026d-6527-4947-8966-e7a296094862",
+      "official_id": "5MI1GSFD111830092",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "80fd9a0c-8a0e-4f20-a975-7503f59a11f5",
+      "official_id": "5MJ1GSBD111670107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "55383377-2779-4a0d-b7db-990adf0f0e2b",
+      "official_id": "5MJ1GSFD102372111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "04ea1e01-a0ea-48a3-9e53-f28564b1ec8f",
+      "official_id": "5MJ1GSFD111234112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "3099f94a-39be-49f9-b336-90f6297729fe",
+      "official_id": "5MJ1GSFD111921076",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "b8c3ecbf-9ad5-44a8-9dc1-efc66b5f1697",
+      "official_id": "5MK1GSFD100433112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "c5f9ba94-a77d-4bde-981e-56c29cacd7f2",
+      "official_id": "5MK1GSFD101903103",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "615b6db7-5b1b-46ec-8956-9cf51cc1dbfd",
+      "official_id": "5MK1GSFD102019111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "3f21f1af-782a-4bdd-a060-b851c8528dce",
+      "official_id": "5MK1GSFD102377113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "1ecc3f9a-e162-400c-aa38-a4815f1f058d",
+      "official_id": "5MK1GSFD102444110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "a63ec945-001c-4729-a9cd-37da4f85a49a",
+      "official_id": "5MK1GSFD110111092",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "465e98b7-beac-4d1d-bc23-0f1a18792183",
+      "official_id": "5MK1GSFD111347111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "6d78855d-d47d-4c47-b9ab-2575073be81d",
+      "official_id": "5ML1GSBD112204110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "e108ae47-27f0-4933-8350-c75f60975276",
+      "official_id": "5ML1GSFD102247110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "94d3f3b4-7b99-4d3e-88c7-fd3c056132b2",
+      "official_id": "5ML1GSFD102383113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "8a7b4041-b99f-435b-bba3-ceffaac06c7b",
+      "official_id": "5ML1GSFD112243111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "cb5640d3-f20d-4ff0-b96a-5aa76f2bec65",
+      "official_id": "5ML1GSFD112391108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "b3b2cdc4-1185-4f7e-86eb-7217a190c18d",
+      "official_id": "5ML1GSFD112468095",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "e765c7fd-5525-4a38-bcae-af5c623f2b37",
+      "official_id": "5MM1GSFD102049106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "0fb4c96b-04ef-4d2c-a600-a5540b616ba2",
+      "official_id": "5MM1GSFD102172110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "41b9afcb-8ce3-4166-b324-3a8e1df875ed",
+      "official_id": "5MM1GSFD102404110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "a3174344-7338-4fd4-9ac9-c4aaadf1049c",
+      "official_id": "5MM1GSFD110510111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "9a43d5d5-a092-4092-98b5-dcee7857f7e4",
+      "official_id": "5MM1GSFD111350097",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "1ed21d22-2dc2-402d-a724-042f68b0a14e",
+      "official_id": "5MN1GSBD110834110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "f4745ed2-6ef1-4554-87eb-0896f5290f7b",
+      "official_id": "5MN1GSFD101826109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "632a681f-1526-42c9-a895-5f47fbd52f0f",
+      "official_id": "5MN1GSFD112141111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "3fe8a175-c536-415e-9a9c-1544e99ff798",
+      "official_id": "5MN1GSFD112457071",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "59958111-f96c-4a4b-a7e6-47f9b8d87787",
+      "official_id": "5MQ1GSFD101247108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "44d0fd6a-4633-4385-8a8f-685cee77c49a",
+      "official_id": "5MQ1GSFD101254106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "0efefef0-45a6-48bb-861b-5fa64913578e",
+      "official_id": "5MQ1GSFD110557109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "8cf10c30-54d0-42bd-b80f-9fb393fd041a",
+      "official_id": "5NC1GSBD111514111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "b864365b-e21f-4f3e-bea1-a6cd3243e1c2",
+      "official_id": "5NC1GSFD100874113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "bc3c8f83-a813-4835-97e7-77c0788f3323",
+      "official_id": "5NC1GSFD101257110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "31d8d1d6-605e-47a9-b6cf-34d1a70441ba",
+      "official_id": "5NC1GSFD101267099",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "4af6b330-3f26-4b08-9739-2ccbecf98a1d",
+      "official_id": "5NC1GSFD101272110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "68f446f9-4e08-49d9-83c4-31b1a5d08939",
+      "official_id": "5NC1GSFD101275109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "33a65891-5949-4449-aca0-08207f7cd736",
+      "official_id": "5NC1GSFD101521112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "6031d4d8-8848-49c4-b85a-c20574bcf6cb",
+      "official_id": "5NC1GSFD101973102",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.067948+00:00"
+    },
+    {
+      "establishment_id": "8be4a065-f669-4339-9e43-f27d2f1eb8ac",
+      "official_id": "5NC1GSFD111002076",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "9906aa09-4af3-4ee9-9dd8-bdbf25da0a96",
+      "official_id": "5NC1GSFD112242115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "30208b2e-30d2-486f-8073-f05ccb1460da",
+      "official_id": "5NE1GSBD102913114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "d44ca8e1-f84e-44e4-8fc7-858986897cfa",
+      "official_id": "5NE1GSBD112139114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "61381b54-4164-4946-8ff5-025e729e76f9",
+      "official_id": "5NE1GSFD100651110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "c2947323-8064-413b-9bfc-6b90ec804849",
+      "official_id": "5NE1GSFD100749108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "dc289b0b-4898-4c8f-9926-0edb9b8a4b24",
+      "official_id": "5NE1GSFD101192110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "2dab5ae6-5598-4090-a80d-f72494718cf3",
+      "official_id": "5NE1GSFD110607111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "839094a5-484a-4df1-973a-7b0634e3c333",
+      "official_id": "5NE1GSFD110756113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "089282d6-9939-48dc-ab1d-503bed4ceac2",
+      "official_id": "5NH1GSFD100601112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "ee2a06db-8df1-4d45-a32e-5ed507ba9013",
+      "official_id": "5NH1GSFD100615110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "2e63c350-8bcf-4ecb-9971-acbfa2fd60b4",
+      "official_id": "5NH1GSFD100622110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "b7884805-0b24-4fbc-b0ac-435a70117b31",
+      "official_id": "5NH1GSFD100631109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "8718d061-b990-4307-a960-c8aacc36351b",
+      "official_id": "5NH1GSFD111933091",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "1ef7d84b-0f90-43e2-9ad5-426f65225597",
+      "official_id": "5NI1GSFD100821109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "b620e6f4-5a2f-4cdb-9d8e-25514eb91045",
+      "official_id": "5NI1GSFD110662104",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "0dc5bbe1-0d77-4ba0-8bc4-2da0bf4837f4",
+      "official_id": "5NJ1GSBD112206111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "08478504-ec14-43a6-b65a-6128733aadde",
+      "official_id": "5NJ1GSFD100650109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "ea97241c-4359-4ed2-97a0-0ab0b2b0e89e",
+      "official_id": "5NJ1GSFD100657107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "5d52a214-f2f5-4639-8a05-3790f5deadf3",
+      "official_id": "5QC1GSFD102064097",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "d20c5d83-a22a-4088-a4f8-57207aa0a548",
+      "official_id": "5QE1GSBD111854098",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "9eab8576-36ca-46a4-8a0a-068d27bfceb6",
+      "official_id": "5QE1GSFD100720106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "1f99ad58-e1b4-4a3a-8f6c-abc98fc87875",
+      "official_id": "5QE1GSFD101997108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "cb377da5-5cbf-4f0e-8788-ff507dc25c72",
+      "official_id": "5QE1GSFD102250100",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "5ab694d0-a8b0-4cbd-a487-48cc3c65e22f",
+      "official_id": "5QH1GSBD111890097",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "6444c56e-40b9-41c1-8870-1b4f5193c9db",
+      "official_id": "5QH1GSFD100349109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "2913bf85-5975-4f4b-8e9b-8660be8d6540",
+      "official_id": "5QH1GSFD100623110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "da7fa14b-3dc2-41ea-91f8-95a058d5616d",
+      "official_id": "5QH1GSFD102988117",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "1533251d-a175-40bf-873b-63df09a70f94",
+      "official_id": "5QH1GSFD111879099",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "83d9c47b-acee-464b-80d6-94cb0df01806",
+      "official_id": "5QI1GSFD101862098",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "0da21a75-4a3a-4058-9e0e-5f2c5dc191b2",
+      "official_id": "5QI1GSFD111958098",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "b1f515cd-63f5-4a74-97a3-b323bb4005f2",
+      "official_id": "5QJ1GSBD112090111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "24e0d0d2-2b17-41b8-be7c-b2484bd7e25a",
+      "official_id": "5QJ1GSFD100119111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "5b0fe2f8-d355-417d-9f1c-839b1c7c0a66",
+      "official_id": "5QJ1GSFD100345107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "6c1ff20e-265f-4bf4-870f-ce30856df9c7",
+      "official_id": "5QJ1GSFD100408111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "d44cae9a-65eb-4beb-b0d8-f5023d61e3a0",
+      "official_id": "5QJ1GSFD102038112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "a27f22ce-f112-4048-a582-115cd690584f",
+      "official_id": "5QJ1GSFD102055100",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "ce9bbbd6-9b48-4ace-be53-9252ff6a18fb",
+      "official_id": "5QJ1GSFD110429112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "05774cea-54b4-4a18-a6a1-1d24d4140576",
+      "official_id": "5QK1GSFD100388109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "b3fc936b-03ab-429e-a73d-38a537480964",
+      "official_id": "5QK1GSFD102005109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "ced0dcd2-1d0b-4498-85b3-e9da52f3d29f",
+      "official_id": "5QK1GSFD112092106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "ff4a004b-258b-43cd-9d22-d5e97dcf5846",
+      "official_id": "7CE1GSBD111326112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "2fbf62ae-94c3-426e-972a-ab4b23428381",
+      "official_id": "7CE1GSBD111588114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "33faa2ec-505d-4668-9fdf-6564fbcb5af6",
+      "official_id": "7CE1GSFD102040112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "70168a77-226d-43fb-aa50-24878828b2e5",
+      "official_id": "7CE1GSFD110282115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "7598d3c9-780b-4e6e-a828-c96b50432229",
+      "official_id": "7CH1GSBD112034107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "c644fab7-3d7f-46ee-872e-2f04b9dc1135",
+      "official_id": "7CH1GSFD101821111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "783b931b-1998-414b-9e52-33316f95433d",
+      "official_id": "7CH1GSFD102149098",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "dfcd31a9-b90a-4233-b7a7-cde77a28ad53",
+      "official_id": "7CH1GSFD111841092",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "01f96d6c-d12f-4631-8381-c6090102b67c",
+      "official_id": "7CI1GSBD102833115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "b557ddb8-09ef-4994-806e-a4b1340f2b26",
+      "official_id": "7CI1GSBD111669109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "30f48b1e-c5a4-43bd-8de8-754b1fa5f416",
+      "official_id": "7CI1GSBD111996107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "2cfdbabf-216a-4b9d-974c-ee7ce50f10dd",
+      "official_id": "7CI1GSBD112067113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "a6fbe91e-70d7-4f18-bd37-a1c4eb259e2e",
+      "official_id": "7CJ1GSBD110005110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "91c6f62c-eb45-4e27-aba2-9e2148db3fb0",
+      "official_id": "7CJ1GSBD110217115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "dbf26de8-9664-40af-b316-65bd950dff27",
+      "official_id": "7CJ1GSFD101874096",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "8b6222d7-85f2-4188-8da4-5c71408f6d5b",
+      "official_id": "7CJ1GSFD112010091",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "253851cd-ac77-4bfd-b7c6-b50c9f413cdf",
+      "official_id": "7CK1GSBD102062096",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "1378d786-d681-46c4-9ed3-cfd6d059af93",
+      "official_id": "7CK1GSBD112108111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "e8bcebc5-e4a5-46f3-9193-0032054dab23",
+      "official_id": "7CK1GSFD102340113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "99af84bd-e223-4574-afd9-3d3c684960d4",
+      "official_id": "7CK1GSFD110234092",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "b541ddd3-8415-4f22-93ec-f068876218cc",
+      "official_id": "7CL1GSBD102688114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "341cbd10-daae-4fd6-b2f8-ec3c6ec0e853",
+      "official_id": "7CL1GSBD111678109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "9e37eee8-dea6-4dcd-90ee-d24485893df2",
+      "official_id": "7CM1GSBD101718111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "7dbd1e0a-9e72-4dde-9a26-b8400a916df6",
+      "official_id": "7CM1GSBD102921115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "436cf5c9-11ba-4de6-80a8-aab0b14df28c",
+      "official_id": "7CM1GSBD103238120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "527802a5-933c-4981-bf07-ac2031970663",
+      "official_id": "7CM1GSBD111578106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "8f8cbf15-0c4a-4966-a455-66e16549238b",
+      "official_id": "7CM1GSBD112016111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "006e18ea-0349-4eee-899b-4318e6dd33ca",
+      "official_id": "7CM1GSBD112101113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "29e0ff76-740c-4958-8f0c-67cf4fcfa19a",
+      "official_id": "7CM1GSBD112119114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "34da34ad-1b04-4378-b650-f5069a7e7ac0",
+      "official_id": "7CM1GSFD111655107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "5ebebfc6-09f2-499d-ab33-3dc6efd0a48f",
+      "official_id": "7CMGSFD102683114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "ca9171ce-ac19-4a9c-a5c3-d803f5f85b16",
+      "official_id": "7CN1GSBD111713108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "f8a901c3-286b-4069-b1e8-fe2ee16ac2a2",
+      "official_id": "7CQ1GSBD111831105",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "4a2c9fec-0222-4189-ae3f-f63bd05f633f",
+      "official_id": "7CQ1GSBD111989113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "285f3216-bcc9-4a45-b0d0-1eae7f81f56d",
+      "official_id": "7CR1GSFD111891103",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "18fb6146-fe6e-4665-a595-64a7193a7b1e",
+      "official_id": "7CT1GSBD111358115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "b95c5f12-83e3-486c-aed6-c74051430185",
+      "official_id": "7CT1GSFD112358060",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "604417b9-bfea-4907-a778-05f2cdb4e4fe",
+      "official_id": "7CV1GSBD112022092",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "f1fdf8e1-da21-4661-9a7e-2fc39cee5773",
+      "official_id": "7CX1GSBD100276110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "dabc8427-71e1-4423-a8c5-6dcf8f68dac4",
+      "official_id": "7CX1GSBD110236113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "8c1a927e-7e5b-4427-9d20-60dbfda29fd0",
+      "official_id": "7CX1GSBD110291113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.433253+00:00"
+    },
+    {
+      "establishment_id": "91f1819f-ab1b-4c4b-94b5-05d088a8d851",
+      "official_id": "7CX1GSFD102117096",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "d95bdee7-3d0b-4582-9192-c0a1fc297758",
+      "official_id": "7CX1GSFD102439096",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "9e0dce08-e5fc-4db3-a860-05a78d0401d0",
+      "official_id": "7EC1GSBD110051110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "3eb44da6-9201-4f8b-9848-260d755cebf4",
+      "official_id": "7EC1GSFD100344112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "62c2effe-f85d-4f1c-bde3-12b4753eeb76",
+      "official_id": "7EC1GSFD102028110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "4d871e60-df57-4d42-bc0c-50ecb51c3618",
+      "official_id": "7EC1GSFD102046110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "1a22a722-d362-4fb1-8aef-ede8284d0583",
+      "official_id": "7EC1GSFD102371113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "db7d2bb1-aef5-42c4-a0f9-e790fdf395cd",
+      "official_id": "7EC1GSFD102832115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "1e8bdabd-56a5-4f3a-a338-1851d8827e62",
+      "official_id": "7EC1GSFD110231108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "e8ffd7e0-ba0d-45c4-8b92-e1a7c55c270f",
+      "official_id": "7EC1GSFD111899113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "bddc602c-38a0-46e1-b48f-89deb3d16d45",
+      "official_id": "7EE1GSFD100328111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "27652bab-e51e-40dd-8acd-251d2a067e51",
+      "official_id": "7EE1GSFD100337112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "7508120b-fe91-42d5-af46-d4eddddaa5b4",
+      "official_id": "7EE1GSFD100691110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "2e71d41c-df7f-4f3f-be0b-2e5658087ebc",
+      "official_id": "7EE1GSFD101711111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "95ed99bd-1ac6-4c0b-b431-422928b18043",
+      "official_id": "7EE1GSFD111692108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "ed736ef9-d8e9-4699-9da0-ac4aa5dc6ac7",
+      "official_id": "7EH1GSBD100351114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "7c53d33e-22bc-480e-b8bf-857917b953cf",
+      "official_id": "7EH1GSBD110322112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "b32734bf-c411-46d9-a953-adb31c983e2f",
+      "official_id": "7EH1GSFD100045111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "4668099b-0ebc-4c5c-a180-fcea050905bd",
+      "official_id": "7EH1GSFD100981110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "dc2edd6d-7a48-421a-ac5c-ea587277e40e",
+      "official_id": "7EH1GSFD102326113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "d2338973-9c66-4f29-9f09-65f849f8b141",
+      "official_id": "7EH1GSFD102332113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "5ed281a8-8c73-46a2-ab2e-2aaade5db9ba",
+      "official_id": "7EH1GSFD102717114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "bb0e9496-6cfe-411c-a9ab-557a69ab8137",
+      "official_id": "7EH1GSFD111595108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "25f2c1d1-336c-4f45-a909-1fd7cc7e0081",
+      "official_id": "7EI1GSFD102831115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "ed070120-0ba1-4cad-b185-de76882302c6",
+      "official_id": "7EI1GSFD111687095",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "1baf22f7-692a-4401-96ab-4be703cf39b0",
+      "official_id": "7HC1GSBD110636113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "66a5c07f-1631-43c8-8890-bea64e651b2b",
+      "official_id": "7HC1GSFD102331113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "2a8bf65b-ba52-48ba-b56e-b598c9549e66",
+      "official_id": "7HC1GSFD110053109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "a71ba754-fe58-4616-9c2c-458506b57136",
+      "official_id": "7HE1GSBD100496111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "947a8afe-424c-46f6-aa05-c683f7919020",
+      "official_id": "7HE1GSBD110313107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "eae97453-09d8-4dc4-af4f-7081d2fad386",
+      "official_id": "7HE1GSBD110648112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "9c5fa5ec-d12d-43c7-aaa9-29d338283e23",
+      "official_id": "7HH1GSBD110332112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "4c035f12-bd15-4b5a-925b-870d94ac522b",
+      "official_id": "7HH1GSBD110360092",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "4b598cfc-017b-44ae-864a-d0b878141202",
+      "official_id": "7HH1GSBD111952109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "dfc566ea-2bfd-4322-8360-7ab0a142057c",
+      "official_id": "7HH1GSFD100764109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "5d5a2d3c-a72a-4c3a-b46c-88bb9e6aff2f",
+      "official_id": "7HH1GSFD102990117",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "abdc4eda-d842-4c72-b1e9-3d9cb188779b",
+      "official_id": "7HH1GSFD110448113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "9fa51859-6001-4c56-bf8e-dc2fb8747b97",
+      "official_id": "7HH1GSFD112218074",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "4c665ff0-6f72-488c-ba9f-5c883d3dcdaa",
+      "official_id": "7HI1GSFD101316108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "2bc09adb-05a4-4727-aa83-82978449f50c",
+      "official_id": "7HI1GSFD103028117",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "6f569f5f-f85e-48ee-8208-9c960d7fd4af",
+      "official_id": "7HI1GSFD111881103",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "31a05a2d-3780-41b4-a52b-9ab24588d610",
+      "official_id": "7HJ1GSFD100492108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "ed4f8e0d-5a4e-4202-8cdd-1cd9a774d7d2",
+      "official_id": "7HJ1GSFD110052109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "7c8b0f2c-c37a-46ab-a8b2-8f26c1da681a",
+      "official_id": "7HJ1GSFD110063106",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "c6978958-77aa-48b4-9eed-ce15930e2efa",
+      "official_id": "7HJ1GSFD110070109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "23a1776b-e412-4b56-a83f-5e4a4493d666",
+      "official_id": "7HK1GSBD111887108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "46b5ff39-a5ca-45c8-a445-130500c6160a",
+      "official_id": "7HK1GSFD102375113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "ebe55c51-1acf-4e52-bc41-366731276958",
+      "official_id": "7HL1GSBD102693114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "aef2c136-252f-47d4-b66e-198a659b6543",
+      "official_id": "7HL1GSFD100226100",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "9d79ec0e-5ee6-4da2-a931-958feb526960",
+      "official_id": "7HL1GSFD101310112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "e6d62829-6933-4292-9a1f-2d7f23a9408d",
+      "official_id": "7HL1GSFD101320109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "982d9e69-97c1-4eb0-a18a-3b2aa1effc2e",
+      "official_id": "7HL1GSFD101585108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "9fbebd64-4f45-45af-ae6f-84c1ec4b3594",
+      "official_id": "7HL1GSFD102727114",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "6f71cb4c-ec26-4b3b-9ea8-8c4077130f2f",
+      "official_id": "7HL1GSFD111573107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "9e91851c-d9c1-4d3e-855a-5febe7d2f355",
+      "official_id": "7HL1GSFD111582091",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "bc35de24-bbdf-46f3-999f-3379c0c96ced",
+      "official_id": "7HM1GSFD100977109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "0b4904f4-d127-4134-bc59-32500b458bcd",
+      "official_id": "7HM1GSFD101555098",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "2f8ba7f3-6963-4ffd-b816-70ad0c0457a4",
+      "official_id": "7HM1GSFD111558112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "2dab0c99-6fc2-4f82-a475-8e0af2c66cdf",
+      "official_id": "7HM1GSFD111681092",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "949f8536-7c7d-4624-acc2-c51868f7b1ff",
+      "official_id": "7HN1GSFD101132111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "5e86446e-2473-41ae-8253-c739ef954fe9",
+      "official_id": "7HN1GSFD101138110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "a324fbbd-3278-4f84-ab3f-7e707ac3b56a",
+      "official_id": "7HN1GSFD101549109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "1ed7d2f0-74be-4ead-9d9f-98e4eba7b4a1",
+      "official_id": "7HN1GSFD111155107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "58a65489-97d2-42b8-8a23-9c11e2233f05",
+      "official_id": "7HQ1GSFD101130108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "9e6192c6-b006-43fc-b059-8921b5b92433",
+      "official_id": "7HQ1GSFD101142110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "62517f98-15dd-4cd6-ba57-6fcd619b1b20",
+      "official_id": "7HQ1GSFD102378113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "d1b517ac-c4f5-4fa7-b1bc-171cef3275c2",
+      "official_id": "7HQ1GSFD110970109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "de36899f-2bf5-4143-911d-ce19fde6e065",
+      "official_id": "7HQ1GSFD111176113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "82ed2993-0b89-4f1e-b26a-6d5c02615376",
+      "official_id": "7HQ1GSFD111542112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "0945f6dc-2976-4229-bfc2-cd830833c546",
+      "official_id": "7HQ1GSFD111603109",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "58c6ea2f-1eb0-4e92-9907-abaf8f5d51a2",
+      "official_id": "7HQ1GSFD111979096",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "39f05bca-14d9-4d9a-b1a1-0d6260993940",
+      "official_id": "7HR1GSFD101600108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "386c453d-d7e0-4184-8a7d-b559d0852de2",
+      "official_id": "7HR1GSFD102057111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "7097f0aa-de19-4e69-8615-2beed954bd15",
+      "official_id": "7HR1GSFD102113102",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "541e8fab-0528-4c47-8801-f25b60969bf2",
+      "official_id": "7HR1GSFD102175110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "329e813b-058f-48a0-8dde-fb481d007cba",
+      "official_id": "7HR1GSFD111931091",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "adf859e0-fb06-4be6-bca0-9a22969ba88f",
+      "official_id": "7IC1GSFD112465054",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "75aa380d-bf43-4368-9b4b-be1cb4093e93",
+      "official_id": "7IE1GSBD102809115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "952a6812-0b77-4870-879f-c2c63e35b671",
+      "official_id": "7IE1GSFD110002091",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "e0f7e0da-bcb7-48d4-b50d-6cdeea516a8c",
+      "official_id": "7IH1GSBD102232112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "bd310430-6f15-4da0-b3ce-dd1b8fa0c163",
+      "official_id": "7IH1GSBD103239120",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "9d3af2e2-8ad7-474c-aac1-762a2c6582a8",
+      "official_id": "7IH1GSBD110223107",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "63088e4b-fb85-49dc-ad3d-afc3517d2798",
+      "official_id": "7IH1GSBD110294112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "208982a1-e6a8-4a23-95fe-17942205893a",
+      "official_id": "7IH1GSBD110694111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "420471ee-2e04-4d05-a8de-67e5f7466d3e",
+      "official_id": "7IH1GSBD111146111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "c223f706-05e6-4f53-a71b-74f40fdf47c3",
+      "official_id": "7IH1GSBD111167105",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "f3d33a22-86f3-4a71-afaf-cec88103e228",
+      "official_id": "7IH1GSFD110083099",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "a1256e95-80b1-44f1-b358-b483fd2c9519",
+      "official_id": "7IH1GSFD110273115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "abe725e5-ca7c-4a9f-87b4-50615ce3f8de",
+      "official_id": "7IH1GSFD111287099",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "fa78b1cb-7baa-45dc-955e-f86dbfe712b0",
+      "official_id": "7IH1GSFD112053095",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "1fd4ead5-ef07-42b7-8dd5-421853123bb8",
+      "official_id": "7II1GSBD102868116",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "ceb5c79e-ce74-4b87-a202-d5e159c15b77",
+      "official_id": "7II1GSBD110268108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "ab34c1c5-8b48-4297-b775-3eac46abd6da",
+      "official_id": "7II1GSBD110297110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "4f399622-3f50-4631-a3ae-f2e312b5057e",
+      "official_id": "7II1GSBD110308090",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "b7402eb7-f108-4291-ba03-e32c439ef1b5",
+      "official_id": "7II1GSBD111330112",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "76fade41-e379-40a8-83c2-400a2a456c82",
+      "official_id": "7II1GSBD112333115",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "00b33f4c-24c2-4fa6-a75c-839051b0d2ec",
+      "official_id": "7II1GSFD012470072",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "67677872-2347-4ed6-8ddc-db81cbd5549f",
+      "official_id": "7IJ1GSBD110007113",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "534487ad-f6f6-464d-a668-353b2d06a2d3",
+      "official_id": "7IJ1GSBD111195108",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:27.754387+00:00"
+    },
+    {
+      "establishment_id": "efd9d438-621c-4ab2-8c0b-b615e159a275",
+      "official_id": "7IJ1GSFD101305110",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "480b9b4f-3ea8-40ed-bff9-10ac8a7d55de",
+      "official_id": "7IJ1GSFD110039090",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "a0ba89bc-8b88-4620-ac50-3af88c54be83",
+      "official_id": "7IJ1GSFD110043100",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    },
+    {
+      "establishment_id": "fb2542c8-c1fb-4cfa-825e-ef1be0ece17d",
+      "official_id": "7IK1GSBD110237111",
+      "registry_import_batch": "minesec-master-v1-promotion-p3",
+      "created_at": "2026-08-18T02:13:28.43983+00:00"
+    }
+  ]
+}

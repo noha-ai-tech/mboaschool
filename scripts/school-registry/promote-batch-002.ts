@@ -23,8 +23,20 @@ import type { NormalizedStagingRecord } from "./types";
  * voir reports/registry/batch-002-promotion-summary.json pour la liste des
  * exclus, à traiter séparément.
  *
- * Usage : node_modules/.bin/tsx promote-batch-002.ts
+ * Usage : node_modules/.bin/tsx promote-batch-002.ts --commit
+ *
+ * ============================================================================
+ * SPRINT P.5 §18 — NO DIRECT PROMOTION WITHOUT STAGING DECISION.
+ * Ce script écrit directement dans `establishments` en contournant le
+ * pipeline canonique staging -> review -> approve -> promote (voir
+ * reconcile-promotion-p3.ts). Il est gelé : exige --commit explicite et le
+ * bon project ref Supabase. NE JAMAIS l'exécuter sans validation explicite
+ * d'Eddy et de l'architecte — et jamais pendant SPRINT P.5 (réconciliation
+ * uniquement, aucune nouvelle promotion).
+ * ============================================================================
  */
+
+const EXPECTED_PROJECT_REF = "umcwwynrftidytxgqkwi";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..", "..");
@@ -60,9 +72,21 @@ function readEnvVar(env: string, key: string): string {
 }
 
 async function main() {
+  if (!process.argv.includes("--commit")) {
+    throw new Error(
+      "NO DIRECT PROMOTION WITHOUT STAGING DECISION — ce script écrit directement dans `establishments` hors du pipeline " +
+        "staging -> review -> approve -> promote. Gelé par SPRINT P.5 §18. Nécessite --commit explicite, et une " +
+        "validation Eddy/architecte séparée avant toute exécution."
+    );
+  }
+
   const env = readFileSync(join(rootDir, ".env.local"), "utf-8");
   const url = readEnvVar(env, "NEXT_PUBLIC_SUPABASE_URL");
   const serviceKey = readEnvVar(env, "SUPABASE_SERVICE_ROLE_KEY");
+  const projectRef = new URL(url).hostname.split(".")[0];
+  if (projectRef !== EXPECTED_PROJECT_REF) {
+    throw new Error(`STOP — project ref inattendu (${projectRef} != ${EXPECTED_PROJECT_REF}).`);
+  }
 
   const normalizedPath = join(rootDir, "data", "registry", "normalized", "minesec-ouest-grand-nord-2026-08-16.json");
   const batch: NormalizedStagingRecord[] = JSON.parse(readFileSync(normalizedPath, "utf-8"));

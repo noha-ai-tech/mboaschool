@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-08-18T03:09:29.324Z",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "establishments_count": 1277,
+  "staging_count": 1251,
+  "approved_count": 556,
+  "review_count": 6,
+  "review_breakdown": {
+    "doubtful_matches": 6,
+    "locality_flagged_new_candidates": 0
+  },
+  "data_sources_count": 1,
+  "data_sources": [
+    "MINESEC"
+  ],
+  "reconstructed_after_execution": true,
+  "reconciliation_date": "2026-08-18T03:20:16.368Z"
+}

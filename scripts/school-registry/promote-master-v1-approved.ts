@@ -48,11 +48,21 @@ import { normalizeName } from "./lib/normalize";
  * Usage :
  *   tsx promote-master-v1-approved.ts --dry-run   (défaut)
  *   tsx promote-master-v1-approved.ts --commit     (NON EXÉCUTÉ ce sprint)
+ *
+ * ============================================================================
+ * SPRINT P.5 §18 — NO DIRECT PROMOTION WITHOUT STAGING DECISION.
+ * Le batch minesec-master-v1-promotion-p3 a déjà été promu (556/556, hors de
+ * tout script tracé — voir reconcile-promotion-p3.ts pour la réparation de
+ * traçabilité SPRINT P.5). Relancer ce script en --commit réinsérerait sur
+ * le même batch : ne JAMAIS l'exécuter pendant SPRINT P.5. Toute promotion
+ * future exige une nouvelle validation explicite d'Eddy et de l'architecte.
+ * ============================================================================
  */
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..", "..");
 
+const EXPECTED_PROJECT_REF = "umcwwynrftidytxgqkwi";
 const IMPORT_BATCH = "minesec-master-v1-promotion-p3";
 const BATCH_SIZE = 100;
 
@@ -122,12 +132,14 @@ async function main() {
   const commit = args.includes("--commit");
 
   if (commit) {
-    // Garde explicite — SPRINT P.3 interdit toute exécution --commit.
-    // Retiré volontairement quand une mission future autorisera la
-    // promotion réelle, avec le même luxe de vérifications que 0018/0019.
+    // Garde explicite — le batch minesec-master-v1-promotion-p3 est déjà
+    // promu (SPRINT P.5). NO DIRECT PROMOTION WITHOUT STAGING DECISION :
+    // toute promotion future exige un nouveau batch + validation Eddy et
+    // architecte, jamais une relance de ce script sur ce batch.
     throw new Error(
-      "--commit est désactivé pour SPRINT P.3 (\"Do not promote\", \"Wait for Eddy and architect approval\"). " +
-        "Utilisez --dry-run. La promotion réelle est une mission séparée, hors périmètre ici."
+      `--commit est désactivé (batch "${IMPORT_BATCH}" déjà promu — voir reconcile-promotion-p3.ts). ` +
+        `Utilisez --dry-run. Project ref attendu pour toute future promotion : ${EXPECTED_PROJECT_REF}. ` +
+        "La promotion réelle d'un nouveau batch est une mission séparée, hors périmètre ici."
     );
   }
 

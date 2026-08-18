@@ -1,0 +1,15 @@
+{
+  "reconstructed_after_execution": true,
+  "reconciliation_date": "2026-08-18T03:20:16.368Z",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "registry_import_batch": "minesec-master-v1-promotion-p3",
+  "eligible": 556,
+  "inserted": 556,
+  "skipped": 0,
+  "failed": 0,
+  "production_before": 721,
+  "production_after": 1277,
+  "staging_promoted": 556,
+  "official_id_duplicates": 0,
+  "note": "La promotion elle-même (INSERT establishments) a été exécutée hors de tout script tracé dans ce repo, avant SPRINT P.5. Ce rapport est reconstruit a posteriori à partir de l'état réel de la base (établissements du batch + liens staging réparés par reconcile-promotion-p3.ts), pas d'un log d'exécution original."
+}
