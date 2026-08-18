@@ -3792,6 +3792,816 @@
       "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
       "source_type": "tier3",
       "discovery_source": "web_search"
+    },
+    {
+      "city": "Bafoussam",
+      "region": "Ouest",
+      "official_name": "Collège de la Réunification Tankou",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bafoussam",
+      "region": "Ouest",
+      "official_name": "Collège Polyvalent Bilingue Martin Luther King",
+      "category_hint": "college_bilingue",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bafoussam",
+      "region": "Ouest",
+      "official_name": "Collège Saint-Thomas d'Aquin de Bafoussam",
+      "category_hint": "college_confessionnel",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bafoussam",
+      "region": "Ouest",
+      "official_name": "Collège la Confiance de Bafoussam",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bafoussam",
+      "region": "Ouest",
+      "official_name": "Lycée Classique de Bafoussam",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bafoussam",
+      "region": "Ouest",
+      "official_name": "Lycée Technique de Bafoussam",
+      "category_hint": "lycee_technique_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bafoussam",
+      "region": "Ouest",
+      "official_name": "Lycée de Bafoussam (Ndiengdam)",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bafoussam",
+      "region": "Ouest",
+      "official_name": "Lycée Bilingue de Baleng",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bafoussam",
+      "region": "Ouest",
+      "official_name": "Lycée Bilingue de Bafoussam",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bafoussam",
+      "region": "Ouest",
+      "official_name": "Lycée Technique de Banengo",
+      "category_hint": "lycee_technique_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bafoussam",
+      "region": "Ouest",
+      "official_name": "Complexe Polytechnique Bilingue Laïc Tama",
+      "category_hint": "college_bilingue",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bamenda",
+      "region": "Nord-Ouest",
+      "official_name": "Sacred Heart College Mankon (SAHECO)",
+      "category_hint": "college_confessionnel",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bamenda",
+      "region": "Nord-Ouest",
+      "official_name": "Our Lady of Lourdes College Mankon",
+      "category_hint": "college_confessionnel",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bamenda",
+      "region": "Nord-Ouest",
+      "official_name": "Presbyterian Secondary College Bamenda",
+      "category_hint": "college_confessionnel",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bamenda",
+      "region": "Nord-Ouest",
+      "official_name": "Progressive Comprehensive School Bamenda",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bamenda",
+      "region": "Nord-Ouest",
+      "official_name": "PSS Mankon (WTTC Mankon)",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bamenda",
+      "region": "Nord-Ouest",
+      "official_name": "Government Bilingual High School Bamenda",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bamenda",
+      "region": "Nord-Ouest",
+      "official_name": "Gospel Secondary School Bamenda",
+      "category_hint": "college_confessionnel",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Buea",
+      "region": "Sud-Ouest",
+      "official_name": "St. Joseph's College Sasse",
+      "category_hint": "college_confessionnel",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Buea",
+      "region": "Sud-Ouest",
+      "official_name": "Lycée Bilingue de Buéa",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Buea",
+      "region": "Sud-Ouest",
+      "official_name": "Bishop Rogan College Soppo",
+      "category_hint": "college_confessionnel",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Buea",
+      "region": "Sud-Ouest",
+      "official_name": "Baptist High School Buea",
+      "category_hint": "college_confessionnel",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Limbe",
+      "region": "Sud-Ouest",
+      "official_name": "National Comprehensive High School Limbe",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Limbe",
+      "region": "Sud-Ouest",
+      "official_name": "Government Bilingual High School Limbe",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Limbe",
+      "region": "Sud-Ouest",
+      "official_name": "Saker Baptist College",
+      "category_hint": "college_confessionnel",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Limbe",
+      "region": "Sud-Ouest",
+      "official_name": "Government High School Limbe",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Limbe",
+      "region": "Sud-Ouest",
+      "official_name": "Enrichetta Comprehensive Secondary School",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Limbe",
+      "region": "Sud-Ouest",
+      "official_name": "Royal Bilingual College Isokolo",
+      "category_hint": "college_bilingue",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Limbe",
+      "region": "Sud-Ouest",
+      "official_name": "Hope High School Idenau",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Limbe",
+      "region": "Sud-Ouest",
+      "official_name": "Presbyterian Girls Secondary School Limbe",
+      "category_hint": "college_confessionnel",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Kumba",
+      "region": "Sud-Ouest",
+      "official_name": "Full Gospel Secondary School Kumba",
+      "category_hint": "college_confessionnel",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Kumba",
+      "region": "Sud-Ouest",
+      "official_name": "Cameroon College of Arts and Science Kumba (CCAS)",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Kumba",
+      "region": "Sud-Ouest",
+      "official_name": "Jemea Memorial College",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Kumba",
+      "region": "Sud-Ouest",
+      "official_name": "Kumba City College",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Kumba",
+      "region": "Sud-Ouest",
+      "official_name": "St. Francis College Fiango Kumba",
+      "category_hint": "college_confessionnel",
+      "source_name": "ecolesaucameroun.com",
+      "source_url": "https://ecolesaucameroun.com/en/school.php?id=4853-st-francis-college-fiango-kumba",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Kumba",
+      "region": "Sud-Ouest",
+      "official_name": "Victory Comprehensive College Kumba",
+      "category_hint": "college",
+      "source_name": "ecolesaucameroun.com",
+      "source_url": "https://ecolesaucameroun.com/en/school.php?id=4833-victory-comprehensive-college-kumba",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Kumba",
+      "region": "Sud-Ouest",
+      "official_name": "Presbyterian High School Kumba",
+      "category_hint": "college_confessionnel",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Kumba",
+      "region": "Sud-Ouest",
+      "official_name": "Denis Comprehensive College Kumba",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Mamfe",
+      "region": "Sud-Ouest",
+      "official_name": "Government High School Mamfe",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Mamfe",
+      "region": "Sud-Ouest",
+      "official_name": "Union Comprehensive High School Mamfe",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Kumbo",
+      "region": "Nord-Ouest",
+      "official_name": "Government Bilingual High School Kumbo",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Kumbo",
+      "region": "Nord-Ouest",
+      "official_name": "Christ The King College Kumbo",
+      "category_hint": "college_confessionnel",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Kumbo",
+      "region": "Nord-Ouest",
+      "official_name": "Presbyterian Comprehensive High School Kumbo",
+      "category_hint": "college_confessionnel",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Garoua",
+      "region": "Nord",
+      "official_name": "Collège et Lycée Classique et Moderne de Garoua",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Garoua",
+      "region": "Nord",
+      "official_name": "Collège et Lycée Bilingue de Garoua",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Garoua",
+      "region": "Nord",
+      "official_name": "Collège et Lycée Technique de Garoua",
+      "category_hint": "lycee_technique_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Garoua",
+      "region": "Nord",
+      "official_name": "Collège et Lycée Polyvalent de Garoua",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Garoua",
+      "region": "Nord",
+      "official_name": "Complexe Scolaire Bilingue Lamido Aman Sa'aly",
+      "category_hint": "college_bilingue",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Garoua",
+      "region": "Nord",
+      "official_name": "Lycée Technique de Bibemiré",
+      "category_hint": "lycee_technique_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Garoua",
+      "region": "Nord",
+      "official_name": "Lycée de Garoua Djamboutou",
+      "category_hint": "lycee_public",
+      "source_name": "ecolesaucameroun.com",
+      "source_url": "https://ecolesaucameroun.com/ecole.php?id=3042-lycee-de-garoua-djamboutou",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Garoua",
+      "region": "Nord",
+      "official_name": "Lycée Technique de Garoua Djamboutou",
+      "category_hint": "lycee_technique_public",
+      "source_name": "ecolesaucameroun.com",
+      "source_url": "https://ecolesaucameroun.com/ecole.php?id=3056-lycee-technique-de-garoua-djamboutou-arrondissement-de-garoua-i",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Garoua",
+      "region": "Nord",
+      "official_name": "Lycée Bilingue de Garoua",
+      "category_hint": "lycee_public",
+      "source_name": "ecolesaucameroun.com",
+      "source_url": "https://ecolesaucameroun.com/ecole.php?id=3064-lycee-bilingue-de-garoua",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Garoua",
+      "region": "Nord",
+      "official_name": "Lycée Technique Bilingue de Garoua",
+      "category_hint": "lycee_technique_public",
+      "source_name": "ecolesaucameroun.com",
+      "source_url": "https://ecolesaucameroun.com/ecole.php?id=3068-lycee-technique-bilingue-de-garoua-arrondissement-de-garoua-ii",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Garoua",
+      "region": "Nord",
+      "official_name": "Collège Canard",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Garoua",
+      "region": "Nord",
+      "official_name": "Collège Lamido Hayatou",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Maroua",
+      "region": "Extrême-Nord",
+      "official_name": "Lycée Technique Bilingue de Maroua",
+      "category_hint": "lycee_technique_public",
+      "source_name": "ecolesaucameroun.com",
+      "source_url": "https://ecolesaucameroun.com/ecole.php?id=2142-lycee-technique-bilingue-de-maroua",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Maroua",
+      "region": "Extrême-Nord",
+      "official_name": "Lycée de Maroua-Kongola",
+      "category_hint": "lycee_public",
+      "source_name": "ecolesaucameroun.com",
+      "source_url": "https://ecolesaucameroun.com/ecole.php?id=2136-lycee-de-maroua-kongola",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Maroua",
+      "region": "Extrême-Nord",
+      "official_name": "Lycée Bilingue de Maroua",
+      "category_hint": "lycee_public",
+      "source_name": "Wikipédia",
+      "source_url": "https://fr.wikipedia.org/wiki/Lyc%C3%A9e_bilingue_de_Maroua",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bertoua",
+      "region": "Est",
+      "official_name": "Collège Bilingue de l'Orient de Bertoua",
+      "category_hint": "college_bilingue",
+      "source_name": "ecolesaucameroun.com",
+      "source_url": "https://ecolesaucameroun.com/ecole.php?id=2057-college-bilingue-de-lorient-de-bertoua-arrondissement-de-bertoua-ii",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bertoua",
+      "region": "Est",
+      "official_name": "Collège Adventiste de Bertoua",
+      "category_hint": "college_confessionnel",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Ebolowa",
+      "region": "Sud",
+      "official_name": "Lycée Classique et Moderne d'Ebolowa",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Dschang",
+      "region": "Ouest",
+      "official_name": "Lycée Bilingue de Dschang",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Dschang",
+      "region": "Ouest",
+      "official_name": "Collège Notre-Dame de Dschang",
+      "category_hint": "college_confessionnel",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Dschang",
+      "region": "Ouest",
+      "official_name": "Collège Menoua Espoir de Dschang",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Dschang",
+      "region": "Ouest",
+      "official_name": "Collège Albert Camus de Dschang",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Dschang",
+      "region": "Ouest",
+      "official_name": "Collège la Renaissance de Dschang",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Dschang",
+      "region": "Ouest",
+      "official_name": "Collège Bilingue Intelexi de Dschang",
+      "category_hint": "college_bilingue",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Dschang",
+      "region": "Ouest",
+      "official_name": "Lycée Technique de Dschang",
+      "category_hint": "lycee_technique_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Dschang",
+      "region": "Ouest",
+      "official_name": "CETIC de Dschang",
+      "category_hint": "cetic_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Dschang",
+      "region": "Ouest",
+      "official_name": "CES de Fonakeukeu",
+      "category_hint": "ces_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Foumban",
+      "region": "Ouest",
+      "official_name": "Lycée Bilingue Sultan Ibrahim Njoya de Foumban",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Foumban",
+      "region": "Ouest",
+      "official_name": "Collège de la Paix Foumban",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Kousséri",
+      "region": "Extrême-Nord",
+      "official_name": "Lycée Mixte de Kousséri",
+      "category_hint": "lycee_public",
+      "source_name": "ecolesaucameroun.com",
+      "source_url": "https://ecolesaucameroun.com/ecole.php?id=2171-lycee-mixte-de-kousseri-arrondissement-de-kousseri",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Kribi",
+      "region": "Sud",
+      "official_name": "Lycée Bilingue de Kribi Urbain",
+      "category_hint": "lycee_public",
+      "source_name": "Osidimbea — La Mémoire du Cameroun",
+      "source_url": "https://www.osidimbea-edu.cm/secondaire-1/sud/lycee-kribi-urbain/",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Kribi",
+      "region": "Sud",
+      "official_name": "Lycée Bilingue de Kribi",
+      "category_hint": "lycee_public",
+      "source_name": "Osidimbea — La Mémoire du Cameroun",
+      "source_url": "https://www.osidimbea-edu.cm/secondaire-1/sud/lycee-bilingue-kribi/",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Batouri",
+      "region": "Est",
+      "official_name": "Lycée Bilingue de Batouri",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Batouri",
+      "region": "Est",
+      "official_name": "Lycée Technique de Batouri",
+      "category_hint": "lycee_technique_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Batouri",
+      "region": "Est",
+      "official_name": "Collège Bary",
+      "category_hint": "college",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Mbouda",
+      "region": "Ouest",
+      "official_name": "Government Bilingual High School Mbouda",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Mbouda",
+      "region": "Ouest",
+      "official_name": "Government Bilingual Secondary School Banock",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
+    },
+    {
+      "city": "Bangangté",
+      "region": "Ouest",
+      "official_name": "Lycée de Bangangté",
+      "category_hint": "lycee_public",
+      "source_name": "Recherche web générale",
+      "source_url": "",
+      "source_type": "tier3",
+      "discovery_source": "web_search"
     }
   ]
 }

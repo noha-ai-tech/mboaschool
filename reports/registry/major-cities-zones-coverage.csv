@@ -1,0 +1,14 @@
+city,zone,count_live,count_staging,count_unique,count_with_official_id,count_locality_filled
+Douala,Douala I,0,0,0,0,0
+Douala,Douala II,1,1,1,2,2
+Douala,Douala III,0,0,0,0,0
+Douala,Douala IV,0,0,0,0,0
+Douala,Douala V,0,0,0,0,0
+Douala,Douala VI,0,0,0,0,0
+Yaoundé,Yaoundé I,1,0,1,0,1
+Yaoundé,Yaoundé II,1,0,1,0,1
+Yaoundé,Yaoundé III,0,0,0,0,0
+Yaoundé,Yaoundé IV,1,1,1,2,2
+Yaoundé,Yaoundé V,0,0,0,0,0
+Yaoundé,Yaoundé VI,0,0,0,0,0
+Yaoundé,Yaoundé VII,0,0,0,0,0

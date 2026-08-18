@@ -2,19 +2,181 @@
   "Douala": {
     "candidates_examined": 78,
     "already_live": 2,
-    "already_staging": 0,
-    "review_required": 8,
-    "source_verified_review": 55,
-    "insufficient_source": 13,
+    "already_staging": 55,
+    "review_required": 13,
+    "source_verified_review": 0,
+    "insufficient_source": 8,
     "clean_approvable": 0
   },
   "Yaoundé": {
     "candidates_examined": 292,
     "already_live": 2,
+    "already_staging": 255,
+    "review_required": 32,
+    "source_verified_review": 0,
+    "insufficient_source": 3,
+    "clean_approvable": 0
+  },
+  "Bafoussam": {
+    "candidates_examined": 11,
+    "already_live": 4,
     "already_staging": 0,
-    "review_required": 26,
-    "source_verified_review": 252,
-    "insufficient_source": 12,
+    "review_required": 0,
+    "source_verified_review": 0,
+    "insufficient_source": 7,
+    "clean_approvable": 0
+  },
+  "Bamenda": {
+    "candidates_examined": 7,
+    "already_live": 0,
+    "already_staging": 0,
+    "review_required": 0,
+    "source_verified_review": 0,
+    "insufficient_source": 7,
+    "clean_approvable": 0
+  },
+  "Buea": {
+    "candidates_examined": 4,
+    "already_live": 1,
+    "already_staging": 0,
+    "review_required": 1,
+    "source_verified_review": 0,
+    "insufficient_source": 2,
+    "clean_approvable": 0
+  },
+  "Limbe": {
+    "candidates_examined": 8,
+    "already_live": 0,
+    "already_staging": 0,
+    "review_required": 0,
+    "source_verified_review": 0,
+    "insufficient_source": 8,
+    "clean_approvable": 0
+  },
+  "Kumba": {
+    "candidates_examined": 8,
+    "already_live": 0,
+    "already_staging": 0,
+    "review_required": 0,
+    "source_verified_review": 2,
+    "insufficient_source": 6,
+    "clean_approvable": 0
+  },
+  "Mamfe": {
+    "candidates_examined": 2,
+    "already_live": 0,
+    "already_staging": 0,
+    "review_required": 0,
+    "source_verified_review": 0,
+    "insufficient_source": 2,
+    "clean_approvable": 0
+  },
+  "Kumbo": {
+    "candidates_examined": 3,
+    "already_live": 0,
+    "already_staging": 0,
+    "review_required": 0,
+    "source_verified_review": 0,
+    "insufficient_source": 3,
+    "clean_approvable": 0
+  },
+  "Garoua": {
+    "candidates_examined": 12,
+    "already_live": 8,
+    "already_staging": 0,
+    "review_required": 0,
+    "source_verified_review": 0,
+    "insufficient_source": 4,
+    "clean_approvable": 0
+  },
+  "Maroua": {
+    "candidates_examined": 3,
+    "already_live": 3,
+    "already_staging": 0,
+    "review_required": 0,
+    "source_verified_review": 0,
+    "insufficient_source": 0,
+    "clean_approvable": 0
+  },
+  "Bertoua": {
+    "candidates_examined": 2,
+    "already_live": 0,
+    "already_staging": 0,
+    "review_required": 0,
+    "source_verified_review": 1,
+    "insufficient_source": 1,
+    "clean_approvable": 0
+  },
+  "Ebolowa": {
+    "candidates_examined": 1,
+    "already_live": 1,
+    "already_staging": 0,
+    "review_required": 0,
+    "source_verified_review": 0,
+    "insufficient_source": 0,
+    "clean_approvable": 0
+  },
+  "Dschang": {
+    "candidates_examined": 9,
+    "already_live": 3,
+    "already_staging": 0,
+    "review_required": 0,
+    "source_verified_review": 0,
+    "insufficient_source": 6,
+    "clean_approvable": 0
+  },
+  "Foumban": {
+    "candidates_examined": 2,
+    "already_live": 0,
+    "already_staging": 0,
+    "review_required": 0,
+    "source_verified_review": 0,
+    "insufficient_source": 2,
+    "clean_approvable": 0
+  },
+  "Kousséri": {
+    "candidates_examined": 1,
+    "already_live": 1,
+    "already_staging": 0,
+    "review_required": 0,
+    "source_verified_review": 0,
+    "insufficient_source": 0,
+    "clean_approvable": 0
+  },
+  "Kribi": {
+    "candidates_examined": 2,
+    "already_live": 2,
+    "already_staging": 0,
+    "review_required": 0,
+    "source_verified_review": 0,
+    "insufficient_source": 0,
+    "clean_approvable": 0
+  },
+  "Batouri": {
+    "candidates_examined": 3,
+    "already_live": 2,
+    "already_staging": 0,
+    "review_required": 0,
+    "source_verified_review": 0,
+    "insufficient_source": 1,
+    "clean_approvable": 0
+  },
+  "Mbouda": {
+    "candidates_examined": 2,
+    "already_live": 0,
+    "already_staging": 0,
+    "review_required": 1,
+    "source_verified_review": 0,
+    "insufficient_source": 1,
+    "clean_approvable": 0
+  },
+  "Bangangté": {
+    "candidates_examined": 1,
+    "already_live": 1,
+    "already_staging": 0,
+    "review_required": 0,
+    "source_verified_review": 0,
+    "insufficient_source": 0,
     "clean_approvable": 0
   }
 }

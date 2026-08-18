@@ -1,0 +1,926 @@
+[
+  {
+    "zone": "Yaoundé I",
+    "name": "GOPAL BILINGUAL SECONDARY SCHOOL"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "ACADEMIC COLLEGE OF EXCELLENCE"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "BILIK-CITY BILINGUAL COMPLEX"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "CENTRE EDUCATIF D'EKOUDOU BASTOS (CEEB)"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE BILINGUE PRIVE LAIC WILLIAN BOOTH"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE BILINGUE SEAT OF WISDOM"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE BILINGUE SIBAFO"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE D'ENSEIGNEMENT TECHNIQUE ET GENERAL DE L'UNITE"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE FIDO"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE IPLEX EDUCATION"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE OLIVERAIE DE NYOM"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE OMGBA NDONGO"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE PENIEL"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE PRIVE BILINGUE LES PIERRES PRECIEUSES"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE PRIVE LAÏC CHARLES MBAKOP"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE PRIVE LAIC ENFANT D'AFRIQUE"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE PRIVE LAÏC FAPO"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE PRIVE LAÏC L'EMERGENCE"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE PRIVE LAÏC LA FORGE"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE PRIVE LAÏC LA VICTOIRE"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE PRIVE LAÏC MARCEL BAYARDON"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE PRIVE LAÏC MVOM-NNAM"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE SAINTE FAMILLE"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE SOCRATE ELANDI"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COMPLEXE SCOLAIRE BILINGUE METENOU"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COMPLEXE SCOLAIRE ILE EDUCATIVE"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COMPLEXE SCOLAIRE INTERNATIONALE \"LA GAIETE"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COMPLEXE SCOLAIRE ORNEL BILINGUAL ACADEMY"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COMPLEXE SCOLAIRE SAINT ANDRE"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "CTI-NYOM"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "FONDATION TSOUNGUI"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "INSTITUT BILINGUE D'ETOUDI"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "INSTITUT BILINGUE TOUMWA (IBT)"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "INSTITUT BLAISE PASCAL"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "INSTITUT MATAMFEN"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "INSTITUT MODERNE MBASSI"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "INSTITUT POLYVALENT JUNIOR"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "INSTITUT PRIVE LAÏC DE DEVELOPPEMENT INDUSTRIEL ET COMMERCIAL (ISDIC)"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE DE L'UNITE"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE TECHNIQUE INDUSTRIEL"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "CETI BENIGNA"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE PRIVE LAIC FAPO"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "COLLEGE PRIVE LAIC INSTITUT JEAN BODY ZIBI"
+  },
+  {
+    "zone": "Yaoundé I",
+    "name": "CETI SACRE COEUR DE MOKOLO"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "AYUNGHA BILINGUAL COLLEGE"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "BODIO BILINGUAL COMPLEX"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "CAMEROON SCHOOL OF EXCELLENCE"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE BILINGUE GOLDEN INSTITUTE"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE FADIMATOU HADJA"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE FOCHE"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE LA DIGNITE"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE MATHIEU ET CLAIRE"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE POLYVALENT SAINT AUGUSTIN"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE PRIVE DU SUCCES"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE PRIVE LAIC DE L'ESPERANCE"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE PRIVE LAÏC DJA'ANKEU"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE PRIVE LAÏC INTERNATIONAL PYTHAGORE"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE PRIVE LAIC LAROUSSE"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE PRIVE LAÏC LE \"FANION\""
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE PRIVE LAIC LES CHANTERELLES"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE PRIVE LAIC LES LILAS"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE PRIVE LAÏC MONTESQUIEU"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE PRIVE LAÏC SAINT-EXUPERY"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE PRIVE LAIC TOUSSAINT ANTOINE"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE PRIVE MONGO BETI"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COURS DU SOIR FADIMATOU HADJA"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "INSTITUT DE LA REFERENCE"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "INSTITUT PRIVE LAÏC ESSOMBA"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "INSTITUT PRIVE LAÏC MBEUKAM"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "INSTITUT PRIVE LAÏC SIANTOU"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "INSTITUT SAMBA"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "NOTRE DAME DE LA BONNE SEMENCE"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "QUEENSWAY INTERNATIONAL COLLEGE"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "ROBEN MEMORIAL EDUCATIONAL COMPLEX"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLÈGE FADIMATOU HADJA"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "INSTITUT PRIVE LAIC ESSOMBA"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE D'ENSEIGNEMENT TECHNIQUE INDUSTRIEL FEMININ"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE PRIVE LAIC DE L'ESPERANCE (COPES)"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE PRIVE LAIC GOLDEN INSTITUTE"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "COLLEGE PRIVE LAIC LA DIGNITE"
+  },
+  {
+    "zone": "Yaoundé V",
+    "name": "CETI NOTRE DAME DES VICTOIRES"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "CITY BILINGUAL ACADEMY"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE B. OLIVE"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE BILINGUE LES OISILLONS"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE DE LA RENOVATION"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE DES SCIENCES ET TECHNIQUES INDUSTRIELLES"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE EBANDA"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE FUSEE (FONDATION UNIVERSELLE STELLA ENGAMA)"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE JULES FERRY"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE MARKESSO"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE POLYVALENT BILINGUE LES AIGLONS"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE POLYVALENT LA MUTUELLE COMMUNAUTAIRE DE DEVELOPPEMENT"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE POLYVALENT SAINTE MERE"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE PRIVE LAÏC DU SAVOIR"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE PRIVE LAIC FLEMING"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE PRIVE LAIC JEAN JAURES"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE PRIVE LAIC LA FONTAINE"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE PRIVE LAIC LES CHAMPS DU LYS"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE PRIVE LAÏC MOKALA"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE PRIVE LAIC NOTRE DAME DES BEATITUDES"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE PRIVE LAIC SIGMUND FREUD"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE PRIVE MODERNE DE L'ESPERANCE"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COMPLEXE SCOLAIRE PRIVE LAÏC BILINGUE EMMAÜS (COSBIE)"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "FRANKY SECONDARY SCHOOL"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "GROUPE SCOLAIRE LES PIGEONS"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "HOLY INFANT HIGH SCHOOL YAOUNDE"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "INSTITUT BAUDELAIRE BILINGUE"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "INSTITUT DES TECHNIQUES INDUSTRIELLES D'ETOUG-EBE"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "INSTITUT POLYVALENT NIBERT (IPONI)"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "ISEIG ENSEIGNEMENTS SECONDAIRES"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "KAD-NDAP BILINGUAL SECONDARY SCHOOL"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "MARIO ACADEMIC COMPLEX, MENDONG"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "MEVICK BILINGUAL GRAMMAR SCHOOL ETOUG-EBE"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "NATIONAL EDUCATION SERVICE COLLEGE OF ARTS AND SCIENCES(NESCA)"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "OXFORD HIGH SCHOOL"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "QUALITY INTERNATIONAL SCHOOL"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE PRIVE LAIC DU SAVOIR"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "BILINGUAL AFRICAN COLLEGE OF TECHNIQUES (BACT)"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COLLEGE PRIVE LAIC INSTITUT BILINGUE BAUDELAIRE (IBB)"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "COMPLEXE SCOLAIRE ADVENTISTE D'ODZA"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "GROUPE SCOLAIRE PRIVE LAIC DJONOU"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "NSTITUT TECHNIQUE INDUSTRIEL D'ETOUG EBE (I.T.I.E)"
+  },
+  {
+    "zone": "Yaoundé VI",
+    "name": "INSTITUT DES SCIENCES ECONOMIQUE ET INFORMATIQUE DE GESTION"
+  },
+  {
+    "zone": "Yaoundé II",
+    "name": "CHUO BILINGUAL COMPREHENSIVE COLLEGE (CBCC)"
+  },
+  {
+    "zone": "Yaoundé II",
+    "name": "COLLEGE \"LES COCCINELLES\""
+  },
+  {
+    "zone": "Yaoundé II",
+    "name": "COLLEGE BILINGUE BETHELEHEM LEGRAND"
+  },
+  {
+    "zone": "Yaoundé II",
+    "name": "COLLEGE BILINGUE LINCOLN"
+  },
+  {
+    "zone": "Yaoundé II",
+    "name": "COLLEGE ELOHIM"
+  },
+  {
+    "zone": "Yaoundé II",
+    "name": "COLLEGE PRIVE LAÏC LA GRACE"
+  },
+  {
+    "zone": "Yaoundé II",
+    "name": "COLLEGE ROSA PARKS"
+  },
+  {
+    "zone": "Yaoundé II",
+    "name": "INSTITUT BILINGUE MICHELANN"
+  },
+  {
+    "zone": "Yaoundé II",
+    "name": "INSTITUT JEAN BODY ZIBI"
+  },
+  {
+    "zone": "Yaoundé II",
+    "name": "INSTITUT NOTRE DAME DE LA PAIX"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "COLLEGE DIDEROT"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "COLLEGE LA GRACE TCHETGNA"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "COLLEGE LES FUTURS BOSS"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "COLLEGE PRIVE LAÏC ATANGANA FOUDA ALBERT"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "COLLEGE PRIVE LAÏC BILINGUE \"LES BAMBIS\""
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "COLLEGE PRIVE LAIC LA COLOMBE"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "COLLEGE PRIVE LAIC LES SAPINS"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "COMPLEXE SCOLAIRE EVANGELIQUE DE PENTECOTE"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "ENGLISH HIGH SCHOOL (E H S) YAOUNDÉ"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "FONDATION SCOLAIRE AA"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "FRAZATI BILINGUAL COLLEGE"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "INSTITUT PASCAL"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "INSTITUT POLYVALENT BILINGUE DES NATIONS"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "INSTITUT POLYVALENT DE LA RENOVATION PEDAGOGIQUE"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "INSTITUT VICTOR HUGO"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "WECARE SECONDARY SCHOOL"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "COLLEGE PRIVE LAIC CENTRE SOCIO EDUCATIF BILINGUE DAVID"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "INSTITUT PRIVE LAIC PAUL MOMO"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "COLLEGE PRIVE DIDEROT"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "INSTITUT PRIVE LAIC POLYVALENT RENOVATION PEDAGOGIQUE"
+  },
+  {
+    "zone": "Yaoundé III",
+    "name": "INSTITUT PRIVE LAIC POLYVALENT BILINGUE DES NATIONS"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "AMASIA MAHAMAIN BILINGUAL SECONDARY SCHOOL"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE ANGLO-SAXON \"PI AND JU PLUS"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE BILINGUE INTERNATIONAL LA FIERTE"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE BILINGUE JEUNESSE LUMIERE"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE BILINGUE LES ANGES"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE BILINGUE SHAKESPEARE"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE BILINGUE YONDO"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE BRAUNSCHWEIG (COLBRA)"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE DE LA MEFOU"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE FRANTZ FANON"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE INTERNATIONAL BILINGUE DADA ET FILS"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE INTERNATIONAL DE REFERNCE LA FARANDOLE"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE MAISON DOLA"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE MARIE ALBERT II"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE POLYVALENT LES LAUREATS"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE POLYVALENT PERE MATTHIEU"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE POLYVALENT SAINT PIERRE"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE PRIVE BILINGUE LES MIGNONS"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE PRIVE ELOUNDOU MARGUERITE"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE PRIVE JARDIN D'EDEN"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE PRIVE LAIC ATANGANA ESSOMBA"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE PRIVE LAÏC DOLTA"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE PRIVE LAÏC EFFA GASTON (COPLEG)"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE PRIVE LAÏC LES PHARAONS"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE PRIVE LAIC MONT-VALERIEN"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE PRIVE LAÏC SAINT JOSEPH DE MIMBOMAN"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE PRIVE MADELEINE"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE SAINTE MARGUERITE"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COMPLEXE SCOLAIRE EEKO DE L'ESPOIR"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COMPLEXE SCOLAIRE L'EXCELLENCE"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COMPLEXE SCOLAIRE LES \"AS\" DE MVAN"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COURS DU SOIR \"LE PROGRES SOCIAL\""
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COURS DU SOIR ACADEMIA"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT BILINGUE LA CONFIANCE"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT CENTRAL INSTIC"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT FOTSO"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT GAZOLENT D'EKOUNOU"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT JEAN BOCCHI"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT MBE"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT PETOU"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT POLYVALENT DU SUCCES"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT POLYVALENT LA METHODE"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT POLYVALENT(BILINGUE) CECILE ET GABRIEL DIPITO"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT PRIVE LAIC ZANG MEBENGA"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT RENE PHILOMBE"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT TAGA"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT PRIVE LAIC MBE"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE PRIVE LAIC DOLTA"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT PRIVE LAIC CENTRAL (INSTIC)"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COURS DU SOIR ADVENTISTE D'ODZA"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE PRIVE LAIC MARIE ALBERT II ( COMAL II)"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT GAZOLENT"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE PRIVE LAIC FRANTZ"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "CETI JEANNE ALEGUE MESSI"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INTITUT TECHNIQUE ET PROFESSIONNEL PRIVE CATHOLIQUE DON BOSCO"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "CENTRE EDUCATIF LE BON BERGER"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "INSTITUT SIANTOU"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE PRIVE LAIC DU MONT VALERIEN"
+  },
+  {
+    "zone": "Yaoundé IV",
+    "name": "COLLEGE PRIVE LAIC COMPLEXE BILINGUE YONDO"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "CENTRE EDUCATIF MEYON MEYEME"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "COLLEGE BILINGUE LES AGNEAUX"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "COLLEGE DE LA PAIX"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "COLLEGE KIATABALA"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "COLLEGE LE SAMARITAIN-YAOUNDE"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "COLLEGE POLYVALENT LA PERLE PLUS"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "COLLEGE PRIVE LAÏC \"EXCELLENCE PLUS\" DE YAOUNDE"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "COLLEGE PRIVE LAIC XAVIER EBOMO"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "COLLEGE VENUS"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "COMPLEXE SCOLAIRE THECLA"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "COMPLEXE SCOLAIRE YONA"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "INSTITUT PRIVE LAÏC POUSSI"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "INSTITUT PRIVE LAÏC PRIVE \"LE JOURDAIN\""
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "INTERNATIONAL BILINGUAL ACADEMY YAOUNDÉ (IBAY)"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "INSTITUT MGR RENE GRAFFIN"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "COLLEGE PRIVE LAIC TECHNIQUE STELLA MARIS"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "COLLEGE D'ENSEIGNEMENT TECHNIQUE EKANI EYENGA"
+  },
+  {
+    "zone": "Yaoundé VII",
+    "name": "INSTITUT LE JOURDAIN BP:25545 YDE"
+  }
+]

@@ -1,0 +1,68 @@
+{
+  "audit_date": "2026-08-18T16:38:07.353Z",
+  "operator": "jean-merlain",
+  "batch": "major-cities-secondary-completeness-v1",
+  "scope": "Audit RÉTROSPECTIF — lecture seule, aucune promotion, aucune suppression (§63-65)",
+  "total_rows_audited": 310,
+  "douala": {
+    "label": "Douala",
+    "total": 55,
+    "extraction_safe": 23,
+    "extraction_uncertain": 32,
+    "uncertain_sample": [
+      "Lycée d'Akwa",
+      "Lycée Technique d'Akwa",
+      "Lycée Technique de Bonadoumbè",
+      "Lycée Technique de Douala-Koumassi",
+      "Lycée Mongo Joseph"
+    ]
+  },
+  "yaounde": {
+    "label": "Yaoundé",
+    "total": 252,
+    "extraction_safe": 207,
+    "extraction_uncertain": 45,
+    "uncertain_sample": [
+      "Lycée d'Emana",
+      "Lycée de Nkolondom",
+      "Lycée de Mballa II",
+      "Lycée d'Elig-Essono",
+      "Lycée Bilingue de Nkoleton"
+    ]
+  },
+  "other_cities": {
+    "label": "Autres villes (Mission A2)",
+    "total": 3,
+    "extraction_safe": 0,
+    "extraction_uncertain": 3,
+    "uncertain_sample": [
+      "St. Francis College Fiango Kumba",
+      "Victory Comprehensive College Kumba",
+      "Collège Bilingue de l'Orient de Bertoua"
+    ]
+  },
+  "other_cities_breakdown": [
+    {
+      "label": "Kumba",
+      "total": 2,
+      "extraction_safe": 0,
+      "extraction_uncertain": 2,
+      "uncertain_sample": [
+        "St. Francis College Fiango Kumba",
+        "Victory Comprehensive College Kumba"
+      ]
+    },
+    {
+      "label": "Bertoua",
+      "total": 1,
+      "extraction_safe": 0,
+      "extraction_uncertain": 1,
+      "uncertain_sample": [
+        "Collège Bilingue de l'Orient de Bertoua"
+      ]
+    }
+  ],
+  "source_quality_note": "Dimension séparée de l'extraction safety (§50) : les 307 lignes sont TOUTES Tier 3 (§16), donc aucune n'est CLEAN_APPROVABLE quelle que soit la méthode d'extraction. EXTRACTION_SAFE signifie 'méthode de collecte vérifiable', pas 'source officielle'.",
+  "action_taken": "AUCUNE — aucune ligne staging modifiée, supprimée ou promue par cet audit (§65).",
+  "recommendation": "Les lignes EXTRACTION_UNCERTAIN (arrondissements publics Douala/Yaoundé, catholiques Yaoundé, recherche web générale, Mission A2) doivent être ré-extraites via un parseur déterministe (scripts/school-registry/lib/extraction/htmlExtractor.ts) avant tout futur import staging de complément — pas retirées de staging existant, simplement pas la référence pour la suite."
+}
