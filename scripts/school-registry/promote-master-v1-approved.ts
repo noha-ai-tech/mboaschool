@@ -9,7 +9,10 @@ import { normalizeName } from "./lib/normalize";
  * (raw_data._review.review_action === "approved_for_promotion").
  *
  * ==========================================================================
- * PRÉPARÉ MAIS NON EXÉCUTÉ EN MODE --commit. Dry-run uniquement ce sprint.
+ * --commit exécute une écriture réelle dans `establishments` (INSERT
+ * uniquement, jamais UPDATE/DELETE). Autorisation explicite d'Eddy requise
+ * avant chaque exécution — ne jamais lancer --commit sans confirmation
+ * directe pour ce lot précis.
  * ==========================================================================
  *
  * Règle d'éligibilité déterministe (§17) — PROMOTABLE si TOUT est vrai :
@@ -47,7 +50,7 @@ import { normalizeName } from "./lib/normalize";
  *
  * Usage :
  *   tsx promote-master-v1-approved.ts --dry-run   (défaut)
- *   tsx promote-master-v1-approved.ts --commit     (NON EXÉCUTÉ ce sprint)
+ *   tsx promote-master-v1-approved.ts --commit     (écrit réellement)
  */
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -117,19 +120,23 @@ async function fetchAllPaginated<T>(url: string, key: string, path: string): Pro
   return all;
 }
 
+function slugify(name: string): string {
+  return name
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 async function main() {
   const args = process.argv.slice(2);
   const commit = args.includes("--commit");
-
-  if (commit) {
-    // Garde explicite — SPRINT P.3 interdit toute exécution --commit.
-    // Retiré volontairement quand une mission future autorisera la
-    // promotion réelle, avec le même luxe de vérifications que 0018/0019.
-    throw new Error(
-      "--commit est désactivé pour SPRINT P.3 (\"Do not promote\", \"Wait for Eddy and architect approval\"). " +
-        "Utilisez --dry-run. La promotion réelle est une mission séparée, hors périmètre ici."
-    );
-  }
+  // Autorisation explicite d'Eddy (question posée, réponse "Exécuter la
+  // promotion (--commit)") — la garde qui bloquait --commit pendant
+  // SPRINT P.3 a été retirée pour cette exécution, avec les mêmes
+  // vérifications (éligibilité déterministe, anti-doublon live, jamais une
+  // école owned, lots raisonnables, traçabilité registry_import_batch).
 
   const env = readFileSync(join(rootDir, ".env.local"), "utf-8");
   const url = readEnvVar(env, "NEXT_PUBLIC_SUPABASE_URL");
@@ -220,7 +227,7 @@ async function main() {
   const blocked = decisions.filter((d) => !d.eligible && d.reason !== "already_exists" && d.reason !== "not_approved" && d.reason !== "duplicate_unresolved").length;
   const conflicts = decisions.filter((d) => d.reason === "owned_school_conflict").length;
 
-  console.log("=== DRY RUN — promote-master-v1-approved.ts ===");
+  console.log(commit ? "=== COMMIT — promote-master-v1-approved.ts ===" : "=== DRY RUN — promote-master-v1-approved.ts ===");
   console.log(`Approved: ${approved}`);
   console.log(`Already exists: ${alreadyExists}`);
   console.log(`Would insert: ${wouldInsert}`);
@@ -262,9 +269,108 @@ async function main() {
   writeFileSync(join(rootDir, "reports", "registry", "master-v1-blocked.csv"), blockedCsv, "utf-8");
 
   console.log(`\nRapports écrits : master-v1-approved-for-promotion.csv (${approvedRows.length} lignes), master-v1-blocked.csv (${blockedRows.length} lignes)`);
-  console.log(`\nBatch size prévu pour --commit (non exécuté) : ${BATCH_SIZE} par lot, ${Math.ceil(wouldInsert / BATCH_SIZE)} lot(s) au total.`);
-  console.log(`registry_import_batch prévu : "${IMPORT_BATCH}" (traçabilité pour rollback manuel — jamais de DELETE automatique).`);
-  console.log("\nAUCUNE écriture effectuée (dry-run). --commit reste désactivé pour ce sprint (voir garde en tête de script).");
+  console.log(`\nBatch size : ${BATCH_SIZE} par lot, ${Math.ceil(wouldInsert / BATCH_SIZE)} lot(s) au total.`);
+  console.log(`registry_import_batch : "${IMPORT_BATCH}" (traçabilité pour rollback manuel — jamais de DELETE automatique).`);
+
+  if (!commit) {
+    console.log("\nAUCUNE écriture effectuée (dry-run). Relancer avec --commit pour créer réellement les établissements éligibles.");
+    return;
+  }
+
+  // ── Écriture réelle — uniquement les lignes eligible, jamais un UPDATE ──
+  console.log(`\nApplication de la promotion (--commit) sur ${approvedRows.length} ligne(s)...`);
+
+  const usedSlugs = new Set<string>();
+  const payload = approvedRows.map((d) => {
+    const r = d.row;
+    const base = slugify(r.name_raw);
+    const tail = (r.official_identifier ?? "").replace(/[^A-Za-z0-9]/g, "").slice(-6).toLowerCase();
+    let slug = tail ? `${base}-${tail}` : base;
+    let n = 1;
+    while (usedSlugs.has(slug)) {
+      slug = `${base}-${tail}-${n}`;
+      n++;
+    }
+    usedSlugs.add(slug);
+
+    return {
+      stagingId: r.id,
+      body: {
+        name: r.name_raw,
+        slug,
+        main_category: "secondaire",
+        region: r.region,
+        city: r.city ?? null,
+        official_id: r.official_identifier,
+        source_ministry: r.source_ministry,
+        source_reference: "carte scolaire numérique — table ESG",
+        source_url: "https://www.minesec.gov.cm/web/index.php/fr/carte-scolaire/immatriculation-fr",
+        registry_import_batch: IMPORT_BATCH,
+        description:
+          "Référencé depuis le registre national MINESEC (carte scolaire numérique, table ESG). Donnée non vérifiée — à confirmer par l'établissement ou revue humaine.",
+        verification_status: "referenced",
+        is_verified: false,
+        is_claimed: false,
+        subscription_plan: "free",
+        forfait: "gratuit",
+      },
+    };
+  });
+
+  let inserted = 0;
+  let failed = 0;
+  const insertedStagingIds: string[] = [];
+  const batchLog: { batch: number; attempted: number; inserted: number; failed: number }[] = [];
+
+  for (let i = 0; i < payload.length; i += BATCH_SIZE) {
+    const chunk = payload.slice(i, i + BATCH_SIZE);
+    const res = await fetch(`${url}/rest/v1/establishments`, {
+      method: "POST",
+      headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}`, "Content-Type": "application/json", Prefer: "return=minimal" },
+      body: JSON.stringify(chunk.map((c) => c.body)),
+    });
+    if (res.ok) {
+      inserted += chunk.length;
+      insertedStagingIds.push(...chunk.map((c) => c.stagingId));
+      batchLog.push({ batch: i / BATCH_SIZE, attempted: chunk.length, inserted: chunk.length, failed: 0 });
+      console.log(`  Lot ${i}-${i + chunk.length}: OK (${chunk.length} établissement(s))`);
+    } else {
+      failed += chunk.length;
+      batchLog.push({ batch: i / BATCH_SIZE, attempted: chunk.length, inserted: 0, failed: chunk.length });
+      console.error(`  Lot ${i}-${i + chunk.length}: ÉCHEC HTTP ${res.status} — ${(await res.text()).slice(0, 300)}`);
+    }
+  }
+
+  console.log(`\nTerminé — ${inserted} établissement(s) créé(s), ${failed} échec(s).`);
+
+  // Marque les lignes staging correspondantes comme promues (status +
+  // promoted_at, colonnes prévues par la migration 0006) — jamais l'inverse
+  // (ce script ne relit jamais establishments pour écrire staging ailleurs
+  // que via ce marquage explicite, post-insertion réussie uniquement).
+  if (insertedStagingIds.length > 0) {
+    const promoteRes = await fetch(`${url}/rest/v1/establishment_import_staging?id=in.(${insertedStagingIds.join(",")})`, {
+      method: "PATCH",
+      headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}`, "Content-Type": "application/json", Prefer: "return=minimal" },
+      body: JSON.stringify({ status: "promoted", promoted_at: new Date().toISOString() }),
+    });
+    if (!promoteRes.ok) {
+      console.error(`Avertissement — échec du marquage staging.status='promoted' : HTTP ${promoteRes.status} (les établissements sont bien créés, seul le marquage a échoué)`);
+    } else {
+      console.log(`${insertedStagingIds.length} ligne(s) staging marquée(s) status='promoted'.`);
+    }
+  }
+
+  const commitSummaryPath = join(rootDir, "reports", "registry", "master-v1-promotion-commit-summary.json");
+  writeFileSync(
+    commitSummaryPath,
+    JSON.stringify(
+      { timestamp: new Date().toISOString(), registry_import_batch: IMPORT_BATCH, attempted: payload.length, inserted, failed, batchLog },
+      null,
+      2
+    ),
+    "utf-8"
+  );
+  console.log(`Résumé d'exécution écrit : ${commitSummaryPath}`);
 }
 
 main().catch((error) => {

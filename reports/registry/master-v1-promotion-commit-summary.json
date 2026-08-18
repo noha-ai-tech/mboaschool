@@ -1,0 +1,45 @@
+{
+  "timestamp": "2026-08-18T02:13:28.480Z",
+  "registry_import_batch": "minesec-master-v1-promotion-p3",
+  "attempted": 556,
+  "inserted": 556,
+  "failed": 0,
+  "batchLog": [
+    {
+      "batch": 0,
+      "attempted": 100,
+      "inserted": 100,
+      "failed": 0
+    },
+    {
+      "batch": 1,
+      "attempted": 100,
+      "inserted": 100,
+      "failed": 0
+    },
+    {
+      "batch": 2,
+      "attempted": 100,
+      "inserted": 100,
+      "failed": 0
+    },
+    {
+      "batch": 3,
+      "attempted": 100,
+      "inserted": 100,
+      "failed": 0
+    },
+    {
+      "batch": 4,
+      "attempted": 100,
+      "inserted": 100,
+      "failed": 0
+    },
+    {
+      "batch": 5,
+      "attempted": 56,
+      "inserted": 56,
+      "failed": 0
+    }
+  ]
+}
