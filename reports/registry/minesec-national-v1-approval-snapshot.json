@@ -1,0 +1,29 @@
+{
+  "generated_at": "2026-08-18T04:48:14.843Z",
+  "checksum_source": "sha256(sorted staging_id|official_id|CLEAN_APPROVABLE)",
+  "approval_checksum": "5e412ed77e3efa2ca82c3c6b4656f2356e340d2cdf221a4c5b75c707cdf8d058",
+  "count": 3,
+  "candidates": [
+    {
+      "staging_id": "4893b34c-65d2-48e3-a3cd-eb3b8c8faca2",
+      "official_id": "5LL1GSFD112162098",
+      "region": "CENTRE",
+      "category": "secondary_general",
+      "decision": "CLEAN_APPROVABLE"
+    },
+    {
+      "staging_id": "83953cef-d0f3-44da-99e0-ee5b67733639",
+      "official_id": "5EL1GSFD102849115",
+      "region": "CENTRE",
+      "category": "secondary_general",
+      "decision": "CLEAN_APPROVABLE"
+    },
+    {
+      "staging_id": "18eec087-f758-4775-8dd5-651289e5bdc9",
+      "official_id": "7IE1GSBD110300109",
+      "region": "LITTORAL",
+      "category": "secondary_general",
+      "decision": "CLEAN_APPROVABLE"
+    }
+  ]
+}

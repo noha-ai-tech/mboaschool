@@ -10,6 +10,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import { CANONICAL_REGIONS, GRAND_NORD, ZONE_ANGLOPHONE, normalizeRegionCasing } from "@/lib/cameroonRegions";
 import {
   Building2,
   Link2,
@@ -21,6 +22,8 @@ import {
   XCircle,
   HelpCircle,
   Loader2,
+  Layers,
+  ShieldCheck,
 } from "lucide-react";
 
 type MatchType =
@@ -66,7 +69,10 @@ interface EstablishmentLite {
   region: string | null;
   city: string | null;
   main_category: string | null;
+  source_ministry: string | null;
 }
+
+type MacroZone = "all" | "grand_nord" | "zone_anglophone";
 
 type Classification =
   | "EXISTING_OFFICIAL_ID"
@@ -104,6 +110,27 @@ async function fetchAllStaging(): Promise<StagingRow[]> {
   return all;
 }
 
+// SPRINT R — établissements a dépassé 1000 lignes (le plafond par défaut
+// PostgREST) ; un .select() sans .range() tronquait silencieusement "Déjà
+// liés" et les KPIs live. Paginé pour la même raison que fetchAllStaging.
+async function fetchAllEstablishments(): Promise<EstablishmentLite[]> {
+  const all: EstablishmentLite[] = [];
+  const pageSize = 1000;
+  let from = 0;
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    const { data, error } = await supabase
+      .from("establishments")
+      .select("id, name, region, city, main_category, source_ministry")
+      .range(from, from + pageSize - 1);
+    if (error) throw error;
+    all.push(...((data ?? []) as EstablishmentLite[]));
+    if (!data || data.length < pageSize) break;
+    from += pageSize;
+  }
+  return all;
+}
+
 const TABS = [
   { key: "overview", label: "Vue d'ensemble" },
   { key: "new", label: "Nouveaux candidats" },
@@ -125,6 +152,9 @@ export default function RegistreNationalPage() {
   const [query, setQuery] = useState("");
   const [regionFilter, setRegionFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [macroZoneFilter, setMacroZoneFilter] = useState<MacroZone>("all");
+  const [localityQualityFilter, setLocalityQualityFilter] = useState("all");
+  const [sourceFilter, setSourceFilter] = useState("all");
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -135,12 +165,9 @@ export default function RegistreNationalPage() {
     setLoading(true);
     setError(null);
     try {
-      const [staging, estRes] = await Promise.all([
-        fetchAllStaging(),
-        supabase.from("establishments").select("id, name, region, city, main_category"),
-      ]);
+      const [staging, establishmentsData] = await Promise.all([fetchAllStaging(), fetchAllEstablishments()]);
       setRows(staging);
-      setEstablishments((estRes.data ?? []) as EstablishmentLite[]);
+      setEstablishments(establishmentsData);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Échec du chargement");
     }
@@ -167,25 +194,54 @@ export default function RegistreNationalPage() {
   const linkedExisting = counts.EXISTING_OFFICIAL_ID + counts.EXISTING_LEGACY_CONFIRMED;
   const needsReview = counts.EXISTING_PROBABLE + counts.EXISTING_AMBIGUOUS + counts.NEW_CANDIDATE_REVIEW_REQUIRED;
 
+  // ── SPRINT R §34 — KPIs nationaux réels (jamais de chiffre inventé) ──────
+  const nationalKpis = useMemo(() => {
+    const byStatus: Record<string, number> = {};
+    for (const r of rows) byStatus[r.status] = (byStatus[r.status] ?? 0) + 1;
+    return {
+      totalMinesecStaging: rows.length,
+      live: establishments.filter((e) => e.source_ministry === "MINESEC").length,
+      staging: rows.length,
+      promoted: byStatus.promoted ?? 0,
+      ready: byStatus.ready ?? 0,
+      review: (byStatus.duplicate_review ?? 0) + counts.NEW_CANDIDATE_REVIEW_REQUIRED,
+      duplicate: byStatus.duplicate_exact ?? 0,
+    };
+  }, [rows, establishments, counts]);
+
   // ── Nouveaux candidats (propres + à revoir) ──────────────────────────────
   const newCandidates = useMemo(
     () => classified.filter((c) => c.classification === "CLEAN_NEW_CANDIDATE" || c.classification === "NEW_CANDIDATE_REVIEW_REQUIRED"),
     [classified]
   );
-  const regions = useMemo(() => Array.from(new Set(newCandidates.map((c) => c.row.region).filter(Boolean))).sort() as string[], [newCandidates]);
+  // SPRINT R §29 — les 10 régions canoniques toujours proposées au filtre
+  // (pas seulement celles présentes dans le lot courant de candidats).
+  const regions = CANONICAL_REGIONS;
   const categories = useMemo(() => Array.from(new Set(newCandidates.map((c) => c.row.education_family).filter(Boolean))).sort() as string[], [newCandidates]);
+  const sources = useMemo(() => Array.from(new Set(newCandidates.map((c) => c.row.source_ministry).filter(Boolean))).sort() as string[], [newCandidates]);
 
   const filteredNewCandidates = useMemo(() => {
     return newCandidates.filter((c) => {
-      if (regionFilter !== "all" && c.row.region !== regionFilter) return false;
+      // region en staging reste en casse brute source (ex. "SUD") — comparaison canonique.
+      if (regionFilter !== "all" && normalizeRegionCasing(c.row.region) !== regionFilter) return false;
       if (categoryFilter !== "all" && c.row.education_family !== categoryFilter) return false;
+      if (sourceFilter !== "all" && c.row.source_ministry !== sourceFilter) return false;
+      if (macroZoneFilter !== "all") {
+        const canonical = normalizeRegionCasing(c.row.region);
+        const zoneRegions: readonly string[] = macroZoneFilter === "grand_nord" ? GRAND_NORD : ZONE_ANGLOPHONE;
+        if (!canonical || !zoneRegions.includes(canonical)) return false;
+      }
+      if (localityQualityFilter !== "all") {
+        const quality = c.row.raw_data?._localityAudit?.localityStatus ?? "MISSING";
+        if (quality !== localityQualityFilter) return false;
+      }
       if (query) {
         const q = query.toLowerCase();
         if (!`${c.row.name_raw} ${c.row.official_identifier ?? ""} ${c.row.locality ?? ""}`.toLowerCase().includes(q)) return false;
       }
       return true;
     });
-  }, [newCandidates, regionFilter, categoryFilter, query]);
+  }, [newCandidates, regionFilter, categoryFilter, sourceFilter, macroZoneFilter, localityQualityFilter, query]);
 
   const doubtfulMatches = useMemo(
     () => classified.filter((c) => c.classification === "EXISTING_PROBABLE" || c.classification === "EXISTING_AMBIGUOUS"),
@@ -263,12 +319,15 @@ export default function RegistreNationalPage() {
         <div className="mb-4 bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm font-medium">{error}</div>
       )}
 
-      {/* KPI */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <KpiCard icon={Building2} value={rows.length} label="Total staging" />
-        <KpiCard icon={Link2} value={linkedExisting} label="Déjà liés" />
-        <KpiCard icon={Sparkles} value={counts.CLEAN_NEW_CANDIDATE} label="Nouveaux propres" />
-        <KpiCard icon={AlertTriangle} value={needsReview} label="À revoir" />
+      {/* KPI nationaux — SPRINT R §34, uniquement des chiffres réels */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4 mb-6">
+        <KpiCard icon={Building2} value={nationalKpis.totalMinesecStaging} label="Total MINESEC" />
+        <KpiCard icon={ShieldCheck} value={nationalKpis.live} label="Live" />
+        <KpiCard icon={Layers} value={nationalKpis.staging} label="Staging" />
+        <KpiCard icon={CheckCircle2} value={nationalKpis.promoted} label="Promus" />
+        <KpiCard icon={Sparkles} value={nationalKpis.ready} label="Prêts" />
+        <KpiCard icon={AlertTriangle} value={nationalKpis.review} label="À vérifier" />
+        <KpiCard icon={Link2} value={nationalKpis.duplicate} label="Doublons" />
       </div>
 
       {/* Tabs */}
@@ -326,6 +385,32 @@ export default function RegistreNationalPage() {
                 <option key={c} value={c}>{c}</option>
               ))}
             </select>
+            <select
+              value={macroZoneFilter}
+              onChange={(e) => setMacroZoneFilter(e.target.value as MacroZone)}
+              className="border border-[#ebebeb] rounded-xl px-3 py-2.5 text-sm bg-white"
+              title="Filtre produit — jamais une valeur de region en base"
+            >
+              <option value="all">Toutes macro-zones</option>
+              <option value="grand_nord">Grand Nord</option>
+              <option value="zone_anglophone">Zone anglophone</option>
+            </select>
+            <select value={localityQualityFilter} onChange={(e) => setLocalityQualityFilter(e.target.value)} className="border border-[#ebebeb] rounded-xl px-3 py-2.5 text-sm bg-white">
+              <option value="all">Toute qualité localité</option>
+              <option value="VALID">Localité valide</option>
+              <option value="POSSIBLE_REAL_LOCALITY">Localité possible</option>
+              <option value="NEEDS_REVIEW">Localité à revoir</option>
+              <option value="CLEARLY_INVALID">Localité invalide</option>
+              <option value="MISSING">Localité absente</option>
+            </select>
+            {sources.length > 1 && (
+              <select value={sourceFilter} onChange={(e) => setSourceFilter(e.target.value)} className="border border-[#ebebeb] rounded-xl px-3 py-2.5 text-sm bg-white">
+                <option value="all">Toutes sources</option>
+                {sources.map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            )}
           </div>
 
           {selected.size > 0 && (

@@ -89,3 +89,36 @@ export function isInGrandNord(region: string | null | undefined): boolean {
 export function isInZoneAnglophone(region: string | null | undefined): boolean {
   return Boolean(region) && (ZONE_ANGLOPHONE as readonly string[]).includes(region!);
 }
+
+// SPRINT R §7 — seule liste canonique des 10 régions administratives. Toute
+// écriture future de `establishments.region` / `establishment_import_staging.region`
+// doit produire une de ces 10 valeurs exactes, jamais une variante de casse.
+export const CANONICAL_REGIONS = [
+  "Adamaoua",
+  "Centre",
+  "Est",
+  "Extrême-Nord",
+  "Littoral",
+  "Nord",
+  "Nord-Ouest",
+  "Ouest",
+  "Sud",
+  "Sud-Ouest",
+] as const;
+
+function stripAccentsLower(s: string): string {
+  return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
+}
+
+/**
+ * Fait correspondre une valeur de région dans n'importe quelle casse/accentuation
+ * (ex. "CENTRE", "extreme-nord") à sa forme canonique exacte — UNIQUEMENT en cas
+ * de correspondance sans ambiguïté (accents/casse ignorés, rien d'autre). Retourne
+ * null si aucune des 10 régions canoniques ne correspond — ne devine jamais.
+ */
+export function normalizeRegionCasing(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  const key = stripAccentsLower(raw);
+  const match = CANONICAL_REGIONS.find((r) => stripAccentsLower(r) === key);
+  return match ?? null;
+}

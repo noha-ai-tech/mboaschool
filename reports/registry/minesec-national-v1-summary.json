@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-08-18T04:48:14.848Z",
+  "operator": "jean-merlain",
+  "total_unique": 1942,
+  "official_id_coverage": "1941/1942",
+  "region_coverage": "10/10",
+  "locality_quality": {
+    "VALID": 1647,
+    "MISSING": 216,
+    "CLEARLY_INVALID": 45,
+    "NEEDS_REVIEW": 28,
+    "POSSIBLE_REAL_LOCALITY": 6
+  },
+  "status_counts": {
+    "promoted": 1221,
+    "ready": 45,
+    "duplicate_exact": 674,
+    "duplicate_review": 2
+  },
+  "region_counts": {
+    "CENTRE": 345,
+    "SUD": 135,
+    "EST": 108,
+    "LITTORAL": 149,
+    "SUD-OUEST": 184,
+    "NORD": 141,
+    "OUEST": 251,
+    "EXTREME-NORD": 269,
+    "ADAMAOUA": 96,
+    "NORD-OUEST": 264
+  },
+  "macro_zone_counts": {
+    "grand_nord": 0,
+    "zone_anglophone": 0
+  },
+  "clean_approvable": 3,
+  "review_required": 42,
+  "duplicates": 676,
+  "live_matches": 1221,
+  "ready_classification": {
+    "A_CLEAN": 3,
+    "B_LOCALITY_REVIEW": 41,
+    "C_ID_REVIEW": 1,
+    "D_OTHER_REVIEW": 0
+  },
+  "duplicate_exact_audit": {
+    "total": 674,
+    "unlinked": 0,
+    "broken_link": 0
+  }
+}
