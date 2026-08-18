@@ -1,0 +1,46 @@
+official_id,name_raw,region,locality_status,identity_valid,identity_reason,locality_policy,approvable
+5CE1GSFD110541109,Lyce de LEMBE-YEZOUM,CENTRE,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+5CH1GSFD110137113,Lyce de MBANDJOCK,CENTRE,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+5CJ1GSFD101886104,CES d'OUASSA-BAMVELE,CENTRE,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+5CJ1GSBD112195111,Lyce Bilingue de NANGA-EBOKO,CENTRE,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+5CK1GSFD111673096,Lyce de NKOTENG,CENTRE,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+5EH1GSFD110860112,Lyce de KOKODO,CENTRE,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+5EM1GSFD100792109,CES de VOA II,CENTRE,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+5HE1GSFD100850111,CES de BOKAGA II,CENTRE,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+5IE1GSBD111981106,Lyce Bilingue de NGAMBE-TIKAR,CENTRE,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+6CE1GSAD110479113,Lyce de BONADIKOMBO-MILE 4,SUD-OUEST,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+6CE1GSAD111852082,Lyce de LIMBE,SUD-OUEST,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+5LI1GSFD112295089,Lyce d'ANGUISSA,CENTRE,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+5LK1GSBD111628110,Lyce Bilingue de MENDONG,CENTRE,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+5LL1GSFD112162098,Lyce Classique de NKOLBISSON,CENTRE,VALID,YES,toutes conditions réunies,A. VALID/POSSIBLE — utilisable,YES
+5NC1GSFD101262108,CES de ZALOM,CENTRE,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+5QH1GSFD110348111,Lyce de MBALMAYO-RURAL,CENTRE,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+6EE1GSAD102322113,CES de BABENSI I,SUD-OUEST,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+7IC1GSFD110287091,Lyce d'AKWA,LITTORAL,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+6EH1GSAD102813115,CES de NGOBENYOE,SUD-OUEST,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+7IH1GSFD110305090,Lyce d'OYACK,LITTORAL,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+7IJ1GSFD112004091,Lyce d'AKWA-NORD,LITTORAL,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+5EL1GSFD102849115,CES de NKOLMELEN,CENTRE,MISSING,YES,toutes conditions réunies,"B. MISSING — NULL, non bloquant",YES
+7IE1GSBD110300109,Lyce Bilingue de NEW-BELL,LITTORAL,VALID,YES,toutes conditions réunies,A. VALID/POSSIBLE — utilisable,YES
+8CH1GSFD102312113,CES de TATCHING II,SUD,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+8EL1GSFD102044111,CES d'ENDENGUE,SUD,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+8HE1GSFD100367110,CES de GRAND-ZAMBI,SUD,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+8HK1GSFD102318113,CES de NKOLLO,SUD,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+8HK1GSBD111317110,Lyce Bilingue de KRIBI-RURAL,SUD,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+8HL1GSFD101265110,CES de BIKOKA,SUD,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+8HM1GSFD102736114,CES de WOM,SUD,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+8IC1GSBD112069108,Lyce Bilingue d'AMBAM,SUD,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+8II1GSBD100170118,CES Bilingue de BIYI-AKOUM-ESEJEE,SUD,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+9CH1GSFD102846115,CES de MIKEL,EST,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+9CI1GSFD100054106,CES de MBOY I,EST,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+9HC1GSFD102066108,CES de GADJI,EST,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+9HC1GSFD101318112,CES de TAPARE,EST,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+9IC1GSFD110011113,Lyce de NDEMBA I,EST,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+9IE1GSFD110321105,Lyce de MOKOLO 4-BERTOUA,EST,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+9IH1GSFD102370113,CES de BERTOUA II,EST,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+9IH1GSFD102394113,CES de NGAIKADA,EST,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+,CES de DANG-PATOU,EST,VALID,NO,official_id présent,A. VALID/POSSIBLE — utilisable,NO
+9II1GSFD110335115,Lyce de MBITOM,EST,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES
+3CC1GSBD110178110,Lyce Bilingue de BELO,NORD-OUEST,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+3JE1GSAD100066112,CES de BOSSA,NORD-OUEST,CLEARLY_INVALID,YES,toutes conditions réunies,C. CLEARLY_INVALID — jamais promue vers city/locality,YES
+3LC1GSAD102307113,CES de KEFEUNG,NORD-OUEST,NEEDS_REVIEW,YES,toutes conditions réunies,"D. NEEDS_REVIEW — raw conservé en staging, jamais affiché publiquement sans confirmation",YES

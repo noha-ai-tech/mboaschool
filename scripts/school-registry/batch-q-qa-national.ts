@@ -25,7 +25,7 @@ function readEnvVar(env: string, key: string): string {
   return value;
 }
 
-function stripAccents(s: string): string {
+function stripAccents(s: string | null | undefined): string {
   return (s ?? "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim().replace(/-/g, " ");
 }
 

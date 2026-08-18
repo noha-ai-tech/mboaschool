@@ -32,6 +32,8 @@ const BASE: RegistryWriteRequest = {
   expectedCandidates: 2,
   computedChecksum: validChecksum,
   approvalChecksum: validChecksum,
+  operator: "jean-merlain",
+  expectedOperator: "jean-merlain",
 };
 
 interface Scenario {
@@ -46,6 +48,8 @@ const scenarios: Scenario[] = [
   { name: "mauvais expected count", request: { ...BASE, actualCandidates: 3 }, expectBlocked: true },
   { name: "checksum différent", request: { ...BASE, approvalChecksum: "0000000000000000000000000000000000000000000000000000000000000000" }, expectBlocked: true },
   { name: "staging non approuvé (batch différent de l'attendu)", request: { ...BASE, batch: "unapproved-batch" }, expectBlocked: true },
+  { name: "opérateur absent", request: { ...BASE, operator: undefined }, expectBlocked: true },
+  { name: "mauvais opérateur", request: { ...BASE, operator: "eddy" }, expectBlocked: true },
   {
     name: "official_id déjà existant (simulé par actualCandidates=0 après filtrage anti-doublon)",
     request: { ...BASE, actualCandidates: 0, expectedCandidates: 0, computedChecksum: computeApprovalChecksum([]), approvalChecksum: computeApprovalChecksum([]) },

@@ -26,6 +26,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { categories } from "@/lib/categories";
 import { GRAND_NORD, ZONE_ANGLOPHONE, normalizeRegionCasing } from "@/lib/cameroonRegions";
 import { formatQuartierCity } from "@/lib/formatSchoolLocation";
+import { normalizeSearchText, matchesSearchQuery } from "@/lib/search/normalizeSearchText";
 
 const LocalSchoolMap = dynamic(() => import("@/components/LocalSchoolMap"), {
   ssr: false,
@@ -373,6 +374,26 @@ function RecherchePageInner() {
 
   const mapCenter = userLocation ?? DEFAULT_CENTER;
 
+  // SPRINT R.1 §9 — calculé une seule fois par chargement de `schools`
+  // (pas à chaque frappe), jamais un aller-retour réseau supplémentaire
+  // juste pour normaliser : le jeu de 1942 établissements est déjà en
+  // mémoire côté client (architecture existante, inchangée ce sprint).
+  const searchHaystackById = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const s of schools) {
+      const canonicalRegion = normalizeRegionCasing(s.region);
+      const macroZoneWords = [
+        ...(canonicalRegion && (GRAND_NORD as readonly string[]).includes(canonicalRegion) ? ["grand nord"] : []),
+        ...(canonicalRegion && (ZONE_ANGLOPHONE as readonly string[]).includes(canonicalRegion) ? ["zone anglophone"] : []),
+      ];
+      // SPRINT R.1 §3-6 — normalizeSearchText() insensible aux accents pour
+      // la comparaison ; official_name / name en base restent intacts,
+      // seule cette copie de travail est transformée.
+      map.set(s.id, normalizeSearchText(`${s.name} ${s.city} ${s.region} ${s.quartier} ${s.category} ${s.subcategory} ${macroZoneWords.join(" ")}`));
+    }
+    return map;
+  }, [schools]);
+
   const filtered = schools.filter((s) => {
     if (activeCategory !== "all" && s.category !== activeCategory) return false;
     if (city !== "all" && s.city !== city) return false;
@@ -381,22 +402,9 @@ function RecherchePageInner() {
       if (haversineKm(userLocation.lat, userLocation.lng, s.lat, s.lng) > Number(radius)) return false;
     }
     if (query) {
-      // SPRINT R §31-33 — recherche textuelle sur region en plus de city
-      // (jamais exiger city, region peut être la seule localisation connue
-      // pour un établissement du registre national). "grand nord" / "zone
-      // anglophone" sont des filtres produit, jamais une valeur de region.
-      const canonicalRegion = normalizeRegionCasing(s.region);
-      const macroZoneWords = [
-        ...(canonicalRegion && (GRAND_NORD as readonly string[]).includes(canonicalRegion) ? ["grand nord"] : []),
-        ...(canonicalRegion && (ZONE_ANGLOPHONE as readonly string[]).includes(canonicalRegion) ? ["zone anglophone"] : []),
-      ];
-      const haystack = `${s.name} ${s.city} ${s.region} ${s.quartier} ${s.category} ${s.subcategory} ${macroZoneWords.join(" ")}`.toLowerCase();
-      // Mot par mot (ET logique) plutôt que la phrase entière : "lycée yaoundé"
-      // doit trouver "Lycée Bilingue de Yaoundé" même si les deux mots ne sont
-      // pas adjacents dans le nom — un .includes() sur la phrase complète les
-      // aurait ratés.
-      const words = query.toLowerCase().split(/\s+/).filter(Boolean);
-      if (!words.every((w) => haystack.includes(w))) return false;
+      // Mot par mot (ET logique) + alias lycée/lyce + insensible aux accents.
+      const haystack = searchHaystackById.get(s.id) ?? "";
+      if (!matchesSearchQuery(haystack, query)) return false;
     }
     return true;
   });

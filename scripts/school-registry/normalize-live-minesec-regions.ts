@@ -28,6 +28,7 @@ import {
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..", "..");
 const BATCH = "region-casing-normalization";
+const EXPECTED_OPERATOR = "jean-merlain";
 
 function readEnvVar(env: string, key: string): string {
   const match = env.match(new RegExp(`^${key}=(.*)$`, "m"));
@@ -101,7 +102,7 @@ async function main() {
   console.log(`Other fields touched: 0`);
   console.log(`Project ref: ${projectRef}`);
   console.log(`Approval checksum (set exact ${candidates.length} lignes): ${computedChecksum}`);
-  console.log(`\nPour committer : --commit --confirm="PROMOTE_REGISTRY_TO_PRODUCTION" --expected-candidates=${candidates.length} --approval-checksum=${computedChecksum}`);
+  console.log(`\nPour committer : --commit --confirm="PROMOTE_REGISTRY_TO_PRODUCTION" --expected-candidates=${candidates.length} --approval-checksum=${computedChecksum} --operator=${EXPECTED_OPERATOR}`);
 
   mkdirSync(join(rootDir, "reports", "registry"), { recursive: true });
   writeFileSync(
@@ -118,6 +119,7 @@ async function main() {
   const expectedCandidates = Number(argValue(args, "expected-candidates"));
   const approvalChecksum = argValue(args, "approval-checksum");
   const confirmPhrase = argValue(args, "confirm");
+  const operator = argValue(args, "operator");
 
   try {
     assertRegistryProductionWriteAllowed({
@@ -132,6 +134,8 @@ async function main() {
       expectedCandidates,
       computedChecksum,
       approvalChecksum,
+      operator,
+      expectedOperator: EXPECTED_OPERATOR,
     });
   } catch (e) {
     if (e instanceof RegistryWriteRefused) {

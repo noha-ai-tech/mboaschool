@@ -194,20 +194,25 @@ export default function RegistreNationalPage() {
   const linkedExisting = counts.EXISTING_OFFICIAL_ID + counts.EXISTING_LEGACY_CONFIRMED;
   const needsReview = counts.EXISTING_PROBABLE + counts.EXISTING_AMBIGUOUS + counts.NEW_CANDIDATE_REVIEW_REQUIRED;
 
-  // ── SPRINT R §34 — KPIs nationaux réels (jamais de chiffre inventé) ──────
+  // ── SPRINT R §34 / R.1 §29 — KPIs nationaux réels, jamais de chiffre
+  // inventé ni trompeur. "À vérifier" ne compte QUE les blocages réels
+  // d'identité (doublon ambigu, matricule absent) — une localité manquante/
+  // suspecte sur une identité par ailleurs fiable n'est PAS un problème
+  // d'identité (SPRINT R.1 §10-11) et ne doit pas gonfler ce chiffre.
   const nationalKpis = useMemo(() => {
     const byStatus: Record<string, number> = {};
     for (const r of rows) byStatus[r.status] = (byStatus[r.status] ?? 0) + 1;
+    const readyMissingOfficialId = rows.filter((r) => r.status === "ready" && !r.official_identifier).length;
     return {
       totalMinesecStaging: rows.length,
       live: establishments.filter((e) => e.source_ministry === "MINESEC").length,
       staging: rows.length,
       promoted: byStatus.promoted ?? 0,
       ready: byStatus.ready ?? 0,
-      review: (byStatus.duplicate_review ?? 0) + counts.NEW_CANDIDATE_REVIEW_REQUIRED,
+      review: (byStatus.duplicate_review ?? 0) + readyMissingOfficialId,
       duplicate: byStatus.duplicate_exact ?? 0,
     };
-  }, [rows, establishments, counts]);
+  }, [rows, establishments]);
 
   // ── Nouveaux candidats (propres + à revoir) ──────────────────────────────
   const newCandidates = useMemo(

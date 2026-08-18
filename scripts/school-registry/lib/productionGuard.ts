@@ -48,6 +48,9 @@ export interface RegistryWriteRequest {
   computedChecksum: string;
   /** --approval-checksum=..., produit par le dry-run validé. */
   approvalChecksum: string | undefined;
+  /** SPRINT R.1 §18 — opérateur déclaré explicitement (--operator=...), jamais inféré depuis git author/session. */
+  operator: string | undefined;
+  expectedOperator: string;
 }
 
 export class RegistryWriteRefused extends Error {}
@@ -68,6 +71,11 @@ export function assertRegistryProductionWriteAllowed(req: RegistryWriteRequest):
   }
   if (req.projectRef !== EXPECTED_PROJECT_REF) {
     throw new RegistryWriteRefused(`REFUSED — project ref inattendu (${req.projectRef} != ${EXPECTED_PROJECT_REF}).`);
+  }
+  if (!req.operator || req.operator !== req.expectedOperator) {
+    throw new RegistryWriteRefused(
+      `REFUSED — opérateur manquant ou inattendu (${req.operator ?? "(absent)"} != ${req.expectedOperator}). Exiger --operator="${req.expectedOperator}".`
+    );
   }
   if (req.batch !== req.expectedBatch) {
     throw new RegistryWriteRefused(`REFUSED — batch inattendu (${req.batch} != ${req.expectedBatch}).`);

@@ -1,53 +1,44 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execSync } from "node:child_process";
 import { normalizeName } from "./lib/normalize";
+import { normalizeRegionCasing } from "../../src/lib/cameroonRegions";
 import {
   assertRegistryProductionWriteAllowed,
   computeApprovalChecksum,
   evaluatePromotionOutcome,
   verifyPromotionReportComplete,
-  EXPECTED_PROJECT_REF,
   RegistryWriteRefused,
 } from "./lib/productionGuard";
 
 /**
- * SPRINT R (promotion réelle, hors SPRINT Q) — Promotion contrôlée de
- * establishment_import_staging vers `establishments` pour le batch
- * "MINESEC Batch 003 (Sud, Est, Nord-Ouest, Sud-Ouest)".
+ * SPRINT R.1 §17-23 — Promotion contrôlée finale du registre MINESEC V1 :
+ * UNIQUEMENT les candidats du snapshot figé
+ * reports/registry/minesec-national-v1-final-approval.json (44 lignes,
+ * identité fiable — localité jamais exigée, §16). Le snapshot v1 (3
+ * candidats, SPRINT R) reste historique, jamais écrasé.
  *
- * Première implémentation --commit réelle du pipeline (P.3/P.5 n'en avaient
- * jamais eu — voir REGISTRY_PRODUCTION_RUNBOOK.md). Passe obligatoirement
- * par assertRegistryProductionWriteAllowed() (SPRINT P.6) : --commit,
- * phrase de confirmation, project ref, comptage attendu, checksum
- * d'approbation sur le set exact approuvé — refuse avant toute écriture si
- * un seul diffère.
+ * Ré-exécute l'éligibilité en direct contre l'état actuel de production
+ * (jamais la confiance aveugle dans un fichier local) — mêmes règles que
+ * promote-batch-q-approved.ts : official_id, source MINESEC, nom, région
+ * canonique, catégorie, aucun conflit officiel_id/nom+région live.
  *
- * Règle d'éligibilité déterministe (identique à SPRINT P.3) — PROMOTABLE
- * si TOUT est vrai :
- *   - status = 'ready' (jamais duplicate_exact/duplicate_review)
- *   - raw_data._review.review_action === 'approved_for_promotion'
- *   - official_identifier présent, source_ministry = MINESEC
- *   - name_raw, region, education_family présents
- *   - pas de conflit anti-doublon LIVE (official_id exact, puis nom+région
- *     pour repérer une école déjà revendiquée — jamais touchée)
- * `city` peut être NULL. Aucune description fabriquée, aucune photo,
- * owner_id NULL, is_verified jamais forcé à true, plan par défaut.
- *
- * Chaque établissement créé reçoit IMMÉDIATEMENT son lien staging
- * (promoted_establishment_id + promoted_at + status='promoted') dans le
- * même passage — jamais en différé (le bug P.3 ne doit plus se reproduire).
+ * approved_by : aucune identité distincte de l'opérateur n'a été fournie
+ * explicitement pour cette mission — jamais inventé (§23). Reste null,
+ * documenté comme tel dans le rapport.
  *
  * Usage :
- *   tsx promote-batch-q-approved.ts --dry-run
- *   tsx promote-batch-q-approved.ts --commit --confirm="PROMOTE_REGISTRY_TO_PRODUCTION" --expected-candidates=N --approval-checksum=<sha256>
+ *   tsx promote-minesec-final.ts --dry-run
+ *   tsx promote-minesec-final.ts --commit --confirm="PROMOTE_REGISTRY_TO_PRODUCTION" --expected-candidates=N --approval-checksum=<sha256> --operator=jean-merlain
  */
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, "..", "..");
 const BATCH_SIZE = 100;
-const REGISTRY_IMPORT_BATCH = "minesec-batch-q-promotion";
+const REGISTRY_IMPORT_BATCH = "minesec-national-v1-final-promotion";
 const EXPECTED_OPERATOR = "jean-merlain";
+const APPROVED_BY: string | null = null; // §23 — jamais inventé
 
 function stripAccents(s: string): string {
   return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
@@ -63,9 +54,6 @@ function slugify(name: string): string {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 }
-/** main_category (enum DB : garderie/primaire/secondaire/superieur/autres) — jamais
- * la taxonomie interne du registre (`education_family`, ex. secondary_general),
- * qui est une classification différente et plus fine. Mapping déterministe. */
 function toMainCategory(educationFamily: string): "garderie" | "primaire" | "secondaire" | "superieur" | "autres" {
   switch (educationFamily) {
     case "basic":
@@ -99,8 +87,6 @@ interface StagingRow {
   region: string | null;
   city: string | null;
   locality: string | null;
-  department: string | null;
-  arrondissement: string | null;
   education_family: string | null;
   source_ministry: string | null;
   status: string;
@@ -121,9 +107,7 @@ async function fetchAllPaginated<T>(url: string, key: string, path: string): Pro
   let offset = 0;
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    const res = await fetch(`${url}${path}${path.includes("?") ? "&" : "?"}limit=${pageSize}&offset=${offset}`, {
-      headers: { apikey: key, Authorization: `Bearer ${key}` },
-    });
+    const res = await fetch(`${url}${path}${path.includes("?") ? "&" : "?"}limit=${pageSize}&offset=${offset}`, { headers: { apikey: key, Authorization: `Bearer ${key}` } });
     if (!res.ok) throw new Error(`GET ${path} -> HTTP ${res.status}`);
     const page = (await res.json()) as T[];
     all.push(...page);
@@ -131,14 +115,6 @@ async function fetchAllPaginated<T>(url: string, key: string, path: string): Pro
     offset += pageSize;
   }
   return all;
-}
-
-interface Decision {
-  row: StagingRow;
-  eligible: boolean;
-  reason: string;
-  alreadyExists: LiveEstablishment | null;
-  ownedConflict: LiveEstablishment | null;
 }
 
 async function main() {
@@ -150,15 +126,21 @@ async function main() {
   const serviceKey = readEnvVar(env, "SUPABASE_SERVICE_ROLE_KEY");
   const projectRef = new URL(url).hostname.split(".")[0];
 
+  const snapshot: { approval_checksum: string; count: number; candidates: { staging_id: string; official_id: string | null }[] } = JSON.parse(
+    readFileSync(join(rootDir, "reports", "registry", "minesec-national-v1-final-approval.json"), "utf-8")
+  );
+  console.log(`Snapshot final v2 : ${snapshot.count} candidat(s), checksum enregistré ${snapshot.approval_checksum}`);
+
   const [staging, live] = await Promise.all([
     fetchAllPaginated<StagingRow>(
       url,
       serviceKey,
-      "/rest/v1/establishment_import_staging?select=id,official_identifier,name_raw,name_normalized,region,city,locality,department,arrondissement,education_family,source_ministry,status,raw_data"
+      "/rest/v1/establishment_import_staging?select=id,official_identifier,name_raw,name_normalized,region,city,locality,education_family,source_ministry,status,raw_data"
     ),
     fetchAllPaginated<LiveEstablishment>(url, serviceKey, "/rest/v1/establishments?select=id,name,region,official_id,source_ministry,owner_id"),
   ]);
 
+  const stagingById = new Map(staging.map((r) => [r.id, r]));
   const liveByOfficialId = new Map<string, LiveEstablishment>();
   const liveByRegion = new Map<string, LiveEstablishment[]>();
   for (const e of live) {
@@ -168,56 +150,101 @@ async function main() {
     liveByRegion.get(key)!.push(e);
   }
 
-  const decisions: Decision[] = staging.map((row) => {
-    const reviewAction = row.raw_data?._review?.review_action;
-    if (row.status !== "ready") return { row, eligible: false, reason: "duplicate_unresolved", alreadyExists: null, ownedConflict: null };
-    if (reviewAction === "excluded") return { row, eligible: false, reason: "excluded", alreadyExists: null, ownedConflict: null };
-    if (reviewAction !== "approved_for_promotion") return { row, eligible: false, reason: "not_approved", alreadyExists: null, ownedConflict: null };
-    if (!row.official_identifier) return { row, eligible: false, reason: "missing_official_id", alreadyExists: null, ownedConflict: null };
-    if (row.source_ministry !== "MINESEC") return { row, eligible: false, reason: "unsupported_source_ministry", alreadyExists: null, ownedConflict: null };
-    if (!row.name_raw) return { row, eligible: false, reason: "missing_name", alreadyExists: null, ownedConflict: null };
-    if (!row.region) return { row, eligible: false, reason: "missing_region", alreadyExists: null, ownedConflict: null };
-    if (!row.education_family) return { row, eligible: false, reason: "missing_category", alreadyExists: null, ownedConflict: null };
+  interface Decision {
+    row: StagingRow;
+    eligible: boolean;
+    reason: string;
+  }
+  const decisions: Decision[] = [];
+  let missingFromStaging = 0;
 
+  for (const c of snapshot.candidates) {
+    const row = stagingById.get(c.staging_id);
+    if (!row) {
+      missingFromStaging++;
+      continue;
+    }
+    if (row.status !== "ready") {
+      decisions.push({ row, eligible: false, reason: `déjà ${row.status} depuis le snapshot` });
+      continue;
+    }
+    if (row.raw_data?._review?.review_action !== "approved_for_promotion") {
+      decisions.push({ row, eligible: false, reason: "approbation absente ou retirée depuis le snapshot" });
+      continue;
+    }
+    if (!row.official_identifier) {
+      decisions.push({ row, eligible: false, reason: "missing_official_id" });
+      continue;
+    }
+    if (row.source_ministry !== "MINESEC") {
+      decisions.push({ row, eligible: false, reason: "unsupported_source_ministry" });
+      continue;
+    }
+    const canonicalRegion = normalizeRegionCasing(row.region);
+    if (!canonicalRegion) {
+      decisions.push({ row, eligible: false, reason: "missing_or_ambiguous_region" });
+      continue;
+    }
+    if (!row.education_family) {
+      decisions.push({ row, eligible: false, reason: "missing_category" });
+      continue;
+    }
     const officialIdHit = liveByOfficialId.get(row.official_identifier.trim().toUpperCase());
-    if (officialIdHit) return { row, eligible: false, reason: "already_exists", alreadyExists: officialIdHit, ownedConflict: null };
-
-    const candidates = liveByRegion.get(stripAccents(row.region)) ?? [];
+    if (officialIdHit) {
+      decisions.push({ row, eligible: false, reason: "already_exists" });
+      continue;
+    }
+    const candidates = liveByRegion.get(stripAccents(canonicalRegion)) ?? [];
     const key = matchKey(row.name_normalized);
-    const nameMatch = candidates.find((c) => matchKey(normalizeName(c.name)) === key && key.length > 0);
-    if (nameMatch?.owner_id) return { row, eligible: false, reason: "owned_school_conflict", alreadyExists: null, ownedConflict: nameMatch };
-    if (nameMatch) return { row, eligible: false, reason: "already_exists", alreadyExists: nameMatch, ownedConflict: null };
-
-    return { row, eligible: true, reason: "eligible", alreadyExists: null, ownedConflict: null };
-  });
+    const nameMatch = candidates.find((c2) => matchKey(normalizeName(c2.name)) === key && key.length > 0);
+    if (nameMatch?.owner_id) {
+      decisions.push({ row, eligible: false, reason: "owned_school_conflict" });
+      continue;
+    }
+    if (nameMatch) {
+      decisions.push({ row, eligible: false, reason: "already_exists" });
+      continue;
+    }
+    decisions.push({ row, eligible: true, reason: "eligible" });
+  }
 
   const eligibleRows = decisions.filter((d) => d.eligible);
+  const alreadyLive = decisions.filter((d) => d.reason === "already_exists").length;
+  const conflicts = decisions.filter((d) => d.reason === "owned_school_conflict").length;
   const reasonCounts: Record<string, number> = {};
   for (const d of decisions) reasonCounts[d.reason] = (reasonCounts[d.reason] ?? 0) + 1;
 
-  const checksumInput = eligibleRows.map((d) => ({ id: d.row.id, officialId: d.row.official_identifier, decision: "approved_for_promotion" }));
+  // Même label que reclassify-locality-review.ts (source du snapshot figé) —
+  // sinon le checksum ne peut jamais correspondre, même sur un set identique.
+  const checksumInput = eligibleRows.map((d) => ({ id: d.row.id, officialId: d.row.official_identifier, decision: "CLEAN_APPROVABLE_V2" }));
   const computedChecksum = computeApprovalChecksum(checksumInput);
 
-  console.log("=== DRY RUN — promote-batch-q-approved.ts ===");
-  console.log(`Staging total: ${staging.length}`);
-  console.log(`Eligible (would insert): ${eligibleRows.length}`);
-  console.log(`Détail par raison :`, reasonCounts);
-  console.log(`Would update existing: 0 (ce script n'UPDATE jamais establishments existant)`);
+  console.log("\n=== DRY RUN — promote-minesec-final.ts ===");
+  console.log(`Eligible: ${eligibleRows.length}`);
+  console.log(`Already live: ${alreadyLive}`);
+  console.log(`Conflicts: ${conflicts}`);
+  console.log(`Would insert: ${eligibleRows.length}`);
+  console.log(`Would update existing: 0`);
   console.log(`Would delete: 0`);
-  console.log(`Project ref: ${projectRef}`);
-  console.log(`Approval checksum (set exact ${eligibleRows.length} lignes): ${computedChecksum}`);
-  console.log(`\nPour committer : --commit --confirm="PROMOTE_REGISTRY_TO_PRODUCTION" --expected-candidates=${eligibleRows.length} --approval-checksum=${computedChecksum} --operator=${EXPECTED_OPERATOR}`);
+  console.log(`Would link staging: ${eligibleRows.length}`);
+  console.log(`Expected count: ${snapshot.count}`);
+  console.log(`Checksum (recalculé maintenant): ${computedChecksum}`);
+  console.log(`Manquant du staging (supprimé depuis le snapshot ?): ${missingFromStaging}`);
+  console.log(`Détail par raison:`, reasonCounts);
+
+  const dryRunOk = eligibleRows.length === snapshot.count && conflicts === 0 && missingFromStaging === 0 && computedChecksum === snapshot.approval_checksum;
+  console.log(`\n§19 Conditions (would_update=0, would_delete=0, conflicts=0, would_insert=would_link=expected, checksum stable) : ${dryRunOk ? "TOUTES VERTES" : "❌ AU MOINS UNE ÉCHOUÉE — STOP"}`);
 
   mkdirSync(join(rootDir, "reports", "registry"), { recursive: true });
-  writeFileSync(
-    join(rootDir, "reports", "registry", "batch-q-promotion-dryrun.json"),
-    JSON.stringify({ timestamp: new Date().toISOString(), project_ref: projectRef, eligible: eligibleRows.length, reasonCounts, approval_checksum: computedChecksum }, null, 2),
-    "utf-8"
-  );
 
   if (!commit) {
     console.log("\nAUCUNE écriture effectuée (dry-run).");
     return;
+  }
+
+  if (!dryRunOk) {
+    console.error("\n❌ STOP — le dry-run n'est pas parfait, --commit refusé par ce script (avant même le garde-fou).");
+    process.exit(1);
   }
 
   const expectedCandidates = Number(argValue(args, "expected-candidates"));
@@ -233,13 +260,13 @@ async function main() {
       batch: REGISTRY_IMPORT_BATCH,
       expectedBatch: REGISTRY_IMPORT_BATCH,
       sourceMinistry: "MINESEC",
-      operator,
-      expectedOperator: EXPECTED_OPERATOR,
       expectedSourceMinistry: "MINESEC",
       actualCandidates: eligibleRows.length,
       expectedCandidates,
       computedChecksum,
       approvalChecksum,
+      operator,
+      expectedOperator: EXPECTED_OPERATOR,
     });
   } catch (e) {
     if (e instanceof RegistryWriteRefused) {
@@ -249,7 +276,7 @@ async function main() {
     throw e;
   }
 
-  console.log(`\n✅ Garde-fou production : autorisé. Écriture de ${eligibleRows.length} établissement(s) par lots de ${BATCH_SIZE}.`);
+  console.log(`\n✅ Garde-fou : autorisé. Écriture de ${eligibleRows.length} établissement(s) par lots de ${BATCH_SIZE}.`);
 
   const timestamp = new Date().toISOString();
   let inserted = 0;
@@ -270,12 +297,11 @@ async function main() {
         n++;
       }
       usedSlugs.add(slug);
-
       return {
         name: d.row.name_raw,
         slug,
-        region: d.row.region,
-        city: d.row.city, // peut être NULL — jamais de valeur fabriquée
+        region: normalizeRegionCasing(d.row.region),
+        city: d.row.city,
         main_category: toMainCategory(d.row.education_family!),
         official_id: d.row.official_identifier,
         source_ministry: "MINESEC",
@@ -295,7 +321,6 @@ async function main() {
       headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}`, "Content-Type": "application/json", Prefer: "return=representation" },
       body: JSON.stringify(payload),
     });
-
     if (!res.ok) {
       const errText = (await res.text()).slice(0, 300);
       console.error(`  Lot ${i}-${i + chunk.length}: ÉCHEC INSERT HTTP ${res.status} — ${errText}`);
@@ -303,7 +328,6 @@ async function main() {
       for (const d of chunk) failedRows.push({ id: d.row.id, official_id: d.row.official_identifier, error: `insert HTTP ${res.status}` });
       continue;
     }
-
     const createdRows: { id: string; official_id: string | null }[] = await res.json();
     console.log(`  Lot ${i}-${i + chunk.length}: INSERT OK (${createdRows.length})`);
 
@@ -320,48 +344,62 @@ async function main() {
         createdIds.push({ establishment_id: created.id, official_id: created.official_id, staging_id: stagingRow.id });
       } else {
         failed++;
-        failedRows.push({ id: stagingRow.id, official_id: stagingRow.official_identifier, error: `staging link HTTP ${linkRes.status} (établissement ${created.id} créé mais NON lié — réconciliation requise)` });
+        failedRows.push({ id: stagingRow.id, official_id: stagingRow.official_identifier, error: `staging link HTTP ${linkRes.status} — établissement ${created.id} créé mais NON lié` });
         console.error(`  ÉCHEC LIEN staging ${stagingRow.id} -> establishment ${created.id} : HTTP ${linkRes.status}`);
       }
     }
   }
 
   console.log(`\nTerminé — ${inserted} créé(s) + lié(s), ${failed} échoué(s).`);
-
-  const outcome = evaluatePromotionOutcome(inserted + failedRows.filter((f) => f.error.includes("créé mais NON lié")).length, inserted);
+  const createdTotal = inserted + failedRows.filter((f) => f.error.includes("créé mais NON lié")).length;
+  const outcome = evaluatePromotionOutcome(createdTotal, inserted);
   console.log(`Outcome: ${outcome}`);
 
+  let gitCommit: string | null = null;
+  try {
+    gitCommit = execSync("git rev-parse HEAD", { cwd: rootDir }).toString().trim();
+  } catch {
+    // pas de dépôt git accessible — reste null, jamais deviné
+  }
+
   const report = {
-    timestamp,
+    operator: EXPECTED_OPERATOR,
+    approved_by: APPROVED_BY,
+    git_commit: gitCommit,
     project_ref: projectRef,
-    registry_import_batch: REGISTRY_IMPORT_BATCH,
+    timestamp,
     approval_checksum: computedChecksum,
+    registry_import_batch: REGISTRY_IMPORT_BATCH,
     eligible: eligibleRows.length,
     inserted,
-    skipped: reasonCounts.already_exists ?? 0,
+    skipped: alreadyLive,
+    created: inserted,
+    linked: inserted,
     failed,
     failed_rows: failedRows,
     outcome,
   };
-  const reportPath = join(rootDir, "reports", "registry", "promotion-batch-q-summary.json");
-  writeFileSync(reportPath, JSON.stringify(report, null, 2), "utf-8");
-  writeFileSync(join(rootDir, "reports", "registry", "promotion-batch-q-created-ids.json"), JSON.stringify({ registry_import_batch: REGISTRY_IMPORT_BATCH, count: createdIds.length, establishments: createdIds }, null, 2), "utf-8");
+  writeFileSync(join(rootDir, "reports", "registry", "minesec-national-v1-final-promotion-summary.json"), JSON.stringify(report, null, 2), "utf-8");
+  writeFileSync(
+    join(rootDir, "reports", "registry", "minesec-national-v1-final-created-ids.json"),
+    JSON.stringify({ registry_import_batch: REGISTRY_IMPORT_BATCH, count: createdIds.length, establishments: createdIds }, null, 2),
+    "utf-8"
+  );
 
-  const { complete, missing } = verifyPromotionReportComplete(report);
+  const { complete, missing } = verifyPromotionReportComplete({ ...report, timestamp: report.timestamp, registry_import_batch: report.registry_import_batch });
   if (!complete) {
-    console.error(`\n❌ AUDIT INCOMPLETE — champs manquants du rapport : ${missing.join(", ")}`);
+    console.error(`\n❌ AUDIT INCOMPLETE — champs manquants : ${missing.join(", ")}`);
     process.exitCode = 1;
   } else {
-    console.log(`\nRapports écrits : ${reportPath}, promotion-batch-q-created-ids.json`);
+    console.log(`\nRapports écrits : minesec-national-v1-final-promotion-summary.json, minesec-national-v1-final-created-ids.json`);
   }
-
   if (outcome !== "SUCCESS") {
-    console.error(`\n⚠️ ${outcome} — des établissements ont pu être créés sans lien staging correspondant. Ne PAS relancer --commit : réconcilier manuellement d'abord.`);
+    console.error(`\n⚠️ ${outcome} — ne pas relancer --commit, réconcilier manuellement.`);
     process.exitCode = 1;
   }
 }
 
 main().catch((error) => {
-  console.error("Échec de la promotion Batch Q :", error);
+  console.error("Échec de la promotion finale :", error);
   process.exit(1);
 });

@@ -1,0 +1,226 @@
+{
+  "registry_import_batch": "minesec-national-v1-final-promotion",
+  "count": 44,
+  "establishments": [
+    {
+      "establishment_id": "04b0f107-949b-4b2c-96c0-fd645d4cb6fd",
+      "official_id": "5CE1GSFD110541109",
+      "staging_id": "3c70fa58-b2d2-4443-b6d1-ec83a60077ca"
+    },
+    {
+      "establishment_id": "0428ef36-f112-48be-9e4b-965ef73f77bb",
+      "official_id": "5CH1GSFD110137113",
+      "staging_id": "fd2c4825-e6c9-42b5-bebc-a78f0a3219e8"
+    },
+    {
+      "establishment_id": "fba0ed17-3a66-4867-a96e-d0d93f6b5e32",
+      "official_id": "5CJ1GSFD101886104",
+      "staging_id": "44534891-ad3c-42f7-8494-cb662bb825de"
+    },
+    {
+      "establishment_id": "87b7d214-551e-45e2-88ca-284dae3a3cb5",
+      "official_id": "5CJ1GSBD112195111",
+      "staging_id": "2a5207a8-c0db-4a82-910c-13cf547ef452"
+    },
+    {
+      "establishment_id": "14133f13-e283-43ff-981d-27b3459434d7",
+      "official_id": "5CK1GSFD111673096",
+      "staging_id": "fd7c692c-3c2f-4dcd-9866-7b42f2917598"
+    },
+    {
+      "establishment_id": "65e49790-010b-466c-b15c-0b569b25bbfc",
+      "official_id": "5EH1GSFD110860112",
+      "staging_id": "a3ab984d-1e53-4cec-9d6c-5c6ff3a5497d"
+    },
+    {
+      "establishment_id": "28633a72-9b1e-427c-a21f-1750d515dde5",
+      "official_id": "5EM1GSFD100792109",
+      "staging_id": "d1810e88-1575-4f56-a75f-f8ea9dbe4595"
+    },
+    {
+      "establishment_id": "4d86d901-bf20-4d26-9532-4af25b147f93",
+      "official_id": "5HE1GSFD100850111",
+      "staging_id": "9c3275f4-cbac-470a-9f5d-8df6c89d504d"
+    },
+    {
+      "establishment_id": "c3f439c8-da7f-486d-8ebb-2173d4c455dd",
+      "official_id": "5IE1GSBD111981106",
+      "staging_id": "23cda375-0a58-4c44-a504-d19864bc2a15"
+    },
+    {
+      "establishment_id": "28f79c77-fb9a-4f43-b472-347428b04e06",
+      "official_id": "6CE1GSAD110479113",
+      "staging_id": "d322e04c-4ef8-499a-87ea-68631050c4d5"
+    },
+    {
+      "establishment_id": "4d716ebf-0ff2-4306-8cba-6921bb8dc8ef",
+      "official_id": "6CE1GSAD111852082",
+      "staging_id": "81b2df92-d8f6-4b14-a11c-dc4ad4af9cba"
+    },
+    {
+      "establishment_id": "62c98faa-a96f-4b45-83a3-4d71ca4f70a4",
+      "official_id": "5LI1GSFD112295089",
+      "staging_id": "8e163fe1-c86b-41e1-a294-e2ac8070541d"
+    },
+    {
+      "establishment_id": "96f22d66-b5bb-49f9-b0d4-220ac275e0c3",
+      "official_id": "5LK1GSBD111628110",
+      "staging_id": "119be588-0a7b-4afa-a9e2-be2ff1f9332e"
+    },
+    {
+      "establishment_id": "2244c201-10ed-41a0-a7aa-dc46a289b573",
+      "official_id": "5LL1GSFD112162098",
+      "staging_id": "4893b34c-65d2-48e3-a3cd-eb3b8c8faca2"
+    },
+    {
+      "establishment_id": "d31b2431-2b8e-44b3-bebd-a08087df65f4",
+      "official_id": "5NC1GSFD101262108",
+      "staging_id": "6d52e4aa-c52b-4a65-86d4-a6178d188c4c"
+    },
+    {
+      "establishment_id": "51556c48-ba8a-4f50-b3da-8106ec10b3bb",
+      "official_id": "5QH1GSFD110348111",
+      "staging_id": "b81c3bea-99e6-49fc-8783-31691e112173"
+    },
+    {
+      "establishment_id": "0efcc7c7-db3a-4905-a18e-a33faed383c8",
+      "official_id": "6EE1GSAD102322113",
+      "staging_id": "8e1433fd-50ca-4612-b681-1f76df64fd10"
+    },
+    {
+      "establishment_id": "2a2aa215-6c72-41de-8e18-5562fb9870fe",
+      "official_id": "7IC1GSFD110287091",
+      "staging_id": "b195e15e-c9e2-4f87-ac7c-b703c3e87eef"
+    },
+    {
+      "establishment_id": "9fd8bbc5-c816-4537-abd0-976b898d3ccb",
+      "official_id": "6EH1GSAD102813115",
+      "staging_id": "d663f0a9-b5f5-49a9-a664-bd88f249fe14"
+    },
+    {
+      "establishment_id": "1c0364dd-4ad7-4c36-9c92-f8702f5c87ae",
+      "official_id": "7IH1GSFD110305090",
+      "staging_id": "62d4f388-7d58-4c37-8ab5-44484acc8279"
+    },
+    {
+      "establishment_id": "017e42db-0aea-4efb-bae5-410bd33f4b48",
+      "official_id": "7IJ1GSFD112004091",
+      "staging_id": "b2cb3c74-4892-4cc4-af46-a0e381a46d8d"
+    },
+    {
+      "establishment_id": "3a31843a-7ddd-4b83-91e3-99767faa22a2",
+      "official_id": "5EL1GSFD102849115",
+      "staging_id": "83953cef-d0f3-44da-99e0-ee5b67733639"
+    },
+    {
+      "establishment_id": "6e61eedb-fb6f-4b27-a942-699de0915da3",
+      "official_id": "7IE1GSBD110300109",
+      "staging_id": "18eec087-f758-4775-8dd5-651289e5bdc9"
+    },
+    {
+      "establishment_id": "d31b581b-33f8-436c-851b-039153daca83",
+      "official_id": "8CH1GSFD102312113",
+      "staging_id": "fb0af650-4152-4123-97a3-fc89aae44091"
+    },
+    {
+      "establishment_id": "692d055c-82ee-474d-91a8-81a3fb7aaf1f",
+      "official_id": "8EL1GSFD102044111",
+      "staging_id": "c9328251-5d36-4dcf-a04f-47c36743e36f"
+    },
+    {
+      "establishment_id": "1feff33a-059d-4305-893a-9ac12b719a34",
+      "official_id": "8HE1GSFD100367110",
+      "staging_id": "68292dee-0cbe-4e2e-ab14-ab2357b186f5"
+    },
+    {
+      "establishment_id": "83b472c2-6e37-4863-9bfe-4d90b9748f94",
+      "official_id": "8HK1GSFD102318113",
+      "staging_id": "29060ebc-dfd3-4a57-bc0e-68100e7dac33"
+    },
+    {
+      "establishment_id": "6b503c9d-c063-4ad0-b4d6-331b8147e252",
+      "official_id": "8HK1GSBD111317110",
+      "staging_id": "85af61a8-a30a-420f-a16c-9ec638043641"
+    },
+    {
+      "establishment_id": "5871d9a2-a031-4e89-a26a-89c354bc2009",
+      "official_id": "8HL1GSFD101265110",
+      "staging_id": "a09afc02-ce60-4683-8458-8ac94b55ca46"
+    },
+    {
+      "establishment_id": "81110405-03a6-4c94-b9f3-2403f4b7c0df",
+      "official_id": "8HM1GSFD102736114",
+      "staging_id": "e2825ef4-5812-41d3-ad0b-f94cba457315"
+    },
+    {
+      "establishment_id": "59358ed7-e595-4241-b4ce-c60269eaac81",
+      "official_id": "8IC1GSBD112069108",
+      "staging_id": "494d52ed-0d28-44fa-b485-a1adb0c6dba4"
+    },
+    {
+      "establishment_id": "c1944a0a-517b-4d0a-bfd2-d7b22dc47aa2",
+      "official_id": "8II1GSBD100170118",
+      "staging_id": "c0b5e6f2-2b9f-42f2-949a-3faf0d118cbc"
+    },
+    {
+      "establishment_id": "fd2af9e8-0fd7-449f-9f29-6aa279d7badf",
+      "official_id": "9CH1GSFD102846115",
+      "staging_id": "856d3475-f175-4bf8-b145-550e546309f9"
+    },
+    {
+      "establishment_id": "2b1d3328-b287-4f88-9a56-8c142cb82208",
+      "official_id": "9CI1GSFD100054106",
+      "staging_id": "c8b94354-cbd7-4fae-8ae6-4ec31328ae4c"
+    },
+    {
+      "establishment_id": "db5aed3c-e296-4bfa-b554-81d7ce80a135",
+      "official_id": "9HC1GSFD102066108",
+      "staging_id": "17d52098-3143-491b-93e0-5ce17c69864f"
+    },
+    {
+      "establishment_id": "3107ae4b-43d3-48a9-be66-e76db6dc27f5",
+      "official_id": "9HC1GSFD101318112",
+      "staging_id": "86dde8c9-1dec-4173-a59c-a1620f968c91"
+    },
+    {
+      "establishment_id": "2eb08793-a9d6-44a1-aa65-8b8326eb3705",
+      "official_id": "9IC1GSFD110011113",
+      "staging_id": "b7bd4c70-69b7-4605-8ed1-59f03fa102dc"
+    },
+    {
+      "establishment_id": "96ca40c5-4800-4d28-ba53-d30591e6572d",
+      "official_id": "9IE1GSFD110321105",
+      "staging_id": "35af1f6c-87e6-4b8c-aa05-00c6d4af9fb9"
+    },
+    {
+      "establishment_id": "6e3726ab-df58-4b43-bcae-c316ca7bc7cb",
+      "official_id": "9IH1GSFD102370113",
+      "staging_id": "b9f36171-b7af-4aa3-83a6-e0d3acdf3fed"
+    },
+    {
+      "establishment_id": "b1ceb58a-d49d-402f-a851-9dcc0d147981",
+      "official_id": "9IH1GSFD102394113",
+      "staging_id": "14c3aca9-837b-4056-8767-69db37b8d014"
+    },
+    {
+      "establishment_id": "eab274ee-ddbc-46fb-a739-27f3895c1d70",
+      "official_id": "9II1GSFD110335115",
+      "staging_id": "d2ae9196-08c2-4a6b-9b04-8bbcb87adf95"
+    },
+    {
+      "establishment_id": "91debc05-e862-4529-831f-93e7f4c3c671",
+      "official_id": "3CC1GSBD110178110",
+      "staging_id": "b42c3939-ec97-4608-93f9-ac7a2c2b8818"
+    },
+    {
+      "establishment_id": "a7601e96-568e-4a7a-aa5c-c78bd5a65ec9",
+      "official_id": "3JE1GSAD100066112",
+      "staging_id": "5d927cbb-96a3-4f81-9581-acbe385ed631"
+    },
+    {
+      "establishment_id": "b384bc2e-2941-4e8a-be25-0b7f6ab0f01a",
+      "official_id": "3LC1GSAD102307113",
+      "staging_id": "77fe8c55-9010-4b8d-9e0e-ed30fdfa6721"
+    }
+  ]
+}

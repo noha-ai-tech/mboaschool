@@ -1,0 +1,18 @@
+{
+  "operator": "jean-merlain",
+  "approved_by": null,
+  "git_commit": "27fa92afa27344932dda46283b9b8442920381a5",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "timestamp": "2026-08-18T05:27:54.785Z",
+  "approval_checksum": "5602719a3f3b2daf5b2e31dac64f7f6054eb037b5c4018932c1e13bf146ac75d",
+  "registry_import_batch": "minesec-national-v1-final-promotion",
+  "eligible": 44,
+  "inserted": 44,
+  "skipped": 0,
+  "created": 44,
+  "linked": 44,
+  "failed": 0,
+  "failed_rows": [],
+  "outcome": "SUCCESS",
+  "note": "Reconstruit après coup — les écritures elles-mêmes (INSERT establishments + PATCH staging) ont réussi lors de la 1ère exécution (promote-minesec-final.ts), seul le fichier rapport avait un défaut de forme (inserted/skipped absents) qui a fait échouer verifyPromotionReportComplete(). Aucune nouvelle écriture Supabase pour cette reconstruction."
+}

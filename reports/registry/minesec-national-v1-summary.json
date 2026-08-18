@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T05:03:42.309Z",
+  "generated_at": "2026-08-18T05:28:10.702Z",
   "operator": "jean-merlain",
   "total_unique": 1942,
   "official_id_coverage": "1941/1942",
@@ -8,14 +8,14 @@
     "VALID": 1647,
     "MISSING": 216,
     "CLEARLY_INVALID": 45,
-    "NEEDS_REVIEW": 28,
-    "POSSIBLE_REAL_LOCALITY": 6
+    "POSSIBLE_REAL_LOCALITY": 6,
+    "NEEDS_REVIEW": 28
   },
   "status_counts": {
-    "promoted": 1221,
-    "ready": 45,
+    "promoted": 1265,
     "duplicate_exact": 674,
-    "duplicate_review": 2
+    "duplicate_review": 2,
+    "ready": 1
   },
   "region_counts": {
     "Centre": 345,
@@ -33,13 +33,13 @@
     "grand_nord": 506,
     "zone_anglophone": 448
   },
-  "clean_approvable": 3,
-  "review_required": 42,
+  "clean_approvable": 0,
+  "review_required": 1,
   "duplicates": 676,
-  "live_matches": 1221,
+  "live_matches": 1265,
   "ready_classification": {
-    "A_CLEAN": 3,
-    "B_LOCALITY_REVIEW": 41,
+    "A_CLEAN": 0,
+    "B_LOCALITY_REVIEW": 0,
     "C_ID_REVIEW": 1,
     "D_OTHER_REVIEW": 0
   },
