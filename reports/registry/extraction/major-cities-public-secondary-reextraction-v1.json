@@ -1,5 +1,5 @@
 {
-  "audit_date": "2026-08-18T19:00:10.465Z",
+  "audit_date": "2026-08-18T19:17:06.508Z",
   "operator": "jean-merlain",
   "batch": "major-cities-secondary-completeness-v1",
   "scope": "Ré-extraction déterministe des sources memoire*0.jimdofree.com derrière les lignes staging EXTRACTION_UNCERTAIN — LECTURE SEULE, aucune écriture Supabase, aucune promotion.",
@@ -101,7 +101,7 @@
         "Yaoundé 5ème",
         "Yaoundé 7ème"
       ],
-      "extractedCount": 40,
+      "extractedCount": 39,
       "extractedNames": [
         "CES de Nyom",
         "CETIC de Ngoa-Ekellé",
@@ -141,8 +141,7 @@
         "Lycée de Nkolondom",
         "Lycée de Nsam-Efoulan",
         "Lycée de Tsinga",
-        "Lycée de la Cité verte",
-        "Nom de l'Etablissement"
+        "Lycée de la Cité verte"
       ],
       "completenessStatus": "PASS",
       "completenessExplanation": "EXPECTED_COUNT_UNKNOWN — complétude établie par preuve alternative : les 7 arrondissements attendus sont tous présents dans les titres de section (Yaoundé 1er, Yaoundé 4ème, Yaoundé 6ème, Yaoundé 2ème, Yaoundé 3ème, Yaoundé 5ème, Yaoundé 7ème) — page mono-bloc sans pagination, aucun lien \"page suivante\" détecté.",
@@ -152,7 +151,6 @@
         "ENIEG B",
         "Lycée Technique Charles Atangana",
         "Lycée de Nkolndongo",
-        "Nom de l'Etablissement",
         "Lycée Général Leclerc",
         "CETIF DE NGOA EKELLE YAOUNDE",
         "Lycée Bilingue de Nkolbisson",
@@ -229,10 +227,10 @@
     }
   ],
   "summary": {
-    "total_reextracted": 98,
+    "total_reextracted": 97,
     "total_staging_covered": 75,
     "all_completeness_pass": true
   },
   "action_taken": "AUCUNE — aucune ligne staging modifiée, supprimée ou promue. Rapport de référence uniquement.",
-  "out_of_scope_note": "3 des 77 lignes EXTRACTION_UNCERTAIN (InovEdu x2, ecolesaucameroun.com x1) sont des fiches détail mono-établissement sans risque de sous-comptage de liste — non couvertes par cette ré-extraction basée sur htmlExtractor."
+  "out_of_scope_note": "5 des 80 lignes EXTRACTION_UNCERTAIN (InovEdu x2 — Douala, ecolesaucameroun.com x3 — Kumba x2 + Bertoua x1) sont des fiches détail mono-établissement sans risque de sous-comptage de liste — non couvertes par cette ré-extraction basée sur htmlExtractor. 80 - 5 = 75, exactement total_staging_covered ci-dessus."
 }

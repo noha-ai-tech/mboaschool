@@ -25,3 +25,8 @@ next-env.d.ts
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Registry scripts — scratch/one-off working files only (SPRINT R.2-SAFETY-CLOSE §27).
+# Durable artifacts belong in data/registry/raw/, reports/registry/, or scripts/school-registry/
+# itself as a named reusable script — never here.
+scripts/school-registry/tmp/

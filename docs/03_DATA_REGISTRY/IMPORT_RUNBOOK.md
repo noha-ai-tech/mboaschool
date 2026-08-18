@@ -6,6 +6,29 @@ tourné.
 
 ---
 
+## 0. Extraction Safety Gate — obligatoire depuis SPRINT R.2-SAFETY (ajouté 2026-08-18)
+
+Ajouté après la clôture de SPRINT R.2-SAFETY et applicable à **tout** import futur, y compris un
+premier crawl live MINESEC (§4 ci-dessous, jamais exécuté à ce jour) : aucun batch ne peut
+atteindre `establishment_import_staging` sans être passé par le framework d'extraction
+déterministe de `scripts/school-registry/lib/extraction/` — voir
+[`REGISTRY_EXTRACTION_SAFETY.md`](./REGISTRY_EXTRACTION_SAFETY.md) pour la politique complète.
+
+Concrètement, avant toute écriture staging :
+
+1. Snapshot brut de la source (`writeSourceSnapshot`) — hash SHA256, `source_url`, `fetched_at`.
+2. Extraction déterministe (jamais un résumé IA comme mécanisme de comptage exhaustif).
+3. Vérification de complétude (`evaluateCompleteness` / `requireExtractionSafe`) — le batch est
+   bloqué si le statut n'est pas `PASS` ou `PASS_WITH_EXPLAINED_EXCLUSIONS`.
+
+Ce principe n'a pas encore été appliqué rétroactivement au collecteur MINESEC (`sources/minesec.ts`,
+§3-4 ci-dessous) — il prédate ce framework et n'a pas de snapshot SHA256 ni de statut de complétude
+formel, bien qu'il ait déjà une logique de pagination par épuisement raisonnable. Voir l'audit des
+collecteurs existants dans `REGISTRY_EXTRACTION_SAFETY.md`. Il devra être aligné sur ce gate avant
+tout nouveau crawl live à grande échelle.
+
+---
+
 ## 1. Prérequis avant toute exécution réelle
 
 1. Validation d'Eddy sur le schéma de staging (`supabase/migrations/0006_national_registry_staging.sql`)

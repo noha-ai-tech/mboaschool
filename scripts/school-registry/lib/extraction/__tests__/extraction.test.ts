@@ -82,6 +82,24 @@ describe("§27 — Extraction table avec colonne nom non-première", () => {
   });
 });
 
+describe("§27 — En-têtes de colonne non uniformes entre sections d'une même page", () => {
+  test("\"Nom de l'Etablissement\" (variante d'en-tête) n'est jamais retourné comme nom d'établissement réel", () => {
+    const fixture = `
+<table><tbody>
+<tr><td>Etablissement</td><td>Type</td><td>Date de creation</td></tr>
+<tr><td><a><strong>Lycée A</strong></a></td><td>Général</td><td>2000</td></tr>
+</tbody></table>
+<table><tbody>
+<tr><td>Nom de l'Etablissement</td><td>Type</td><td>Date de creation</td></tr>
+<tr><td><a><strong>Lycée B</strong></a></td><td>Technique</td><td>2001</td></tr>
+</tbody></table>`;
+    const names = extractTableFirstColumn(fixture, {
+      ignoreCellText: ["Etablissement", "Établissement", "Nom de l'Etablissement", "Nom de l'Établissement", "Type", "Date de creation", "Date de création"],
+    });
+    assert.deepEqual(names, ["Lycée A", "Lycée B"]);
+  });
+});
+
 describe("§53-55 — Comptabilité de complétude", () => {
   test("§54 extraction complète (100/100) -> PASS", () => {
     const outcome = evaluateCompleteness({

@@ -9,22 +9,24 @@ import type { ExtractionStatus } from "./lib/extraction/types";
 
 /**
  * SPRINT R.2-SAFETY — Ré-extraction déterministe des 4 sources memoire*0.jimdofree.com
- * derrière les 77 lignes staging classées EXTRACTION_UNCERTAIN par l'audit
- * rétrospectif (retrospective-audit-r2-pilot.ts) : ces lignes venaient d'un
- * résumé WebFetch/recherche assisté par IA, jamais d'un parseur déterministe
- * avec équation de complétude — exactement le pattern de l'incident Yaoundé
- * qui a déclenché ce sprint.
+ * derrière les lignes staging classées EXTRACTION_UNCERTAIN par l'audit
+ * rétrospectif (retrospective-audit-r2-pilot.ts, 80 lignes au moment de
+ * l'exécution de ce script) : ces lignes venaient d'un résumé WebFetch/
+ * recherche assisté par IA, jamais d'un parseur déterministe avec équation
+ * de complétude — exactement le pattern de l'incident Yaoundé qui a
+ * déclenché ce sprint.
  *
  * LECTURE SEULE côté Supabase — ne modifie, ne supprime, ne promeut aucune
  * ligne staging existante (§65 de l'audit rétrospectif). Compare seulement
- * les noms ré-extraits aux 74 lignes existantes (Douala publics + Yaoundé
- * publics + Yaoundé catholiques) pour établir une référence vérifiée pour
- * tout futur import staging de complément.
+ * les noms ré-extraits aux 75 lignes existantes (Douala publics + Yaoundé
+ * publics + Yaoundé technique + Yaoundé catholiques) pour établir une
+ * référence vérifiée pour tout futur import staging de complément.
  *
- * N'importe QUE 74 des 77 lignes : les 3 restantes (2 InovEdu + 1
- * ecolesaucameroun.com) sont des fiches détail mono-établissement, pas des
- * listes — aucun risque de sous-comptage de type "incident Yaoundé", donc
- * hors périmètre de cette ré-extraction basée sur htmlExtractor.
+ * N'importe QUE 75 des 80 lignes : les 5 restantes (2 InovEdu — Douala, 3
+ * ecolesaucameroun.com — Kumba x2 + Bertoua x1) sont des fiches détail
+ * mono-établissement, pas des listes — aucun risque de sous-comptage de type
+ * "incident Yaoundé", donc hors périmètre de cette ré-extraction basée sur
+ * htmlExtractor.
  */
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -90,7 +92,10 @@ const SOURCES: SourceSpec[] = [
     // cette variante plutôt que de dépendre de l'orthographe exacte du mot.
     headingMatch: /Douala\s*\d/,
     expectedSections: ["Douala 1", "Douala 2", "Douala 3", "Douala 4", "Douala 5", "Douala 6"],
-    ignoreCellText: ["Etablissement", "Établissement", "Type", "Date de creation", "Date de création"],
+    // §confirmé : l'en-tête de colonne n'est pas orthographié/formulé de façon
+    // uniforme d'une section à l'autre sur la même page (7 sections Yaoundé,
+    // une seule dit "Nom de l'Etablissement" au lieu de "Etablissement").
+    ignoreCellText: ["Etablissement", "Établissement", "Nom de l'Etablissement", "Nom de l'Établissement", "Type", "Date de creation", "Date de création"],
     nameColumnIndex: 0,
     matchesStagingRow: (r) => r.city === "Douala" && r.raw_data?.source_url === "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
   },
@@ -101,7 +106,10 @@ const SOURCES: SourceSpec[] = [
     url: "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
     headingMatch: /Yaoundé/,
     expectedSections: ["Yaoundé 1", "Yaoundé 2", "Yaoundé 3", "Yaoundé 4", "Yaoundé 5", "Yaoundé 6", "Yaoundé 7"],
-    ignoreCellText: ["Etablissement", "Établissement", "Type", "Date de creation", "Date de création"],
+    // §confirmé : l'en-tête de colonne n'est pas orthographié/formulé de façon
+    // uniforme d'une section à l'autre sur la même page (7 sections Yaoundé,
+    // une seule dit "Nom de l'Etablissement" au lieu de "Etablissement").
+    ignoreCellText: ["Etablissement", "Établissement", "Nom de l'Etablissement", "Nom de l'Établissement", "Type", "Date de creation", "Date de création"],
     nameColumnIndex: 0,
     matchesStagingRow: (r) => r.city === "Yaoundé" && r.raw_data?.source_url === "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
   },
@@ -286,7 +294,7 @@ async function main() {
     },
     action_taken: "AUCUNE — aucune ligne staging modifiée, supprimée ou promue. Rapport de référence uniquement.",
     out_of_scope_note:
-      "3 des 77 lignes EXTRACTION_UNCERTAIN (InovEdu x2, ecolesaucameroun.com x1) sont des fiches détail mono-établissement sans risque de sous-comptage de liste — non couvertes par cette ré-extraction basée sur htmlExtractor.",
+      "5 des 80 lignes EXTRACTION_UNCERTAIN (InovEdu x2 — Douala, ecolesaucameroun.com x3 — Kumba x2 + Bertoua x1) sont des fiches détail mono-établissement sans risque de sous-comptage de liste — non couvertes par cette ré-extraction basée sur htmlExtractor. 80 - 5 = 75, exactement total_staging_covered ci-dessus.",
   };
 
   mkdirSync(join(rootDir, "reports", "registry", "extraction"), { recursive: true });
