@@ -1,0 +1,8 @@
+{
+  "batch": "major-cities-secondary-completeness-v1-a2",
+  "generated_at": "2026-08-18T20:12:16.478Z",
+  "clean_approvable_count": 0,
+  "candidates": [],
+  "note": "Snapshot vide — aucun candidat CLEAN_APPROVABLE généré pendant SPRINT R.2-A2 (0 nouvelle ligne staging).",
+  "sha256": "a100af0823aa781a82e4980d2c9a131cda042821b6b26d88abcee048a96c4eab"
+}
