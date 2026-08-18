@@ -1,0 +1,20 @@
+{
+  "Douala": {
+    "candidates_examined": 78,
+    "already_live": 2,
+    "already_staging": 0,
+    "review_required": 8,
+    "source_verified_review": 55,
+    "insufficient_source": 13,
+    "clean_approvable": 0
+  },
+  "Yaoundé": {
+    "candidates_examined": 292,
+    "already_live": 2,
+    "already_staging": 0,
+    "review_required": 26,
+    "source_verified_review": 252,
+    "insufficient_source": 12,
+    "clean_approvable": 0
+  }
+}
