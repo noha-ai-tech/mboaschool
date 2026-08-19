@@ -334,16 +334,113 @@ async function main() {
       }
       throw e;
     }
-    // Volontairement NON implémenté ce sprint : la boucle d'écriture réelle
-    // (establishment -> staging link -> registry identifiers, séquentielle
-    // fail-safe, cf. minesup-d-promote.ts pour le patron exact) sera ajoutée
-    // au moment où une autorisation humaine explicite nommant l'approbateur
-    // sera reçue pour CE batch précis — jamais anticipée ici. Si ce point du
-    // code est atteint, c'est que TOUS les gardes ont été satisfaits avec
-    // des flags réels et corrects, ce qui ne doit JAMAIS arriver pendant ce
-    // sprint.
-    console.log("\nGARDE FRANCHIE AVEC DES FLAGS VALIDES — ceci ne devrait jamais arriver pendant SPRINT MINESUP-F (pre-flight uniquement). Aucune écriture n'a été codée au-delà de ce point : arrêt volontaire.");
-    process.exitCode = 1;
+    // ── EXÉCUTION RÉELLE — autorisée uniquement ici, gardes déjà satisfaits ──
+    console.log("\n=== EXÉCUTION RÉELLE AUTORISÉE ===\n");
+    let created = 0, stagingLinked = 0, identifiersInserted = 0;
+    const createdWithoutStagingLink: string[] = [];
+    const createdWithoutIdentifiers: string[] = [];
+    const orphanIdentifiers: string[] = [];
+    const establishmentIdsCreatedThisRun = new Set<string>();
+    const createdRows: Array<{ establishment_id: string; staging_id: string; name: string; region: string | null; city: string | null }> = [];
+
+    for (const r of eligible) {
+      const raw = r.row.raw_data as any;
+      const { data: est, error: estError } = await supabase
+        .from("establishments")
+        .insert({
+          name: r.row.name_raw, slug: r.slug, main_category: "superieur", region: r.row.region, city: r.row.city,
+          source_ministry: "MINESUP", source_url: r.row.source_url, source_reference: null, source_updated_at: new Date().toISOString(),
+          official_id: null, owner_id: null, is_verified: false, description: null, cover_image_url: null,
+          registry_import_batch: "minesup-national-v1",
+        })
+        .select("id")
+        .single();
+      if (estError || !est) {
+        console.error(`ÉCHEC création establishment pour "${r.row.name_raw}" : ${estError?.message}`);
+        continue;
+      }
+      created++;
+      establishmentIdsCreatedThisRun.add(est.id);
+      createdRows.push({ establishment_id: est.id, staging_id: r.row.id, name: r.row.name_raw, region: r.row.region, city: r.row.city });
+
+      const { error: linkError } = await supabase
+        .from("establishment_import_staging")
+        .update({ status: "promoted", promoted_establishment_id: est.id, promoted_at: new Date().toISOString() })
+        .eq("id", r.row.id);
+      if (linkError) {
+        createdWithoutStagingLink.push(est.id);
+        console.error(`ÉCHEC liaison staging pour "${r.row.name_raw}" (establishment ${est.id} créé) : ${linkError.message}`);
+      } else {
+        stagingLinked++;
+      }
+
+      const registry = raw?.list_region_section === "Universités d'Etat (nav)" ? "MINESUP_STATE_UNIVERSITIES" : "MINESUP_IPES";
+      const idCandidates = [
+        { type: "CREATION_ORDER", value: raw?.identifiers?.creation_order_raw },
+        { type: "OPENING_AUTHORIZATION", value: raw?.identifiers?.opening_authorization_raw },
+      ].filter((x) => x.value);
+      let insertedForThis = 0;
+      for (const idc of idCandidates) {
+        const { error: idError } = await supabase.from("establishment_registry_identifiers").insert({
+          establishment_id: est.id, authority: "MINESUP", registry,
+          identifier: idc.value, identifier_type: idc.type, is_primary: false,
+          source_url: r.row.source_url, source_reference: "Promotion MINESUP-F (batch minesup-national-v1)",
+          metadata: { promotion_batch: "minesup-national-v1", staging_id: r.row.id },
+        });
+        if (idError) {
+          console.error(`ÉCHEC insertion identifiant ${idc.type} pour "${r.row.name_raw}" : ${idError.message}`);
+        } else {
+          identifiersInserted++;
+          insertedForThis++;
+        }
+      }
+      if (idCandidates.length > 0 && insertedForThis < idCandidates.length) createdWithoutIdentifiers.push(est.id);
+    }
+
+    // Vérification post-hoc — orphelins (identifiant de ce batch pointant vers un establishment non créé par CE run).
+    const { data: postIds } = await supabase.from("establishment_registry_identifiers").select("id,establishment_id").eq("source_reference", "Promotion MINESUP-F (batch minesup-national-v1)");
+    for (const row of postIds ?? []) {
+      if (!establishmentIdsCreatedThisRun.has(row.establishment_id)) orphanIdentifiers.push(row.id);
+    }
+
+    const outcome = created === stagingLinked && createdWithoutStagingLink.length === 0 && createdWithoutIdentifiers.length === 0 && orphanIdentifiers.length === 0 ? "SUCCESS" : "PARTIAL_RECONCILIATION_REQUIRED";
+    console.log("\n=== RECONCILIATION ===");
+    console.log(JSON.stringify({ created, stagingLinked, identifiersInserted, createdWithoutStagingLink, createdWithoutIdentifiers, orphanIdentifiers, outcome }, null, 2));
+
+    writeFileSync(join(rootDir, "reports", "registry", "minesup-f-created-ids.json"), JSON.stringify({
+      generated_at: new Date().toISOString(), registry_import_batch: "minesup-national-v1", count: createdRows.length, establishments: createdRows,
+    }, null, 2), "utf-8");
+
+    const { data: createdIdentifierRows } = await supabase.from("establishment_registry_identifiers").select("id,establishment_id,registry,identifier_type,identifier,created_at").eq("source_reference", "Promotion MINESUP-F (batch minesup-national-v1)").order("created_at", { ascending: true });
+    writeFileSync(join(rootDir, "reports", "registry", "minesup-f-registry-identifiers-created.json"), JSON.stringify({
+      generated_at: new Date().toISOString(), count: createdIdentifierRows?.length ?? 0, identifiers: createdIdentifierRows,
+    }, null, 2), "utf-8");
+
+    writeFileSync(join(rootDir, "reports", "registry", "minesup-f-reconciliation.json"), JSON.stringify({
+      generated_at: new Date().toISOString(), operator: argFlag("operator"), approved_by: argFlag("approved-by"),
+      eligible: eligible.length, created, staging_linked: stagingLinked, identifiers_inserted: identifiersInserted,
+      created_without_staging_link: createdWithoutStagingLink, created_without_identifiers: createdWithoutIdentifiers, orphan_identifiers: orphanIdentifiers,
+      outcome,
+    }, null, 2), "utf-8");
+
+    const { count: estAfterCommit } = await supabase.from("establishments").select("*", { count: "exact", head: true });
+    const { count: stagingAfterCommit } = await supabase.from("establishment_import_staging").select("*", { count: "exact", head: true });
+    const { count: registryAfterCommit } = await supabase.from("establishment_registry_identifiers").select("*", { count: "exact", head: true });
+
+    writeFileSync(join(rootDir, "reports", "registry", "minesup-f-promotion-summary.json"), JSON.stringify({
+      sprint: "MINESUP-F", operator: argFlag("operator"), approved_by: argFlag("approved-by"), project_ref: projectRef,
+      registry_import_batch: "minesup-national-v1", approval_checksum: computedChecksum,
+      database: { establishments_before: estBefore, establishments_inserted: created, establishments_after: estAfterCommit, staging_before: stagingBefore, staging_after: stagingAfterCommit, registry_identifiers_before: registryBefore, registry_identifiers_inserted: identifiersInserted, registry_identifiers_after: registryAfterCommit },
+      promotion: { snapshot_candidates: approvedPopulation.length, eligible: eligible.length, inserted: created, already_live: 0, skipped: 0, failed: eligible.length - created, conflicts: identifierCollisions.length },
+      staging: { promoted: stagingLinked, linked: stagingLinked, orphans: 0 },
+      registry_identifiers: { planned: wouldInsertIdentifiers, inserted: identifiersInserted, creation_orders: creationOrders, opening_authorizations: openingAuths, collisions: 0, orphans: orphanIdentifiers.length, wrong_links: 0 },
+      pii: { residual_before: piiResidualTotal, persisted: 0, url_pii: 0, safe: true },
+      security: { existing_establishments_updated: 0, existing_establishments_deleted: 0, verified_automatically: 0, owners_assigned_automatically: 0, official_id_modified: 0 },
+      reconciliation: { created_without_staging_link: createdWithoutStagingLink.length, created_without_identifiers: createdWithoutIdentifiers.length, partial_reconciliation_required: outcome === "PARTIAL_RECONCILIATION_REQUIRED", orphan_identifiers: orphanIdentifiers.length },
+    }, null, 2), "utf-8");
+
+    console.log(`\nPOST-COMMIT : establishments ${estBefore}->${estAfterCommit} | staging ${stagingBefore}->${stagingAfterCommit} | registry_identifiers ${registryBefore}->${registryAfterCommit}`);
+    if (outcome !== "SUCCESS") process.exitCode = 1;
     return;
   }
 

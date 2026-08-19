@@ -1,0 +1,782 @@
+{
+  "generated_at": "2026-08-19T19:47:43.489Z",
+  "count": 97,
+  "identifiers": [
+    {
+      "id": "ccd71b2a-da6b-45a8-bf82-5987e7da6ecc",
+      "establishment_id": "c5c5a2e6-f485-4b79-9a91-df38c611d10f",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "n° 08/0266/MINESUP/SG/DDES/ESUP",
+      "created_at": "2026-08-19T19:47:06.821424+00:00"
+    },
+    {
+      "id": "f0d0c332-34aa-4467-b148-4d6fbee8277c",
+      "establishment_id": "c5c5a2e6-f485-4b79-9a91-df38c611d10f",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "n°12/0374/MINESUP/SG/DDES/ESUP du 17 AOUT 2012",
+      "created_at": "2026-08-19T19:47:06.97067+00:00"
+    },
+    {
+      "id": "f4a5afd8-3df7-40f9-a372-fc526431a02a",
+      "establishment_id": "7ee5177d-8b4c-47f3-aaa9-9779788c9115",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°07/0016/MINESUP du 26 février 2007",
+      "created_at": "2026-08-19T19:47:07.417271+00:00"
+    },
+    {
+      "id": "ab1ca3fe-187a-47c1-8bd6-a7c953faaf19",
+      "establishment_id": "7ee5177d-8b4c-47f3-aaa9-9779788c9115",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°07/0129/MINESUP du 21 septembre 2007",
+      "created_at": "2026-08-19T19:47:07.563686+00:00"
+    },
+    {
+      "id": "919e2563-b13f-4177-8a44-4ba5cc481d30",
+      "establishment_id": "912fce41-6350-4308-8765-8ab5f47eced2",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°08/0269/MINESUP du 03 octobre 2008",
+      "created_at": "2026-08-19T19:47:08.013079+00:00"
+    },
+    {
+      "id": "429cf476-f556-42f2-a58f-be876102ab5d",
+      "establishment_id": "912fce41-6350-4308-8765-8ab5f47eced2",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°12/0366/MINESUP du 17 août 2012",
+      "created_at": "2026-08-19T19:47:08.166804+00:00"
+    },
+    {
+      "id": "2493c12a-b24c-440d-9ceb-56d14b51bc35",
+      "establishment_id": "a51759a5-78ff-4801-ae85-7468b6e484d9",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°15/06001/L/ MINESUP/SG/DDES/ESUP/SDA/NJN du 18 juin 2015",
+      "created_at": "2026-08-19T19:47:08.61819+00:00"
+    },
+    {
+      "id": "0405001a-4f49-4b1f-84f9-86cef7b4fa20",
+      "establishment_id": "a51759a5-78ff-4801-ae85-7468b6e484d9",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°15/06001/L/ MINESUP/SG/DDES/ESUP/SDA/NJN du 18 juin 2015",
+      "created_at": "2026-08-19T19:47:08.765932+00:00"
+    },
+    {
+      "id": "df063461-9c82-4e88-94d1-72a81dae56cb",
+      "establishment_id": "dd94a049-ffc5-4037-9e08-b8c61f7c72e3",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°14/0034/MINESUP/SG/DDES du 11 mars 2014",
+      "created_at": "2026-08-19T19:47:09.211992+00:00"
+    },
+    {
+      "id": "795400e7-38c3-4e0e-8a0a-91c5475fd890",
+      "establishment_id": "dd94a049-ffc5-4037-9e08-b8c61f7c72e3",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "Provisoire N°13/07893/L/MINESUP/SG/DDES/ESUP/OAGS du 18 novembre 2013",
+      "created_at": "2026-08-19T19:47:09.40998+00:00"
+    },
+    {
+      "id": "9b36d740-4186-4214-b6f7-23da8a77cea0",
+      "establishment_id": "faef2289-0aed-4f88-a7e8-e1f5d4f55330",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°13/0409/MINESUP/SG/DDES du 10 septembre 2013",
+      "created_at": "2026-08-19T19:47:09.916602+00:00"
+    },
+    {
+      "id": "9c4108f9-7012-44cc-83cb-2521828a10d6",
+      "establishment_id": "faef2289-0aed-4f88-a7e8-e1f5d4f55330",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°14/0390/MINESUP/SG/DDES/ du 04 juillet 2014",
+      "created_at": "2026-08-19T19:47:10.061657+00:00"
+    },
+    {
+      "id": "c7b0480a-4cfe-422b-9052-a864c0e66202",
+      "establishment_id": "4294352d-156c-4d46-a53b-fbc734a7a43a",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°13/0410/MINESUP/SG/DDES du 10 septembre 2013",
+      "created_at": "2026-08-19T19:47:10.962062+00:00"
+    },
+    {
+      "id": "0037fbba-2ff5-4b93-9141-59cc7b410726",
+      "establishment_id": "e9574400-9b8c-4bb4-a7cf-ab3945631107",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°12/0647/MINESUP/SG/DDES/ du 23 novembre 2012",
+      "created_at": "2026-08-19T19:47:11.499412+00:00"
+    },
+    {
+      "id": "27188f9a-9607-445e-8ba4-dadf650ff994",
+      "establishment_id": "e9574400-9b8c-4bb4-a7cf-ab3945631107",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°14/07012/N/MINESUP/ DDES/ESUP/SDA/OPC du 07 octobre 2014",
+      "created_at": "2026-08-19T19:47:11.645477+00:00"
+    },
+    {
+      "id": "837d6acc-c4ff-4501-8b8e-6d5668dcff9f",
+      "establishment_id": "0dde7325-d9ae-4eb5-a789-31cead5d6c23",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°08/0099/MINESUP du 05 mai 2008",
+      "created_at": "2026-08-19T19:47:12.100771+00:00"
+    },
+    {
+      "id": "2a682336-add5-4c2d-950f-e3267f3407c0",
+      "establishment_id": "0dde7325-d9ae-4eb5-a789-31cead5d6c23",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°13/0594/MINESUP du 02 décembre 2013",
+      "created_at": "2026-08-19T19:47:12.24748+00:00"
+    },
+    {
+      "id": "c7a41cd0-2bdd-4ba0-b06c-baa7bb729079",
+      "establishment_id": "e6ca0d1f-c223-478a-bcf0-dcaf9f3233da",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°11/0532/MINESUP/SG/DDES du 05 Octobre 2011",
+      "created_at": "2026-08-19T19:47:13.163229+00:00"
+    },
+    {
+      "id": "e2b06e3a-40da-43e1-8b61-959b2cf32ea4",
+      "establishment_id": "e6ca0d1f-c223-478a-bcf0-dcaf9f3233da",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°12/0398/MINESUP/SG/DDES du 17 Août 2012",
+      "created_at": "2026-08-19T19:47:13.299298+00:00"
+    },
+    {
+      "id": "9bf599ad-1d0d-48a7-bc0b-b401c18138ac",
+      "establishment_id": "f959c749-344e-4b25-b874-efaf05d58060",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°16-13465/MINESUP/SG/DDES/ESUP/SDA/LMN du 16 décembre 2016",
+      "created_at": "2026-08-19T19:47:13.701901+00:00"
+    },
+    {
+      "id": "6e062720-6a36-4a69-b22f-4d834e694f2f",
+      "establishment_id": "f959c749-344e-4b25-b874-efaf05d58060",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°16-13465/MINESUP/SG/DDES/ESUP/SDA/LMN du 16 décembre 2016",
+      "created_at": "2026-08-19T19:47:13.835244+00:00"
+    },
+    {
+      "id": "0668e0d4-9860-4d70-91b9-be158733fdb5",
+      "establishment_id": "0e72a720-87f9-437a-b475-eed7d09e4782",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°15/08927/L/MINESUP/SG/DDES/ESUP/SDA/AEO du  18 septembre 2015.",
+      "created_at": "2026-08-19T19:47:14.372025+00:00"
+    },
+    {
+      "id": "1b1b003e-b168-4c47-bc13-8c25d387a672",
+      "establishment_id": "0e72a720-87f9-437a-b475-eed7d09e4782",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°15/08927/L/MINESUP/SG/DDES/ESUP/SDA/AEO du  18 septembre 2015",
+      "created_at": "2026-08-19T19:47:14.501887+00:00"
+    },
+    {
+      "id": "67967325-76c8-4e4f-955d-4de61870f934",
+      "establishment_id": "037c7154-803b-4a5a-91a0-9a2225ec4e79",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°07/0120/MINESUP du 02 octobre 2006",
+      "created_at": "2026-08-19T19:47:14.906207+00:00"
+    },
+    {
+      "id": "26e0e00e-31d1-4449-9bfb-feda683366e6",
+      "establishment_id": "037c7154-803b-4a5a-91a0-9a2225ec4e79",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°08/0115/MINESUP du 05 mai 2008",
+      "created_at": "2026-08-19T19:47:15.032814+00:00"
+    },
+    {
+      "id": "ab1bac9b-bd84-46c9-b404-1e5308b4b2e2",
+      "establishment_id": "f4abb3ae-6093-4784-953a-fb7a66b80a7c",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°06/0049/MINESUP du 02 juin 2006",
+      "created_at": "2026-08-19T19:47:15.450943+00:00"
+    },
+    {
+      "id": "92963177-cfd1-4bae-9f3a-5611aea7231f",
+      "establishment_id": "f4abb3ae-6093-4784-953a-fb7a66b80a7c",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°07/0018/MINESUP du 26 février  2007",
+      "created_at": "2026-08-19T19:47:15.697531+00:00"
+    },
+    {
+      "id": "209d1f4d-b9ae-4908-8f83-3c39d48aa952",
+      "establishment_id": "0b642da2-df91-4ff6-8393-637fb03be75e",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N° 08/0271/MINESUP du 03 octobre 2008",
+      "created_at": "2026-08-19T19:47:16.099362+00:00"
+    },
+    {
+      "id": "83cdd7f5-d75c-407a-9476-48adc8d424eb",
+      "establishment_id": "0b642da2-df91-4ff6-8393-637fb03be75e",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N° 12/0390/MINESUP du 17 août 2012",
+      "created_at": "2026-08-19T19:47:16.23519+00:00"
+    },
+    {
+      "id": "eda4c854-bb3d-4056-8765-81d6e6d9df53",
+      "establishment_id": "f88d6a3b-75d5-465c-875a-0ef079066688",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°22/01569/L/MINESUP/SG/DDES/SD-ESUP/SDA/LMN du 16 Mars 2022.",
+      "created_at": "2026-08-19T19:47:16.636103+00:00"
+    },
+    {
+      "id": "dbea8319-7abc-40ac-9bb7-5ceff4a4194b",
+      "establishment_id": "f88d6a3b-75d5-465c-875a-0ef079066688",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°22/01569/L/MINESUP/SG/DDES/SD-ESUP/SDA/LMN du 16 Mars 2022.",
+      "created_at": "2026-08-19T19:47:16.762982+00:00"
+    },
+    {
+      "id": "dc0bcf17-5f65-4ee5-bf65-a406ca924b8d",
+      "establishment_id": "0b1c429a-eb85-449b-b536-b90e3c39a9e8",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°18-09873/L/MINESUP/SG/DDES/SDA/OPC du 22 novembre 2018",
+      "created_at": "2026-08-19T19:47:17.47133+00:00"
+    },
+    {
+      "id": "13d8f7cb-ff9b-4ce3-918b-0ed846798852",
+      "establishment_id": "0b1c429a-eb85-449b-b536-b90e3c39a9e8",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°18-09873/L/MINESUP/SG/DDES/SDA/OPC du 22 novembre 2018",
+      "created_at": "2026-08-19T19:47:17.60713+00:00"
+    },
+    {
+      "id": "2784dd95-3deb-4b1c-ab3f-af4a009f5b10",
+      "establishment_id": "ec87da41-75c0-4b84-a574-633920c2a230",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°14/0028/MINESUP/SG/DDES du 11 mars 2014",
+      "created_at": "2026-08-19T19:47:18.035378+00:00"
+    },
+    {
+      "id": "7a4c5e63-c153-4b4d-92d3-1796b1c64fb4",
+      "establishment_id": "ec87da41-75c0-4b84-a574-633920c2a230",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°14/0398/MINESUP/SG/DDES/ du 04 juillet 2014",
+      "created_at": "2026-08-19T19:47:18.176275+00:00"
+    },
+    {
+      "id": "4dc140cf-932f-4505-89de-8e1dc34aec8e",
+      "establishment_id": "b969e308-03a4-4c3b-a254-fa31170d248e",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°16-06587/MINESUP/SG/DDES/ESUP/SDA/OAGS du 28 juin 2016",
+      "created_at": "2026-08-19T19:47:18.622605+00:00"
+    },
+    {
+      "id": "f4411c65-7c84-47cb-9556-b6583c076cac",
+      "establishment_id": "b969e308-03a4-4c3b-a254-fa31170d248e",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°16-06587/MINESUP/SG/DDES/ESUP/SDA/OAGS du 28 juin 2016",
+      "created_at": "2026-08-19T19:47:18.757105+00:00"
+    },
+    {
+      "id": "bfc66897-9b52-4dd6-904e-863ddb43cbc3",
+      "establishment_id": "18f67de1-3a0a-4d34-9067-f74951560590",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°16-05803/L/MINESUP/SG/DDES/ESUP/SDA/OAGS du 26 mai 2016",
+      "created_at": "2026-08-19T19:47:19.192128+00:00"
+    },
+    {
+      "id": "3c5446cd-396d-42d6-8587-d2c5b3442753",
+      "establishment_id": "18f67de1-3a0a-4d34-9067-f74951560590",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°16-05803/L/MINESUP/SG/DDES/ESUP/SDA/OAGS du 26 mai 2016",
+      "created_at": "2026-08-19T19:47:19.329+00:00"
+    },
+    {
+      "id": "fd60b4aa-9adc-4842-9282-46fd64bde1be",
+      "establishment_id": "e0f3e023-7eea-4094-ad85-62472d7f06fb",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°08/0268/MINESUP  du 03 octobre 2008",
+      "created_at": "2026-08-19T19:47:19.828001+00:00"
+    },
+    {
+      "id": "4c8a045f-e2fe-492f-aa38-7bcb8fc2ec4c",
+      "establishment_id": "e0f3e023-7eea-4094-ad85-62472d7f06fb",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°12/0361/MINESUP du 17 août 2012",
+      "created_at": "2026-08-19T19:47:19.986882+00:00"
+    },
+    {
+      "id": "881de677-ac49-42f8-80bc-a8df76ad9744",
+      "establishment_id": "02145db9-77d6-4243-9379-7256179f397b",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°16-0834/MINESUP/SG/DDES/ESUP du 14 septembre 2016",
+      "created_at": "2026-08-19T19:47:20.425467+00:00"
+    },
+    {
+      "id": "51130d38-3cdf-423c-a59f-d01e957803bc",
+      "establishment_id": "02145db9-77d6-4243-9379-7256179f397b",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°17-03857/L/MINESUP/SG/DDES/ESUP/SDA/OAGS du 25 avril 2017",
+      "created_at": "2026-08-19T19:47:20.566255+00:00"
+    },
+    {
+      "id": "bf973ff8-bef8-4f8b-bd82-cc92c7377134",
+      "establishment_id": "a3e97859-690c-4ab1-82b4-adf31416bcc3",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°12/0638/MINESUP du 23 novembre 2012",
+      "created_at": "2026-08-19T19:47:21.026852+00:00"
+    },
+    {
+      "id": "0631b6f0-793e-4b3e-a7c7-51969bce1e96",
+      "establishment_id": "a3e97859-690c-4ab1-82b4-adf31416bcc3",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°13/0584/MINESUP du 02 décembre 2013",
+      "created_at": "2026-08-19T19:47:21.161401+00:00"
+    },
+    {
+      "id": "299d107a-1859-4806-b803-327b2d2b30a1",
+      "establishment_id": "2b083f50-6673-4299-9be7-116ad299f03f",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "15/0015/MINESUP/SG/DDES/ESUP du 28 Janvier 2015",
+      "created_at": "2026-08-19T19:47:21.571435+00:00"
+    },
+    {
+      "id": "9f205c83-d322-4ff7-aec7-03f35fde3471",
+      "establishment_id": "2b083f50-6673-4299-9be7-116ad299f03f",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "16/0635/L/MINESUP/SG/DDES/ESUP du 17 JUIN 2016",
+      "created_at": "2026-08-19T19:47:21.709158+00:00"
+    },
+    {
+      "id": "83d4e60e-55e5-4463-9b26-f971239ca422",
+      "establishment_id": "e4b6e83d-5e30-464f-889a-b217f12b462e",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°13/0412/MINESUP/SG/DDES/ESUP du 10 septembre 2013",
+      "created_at": "2026-08-19T19:47:22.156986+00:00"
+    },
+    {
+      "id": "2e28e1c7-99a3-4ab6-848b-d1d516692aaf",
+      "establishment_id": "e4b6e83d-5e30-464f-889a-b217f12b462e",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°14/0386/MINESUP/SG/DDES/ESUP du 04septembre 2014",
+      "created_at": "2026-08-19T19:47:22.304903+00:00"
+    },
+    {
+      "id": "e1765cba-f497-4d8d-ba50-6c0a1694d29e",
+      "establishment_id": "ecd9f4c8-0ed5-49d7-ac32-af12ca7a1758",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°11/0533/MINESUP/SG/DDES du 05 octobre 2011",
+      "created_at": "2026-08-19T19:47:22.794854+00:00"
+    },
+    {
+      "id": "09d65c8c-f9ba-41ab-9780-ee08dadbd7e6",
+      "establishment_id": "ecd9f4c8-0ed5-49d7-ac32-af12ca7a1758",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°12/0397/MINESUP du 17 août 2012",
+      "created_at": "2026-08-19T19:47:22.992548+00:00"
+    },
+    {
+      "id": "ad00a337-07a1-479d-9c1f-20b0ae445fb2",
+      "establishment_id": "5e68371f-ec1c-4299-9876-0e92048fdb63",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "n° 15 – 08884/L/MINESUP/SG/DDES/ESUP/SDA/GA du 15 sept 2015.",
+      "created_at": "2026-08-19T19:47:23.53765+00:00"
+    },
+    {
+      "id": "cce5233c-91f6-4dea-a8d1-81c023e7af5e",
+      "establishment_id": "5e68371f-ec1c-4299-9876-0e92048fdb63",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "n° 17 – 08116/ MINESUP/SG/DDES/ESUP/SDA/MM du 04 out 2017.",
+      "created_at": "2026-08-19T19:47:23.733094+00:00"
+    },
+    {
+      "id": "f89ac40e-4f71-4f56-83e1-c8e33d997096",
+      "establishment_id": "251b0eb7-35ff-4e42-ae4d-8a7ea13413a8",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°16-00962/L/MINESUP/SG/DDES/ESUP/SDA/NJN du 02 février 2016",
+      "created_at": "2026-08-19T19:47:24.188641+00:00"
+    },
+    {
+      "id": "49106e90-7c14-4237-b2b7-cf86786ebdbb",
+      "establishment_id": "251b0eb7-35ff-4e42-ae4d-8a7ea13413a8",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°16-00962/L/MINESUP/SG/DDES/ESUP/SDA/NJN du 02 février 2016",
+      "created_at": "2026-08-19T19:47:24.399622+00:00"
+    },
+    {
+      "id": "fe0b8665-d6f7-4d89-8e73-ec7ceeb621d2",
+      "establishment_id": "26d2c190-26a0-45dd-bce5-d555fb581828",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°11/0512/MINESUP du  05 octobre 2011",
+      "created_at": "2026-08-19T19:47:24.948546+00:00"
+    },
+    {
+      "id": "0c84312c-7b25-4677-9a69-adaae627ebda",
+      "establishment_id": "26d2c190-26a0-45dd-bce5-d555fb581828",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°13/0592/MINESUP du 02 décembre 2013",
+      "created_at": "2026-08-19T19:47:25.115736+00:00"
+    },
+    {
+      "id": "c0cfae74-dfcb-499a-89f0-bb139dc4755c",
+      "establishment_id": "a8fa62b6-65e3-4e31-ae10-1e8cf79e715d",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°11/0030/MINESUP  du",
+      "created_at": "2026-08-19T19:47:25.605923+00:00"
+    },
+    {
+      "id": "36bab6f1-3a49-4973-ad71-5526211b3938",
+      "establishment_id": "a8fa62b6-65e3-4e31-ae10-1e8cf79e715d",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°11/0049/MINESUP du 12 janvier 2011",
+      "created_at": "2026-08-19T19:47:25.784725+00:00"
+    },
+    {
+      "id": "1353f462-3b1d-431e-9e1c-48d6e3705164",
+      "establishment_id": "e143157f-6ad0-4f08-b453-49b3592d6e68",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°17-09460/L/MINESUP/SG/DDES/ESUP/SDA/OAGS  du 20 septembre 2017",
+      "created_at": "2026-08-19T19:47:26.361761+00:00"
+    },
+    {
+      "id": "703210bb-cb7c-46d1-a8de-e96ff0ca8cb6",
+      "establishment_id": "e143157f-6ad0-4f08-b453-49b3592d6e68",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°17-09460/L/MINESUP/SG/DDES/ESUP/SDA/OAGS  du 20 septembre 201",
+      "created_at": "2026-08-19T19:47:26.528441+00:00"
+    },
+    {
+      "id": "3812b334-adf8-4235-a78c-6323b2f814fc",
+      "establishment_id": "2e3df645-0716-46a3-bac0-9c8161e63b83",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°16-10473/L/MINESUP/SG/DDES/ESUP/SDA/AEO du 09 septembre 2016",
+      "created_at": "2026-08-19T19:47:27.146506+00:00"
+    },
+    {
+      "id": "8102a1a5-a18e-4ded-99d4-ee83f5dedad0",
+      "establishment_id": "2e3df645-0716-46a3-bac0-9c8161e63b83",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°16-10473/L/MINESUP/SG/DDES/ESUP/SDA/AEO du 09 septembre 2016",
+      "created_at": "2026-08-19T19:47:27.3069+00:00"
+    },
+    {
+      "id": "ec6c1446-5071-4fac-a623-d1eb01db0682",
+      "establishment_id": "1e4acbae-072d-4407-8c91-7fec5c86d1e6",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°07/0019/MINESUP du",
+      "created_at": "2026-08-19T19:47:27.85068+00:00"
+    },
+    {
+      "id": "afbcaa61-a342-4b24-9561-80e6a8263d15",
+      "establishment_id": "1e4acbae-072d-4407-8c91-7fec5c86d1e6",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°07/0020/MINESUP du 26 février 2007",
+      "created_at": "2026-08-19T19:47:28.005863+00:00"
+    },
+    {
+      "id": "fe39ccfa-5b6f-4d76-919f-3f47e1db6e6d",
+      "establishment_id": "2ad146c9-054a-4358-9a06-303bacdd401b",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°17-08838/L/MINESUP/SG/DDES/ESUP/OPC du 31 août 2017",
+      "created_at": "2026-08-19T19:47:28.511286+00:00"
+    },
+    {
+      "id": "88841c5c-e78e-4929-8bb1-fe6f4e932aaa",
+      "establishment_id": "2ad146c9-054a-4358-9a06-303bacdd401b",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°17-08838/L/MINESUP/SG/DDES/ESUP/OPC du 31 août 2017",
+      "created_at": "2026-08-19T19:47:28.677591+00:00"
+    },
+    {
+      "id": "5c43de76-cf78-407d-a331-0746340cc4b9",
+      "establishment_id": "7a04ccbc-46b7-4ac3-8794-5d7fb7cbdbd7",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°05/0005/ MINESUP du 03 janvier 2005",
+      "created_at": "2026-08-19T19:47:29.132471+00:00"
+    },
+    {
+      "id": "000ad194-d67e-46fd-9f33-047df70c45ad",
+      "establishment_id": "7a04ccbc-46b7-4ac3-8794-5d7fb7cbdbd7",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°05/0091/ MINESUP du 07 septembre 2005",
+      "created_at": "2026-08-19T19:47:29.280737+00:00"
+    },
+    {
+      "id": "94a2760b-69a6-4909-8db4-2d62db777847",
+      "establishment_id": "73c5833a-c84d-4031-93ff-2d33bc05bcce",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°11/0039/MINESUP du 12 janvier 2011",
+      "created_at": "2026-08-19T19:47:29.756756+00:00"
+    },
+    {
+      "id": "e93b2d48-21f9-4c44-bbb8-bb6679825aa6",
+      "establishment_id": "73c5833a-c84d-4031-93ff-2d33bc05bcce",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°12/0360/MINESUP du 17 août 2012",
+      "created_at": "2026-08-19T19:47:29.902598+00:00"
+    },
+    {
+      "id": "b40dbdf8-d1f3-43f2-9f8a-6ef6b5e1c619",
+      "establishment_id": "61f2e11c-52ff-4075-9bd6-33c5e2ac4609",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°16-12392/L/MINESUP/SG/DDES/ESUP/SDA/AOSB du 11 novembre 2016",
+      "created_at": "2026-08-19T19:47:30.354826+00:00"
+    },
+    {
+      "id": "4a422dc1-0646-49a4-b327-c65067c45687",
+      "establishment_id": "61f2e11c-52ff-4075-9bd6-33c5e2ac4609",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°16-12392/L/MINESUP/SG/DDES/ESUP/SDA/AOSB du 11 novembre 2016",
+      "created_at": "2026-08-19T19:47:30.497365+00:00"
+    },
+    {
+      "id": "5f511103-649d-4cb8-bcb6-263220c53f5c",
+      "establishment_id": "3a874f94-090f-49a9-ab3b-6a8101712bd0",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°08/0095/MINESUP du 05 mai 2008",
+      "created_at": "2026-08-19T19:47:30.953491+00:00"
+    },
+    {
+      "id": "a227b6a8-bb23-4ca6-be88-a5934c3860f3",
+      "establishment_id": "3a874f94-090f-49a9-ab3b-6a8101712bd0",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°14/0402/MINESUP/SG/DDES/ du 04 juillet 2014",
+      "created_at": "2026-08-19T19:47:31.102062+00:00"
+    },
+    {
+      "id": "99f0c76e-7698-4fc6-ac42-3316fbdf6de0",
+      "establishment_id": "57cab75a-b8b1-4d36-96a5-fffa6a1ea5ba",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°17-00294/L/MINESUP/SG/DDES/ESUP/SDA/OAGS du 17 janvier 2017",
+      "created_at": "2026-08-19T19:47:32.470124+00:00"
+    },
+    {
+      "id": "33012120-685e-48fb-b177-15a09a4831cc",
+      "establishment_id": "57cab75a-b8b1-4d36-96a5-fffa6a1ea5ba",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°17-00294/L/MINESUP/SG/DDES/ESUP/SDA/OAGS du 17 janvier 2017",
+      "created_at": "2026-08-19T19:47:32.613775+00:00"
+    },
+    {
+      "id": "a5307b2c-a39b-4db8-9d5e-494a24c7590a",
+      "establishment_id": "5f7d9f40-d412-4df5-af82-0aa636790eae",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°2705/MINFI/MINESUP du 17 Novembre 2015.",
+      "created_at": "2026-08-19T19:47:33.867749+00:00"
+    },
+    {
+      "id": "0d429a37-e5f4-40d7-a25c-a24e26272d95",
+      "establishment_id": "5f7d9f40-d412-4df5-af82-0aa636790eae",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°2705/MINFI/MINESUP du 17 Novembre 2015.",
+      "created_at": "2026-08-19T19:47:34.023651+00:00"
+    },
+    {
+      "id": "28939c95-0714-4d68-b152-ae150e04162b",
+      "establishment_id": "a2aaf363-a9a4-46c6-abab-bdbcac8cac70",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°11/0526/MINESUP/DDES du 05 octobre 2011",
+      "created_at": "2026-08-19T19:47:34.440077+00:00"
+    },
+    {
+      "id": "f738f5f1-89bc-442d-8f14-f713fa2fa080",
+      "establishment_id": "a2aaf363-a9a4-46c6-abab-bdbcac8cac70",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°12/0368/MINESUP du 17 août 2012",
+      "created_at": "2026-08-19T19:47:34.578341+00:00"
+    },
+    {
+      "id": "e493e14c-d032-40ef-84f8-4dd44ede6bdc",
+      "establishment_id": "832a1b35-56dc-4d58-8087-b8b25453ee41",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°2705/MINFI/MINESUP of 17 November 2015",
+      "created_at": "2026-08-19T19:47:34.997804+00:00"
+    },
+    {
+      "id": "e8d83bee-f54e-4133-b823-2aa761ff5ef5",
+      "establishment_id": "832a1b35-56dc-4d58-8087-b8b25453ee41",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°2705/MINFI/MINESUP of 17 November 2015",
+      "created_at": "2026-08-19T19:47:35.160406+00:00"
+    },
+    {
+      "id": "1a33c95a-9813-4e99-8f9f-348df633e14d",
+      "establishment_id": "e48b7790-d7c5-412e-bf95-abb2d7fce876",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°15/08258/L/MINESUP/SG/DDES/ESUP/SDA/MM du 02 septembre 2015",
+      "created_at": "2026-08-19T19:47:35.886966+00:00"
+    },
+    {
+      "id": "47b2b3a5-47fc-437e-bb73-72382925d80e",
+      "establishment_id": "e48b7790-d7c5-412e-bf95-abb2d7fce876",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°15/08258/L/MINESUP/SG/DDES/ESUP/SDA/MM du 02 septembre 2015",
+      "created_at": "2026-08-19T19:47:36.01935+00:00"
+    },
+    {
+      "id": "97f9a856-1fc8-46d4-81b0-402b6e9d6187",
+      "establishment_id": "4b2ca2ac-8da5-4bf9-95da-2d75482f6ac0",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°02/0050/MINESUP du 12 juin  2002.",
+      "created_at": "2026-08-19T19:47:36.427311+00:00"
+    },
+    {
+      "id": "53295f5d-3ea6-4592-8cb3-99115a38b1df",
+      "establishment_id": "4b2ca2ac-8da5-4bf9-95da-2d75482f6ac0",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°02 / 0064 / MINESUP du 16 juillet 2002.",
+      "created_at": "2026-08-19T19:47:36.577776+00:00"
+    },
+    {
+      "id": "75c28471-5872-4e67-b5e1-924084982cd9",
+      "establishment_id": "62cb5449-2dbe-4460-a1d0-8a4788f96f4b",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°12/0660/MINESUP/SG/DDES du 23 novembre 2012",
+      "created_at": "2026-08-19T19:47:37.357931+00:00"
+    },
+    {
+      "id": "2c9370da-d4bd-48e1-a6f6-c4e116f2f47a",
+      "establishment_id": "62cb5449-2dbe-4460-a1d0-8a4788f96f4b",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°14/0394/MINESUP/SG/DDES/ du 04 juillet 2014",
+      "created_at": "2026-08-19T19:47:37.501675+00:00"
+    },
+    {
+      "id": "bfa93f18-040c-4ccf-a4b6-30f2c416da3b",
+      "establishment_id": "8ab8c4c6-9397-4650-a5e5-76e3d06c9f54",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°16-04349/L/MINESUP/SG/DDES/ESUP/SSIPES/AOSB du 27 avril 2016",
+      "created_at": "2026-08-19T19:47:38.0215+00:00"
+    },
+    {
+      "id": "ffdc87e5-94d6-4884-8f27-54e37b492ed5",
+      "establishment_id": "8ab8c4c6-9397-4650-a5e5-76e3d06c9f54",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°16-04349/L/MINESUP/SG/DDES/ESUP/SSIPES/AOSB du 27 avril 2016",
+      "created_at": "2026-08-19T19:47:38.185835+00:00"
+    },
+    {
+      "id": "79bac322-2c4c-4d34-828d-adc57e58bc1e",
+      "establishment_id": "41f5e543-fe78-4496-a711-3ce5f4c6b9c3",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°11/0529/MINESUP/SG/DDES du 05 octobre 2011",
+      "created_at": "2026-08-19T19:47:39.007271+00:00"
+    },
+    {
+      "id": "939a3225-9956-4d37-b2b1-39ed3e6b25e8",
+      "establishment_id": "41f5e543-fe78-4496-a711-3ce5f4c6b9c3",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°12/0391/MINESUP du 17 août 2012",
+      "created_at": "2026-08-19T19:47:39.163262+00:00"
+    },
+    {
+      "id": "0dfaf19d-03be-42d3-8cdb-9912f8b58fe1",
+      "establishment_id": "da36c1eb-2d7c-4250-8a19-d419dc5bdb70",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°17-07461/N/MINESUP/SG/DDES/ESUP/SDA/NJN/ebm du 12 juin 2017",
+      "created_at": "2026-08-19T19:47:39.612149+00:00"
+    },
+    {
+      "id": "9c4493e7-a547-4fab-8756-b5190d39f591",
+      "establishment_id": "da36c1eb-2d7c-4250-8a19-d419dc5bdb70",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°17-07461/N/MINESUP/SG/DDES/ESUP/SDA/NJN/ebm du 12 juin 2017",
+      "created_at": "2026-08-19T19:47:39.758072+00:00"
+    },
+    {
+      "id": "07717ad2-8006-426b-9a43-7352990aefc7",
+      "establishment_id": "9796b99c-c0d2-4afc-8b44-d485624ca70f",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°11/05815/MINESUP du 28 novembre 2011",
+      "created_at": "2026-08-19T19:47:40.205483+00:00"
+    },
+    {
+      "id": "a5316c3e-63b4-4ff8-ac28-09ef89b6fe5f",
+      "establishment_id": "9796b99c-c0d2-4afc-8b44-d485624ca70f",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°14/0407/MINESUP/SG/DDES/ du 04 juillet 2014",
+      "created_at": "2026-08-19T19:47:40.352498+00:00"
+    }
+  ]
+}

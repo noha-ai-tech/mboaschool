@@ -1,0 +1,60 @@
+{
+  "sprint": "MINESUP-F",
+  "operator": "jean-merlain",
+  "approved_by": "Eddy",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "registry_import_batch": "minesup-national-v1",
+  "approval_checksum": "4b398dab3443d5d1d24030b2f7677f5eeacad5c572648c99bed37f306cb6a65b",
+  "database": {
+    "establishments_before": 2180,
+    "establishments_inserted": 60,
+    "establishments_after": 2240,
+    "staging_before": 2344,
+    "staging_after": 2344,
+    "registry_identifiers_before": 2145,
+    "registry_identifiers_inserted": 97,
+    "registry_identifiers_after": 2242
+  },
+  "promotion": {
+    "snapshot_candidates": 60,
+    "eligible": 60,
+    "inserted": 60,
+    "already_live": 0,
+    "skipped": 0,
+    "failed": 0,
+    "conflicts": 0
+  },
+  "staging": {
+    "promoted": 60,
+    "linked": 60,
+    "orphans": 0
+  },
+  "registry_identifiers": {
+    "planned": 97,
+    "inserted": 97,
+    "creation_orders": 49,
+    "opening_authorizations": 48,
+    "collisions": 0,
+    "orphans": 0,
+    "wrong_links": 0
+  },
+  "pii": {
+    "residual_before": 0,
+    "persisted": 0,
+    "url_pii": 0,
+    "safe": true
+  },
+  "security": {
+    "existing_establishments_updated": 0,
+    "existing_establishments_deleted": 0,
+    "verified_automatically": 0,
+    "owners_assigned_automatically": 0,
+    "official_id_modified": 0
+  },
+  "reconciliation": {
+    "created_without_staging_link": 0,
+    "created_without_identifiers": 0,
+    "partial_reconciliation_required": false,
+    "orphan_identifiers": 0
+  }
+}

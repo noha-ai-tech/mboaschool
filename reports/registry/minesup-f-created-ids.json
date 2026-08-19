@@ -1,0 +1,427 @@
+{
+  "generated_at": "2026-08-19T19:47:43.319Z",
+  "registry_import_batch": "minesup-national-v1",
+  "count": 60,
+  "establishments": [
+    {
+      "establishment_id": "c5c5a2e6-f485-4b79-9a91-df38c611d10f",
+      "staging_id": "034563dc-d15e-4bf8-8c38-403f479e6223",
+      "name": "Institut Supérieur du Septentrion Informatique",
+      "region": "Nord",
+      "city": null
+    },
+    {
+      "establishment_id": "7ee5177d-8b4c-47f3-aaa9-9779788c9115",
+      "staging_id": "04d41866-c920-4993-8d61-e30711ed5506",
+      "name": "Institut Supérieur la Rosière",
+      "region": "Centre",
+      "city": "Simbock"
+    },
+    {
+      "establishment_id": "912fce41-6350-4308-8765-8ab5f47eced2",
+      "staging_id": "13ce9bc3-8af3-4936-b2bb-5e9c97588ea1",
+      "name": "Institut Supérieur des Techniques Economiques et Comptables",
+      "region": "Littoral",
+      "city": "Akwa"
+    },
+    {
+      "establishment_id": "a51759a5-78ff-4801-ae85-7468b6e484d9",
+      "staging_id": "1621cf2d-5165-458e-87c9-396a9e0ca79c",
+      "name": "Landmark Higher Institute (LHI)",
+      "region": "Sud-Ouest",
+      "city": null
+    },
+    {
+      "establishment_id": "dd94a049-ffc5-4037-9e08-b8c61f7c72e3",
+      "staging_id": "16cff835-0e65-4ef9-b883-99653444a183",
+      "name": "Institut Supérieur de Psychopédagogie Appliquée (ISPPA)",
+      "region": "Littoral",
+      "city": "Bonamoussadi"
+    },
+    {
+      "establishment_id": "faef2289-0aed-4f88-a7e8-e1f5d4f55330",
+      "staging_id": "17e1598c-1f0b-4ab1-ad58-bc7aea1558f6",
+      "name": "Institut MBASSI Supérieur",
+      "region": "Centre",
+      "city": "Monatélé"
+    },
+    {
+      "establishment_id": "e38d7302-823d-41d7-8fdc-da3587356b64",
+      "staging_id": "19481c97-20a6-4ba4-a560-c053dc2db3d5",
+      "name": "HIPTEX University Institute",
+      "region": "Centre",
+      "city": null
+    },
+    {
+      "establishment_id": "4294352d-156c-4d46-a53b-fbc734a7a43a",
+      "staging_id": "1b2b37f7-d3c9-4551-bb04-6a8f17e249d6",
+      "name": "Institut AGENLA Academy",
+      "region": "Centre",
+      "city": "Yaoundé (Nkoabang)"
+    },
+    {
+      "establishment_id": "e9574400-9b8c-4bb4-a7cf-ab3945631107",
+      "staging_id": "1bae808d-159e-448d-8956-fc54c892b36a",
+      "name": "Ecole Sup Prépa",
+      "region": "Centre",
+      "city": "Yaoundé (Nkolfoulou)"
+    },
+    {
+      "establishment_id": "0dde7325-d9ae-4eb5-a789-31cead5d6c23",
+      "staging_id": "252d1e2d-20a1-47e6-a46d-c4e8fd9de04c",
+      "name": "Institut Supérieur du Génie Thermique et Énergétique",
+      "region": "Littoral",
+      "city": "Ndogbong"
+    },
+    {
+      "establishment_id": "9e6d4c5d-cb88-48e8-aa88-ae97ed735940",
+      "staging_id": "2613924e-2a12-48bb-9529-de1ae82a6bc6",
+      "name": "Institut des Hautes Etudes Supérieures (IHES)",
+      "region": "Littoral",
+      "city": "Nyalla Pariso Maison Jumelle"
+    },
+    {
+      "establishment_id": "e6ca0d1f-c223-478a-bcf0-dcaf9f3233da",
+      "staging_id": "2a1726f8-d206-432a-bbf8-5e36bfd05cc6",
+      "name": "Institut Supérieur Yérima    Dewa",
+      "region": "Nord",
+      "city": "Galbidjie"
+    },
+    {
+      "establishment_id": "f959c749-344e-4b25-b874-efaf05d58060",
+      "staging_id": "2b3b42da-927c-4fd9-863f-dc2044b76105",
+      "name": "Institut Supérieur des Formations Appliquées (ISFA)",
+      "region": "Littoral",
+      "city": "Bonandjo"
+    },
+    {
+      "establishment_id": "0e72a720-87f9-437a-b475-eed7d09e4782",
+      "staging_id": "2b6e1998-9f6e-4063-b30a-ca6d695fffd0",
+      "name": "Institut d’Enseignement Supérieur Foyaguem (IESF)",
+      "region": "Ouest",
+      "city": "Keleng"
+    },
+    {
+      "establishment_id": "037c7154-803b-4a5a-91a0-9a2225ec4e79",
+      "staging_id": "2f012236-4131-492f-956e-71f67eebbfb3",
+      "name": "Institut Supérieur des Métiers (ISMET)",
+      "region": "Littoral",
+      "city": "PK8"
+    },
+    {
+      "establishment_id": "f4abb3ae-6093-4784-953a-fb7a66b80a7c",
+      "staging_id": "34c654c6-57ac-45b9-9c05-0025fd68d70e",
+      "name": "Institut Supérieur MINGOLE (ISM)",
+      "region": "Littoral",
+      "city": "Deido"
+    },
+    {
+      "establishment_id": "0b642da2-df91-4ff6-8393-637fb03be75e",
+      "staging_id": "38900775-9726-4ec2-8f8b-535d15eca4ac",
+      "name": "Institut Supérieur des Affaires (ISA)",
+      "region": "Centre",
+      "city": null
+    },
+    {
+      "establishment_id": "f88d6a3b-75d5-465c-875a-0ef079066688",
+      "staging_id": "3e0d99d2-d882-4eeb-8a58-e223c4cc25ab",
+      "name": "Institut Supérieur de Génie Civil (ISGeC)",
+      "region": "Centre",
+      "city": null
+    },
+    {
+      "establishment_id": "0b1c429a-eb85-449b-b536-b90e3c39a9e8",
+      "staging_id": "40873d9e-ddfa-464b-b286-5abca970501e",
+      "name": "Institut Supérieur Kalata (ISKA)",
+      "region": "Centre",
+      "city": "Avenue Kennedy"
+    },
+    {
+      "establishment_id": "ec87da41-75c0-4b84-a574-633920c2a230",
+      "staging_id": "47a93286-fcda-405c-b08d-ceef00655046",
+      "name": "SMU Higher Institute",
+      "region": "Sud-Ouest",
+      "city": null
+    },
+    {
+      "establishment_id": "b969e308-03a4-4c3b-a254-fa31170d248e",
+      "staging_id": "4a880cb7-389b-455f-a512-9792f8248a0f",
+      "name": "Institut Supérieur Jimit (ISJ)",
+      "region": "Centre",
+      "city": "Ngoa-Ekelle"
+    },
+    {
+      "establishment_id": "18f67de1-3a0a-4d34-9067-f74951560590",
+      "staging_id": "4b585880-14ad-49ce-9019-0d5d97106292",
+      "name": "Institut Supérieur de l’Emergence (ISE)",
+      "region": "Centre",
+      "city": "Odza"
+    },
+    {
+      "establishment_id": "e0f3e023-7eea-4094-ad85-62472d7f06fb",
+      "staging_id": "55f943e5-176a-41b8-9427-82e68c5fa31b",
+      "name": "Institut Supérieur Lumière",
+      "region": "Littoral",
+      "city": "Ndokotti"
+    },
+    {
+      "establishment_id": "02145db9-77d6-4243-9379-7256179f397b",
+      "staging_id": "563b9780-92e6-4345-be03-9242c768afae",
+      "name": "Chartered Higher Institute of Cameroon (CHIC)",
+      "region": "Sud-Ouest",
+      "city": "Muea"
+    },
+    {
+      "establishment_id": "a3e97859-690c-4ab1-82b4-adf31416bcc3",
+      "staging_id": "59b938e8-34b9-4ad9-8b7c-a3e666fc555a",
+      "name": "FOMIC Polytechnic",
+      "region": "Sud-Ouest",
+      "city": null
+    },
+    {
+      "establishment_id": "2b083f50-6673-4299-9be7-116ad299f03f",
+      "staging_id": "5b1055ed-2197-4b06-b8b2-e7f729c534e9",
+      "name": "Institut Supérieur d’Agronomie (ISA)",
+      "region": "EST",
+      "city": null
+    },
+    {
+      "establishment_id": "e4b6e83d-5e30-464f-889a-b217f12b462e",
+      "staging_id": "6f7c1286-c274-4a2b-9309-0f225b8c7526",
+      "name": "Institut Supérieur Fondation Mamadou Bako",
+      "region": "Nord",
+      "city": null
+    },
+    {
+      "establishment_id": "ecd9f4c8-0ed5-49d7-ac32-af12ca7a1758",
+      "staging_id": "76c314c0-5332-47e9-8129-5b0051ead7f1",
+      "name": "Institut Supérieur des Technologies et de l’Innovation",
+      "region": "Centre",
+      "city": null
+    },
+    {
+      "establishment_id": "5e68371f-ec1c-4299-9876-0e92048fdb63",
+      "staging_id": "788d6625-3879-424d-87b9-120336a135f4",
+      "name": "Institut Supérieur Islamique de Foumban (ISIF)",
+      "region": "Ouest",
+      "city": "Kouga"
+    },
+    {
+      "establishment_id": "251b0eb7-35ff-4e42-ae4d-8a7ea13413a8",
+      "staging_id": "7a50ab4d-ab9e-4e69-aa78-6300420a8533",
+      "name": "Horti-Florale Institute (HFI)",
+      "region": "Sud-Ouest",
+      "city": "Buea"
+    },
+    {
+      "establishment_id": "26d2c190-26a0-45dd-bce5-d555fb581828",
+      "staging_id": "7c6337bb-c8d3-45fd-97ac-86cae7ec79dd",
+      "name": "Institut Supérieur des Techniques Agricoles d’Ombessa",
+      "region": "Centre",
+      "city": "Guintsing"
+    },
+    {
+      "establishment_id": "a8fa62b6-65e3-4e31-ae10-1e8cf79e715d",
+      "staging_id": "89cadd55-58ec-4dd6-be10-a162750257ca",
+      "name": "Institut Supérieur d’Informatique et de la Communication (ISICOM)",
+      "region": "Littoral",
+      "city": "Logbessou"
+    },
+    {
+      "establishment_id": "e143157f-6ad0-4f08-b453-49b3592d6e68",
+      "staging_id": "8f019111-012d-4548-a3f5-5b5e156b14ee",
+      "name": "Institut Supérieur la Perle (ISLAPE)",
+      "region": "Littoral",
+      "city": "Yassa"
+    },
+    {
+      "establishment_id": "2e3df645-0716-46a3-bac0-9c8161e63b83",
+      "staging_id": "918ab878-574f-4383-9733-659ff92bdca3",
+      "name": "Cameroon Bilingual Higher Institute (CBHI)",
+      "region": "Centre",
+      "city": "&#8211;"
+    },
+    {
+      "establishment_id": "1e4acbae-072d-4407-8c91-7fec5c86d1e6",
+      "staging_id": "920acd74-98dd-43c0-b1e3-04eee5335b21",
+      "name": "Biaka University Institute of Buea (BUIB)",
+      "region": "Sud-Ouest",
+      "city": null
+    },
+    {
+      "establishment_id": "2ad146c9-054a-4358-9a06-303bacdd401b",
+      "staging_id": "99db304c-1df0-4d0b-9dfd-34fd381c87e7",
+      "name": "Institut panafricain pour le Développement (IPD)",
+      "region": "Littoral",
+      "city": null
+    },
+    {
+      "establishment_id": "7a04ccbc-46b7-4ac3-8794-5d7fb7cbdbd7",
+      "staging_id": "a79be0ce-d561-4a1f-8de6-c55dfe2f50cc",
+      "name": "Institut Supérieur de Technologies Appliquées (INSTAP)",
+      "region": "Littoral",
+      "city": "Makepé, Carrefour Rhône Poulenc"
+    },
+    {
+      "establishment_id": "73c5833a-c84d-4031-93ff-2d33bc05bcce",
+      "staging_id": "a8067013-bc95-46de-852a-110762c47cb5",
+      "name": "Institut Supérieur Africain d’Enseignement Managérial et Technologique",
+      "region": "Littoral",
+      "city": "Makepe"
+    },
+    {
+      "establishment_id": "61f2e11c-52ff-4075-9bd6-33c5e2ac4609",
+      "staging_id": "ad675094-d457-4974-861a-601dc1440d09",
+      "name": "Fotabe Higher Institute (FHI)",
+      "region": "Sud-Ouest",
+      "city": "Buea"
+    },
+    {
+      "establishment_id": "3a874f94-090f-49a9-ab3b-6a8101712bd0",
+      "staging_id": "aeb993e7-fc07-41a4-b208-b3e67707a014",
+      "name": "Institut Universitaires des Grandes Ecoles des Tropiques (IUGET)",
+      "region": "Littoral",
+      "city": "Bonamoussadi (Rond-point MAETUR)"
+    },
+    {
+      "establishment_id": "6f1d9945-3b4b-45dd-861d-e070113ec814",
+      "staging_id": "b4d989ce-f013-4ed5-8ccc-ee59484a8b30",
+      "name": "DAJA Higher Institute (DHI)",
+      "region": "Sud-Ouest",
+      "city": "Mt Carmel Junction. 1003 DAJA Avenue, Mile 18; Buea, SWR, Cameroon"
+    },
+    {
+      "establishment_id": "ef5d9cfc-eeea-4887-b9f0-3866b8259a0e",
+      "staging_id": "b6e152f1-a14b-4782-b755-d3d6eda77f81",
+      "name": "WALYA SUP",
+      "region": "Nord",
+      "city": "Guere"
+    },
+    {
+      "establishment_id": "bedf499d-66e9-45e2-a53d-8fd2b8cb73c1",
+      "staging_id": "be6396c7-d8c0-470b-aaf3-ac6379b0a45f",
+      "name": "Jagora University",
+      "region": "Centre",
+      "city": null
+    },
+    {
+      "establishment_id": "57cab75a-b8b1-4d36-96a5-fffa6a1ea5ba",
+      "staging_id": "bfb68d32-efb8-40df-b796-051b6c9e26f2",
+      "name": "Institut Supérieur de Pétrochimie et d’Ingénierie Mathématique (ISPIM)",
+      "region": "Centre",
+      "city": "Simbock"
+    },
+    {
+      "establishment_id": "599227d2-23b8-4ca6-bb30-814858c2cdb3",
+      "staging_id": "bfd3b609-852e-4027-95a1-cd2b421f234c",
+      "name": "Century Innovating Higher Institute (CINNOHI)",
+      "region": "Littoral",
+      "city": "Douala / Bonapriso – Kuwait, below forêt bar Bois des singes"
+    },
+    {
+      "establishment_id": "fd3b6ac7-4896-499d-9cdf-319e30459dea",
+      "staging_id": "c013af83-a753-446e-a587-0a7679a1a56d",
+      "name": "Institut Supérieur Africain des Technologies de l'Information et de la Connaissance (ISATIC)",
+      "region": "Littoral",
+      "city": "Douala"
+    },
+    {
+      "establishment_id": "e2c2476c-dfd6-405f-8975-cb440d2e8ea0",
+      "staging_id": "c7c053dc-f03f-445c-b43f-56c691cf4e82",
+      "name": "Gracious Higher Institute of Excellence (GRHIEX)",
+      "region": "Sud-Ouest",
+      "city": "100 Gracious, Avenue Mount Carmel Junction Mile 18"
+    },
+    {
+      "establishment_id": "5f7d9f40-d412-4df5-af82-0aa636790eae",
+      "staging_id": "c93ae2bf-c393-4b7e-9931-17036eceabca",
+      "name": "STALWART HIGHER INSTITUTE (SHI)",
+      "region": "Littoral",
+      "city": "Feu rouge Bessengue"
+    },
+    {
+      "establishment_id": "a2aaf363-a9a4-46c6-abab-bdbcac8cac70",
+      "staging_id": "cc4196f4-f96b-404c-9bf9-82549af3862b",
+      "name": "Institut Supérieur d’Enseignement Managérial et Technologique",
+      "region": "Centre",
+      "city": "Cité verte monté Renault"
+    },
+    {
+      "establishment_id": "832a1b35-56dc-4d58-8087-b8b25453ee41",
+      "staging_id": "ce71f0d1-d60c-461e-ad21-1e3b2df6dd05",
+      "name": "H.O.P.E University  Institute (HUI) Limbe",
+      "region": "Sud-Ouest",
+      "city": null
+    },
+    {
+      "establishment_id": "030dd885-d03c-4ea3-9b5c-c425b9a71750",
+      "staging_id": "d99c77c8-7477-4eeb-a842-ffb14e7a7557",
+      "name": "Ecole Supérieure Spéciale d’Architecture du Cameroun (ESSACA)",
+      "region": "Centre",
+      "city": "Quartier Nylon, Bastos"
+    },
+    {
+      "establishment_id": "e48b7790-d7c5-412e-bf95-abb2d7fce876",
+      "staging_id": "db2bbcf8-21dd-4769-9863-bb20943e2cad",
+      "name": "Sabena Flight Academy Africa",
+      "region": "Littoral",
+      "city": null
+    },
+    {
+      "establishment_id": "4b2ca2ac-8da5-4bf9-95da-2d75482f6ac0",
+      "staging_id": "e5954b71-21a8-4a00-8dee-ada9c90a997a",
+      "name": "Groupe Tankou Enseignement Supérieur (GTES)",
+      "region": "Ouest",
+      "city": "Mairie rurale"
+    },
+    {
+      "establishment_id": "b411bf38-b9d7-48c9-835c-efa41386d0ad",
+      "staging_id": "ea537c3f-14d9-4ca2-a321-074964e69edb",
+      "name": "Cameroon Institute of Renewable Energy (CIRE)",
+      "region": "South West",
+      "city": "Bobende Quater 3, Limbe 2 subdivision"
+    },
+    {
+      "establishment_id": "62cb5449-2dbe-4460-a1d0-8a4788f96f4b",
+      "staging_id": "eb9c99ff-b2eb-43e2-8a13-3ec1aeaf671c",
+      "name": "JSF Polytechnic",
+      "region": "Sud-Ouest",
+      "city": "Muea"
+    },
+    {
+      "establishment_id": "8ab8c4c6-9397-4650-a5e5-76e3d06c9f54",
+      "staging_id": "ebd42661-4b47-47d9-8120-791e7abb74ce",
+      "name": "Ecole Supérieure Technique la Salle (EST)",
+      "region": "Littoral",
+      "city": "Akwa"
+    },
+    {
+      "establishment_id": "039481d1-1041-4bd6-a169-f2003c48cc36",
+      "staging_id": "f02418be-128a-480d-91cf-da873cc054d3",
+      "name": "HIBMAT University Institute of Buea (HUIB)",
+      "region": "Sud-Ouest ; Molyoko ; Buea",
+      "city": "MOLYKO"
+    },
+    {
+      "establishment_id": "41f5e543-fe78-4496-a711-3ce5f4c6b9c3",
+      "staging_id": "f57c1522-de0b-45d3-b673-4b63d1b3e6c7",
+      "name": "Institut Supérieur Dale Kietzman",
+      "region": "Littoral",
+      "city": "Ndokotti"
+    },
+    {
+      "establishment_id": "da36c1eb-2d7c-4250-8a19-d419dc5bdb70",
+      "staging_id": "f8d88d0f-3418-49bf-82be-7efd5fe72d6e",
+      "name": "Buea Polytechnic",
+      "region": "Sud-Ouest",
+      "city": "Buea"
+    },
+    {
+      "establishment_id": "9796b99c-c0d2-4afc-8b44-d485624ca70f",
+      "staging_id": "fbd3b291-3dcf-4c67-97db-8b77c5a20502",
+      "name": "Institut Supérieur du Personnel Médico- Sanitaire (ISPM)",
+      "region": "Centre",
+      "city": "Ekounou"
+    }
+  ]
+}

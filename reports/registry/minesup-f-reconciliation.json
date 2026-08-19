@@ -1,0 +1,13 @@
+{
+  "generated_at": "2026-08-19T19:47:43.502Z",
+  "operator": "jean-merlain",
+  "approved_by": "Eddy",
+  "eligible": 60,
+  "created": 60,
+  "staging_linked": 60,
+  "identifiers_inserted": 97,
+  "created_without_staging_link": [],
+  "created_without_identifiers": [],
+  "orphan_identifiers": [],
+  "outcome": "SUCCESS"
+}
