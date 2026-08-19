@@ -1,0 +1,33 @@
+staging_id,name,region,city,decision,matched_establishment_id,match_type,source_status,pii_safe,identifier_count,identifier_collision,reason
+dd59929f-728d-403b-aeba-2f2e0d4e4076,Acces Care Institute (ACI),North West,Nkwen,ELIGIBLE,,NO_MATCH,ready,true,0,false,aucun mot significatif commun avec une cible.
+f4705c18-d713-4e74-abc4-b2636d918109,Bamenda University Institute of Science and Technology (BUIST),Nord-Ouest,Bamenda (Mile 3 Nkwen),ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+23f8537b-bf0d-44ca-8569-e043464cb8c5,Baptist Institute of Higher Learning,Nord-Ouest,Bamenda,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+cf0cc340-6e85-4a1c-8ac4-fb75876d88c6,Capitol Higher Institute of Health Sciences and Beauty Therapy,Nord-Ouest,Bamenda (Mile 3 Nkwen),ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+05440cf1-8ad6-4a6b-b530-c644e882d2dc,Catholic University Institute of Bamenda,Nord-Ouest,,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+33030456-77a2-4ad6-bcaa-eeca225e1546,Central Higher Institute (CHI),Nord-Ouest,Bamenda,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+e64bec3d-a5ad-4744-9808-0598e46d20c0,Christian University Institute,Nord-Ouest,Mbatu,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+9be315b4-b2d4-4c89-a45a-75ac9b0f55af,Continental University Institute of science and Technology (CUIST),North West Region,Upper Melim Kumbo,ELIGIBLE,,NO_MATCH,ready,true,0,false,aucun mot significatif commun avec une cible.
+ebdd0ac9-833a-4aab-a386-c97da52543ec,Experiental Higher Institute of Science and Technology (EXHIST),CENTRE/ NORTH WEST(Annexe),"Entre collège Ebanda, Biyem-Assi, Yaoundé / Below Linguistic Centre, Old Town Bamenda (Annexe)",ELIGIBLE,,NO_MATCH,ready,true,0,false,aucun mot significatif commun avec une cible.
+88dd575f-5dfe-4578-9fdb-92c8c7b27577,Florence Nigtingale Higher Institute of Health and Biomedical Sciences,Nord-Ouest,,SOURCE_REVIEW,,NO_MATCH,normalized,true,0,false,aucun mot significatif commun avec une cible.
+f8eda3ef-c0d1-4582-a832-df528171a2fd,Fonab Polytechnic,Nord-Ouest,(Mile 3 Nkwen),ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+56e97176-8e27-44ba-b5f1-1d2e6f22dee5,Havard Higher Institute of Science and Technology,Nord-Ouest,Up station,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+94b3607e-5354-4e8b-bb61-1da9ecf8ff23,Higher Institute for Business and management Sciences,Nord-Ouest,Bamenda (Mbatu),ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+332cde68-1f88-4eb5-bf50-96cae4b1f322,Higher Institute for Professional Development and Training (HIPDET),Nord-Ouest,,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+39d6a1ab-329c-446f-b2cf-ca35202ebbf3,Higher Institute of Professionalism and Technology (HIPT),Nord-Ouest,Kumbo,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+5e1f5128-0739-4655-94c0-9ee4fe57a6a0,Impact Polytechnic,Nord-Ouest,,SOURCE_REVIEW,,NO_MATCH,normalized,true,0,false,aucun mot significatif commun avec une cible.
+5ce1ddb8-eff8-44dc-9aed-e6d5fc8a59b6,International University of Bamenda,Nord-ouest,Kumbo,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+c50e1225-cf84-4e9b-b0c6-0b1095b0ab8b,Jomatt Polytechnic Institute of Education,Nord-Ouest,Bamenda,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+c92fec8b-4166-4990-8d8b-ef8194505480,Laureate Higher Institute of Business and Administration (LAHIBA),Nord-Ouest,,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+9cb81063-6c34-4997-8053-356e9a3bdc80,"National Higher Institute of Business, Tourism and Hotel Management (NAHIBUTH)",Nord-Ouest,Bamenda,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+09de0337-4fa9-44d0-9584-08cf5cfb779f,National Polytechnic University Institute (NPUI),Nord-Ouest,,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+22021e99-1aee-4d7a-a964-e7b6a5cc8a88,"Paul Nkwi Higher Institute of Management, Science, Arts and Technology (PN-HIMSAT)",Nord-Ouest,Njinikom,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+baaa34bc-c47c-45be-975e-6bd35854b142,Pauls’s Computer Higher Institute of Technology (PC-HITECH),Nord-Ouest,,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+207d940b-48c0-4851-8e12-61bc873e9fb6,Pyramid Higher Institute of Professional Studies,Nord-Ouest,,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+20c6bd24-b075-46f3-987f-7b28bba783c8,Saint Louis Higher Institute of Health and Biomedical Sciences,Nord-Ouest,,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+2f80a015-4e54-431b-bf47-dab5faece189,ST Jude’s Higher Institute of Nursing and Biomedical,Nord-Ouest,,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+732f7580-1189-4dad-a370-9268a2bd64c2,ST Thierry Higher Institute of Health Science and Technology (SHIHSAT),Nord-Ouest,,ELIGIBLE,,NO_MATCH,ready,true,0,false,aucun mot significatif commun avec une cible.
+717072ae-b3f3-40aa-8278-c7ba249de610,Taniform Higher Institute of Learning (THIL),Nord-Ouest,Bamenda,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+36a3705c-770b-4f86-baac-e8129c0a73e4,Saint Laurence Higher Institute (SLHI),NORD-OUEST,BAMENDA/NDOP,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+31965814-6dba-420e-a64b-95f664ed8f37,Saint Michael Higher Institute of Professional Studies (SHIPS),Nord-Ouest,Bamenda,ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+eca6c03c-455a-4eb4-9332-95d4669111a6,Catholic School of Health Sciences Shisong,Nord-Ouest,Kumbo (Shisong),ELIGIBLE,,NO_MATCH,ready,true,2,false,aucun mot significatif commun avec une cible.
+12138617-9841-4df0-b8b4-156ba5b6bbba,University of Bamenda,Nord-Ouest,,SOURCE_REVIEW,,NO_MATCH,normalized,true,0,false,aucun mot significatif commun avec une cible.

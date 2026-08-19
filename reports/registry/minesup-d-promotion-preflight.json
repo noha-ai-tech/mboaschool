@@ -1,0 +1,57 @@
+{
+  "sprint": "MINESUP-D",
+  "operator": "jean-merlain",
+  "generated_at": "2026-08-19T16:41:04.483Z",
+  "database": {
+    "establishments_before": 2151,
+    "staging_before": 2284,
+    "registry_identifiers_before": 2096
+  },
+  "pilot_revalidation": {
+    "snapshot_candidates": 29,
+    "live_eligible_before_collision_check": 29,
+    "source_review_excluded": 3
+  },
+  "approval": {
+    "checksum_expected_prompt": "f1f12668644215a36a1f5e162fab196de25be01d959033ac18547cd4d28f1fdd",
+    "checksum_stored": "f1f12668644215a36a1f5e162fab196de25be01d959033ac18547cd4d28f1fdd",
+    "checksum_recomputed": "f1f12668644215a36a1f5e162fab196de25be01d959033ac18547cd4d28f1fdd",
+    "valid": true
+  },
+  "pii": {
+    "candidates_checked": 32,
+    "residual": 0,
+    "safe": true
+  },
+  "matching": {
+    "exact_identifier": 0,
+    "exact_identity": 0,
+    "strong": 0,
+    "probable": 0,
+    "ambiguous": 0,
+    "new": 32
+  },
+  "identifiers": {
+    "exact_existing": 0,
+    "cross_establishment_collision": 0,
+    "safe_new": 50
+  },
+  "classification": {
+    "eligible": 29,
+    "already_live": 0,
+    "duplicate_review": 0,
+    "identifier_collision": 0,
+    "source_review": 3,
+    "identity_review": 0,
+    "invalid": 0
+  },
+  "dry_run": {
+    "would_insert_establishments": 29,
+    "would_update_establishments": 0,
+    "would_delete_establishments": 0,
+    "would_link_staging": 29,
+    "would_insert_registry_identifiers": 50,
+    "expected_establishments_after": 2180
+  },
+  "ready_to_commit": true
+}
