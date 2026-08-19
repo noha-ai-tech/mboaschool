@@ -1,0 +1,23 @@
+{
+  "generated_at": "2026-08-19T04:32:56.260Z",
+  "operator": "jean-merlain",
+  "sprint": "REGISTRY-MULTI-A",
+  "mode": "DRY_RUN_READ_ONLY — aucune écriture, la table cible n'existe pas encore en production (migration 0021 non exécutée)",
+  "establishments_total": 2151,
+  "with_official_id": 1938,
+  "source_ministry_minesec": 1938,
+  "source_ministry_other": 161,
+  "unclassifiable_review_required": 0,
+  "invalid_format": 3,
+  "registry_identifier_collisions": 0,
+  "collision_detail": [],
+  "duplicate_identifier_text_across_establishments": 0,
+  "establishments_sharing_a_duplicate_identifier": 0,
+  "would_insert_identifiers_total": 2096,
+  "would_insert_by_registry": {
+    "MINESEC_ESG": 1935,
+    "MINESEC_CARTESCOLAIRE": 161
+  },
+  "dual_id_scenario_tested": true,
+  "note": "Simulation uniquement. Aucune ligne insérée nulle part. establishments.official_id reste inchangé. Le scénario dual-ID (un même concept d'établissement avec un identifiant MINESEC_ESG ET un identifiant MINESEC_CARTESCOLAIRE) n'a pas encore été testé établissement-par-établissement réel (les 161 candidats R.3.2 n'ont pas de official_id MINESEC_ESG connu — voir MINESEC V1.1, zéro recouvrement direct) ; le test structurel du modèle (deux registres, une seule table, unicité par registre) est couvert par scripts/school-registry/lib/matching/__tests__/matching.test.ts §23.H avec une fixture locale."
+}

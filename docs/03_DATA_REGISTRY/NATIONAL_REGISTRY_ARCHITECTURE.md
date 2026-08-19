@@ -229,3 +229,177 @@ encore factorisé est le MATCHING (chaque script de promotion recalcule sa
 propre logique de correspondance) — recommandé comme nettoyage avant
 MINESUP plutôt qu'une nouvelle copie du même code, mais non bloquant pour
 démarrer.
+
+---
+
+## 10. MULTI-REGISTRY FOUNDATION — SPRINT REGISTRY-MULTI-A (2026-08-19)
+
+Ce sprint transforme la recommandation §9.1 en artefacts concrets — schéma
+préparé (non exécuté), module de matching partagé, dry-run de backfill,
+tests. Voir aussi `docs/03_DATA_REGISTRY/MULTI_REGISTRY_CONTRACT.md` pour
+le contrat détaillé destiné aux futurs collecteurs.
+
+### 10.1 Audit du modèle actuel (§4 de la spec — 12 questions)
+
+1. **Où les identifiants officiels sont-ils stockés ?** `establishments.official_id`
+   (text, migration 0018, colonne UNIQUE) et `establishment_import_staging.official_identifier`
+   (text, migration 0006). Deux colonnes séparées, une par table, jamais synchronisées automatiquement.
+2. **Combien d'identifiants un établissement peut-il représenter aujourd'hui ?**
+   **Un seul.** `official_id` est une colonne scalaire. Prouvé insuffisant en
+   pratique par SPRINT R.3.2 : 161 établissements ont une corroboration
+   officielle réelle (cartescolaire.cm/MINESEC) qui n'a nulle part où vivre
+   structurellement — reléguée en texte libre dans `source_reference`.
+3. **Quels endroits supposent "1 établissement = 1 official_id" ?**
+   Tout script `promote-*.ts` qui écrit `official_id: d.row.official_identifier`
+   dans son payload d'INSERT (5 scripts). Le Review Center
+   (`src/app/dashboard/admin/registre/page.tsx`) affiche un seul champ
+   "Matricule" par ligne. Aucune dépendance côté Search V2 ou claim flow
+   (voir points 8-10).
+4. **Quels scripts utilisent official_id comme clé de déduplication ?**
+   Tous les scripts `promote-*.ts` (priorité 1 dans leur logique de matching,
+   cohérent avec `DEDUPLICATION_RULES.md` §1) + `backfill-minesec-official-ids.ts`
+   + `audit-batch-002-matricules.ts` + `match-batch-001.ts`/`match-batch-002.ts`.
+   29 fichiers au total référencent `official_id`/`official_identifier`
+   (`grep -rl` sur `scripts/school-registry/`).
+5. **Quels index UNIQUE dépendent de cette hypothèse ?**
+   `uq_establishments_source_ministry_official_id` — index UNIQUE PARTIEL sur
+   `(source_ministry, official_id) WHERE official_id IS NOT NULL` (migration
+   0018). Déjà namespacé par ministère (pas un UNIQUE(official_id) global) —
+   bonne pratique déjà en place, mais la colonne scalaire sous-jacente reste
+   la vraie limite (point 2), pas cet index.
+6. **Composants cassés par une migration multi-ID naïve ?** Aucun composant
+   applicatif ne lit `official_id` en dehors du Review Center (point 3) — une
+   migration additive (nouvelle table, `official_id` intact) ne casse rien.
+   Une migration qui SUPPRIMERAIT `official_id` casserait le Review Center et
+   tous les scripts de promotion existants — **non envisagée**, voir §10.2.
+7. **official_id est-il exposé publiquement ?** NON — absent de
+   `src/lib/search/types.ts` (`SchoolSearchResult`), absent de
+   `/api/recherche`, absent des colonnes sélectionnées par `/ecole/[id]`.
+8. **Utilisé dans les claims ?** NON — `src/app/api/claims/route.ts` ne
+   référence ni `official_id` ni `official_identifier`.
+9. **Utilisé dans Search V2 ?** NON — confirmé par audit direct de
+   `src/app/api/recherche/route.ts` et `queryBuilder.ts` (`SEARCHABLE_COLUMNS`
+   n'inclut pas `official_id`).
+10. **Utilisé dans les URLs ?** NON — les routes utilisent `establishments.id`
+    (uuid), jamais `official_id` (`/ecole/[id]`, `/revendiquer/[id]`).
+11. **Utilisé comme FK ailleurs ?** NON — aucune contrainte FK sur cette
+    colonne dans le schéma actuel (vérifié : `official_id` n'apparaît que sur
+    `establishments`, pas référencé depuis une autre table).
+12. **Peut-on ajouter un modèle multi-ID sans supprimer le champ historique ?**
+    OUI — c'est exactement ce que fait la migration préparée §10.2 : table
+    séparée, `official_id` intact, zéro dépendance applicative cassée
+    (points 7-11).
+
+**Conclusion de l'audit** : `official_id` est une colonne à faible risque de
+migration (peu de dépendances, bien isolée) mais structurellement
+insuffisante (colonne scalaire = un seul identifiant). La voie la plus sûre
+est additive, jamais une réécriture destructrice.
+
+### 10.2 Modèle cible — préparé, non exécuté
+
+`supabase/migrations/0021_establishment_registry_identifiers.sql` —
+**PRÉPARÉE MAIS NON EXÉCUTÉE**, comme toute migration de ce projet avant
+validation explicite. Table `establishment_registry_identifiers` : un
+enregistrement par identifiant, `UNIQUE(registry, identifier)`, `authority`/
+`registry` en texte libre (pas un enum fermé — extensibilité sans migration
+répétée), RLS `platform_admin`-only (aucun besoin public confirmé, point 7
+ci-dessus). Détail complet et justification champ-par-champ dans le fichier
+de migration lui-même.
+
+Namespaces authority/registry centralisés dans
+`scripts/school-registry/lib/registryAuthority.ts` — réutilise l'enum
+Postgres existant `registry_source_ministry` comme source de vérité pour
+les autorités déjà connues, ajoute `MINTRANSPORT` comme **constante interne
+stable uniquement** (absente de l'enum Postgres tant qu'aucune migration
+`ALTER TYPE` n'est faite — non faite ici, aucune collecte Transport prévue
+avant son propre audit).
+
+### 10.3 Stratégie de compatibilité `official_id` (§7 de la spec)
+
+```
+PHASE 1 (ce sprint)   — official_id intact. Table establishment_registry_identifiers
+                         préparée (migration 0021, NON exécutée).
+PHASE 2 (futur)       — backfill réel des 1935 official_id MINESEC_ESG valides
+                         (voir dry-run §10.4) + décision produit sur les 161
+                         corroborations cartescolaire actuellement en texte libre.
+PHASE 3 (futur)       — les nouveaux collecteurs (MINESUP etc.) écrivent
+                         directement dans le modèle multi-ID dès leur promotion.
+PHASE 4 (futur)       — code métier (Review Center notamment) lit
+                         progressivement la nouvelle table en plus de/à la
+                         place de official_id.
+PHASE 5 (non planifiée) — dépréciation éventuelle de official_id, seulement
+                         si PHASE 4 démontre que plus aucun code n'en dépend.
+```
+
+Aucune de ces phases n'est exécutée dans ce sprint au-delà de la
+préparation PHASE 1. **MINESEC V1 continue de fonctionner sans modification
+visible** — `official_id` n'est touché nulle part.
+
+### 10.4 Backfill dry-run (§8 de la spec)
+
+Script : `scripts/school-registry/backfill-registry-identifiers-dry-run.ts`
+— LECTURE SEULE, aucune écriture (la table cible n'existe pas encore en
+production). Rapport :
+`reports/registry/registry-identifiers-backfill-dry-run.json`.
+
+| Mesure | Valeur |
+|---|---|
+| Établissements avec official_id | 1938 |
+| ...produiraient un identifiant registry (MINESEC_ESG, longueur conforme) | 1935 |
+| source_ministry MINESEC | 1938 |
+| source_ministry OTHER | 161 |
+| Impossibles à classifier automatiquement | 0 |
+| Valeurs invalides (longueur inattendue) | 3 |
+| Collisions (registry, identifier) | 0 |
+| Identifiants dupliqués (texte, tous registres confondus) | 0 |
+| Identifiants qui seraient insérés (simulation, MINESEC_ESG + MINESEC_CARTESCOLAIRE) | 2096 |
+
+Les 3 "valeurs invalides" (`CES de LINDOI`, `CES de NINONG`, `CES Bilingue
+de NTENAKO` — longueurs 18/16/16 au lieu de 17) sont un constat réel sur les
+données de production, pas une invention — trouvés en corrigeant une
+première version du script qui utilisait une regex de motif de caractères
+trop stricte (voir commentaire dans le script : le segment médian des
+identifiants MINESEC_ESG a 3 variantes légitimes — `1GSF`/`1GSB`/`1GSA`,
+1191/383/361 occurrences — qu'une regex figée aurait classées à tort comme
+invalides).
+
+Scénario double-identifiant (§9 de la spec, cartescolaire + MINESEC pour un
+même établissement) : testé structurellement via fixture locale
+(`lib/matching/__tests__/matching.test.ts` §23.H), pas contre des données de
+production réelles — aucun des 161 établissements Major Cities n'a
+d'identifiant MINESEC_ESG connu par ailleurs (zéro recouvrement direct,
+SPRINT MINESEC V1.1), donc le cas réel "un même établissement avec ses deux
+identifiants simultanément" n'existe pas encore dans les données actuelles.
+
+### 10.5 Matching engine partagé
+
+`scripts/school-registry/lib/matching/` (`engine.ts`, `types.ts`,
+`__tests__/matching.test.ts`, 19 tests) — voir
+`MULTI_REGISTRY_CONTRACT.md` §5-6 pour le détail. Règle permanente : FUZZY
+MATCH != IDENTITY PROOF, aucun niveau autre qu'EXACT_IDENTIFIER/
+EXACT_IDENTITY n'autorise `safeForAutoLink = true`, et ce champ vaut
+`false` pour TOUS les niveaux dans l'implémentation actuelle (aucune fusion
+automatique nulle part, y compris pour un identifiant exact — signal
+"déjà existant", jamais une autorisation de fusion silencieuse de deux
+fiches distinctes).
+
+### 10.6 Review Center — lisibilité future
+
+Audit (§19 de la spec) : `src/app/dashboard/admin/registre/page.tsx` affiche
+aujourd'hui un seul champ "Matricule" (`official_identifier`, staging
+uniquement — pas de vue sur `establishments.official_id` ni sur une future
+table multi-ID). Pour afficher authority/registry/identifiants
+multiples/discovery vs corroboration à terme, il faudrait une requête
+supplémentaire vers `establishment_registry_identifiers` (une fois créée) —
+**non fait dans ce sprint** (refonte UI hors périmètre, §19 : "ne pas
+détourner ce sprint vers un projet UI"). Le modèle de données (§10.2) est
+compatible avec cet affichage futur sans migration destructrice
+supplémentaire.
+
+### 10.7 Search V2 — dépendances auditées, aucune régression
+
+`/api/recherche` ne sélectionne ni ne filtre sur `official_id` (confirmé
+§10.1 point 9). Le modèle multi-ID n'introduit aucune dépendance nouvelle
+côté recherche publique — les identifiants de registre restent
+`platform_admin`-only (§10.2, RLS). Suite de tests existante (49 tests
+extraction+search) rejouée sans modification ce sprint, voir rapport final.
