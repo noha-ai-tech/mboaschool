@@ -1,0 +1,51 @@
+{
+  "sprint": "REGISTRY-MULTI-B",
+  "operator": "jean-merlain",
+  "approved_by": "Jean Merlain",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "migration": "supabase/migrations/0021_establishment_registry_identifiers.sql",
+  "execution_method": "Supabase Dashboard SQL Editor (manuelle, hors environnement agent — aucun accès direct au Postgres wire protocol ni au CLI lié disponible dans cet environnement, cohérent avec docs/03_DATA_REGISTRY/PRODUCTION_MIGRATION_STATE.md qui documente le même mode opératoire pour les migrations 0006 et 0016)",
+  "executed_at_reported_by_operator": "2026-08-19",
+  "verified_at": "2026-08-19T00:00:00.000Z",
+  "verification_method": "Vérification empirique via API REST Supabase (service_role + anon key) — pas d'accès à information_schema/pg_catalog depuis cet environnement, donc vérification par comportement fonctionnel plutôt que par introspection de catalogue.",
+  "table_created": true,
+  "table_verification": "GET /rest/v1/establishment_registry_identifiers -> HTTP 200 (était 404 avant)",
+  "columns_verified": [
+    "id", "establishment_id", "authority", "registry", "identifier", "identifier_type",
+    "source_url", "source_reference", "verification_status", "is_primary",
+    "first_seen_at", "last_verified_at", "created_at", "metadata"
+  ],
+  "columns_verification_method": "OpenAPI schema description (GET /rest/v1/ avec Accept: application/openapi+json) — 14/14 colonnes attendues présentes, aucune colonne manquante ni inattendue.",
+  "constraints": {
+    "uq_registry_identifiers_registry_type_identifier": {
+      "expected": "UNIQUE(registry, identifier_type, identifier)",
+      "verified": true,
+      "verification_method": "Insertion de test contrôlée : (A) une ligne insérée avec succès ; (B) une seconde ligne avec le même triple (registry, identifier_type, identifier) REJETÉE avec l'erreur Postgres exacte 'duplicate key value violates unique constraint \"uq_registry_identifiers_registry_type_identifier\"' — nom de contrainte confirmé caractère pour caractère identique à celui défini dans le fichier de migration ; (C) une troisième ligne avec le même (registry, identifier) mais un identifier_type DIFFÉRENT insérée avec succès, confirmant que identifier_type fait bien partie de la contrainte (pas seulement registry+identifier). Les 2 lignes de test ont été supprimées immédiatement après vérification."
+    },
+    "uq_registry_identifiers_one_primary_per_establishment": {
+      "expected": "UNIQUE(establishment_id) WHERE is_primary",
+      "verified": true,
+      "verification_method": "Insertion de test : une première ligne is_primary=true pour un établissement test acceptée ; une seconde ligne is_primary=true pour LE MÊME établissement (registre différent) REJETÉE avec l'erreur exacte 'duplicate key value violates unique constraint \"uq_registry_identifiers_one_primary_per_establishment\"'. Lignes de test supprimées immédiatement après vérification."
+    },
+    "idx_registry_identifiers_establishment": {
+      "expected": "index non-unique sur establishment_id (lookup)",
+      "verified": "NON VÉRIFIABLE DIRECTEMENT",
+      "verification_method": "Un index non-unique ne produit aucune erreur observable via l'API REST s'il est absent (impact uniquement sur la performance, pas sur la correction). Inférence raisonnable : les 3 instructions CREATE INDEX du fichier de migration ont été exécutées dans le même run SQL Editor que les 2 index uniques ci-dessus, dont l'exécution a été positivement confirmée par comportement — absence de preuve directe, mais aucun signal contraire non plus."
+    }
+  },
+  "rls": {
+    "enabled": true,
+    "verification_method": "SELECT sur la table via la clé ANON (pas service_role) -> 0 lignes retournées, alors que la clé service_role voit les lignes de test insérées au même moment — confirme que RLS filtre activement les lecteurs non privilégiés.",
+    "platform_admin_policy_present": "présumée présente (définie dans le fichier de migration exécuté tel quel), non testée directement faute d'un compte platform_admin de test disponible dans ce sprint — cohérent avec la portée READ-ONLY/AUDIT de ce sprint, aucun compte de test créé."
+  },
+  "database_unchanged_check": {
+    "establishments_before": 2151,
+    "establishments_after_migration": 2151,
+    "staging_before": 2252,
+    "staging_after_migration": 2252,
+    "official_id_column_touched": false,
+    "note": "Le fichier de migration ne contient aucune instruction ALTER/UPDATE/DELETE sur establishments ou establishment_import_staging — confirmé par lecture intégrale du fichier avant exécution (pré-flight) et par comptage inchangé après exécution."
+  },
+  "test_rows_cleanup_confirmed": true,
+  "final_row_count_before_backfill": 0
+}

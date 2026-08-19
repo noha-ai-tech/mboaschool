@@ -30,3 +30,6 @@ yarn-error.log*
 # Durable artifacts belong in data/registry/raw/, reports/registry/, or scripts/school-registry/
 # itself as a named reusable script — never here.
 scripts/school-registry/tmp/
+
+# Supabase CLI local state (SPRINT REGISTRY-MULTI-B) — version cache only, not a project artifact.
+supabase/.temp/

@@ -1,0 +1,57 @@
+{
+  "sprint": "REGISTRY-MULTI-B",
+  "operator": "jean-merlain",
+  "approved_by": "Jean Merlain",
+  "generated_at": "2026-08-19T00:00:00.000Z",
+  "note_on_verification_bug": "Le premier passage de vérification post-hoc (script registry-multi-b-backfill.ts) a lu establishment_registry_identifiers SANS pagination complète, plafonné par défaut à 1000 lignes par PostgREST — sur 2096 lignes réelles, 1096 ont été comparées à tort comme 'manquantes'/'collision', et le calcul d'idempotence initial comparait 1000 vs 2096 pour la même raison. C'était un bug de LECTURE dans le script de vérification (résolu par scripts/school-registry/registry-multi-b-verify-fix.ts, pagination complète par .range()), PAS un problème d'ÉCRITURE — chaque lot d'upsert du backfill original faisait ≤500 lignes, largement sous le plafond, donc les données insérées étaient déjà correctes dès le premier passage. Ce rapport contient les chiffres CORRIGÉS et re-vérifiés avec pagination complète.",
+  "database": {
+    "establishments_before": 2151,
+    "establishments_after": 2151,
+    "staging_before": 2252,
+    "staging_after": 2252,
+    "registry_identifiers_before": 0,
+    "registry_identifiers_after": 2096
+  },
+  "minesec_esg_backfill": {
+    "establishments_with_official_id": 1938,
+    "inserted_valid_length_17": 1935,
+    "review_required_excluded": 3,
+    "unclassifiable_non_minesec_excluded": 0
+  },
+  "cartescolaire_backfill": {
+    "candidates_expected": 161,
+    "candidates_exploitable": 161,
+    "inserted": 161,
+    "missing": 0,
+    "registry_import_batch": "major-cities-official-corroboration-v1",
+    "approval_checksum": "d7f7cb6eef13cd59304e0dcbe0e6223f8ab1557a1e95dec667afbed630cb3025"
+  },
+  "overlap_between_populations": 0,
+  "total_rows_intended": 2096,
+  "total_rows_confirmed_present_after_full_pagination_check": 2096,
+  "truly_missing_after_full_pagination": 0,
+  "duplicate_triples_in_table": 0,
+  "collisions_detected": 0,
+  "collision_detail": [],
+  "idempotence_test": {
+    "count_before_second_run": 2096,
+    "count_after_second_run": 2096,
+    "second_run_new_inserts": 0,
+    "idempotent": true
+  },
+  "orphan_identifiers": 0,
+  "official_id_modified": 0,
+  "owner_modified": 0,
+  "verified_modified": 0,
+  "not_imported_by_design": {
+    "cartescolaire_full_national_dataset_5307_rows": true,
+    "minesec_v1_2_backlog": true,
+    "minesup_data": true,
+    "other_ministries": true
+  },
+  "review_required_detail": [
+    { "establishment_id": "350ba4b3-4e68-44fe-8181-b1d682b16274", "name": "CES de LINDOI", "official_id": "5ME1GSFD100552107A", "length": 18, "expected_length": 17 },
+    { "establishment_id": "5ebebfc6-09f2-499d-ab33-3dc6efd0a48f", "name": "CES de NINONG", "official_id": "7CMGSFD102683114", "length": 16, "expected_length": 17 },
+    { "establishment_id": "e3225c5e-957c-431d-a62d-02b4b1c1fc29", "name": "CES Bilingue de NTENAKO", "official_id": "6IEGSBD102697114", "length": 16, "expected_length": 17 }
+  ]
+}

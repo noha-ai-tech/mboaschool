@@ -1,0 +1,4 @@
+category,establishment_id,name,official_id_or_identifier,source_ministry,reason
+MINESEC_REVIEW_REQUIRED,350ba4b3-4e68-44fe-8181-b1d682b16274,CES de LINDOI,5ME1GSFD100552107A,MINESEC,"longueur inattendue (18 caractères, attendu 17) — REVIEW_REQUIRED, non inséré"
+MINESEC_REVIEW_REQUIRED,5ebebfc6-09f2-499d-ab33-3dc6efd0a48f,CES de NINONG,7CMGSFD102683114,MINESEC,"longueur inattendue (16 caractères, attendu 17) — REVIEW_REQUIRED, non inséré"
+MINESEC_REVIEW_REQUIRED,e3225c5e-957c-431d-a62d-02b4b1c1fc29,CES Bilingue de NTENAKO,6IEGSBD102697114,MINESEC,"longueur inattendue (16 caractères, attendu 17) — REVIEW_REQUIRED, non inséré"
