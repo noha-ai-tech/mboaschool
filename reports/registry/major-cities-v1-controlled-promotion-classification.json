@@ -1,0 +1,3116 @@
+{
+  "generated_at": "2026-08-19T03:00:46.948Z",
+  "total": 310,
+  "tally": {
+    "ALREADY_LIVE": 1,
+    "CLEAN_APPROVABLE": 0,
+    "DUPLICATE_REVIEW": 90,
+    "SOURCE_REVIEW": 219,
+    "IDENTITY_REVIEW": 0,
+    "LOCALITY_REVIEW": 0,
+    "INSUFFICIENT_SOURCE": 0,
+    "REJECTED": 0
+  },
+  "decisions": [
+    {
+      "staging_id": "e37bfbae-158a-402d-9a1b-a9f34e0e1b55",
+      "name_raw": "CEFTI",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "ea7c760b-ea36-4fb3-a22c-579b6b28cd76",
+      "name_raw": "CEGT MALANGUE",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "293f466f-a9fb-4ef9-998d-a9e23d3cf8a3",
+      "name_raw": "CETI NGUEUGA",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "a4196e2a-03c5-4271-be1b-0c423b4cc9cc",
+      "name_raw": "CETI STE CECILE",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "7c697aa7-2299-48e8-a396-1cff6c9f33a9",
+      "name_raw": "COLLEGE ANDRE MALRAUX",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "520a0ebd-d333-4fb8-a9d1-3f082fabdbf0",
+      "name_raw": "COLLEGE BENEDICTE",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "b2042a09-4a41-4594-aa2a-bd47f61f1cf3",
+      "name_raw": "COLLEGE BILINGUE ADONAÏ",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "953ed8a0-db0b-4e92-b17d-e0bd7bfd8355",
+      "name_raw": "COLLEGE BILINGUE BONCHOUO",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "05a62eff-a78f-4ab9-afa0-5075b9e933cb",
+      "name_raw": "COLLEGE BILINGUE EMERGENCE MIAFO SOLANGE",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "76810653-17e2-4871-8b4f-7a64c6a27e84",
+      "name_raw": "COLLEGE BILINGUE FANON ET CESAIRE",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "a4c189dc-69e8-4b53-b493-8e226ad7fee5",
+      "name_raw": "COLLEGE BILINGUE LA CADENELLE",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "f151be76-dd16-4c1a-8629-b43991c71d51",
+      "name_raw": "COLLEGE BILINGUE L'ORCHIDEE",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "f439adb4-1677-452e-ac47-97f1119f1140",
+      "name_raw": "COLLEGE BILINGUE LA PERLE",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "e3e0380c-ccdc-4184-a6bd-761f74adeca8",
+      "name_raw": "COLLEGE BILINGUE LAVAL",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "77315b6b-f363-4374-80fd-990fa818b5bb",
+      "name_raw": "COLLEGE BILINGUE LE PETIT ROUSSEAU",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de BOBONGO-PETIT-PARIS\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "175d0b2f-efc0-4c53-ba09-4b37da0c465e",
+      "name_raw": "COLLEGE BILINGUE LES LEADERS",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "fc63ea31-f080-4630-886c-3662925026d3",
+      "name_raw": "COLLEGE BILINGUE MATURITE",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "858eecac-76f7-40a8-ae2c-73052b722b10",
+      "name_raw": "COLLEGE CHARLES DE GAULLE",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "a29dca3f-37f6-45bd-b66e-4765ba9f5cb0",
+      "name_raw": "COLLEGE CHRISTINA",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "9c87ac95-9eba-4caa-a980-79782e3cab2b",
+      "name_raw": "COLLEGE DE LA RESPONSABILITE",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "3c77ad32-42f6-43c5-bd0f-a43923e6b655",
+      "name_raw": "COLLEGE DE LA RETRAITE EDINGELE",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "0763cf1b-308d-4885-96d6-096b8395d16e",
+      "name_raw": "COLLEGE DU LEVANT BONABERI",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Polyvalent de BONABERI\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "35dbc7ad-bf07-4f36-9236-9b46b3ca4842",
+      "name_raw": "FONDATION KAMTCHOUM-NDAMI COLLEGE",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/colleges-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "5485d520-75a4-43b3-a23f-e91c184eb49c",
+      "name_raw": "Lycée d'Akwa",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce d'AKWA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "15a49361-77dd-469a-b887-99e262c128ef",
+      "name_raw": "Lycée Technique d'Akwa",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce d'AKWA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "5f2025db-8c83-4b8f-9e5b-8c4fea8a05a2",
+      "name_raw": "Lycée Technique de Bonadoumbè",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirelittoral0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "88fbf516-b6e2-47bc-9f27-0dc37bbc7afd",
+      "name_raw": "Lycée Technique de Douala-Koumassi",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"École Protestante Centrale de Douala\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "5ef30f0b-125e-4178-b6d0-fb8726a431cc",
+      "name_raw": "Lycée Mongo Joseph",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce TSF MONGO JOSEPH\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "6c012224-a537-4f15-a70c-06a9f1456295",
+      "name_raw": "Lycée Bilingue de Nyalla",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de NYALLA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "8e1b63a5-a712-485b-8061-97b31fb1dff4",
+      "name_raw": "Lycée Génie Militaire",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue du GENIE MILITAIRE\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "2e5e271b-28b9-4c36-bbb0-ceb7377290c2",
+      "name_raw": "Lycée de Japoma",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de JAPOMA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "8f1c5054-e488-465b-845d-dc27d204ea97",
+      "name_raw": "Lycée Bilingue de PK21-Massoumbou",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce de PK21\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "64cf5273-ee9a-4c1a-bd62-cc12cb655ff0",
+      "name_raw": "Lycée Bilingue de Ngodi-Bakoko",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de NGODI-BAKOKO\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "0ac85afb-0984-44bc-a960-9d2419d4e0b8",
+      "name_raw": "Lycée Bilingue de Bobongo Petit-Paris",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de BOBONGO-PETIT-PARIS\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "3a8a40a7-ba07-46bc-8102-c481e8a5a080",
+      "name_raw": "Lycée d'Oyack",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce d'OYACK\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "2e5aab21-5a12-4703-8d9b-2fcb1fab2845",
+      "name_raw": "Lycée de Ndog Hem",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"CES de NDOG-BABEM\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "b9403150-0b94-4fc1-b79c-b9d9cce1e302",
+      "name_raw": "Lycée Bilingue de Nylon Ndogpassi",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de NYLON-NDOGPASSI\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "a30ec37e-ba2a-41e3-bc9c-f0a3054a7344",
+      "name_raw": "Lycée Bilingue de Nylon-Brazzaville",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de NYLON-NDOGPASSI\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "f49b2465-5d15-46b9-aa06-94a5a22ae300",
+      "name_raw": "Lycée Technique de Nylon-Ndogpassi ZR",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de NYLON-NDOGPASSI\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "54cceb4d-bb50-438b-ba7b-644def31daa4",
+      "name_raw": "Lycée Polyvalent de Bonabéri",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Polyvalent de BONABERI\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "3eb74748-621b-4335-961a-389e106f4447",
+      "name_raw": "Lycée de Sodiko",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de SODIKO\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "f89529f8-0255-425c-b010-54e211d88931",
+      "name_raw": "Lycée Bilingue de Bonassama",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de BONASSAMA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "160499cc-d179-4ee0-81ac-4169bee9b2af",
+      "name_raw": "Lycée Bilingue de Bonabéri",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Polyvalent de BONABERI\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "d6b0ff63-9e25-4ef6-92d9-862a85b3a649",
+      "name_raw": "Lycée Bilingue de Bojongo",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de BOJONGO\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "3805fb48-88b4-4ab5-9c39-73b6f85b7332",
+      "name_raw": "Lycée Bilingue de Mambanda",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de MAMBANDA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "a11111b7-8f0c-4d56-9532-cf0054e1a2fd",
+      "name_raw": "Lycée Technique de Bonabéri-Bonendalè",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Polyvalent de BONABERI\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "064726fa-427f-48e8-a40c-676e23cb1a7f",
+      "name_raw": "Lycée Bilingue de Makepe",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce de MAKEPE\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "8f24afd1-468b-4d3d-8eb0-7638a7569740",
+      "name_raw": "Lycée d'Akwa-Nord Bonamoussadi",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce d'AKWA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "1b96f6c3-21c6-4c74-86c7-0e054812187e",
+      "name_raw": "Lycée Bilingue de Logpom",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de LOGPOM II\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "039228f9-23d7-4e9c-9402-dfd1a2e7cc89",
+      "name_raw": "Lycée Bilingue de Bépanda",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de BEPANDA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "f0b0cb11-00b0-4834-8483-6618950f14e4",
+      "name_raw": "CES de la Cité Sic",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "ALREADY_LIVE",
+      "reason": "correspondance exacte de nom avec établissement(s) live déjà présents : CES de la CITE-SIC"
+    },
+    {
+      "staging_id": "d3ca6819-8cff-4465-a0c1-7c1682058cf0",
+      "name_raw": "CETIC de Logbessou",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"CES Bilingue MOUNGUI DE LOGBESSOU\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "183bf20c-455c-4f03-b6a0-06da4c713f60",
+      "name_raw": "Lycée Bilingue de Manoka",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://memoirelittoral0.jimdofree.com/secondaire/littoral/etablissements-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de MANOKA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "04408274-1ce0-4891-a8a5-8486eed17427",
+      "name_raw": "COLLEGE BILINGUE EXCELLENCE TERCIO",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://www.inovedu.net/fr/schooldirectory/schools/cameroon/douala/secondaire/college-bilingue-excellence-tercio",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (www.inovedu.net) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "26602a4d-3f48-4f42-8278-a5f50d2923f0",
+      "name_raw": "COLLEGE POLYVALENT BILINGUE BAHO",
+      "city": "Douala",
+      "region": "Littoral",
+      "source_url": "https://www.inovedu.net/fr/schooldirectory/schools/cameroon/douala/secondaire/college-polyvalent-bilingue-baho",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (www.inovedu.net) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "a5a89856-0b97-4ce7-a5db-dd5aa4f9940f",
+      "name_raw": "Lycée d'Emana",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue d'EMANA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "c17d5a74-9d2e-4a29-a9cf-ef8c6ab597c5",
+      "name_raw": "Lycée de Nkolondom",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce de NKOLONDOM\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "fbe2e19b-6a17-4335-8efa-1accb7c52fc5",
+      "name_raw": "Lycée de Mballa II",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce de MBALLA II\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "e55f4e23-877d-411a-adf8-9cba1ede94c4",
+      "name_raw": "Lycée d'Elig-Essono",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce d'ELIG-MFOMO\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "369770b6-38e4-41e8-9947-65b32fab8512",
+      "name_raw": "Lycée Bilingue de Nkoleton",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "0a3a2e82-e96b-453b-b910-d6340d59cfa1",
+      "name_raw": "CES de Nyom",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de NYOM\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "29c8df48-98f4-4229-b6de-4c992be66fa7",
+      "name_raw": "Lycée Technique Charles Atangana",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/technique-ca/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "7a0b79dc-3942-442f-aa2d-bd3260ef5389",
+      "name_raw": "Lycée Technique de Nsam-Efoulan",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce de NSAM-EFOULAN\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "644fb51e-0a87-45ed-91b6-098459d85c41",
+      "name_raw": "Lycée de la Cité Verte",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce de LA CITE-VERTE\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "d759f137-b331-48a7-b9ff-05dbf9e631bf",
+      "name_raw": "Lycée de Tsinga",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"CES de TSINGA-VILLAGE\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "868ca235-013e-4cf5-b91e-0b3162495004",
+      "name_raw": "Lycée Technique de Yaoundé II",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"École Protestante de Yaoundé\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "70a812f8-7b99-4450-bbf0-115ebcd775a1",
+      "name_raw": "Lycée de Ngoa-Ekellé",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce de NGOA-EKELLE\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "7b95a190-43f6-42c1-8ca2-c9b2c1e5ee79",
+      "name_raw": "Lycée Bilingue d'Application",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue d'APPLICATION\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "b50c363f-5b39-4ed0-affb-50593e37db83",
+      "name_raw": "Lycée de Nsam-Efoulan",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce de NSAM-EFOULAN\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "8585fc29-47e5-48f1-aac4-e1ae2d122515",
+      "name_raw": "Lycée de Biyem-Assi",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce de BIYEM-ASSI\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "c9f8eb0b-eea8-4868-853a-9ee7b6fdae75",
+      "name_raw": "Lycée d'Afan Oyoa",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "07fb8a3b-97ef-4b43-b0aa-988976020786",
+      "name_raw": "Lycée d'Ahala",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce d'AHALA II\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "54877dae-8e1f-4fac-ae25-fd3ffc62e9fd",
+      "name_raw": "Lycée Technique Industriel et Commercial Bilingue",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "0fb18648-bb11-45c3-a136-341ed2070934",
+      "name_raw": "Lycée Technique Bilingue de Nsam-Efoulan",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce de NSAM-EFOULAN\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "ed845d5a-f589-4182-a44f-012185c3a5c3",
+      "name_raw": "Lycée Technique d'Afan Oyoa",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "cd173df1-202b-4405-a1d4-bf09e6aea8ed",
+      "name_raw": "CETIC de Ngoa-Ekellé",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce de NGOA-EKELLE\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "cd5c6bb3-3ff0-40a5-a53d-bb517a6ef582",
+      "name_raw": "CETIF de Ngoa Ekelle",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce de NGOA-EKELLE\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "b14df660-7538-48b9-a3d8-a2a960b857d8",
+      "name_raw": "Lycée Bilingue d'Ekounou",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue d'EKOUNOU\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "80725a1d-ba16-4d03-b32a-547b717a2a6d",
+      "name_raw": "Lycée Bilingue d'Anguissa",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce d'ANGUISSA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "17fb5817-2774-4ad4-aa67-b9d6fced7768",
+      "name_raw": "Lycée Bilingue de Mimboman",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de MIMBOMAN\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "e71eacf0-d530-47bd-8d40-0e561198ff25",
+      "name_raw": "Lycée d'Odza",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce d'ODZA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "a0185465-25cc-409a-a672-e963537ec35b",
+      "name_raw": "Lycée de Minkan",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce de MINKAN\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "265a2fb0-37ed-44bd-82f9-1b902cf64682",
+      "name_raw": "Lycée Technique d'Ekounou",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue d'EKOUNOU\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "34c653cb-bb8a-40de-bff4-9f97be993e5b",
+      "name_raw": "Lycée Bilingue d'Essos",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "79fd8e28-022b-45ec-8b0e-a8c9a8525454",
+      "name_raw": "Lycée de Ngousso-Ngoulmekong",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce de NGOUSSO-NGOULMEKONG\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "64179d48-78a6-48ec-a6e3-fb7ca4492fed",
+      "name_raw": "Lycée de Nkolmesseng",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce de NKOLMESSENG\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "fa1830a2-b09f-4226-aae0-57178be2881b",
+      "name_raw": "Lycée Bilingue de Mendong",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"CES de MENDONG II\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "ff8f8bbf-b030-4f8d-a410-ff316ea101ae",
+      "name_raw": "Lycée Bilingue d'Etoug-Ebé",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue d'ETOUG-EBE\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "0a4b6e02-c0ed-48af-885c-f65e99ef3917",
+      "name_raw": "Lycée d'Ekorezok",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-publics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue d'EKOREZOK\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "a838f199-6514-4598-b9a2-dacb5041c0fe",
+      "name_raw": "Collège Jean Tabi",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-catholiques/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "597e6376-f70d-46bf-8db3-1618656f25ab",
+      "name_raw": "Collège Bénoit XVI",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-catholiques/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "57c13a2e-9dda-4071-a284-a7e92c17fd7b",
+      "name_raw": "Collège Benigna d'Etoudi",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-catholiques/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "e2d2aea9-1a8a-460a-b824-336000e4ff2f",
+      "name_raw": "Collège Notre-Dame de Mimetala",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-catholiques/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "364585f3-261c-48d2-a3f8-c685bdf1b274",
+      "name_raw": "Collège Benisuza",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-catholiques/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "b31aea1f-d191-4e11-bc99-21ab49892dd1",
+      "name_raw": "Collège St Joseph de Messa Mvelé",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-catholiques/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "09d0f53a-4bc4-4b2a-a6c3-bf795deb7714",
+      "name_raw": "Collège Notre-Dame des Victoires",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-catholiques/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "7551ab3a-59fc-4cfd-870f-73e58d037428",
+      "name_raw": "Institut René Graffin",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-catholiques/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "8f6415f7-d4f7-48a8-ba8e-3aeb148a1479",
+      "name_raw": "CETIF Benigna",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-catholiques/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "9641eb2e-5bc3-408b-86b2-1f12c38803d5",
+      "name_raw": "CETI Jeanne Alegué",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-catholiques/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "b4c66003-169b-4f9b-80cf-cbbfca487ad2",
+      "name_raw": "CETIG Bénédictin du Mt Febé",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-catholiques/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "a3a8ff52-2214-445e-961f-4f68cbd04ccb",
+      "name_raw": "GOPAL BILINGUAL SECONDARY SCHOOL",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "7a48f1e0-5288-430e-8ee4-72cc24ca6454",
+      "name_raw": "ACADEMIC COLLEGE OF EXCELLENCE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "8adeea6d-52c3-4186-a9cf-788c942ed374",
+      "name_raw": "BILIK-CITY BILINGUAL COMPLEX",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "18cfbc19-27e1-46f1-be7e-86dde2aa7f05",
+      "name_raw": "COLLEGE BILINGUE PRIVE LAIC WILLIAN BOOTH",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "3d9b17ff-165f-4588-a60b-5ac61d013555",
+      "name_raw": "COLLEGE BILINGUE SEAT OF WISDOM",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "d175b046-532f-4397-971f-649df9870626",
+      "name_raw": "COLLEGE BILINGUE SIBAFO",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "0c7c6bc1-bb03-4bc9-aebe-8961a375617b",
+      "name_raw": "COLLEGE FIDO",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "5b57572c-de6b-429b-9c7b-86d06ca86be9",
+      "name_raw": "COLLEGE IPLEX EDUCATION",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "b5c86685-b04a-4df0-a495-c8dae01f95e0",
+      "name_raw": "COLLEGE OLIVERAIE DE NYOM",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de NYOM\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "f8da5961-afd3-49f1-bb6b-018df0754271",
+      "name_raw": "COLLEGE OMGBA NDONGO",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"CES de NDONGO-CENTRE\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "ae93f779-c630-4d15-bcb3-e9e05ac9742f",
+      "name_raw": "COLLEGE PENIEL",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "1df14bdc-5bfc-4a27-a141-21162ae6c49d",
+      "name_raw": "COLLEGE PRIVE BILINGUE LES PIERRES PRECIEUSES",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "805375b3-eee6-4cd7-bc2b-821482efcd86",
+      "name_raw": "COLLEGE PRIVE LAÏC CHARLES MBAKOP",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "cb0abbb4-7a6a-43c6-87dc-02af4216816d",
+      "name_raw": "COLLEGE PRIVE LAÏC FAPO",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "doublon interne au batch (même établissement collecté deux fois, variante orthographique de la source)"
+    },
+    {
+      "staging_id": "3ab9ad68-123f-4118-8632-a96635b95979",
+      "name_raw": "COLLEGE PRIVE LAÏC L'EMERGENCE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "d48e0d60-6af9-4308-a468-4189698dde6b",
+      "name_raw": "COLLEGE PRIVE LAÏC LA FORGE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "5386b0c3-86a4-4d69-9c20-d4c1d118946a",
+      "name_raw": "COLLEGE PRIVE LAÏC MARCEL BAYARDON",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "d6f37126-a526-415f-ace4-c7aa5b174864",
+      "name_raw": "COLLEGE PRIVE LAÏC MVOM-NNAM",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "46cd8388-0d71-4b7f-93f4-89589c57a4ec",
+      "name_raw": "COLLEGE SOCRATE ELANDI",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "661f12ac-1b75-4386-bd77-e6b84addea61",
+      "name_raw": "COMPLEXE SCOLAIRE BILINGUE METENOU",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "f505132b-8cf1-4daa-8471-b690298cb789",
+      "name_raw": "COMPLEXE SCOLAIRE ILE EDUCATIVE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "c4ec5341-c19b-4ff3-803f-7cd6dab42a87",
+      "name_raw": "COMPLEXE SCOLAIRE INTERNATIONALE \"LA GAIETE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "7634bcfe-1190-4717-9176-58a791ca0a7f",
+      "name_raw": "COMPLEXE SCOLAIRE ORNEL BILINGUAL ACADEMY",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "cd401950-dd5e-4489-bdfb-84306b028f7d",
+      "name_raw": "CTI-NYOM",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de NYOM\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "f9060410-d218-49cd-91b1-86afc59e802a",
+      "name_raw": "FONDATION TSOUNGUI",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "6a949ee2-dac9-47cf-b9c0-fd4713976f9d",
+      "name_raw": "INSTITUT BILINGUE D'ETOUDI",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "632fab45-b9b6-4e26-8428-5250c2653dcb",
+      "name_raw": "INSTITUT BILINGUE TOUMWA (IBT)",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "ad534f58-52f6-4f02-bcf1-b8aaa59cf372",
+      "name_raw": "INSTITUT BLAISE PASCAL",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "fd6168df-d484-44d5-8d41-e35340beffe9",
+      "name_raw": "INSTITUT MATAMFEN",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "471946a4-3053-43e7-ae85-0b8078e41e2d",
+      "name_raw": "INSTITUT MODERNE MBASSI",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Moderne de NLONG\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "fd93be9c-aee6-449c-9338-d8cc0dae53c6",
+      "name_raw": "INSTITUT POLYVALENT JUNIOR",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "2afd2b41-596d-44b5-ad3c-53264e43cdac",
+      "name_raw": "INSTITUT PRIVE LAÏC DE DEVELOPPEMENT INDUSTRIEL ET COMMERCIAL (ISDIC)",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "3b5d047f-7cd7-4104-8218-b4c9b88694c4",
+      "name_raw": "COLLEGE DE L'UNITE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "38f52a0b-44cb-4fd3-8d81-355a0ab9c024",
+      "name_raw": "COLLEGE TECHNIQUE INDUSTRIEL",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "12048d04-0ac5-43d8-92ee-9b4606422255",
+      "name_raw": "CETI BENIGNA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "f07b4e2a-f266-4564-973b-c2f7e740221b",
+      "name_raw": "COLLEGE PRIVE LAIC FAPO",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "doublon interne au batch (même établissement collecté deux fois, variante orthographique de la source)"
+    },
+    {
+      "staging_id": "ac5cb5af-55aa-4f16-bbe4-062501eda37d",
+      "name_raw": "COLLEGE PRIVE LAIC INSTITUT JEAN BODY ZIBI",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "8c616a3e-f716-49fd-a19b-3531d93c4b0f",
+      "name_raw": "BODIO BILINGUAL COMPLEX",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "d5a7bcd2-cec7-4dab-b571-9ebd2bdd9bf4",
+      "name_raw": "CAMEROON SCHOOL OF EXCELLENCE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "bb185b53-452b-49d8-b923-7f306e4de49e",
+      "name_raw": "COLLEGE BILINGUE GOLDEN INSTITUTE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "fd8cfb17-b56d-448d-a8bd-a3fde9475a9b",
+      "name_raw": "COLLEGE FADIMATOU HADJA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "doublon interne au batch (même établissement collecté deux fois, variante orthographique de la source)"
+    },
+    {
+      "staging_id": "6173603e-1639-4ce4-b143-f9adee4519af",
+      "name_raw": "COLLEGE FOCHE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "1c5f0895-33a5-491d-9f0a-64c1c40a244d",
+      "name_raw": "COLLEGE LA DIGNITE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "6cb2ead2-e4aa-4fdf-9a41-8ce67f2a6434",
+      "name_raw": "COLLEGE MATHIEU ET CLAIRE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "c4851730-c721-47cb-a1ac-2377c4628af5",
+      "name_raw": "COLLEGE POLYVALENT SAINT AUGUSTIN",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "8e335efa-807c-497d-b89d-347a07cc6ee9",
+      "name_raw": "COLLEGE PRIVE DU SUCCES",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "80dd9363-42cf-4ffa-9bc0-d7a492daf676",
+      "name_raw": "COLLEGE PRIVE LAIC DE L'ESPERANCE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "9e30b614-8b57-4156-890d-294479712f13",
+      "name_raw": "COLLEGE PRIVE LAÏC DJA'ANKEU",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "bd941dbe-3efe-4720-889d-a001f83c3544",
+      "name_raw": "COLLEGE PRIVE LAIC LAROUSSE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "7e4ba5ec-7b29-494b-95e1-0969917f8eb4",
+      "name_raw": "COLLEGE PRIVE LAÏC LE \"FANION\"",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "2e9b534c-4348-4bb5-92aa-8b4e0173bc5d",
+      "name_raw": "COLLEGE PRIVE LAIC LES CHANTERELLES",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "8a97521e-04eb-46b8-83b4-70f241cbca1e",
+      "name_raw": "COLLEGE PRIVE LAIC LES LILAS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "56090dea-274f-4e8e-9c63-62d6977e8060",
+      "name_raw": "COLLEGE PRIVE LAÏC MONTESQUIEU",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "220335c1-f4c6-4fde-ad8d-b8c13967c3df",
+      "name_raw": "COLLEGE PRIVE LAÏC SAINT-EXUPERY",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "dc2be60c-964c-48ab-9df4-af337b0fdaf0",
+      "name_raw": "COLLEGE PRIVE LAIC TOUSSAINT ANTOINE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "63d5a339-ed0e-4f76-badd-01e922b7cd86",
+      "name_raw": "COLLEGE PRIVE MONGO BETI",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "352c817f-8b7c-4b6d-b754-30119404a62b",
+      "name_raw": "COURS DU SOIR FADIMATOU HADJA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "435f8936-87d2-4adb-a6b7-efe2e5a12c84",
+      "name_raw": "INSTITUT DE LA REFERENCE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "59d95502-2f5f-4b9d-84ad-e9aebc507210",
+      "name_raw": "INSTITUT PRIVE LAÏC ESSOMBA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "doublon interne au batch (même établissement collecté deux fois, variante orthographique de la source)"
+    },
+    {
+      "staging_id": "c93d248a-ecb1-4c06-a8e2-8c92563c162b",
+      "name_raw": "INSTITUT PRIVE LAÏC MBEUKAM",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "31da4bb0-eab2-4965-9be3-db9918b2c058",
+      "name_raw": "INSTITUT PRIVE LAÏC SIANTOU",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "97cffb99-32b8-4115-8e37-c20ba1c2da42",
+      "name_raw": "INSTITUT SAMBA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "290c61b6-3acf-4082-9fd7-5e539e657842",
+      "name_raw": "NOTRE DAME DE LA BONNE SEMENCE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "38493dd7-c95a-4010-833d-5c6e7d7c8f4a",
+      "name_raw": "ROBEN MEMORIAL EDUCATIONAL COMPLEX",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "f09a235b-0a2e-41d4-9e38-ee2722beaa75",
+      "name_raw": "COLLÈGE FADIMATOU HADJA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "doublon interne au batch (même établissement collecté deux fois, variante orthographique de la source)"
+    },
+    {
+      "staging_id": "d81141ee-4962-4eef-ae53-46fdc3281cae",
+      "name_raw": "INSTITUT PRIVE LAIC ESSOMBA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "doublon interne au batch (même établissement collecté deux fois, variante orthographique de la source)"
+    },
+    {
+      "staging_id": "c65852ca-944b-4467-9b49-3c70f3c483da",
+      "name_raw": "COLLEGE D'ENSEIGNEMENT TECHNIQUE INDUSTRIEL FEMININ",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "4396fc55-1b99-4b0f-b599-62bed83be8ad",
+      "name_raw": "COLLEGE PRIVE LAIC DE L'ESPERANCE (COPES)",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "4016d84a-e507-48b5-b175-03ffbe1ff58e",
+      "name_raw": "COLLEGE PRIVE LAIC GOLDEN INSTITUTE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "31339da2-7153-4a71-bc64-dea496e18925",
+      "name_raw": "COLLEGE PRIVE LAIC LA DIGNITE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "983387a0-2431-4442-9dd4-4f0f15e842e5",
+      "name_raw": "CETI NOTRE DAME DES VICTOIRES",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "e8b8392e-8f79-403a-843e-ccf622ffc64f",
+      "name_raw": "CITY BILINGUAL ACADEMY",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "fa1a9337-9f2c-4aa6-8d68-a6f2e1c90056",
+      "name_raw": "COLLEGE B. OLIVE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "891b0d6a-fdc1-434d-af96-c74883ad63f0",
+      "name_raw": "COLLEGE BILINGUE LES OISILLONS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "8b762796-54af-4ea9-8c0a-323e13e999a6",
+      "name_raw": "COLLEGE DE LA RENOVATION",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "dfc38288-a48b-452e-83e5-8eacc18df237",
+      "name_raw": "COLLEGE DES SCIENCES ET TECHNIQUES INDUSTRIELLES",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "9d8e1c58-ecc8-4ef0-b5d8-ec129bd81fdf",
+      "name_raw": "COLLEGE EBANDA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "227e7f9c-3c50-486d-964b-9528e77fe0e2",
+      "name_raw": "COLLEGE FUSEE (FONDATION UNIVERSELLE STELLA ENGAMA)",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "46359034-07c6-439b-a9c1-0b7042a12021",
+      "name_raw": "COLLEGE JULES FERRY",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "eb245bf6-2bac-40c4-833e-20276b8ca1f8",
+      "name_raw": "COLLEGE MARKESSO",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "fe9e01da-849b-48b5-aee3-0546db9304ee",
+      "name_raw": "COLLEGE POLYVALENT BILINGUE LES AIGLONS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "548ce6ae-4e6f-4cb3-a8b6-0ee8007560ef",
+      "name_raw": "COLLEGE POLYVALENT LA MUTUELLE COMMUNAUTAIRE DE DEVELOPPEMENT",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "dff6d930-c68b-425b-be66-4b37a18166ce",
+      "name_raw": "COLLEGE PRIVE LAÏC DU SAVOIR",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "doublon interne au batch (même établissement collecté deux fois, variante orthographique de la source)"
+    },
+    {
+      "staging_id": "f32994d7-9046-4eae-9671-f69d0113c20d",
+      "name_raw": "COLLEGE PRIVE LAIC FLEMING",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "b6a6fd16-5c6f-4e89-b326-3f01fb91e720",
+      "name_raw": "COLLEGE PRIVE LAIC JEAN JAURES",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "ec9ab585-fe88-4132-91c3-098539a20cee",
+      "name_raw": "COLLEGE PRIVE LAIC LA FONTAINE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "dc9c37aa-c323-4058-97b1-0098487dd6a9",
+      "name_raw": "COLLEGE PRIVE LAIC LES CHAMPS DU LYS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "c5d8621a-06d6-48a2-a134-4088e2126e52",
+      "name_raw": "COLLEGE PRIVE LAÏC MOKALA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "6df69f6f-4512-4d4d-b50e-d9927b86b377",
+      "name_raw": "COLLEGE PRIVE LAIC NOTRE DAME DES BEATITUDES",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "bbd9efe2-f799-429a-8218-4314cc39f1d6",
+      "name_raw": "COLLEGE PRIVE LAIC SIGMUND FREUD",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "c9966b05-3b73-4512-ac29-3147e86f691b",
+      "name_raw": "COLLEGE PRIVE MODERNE DE L'ESPERANCE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Moderne de NLONG\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "fe4f2620-5a40-4410-b0f3-26192664d458",
+      "name_raw": "COMPLEXE SCOLAIRE PRIVE LAÏC BILINGUE EMMAÜS (COSBIE)",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "7c96626f-ad38-439a-ac94-b0bc6831b483",
+      "name_raw": "FRANKY SECONDARY SCHOOL",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "f35d5bbf-7b23-4d44-8b70-91ca4df61633",
+      "name_raw": "GROUPE SCOLAIRE LES PIGEONS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "46b04650-3eb8-4ff7-b4d1-5ebfb0120a62",
+      "name_raw": "HOLY INFANT HIGH SCHOOL YAOUNDE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"École Protestante de Yaoundé\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "297787ec-8eb0-4982-a495-c891469236a6",
+      "name_raw": "INSTITUT BAUDELAIRE BILINGUE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "de418e92-f152-4540-837f-df11cd38378a",
+      "name_raw": "INSTITUT DES TECHNIQUES INDUSTRIELLES D'ETOUG-EBE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue d'ETOUG-EBE\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "c0b28ce4-f1b2-4781-b595-ac78db9236db",
+      "name_raw": "INSTITUT POLYVALENT NIBERT (IPONI)",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "2ae17700-fbcb-44b0-b053-f3096cc1d8e4",
+      "name_raw": "ISEIG ENSEIGNEMENTS SECONDAIRES",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "54d99542-6288-40b9-b7ea-364204f94974",
+      "name_raw": "KAD-NDAP BILINGUAL SECONDARY SCHOOL",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "e603dd24-7c44-43fe-9922-cf506ce4533e",
+      "name_raw": "MARIO ACADEMIC COMPLEX, MENDONG",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"CES de MENDONG II\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "c8795802-b903-4723-9459-d419284f2e4e",
+      "name_raw": "MEVICK BILINGUAL GRAMMAR SCHOOL ETOUG-EBE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue d'ETOUG-EBE\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "8c280508-34cc-4fde-8891-417087218fc6",
+      "name_raw": "NATIONAL EDUCATION SERVICE COLLEGE OF ARTS AND SCIENCES(NESCA)",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "22dc5585-e6dc-4f81-89ca-601997c918bc",
+      "name_raw": "OXFORD HIGH SCHOOL",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "184c98bc-3ea6-4735-afc6-a70ea1ba3f6e",
+      "name_raw": "COLLEGE PRIVE LAIC DU SAVOIR",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "doublon interne au batch (même établissement collecté deux fois, variante orthographique de la source)"
+    },
+    {
+      "staging_id": "65881361-780d-40f6-89b3-05bab7704ce3",
+      "name_raw": "BILINGUAL AFRICAN COLLEGE OF TECHNIQUES (BACT)",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "19ffdcfa-8fe4-48d5-a603-c24457f4ec1e",
+      "name_raw": "COLLEGE PRIVE LAIC INSTITUT BILINGUE BAUDELAIRE (IBB)",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "2b20383b-400c-441a-8b18-4bb50a3c6ff8",
+      "name_raw": "COMPLEXE SCOLAIRE ADVENTISTE D'ODZA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce d'ODZA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "69caa37b-5c5f-4f09-a02b-ca738de17522",
+      "name_raw": "GROUPE SCOLAIRE PRIVE LAIC DJONOU",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "efecd56c-b7ff-480d-a8d8-02ce814893fd",
+      "name_raw": "NSTITUT TECHNIQUE INDUSTRIEL D'ETOUG EBE (I.T.I.E)",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue d'ETOUG-EBE\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "b3e5ce83-5e3b-400c-bc8d-faf1106feb42",
+      "name_raw": "CHUO BILINGUAL COMPREHENSIVE COLLEGE (CBCC)",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "fa75c5bb-ff5b-4a01-b622-591d300829be",
+      "name_raw": "COLLEGE \"LES COCCINELLES\"",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "a83f65ef-f92f-4ae1-b6e0-5e2d2d54474b",
+      "name_raw": "COLLEGE BILINGUE BETHELEHEM LEGRAND",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "6c0185fb-1eef-460e-9787-3b928b14a36e",
+      "name_raw": "COLLEGE BILINGUE LINCOLN",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "fd596179-a025-4cff-b79c-f93dd8bc6334",
+      "name_raw": "COLLEGE ELOHIM",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "8f4dca37-726e-4afd-ae82-5f570644a2fc",
+      "name_raw": "COLLEGE PRIVE LAÏC LA GRACE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "18999583-579f-4ffb-a00e-4bb7843f8be1",
+      "name_raw": "COLLEGE ROSA PARKS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "4752d4b8-2ede-48ff-a5c2-06e20a390b85",
+      "name_raw": "INSTITUT BILINGUE MICHELANN",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "e7343738-6d3f-473c-a1b0-87580332259d",
+      "name_raw": "INSTITUT JEAN BODY ZIBI",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "849715f6-8cb6-4463-9e82-94d33b77be6a",
+      "name_raw": "INSTITUT NOTRE DAME DE LA PAIX",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "4b989000-59d7-42a8-96f6-74f656d8302e",
+      "name_raw": "COLLEGE DIDEROT",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "20c68fb7-03cd-4447-9c6d-1121ecf886a8",
+      "name_raw": "COLLEGE LA GRACE TCHETGNA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "345f3f2a-c7c6-4084-a8f3-989656de2d0c",
+      "name_raw": "COLLEGE LES FUTURS BOSS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "39fd08c9-a2ec-4efc-8fe1-f83a48cac271",
+      "name_raw": "COLLEGE PRIVE LAÏC ATANGANA FOUDA ALBERT",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "da103290-5b1a-4bd6-b048-c6adc2583eb6",
+      "name_raw": "COLLEGE PRIVE LAÏC BILINGUE \"LES BAMBIS\"",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "80567603-9d1d-4d3d-8d46-ebdfcfb3c468",
+      "name_raw": "COLLEGE PRIVE LAIC LA COLOMBE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "1c7f3668-ff45-4da5-b173-712f57ded3db",
+      "name_raw": "COLLEGE PRIVE LAIC LES SAPINS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "51543d3f-f778-4d26-bece-56b8c916df3d",
+      "name_raw": "COMPLEXE SCOLAIRE EVANGELIQUE DE PENTECOTE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "1d4e43ce-54b6-426c-aebc-4dd9077f7b71",
+      "name_raw": "ENGLISH HIGH SCHOOL (E H S) YAOUNDÉ",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"École Protestante de Yaoundé\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "8da4158b-d712-4d69-8ac6-bd1fc5bc89d0",
+      "name_raw": "FONDATION SCOLAIRE AA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "2eaff3fb-6492-4fa6-8a03-68104043cedb",
+      "name_raw": "FRAZATI BILINGUAL COLLEGE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "4f86224f-6c19-41a1-91c0-a218fc3bc48e",
+      "name_raw": "INSTITUT PASCAL",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "ac9f78ff-89f3-4cdf-9ae1-49b2cb91023d",
+      "name_raw": "INSTITUT POLYVALENT BILINGUE DES NATIONS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "ec8c08b8-709d-40b4-b891-536a352965dc",
+      "name_raw": "INSTITUT POLYVALENT DE LA RENOVATION PEDAGOGIQUE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "8733d5b1-a6f4-4961-ae93-cc08145319ea",
+      "name_raw": "INSTITUT VICTOR HUGO",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "4f7f669e-561e-4fad-b059-ddd7fa75e9e6",
+      "name_raw": "WECARE SECONDARY SCHOOL",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "428c7a73-0361-4a1c-ad12-3c2eb036d325",
+      "name_raw": "INSTITUT PRIVE LAIC PAUL MOMO",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "f3277775-e891-43a2-aebd-acdef2d51139",
+      "name_raw": "COLLEGE PRIVE DIDEROT",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "edccffa8-b25c-4b53-86eb-8c28b1156cee",
+      "name_raw": "INSTITUT PRIVE LAIC POLYVALENT RENOVATION PEDAGOGIQUE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "81c07c58-3f3b-4e1f-94c1-d462e39879e6",
+      "name_raw": "INSTITUT PRIVE LAIC POLYVALENT BILINGUE DES NATIONS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "0079e29c-163a-4f85-b509-5e5ec22a522a",
+      "name_raw": "AMASIA MAHAMAIN BILINGUAL SECONDARY SCHOOL",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "80359441-b27d-4b47-99de-ae717c2c1d6d",
+      "name_raw": "COLLEGE ANGLO-SAXON \"PI AND JU PLUS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "d40ca96f-9a30-45af-8f33-f887cbdf67b8",
+      "name_raw": "COLLEGE BILINGUE JEUNESSE LUMIERE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "586458ce-d8a2-4187-aae5-66d106ffaaa3",
+      "name_raw": "COLLEGE BILINGUE LES ANGES",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "7bcfba36-b85f-42c9-9aa0-3097fd298e95",
+      "name_raw": "COLLEGE BILINGUE SHAKESPEARE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "902d7dba-bb77-45bb-b119-ecfa538c3620",
+      "name_raw": "COLLEGE BILINGUE YONDO",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "7671897a-7802-4b23-aef1-bed372a01239",
+      "name_raw": "COLLEGE BRAUNSCHWEIG (COLBRA)",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "b5954d99-2fcd-49ea-afd4-03a2f608b52a",
+      "name_raw": "COLLEGE DE LA MEFOU",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "bd41179c-d5c8-4406-971b-be33ea3fbb6f",
+      "name_raw": "COLLEGE FRANTZ FANON",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "4338dcb3-e32b-48e2-9988-a10de8b86dd1",
+      "name_raw": "COLLEGE MAISON DOLA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "17fee469-6890-4db2-8d30-52c5ace6116a",
+      "name_raw": "COLLEGE POLYVALENT LES LAUREATS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "dec117b7-e851-49a9-b240-f09cfd318908",
+      "name_raw": "COLLEGE POLYVALENT PERE MATTHIEU",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "861c2a3e-dc85-4ac1-8f78-681378ef2801",
+      "name_raw": "COLLEGE POLYVALENT SAINT PIERRE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "0178ee83-9fe5-4f98-a9bb-40003f4880d1",
+      "name_raw": "COLLEGE PRIVE BILINGUE LES MIGNONS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "882e1de3-1585-4d13-9dbd-fa5446a2fb7e",
+      "name_raw": "COLLEGE PRIVE ELOUNDOU MARGUERITE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "4d924a96-2952-4046-9a79-539a20aae423",
+      "name_raw": "COLLEGE PRIVE JARDIN D'EDEN",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "1dfcf4ce-7f71-4658-920e-7f3d8d61ffee",
+      "name_raw": "COLLEGE PRIVE LAIC ATANGANA ESSOMBA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "65a5ddf9-ca55-4165-ba35-c50d2cbf41bb",
+      "name_raw": "COLLEGE PRIVE LAÏC DOLTA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "doublon interne au batch (même établissement collecté deux fois, variante orthographique de la source)"
+    },
+    {
+      "staging_id": "e2634b89-1f8e-4a3f-96ec-abc3c666fff2",
+      "name_raw": "COLLEGE PRIVE LAÏC EFFA GASTON (COPLEG)",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "92b02867-e5ba-4ae7-8fa9-362f012c6610",
+      "name_raw": "COLLEGE PRIVE LAÏC LES PHARAONS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "cdb0c9f7-940e-452a-ac61-0a73eae318c1",
+      "name_raw": "COLLEGE PRIVE LAIC MONT-VALERIEN",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "doublon interne au batch (même établissement collecté deux fois, variante orthographique de la source)"
+    },
+    {
+      "staging_id": "e8de5d53-5e95-4940-a6c7-91bd15497649",
+      "name_raw": "COLLEGE PRIVE LAÏC SAINT JOSEPH DE MIMBOMAN",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de MIMBOMAN\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "6f0a2fa0-2309-4ac3-807b-b4a018aa6f84",
+      "name_raw": "COLLEGE PRIVE MADELEINE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "eddf5b93-6998-494c-8605-0cf355251464",
+      "name_raw": "COMPLEXE SCOLAIRE EEKO DE L'ESPOIR",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "339015db-9ebe-4dcb-b3f9-ecaf35a847d1",
+      "name_raw": "COMPLEXE SCOLAIRE L'EXCELLENCE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "27b93a4c-3be8-434c-93b4-25919966cde8",
+      "name_raw": "COMPLEXE SCOLAIRE LES \"AS\" DE MVAN",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "68e1972d-9afa-496f-a950-38c94bcc7f7d",
+      "name_raw": "COURS DU SOIR \"LE PROGRES SOCIAL\"",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "bf4d29ca-4641-4004-a913-66d067fbaaa1",
+      "name_raw": "COURS DU SOIR ACADEMIA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "b2ab5725-506c-4e29-bfc3-16d039f16afe",
+      "name_raw": "INSTITUT BILINGUE LA CONFIANCE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "575d5b39-ec23-4155-8a2c-43cc90d1e183",
+      "name_raw": "INSTITUT CENTRAL INSTIC",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "c9f87cc1-e086-49e8-adf6-d4fdc8188c24",
+      "name_raw": "INSTITUT FOTSO",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "5a0517f1-7d0a-493a-b453-4647dc9e66ba",
+      "name_raw": "INSTITUT GAZOLENT D'EKOUNOU",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue d'EKOUNOU\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "0dd94fb2-76eb-4730-ba53-b4064f58aaa9",
+      "name_raw": "INSTITUT JEAN BOCCHI",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "9f31f4bc-6a8d-4ec0-b4f8-c0e342c18f73",
+      "name_raw": "INSTITUT MBE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "ee5dd1ed-65c8-4f9d-b083-56f7c8435e88",
+      "name_raw": "INSTITUT PETOU",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "48c58a3f-ca13-414d-a8e8-989014664a67",
+      "name_raw": "INSTITUT POLYVALENT DU SUCCES",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "5c8dac5e-9568-4ec5-a55d-e5c106ac8309",
+      "name_raw": "INSTITUT POLYVALENT LA METHODE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "84343bb7-a2a5-4303-87d2-4bb989091ab6",
+      "name_raw": "INSTITUT POLYVALENT(BILINGUE) CECILE ET GABRIEL DIPITO",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "b00bd65c-a306-4a0b-81b7-5c418aab445b",
+      "name_raw": "INSTITUT PRIVE LAIC ZANG MEBENGA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "7df68ae0-b020-4616-b2be-a1e3879e4101",
+      "name_raw": "INSTITUT RENE PHILOMBE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "fdb65238-b2fc-4075-a235-028578884e8f",
+      "name_raw": "INSTITUT TAGA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "f7280799-f163-4aed-882e-d1e06c5e6d11",
+      "name_raw": "INSTITUT PRIVE LAIC MBE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "4f0a51eb-815c-474b-9493-0e16ec781c93",
+      "name_raw": "COLLEGE PRIVE LAIC DOLTA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "doublon interne au batch (même établissement collecté deux fois, variante orthographique de la source)"
+    },
+    {
+      "staging_id": "8350f743-fa6c-4769-b8bd-1c91ca2a5919",
+      "name_raw": "INSTITUT PRIVE LAIC CENTRAL (INSTIC)",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "edba71d6-31c5-4914-8490-3fd6043ffbca",
+      "name_raw": "COURS DU SOIR ADVENTISTE D'ODZA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce d'ODZA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "62b096dd-bf96-40c6-94cf-1d5af0a2a706",
+      "name_raw": "INSTITUT GAZOLENT",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "ddc41f8e-13ad-4744-bf19-1e30b647722b",
+      "name_raw": "COLLEGE PRIVE LAIC FRANTZ",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "d5de9c38-6c12-47b5-8971-b35c409f53ab",
+      "name_raw": "CETI JEANNE ALEGUE MESSI",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "f8012fbd-3d8f-452e-a5e8-bed358466494",
+      "name_raw": "INSTITUT SIANTOU",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "c775bf6a-fdca-464c-914d-c211833d30c6",
+      "name_raw": "COLLEGE PRIVE LAIC DU MONT VALERIEN",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "doublon interne au batch (même établissement collecté deux fois, variante orthographique de la source)"
+    },
+    {
+      "staging_id": "0595f5d5-ae3d-4ff7-8cf1-99283b94e02e",
+      "name_raw": "COLLEGE PRIVE LAIC COMPLEXE BILINGUE YONDO",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "e5f81eb8-0528-4ad5-a43e-631724e1104e",
+      "name_raw": "COLLEGE BILINGUE LES AGNEAUX",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "607717e1-cea8-4a86-9521-079bd9ea4865",
+      "name_raw": "COLLEGE DE LA PAIX",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "cef708f0-f3ed-407f-8a5b-c45c293222cd",
+      "name_raw": "COLLEGE KIATABALA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "79be3726-4fe8-45ab-ad92-6e2f6fc972e4",
+      "name_raw": "COLLEGE LE SAMARITAIN-YAOUNDE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"École Protestante de Yaoundé\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "8f9c73a6-5fa4-4233-bdc5-8e34ceb61b00",
+      "name_raw": "COLLEGE POLYVALENT LA PERLE PLUS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "8a115e6e-006a-46df-ba10-4290d1c2602e",
+      "name_raw": "COLLEGE PRIVE LAÏC \"EXCELLENCE PLUS\" DE YAOUNDE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"École Protestante de Yaoundé\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "ac520461-ca61-4052-bdcc-726b3174450b",
+      "name_raw": "COLLEGE PRIVE LAIC XAVIER EBOMO",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "ef9ee312-c438-40af-8062-7ae219f1fb3e",
+      "name_raw": "COLLEGE VENUS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "5bbf3ea1-923d-4257-82d4-6aed699322a6",
+      "name_raw": "COMPLEXE SCOLAIRE THECLA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "e3dce4a5-ab81-4572-b080-bbd08ae81602",
+      "name_raw": "COMPLEXE SCOLAIRE YONA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "35a002d1-e2f6-4a52-b380-7ec427c83731",
+      "name_raw": "INSTITUT PRIVE LAÏC POUSSI",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "faa5f035-f362-4e67-a2f4-35b00f0bb214",
+      "name_raw": "INSTITUT PRIVE LAÏC PRIVE \"LE JOURDAIN\"",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "b497e0b5-6370-410b-82a7-6fbd3371cf6b",
+      "name_raw": "INSTITUT MGR RENE GRAFFIN",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "951f6dba-1ebe-4014-a8f6-dc208a8801b8",
+      "name_raw": "COLLEGE PRIVE LAIC TECHNIQUE STELLA MARIS",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "94f09f83-40dd-4bf0-ac22-c32af8106641",
+      "name_raw": "COLLEGE D'ENSEIGNEMENT TECHNIQUE EKANI EYENGA",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "c5cf4065-e729-4adc-9d1c-197411b9ef08",
+      "name_raw": "INSTITUT LE JOURDAIN BP:25545 YDE",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "source_url": "https://memoirecentre0.jimdofree.com/secondaire/centre/mfoundi-prives-laics/",
+      "source_tier": "TIER3",
+      "classification": "SOURCE_REVIEW",
+      "reason": "source TIER3 (memoirecentre0.jimdofree.com) — jamais suffisante seule pour CLEAN_APPROVABLE (§2/§16 politique de sources), quel que soit le statut d'extraction"
+    },
+    {
+      "staging_id": "b3cc4cb1-c6ef-4b7c-a5b8-ec7321460215",
+      "name_raw": "St. Francis College Fiango Kumba",
+      "city": "Kumba",
+      "region": "Sud-Ouest",
+      "source_url": "https://ecolesaucameroun.com/en/school.php?id=4853-st-francis-college-fiango-kumba",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de KUMBA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "7fe36fb7-3e91-4144-9e9b-e94e7ca8fefa",
+      "name_raw": "Victory Comprehensive College Kumba",
+      "city": "Kumba",
+      "region": "Sud-Ouest",
+      "source_url": "https://ecolesaucameroun.com/en/school.php?id=4833-victory-comprehensive-college-kumba",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Bilingue de KUMBA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    },
+    {
+      "staging_id": "8a512614-2449-487f-97a0-d5672e663fa0",
+      "name_raw": "Collège Bilingue de l'Orient de Bertoua",
+      "city": "Bertoua",
+      "region": "Est",
+      "source_url": "https://ecolesaucameroun.com/ecole.php?id=2057-college-bilingue-de-lorient-de-bertoua-arrondissement-de-bertoua-ii",
+      "source_tier": "TIER3",
+      "classification": "DUPLICATE_REVIEW",
+      "reason": "chevauchement de mots significatifs avec un établissement live de même ville/région (\"Lyce Scientifique de BERTOUA\") — jamais fusionné automatiquement (§14 fuzzy = REVIEW_REQUIRED)"
+    }
+  ]
+}
