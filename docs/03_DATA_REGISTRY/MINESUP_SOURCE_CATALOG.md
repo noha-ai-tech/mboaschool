@@ -358,3 +358,124 @@ pour les universités d'État**, donc aucun identifiant officiel
 MINESUP-émis observable pour ce sous-ensemble via cette source
 spécifique. Entity model reconfirmé cohérent (YES) : 1 entrée nav = 1
 établissement, aucune subdivision campus observée.
+
+**Piste alternative trouvée (recherche web ciblée, une seule requête,
+aucune collecte de masse)** : les universités d'État camerounaises ont
+été créées par **décret présidentiel**, publiés sur `prc.cm`/`spm.gov.cm`
+(Services du Premier Ministre / Présidence de la République — sources
+TIER 1 distinctes de MINESUP). Confirmé pour 2 exemples précis : Université
+de Ngaoundéré = **Décret n°93/028 du 19 janvier 1993** ; Université de
+Dschang = **Décret n°93/029 du 19 janvier 1993** — un décret PAR
+université, numérotation séquentielle le même jour, cohérent avec
+l'entity model (1 institution = 1 acte). University of Buea est
+**antérieure** à cette série (centre universitaire 1985, université
+1992) — confirme que les 11 universités ne partagent PAS toutes le même
+"lot" de création (au moins 2 vagues distinctes : 1993 et une vague plus
+tardive pour Bertoua/Ebolowa/Garoua/Bamenda). **Piste prometteuse pour un
+futur identifiant officiel des universités d'État, NON poursuivie ce
+sprint** (hors périmètre IPES de MINESUP-B/B.1, et §18 de la spec
+n'autorisait qu'un "petit audit ciblé", pas une collecte des 11 décrets) —
+à traiter comme un objectif dédié d'un futur mini-sprint si jugé utile.
+
+---
+
+# SPRINT MINESUP-B.1 — Échantillon élargi (74 fiches, 8/10 régions avec fiches liées)
+
+2026-08-19. Opérateur : jean-merlain. READ-ONLY strict. Rapports :
+`reports/registry/minesup-b1-identifier-analysis.json` (JSON complet) et
+`reports/registry/minesup-b1-identifier-sample.csv` (colonnes
+institutionnelles seulement). Script :
+`scripts/school-registry/audit-minesup-ipes-identifiers-b1.ts`.
+
+## Échantillonnage
+
+Stratification proportionnelle par région (plancher 3/région quand
+disponible, plafond 20/région), espacement uniforme déterministe DANS
+chaque région plutôt que début/milieu/fin uniquement. Cible 75, obtenu
+**74** (min 50/max 100 respectés).
+
+**Découverte structurelle non anticipée** : les régions **Nord** (5/5
+entrées) et **Sud** (7/7 entrées) ont **0% d'entrées avec un lien de
+fiche détail** — 100% noms seuls, aucune fiche consultable. Ce n'est pas
+un échantillonnage insuffisant : c'est une caractéristique STRUCTURELLE
+de la source pour ces deux régions. **Conséquence directe** : pour ces
+deux régions, un identifiant officiel MINESUP ne sera JAMAIS disponible
+via cette source — le nom + la géographie resteront la SEULE méthode de
+dédoublonnage possible, en permanence, pas seulement en attendant une
+collecte plus large.
+
+## Couverture — correction importante par rapport à MINESUP-B
+
+```
+Sample size:                    74
+Creation order coverage:        59/74 (79.7%)
+Opening authorization coverage: 56/74 (75.7%)
+Any official identifier:        59/74 (79.7%)
+No identifier at all:           15/74 (20.3%)
+Multiple identifiers:           56/74 (75.7%)
+```
+
+**La couverture ~50% mesurée sur les 20 fiches de MINESUP-B NE SE
+CONFIRME PAS** à plus grande échelle — l'échantillon élargi (stratifié
+sur 8 régions réelles plutôt que 10 avec biais de sélection) montre une
+couverture réelle proche de **80%**. Enseignement méthodologique : un
+échantillon de 20 fiches, même déterministe, reste sujet à une variance
+d'échantillonnage significative (50% vs 80% est un écart de 30 points) —
+confirme la nécessité de l'élargissement demandé par ce sprint avant
+toute décision de migration.
+
+## Unicité — confirmée à plus grande échelle
+
+```
+Creation order   : 59 valeurs, 58 uniques, 1 doublon EXACT (même institution listée 2x sous 2 régions — Access-HIPS, déjà connu, PAS une collision inter-institution), 0 collision inter-institution.
+Opening authorization : 56 valeurs, 56 uniques, 0 doublon, 0 collision inter-institution.
+```
+
+**0 collision inter-institution sur 115 valeurs réelles vérifiées**
+(59+56) — renforce significativement `LIKELY_UNIQUE`, sans toutefois
+constituer une preuve nationale absolue (115/301 institutions ≈ 38% de
+couverture d'échantillon, contre ~3% en MINESUP-B — progrès réel mais pas
+100%).
+
+## Format — familles confirmées, aucune structure fixe
+
+15 familles de format distinctes observées sur 59 valeurs
+`creation_order` (préfixe "N°" présent/absent × séparateur "/" vs "-" vs
+mixte × nombre de segments 3 à 9 × suffixe date présent/absent). **3
+valeurs tronquées** trouvées (se terminant abruptement par "du" sans
+date) — confirme que la troncature vue une fois en MINESUP-B est un
+problème SYSTÉMIQUE de la source, pas un cas isolé. 0 valeur classée
+"malformée" au sens strict (toutes contiennent le token "MINESUP"), mais
+la variance de format reste trop large pour toute validation stricte —
+`raw_identifier` reste la seule stratégie sûre, confirmé à plus grande
+échelle.
+
+## Suitability — décisions
+
+```
+CREATION_ORDER   : SECONDARY_IDENTIFIER — fort quand présent (0 collision, ~80% coverage) mais format instable, 3 valeurs tronquées dans la source elle-même, ET deux régions entières (Nord, Sud) à 0% structurel. Ne peut pas être une clé primaire nationale.
+OPENING_AUTHORIZATION : SECONDARY_IDENTIFIER — coverage comparable (75.7%), unicité MESURÉE LÉGÈREMENT MEILLEURE (56/56 unique vs 58/59 pour creation_order dans cet échantillon) — pas moins fiable que creation_order, parfois plus. Les deux doivent être traités comme des signaux de CORROBORATION de rang égal, jamais l'un présenté comme "principal" et l'autre "secondaire" par défaut.
+```
+
+## Politique de priorité proposée (preuve, pas intuition)
+
+Aucun des deux actes n'est structurellement supérieur à l'autre sur cet
+échantillon — **politique proposée : les deux vivent comme des lignes
+`identifier_type` distinctes et de rang ÉGAL** (`CREATION_ORDER`,
+`OPENING_AUTHORIZATION`) ; le matching applicatif considère un match sur
+N'IMPORTE LEQUEL des deux comme `EXACT_IDENTIFIER` (déjà le comportement
+du moteur partagé) ; aucun n'est requis pour l'onboarding (~20% des
+institutions n'ont ni l'un ni l'autre) — nom + région + ville reste le
+mécanisme de repli obligatoire, jamais optionnel.
+
+## Universités d'État (§18)
+
+Aucune nouvelle collecte de masse. Voir la piste décret présidentiel
+documentée plus haut (Source A) — non poursuivie ce sprint au-delà d'un
+audit ciblé de 2 exemples.
+
+## 304/~430 (§19)
+
+Non rouverte. Statut inchangé : `EXPECTED_COUNT_UNKNOWN` pour le total,
+liste elle-même déjà auditée de façon exhaustive (voir SPRINT MINESUP-B
+ci-dessus).

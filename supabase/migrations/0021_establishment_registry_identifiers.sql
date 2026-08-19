@@ -105,8 +105,34 @@ comment on column public.establishment_registry_identifiers.registry is
 -- registres différents peuvent légitimement émettre la même chaîne de
 -- caractères sans que cela désigne le même établissement (§5/§13 de la
 -- spec — coïncidence de namespace, pas un signal d'identité).
-create unique index if not exists uq_registry_identifiers_registry_identifier
-  on public.establishment_registry_identifiers (registry, identifier);
+--
+-- SPRINT MINESUP-B.1 (2026-08-19) — `identifier_type` AJOUTÉ à la
+-- contrainte après preuve réelle sur un échantillon de 74 fiches IPES :
+-- plusieurs institutions (ex. Institut Supérieur de Génie Civil (ISGeC),
+-- British Higher Institute of Science and Technology (BHIST), Access
+-- Higher Institute of Professional Studies) utilisent LA MÊME référence
+-- d'arrêté texte pour "Arrêtés portant création" ET "Autorisation
+-- d'ouverture" — deux actes juridiques distincts, donc deux lignes
+-- distinctes voulues (identifier_type='CREATION_ORDER' vs
+-- 'OPENING_AUTHORIZATION') pour le même établissement. Une contrainte
+-- `UNIQUE(registry, identifier)` seule aurait rejeté la seconde ligne
+-- comme un doublon alors qu'elle représente une donnée légitime et
+-- différente. Voir reports/registry/minesup-b1-identifier-analysis.json
+-- pour les cas réels observés. Migration toujours PRÉPARÉE, NON EXÉCUTÉE
+-- — ce changement est sûr car aucune donnée n'a encore été écrite dans
+-- cette table.
+-- CAVEAT connu et accepté : `identifier_type` reste nullable (ligne 64).
+-- Postgres ne considère jamais deux NULL comme égaux dans un index unique
+-- — une future ligne avec `identifier_type = null` ne serait PAS protégée
+-- contre un doublon `(registry, identifier)` par cet index. Dans les
+-- données déjà envisagées (MINESEC_ESG, MINESUP_IPES) `identifier_type`
+-- est systématiquement renseigné en pratique, donc ce n'est pas bloquant
+-- aujourd'hui — mais tout futur registre qui laisserait ce champ null
+-- devra s'appuyer sur la détection applicative
+-- (`lib/matching/engine.ts::findIdentifierCollisions`), pas sur cet index
+-- seul, pour ses garanties d'unicité.
+create unique index if not exists uq_registry_identifiers_registry_type_identifier
+  on public.establishment_registry_identifiers (registry, identifier_type, identifier);
 
 -- Au plus un identifiant "primaire" par établissement — appliqué par index
 -- partiel plutôt qu'un trigger, plus simple et suffisant ici.

@@ -75,9 +75,26 @@ function wordOverlapRatio(a: string[], b: string[]): number {
   return a.filter((w) => bSet.has(w)).length / a.length;
 }
 
+/**
+ * Deux identifiants "désignent le même acte" si registry + identifier
+ * correspondent ET (au moins un des deux n'a pas de identifier_type, OU
+ * les deux identifier_type correspondent). Absence de identifier_type
+ * d'un côté = comportement historique permissif (cohérent avec la colonne
+ * nullable de la migration 0021) — mais quand LES DEUX côtés précisent un
+ * identifier_type différent, ce n'est PAS la même ligne (ex. un
+ * "CREATION_ORDER" et une "OPENING_AUTHORIZATION" qui partagent la même
+ * chaîne de texte brute, cas réel trouvé SPRINT MINESUP-B.1).
+ */
+function sameIdentifierClaim(a: RegistryIdentifier, b: RegistryIdentifier): boolean {
+  if (a.registry !== b.registry) return false;
+  if (a.identifier.trim().toUpperCase() !== b.identifier.trim().toUpperCase()) return false;
+  if (a.identifierType && b.identifierType && a.identifierType !== b.identifierType) return false;
+  return true;
+}
+
 function findIdentifierMatch(candidate: RegistryIdentifier[], target: MatchTarget): RegistryIdentifier | null {
   for (const ci of candidate) {
-    const hit = target.identifiers.find((ti) => ti.registry === ci.registry && ti.identifier.trim().toUpperCase() === ci.identifier.trim().toUpperCase());
+    const hit = target.identifiers.find((ti) => sameIdentifierClaim(ti, ci));
     if (hit) return hit;
   }
   return null;
@@ -238,23 +255,26 @@ export function matchCandidate(candidate: MatchCandidate, targets: MatchTarget[]
   };
 }
 
-/** §13 — vrai uniquement si deux cibles revendiquent le même (registry, identifier), jamais résolu automatiquement. */
-export function findIdentifierCollisions(all: MatchTarget[]): { registry: string; identifier: string; targets: MatchTarget[] }[] {
-  const byKey = new Map<string, MatchTarget[]>();
+/**
+ * §13 — vrai uniquement si deux cibles revendiquent le même
+ * (registry, identifier_type, identifier), jamais résolu automatiquement.
+ * Une ligne sans identifier_type reste comparée par (registry, identifier)
+ * seul — même logique permissive que `sameIdentifierClaim` (cohérent avec
+ * la colonne nullable de la migration 0021).
+ */
+export function findIdentifierCollisions(all: MatchTarget[]): { registry: string; identifierType: string | null; identifier: string; targets: MatchTarget[] }[] {
+  const byKey = new Map<string, { registry: string; identifierType: string | null; identifier: string; targets: MatchTarget[] }>();
   for (const t of all) {
     for (const id of t.identifiers) {
-      const key = `${id.registry}|${id.identifier.trim().toUpperCase()}`;
-      if (!byKey.has(key)) byKey.set(key, []);
-      byKey.get(key)!.push(t);
+      const key = `${id.registry}|${id.identifierType ?? ""}|${id.identifier.trim().toUpperCase()}`;
+      if (!byKey.has(key)) byKey.set(key, { registry: id.registry, identifierType: id.identifierType ?? null, identifier: id.identifier, targets: [] });
+      byKey.get(key)!.targets.push(t);
     }
   }
-  const collisions: { registry: string; identifier: string; targets: MatchTarget[] }[] = [];
-  for (const [key, list] of byKey) {
-    const uniqueTargetIds = new Set(list.map((t) => t.id));
-    if (uniqueTargetIds.size > 1) {
-      const [registry, identifier] = key.split("|");
-      collisions.push({ registry, identifier, targets: list });
-    }
+  const collisions: { registry: string; identifierType: string | null; identifier: string; targets: MatchTarget[] }[] = [];
+  for (const entry of byKey.values()) {
+    const uniqueTargetIds = new Set(entry.targets.map((t) => t.id));
+    if (uniqueTargetIds.size > 1) collisions.push(entry);
   }
   return collisions;
 }

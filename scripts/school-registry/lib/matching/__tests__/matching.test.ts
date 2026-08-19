@@ -186,6 +186,88 @@ describe("Briques — exactIdentityKey préserve les mots de catégorie (régres
   });
 });
 
+describe("SPRINT MINESUP-B.1 §22 — fixtures multi-ID (identifier_type), scénarios A-G", () => {
+  test("A. creation order seul", () => {
+    const t = target({ id: "t1", name: "Institut A", identifiers: [{ registry: "MINESUP_IPES", identifier: "N°08/0266/MINESUP/SG/DDES/ESUP", identifierType: "CREATION_ORDER" }] });
+    const c = candidate({ name: "Institut A", identifiers: [{ registry: "MINESUP_IPES", identifier: "N°08/0266/MINESUP/SG/DDES/ESUP", identifierType: "CREATION_ORDER" }] });
+    const result = matchCandidate(c, [t]);
+    assert.equal(result.level, "EXACT_IDENTIFIER");
+  });
+
+  test("B. opening authorization seul", () => {
+    const t = target({ id: "t1", name: "Institut B", identifiers: [{ registry: "MINESUP_IPES", identifier: "N°12/0374/MINESUP/SG/DDES/ESUP du 17 AOUT 2012", identifierType: "OPENING_AUTHORIZATION" }] });
+    const c = candidate({ name: "Institut B", identifiers: [{ registry: "MINESUP_IPES", identifier: "N°12/0374/MINESUP/SG/DDES/ESUP du 17 AOUT 2012", identifierType: "OPENING_AUTHORIZATION" }] });
+    const result = matchCandidate(c, [t]);
+    assert.equal(result.level, "EXACT_IDENTIFIER");
+  });
+
+  test("C. les deux identifiants présents — chacun matche indépendamment, aucun n'écrase l'autre", () => {
+    const t = target({
+      id: "t1",
+      name: "Institut Supérieur d'Agronomie (ISA)",
+      identifiers: [
+        { registry: "MINESUP_IPES", identifier: "15/0015/MINESUP/SG/DDES/ESUP du 28 Janvier 2015", identifierType: "CREATION_ORDER" },
+        { registry: "MINESUP_IPES", identifier: "16/0635/L/MINESUP/SG/DDES/ESUP du 17 JUIN 2016", identifierType: "OPENING_AUTHORIZATION" },
+      ],
+    });
+    const viaCreation = matchCandidate(candidate({ name: "X", identifiers: [{ registry: "MINESUP_IPES", identifier: "15/0015/MINESUP/SG/DDES/ESUP du 28 Janvier 2015", identifierType: "CREATION_ORDER" }] }), [t]);
+    const viaOpening = matchCandidate(candidate({ name: "Y", identifiers: [{ registry: "MINESUP_IPES", identifier: "16/0635/L/MINESUP/SG/DDES/ESUP du 17 JUIN 2016", identifierType: "OPENING_AUTHORIZATION" }] }), [t]);
+    assert.equal(viaCreation.level, "EXACT_IDENTIFIER");
+    assert.equal(viaOpening.level, "EXACT_IDENTIFIER");
+    assert.equal(viaCreation.target?.id, "t1");
+    assert.equal(viaOpening.target?.id, "t1");
+  });
+
+  test("D. même texte de valeur, identifier_type différent — cas réel ISGeC/BHIST/Access-HIPS, DEUX lignes légitimes, pas une collision", () => {
+    const t = target({
+      id: "t1",
+      name: "Institut Supérieur de Génie Civil (ISGeC)",
+      identifiers: [
+        { registry: "MINESUP_IPES", identifier: "N°22/01569/L/MINESUP/SG/DDES/SD-ESUP/SDA/LMN du 16 Mars 2022.", identifierType: "CREATION_ORDER" },
+        { registry: "MINESUP_IPES", identifier: "N°22/01569/L/MINESUP/SG/DDES/SD-ESUP/SDA/LMN du 16 Mars 2022.", identifierType: "OPENING_AUTHORIZATION" },
+      ],
+    });
+    // findIdentifierCollisions ne doit PAS lever cette paire comme une collision : (registry, identifier) identiques mais identifier_type différent.
+    const collisions = findIdentifierCollisions([t]);
+    assert.deepEqual(collisions, []);
+    // Un candidat qui précise le identifier_type doit matcher la bonne ligne, pas les deux confondues.
+    const viaCreation = matchCandidate(candidate({ name: "X", identifiers: [{ registry: "MINESUP_IPES", identifier: "N°22/01569/L/MINESUP/SG/DDES/SD-ESUP/SDA/LMN du 16 Mars 2022.", identifierType: "CREATION_ORDER" }] }), [t]);
+    assert.equal(viaCreation.level, "EXACT_IDENTIFIER");
+  });
+
+  test("E. même identifier + même identifier_type + institution DIFFÉRENTE -> collision critique détectée", () => {
+    const t1 = target({ id: "t1", name: "Institut X", identifiers: [{ registry: "MINESUP_IPES", identifier: "N°05/0006/MINESUP du 03 janvier 2005", identifierType: "CREATION_ORDER" }] });
+    const t2 = target({ id: "t2", name: "Institut Y (doublon collecte suspect)", identifiers: [{ registry: "MINESUP_IPES", identifier: "N°05/0006/MINESUP du 03 janvier 2005", identifierType: "CREATION_ORDER" }] });
+    const collisions = findIdentifierCollisions([t1, t2]);
+    assert.equal(collisions.length, 1);
+    assert.equal(collisions[0].identifierType, "CREATION_ORDER");
+    assert.equal(collisions[0].targets.length, 2);
+  });
+
+  test("F. actes multiples pour la même institution (création + ouverture + changement de statut) — toujours 3 lignes distinctes, jamais fusionnées", () => {
+    const t = target({
+      id: "t1",
+      name: "Institut Multi-Actes",
+      identifiers: [
+        { registry: "MINESUP_IPES", identifier: "REF-CREATION-001", identifierType: "CREATION_ORDER" },
+        { registry: "MINESUP_IPES", identifier: "REF-OPENING-001", identifierType: "OPENING_AUTHORIZATION" },
+        { registry: "MINESUP_IPES", identifier: "REF-STATUS-001", identifierType: "STATUS_CHANGE" },
+      ],
+    });
+    assert.equal(t.identifiers.length, 3);
+    const results = t.identifiers.map((id) => matchCandidate(candidate({ name: "?", identifiers: [id] }), [t]));
+    assert.ok(results.every((r) => r.level === "EXACT_IDENTIFIER" && r.target?.id === "t1"));
+  });
+
+  test("G. identifiants manquants — le matching retombe sur nom+géographie, jamais un crash ni un NO_MATCH forcé", () => {
+    const t = target({ id: "t1", name: "Institut Sans Identifiant", region: "Nord", city: null, identifiers: [] });
+    const c = candidate({ name: "Institut Sans Identifiant", region: "Nord", city: null, identifiers: [] });
+    const result = matchCandidate(c, [t]);
+    assert.equal(result.level, "EXACT_IDENTITY");
+    assert.equal(result.safeForAutoLink, false);
+  });
+});
+
 describe("Briques — exactIdentityKey normalise les numéraux romains/arabes institutionnels (SPRINT MINESUP-B §18)", () => {
   test("\"Université de Yaoundé I\" et \"Université de Yaoundé 1\" partagent la même clé exacte", () => {
     assert.equal(exactIdentityKey("Université de Yaoundé I"), exactIdentityKey("Université de Yaoundé 1"));

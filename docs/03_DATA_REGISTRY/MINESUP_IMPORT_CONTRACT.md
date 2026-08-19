@@ -370,10 +370,92 @@ booléens pour ces champs, jamais les noms eux-mêmes).
 [ ] QA publique (recherche/fiche établissement) vérifiée sur le pilote avant extension.
 ```
 
-### 12.9 Décisions
+### 12.9 Décisions (MINESUP-B, 20 fiches)
 
 ```
 MIGRATION 0021 : WAIT_FOR_MORE_EVIDENCE — le schéma texte ouvert (authority/registry/identifier/identifier_type) reste structurellement compatible (YES), mais imposer UNIQUE(registry, identifier) avant qu'un échantillon plus large (50-100 fiches) confirme LIKELY_UNIQUE à l'échelle nationale risquerait de bloquer un futur backfill sur une fausse collision. Réévaluer après un échantillon élargi, pas après ce sprint de 20 fiches.
 BACKFILL TIMING : AFTER_MINESUP_PILOT — aucune donnée MINESUP réelle n'est en staging/production à ce jour ; le backfill MINESEC/cartescolaire existant peut attendre le premier pilote MINESUP réel pour être exécuté dans le même mouvement plutôt que deux fois.
 NEXT COLLECTION DECISION : D — MORE SOURCE WORK REQUIRED (échantillon d'identifiants élargi à 50-100 fiches IPES, PAS un pilote de collecte complet) avant même un MINESUP-C pilote — l'échantillon de 20 fiches de ce sprint est suffisant pour comprendre la SÉMANTIQUE de l'identifiant, insuffisant pour garantir son UNICITÉ nationale.
+```
+
+---
+
+## 13. MISE À JOUR — SPRINT MINESUP-B.1 (2026-08-19)
+
+Échantillon élargi à 74 fiches (8/10 régions avec fiches liées — voir
+`MINESUP_SOURCE_CATALOG.md` section MINESUP-B.1 pour le détail complet).
+
+### 13.1 Migration 0021 — DÉCISION PRISE ET APPLIQUÉE (fichier non exécuté)
+
+**NEEDS_IDENTIFIER_TYPE_IN_UNIQUENESS — appliquée au fichier de migration
+préparé** (toujours NON EXÉCUTÉ). Preuve trouvée sur l'échantillon élargi
+(ISGeC, BHIST, Access-HIPS ×2) : plusieurs institutions utilisent LE MÊME
+texte d'identifiant pour `CREATION_ORDER` et `OPENING_AUTHORIZATION` — un
+`UNIQUE(registry, identifier)` seul aurait rejeté la seconde ligne comme
+un faux doublon. La contrainte de
+`supabase/migrations/0021_establishment_registry_identifiers.sql` a été
+changée en `UNIQUE(registry, identifier_type, identifier)`. **Caveat
+documenté dans le fichier lui-même** : `identifier_type` reste `text`
+nullable — Postgres ne traite jamais deux `NULL` comme égaux dans un
+index unique, donc une future ligne sans `identifier_type` ne serait pas
+protégée par cet index seul (repli sur la détection applicative,
+`findIdentifierCollisions`).
+
+**Cohérence appliquée aussi côté application** : `RegistryIdentifier`
+(`scripts/school-registry/lib/matching/types.ts`) porte désormais un
+`identifierType?: string | null` optionnel ; `findIdentifierMatch`,
+`findIdentifierCollisions` et `hasCrossRegistryCoincidence`
+(`lib/matching/engine.ts`) comparent maintenant `(registry, identifier,
+identifier_type)` — même règle permissive en cas d'absence d'un côté. 7
+nouvelles fixtures de test (§22, scénarios A-G) valident chaque cas :
+identifiant seul, les deux présents, même texte/type différent (pas une
+collision), même texte/même type/institution différente (collision
+détectée), actes multiples, identifiants absents.
+
+### 13.2 Coverage — révisée à la hausse
+
+`~80%` (59-56/74) confirmé sur échantillon élargi et stratifié, PAS
+`~50%` comme le suggérait l'échantillon de 20 fiches de MINESUP-B —
+correction méthodologique importante : un échantillon de 20, même
+déterministe, reste sujet à une variance significative. **Deux régions
+(Nord, Sud) ont 0% de couverture STRUCTURELLE** (aucune fiche détail
+existante, pas seulement non échantillonnée) — nom+géographie y restera
+la seule méthode de dédoublonnage en permanence.
+
+### 13.3 Identifier priority policy — DÉCIDÉE
+
+Aucun acte n'est supérieur à l'autre (unicité mesurée légèrement
+meilleure pour `OPENING_AUTHORIZATION` dans cet échantillon — 56/56
+unique vs 58/59). **Politique : rang égal.** Les deux vivent comme des
+lignes `identifier_type` distinctes ; un match sur l'un OU l'autre
+produit `EXACT_IDENTIFIER` ; aucun n'est requis pour l'onboarding (~20%
+des institutions n'ont ni l'un ni l'autre).
+
+### 13.4 Registry namespace — CONFIRMÉ SUFFISANT
+
+`MINESUP_IPES` reste un namespace unique suffisamment précis : la
+distinction entre les types d'actes vit dans `identifier_type`, pas dans
+le nom du registre. Pas de `MINESUP_IPES_CREATION`/`MINESUP_IPES_OPENING`
+— confirmé inutile.
+
+### 13.5 State universities — piste alternative documentée, non poursuivie
+
+Décrets présidentiels (`prc.cm`/`spm.gov.cm`) confirmés comme source TIER
+1 alternative pour un futur identifiant officiel des universités d'État
+(2 exemples vérifiés : Ngaoundéré = décret 93/028, Dschang = décret
+93/029 — 1 décret par université, au moins 2 vagues de création
+distinctes 1993/plus tardif). Piste prometteuse, explicitement NON
+poursuivie ce sprint (hors périmètre IPES, aurait nécessité une collecte
+des 11 décrets non autorisée par cette spec).
+
+### 13.6 MINESUP V1 Acceptance Criteria — mise à jour
+
+```
+[x] Coverage réelle mesurée à l'échelle (~80%, pas ~50%) — connue et acceptée, pas une inconnue bloquante.
+[x] Identifier priority policy décidée (rang égal, CREATION_ORDER = OPENING_AUTHORIZATION).
+[x] Migration 0021 corrigée (identifier_type dans la contrainte d'unicité) — fichier prêt, non exécuté.
+[ ] 2 régions à 0% structurel (Nord, Sud) — accepté comme limite permanente, pas à "résoudre".
+[ ] Piste décret présidentiel pour universités d'État — à explorer dans un futur mini-sprint dédié si jugé utile, pas un prérequis V1.
+[ ] official_identifier reste NON requis pour le staging — nom+région+ville obligatoire en repli (inchangé depuis §12.8).
+[ ] PII exclue à 100%, y compris dans les URLs (inchangé, renforcé §12.7 — appliqué aussi dans le script B.1 : URL redigée si elle contient un nom de promoteur).
 ```

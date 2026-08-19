@@ -12,6 +12,17 @@ import type { Registry } from "../registryAuthority";
 export interface RegistryIdentifier {
   registry: Registry;
   identifier: string;
+  /**
+   * SPRINT MINESUP-B.1 — type d'acte au sein du registre (ex.
+   * 'CREATION_ORDER' vs 'OPENING_AUTHORIZATION'). Optionnel : des
+   * institutions MINESUP réelles utilisent la MÊME chaîne d'identifiant
+   * pour deux actes juridiques distincts (ex. Institut Supérieur de Génie
+   * Civil (ISGeC)) — sans ce champ, deux lignes légitimes et différentes
+   * seraient traitées comme UNE SEULE collision. Absent = comportement
+   * historique (comparaison sur (registry, identifier) seul), cohérent
+   * avec la colonne nullable `identifier_type` de la migration 0021.
+   */
+  identifierType?: string | null;
 }
 
 /** Un candidat à faire correspondre — nouvelle ligne staging, ou ligne à re-vérifier. */
