@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { CalendarOff } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 import { FormulaireAbsence } from "@/components/pro/FormulaireAbsence";
 
 const TYPE_LABELS: Record<string, string> = { absence: "Absence", conge: "Congé", mission: "Mission" };
@@ -11,11 +12,7 @@ export default async function AbsencesPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/connexion");
 
-  const { data: etablissement } = await supabase
-    .from("establishments")
-    .select("id")
-    .eq("owner_id", user.id)
-    .single();
+  const etablissement = await getActiveEstablishment(supabase, user.id);
   if (!etablissement) redirect("/dashboard/ecole");
 
   const { data: staffMembers } = await supabase

@@ -1,63 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { supabase } from "./supabase";
+import { useSchools, type AuthUser, type SchoolData } from "./school/SchoolContext";
 
-export type SchoolData = {
-  id: string;
-  name: string;
-  city: string | null;
-  neighborhood?: string | null;
-  phone?: string | null;
-  email?: string | null;
-  whatsapp?: string | null;
-  website?: string | null;
-  description?: string | null;
-  address?: string | null;
-  main_category: string;
-  is_verified: boolean;
-  subscription_plan: string;
-  forfait: "gratuit" | "gere" | "pro";
-};
+export type { SchoolData, AuthUser };
 
-export type AuthUser = {
-  id: string;
-  email: string;
-};
-
+// Compatible avec l'API historique ({ school, user, loading, signOut }) —
+// désormais un simple wrapper autour du SchoolContext partagé (voir
+// src/lib/school/SchoolContext.tsx) au lieu de refaire son propre fetch.
+// `school` correspond à l'établissement ACTIF (le premier par défaut, ou
+// celui choisi via le sélecteur si le promoteur en possède plusieurs).
 export function useSchool() {
-  const [school, setSchool] = useState<SchoolData | null>(null);
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function load() {
-      const { data: { user: authUser } } = await supabase.auth.getUser();
-
-      if (!authUser) {
-        setLoading(false);
-        return;
-      }
-
-      setUser({ id: authUser.id, email: authUser.email! });
-
-      const { data } = await supabase
-        .from("establishments")
-        .select("id, name, city, neighborhood, phone, email, whatsapp, website, description, address, main_category, is_verified, subscription_plan, forfait")
-        .eq("owner_id", authUser.id)
-        .single();
-
-      setSchool(data ?? null);
-      setLoading(false);
-    }
-
-    load();
-  }, []);
-
-  async function signOut() {
-    await supabase.auth.signOut();
-    window.location.href = "/";
-  }
-
-  return { school, user, loading, signOut };
+  const { activeSchool, user, loading, signOut } = useSchools();
+  return { school: activeSchool, user, loading, signOut };
 }

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 import { FormulaireConfigurationPaie } from "@/components/pro/FormulaireConfigurationPaie";
 
 export default async function ConfigurationPaiePage() {
@@ -9,11 +10,7 @@ export default async function ConfigurationPaiePage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/connexion");
 
-  const { data: etablissement } = await supabase
-    .from("establishments")
-    .select("id")
-    .eq("owner_id", user.id)
-    .single();
+  const etablissement = await getActiveEstablishment(supabase, user.id);
   if (!etablissement) redirect("/dashboard/ecole");
 
   const { data: config } = await supabase

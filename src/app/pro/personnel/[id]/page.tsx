@@ -2,6 +2,7 @@ import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 import { PersonnelAcces } from "@/components/pro/PersonnelAcces";
 import { PersonnelContrat } from "@/components/pro/PersonnelContrat";
 import { PersonnelDocuments } from "@/components/pro/PersonnelDocuments";
@@ -24,11 +25,7 @@ export default async function PersonnelDetailPage({ params }: { params: Promise<
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/connexion");
 
-  const { data: etablissement } = await supabase
-    .from("establishments")
-    .select("id")
-    .eq("owner_id", user.id)
-    .single();
+  const etablissement = await getActiveEstablishment(supabase, user.id);
   if (!etablissement) redirect("/dashboard/ecole");
 
   const { data: member } = await supabase

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { Globe, BookOpen, CheckCircle2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
+import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 import { FormulaireMessage } from "@/components/pro/FormulaireMessage";
 
 export default async function MessageriePage({
@@ -16,11 +17,7 @@ export default async function MessageriePage({
   } = await supabase.auth.getUser();
   if (!user) redirect("/auth/connexion");
 
-  const { data: etablissement } = await supabase
-    .from("establishments")
-    .select("id")
-    .eq("owner_id", user.id)
-    .single();
+  const etablissement = await getActiveEstablishment(supabase, user.id);
   if (!etablissement) redirect("/dashboard/ecole");
 
   // Départements disponibles dans l'établissement
