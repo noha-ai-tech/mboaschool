@@ -112,3 +112,28 @@ export function extractSelectOptions(html: string, { excludeContains = [], minLa
   }
   return values;
 }
+
+/**
+ * SPRINT MINESEC V1.1 — comme extractSelectOptions, mais conserve aussi
+ * l'attribut `value` de chaque `<option>` (ex. un matricule officiel), pas
+ * seulement son libellé texte. Nécessaire dès qu'une source encode une
+ * donnée structurée (identifiant) dans `value` plutôt que dans le texte
+ * affiché — cas non couvert par extractSelectOptions (cartescolaire.cm/minesec :
+ * `<option value="MATRICULE">NOM ÉTABLISSEMENT</option>`).
+ */
+export function extractSelectOptionPairs(
+  html: string,
+  { excludeContains = [], minLabelLength = 4 }: { excludeContains?: string[]; minLabelLength?: number } = {}
+): { value: string; label: string }[] {
+  const optRe = /<option[^>]*value="([^"]*)"[^>]*>([\s\S]*?)<\/option>/g;
+  const pairs: { value: string; label: string }[] = [];
+  let m: RegExpExecArray | null;
+  while ((m = optRe.exec(html))) {
+    const value = decodeHtmlEntities(m[1]).trim();
+    const label = decodeHtmlEntities(m[2]).replace(/\s+/g, " ").trim();
+    if (!label || label.length < minLabelLength) continue;
+    if (excludeContains.some((frag) => label.includes(frag))) continue;
+    pairs.push({ value, label });
+  }
+  return pairs;
+}

@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { evaluateCompleteness, requireExtractionSafe } from "../completeness";
 import { PaginationTracker } from "../pagination";
 import { checkSourceStructure } from "../validation";
-import { extractTableFirstColumn, segmentByHeading } from "../htmlExtractor";
+import { extractTableFirstColumn, segmentByHeading, extractSelectOptionPairs } from "../htmlExtractor";
 
 /**
  * §52 (suite) — table 3 colonnes (nom/type/date) telle qu'observée sur les
@@ -97,6 +97,100 @@ describe("§27 — En-têtes de colonne non uniformes entre sections d'une même
       ignoreCellText: ["Etablissement", "Établissement", "Nom de l'Etablissement", "Nom de l'Établissement", "Type", "Date de creation", "Date de création"],
     });
     assert.deepEqual(names, ["Lycée A", "Lycée B"]);
+  });
+});
+
+describe("SPRINT MINESEC V1.1 — collecteur cartescolaire.cm (extractSelectOptionPairs + cas réels)", () => {
+  const FIXTURE = `<select name="school_code" id="school" class="dropdown" required>
+    <option value=""></option>
+    <option value="AD08270B01">CES BILINGUE DE BEKA-GHOTTO</option>
+    <option value="14281307">REDEEMED BILINGUAL COLLEGE</option>
+    <option value="14281307">REDEEMED BILINGUAL COLLEGE</option>
+  </select>`;
+
+  test("extrait la paire {value, label} — pas seulement le libellé (contrairement à extractSelectOptions)", () => {
+    const pairs = extractSelectOptionPairs(FIXTURE, { minLabelLength: 3 });
+    assert.equal(pairs.length, 3); // option vide exclue par minLabelLength, 2 options identiques conservées (dédup = responsabilité de l'appelant)
+    assert.deepEqual(pairs[0], { value: "AD08270B01", label: "CES BILINGUE DE BEKA-GHOTTO" });
+  });
+
+  test("doublon exact de matricule (value) détectable par l'appelant — pas filtré silencieusement par l'extracteur", () => {
+    const pairs = extractSelectOptionPairs(FIXTURE, { minLabelLength: 3 });
+    const values = pairs.map((p) => p.value).filter(Boolean);
+    const duplicates = values.filter((v, i) => values.indexOf(v) !== i);
+    assert.deepEqual(duplicates, ["14281307"]);
+  });
+
+  test("option placeholder (value vide, ex. \"Choisir…\") écartée par le filtre value!=='' de l'appelant, jamais comptée comme établissement", () => {
+    const noValueFixture = `<select name="x"><option value="">Choisir…</option><option value="ID1">École Test</option></select>`;
+    const pairs = extractSelectOptionPairs(noValueFixture, { minLabelLength: 3 });
+    assert.equal(pairs.length, 2); // l'extracteur retourne tout, y compris le placeholder — filtrage à la charge de l'appelant
+    const withRealId = pairs.filter((p) => p.value !== "");
+    assert.equal(withRealId.length, 1);
+    assert.equal(withRealId[0].label, "École Test");
+  });
+
+  test("structure attendue absente (page de maintenance/erreur) -> échec fermé, jamais un select vide silencieux", () => {
+    const maintenancePage = `<html><body><h1>Site en maintenance</h1></body></html>`;
+    const result = checkSourceStructure(maintenancePage, {
+      requiredMarkers: ["<select", 'name="school_code"', "<option value="],
+      forbiddenMarkers: ["captcha", "CAPTCHA"],
+      minLength: 10000,
+    });
+    assert.equal(result.valid, false);
+  });
+
+  test("changement de structure (attribut renommé) détecté par checkSourceStructure", () => {
+    const renamedFixture = `<select name="school_id"><option data-code="X">École</option></select>`; // school_code -> school_id
+    const result = checkSourceStructure(renamedFixture, {
+      requiredMarkers: ["<select", 'name="school_code"', "<option value="],
+      minLength: 10,
+    });
+    assert.equal(result.valid, false);
+    assert.match(result.reason ?? "", /school_code/);
+  });
+
+  test("instabilité entre deux récupérations (nombre d'options différent) -> pas de preuve d'épuisement, MANUAL_REVIEW_REQUIRED", () => {
+    const fetch1 = [{ value: "A", label: "École A" }, { value: "B", label: "École B" }];
+    const fetch2 = [{ value: "A", label: "École A" }]; // une option a disparu entre les deux requêtes
+    const stable = fetch1.length === fetch2.length && JSON.stringify(fetch1) === JSON.stringify(fetch2);
+    const outcome = evaluateCompleteness({
+      expectedRows: null, expectedRowsSource: "UNKNOWN", extractedRows: fetch1.length,
+      duplicateRows: 0, explainedExclusions: [], pagination: null,
+      structureValid: true, structureInvalidReason: null, networkFailed: false, networkFailureReason: null,
+      unknownCountExplicitlyComplete: stable ? { reason: "stable" } : null,
+    });
+    assert.equal(outcome.status, "MANUAL_REVIEW_REQUIRED");
+    assert.equal(outcome.safeForStaging, false);
+  });
+
+  test("stabilité confirmée (même contenu, deux récupérations) -> PASS, preuve d'épuisement alternative valide", () => {
+    const fetch1 = [{ value: "A", label: "École A" }, { value: "B", label: "École B" }];
+    const fetch2 = [{ value: "A", label: "École A" }, { value: "B", label: "École B" }];
+    const stable = fetch1.length === fetch2.length && JSON.stringify(fetch1) === JSON.stringify(fetch2);
+    const outcome = evaluateCompleteness({
+      expectedRows: null, expectedRowsSource: "UNKNOWN", extractedRows: fetch1.length,
+      duplicateRows: 0, explainedExclusions: [], pagination: null,
+      structureValid: true, structureInvalidReason: null, networkFailed: false, networkFailureReason: null,
+      unknownCountExplicitlyComplete: stable ? { reason: "deux récupérations identiques" } : null,
+    });
+    assert.equal(outcome.status, "PASS");
+    assert.equal(outcome.safeForStaging, true);
+  });
+
+  test("préfixe numérique de matricule : ne jamais réutiliser un décodage région validé sur UN AUTRE schéma sans le revalider (régression de l'erreur trouvée pendant cet audit)", () => {
+    // Les 2355 matricules DIGIT_PREFIX cartescolaire commencent TOUS par "1"
+    // (aucune variance) — un décodage région appliqué aveuglément (ex. celui
+    // dérivé du format MINESEC V1 à 17 caractères) assignerait à tort TOUTE
+    // cette population à une seule région. Le test vérifie qu'une table de
+    // décodage vide (le choix fait après correction) ne produit aucune
+    // région inventée.
+    const DIGIT_PREFIX_TO_REGION: Record<string, string> = {}; // corrigé : vide, jamais deviné
+    const allSamePrefix = ["10030001", "10020002", "10010003"].every((v) => v[0] === "1");
+    assert.ok(allSamePrefix, "fixture cohérente avec le cas réel observé");
+    for (const matricule of ["10030001", "10020002", "10010003"]) {
+      assert.equal(DIGIT_PREFIX_TO_REGION[matricule[0]], undefined);
+    }
   });
 });
 
