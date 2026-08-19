@@ -1,0 +1,82 @@
+{
+  "sprint": "MINESUP-D",
+  "operator": "jean-merlain",
+  "approved_by": "Eddy",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "registry_import_batch": "minesup-pilot-v1",
+  "approval_checksum": "f1f12668644215a36a1f5e162fab196de25be01d959033ac18547cd4d28f1fdd",
+  "executed_at": "2026-08-19",
+  "database": {
+    "establishments_before": 2151,
+    "establishments_inserted": 29,
+    "establishments_after": 2180,
+    "staging_before": 2284,
+    "staging_after": 2284,
+    "registry_identifiers_before": 2096,
+    "registry_identifiers_inserted": 49,
+    "registry_identifiers_after": 2145
+  },
+  "promotion": {
+    "snapshot_candidates": 29,
+    "eligible": 29,
+    "inserted": 29,
+    "already_live": 0,
+    "skipped": 0,
+    "failed": 0,
+    "conflicts": 0
+  },
+  "staging": {
+    "promoted": 29,
+    "linked": 29,
+    "orphans": 0
+  },
+  "registry_identifiers": {
+    "planned": 50,
+    "inserted": 49,
+    "creation_orders_inserted": 25,
+    "opening_authorizations_inserted": 24,
+    "collisions": 1,
+    "orphans": 0
+  },
+  "known_identifier_collision": {
+    "count": 1,
+    "description": "Deux institutions distinctes et légitimes (creation_order différents, confirmant qu'il ne s'agit PAS d'un doublon) partagent la même valeur d'opening_authorization dans la source MINESUP elle-même : 'N°13/0052/MINESUP du 09 janvier 2013'.",
+    "establishment_a": { "name": "Capitol Higher Institute of Health Sciences and Beauty Therapy", "has_opening_authorization": true },
+    "establishment_b": { "name": "Catholic School of Health Sciences Shisong", "has_opening_authorization": false, "has_creation_order": true },
+    "handling": "La contrainte UNIQUE(registry, identifier_type, identifier) a correctement refusé la seconde insertion — aucune collision n'a été ignorée ni contournée. Shisong a été créé et lié au staging normalement (établissement valide, CREATION_ORDER correctement enregistré) ; seul son OPENING_AUTHORIZATION reste non enregistré tant que l'ambiguïté de la source n'est pas levée par une investigation humaine ou une clarification MINESUP. Non résolu automatiquement — hors périmètre de ce sprint.",
+    "reconciliation_outcome": "PARTIAL_RECONCILIATION_REQUIRED (1 candidat sur 29 avec un identifiant manquant, explicité et documenté — jamais un SUCCESS silencieux)"
+  },
+  "pii": {
+    "residual_before_promotion": 0,
+    "persisted": 0,
+    "url_pii": 0,
+    "safe": true
+  },
+  "security": {
+    "existing_establishments_updated": 0,
+    "existing_establishments_deleted": 0,
+    "owner_auto_assigned": 0,
+    "verified_auto_activated": 0
+  },
+  "idempotence": {
+    "second_run_type": "dry-run (candidats déjà promus automatiquement exclus par le script)",
+    "second_run_eligible": 0,
+    "second_run_would_insert_establishments": 0,
+    "second_run_would_link_staging": 0,
+    "second_run_would_insert_identifiers": 0,
+    "outcome": "PASS"
+  },
+  "public_qa": {
+    "search_v2": "PASS — établissements promus trouvés par nom/acronyme (ex. 'BUIST', 'Bamenda'), aucune régression, requêtes ~150-300ms",
+    "school_page": "PASS — /ecole/[id] 200 pour échantillon testé",
+    "claim_page": "PASS — /revendiquer/[id] 200 pour échantillon testé",
+    "pagination": "PASS — /api/recherche?page=2 200",
+    "false_alarm_investigated": "Une requête de recherche 'Access Care Institute' (orthographe corrigée) ne trouvait rien — pas une régression : le nom réel préservé tel quel depuis la source est 'Acces Care Institute' (une seule lettre 's', orthographe MINESUP d'origine, jamais 'corrigée'). Confirmé en recherchant l'orthographe exacte."
+  },
+  "bugs_found_and_fixed_this_sprint": [
+    "Matching revalidation comparait chaque candidat à l'intégralité du staging y compris ses propres frères du même batch pilote -> 29/29 faux DUPLICATE_REVIEW avant correctif (exclusion du batch entier, pas seulement la ligne du candidat).",
+    "Checksum d'approbation recalculé avec un tri par id au lieu de created_at -> hash différent pour le même ensemble de candidats (corrigé pour utiliser le même ordre que generateMinesupPilotReports()).",
+    "establishments.slug (NOT NULL) omis du payload d'insertion -> échec propre des 29 inserts au premier essai --commit, aucune écriture partielle (le garde-fou fail-safe a fonctionné comme prévu : 0 candidat créé sans être aussi lié/complet). Corrigé en réutilisant la convention slugify() + désambiguïsation des scripts promote-*.ts existants, avec vérification supplémentaire contre les slugs déjà existants en base."
+  ],
+  "not_a_bug_real_source_anomaly": "La collision d'identifiant OPENING_AUTHORIZATION entre Capitol et Shisong (voir known_identifier_collision) est une anomalie de LA SOURCE MINESUP elle-même, pas un bug du pipeline Écoles237 — le pipeline l'a détectée et refusée correctement, exactement comme conçu."
+}

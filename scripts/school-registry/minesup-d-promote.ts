@@ -47,6 +47,15 @@ function argFlag(name: string): string | undefined {
 function hasFlag(name: string): boolean {
   return process.argv.includes(`--${name}`);
 }
+/** Même convention que les autres scripts promote-*.ts (ex. promote-major-cities-r3-2.ts). */
+function slugify(name: string): string {
+  return name
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 async function fetchAllPaginated<T>(supabase: any, table: string, select: string, filter?: (q: any) => any): Promise<T[]> {
   const all: T[] = [];
@@ -188,14 +197,29 @@ async function main() {
   const orphanIdentifiers: string[] = [];
   const establishmentIdsCreatedThisRun = new Set<string>();
 
+  // `slug` est NOT NULL sur establishments (et vraisemblablement UNIQUE) —
+  // charger les slugs existants pour éviter des collisions inutiles, en plus
+  // de la désambiguïsation intra-lot (même convention que promote-*.ts).
+  const existingSlugRows = await fetchAllPaginated<{ slug: string | null }>(supabase, "establishments", "slug");
+  const usedSlugs = new Set<string>(existingSlugRows.map((r) => r.slug).filter((s): s is string => !!s));
+
   for (const r of finalEligible) {
     const raw = r.raw_data as any;
+    const base = slugify(r.name_raw);
+    let slug = base;
+    let n = 1;
+    while (usedSlugs.has(slug)) {
+      slug = `${base}-${n}`;
+      n++;
+    }
+    usedSlugs.add(slug);
+
     const { data: est, error: estError } = await supabase
       .from("establishments")
       .insert({
-        name: r.name_raw, main_category: "superieur", region: r.region, city: r.city,
-        source_ministry: EXPECTED_SOURCE_MINISTRY, source_url: r.source_url,
-        official_id: null, owner_id: null, is_verified: false,
+        name: r.name_raw, slug, main_category: "superieur", region: r.region, city: r.city,
+        source_ministry: EXPECTED_SOURCE_MINISTRY, source_url: r.source_url, source_reference: null, source_updated_at: new Date().toISOString(),
+        official_id: null, owner_id: null, is_verified: false, description: null, cover_image_url: null,
         registry_import_batch: EXPECTED_BATCH,
       })
       .select("id")

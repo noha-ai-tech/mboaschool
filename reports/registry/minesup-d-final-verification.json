@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-08-19T17:06:15.244Z",
+  "promoted_staging_rows": 29,
+  "all_have_establishment_link": true,
+  "establishments_found_for_all_ids": true,
+  "owner_auto_assigned": 0,
+  "verified_auto_activated": 0,
+  "orphan_identifiers": 0,
+  "establishment_linked_by_multiple_staging_rows": 0,
+  "pii_residual": 0,
+  "known_identifier_collision": {
+    "description": "Deux institutions distinctes (creation_order différents, confirmant qu'il ne s'agit PAS d'un doublon) partagent la même valeur d'opening_authorization dans la source MINESUP elle-même — collision réelle de la donnée source, jamais résolue automatiquement, conforme à la politique 'aucune collision ignorée'.",
+    "establishment_a": {
+      "name": "Capitol Higher Institute of Health Sciences and Beauty Therapy",
+      "establishment_id": "8a5786e1-2c4a-4340-b827-a6c286f8990d",
+      "has_opening_authorization": true
+    },
+    "establishment_b": {
+      "name": "Catholic School of Health Sciences Shisong",
+      "establishment_id": "71d1c40e-7b52-4e8a-86f7-2d89b23218a9",
+      "has_opening_authorization": false,
+      "has_creation_order": true,
+      "shared_value": "N°13/0052/MINESUP du  09 janvier 2013"
+    },
+    "resolution": "Non résolu — nécessite une clarification auprès de MINESUP ou une investigation source supplémentaire (hors périmètre de ce sprint). Shisong reste un établissement valide avec son CREATION_ORDER correctement enregistré ; son OPENING_AUTHORIZATION n'est PAS enregistré tant que l'ambiguïté n'est pas levée."
+  }
+}

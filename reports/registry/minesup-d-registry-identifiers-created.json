@@ -1,0 +1,448 @@
+{
+  "generated_at": "2026-08-19T17:05:36.871Z",
+  "registry": "MINESUP_IPES",
+  "count": 49,
+  "identifiers": [
+    {
+      "id": "bf6e5c27-2612-4d99-b9e6-da5cb3a32389",
+      "establishment_id": "d9498d3a-e88f-465b-b6b6-14873460da2f",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°05/0083/MINESUP ; N°05/0084/MINESUP ;  N°05/0085/MINESUP ;  N°05/0086/MINESUP du 07 septembre 2005",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:44.158996+00:00"
+    },
+    {
+      "id": "1d73f5c5-6b09-4128-88aa-784302c7ee76",
+      "establishment_id": "d9498d3a-e88f-465b-b6b6-14873460da2f",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°05/0088/MINESUP ; N°05/0089/MINESUP ; N°05/0092/MINESUP ;  N°05/0093/MINESUP ;  du 07 septembre 2005.",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:44.300416+00:00"
+    },
+    {
+      "id": "ff853c7e-79af-43d8-ab69-7af9eb2da9f2",
+      "establishment_id": "400301dc-cfaf-4076-8468-566dd5efa401",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "19-043372/L/MINESUP/SG/DDES/ESUP/SDA/OAGS du 12 avril 2019",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:44.699087+00:00"
+    },
+    {
+      "id": "bd74d8ab-0ab0-4b29-bf0c-934dd46cfc3f",
+      "establishment_id": "400301dc-cfaf-4076-8468-566dd5efa401",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "19-043372/L/MINESUP/SG/DDES/ESUP/SDA/OAGS du 12 avril 2019",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:44.828495+00:00"
+    },
+    {
+      "id": "97e21cbc-91b6-4e22-bce1-4e349d714e51",
+      "establishment_id": "8a5786e1-2c4a-4340-b827-a6c286f8990d",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°05/0078/MINESUP du  07 septembre 2005",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:45.227117+00:00"
+    },
+    {
+      "id": "e8d52ee5-fe95-4f9a-85dc-2f921b2d2fed",
+      "establishment_id": "8a5786e1-2c4a-4340-b827-a6c286f8990d",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°13/0052/MINESUP du  09 janvier 2013",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:45.360348+00:00"
+    },
+    {
+      "id": "4e8f96b2-800c-4e51-b96c-5dbd8b12f868",
+      "establishment_id": "60e1c9cd-31eb-4236-a67e-664a60c74a98",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°12/00359/MINESUP  du 06 août 2012",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:45.758934+00:00"
+    },
+    {
+      "id": "e67e76f3-fc08-4a94-8af5-289dcb7991e9",
+      "establishment_id": "60e1c9cd-31eb-4236-a67e-664a60c74a98",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°11/0047/MINESUP du 12 janvier 2011",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:45.891266+00:00"
+    },
+    {
+      "id": "bc43ee0c-339b-4db4-b3df-6a2fce86fe9a",
+      "establishment_id": "d548473d-7abf-45ad-a688-28f88067bfe6",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°16-10075/L/MINESUP/SG/DDES/ESUP/SDA/OASB du 05 septembre 2016",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:46.29072+00:00"
+    },
+    {
+      "id": "0227c3ae-7db0-4e81-b85c-b744881d703e",
+      "establishment_id": "d548473d-7abf-45ad-a688-28f88067bfe6",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°16-10075/L/MINESUP/SG/DDES/ESUP/SDA/OASB du 05 septembre 2016",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:46.425235+00:00"
+    },
+    {
+      "id": "9519b6c5-83ce-4a27-81b6-2445d3da4031",
+      "establishment_id": "f5795c8a-cef9-4b8d-870e-f6bfc9ef025b",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°07/0143/MINUP du 21 septembre 2007",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:46.826545+00:00"
+    },
+    {
+      "id": "8faa3541-0b72-4783-906c-b39a9187f0db",
+      "establishment_id": "f5795c8a-cef9-4b8d-870e-f6bfc9ef025b",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°12/0396/MINESUP du 17 août 2012",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:46.953211+00:00"
+    },
+    {
+      "id": "66cb4cff-0ad1-4e18-85fa-d1e6d7ab9e09",
+      "establishment_id": "7a653532-f62f-42b6-8795-0bae452569da",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°02/0051/MINESUP du",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:47.869906+00:00"
+    },
+    {
+      "id": "e3f39d2e-dd14-4265-8432-3b8670c91be5",
+      "establishment_id": "7a653532-f62f-42b6-8795-0bae452569da",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°02/0073/MINESUP du 13/08/2002.",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:48.003391+00:00"
+    },
+    {
+      "id": "d5ec2662-f6b0-43e3-a7a6-918b8162fed7",
+      "establishment_id": "68cc179b-d322-42a5-9bc3-2417f502c188",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°14/N/02628/MINESUP/SG/DDES/ESUP/SDA/MM du 22 avril 2014",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:48.392129+00:00"
+    },
+    {
+      "id": "6b5a3c65-a3b2-483c-84b9-ed6f04c5f044",
+      "establishment_id": "68cc179b-d322-42a5-9bc3-2417f502c188",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°14/N/02628/MINESUP/SG/DDES/ESUP/SDA/MM du 22 avril 2014",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:48.515776+00:00"
+    },
+    {
+      "id": "c816fef4-eaca-4c2e-8547-a3fb1aacaa29",
+      "establishment_id": "3fba2a5d-6438-4f0d-8307-ca2b1b3e9a53",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°06/0050/MINESUP du 02 juin 2006",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:48.919519+00:00"
+    },
+    {
+      "id": "67892124-7eee-4a8f-b8c0-d5b2ac756090",
+      "establishment_id": "3fba2a5d-6438-4f0d-8307-ca2b1b3e9a53",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°12/0393/MINESUP du 17 août 2012",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:49.057818+00:00"
+    },
+    {
+      "id": "a176ad5c-256f-4fcd-b36a-334347fbd1c5",
+      "establishment_id": "411a9767-a23e-43a2-ab72-33c0f4affad4",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°16-13298/N/MINESUP/DDES/ESUP/SDA/NJN/ebm du 08décembre 2016",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:49.457944+00:00"
+    },
+    {
+      "id": "7ec78f47-88ee-4f17-8474-42354ac3f03f",
+      "establishment_id": "411a9767-a23e-43a2-ab72-33c0f4affad4",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°16-13298/N/MINESUP/DDES/ESUP/SDA/NJN/ebm du 08décembre 2016",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:49.58537+00:00"
+    },
+    {
+      "id": "efcaac39-473b-4c87-984c-f474a4723f08",
+      "establishment_id": "37715786-0746-4f3b-8911-8f2fec72bad3",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°17-08144/L/MINESUP/DDES/ESUP/SDA/MM du 04 août 2017",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:49.979996+00:00"
+    },
+    {
+      "id": "b1498478-640a-46b7-b1d0-9934e12ce3fd",
+      "establishment_id": "37715786-0746-4f3b-8911-8f2fec72bad3",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°17-08144/L/MINESUP/DDES/ESUP/SDA/MM du 04 août 2017",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:50.103011+00:00"
+    },
+    {
+      "id": "710a8781-eae5-403e-8960-fa26f8d156ad",
+      "establishment_id": "57cae063-bccf-4727-82ad-d3eb70259205",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°11/00507/MINESUP/SG/DDES du",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:50.505599+00:00"
+    },
+    {
+      "id": "aff2caf7-d9e0-4a31-b9cc-7122a0543075",
+      "establishment_id": "57cae063-bccf-4727-82ad-d3eb70259205",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°12/0363/MINESUP du 17 août 2012",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:50.63946+00:00"
+    },
+    {
+      "id": "b1fd0297-78ea-415a-9375-181b76c66597",
+      "establishment_id": "2652a1de-e072-4b98-9830-1aefe532fc78",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°16-07755/N/MINESUP/SG/DDES/ESUP/SDA/NJN/ebm du 19 juillet 2016",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:51.031931+00:00"
+    },
+    {
+      "id": "c0ff44d8-c636-4de4-8590-7a2e4480d41d",
+      "establishment_id": "2652a1de-e072-4b98-9830-1aefe532fc78",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°16-07755/N/MINESUP/SG/DDES/ESUP/SDA/NJN/ebm du 19 juillet 2016",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:51.161078+00:00"
+    },
+    {
+      "id": "6cf5fb7e-2deb-40e0-8eaf-ee5d791e4144",
+      "establishment_id": "ed4f6502-2121-4806-b902-e6cdc79db00c",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°13/0400/MINESUP/SG/DDES of 10 septembre 2013",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:51.557933+00:00"
+    },
+    {
+      "id": "c75d0fb4-91cf-4424-bab3-d0a2d450c82e",
+      "establishment_id": "ed4f6502-2121-4806-b902-e6cdc79db00c",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°14/0395/MINESUP/SG/DDES/ du 04 juillet 2014",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:51.691117+00:00"
+    },
+    {
+      "id": "362241c7-32c4-4aff-bec5-2d144a20289d",
+      "establishment_id": "9dce018e-1378-49fb-8c9d-6b9e170f9aad",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°17-07437/L/MINESUP/SG/DDES/ESUP/SDA/OAGS du 12 juillet 2017",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:52.092474+00:00"
+    },
+    {
+      "id": "83046148-68cb-4cec-a186-28985589ceec",
+      "establishment_id": "9dce018e-1378-49fb-8c9d-6b9e170f9aad",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°17-07437/L/MINESUP/SG/DDES/ESUP/SDA/OAGS du 12 juillet 2017",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:52.219247+00:00"
+    },
+    {
+      "id": "f76718a0-ef55-43fa-96c4-ade0f5062659",
+      "establishment_id": "752068fd-cf3f-4415-b9df-c7227b1a79b6",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°02/0053/MINESUP du",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:52.613249+00:00"
+    },
+    {
+      "id": "a6a5f529-40d5-42e6-bba0-9f5baf6c533f",
+      "establishment_id": "752068fd-cf3f-4415-b9df-c7227b1a79b6",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°02/0074/MINESUP du 13 août 2002 complétée par l’arrêté N°06/0059/MINESUP du 02 juin 2006",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:52.744011+00:00"
+    },
+    {
+      "id": "de0a5cd7-f633-454a-8ec3-adde9bcc1595",
+      "establishment_id": "0b253a9f-bb04-47d9-8934-8d9f5a231ef6",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°17-08215/L/MINESUP/SG/DDES/ESUP/SDA/OPC du 08 août 2017",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:53.140587+00:00"
+    },
+    {
+      "id": "7d0b4638-040a-4e50-9285-b42dd4323a62",
+      "establishment_id": "0b253a9f-bb04-47d9-8934-8d9f5a231ef6",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°17-08215/L/MINESUP/SG/DDES/ESUP/SDA/OPC du 08 août 2017",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:53.270162+00:00"
+    },
+    {
+      "id": "1f679a3e-9079-4c98-9a18-e7d9e6960521",
+      "establishment_id": "28f2a08f-2ea9-4881-a1f1-b4ae23b54d39",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°15/00760/MINESUP/SG/DDES/ESUP/SDA/NJN du 30 janvier 2015",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:53.671674+00:00"
+    },
+    {
+      "id": "5bdc45ff-effa-4a11-8b9e-51636b1f34fd",
+      "establishment_id": "28f2a08f-2ea9-4881-a1f1-b4ae23b54d39",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°15/00760/MINESUP/SG/DDES/ESUP/SDA/NJN du 30 janvier 2015",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:53.794935+00:00"
+    },
+    {
+      "id": "5c36cbc5-74a9-4898-9f64-13376c71d817",
+      "establishment_id": "6e17ea8a-9108-4ed1-b3cb-e7ae66c3485a",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°13/0402/MINESUP/SG/DDES du 10 septembre 2013",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:54.196156+00:00"
+    },
+    {
+      "id": "93dd2055-3160-46a6-bc6b-ef66c107e468",
+      "establishment_id": "6e17ea8a-9108-4ed1-b3cb-e7ae66c3485a",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°06/0056/MINESUP du 02 juin 2006.",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:54.337591+00:00"
+    },
+    {
+      "id": "93a7ba22-cc1b-42d2-8075-238aaf45f638",
+      "establishment_id": "3479cf30-a1cc-4f75-a3e5-95a20a5f41bd",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°05/0010/MINESUP du",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:54.733431+00:00"
+    },
+    {
+      "id": "2eef296e-ef68-4c58-bbdd-f49f20623e0a",
+      "establishment_id": "3479cf30-a1cc-4f75-a3e5-95a20a5f41bd",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°06/0056/MINESUP du 02 juin 2006,",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:54.86359+00:00"
+    },
+    {
+      "id": "b9b52108-8137-4b16-acf4-66e4e5e423eb",
+      "establishment_id": "ae31d758-9761-48cb-9940-364ed017f7e4",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°07/0135/MINESUP du 21 septembre 2007",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:55.25104+00:00"
+    },
+    {
+      "id": "db31790e-9f0b-40da-a60a-9417482c3488",
+      "establishment_id": "ae31d758-9761-48cb-9940-364ed017f7e4",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°07/0144/MINESUP du 21 septembre 2007",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:55.382921+00:00"
+    },
+    {
+      "id": "522f313e-7960-4546-8621-b718075361b5",
+      "establishment_id": "e3acd884-6f56-4846-8e0c-e889637e4798",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°19-04400/L/MINESUP/DDES/ESUP/SSIPES/LMN du 15 avril 2019",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:56.053537+00:00"
+    },
+    {
+      "id": "9c089d7f-fff3-40e8-b079-740c4b8128c7",
+      "establishment_id": "e3acd884-6f56-4846-8e0c-e889637e4798",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°19-04400/L/MINESUP/DDES/ESUP/SSIPES/LMN du 15 avril 2019",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:56.190272+00:00"
+    },
+    {
+      "id": "cde6393c-2a41-42d6-8a6d-d326cdf7da67",
+      "establishment_id": "60c33474-78b0-4877-a876-70637359eb44",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°1708245/L/MINESUP/SG/DDES/ESUP/SDA/DAGS du 09 Août 2017",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:56.588244+00:00"
+    },
+    {
+      "id": "210fe7bd-be17-45e3-9d0f-0442ee6ba372",
+      "establishment_id": "60c33474-78b0-4877-a876-70637359eb44",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°2107/MINESUP/SG/DDES/ESUP/SDA/… du 02 décembre 2021",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:56.716091+00:00"
+    },
+    {
+      "id": "7a6e4167-e0f7-4a17-b55e-64881eba1731",
+      "establishment_id": "caada710-d33f-4ad9-b12f-434c0b29c79f",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°19-04625/L/MINESUP/DDES/ESUP/SSIPES/LMN du 17 avril 2019",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:57.114436+00:00"
+    },
+    {
+      "id": "a6b281e3-7800-48b2-8fcd-340fe5579d6a",
+      "establishment_id": "caada710-d33f-4ad9-b12f-434c0b29c79f",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "OPENING_AUTHORIZATION",
+      "identifier": "N°19-04625/L/MINESUP/DDES/ESUP/SSIPES/LMN du 17 avril 2019",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:57.245148+00:00"
+    },
+    {
+      "id": "01c0d642-1188-406d-898e-885583305bb0",
+      "establishment_id": "71d1c40e-7b52-4e8a-86f7-2d89b23218a9",
+      "registry": "MINESUP_IPES",
+      "identifier_type": "CREATION_ORDER",
+      "identifier": "N°16-0830/MINESUP/SG/DDES/ESUP du 14 septembre 2016",
+      "source_reference": "Promotion MINESUP-D (batch minesup-pilot-v1)",
+      "created_at": "2026-08-19T17:03:57.639302+00:00"
+    }
+  ]
+}

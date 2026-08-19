@@ -1,0 +1,23 @@
+{
+  "generated_at": "2026-08-19T17:04:00.528Z",
+  "operator": "jean-merlain",
+  "approved_by": "Eddy",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "registry_import_batch": "minesup-pilot-v1",
+  "approval_checksum": "f1f12668644215a36a1f5e162fab196de25be01d959033ac18547cd4d28f1fdd",
+  "eligible": 29,
+  "created": 29,
+  "staging_linked": 29,
+  "identifiers_inserted": 49,
+  "audit": {
+    "createdCount": 29,
+    "stagingLinkedCount": 29,
+    "identifiersInsertedCount": 49,
+    "createdWithoutStagingLink": [],
+    "createdWithoutIdentifiers": [
+      "71d1c40e-7b52-4e8a-86f7-2d89b23218a9"
+    ],
+    "orphanIdentifiers": [],
+    "outcome": "PARTIAL_RECONCILIATION_REQUIRED"
+  }
+}
