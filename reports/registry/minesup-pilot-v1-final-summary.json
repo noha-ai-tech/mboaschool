@@ -1,0 +1,48 @@
+{
+  "run_history_note": "Le collecteur a été exécuté 3 fois : (1) premier passage réel — 32 candidats neufs extraits, 0 correspondance live/staging, 29 CLEAN_APPROVABLE + 3 SOURCE_REVIEW, 32 lignes insérées en staging ; (2) second passage — idempotence prouvée (0 insertion, 32 déjà présentes) ; (3) troisième passage — après découverte et correctif d'un bug PII (des noms de promoteurs réels avaient été sauvegardés en clair dans les snapshots HTML avant d'être committés), pour régénérer des snapshots correctement rédigés — de nouveau 0 insertion (idempotence reconfirmée). Ce fichier reflète l'état final réel après ces 3 passages : establishments/staging/registry_identifiers inchangés par rapport au 1er passage, les 32 lignes staging restent celles créées au 1er passage (jamais dupliquées).",
+  "generated_at": "2026-08-19T16:20:12.156Z",
+  "batch": "minesup-pilot-v1",
+  "operator": "jean-merlain",
+  "database": {
+    "establishments_before": 2151,
+    "establishments_after": 2151,
+    "staging_before": 2284,
+    "staging_after": 2284,
+    "registry_identifiers_before": 2096,
+    "registry_identifiers_after": 2096
+  },
+  "pilot": {
+    "type": "COMPLETE_REGION",
+    "region": "Région Nord-Ouest",
+    "ipes_count": 31,
+    "public_addition": 1,
+    "total_candidates": 32
+  },
+  "completeness": {
+    "status": "PASS",
+    "safeForNormalization": true,
+    "safeForStaging": true,
+    "accounted": 31,
+    "expected": 31,
+    "explanation": "31/31 lignes comptabilisées — équation vérifiée."
+  },
+  "tally": {
+    "exact_identifier": 0,
+    "exact_identity": 32,
+    "strong": 0,
+    "probable": 0,
+    "ambiguous": 0,
+    "new_ready": 0,
+    "source_review": 0,
+    "invalid": 0
+  },
+  "inserted": 0,
+  "skipped_idempotent": 32,
+  "second_pass_would_insert": 0,
+  "staging_rows_by_status": {
+    "ready": 29,
+    "normalized": 3
+  },
+  "clean_approvable": 29,
+  "approval_checksum": "f1f12668644215a36a1f5e162fab196de25be01d959033ac18547cd4d28f1fdd"
+}

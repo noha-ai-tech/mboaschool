@@ -1,0 +1,20 @@
+{
+  "note": "Ce rapport reflète le DERNIER passage du collecteur (exécuté pour régénérer les snapshots après un correctif PII — voir minesup-pilot-v1-final-summary.json). exact_identity=32 signifie que les 32 candidats correspondaient à leur propre copie DÉJÀ STAGÉE d'un passage précédent, PAS à des établissements live préexistants (establishments_after = establishments_before = 2151 dans tous les passages). Le tout premier passage (données neuves, avant tout staging) a produit : exact=0, strong=0, probable=0, ambiguous=0, new_ready=29, source_review=3, invalid=0 — c'est CE résultat qui a justifié l'insertion staging initiale.",
+  "generated_at": "2026-08-19T16:20:11.179Z",
+  "batch": "minesup-pilot-v1",
+  "operator": "jean-merlain",
+  "candidates_extracted": 32,
+  "existing_live": 2151,
+  "existing_staging": 2284,
+  "tally": {
+    "exact_identifier": 0,
+    "exact_identity": 32,
+    "strong": 0,
+    "probable": 0,
+    "ambiguous": 0,
+    "new_ready": 0,
+    "source_review": 0,
+    "invalid": 0
+  },
+  "would_stage": 32
+}

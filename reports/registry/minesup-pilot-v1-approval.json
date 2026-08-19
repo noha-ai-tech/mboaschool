@@ -1,0 +1,445 @@
+{
+  "generated_at": "2026-08-19T16:20:11.755Z",
+  "operator": "jean-merlain",
+  "sprint": "MINESUP-C",
+  "batch": "minesup-pilot-v1",
+  "candidate_count": 29,
+  "candidates": [
+    {
+      "staging_id": "dd59929f-728d-403b-aeba-2f2e0d4e4076",
+      "name": "Acces Care Institute (ACI)",
+      "region": "North West",
+      "city": "Nkwen",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "http://www.minesup.gov.cm/index.php/acces-care-institute-aci/",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": null,
+        "opening_authorization": null
+      }
+    },
+    {
+      "staging_id": "f4705c18-d713-4e74-abc4-b2636d918109",
+      "name": "Bamenda University Institute of Science and Technology (BUIST)",
+      "region": "Nord-Ouest",
+      "city": "Bamenda (Mile 3 Nkwen)",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7775&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°05/0083/MINESUP ; N°05/0084/MINESUP ;  N°05/0085/MINESUP ;  N°05/0086/MINESUP du 07 septembre 2005",
+        "opening_authorization": "N°05/0088/MINESUP ; N°05/0089/MINESUP ; N°05/0092/MINESUP ;  N°05/0093/MINESUP ;  du 07 septembre 2005."
+      }
+    },
+    {
+      "staging_id": "23f8537b-bf0d-44ca-8569-e043464cb8c5",
+      "name": "Baptist Institute of Higher Learning",
+      "region": "Nord-Ouest",
+      "city": "Bamenda",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7811&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "19-043372/L/MINESUP/SG/DDES/ESUP/SDA/OAGS du 12 avril 2019",
+        "opening_authorization": "19-043372/L/MINESUP/SG/DDES/ESUP/SDA/OAGS du 12 avril 2019"
+      }
+    },
+    {
+      "staging_id": "cf0cc340-6e85-4a1c-8ac4-fb75876d88c6",
+      "name": "Capitol Higher Institute of Health Sciences and Beauty Therapy",
+      "region": "Nord-Ouest",
+      "city": "Bamenda (Mile 3 Nkwen)",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7779&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°05/0078/MINESUP du  07 septembre 2005",
+        "opening_authorization": "N°13/0052/MINESUP du  09 janvier 2013"
+      }
+    },
+    {
+      "staging_id": "05440cf1-8ad6-4a6b-b530-c644e882d2dc",
+      "name": "Catholic University Institute of Bamenda",
+      "region": "Nord-Ouest",
+      "city": null,
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7781&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°12/00359/MINESUP  du 06 août 2012",
+        "opening_authorization": "N°11/0047/MINESUP du 12 janvier 2011"
+      }
+    },
+    {
+      "staging_id": "33030456-77a2-4ad6-bcaa-eeca225e1546",
+      "name": "Central Higher Institute (CHI)",
+      "region": "Nord-Ouest",
+      "city": "Bamenda",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7825&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°16-10075/L/MINESUP/SG/DDES/ESUP/SDA/OASB du 05 septembre 2016",
+        "opening_authorization": "N°16-10075/L/MINESUP/SG/DDES/ESUP/SDA/OASB du 05 septembre 2016"
+      }
+    },
+    {
+      "staging_id": "e64bec3d-a5ad-4744-9808-0598e46d20c0",
+      "name": "Christian University Institute",
+      "region": "Nord-Ouest",
+      "city": "Mbatu",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7783&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°07/0143/MINUP du 21 septembre 2007",
+        "opening_authorization": "N°12/0396/MINESUP du 17 août 2012"
+      }
+    },
+    {
+      "staging_id": "9be315b4-b2d4-4c89-a45a-75ac9b0f55af",
+      "name": "Continental University Institute of science and Technology (CUIST)",
+      "region": "North West Region",
+      "city": "Upper Melim Kumbo",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://www.minesup.gov.cm/index.php/continental-university-institute-of-science-and-technology-cuist/",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": null,
+        "opening_authorization": null
+      }
+    },
+    {
+      "staging_id": "ebdd0ac9-833a-4aab-a386-c97da52543ec",
+      "name": "Experiental Higher Institute of Science and Technology (EXHIST)",
+      "region": "CENTRE/ NORTH WEST(Annexe)",
+      "city": "Entre collège Ebanda, Biyem-Assi, Yaoundé / Below Linguistic Centre, Old Town Bamenda (Annexe)",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://www.minesup.gov.cm/index.php/experiental-higher-institute-of-science-and-technology-exhist/",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": null,
+        "opening_authorization": null
+      }
+    },
+    {
+      "staging_id": "f8eda3ef-c0d1-4582-a832-df528171a2fd",
+      "name": "Fonab Polytechnic",
+      "region": "Nord-Ouest",
+      "city": "(Mile 3 Nkwen)",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7787&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°02/0051/MINESUP du",
+        "opening_authorization": "N°02/0073/MINESUP du 13/08/2002."
+      }
+    },
+    {
+      "staging_id": "56e97176-8e27-44ba-b5f1-1d2e6f22dee5",
+      "name": "Havard Higher Institute of Science and Technology",
+      "region": "Nord-Ouest",
+      "city": "Up station",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7789&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°14/N/02628/MINESUP/SG/DDES/ESUP/SDA/MM du 22 avril 2014",
+        "opening_authorization": "N°14/N/02628/MINESUP/SG/DDES/ESUP/SDA/MM du 22 avril 2014"
+      }
+    },
+    {
+      "staging_id": "94b3607e-5354-4e8b-bb61-1da9ecf8ff23",
+      "name": "Higher Institute for Business and management Sciences",
+      "region": "Nord-Ouest",
+      "city": "Bamenda (Mbatu)",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7791&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°06/0050/MINESUP du 02 juin 2006",
+        "opening_authorization": "N°12/0393/MINESUP du 17 août 2012"
+      }
+    },
+    {
+      "staging_id": "332cde68-1f88-4eb5-bf50-96cae4b1f322",
+      "name": "Higher Institute for Professional Development and Training (HIPDET)",
+      "region": "Nord-Ouest",
+      "city": null,
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7809&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°16-13298/N/MINESUP/DDES/ESUP/SDA/NJN/ebm du 08décembre 2016",
+        "opening_authorization": "N°16-13298/N/MINESUP/DDES/ESUP/SDA/NJN/ebm du 08décembre 2016"
+      }
+    },
+    {
+      "staging_id": "39d6a1ab-329c-446f-b2cf-ca35202ebbf3",
+      "name": "Higher Institute of Professionalism and Technology (HIPT)",
+      "region": "Nord-Ouest",
+      "city": "Kumbo",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7816&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°17-08144/L/MINESUP/DDES/ESUP/SDA/MM du 04 août 2017",
+        "opening_authorization": "N°17-08144/L/MINESUP/DDES/ESUP/SDA/MM du 04 août 2017"
+      }
+    },
+    {
+      "staging_id": "5ce1ddb8-eff8-44dc-9aed-e6d5fc8a59b6",
+      "name": "International University of Bamenda",
+      "region": "Nord-ouest",
+      "city": "Kumbo",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7795&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°11/00507/MINESUP/SG/DDES du",
+        "opening_authorization": "N°12/0363/MINESUP du 17 août 2012"
+      }
+    },
+    {
+      "staging_id": "c50e1225-cf84-4e9b-b0c6-0b1095b0ab8b",
+      "name": "Jomatt Polytechnic Institute of Education",
+      "region": "Nord-Ouest",
+      "city": "Bamenda",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7827&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°16-07755/N/MINESUP/SG/DDES/ESUP/SDA/NJN/ebm du 19 juillet 2016",
+        "opening_authorization": "N°16-07755/N/MINESUP/SG/DDES/ESUP/SDA/NJN/ebm du 19 juillet 2016"
+      }
+    },
+    {
+      "staging_id": "c92fec8b-4166-4990-8d8b-ef8194505480",
+      "name": "Laureate Higher Institute of Business and Administration (LAHIBA)",
+      "region": "Nord-Ouest",
+      "city": null,
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7797&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°13/0400/MINESUP/SG/DDES of 10 septembre 2013",
+        "opening_authorization": "N°14/0395/MINESUP/SG/DDES/ du 04 juillet 2014"
+      }
+    },
+    {
+      "staging_id": "9cb81063-6c34-4997-8053-356e9a3bdc80",
+      "name": "National Higher Institute of Business, Tourism and Hotel Management (NAHIBUTH)",
+      "region": "Nord-Ouest",
+      "city": "Bamenda",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7829&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°17-07437/L/MINESUP/SG/DDES/ESUP/SDA/OAGS du 12 juillet 2017",
+        "opening_authorization": "N°17-07437/L/MINESUP/SG/DDES/ESUP/SDA/OAGS du 12 juillet 2017"
+      }
+    },
+    {
+      "staging_id": "09de0337-4fa9-44d0-9584-08cf5cfb779f",
+      "name": "National Polytechnic University Institute (NPUI)",
+      "region": "Nord-Ouest",
+      "city": null,
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7799&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°02/0053/MINESUP du",
+        "opening_authorization": "N°02/0074/MINESUP du 13 août 2002 complétée par l’arrêté N°06/0059/MINESUP du 02 juin 2006"
+      }
+    },
+    {
+      "staging_id": "22021e99-1aee-4d7a-a964-e7b6a5cc8a88",
+      "name": "Paul Nkwi Higher Institute of Management, Science, Arts and Technology (PN-HIMSAT)",
+      "region": "Nord-Ouest",
+      "city": "Njinikom",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7832&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°17-08215/L/MINESUP/SG/DDES/ESUP/SDA/OPC du 08 août 2017",
+        "opening_authorization": "N°17-08215/L/MINESUP/SG/DDES/ESUP/SDA/OPC du 08 août 2017"
+      }
+    },
+    {
+      "staging_id": "baaa34bc-c47c-45be-975e-6bd35854b142",
+      "name": "Pauls’s Computer Higher Institute of Technology (PC-HITECH)",
+      "region": "Nord-Ouest",
+      "city": null,
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7801&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°15/00760/MINESUP/SG/DDES/ESUP/SDA/NJN du 30 janvier 2015",
+        "opening_authorization": "N°15/00760/MINESUP/SG/DDES/ESUP/SDA/NJN du 30 janvier 2015"
+      }
+    },
+    {
+      "staging_id": "207d940b-48c0-4851-8e12-61bc873e9fb6",
+      "name": "Pyramid Higher Institute of Professional Studies",
+      "region": "Nord-Ouest",
+      "city": null,
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7803&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°13/0402/MINESUP/SG/DDES du 10 septembre 2013",
+        "opening_authorization": "N°06/0056/MINESUP du 02 juin 2006."
+      }
+    },
+    {
+      "staging_id": "20c6bd24-b075-46f3-987f-7b28bba783c8",
+      "name": "Saint Louis Higher Institute of Health and Biomedical Sciences",
+      "region": "Nord-Ouest",
+      "city": null,
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7805&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°05/0010/MINESUP du",
+        "opening_authorization": "N°06/0056/MINESUP du 02 juin 2006,"
+      }
+    },
+    {
+      "staging_id": "2f80a015-4e54-431b-bf47-dab5faece189",
+      "name": "ST Jude’s Higher Institute of Nursing and Biomedical",
+      "region": "Nord-Ouest",
+      "city": null,
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7807&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°07/0135/MINESUP du 21 septembre 2007",
+        "opening_authorization": "N°07/0144/MINESUP du 21 septembre 2007"
+      }
+    },
+    {
+      "staging_id": "732f7580-1189-4dad-a370-9268a2bd64c2",
+      "name": "ST Thierry Higher Institute of Health Science and Technology (SHIHSAT)",
+      "region": "Nord-Ouest",
+      "city": null,
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "http://www.minesup.gov.cm/web1/web/index.php/st-thierry-higher-institute-of-health-science-and-technology-shihsat/",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": null,
+        "opening_authorization": null
+      }
+    },
+    {
+      "staging_id": "717072ae-b3f3-40aa-8278-c7ba249de610",
+      "name": "Taniform Higher Institute of Learning (THIL)",
+      "region": "Nord-Ouest",
+      "city": "Bamenda",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7818&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°19-04400/L/MINESUP/DDES/ESUP/SSIPES/LMN du 15 avril 2019",
+        "opening_authorization": "N°19-04400/L/MINESUP/DDES/ESUP/SSIPES/LMN du 15 avril 2019"
+      }
+    },
+    {
+      "staging_id": "36a3705c-770b-4f86-baac-e8129c0a73e4",
+      "name": "Saint Laurence Higher Institute (SLHI)",
+      "region": "NORD-OUEST",
+      "city": "BAMENDA/NDOP",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/index.php/saint-laurence-higher-institute-slhi/",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°1708245/L/MINESUP/SG/DDES/ESUP/SDA/DAGS du 09 Août 2017",
+        "opening_authorization": "N°2107/MINESUP/SG/DDES/ESUP/SDA/… du 02 décembre 2021"
+      }
+    },
+    {
+      "staging_id": "31965814-6dba-420e-a64b-95f664ed8f37",
+      "name": "Saint Michael Higher Institute of Professional Studies (SHIPS)",
+      "region": "Nord-Ouest",
+      "city": "Bamenda",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7821&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°19-04625/L/MINESUP/DDES/ESUP/SSIPES/LMN du 17 avril 2019",
+        "opening_authorization": "N°19-04625/L/MINESUP/DDES/ESUP/SSIPES/LMN du 17 avril 2019"
+      }
+    },
+    {
+      "staging_id": "eca6c03c-455a-4eb4-9332-95d4669111a6",
+      "name": "Catholic School of Health Sciences Shisong",
+      "region": "Nord-Ouest",
+      "city": "Kumbo (Shisong)",
+      "category": "higher_education",
+      "authority": "MINESUP",
+      "registry": "MINESUP_IPES",
+      "source": "https://minesup.gov.cm/?page_id=7823&preview=true",
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": {
+        "creation_order": "N°16-0830/MINESUP/SG/DDES/ESUP du 14 septembre 2016",
+        "opening_authorization": "N°13/0052/MINESUP du  09 janvier 2013"
+      }
+    }
+  ],
+  "checksum": "f1f12668644215a36a1f5e162fab196de25be01d959033ac18547cd4d28f1fdd"
+}

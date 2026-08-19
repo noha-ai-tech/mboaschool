@@ -135,6 +135,34 @@ describe("§23.G — géographie contradictoire -> review", () => {
   });
 });
 
+describe("SPRINT MINESUP-C — un nom de ville partagé n'est jamais un signal d'identité entre catégories différentes (bug réel, pilote Nord-Ouest)", () => {
+  test("un institut supérieur ne devient jamais AMBIGUOUS contre des lycées du même nom de ville (categoryMatch=false exclut la cible)", () => {
+    // Reproduit le cas réel : \"Bamenda University Institute of Science and
+    // Technology (BUIST)\" chevauchait à 17% plusieurs \"Lycée Bilingue de
+    // BAMENDA\" (secondaire) par le seul mot \"bamenda\" — categoryMatch était
+    // calculé mais jamais appliqué comme filtre avant ce correctif.
+    const lycee1 = target({ id: "lycee-1", name: "Lycee Bilingue de Bamenda", region: "Nord-Ouest", category: "secondary_general" });
+    const lycee2 = target({ id: "lycee-2", name: "Lycee Bilingue de Bamenda-Down-Town", region: "Nord-Ouest", category: "secondary_general" });
+    const c = candidate({ name: "Bamenda University Institute of Science and Technology (BUIST)", region: "Nord-Ouest", category: "higher_education" });
+    const result = matchCandidate(c, [lycee1, lycee2]);
+    assert.equal(result.level, "NO_MATCH");
+  });
+
+  test("categoryMatch=null (catégorie inconnue d'un côté) reste permissif — pas d'exclusion sur absence d'information", () => {
+    const t = target({ id: "t1", name: "Institut Polyvalent Bamenda Excellence", region: "Nord-Ouest", category: null });
+    const c = candidate({ name: "Institut Polyvalent Bamenda Excellence Plus", region: "Nord-Ouest", category: "higher_education" });
+    const result = matchCandidate(c, [t]);
+    assert.notEqual(result.level, "NO_MATCH");
+  });
+
+  test("categoryMatch=true (même catégorie connue) reste un STRONG_MATCH normal, non affecté par le filtre", () => {
+    const t = target({ id: "t1", name: "Institut Superieur de Bamenda Technologies", region: "Nord-Ouest", category: "higher_education" });
+    const c = candidate({ name: "Institut Superieur de Bamenda Technologie", region: "Nord-Ouest", category: "higher_education" });
+    const result = matchCandidate(c, [t]);
+    assert.equal(result.level, "STRONG_MATCH");
+  });
+});
+
 describe("§23.H — Cartescolaire + MINESEC dual-ID fixture", () => {
   test("un établissement promu avec corroboration cartescolaire conserve les deux identifiants sans écraser l'un par l'autre", () => {
     // Reproduit le cas réel SPRINT R.3.2 : official_id (MINESEC_ESG) reste

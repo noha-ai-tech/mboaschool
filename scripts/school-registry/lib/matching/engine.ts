@@ -215,7 +215,17 @@ export function matchCandidate(candidate: MatchCandidate, targets: MatchTarget[]
       const ratio = wordOverlapRatio(candWords, fuzzyWords(t.name));
       return { target: t, ratio, geoMatch, geoConflict, categoryMatch };
     })
-    .filter((s) => s.ratio > 0)
+    // SPRINT MINESUP-C — categoryMatch === false (les deux catégories sont
+    // CONNUES et DIFFÉRENTES) exclut la cible du chevauchement flou. Bug réel
+    // trouvé sur données réelles : un candidat higher_education ("Bamenda
+    // University Institute of Science and Technology") chevauchait à 17%
+    // plusieurs "Lycée Bilingue de BAMENDA" (secondaire) par le seul nom de
+    // ville partagé "Bamenda" — un nom de ville n'est jamais un signal
+    // d'identité entre deux catégories d'établissement explicitement
+    // différentes. categoryMatch===null (au moins une catégorie inconnue)
+    // reste permissif, comme pour geoConflict — jamais un blocage sur une
+    // absence d'information.
+    .filter((s) => s.ratio > 0 && s.categoryMatch !== false)
     .sort((a, b) => b.ratio - a.ratio);
 
   if (scored.length === 0) {

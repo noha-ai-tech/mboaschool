@@ -147,6 +147,14 @@ export function inferOwnership(record: RawSourceRecord): Ownership | null {
   const hint = (record.ownershipHint ?? "").toLowerCase();
   const name = record.nameRaw.toLowerCase();
 
+  // SPRINT MINESUP-C — une source peut fournir la valeur DÉJÀ classifiée
+  // directement (ex. la page IPES/Universités d'Etat de MINESUP distingue
+  // structurellement les deux listes, sans ambiguïté) plutôt qu'un simple
+  // indice textuel à interpréter. Vérifié en premier, additif — ne change
+  // rien au comportement existant pour un ownershipHint qui n'est PAS une
+  // de ces 4 valeurs exactes (ex. "fondateur"/"promoteur" MINESEC, inchangé).
+  if (hint === "public" || hint === "private" || hint === "community" || hint === "other") return hint as Ownership;
+
   if (hint.includes("fondateur") || hint.includes("promoteur")) return "private";
   if (name.includes("communautaire")) return "community";
   if (name.startsWith("ecole publique") || name.includes(" public") || name.includes("publique")) {
