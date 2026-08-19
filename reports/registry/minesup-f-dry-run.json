@@ -1,0 +1,10 @@
+{
+  "would_insert_establishments": 60,
+  "would_link_staging": 60,
+  "would_insert_registry_identifiers": 97,
+  "would_update_existing": 0,
+  "would_delete": 0,
+  "conflicts": 0,
+  "expected_establishments_after": 2240,
+  "expected_registry_identifiers_after": 2242
+}

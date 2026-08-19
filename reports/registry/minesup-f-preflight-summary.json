@@ -1,0 +1,71 @@
+{
+  "sprint": "MINESUP-F",
+  "operator": "jean-merlain",
+  "generated_at": "2026-08-19T19:34:10.389Z",
+  "database": {
+    "project_ref": "umcwwynrftidytxgqkwi",
+    "establishments": 2180,
+    "staging": 2344,
+    "registry_identifiers": 2145
+  },
+  "approval": {
+    "snapshot_candidates": 60,
+    "checksum_expected": "4b398dab3443d5d1d24030b2f7677f5eeacad5c572648c99bed37f306cb6a65b",
+    "checksum_stored": "4b398dab3443d5d1d24030b2f7677f5eeacad5c572648c99bed37f306cb6a65b",
+    "checksum_recomputed": "4b398dab3443d5d1d24030b2f7677f5eeacad5c572648c99bed37f306cb6a65b",
+    "checksum_valid": true
+  },
+  "live_revalidation": {
+    "eligible": 60,
+    "already_live": 0,
+    "conflict": 0,
+    "duplicate_signal": 0,
+    "source_issue": 0,
+    "pii_issue": 0,
+    "identifier_collision": 0,
+    "invalid": 0
+  },
+  "pii": {
+    "candidates_checked": 60,
+    "residual": 0,
+    "safe": true
+  },
+  "identifiers": {
+    "with_identifiers": 49,
+    "creation_orders": 49,
+    "opening_authorizations": 48,
+    "without_identifiers": 11,
+    "multiple_identifiers": 48,
+    "total_planned": 97,
+    "existing_collisions": 0,
+    "batch_collisions": 0
+  },
+  "slug_audit": {
+    "candidates": 60,
+    "valid": 60,
+    "existing_collisions": 0,
+    "batch_collisions": 0,
+    "resolution_required": false
+  },
+  "dry_run": {
+    "would_insert_establishments": 60,
+    "would_link_staging": 60,
+    "would_insert_registry_identifiers": 97,
+    "would_update_existing": 0,
+    "would_delete": 0,
+    "conflicts": 0,
+    "expected_establishments_after": 2240,
+    "expected_registry_identifiers_after": 2242
+  },
+  "review_population_protection": {
+    "duplicate_review_excluded": true,
+    "source_review_excluded": true,
+    "invalid_excluded": true,
+    "note": "La population approuvée provient EXCLUSIVEMENT de establishment_import_staging filtré sur status='ready' — aucune ligne duplicate_review/source_review/invalid ne peut structurellement entrer dans ce set (elles ont un status différent : normalized/rejected/duplicate_exact/duplicate_review)."
+  },
+  "capitol_shisong_check": {
+    "in_batch": 0,
+    "safe": true
+  },
+  "ready_to_commit": true
+}

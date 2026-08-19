@@ -1,0 +1,61 @@
+staging_id,name,region,city,decision,match_type,matched_target_id,identifier_count,pii_issue,slug,slug_conflict
+034563dc-d15e-4bf8-8c38-403f479e6223,Institut Supérieur du Septentrion Informatique,Nord,,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-du-septentrion-informatique,false
+04d41866-c920-4993-8d61-e30711ed5506,Institut Supérieur la Rosière,Centre,Simbock,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-la-rosiere,false
+13ce9bc3-8af3-4936-b2bb-5e9c97588ea1,Institut Supérieur des Techniques Economiques et Comptables,Littoral,Akwa,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-des-techniques-economiques-et-comptables,false
+1621cf2d-5165-458e-87c9-396a9e0ca79c,Landmark Higher Institute (LHI),Sud-Ouest,,ELIGIBLE,NO_MATCH,,2,false,landmark-higher-institute-lhi,false
+16cff835-0e65-4ef9-b883-99653444a183,Institut Supérieur de Psychopédagogie Appliquée (ISPPA),Littoral,Bonamoussadi,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-de-psychopedagogie-appliquee-isppa,false
+17e1598c-1f0b-4ab1-ad58-bc7aea1558f6,Institut MBASSI Supérieur,Centre,Monatélé,ELIGIBLE,NO_MATCH,,2,false,institut-mbassi-superieur,false
+19481c97-20a6-4ba4-a560-c053dc2db3d5,HIPTEX University Institute,Centre,,ELIGIBLE,NO_MATCH,,0,false,hiptex-university-institute,false
+1b2b37f7-d3c9-4551-bb04-6a8f17e249d6,Institut AGENLA Academy,Centre,Yaoundé (Nkoabang),ELIGIBLE,NO_MATCH,,1,false,institut-agenla-academy,false
+1bae808d-159e-448d-8956-fc54c892b36a,Ecole Sup Prépa,Centre,Yaoundé (Nkolfoulou),ELIGIBLE,NO_MATCH,,2,false,ecole-sup-prepa,false
+252d1e2d-20a1-47e6-a46d-c4e8fd9de04c,Institut Supérieur du Génie Thermique et Énergétique,Littoral,Ndogbong,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-du-genie-thermique-et-energetique,false
+2613924e-2a12-48bb-9529-de1ae82a6bc6,Institut des Hautes Etudes Supérieures (IHES),Littoral,Nyalla Pariso Maison Jumelle,ELIGIBLE,NO_MATCH,,0,false,institut-des-hautes-etudes-superieures-ihes,false
+2a1726f8-d206-432a-bbf8-5e36bfd05cc6,Institut Supérieur Yérima    Dewa,Nord,Galbidjie,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-yerima-dewa,false
+2b3b42da-927c-4fd9-863f-dc2044b76105,Institut Supérieur des Formations Appliquées (ISFA),Littoral,Bonandjo,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-des-formations-appliquees-isfa,false
+2b6e1998-9f6e-4063-b30a-ca6d695fffd0,Institut d’Enseignement Supérieur Foyaguem (IESF),Ouest,Keleng,ELIGIBLE,NO_MATCH,,2,false,institut-d-enseignement-superieur-foyaguem-iesf,false
+2f012236-4131-492f-956e-71f67eebbfb3,Institut Supérieur des Métiers (ISMET),Littoral,PK8,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-des-metiers-ismet,false
+34c654c6-57ac-45b9-9c05-0025fd68d70e,Institut Supérieur MINGOLE (ISM),Littoral,Deido,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-mingole-ism,false
+38900775-9726-4ec2-8f8b-535d15eca4ac,Institut Supérieur des Affaires (ISA),Centre,,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-des-affaires-isa,false
+3e0d99d2-d882-4eeb-8a58-e223c4cc25ab,Institut Supérieur de Génie Civil (ISGeC),Centre,,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-de-genie-civil-isgec,false
+40873d9e-ddfa-464b-b286-5abca970501e,Institut Supérieur Kalata (ISKA),Centre,Avenue Kennedy,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-kalata-iska,false
+47a93286-fcda-405c-b08d-ceef00655046,SMU Higher Institute,Sud-Ouest,,ELIGIBLE,NO_MATCH,,2,false,smu-higher-institute,false
+4a880cb7-389b-455f-a512-9792f8248a0f,Institut Supérieur Jimit (ISJ),Centre,Ngoa-Ekelle,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-jimit-isj,false
+4b585880-14ad-49ce-9019-0d5d97106292,Institut Supérieur de l’Emergence (ISE),Centre,Odza,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-de-l-emergence-ise,false
+55f943e5-176a-41b8-9427-82e68c5fa31b,Institut Supérieur Lumière,Littoral,Ndokotti,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-lumiere,false
+563b9780-92e6-4345-be03-9242c768afae,Chartered Higher Institute of Cameroon (CHIC),Sud-Ouest,Muea,ELIGIBLE,NO_MATCH,,2,false,chartered-higher-institute-of-cameroon-chic,false
+59b938e8-34b9-4ad9-8b7c-a3e666fc555a,FOMIC Polytechnic,Sud-Ouest,,ELIGIBLE,NO_MATCH,,2,false,fomic-polytechnic,false
+5b1055ed-2197-4b06-b8b2-e7f729c534e9,Institut Supérieur d’Agronomie (ISA),EST,,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-d-agronomie-isa,false
+6f7c1286-c274-4a2b-9309-0f225b8c7526,Institut Supérieur Fondation Mamadou Bako,Nord,,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-fondation-mamadou-bako,false
+76c314c0-5332-47e9-8129-5b0051ead7f1,Institut Supérieur des Technologies et de l’Innovation,Centre,,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-des-technologies-et-de-l-innovation,false
+788d6625-3879-424d-87b9-120336a135f4,Institut Supérieur Islamique de Foumban (ISIF),Ouest,Kouga,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-islamique-de-foumban-isif,false
+7a50ab4d-ab9e-4e69-aa78-6300420a8533,Horti-Florale Institute (HFI),Sud-Ouest,Buea,ELIGIBLE,NO_MATCH,,2,false,horti-florale-institute-hfi,false
+7c6337bb-c8d3-45fd-97ac-86cae7ec79dd,Institut Supérieur des Techniques Agricoles d’Ombessa,Centre,Guintsing,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-des-techniques-agricoles-d-ombessa,false
+89cadd55-58ec-4dd6-be10-a162750257ca,Institut Supérieur d’Informatique et de la Communication (ISICOM),Littoral,Logbessou,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-d-informatique-et-de-la-communication-isicom,false
+8f019111-012d-4548-a3f5-5b5e156b14ee,Institut Supérieur la Perle (ISLAPE),Littoral,Yassa,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-la-perle-islape,false
+918ab878-574f-4383-9733-659ff92bdca3,Cameroon Bilingual Higher Institute (CBHI),Centre,&#8211;,ELIGIBLE,NO_MATCH,,2,false,cameroon-bilingual-higher-institute-cbhi,false
+920acd74-98dd-43c0-b1e3-04eee5335b21,Biaka University Institute of Buea (BUIB),Sud-Ouest,,ELIGIBLE,NO_MATCH,,2,false,biaka-university-institute-of-buea-buib,false
+99db304c-1df0-4d0b-9dfd-34fd381c87e7,Institut panafricain pour le Développement (IPD),Littoral,,ELIGIBLE,NO_MATCH,,2,false,institut-panafricain-pour-le-developpement-ipd,false
+a79be0ce-d561-4a1f-8de6-c55dfe2f50cc,Institut Supérieur de Technologies Appliquées (INSTAP),Littoral,"Makepé, Carrefour Rhône Poulenc",ELIGIBLE,NO_MATCH,,2,false,institut-superieur-de-technologies-appliquees-instap,false
+a8067013-bc95-46de-852a-110762c47cb5,Institut Supérieur Africain d’Enseignement Managérial et Technologique,Littoral,Makepe,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-africain-d-enseignement-managerial-et-technologique,false
+ad675094-d457-4974-861a-601dc1440d09,Fotabe Higher Institute (FHI),Sud-Ouest,Buea,ELIGIBLE,NO_MATCH,,2,false,fotabe-higher-institute-fhi,false
+aeb993e7-fc07-41a4-b208-b3e67707a014,Institut Universitaires des Grandes Ecoles des Tropiques (IUGET),Littoral,Bonamoussadi (Rond-point MAETUR),ELIGIBLE,NO_MATCH,,2,false,institut-universitaires-des-grandes-ecoles-des-tropiques-iuget,false
+b4d989ce-f013-4ed5-8ccc-ee59484a8b30,DAJA Higher Institute (DHI),Sud-Ouest,"Mt Carmel Junction. 1003 DAJA Avenue, Mile 18; Buea, SWR, Cameroon",ELIGIBLE,NO_MATCH,,0,false,daja-higher-institute-dhi,false
+b6e152f1-a14b-4782-b755-d3d6eda77f81,WALYA SUP,Nord,Guere,ELIGIBLE,NO_MATCH,,0,false,walya-sup,false
+be6396c7-d8c0-470b-aaf3-ac6379b0a45f,Jagora University,Centre,,ELIGIBLE,NO_MATCH,,0,false,jagora-university,false
+bfb68d32-efb8-40df-b796-051b6c9e26f2,Institut Supérieur de Pétrochimie et d’Ingénierie Mathématique (ISPIM),Centre,Simbock,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-de-petrochimie-et-d-ingenierie-mathematique-ispim,false
+bfd3b609-852e-4027-95a1-cd2b421f234c,Century Innovating Higher Institute (CINNOHI),Littoral,"Douala / Bonapriso – Kuwait, below forêt bar Bois des singes",ELIGIBLE,NO_MATCH,,0,false,century-innovating-higher-institute-cinnohi,false
+c013af83-a753-446e-a587-0a7679a1a56d,Institut Supérieur Africain des Technologies de l'Information et de la Connaissance (ISATIC),Littoral,Douala,ELIGIBLE,NO_MATCH,,0,false,institut-superieur-africain-des-technologies-de-l-information-et-de-la-connaissance-isatic,false
+c7c053dc-f03f-445c-b43f-56c691cf4e82,Gracious Higher Institute of Excellence (GRHIEX),Sud-Ouest,"100 Gracious, Avenue Mount Carmel Junction Mile 18",ELIGIBLE,NO_MATCH,,0,false,gracious-higher-institute-of-excellence-grhiex,false
+c93ae2bf-c393-4b7e-9931-17036eceabca,STALWART HIGHER INSTITUTE (SHI),Littoral,Feu rouge Bessengue,ELIGIBLE,NO_MATCH,,2,false,stalwart-higher-institute-shi,false
+cc4196f4-f96b-404c-9bf9-82549af3862b,Institut Supérieur d’Enseignement Managérial et Technologique,Centre,Cité verte monté Renault,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-d-enseignement-managerial-et-technologique,false
+ce71f0d1-d60c-461e-ad21-1e3b2df6dd05,H.O.P.E University  Institute (HUI) Limbe,Sud-Ouest,,ELIGIBLE,NO_MATCH,,2,false,h-o-p-e-university-institute-hui-limbe,false
+d99c77c8-7477-4eeb-a842-ffb14e7a7557,Ecole Supérieure Spéciale d’Architecture du Cameroun (ESSACA),Centre,"Quartier Nylon, Bastos",ELIGIBLE,NO_MATCH,,0,false,ecole-superieure-speciale-d-architecture-du-cameroun-essaca,false
+db2bbcf8-21dd-4769-9863-bb20943e2cad,Sabena Flight Academy Africa,Littoral,,ELIGIBLE,NO_MATCH,,2,false,sabena-flight-academy-africa,false
+e5954b71-21a8-4a00-8dee-ada9c90a997a,Groupe Tankou Enseignement Supérieur (GTES),Ouest,Mairie rurale,ELIGIBLE,NO_MATCH,,2,false,groupe-tankou-enseignement-superieur-gtes,false
+ea537c3f-14d9-4ca2-a321-074964e69edb,Cameroon Institute of Renewable Energy (CIRE),South West,"Bobende Quater 3, Limbe 2 subdivision",ELIGIBLE,NO_MATCH,,0,false,cameroon-institute-of-renewable-energy-cire,false
+eb9c99ff-b2eb-43e2-8a13-3ec1aeaf671c,JSF Polytechnic,Sud-Ouest,Muea,ELIGIBLE,NO_MATCH,,2,false,jsf-polytechnic,false
+ebd42661-4b47-47d9-8120-791e7abb74ce,Ecole Supérieure Technique la Salle (EST),Littoral,Akwa,ELIGIBLE,NO_MATCH,,2,false,ecole-superieure-technique-la-salle-est,false
+f02418be-128a-480d-91cf-da873cc054d3,HIBMAT University Institute of Buea (HUIB),Sud-Ouest ; Molyoko ; Buea,MOLYKO,ELIGIBLE,NO_MATCH,,0,false,hibmat-university-institute-of-buea-huib,false
+f57c1522-de0b-45d3-b673-4b63d1b3e6c7,Institut Supérieur Dale Kietzman,Littoral,Ndokotti,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-dale-kietzman,false
+f8d88d0f-3418-49bf-82be-7efd5fe72d6e,Buea Polytechnic,Sud-Ouest,Buea,ELIGIBLE,NO_MATCH,,2,false,buea-polytechnic,false
+fbd3b291-3dcf-4c67-97db-8b77c5a20502,Institut Supérieur du Personnel Médico- Sanitaire (ISPM),Centre,Ekounou,ELIGIBLE,NO_MATCH,,2,false,institut-superieur-du-personnel-medico-sanitaire-ispm,false
