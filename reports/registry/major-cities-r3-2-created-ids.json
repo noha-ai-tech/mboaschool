@@ -1,0 +1,811 @@
+{
+  "registry_import_batch": "major-cities-official-corroboration-v1",
+  "count": 161,
+  "establishments": [
+    {
+      "establishment_id": "c3a8377f-e2e9-42e5-9193-321a5d6e8728",
+      "staging_id": "e37bfbae-158a-402d-9a1b-a9f34e0e1b55",
+      "official_corroboration_id": "14280735"
+    },
+    {
+      "establishment_id": "1f746913-d545-4405-8991-11f873ee115d",
+      "staging_id": "ea7c760b-ea36-4fb3-a22c-579b6b28cd76",
+      "official_corroboration_id": "14280736"
+    },
+    {
+      "establishment_id": "8efbaabb-07c4-4fff-b3c7-00a3b2e29baf",
+      "staging_id": "293f466f-a9fb-4ef9-998d-a9e23d3cf8a3",
+      "official_corroboration_id": "14280701"
+    },
+    {
+      "establishment_id": "7df3f569-caaf-4941-a776-85f27ee33dd3",
+      "staging_id": "7c697aa7-2299-48e8-a396-1cff6c9f33a9",
+      "official_corroboration_id": "14280738"
+    },
+    {
+      "establishment_id": "51cd62a7-775d-45be-88bc-45493831aa70",
+      "staging_id": "520a0ebd-d333-4fb8-a9d1-3f082fabdbf0",
+      "official_corroboration_id": "14280612"
+    },
+    {
+      "establishment_id": "7bc13c53-41c7-444d-8f9c-676ccb6405af",
+      "staging_id": "b2042a09-4a41-4594-aa2a-bd47f61f1cf3",
+      "official_corroboration_id": "14280739"
+    },
+    {
+      "establishment_id": "72555f4a-7a33-4641-a8de-1d37a0acc76b",
+      "staging_id": "953ed8a0-db0b-4e92-b17d-e0bd7bfd8355",
+      "official_corroboration_id": "14280703"
+    },
+    {
+      "establishment_id": "ea759113-d0dd-4176-a8c4-24a4c3f66158",
+      "staging_id": "05a62eff-a78f-4ab9-afa0-5075b9e933cb",
+      "official_corroboration_id": "14280706"
+    },
+    {
+      "establishment_id": "1523d427-7d9b-453c-a270-d75d53b0a83c",
+      "staging_id": "76810653-17e2-4871-8b4f-7a64c6a27e84",
+      "official_corroboration_id": "14280614"
+    },
+    {
+      "establishment_id": "5ab54815-6c56-4e9b-a468-5abd649e5c20",
+      "staging_id": "a4c189dc-69e8-4b53-b493-8e226ad7fee5",
+      "official_corroboration_id": "14280774"
+    },
+    {
+      "establishment_id": "b5e627f5-5139-4172-a7c5-2d984ad42684",
+      "staging_id": "f151be76-dd16-4c1a-8629-b43991c71d51",
+      "official_corroboration_id": "14280749"
+    },
+    {
+      "establishment_id": "073c5115-6e77-4dd6-b9bd-c1904cc5847f",
+      "staging_id": "e3e0380c-ccdc-4184-a6bd-761f74adeca8",
+      "official_corroboration_id": "14280747"
+    },
+    {
+      "establishment_id": "cf67c9ef-fa28-49cd-83b3-d6603c87b270",
+      "staging_id": "175d0b2f-efc0-4c53-ba09-4b37da0c465e",
+      "official_corroboration_id": "14280889"
+    },
+    {
+      "establishment_id": "3c494363-fe19-439d-9bcc-b563dbf9694d",
+      "staging_id": "fc63ea31-f080-4630-886c-3662925026d3",
+      "official_corroboration_id": "14280742"
+    },
+    {
+      "establishment_id": "0c385227-99d1-4890-a600-30d5f0ab00d9",
+      "staging_id": "858eecac-76f7-40a8-ae2c-73052b722b10",
+      "official_corroboration_id": "14280754"
+    },
+    {
+      "establishment_id": "af19bb58-7e74-45cb-abb8-ae30f9a57098",
+      "staging_id": "a29dca3f-37f6-45bd-b66e-4765ba9f5cb0",
+      "official_corroboration_id": "14280755"
+    },
+    {
+      "establishment_id": "42fd72dc-0f20-49e4-9dbb-7511423a2db3",
+      "staging_id": "9c87ac95-9eba-4caa-a980-79782e3cab2b",
+      "official_corroboration_id": "14280623"
+    },
+    {
+      "establishment_id": "640d44a7-3da0-4b9c-a73b-e1791e415984",
+      "staging_id": "3c77ad32-42f6-43c5-bd0f-a43923e6b655",
+      "official_corroboration_id": "14280746"
+    },
+    {
+      "establishment_id": "71aa58f8-04ad-4ac3-8f95-d8c2d331a359",
+      "staging_id": "35dbc7ad-bf07-4f36-9236-9b46b3ca4842",
+      "official_corroboration_id": "14280648"
+    },
+    {
+      "establishment_id": "9b3fccef-97b7-478c-a1d2-0d114080db3f",
+      "staging_id": "5f2025db-8c83-4b8f-9e5b-8c4fea8a05a2",
+      "official_corroboration_id": "LT58097L33"
+    },
+    {
+      "establishment_id": "2b5700fe-cba9-4412-9269-4a46847d121b",
+      "staging_id": "04408274-1ce0-4891-a8a5-8486eed17427",
+      "official_corroboration_id": "14280613"
+    },
+    {
+      "establishment_id": "0278a556-3c55-4050-be5d-d94793672da7",
+      "staging_id": "26602a4d-3f48-4f42-8278-a5f50d2923f0",
+      "official_corroboration_id": "14280770"
+    },
+    {
+      "establishment_id": "faeac04c-9810-4375-aaf3-98f00a2de942",
+      "staging_id": "29c8df48-98f4-4229-b6de-4c992be66fa7",
+      "official_corroboration_id": "CE41357L34"
+    },
+    {
+      "establishment_id": "5683c0ef-a888-4de1-9b50-8b4f5bdfd123",
+      "staging_id": "a838f199-6514-4598-b9a2-dacb5041c0fe",
+      "official_corroboration_id": "11060130"
+    },
+    {
+      "establishment_id": "824772a5-66cb-479f-9ef0-1b5cbef727db",
+      "staging_id": "597e6376-f70d-46bf-8db3-1618656f25ab",
+      "official_corroboration_id": "11130031"
+    },
+    {
+      "establishment_id": "c692a9ee-fe6f-43d4-9bb9-30db17a36b4b",
+      "staging_id": "e2d2aea9-1a8a-460a-b824-336000e4ff2f",
+      "official_corroboration_id": "11080070"
+    },
+    {
+      "establishment_id": "3728d304-d5ce-4a79-967b-68f1c103b750",
+      "staging_id": "364585f3-261c-48d2-a3f8-c685bdf1b274",
+      "official_corroboration_id": "11060282"
+    },
+    {
+      "establishment_id": "fb004522-4e7a-46fb-9386-d6e584796167",
+      "staging_id": "b31aea1f-d191-4e11-bc99-21ab49892dd1",
+      "official_corroboration_id": "11080069"
+    },
+    {
+      "establishment_id": "ba830110-102e-4af7-98d8-a07713878a14",
+      "staging_id": "a3a8ff52-2214-445e-961f-4f68cbd04ccb",
+      "official_corroboration_id": "11060164"
+    },
+    {
+      "establishment_id": "d7b76450-2523-4eaa-91aa-0bd73807488c",
+      "staging_id": "7a48f1e0-5288-430e-8ee4-72cc24ca6454",
+      "official_corroboration_id": "11060110"
+    },
+    {
+      "establishment_id": "030ac586-c8a5-45cb-aca7-0ff54c23a442",
+      "staging_id": "8adeea6d-52c3-4186-a9cf-788c942ed374",
+      "official_corroboration_id": "11060112"
+    },
+    {
+      "establishment_id": "309a8b30-5c40-4978-9a6a-54fac3b8f83b",
+      "staging_id": "3d9b17ff-165f-4588-a60b-5ac61d013555",
+      "official_corroboration_id": "19581218"
+    },
+    {
+      "establishment_id": "4f0fd717-01b3-4d4f-b259-0d467f4c22f1",
+      "staging_id": "d175b046-532f-4397-971f-649df9870626",
+      "official_corroboration_id": "11060120"
+    },
+    {
+      "establishment_id": "6822580e-9bfe-4b61-b391-4327f43b92d0",
+      "staging_id": "0c7c6bc1-bb03-4bc9-aebe-8961a375617b",
+      "official_corroboration_id": "11060127"
+    },
+    {
+      "establishment_id": "171d225c-6ebd-47fe-b9a8-f15947438c9c",
+      "staging_id": "5b57572c-de6b-429b-9c7b-86d06ca86be9",
+      "official_corroboration_id": "11060177"
+    },
+    {
+      "establishment_id": "0288d4ca-d134-425b-9ae7-365e8df45641",
+      "staging_id": "ae93f779-c630-4d15-bcb3-e9e05ac9742f",
+      "official_corroboration_id": "11060134"
+    },
+    {
+      "establishment_id": "f543bef0-5ddc-49c2-ab1d-5c3d4d56edb9",
+      "staging_id": "1df14bdc-5bfc-4a27-a141-21162ae6c49d",
+      "official_corroboration_id": "11060119"
+    },
+    {
+      "establishment_id": "4efb3bf6-c677-4fc1-ba35-967b6d18f36c",
+      "staging_id": "805375b3-eee6-4cd7-bc2b-821482efcd86",
+      "official_corroboration_id": "11060123"
+    },
+    {
+      "establishment_id": "e897157f-6e5c-4d0e-a937-c7d0f9aaf4d7",
+      "staging_id": "3ab9ad68-123f-4118-8632-a96635b95979",
+      "official_corroboration_id": "11060140"
+    },
+    {
+      "establishment_id": "365a93f6-88da-46b9-bace-397dba71dad0",
+      "staging_id": "d48e0d60-6af9-4308-a468-4189698dde6b",
+      "official_corroboration_id": "11060137"
+    },
+    {
+      "establishment_id": "37dce78a-6004-41d9-aba8-c63bc17c8602",
+      "staging_id": "5386b0c3-86a4-4d69-9c20-d4c1d118946a",
+      "official_corroboration_id": "11060169"
+    },
+    {
+      "establishment_id": "8baac124-d9fa-4014-8b19-c58c87686cae",
+      "staging_id": "d6f37126-a526-415f-ace4-c7aa5b174864",
+      "official_corroboration_id": "11060142"
+    },
+    {
+      "establishment_id": "592f7300-301e-464e-b41c-ebab90959f45",
+      "staging_id": "46cd8388-0d71-4b7f-93f4-89589c57a4ec",
+      "official_corroboration_id": "11060145"
+    },
+    {
+      "establishment_id": "1e3032fc-ca83-4136-aeaa-634cdc1b2a3a",
+      "staging_id": "661f12ac-1b75-4386-bd77-e6b84addea61",
+      "official_corroboration_id": "11060151"
+    },
+    {
+      "establishment_id": "4eb01ef6-fbc0-4d68-a378-de36b37b04c5",
+      "staging_id": "f505132b-8cf1-4daa-8471-b690298cb789",
+      "official_corroboration_id": "11060129"
+    },
+    {
+      "establishment_id": "05869d57-c5e6-42c6-a3bf-676c5276595f",
+      "staging_id": "7634bcfe-1190-4717-9176-58a791ca0a7f",
+      "official_corroboration_id": "11060181"
+    },
+    {
+      "establishment_id": "85ea6bf7-644b-4194-b93a-179698fe6e29",
+      "staging_id": "f9060410-d218-49cd-91b1-86afc59e802a",
+      "official_corroboration_id": "11060162"
+    },
+    {
+      "establishment_id": "6b2a7954-b85e-4c4b-b811-3ebb08f102c9",
+      "staging_id": "6a949ee2-dac9-47cf-b9c0-fd4713976f9d",
+      "official_corroboration_id": "11060115"
+    },
+    {
+      "establishment_id": "c987f426-b4f2-4504-b69e-43e1121f4c93",
+      "staging_id": "632fab45-b9b6-4e26-8428-5250c2653dcb",
+      "official_corroboration_id": "11060170"
+    },
+    {
+      "establishment_id": "f8e1db4e-d5f9-487a-a64c-6e79ad12c680",
+      "staging_id": "ad534f58-52f6-4f02-bcf1-b8aaa59cf372",
+      "official_corroboration_id": "11060171"
+    },
+    {
+      "establishment_id": "e34f88b5-8214-4b72-9614-d44647e3103c",
+      "staging_id": "fd6168df-d484-44d5-8d41-e35340beffe9",
+      "official_corroboration_id": "11060172"
+    },
+    {
+      "establishment_id": "3195529f-d1dc-4d63-9b2d-46809af8d045",
+      "staging_id": "fd93be9c-aee6-449c-9338-d8cc0dae53c6",
+      "official_corroboration_id": "11060174"
+    },
+    {
+      "establishment_id": "d09b5144-f7ca-43bd-88b3-00d9ff7c8770",
+      "staging_id": "3b5d047f-7cd7-4104-8218-b4c9b88694c4",
+      "official_corroboration_id": "11060125"
+    },
+    {
+      "establishment_id": "5d924485-957b-49bc-93da-ce1281ed5cb2",
+      "staging_id": "8c616a3e-f716-49fd-a19b-3531d93c4b0f",
+      "official_corroboration_id": "11060318"
+    },
+    {
+      "establishment_id": "e8bc53dd-1ee5-4a3c-93d6-410916a0cd8b",
+      "staging_id": "d5a7bcd2-cec7-4dab-b571-9ebd2bdd9bf4",
+      "official_corroboration_id": "11060319"
+    },
+    {
+      "establishment_id": "c547c5a3-04dc-4fff-b7a2-e76626fef186",
+      "staging_id": "6173603e-1639-4ce4-b143-f9adee4519af",
+      "official_corroboration_id": "11060327"
+    },
+    {
+      "establishment_id": "e558f314-376e-40b2-b8d8-4bda9e067d57",
+      "staging_id": "6cb2ead2-e4aa-4fdf-9a41-8ce67f2a6434",
+      "official_corroboration_id": "11060329"
+    },
+    {
+      "establishment_id": "dae6eebf-efdd-44da-ae71-e4cb10a4f831",
+      "staging_id": "c4851730-c721-47cb-a1ac-2377c4628af5",
+      "official_corroboration_id": "11060334"
+    },
+    {
+      "establishment_id": "9bdece61-a655-4d19-93a1-b104ecb09438",
+      "staging_id": "9e30b614-8b57-4156-890d-294479712f13",
+      "official_corroboration_id": "11060331"
+    },
+    {
+      "establishment_id": "0ce9fc5b-2627-48c0-b525-e2814d6571ec",
+      "staging_id": "bd941dbe-3efe-4720-889d-a001f83c3544",
+      "official_corroboration_id": "11060322"
+    },
+    {
+      "establishment_id": "92faf8bd-5b76-4343-869a-375746010023",
+      "staging_id": "7e4ba5ec-7b29-494b-95e1-0969917f8eb4",
+      "official_corroboration_id": "11060341"
+    },
+    {
+      "establishment_id": "3b0f1a31-f770-4872-9df3-4ba657bddd45",
+      "staging_id": "2e9b534c-4348-4bb5-92aa-8b4e0173bc5d",
+      "official_corroboration_id": "11060324"
+    },
+    {
+      "establishment_id": "dd236b46-fa5f-45fc-a2da-d5399b6538ae",
+      "staging_id": "8a97521e-04eb-46b8-83b4-70f241cbca1e",
+      "official_corroboration_id": "11060321"
+    },
+    {
+      "establishment_id": "0e67130e-dbe4-41fb-a186-e2bd9a4c8b1e",
+      "staging_id": "56090dea-274f-4e8e-9c63-62d6977e8060",
+      "official_corroboration_id": "11060344"
+    },
+    {
+      "establishment_id": "e1225bf6-5de4-4d3a-bd1e-d59c094468db",
+      "staging_id": "220335c1-f4c6-4fde-ad8d-b8c13967c3df",
+      "official_corroboration_id": "11060345"
+    },
+    {
+      "establishment_id": "30aba5b2-cde1-4465-abb0-ed7ebb85a091",
+      "staging_id": "dc2be60c-964c-48ab-9df4-af337b0fdaf0",
+      "official_corroboration_id": "11060346"
+    },
+    {
+      "establishment_id": "fb1c4212-781d-4cde-b7b3-0449add85b37",
+      "staging_id": "63d5a339-ed0e-4f76-badd-01e922b7cd86",
+      "official_corroboration_id": "11060342"
+    },
+    {
+      "establishment_id": "1ac5803b-d176-4eb6-8f18-2e20cb38d64d",
+      "staging_id": "352c817f-8b7c-4b6d-b754-30119404a62b",
+      "official_corroboration_id": "11060349"
+    },
+    {
+      "establishment_id": "ba906f65-dc57-4905-8dae-0c289796b82b",
+      "staging_id": "435f8936-87d2-4adb-a6b7-efe2e5a12c84",
+      "official_corroboration_id": "11060358"
+    },
+    {
+      "establishment_id": "218adc0e-248a-44fb-9733-141c8857560d",
+      "staging_id": "c93d248a-ecb1-4c06-a8e2-8c92563c162b",
+      "official_corroboration_id": "11060361"
+    },
+    {
+      "establishment_id": "569028d6-811c-40df-a82b-d168e73fcf54",
+      "staging_id": "97cffb99-32b8-4115-8e37-c20ba1c2da42",
+      "official_corroboration_id": "11060871"
+    },
+    {
+      "establishment_id": "aab6894e-2fee-4122-8af7-25a18b181c09",
+      "staging_id": "290c61b6-3acf-4082-9fd7-5e539e657842",
+      "official_corroboration_id": "11061102"
+    },
+    {
+      "establishment_id": "de00a49e-e928-4296-ad30-5074c4625de1",
+      "staging_id": "38493dd7-c95a-4010-833d-5c6e7d7c8f4a",
+      "official_corroboration_id": "11060347"
+    },
+    {
+      "establishment_id": "4ab05355-ac9e-4684-951b-3612ceda8b2d",
+      "staging_id": "c65852ca-944b-4467-9b49-3c70f3c483da",
+      "official_corroboration_id": "12180492"
+    },
+    {
+      "establishment_id": "bb2d6c3d-9ba7-4e21-81eb-f6d8b9377415",
+      "staging_id": "e8b8392e-8f79-403a-843e-ccf622ffc64f",
+      "official_corroboration_id": "11060366"
+    },
+    {
+      "establishment_id": "b580847a-604f-4ab2-829a-4124a3653bc8",
+      "staging_id": "fa1a9337-9f2c-4aa6-8d68-a6f2e1c90056",
+      "official_corroboration_id": "11060249"
+    },
+    {
+      "establishment_id": "b6efc92f-77e6-4b5d-978e-68711545ee1e",
+      "staging_id": "891b0d6a-fdc1-434d-af96-c74883ad63f0",
+      "official_corroboration_id": "11060371"
+    },
+    {
+      "establishment_id": "7048ca4a-9529-4ae5-bf64-cbb1b3773f82",
+      "staging_id": "8b762796-54af-4ea9-8c0a-323e13e999a6",
+      "official_corroboration_id": "11060237"
+    },
+    {
+      "establishment_id": "cf7f5b54-0b31-4da0-b859-905bf1ffe302",
+      "staging_id": "dfc38288-a48b-452e-83e5-8eacc18df237",
+      "official_corroboration_id": "11060375"
+    },
+    {
+      "establishment_id": "d58c67c3-4ed4-4860-b8d0-cc43a7d5d7c0",
+      "staging_id": "9d8e1c58-ecc8-4ef0-b5d8-ec129bd81fdf",
+      "official_corroboration_id": "11060377"
+    },
+    {
+      "establishment_id": "bed9d2fd-6ee5-4bce-b654-21189ff6c881",
+      "staging_id": "46359034-07c6-439b-a9c1-0b7042a12021",
+      "official_corroboration_id": "11060379"
+    },
+    {
+      "establishment_id": "b77501de-8c81-48b1-a204-1d02bfa9acc6",
+      "staging_id": "eb245bf6-2bac-40c4-833e-20276b8ca1f8",
+      "official_corroboration_id": "11060872"
+    },
+    {
+      "establishment_id": "f1b5c145-ae05-4cce-b9d9-16293614e38a",
+      "staging_id": "fe9e01da-849b-48b5-aee3-0546db9304ee",
+      "official_corroboration_id": "11060382"
+    },
+    {
+      "establishment_id": "4d929d9d-a128-4163-808e-8cc294a93f3e",
+      "staging_id": "548ce6ae-4e6f-4cb3-a8b6-0ee8007560ef",
+      "official_corroboration_id": "11060383"
+    },
+    {
+      "establishment_id": "9e7217d2-ec99-4bf2-906b-f12f0d3dff29",
+      "staging_id": "f32994d7-9046-4eae-9671-f69d0113c20d",
+      "official_corroboration_id": "11060387"
+    },
+    {
+      "establishment_id": "9adcd926-9c20-42b2-89ea-5815e01599da",
+      "staging_id": "b6a6fd16-5c6f-4e89-b326-3f01fb91e720",
+      "official_corroboration_id": "11060388"
+    },
+    {
+      "establishment_id": "c451483e-98fc-4476-8268-4e019d1e84c8",
+      "staging_id": "ec9ab585-fe88-4132-91c3-098539a20cee",
+      "official_corroboration_id": "11060389"
+    },
+    {
+      "establishment_id": "feec7c50-fa35-4606-a26e-d784ff8b6eba",
+      "staging_id": "dc9c37aa-c323-4058-97b1-0098487dd6a9",
+      "official_corroboration_id": "11060380"
+    },
+    {
+      "establishment_id": "771b85f5-156c-48bd-8af8-24a44dace11e",
+      "staging_id": "c5d8621a-06d6-48a2-a134-4088e2126e52",
+      "official_corroboration_id": "11060372"
+    },
+    {
+      "establishment_id": "cbefd8b5-6455-489b-ad52-045a900e8c85",
+      "staging_id": "6df69f6f-4512-4d4d-b50e-d9927b86b377",
+      "official_corroboration_id": "11060381"
+    },
+    {
+      "establishment_id": "67ba5286-6978-45fa-80d5-c7791bba60f6",
+      "staging_id": "bbd9efe2-f799-429a-8218-4314cc39f1d6",
+      "official_corroboration_id": "11060861"
+    },
+    {
+      "establishment_id": "09feb6f6-c053-476b-bf97-761f67bdbc56",
+      "staging_id": "fe4f2620-5a40-4410-b0f3-26192664d458",
+      "official_corroboration_id": "11060392"
+    },
+    {
+      "establishment_id": "4d686edb-4bb5-4222-ad50-e5a202ce85df",
+      "staging_id": "7c96626f-ad38-439a-ac94-b0bc6831b483",
+      "official_corroboration_id": "11060404"
+    },
+    {
+      "establishment_id": "5eead7d5-6585-4e57-b20b-1f83797664a7",
+      "staging_id": "f35d5bbf-7b23-4d44-8b70-91ca4df61633",
+      "official_corroboration_id": "11060368"
+    },
+    {
+      "establishment_id": "5714ef32-c7c5-4c2b-a23d-db28dd3a69e2",
+      "staging_id": "c0b28ce4-f1b2-4781-b595-ac78db9236db",
+      "official_corroboration_id": "11060410"
+    },
+    {
+      "establishment_id": "a42f6f41-f38f-4b64-97c5-f211720c99b0",
+      "staging_id": "2ae17700-fbcb-44b0-b053-f3096cc1d8e4",
+      "official_corroboration_id": "14280673"
+    },
+    {
+      "establishment_id": "899d3ec6-c784-40e5-8473-48ac9a541950",
+      "staging_id": "54d99542-6288-40b9-b7ea-364204f94974",
+      "official_corroboration_id": "11060412"
+    },
+    {
+      "establishment_id": "f9250d64-f9b3-4c6a-a66b-42f891d744a2",
+      "staging_id": "22dc5585-e6dc-4f81-89ca-601997c918bc",
+      "official_corroboration_id": "11060415"
+    },
+    {
+      "establishment_id": "8b0d33d8-916b-4701-9045-51eac48a03fb",
+      "staging_id": "69caa37b-5c5f-4f09-a02b-ca738de17522",
+      "official_corroboration_id": "11060374"
+    },
+    {
+      "establishment_id": "57f579a5-484e-43b5-b463-dc5ad29c1b45",
+      "staging_id": "fa75c5bb-ff5b-4a01-b622-591d300829be",
+      "official_corroboration_id": "11060191"
+    },
+    {
+      "establishment_id": "ca25beb7-4bc5-42c5-bc8b-742ffc5e0c6c",
+      "staging_id": "6c0185fb-1eef-460e-9787-3b928b14a36e",
+      "official_corroboration_id": "11060187"
+    },
+    {
+      "establishment_id": "6b9cc6df-bed3-4215-8c2f-b0a52844cf45",
+      "staging_id": "fd596179-a025-4cff-b79c-f93dd8bc6334",
+      "official_corroboration_id": "11060188"
+    },
+    {
+      "establishment_id": "f8ce5a7c-e642-4aec-aa00-004b9a24990f",
+      "staging_id": "8f4dca37-726e-4afd-ae82-5f570644a2fc",
+      "official_corroboration_id": "11060189"
+    },
+    {
+      "establishment_id": "319fe815-3690-4b25-a343-c8277dba1cf0",
+      "staging_id": "18999583-579f-4ffb-a00e-4bb7843f8be1",
+      "official_corroboration_id": "11060190"
+    },
+    {
+      "establishment_id": "08c4b8a8-7c3b-4699-8eef-42b6548d41bd",
+      "staging_id": "4752d4b8-2ede-48ff-a5c2-06e20a390b85",
+      "official_corroboration_id": "11060197"
+    },
+    {
+      "establishment_id": "35c7bfef-ceca-4f91-8846-b2f888aa0d5e",
+      "staging_id": "849715f6-8cb6-4463-9e82-94d33b77be6a",
+      "official_corroboration_id": "11060196"
+    },
+    {
+      "establishment_id": "14f2fc9a-b3f3-457e-ae5e-03f96850a3e9",
+      "staging_id": "20c68fb7-03cd-4447-9c6d-1121ecf886a8",
+      "official_corroboration_id": "11060396"
+    },
+    {
+      "establishment_id": "74e9979a-a4f2-4570-8fbc-d38b05b7bbba",
+      "staging_id": "345f3f2a-c7c6-4084-a8f3-989656de2d0c",
+      "official_corroboration_id": "11060210"
+    },
+    {
+      "establishment_id": "123f3730-08fe-4cbd-a2db-88fc2241231b",
+      "staging_id": "39fd08c9-a2ec-4efc-8fe1-f83a48cac271",
+      "official_corroboration_id": "11060213"
+    },
+    {
+      "establishment_id": "2f61157c-4e14-487a-9196-2763653d8b30",
+      "staging_id": "da103290-5b1a-4bd6-b048-c6adc2583eb6",
+      "official_corroboration_id": "11060214"
+    },
+    {
+      "establishment_id": "6ec27477-0307-4246-8578-75bea4eac279",
+      "staging_id": "80567603-9d1d-4d3d-8d46-ebdfcfb3c468",
+      "official_corroboration_id": "11060216"
+    },
+    {
+      "establishment_id": "284b6943-c3f0-4e7e-8705-900c5b6c291b",
+      "staging_id": "1c7f3668-ff45-4da5-b173-712f57ded3db",
+      "official_corroboration_id": "11060215"
+    },
+    {
+      "establishment_id": "6ad48349-0497-4b7c-8e51-ad9ef96dab79",
+      "staging_id": "51543d3f-f778-4d26-bece-56b8c916df3d",
+      "official_corroboration_id": "11060217"
+    },
+    {
+      "establishment_id": "c308a62b-4664-4d26-bb57-db18730eab88",
+      "staging_id": "8da4158b-d712-4d69-8ac6-bd1fc5bc89d0",
+      "official_corroboration_id": "11060230"
+    },
+    {
+      "establishment_id": "7c2155a7-9c00-4aaa-bbab-c0e90d24bd65",
+      "staging_id": "2eaff3fb-6492-4fa6-8a03-68104043cedb",
+      "official_corroboration_id": "11060231"
+    },
+    {
+      "establishment_id": "60fb3139-bf2a-4101-aff6-b5d6a9571b78",
+      "staging_id": "4f86224f-6c19-41a1-91c0-a218fc3bc48e",
+      "official_corroboration_id": "11060233"
+    },
+    {
+      "establishment_id": "dfae9af8-73b1-415a-96b0-b0d228ad042b",
+      "staging_id": "ac9f78ff-89f3-4cdf-9ae1-49b2cb91023d",
+      "official_corroboration_id": "11060236"
+    },
+    {
+      "establishment_id": "7b2b82ff-c376-44d9-9213-ca469a2dda95",
+      "staging_id": "8733d5b1-a6f4-4961-ae93-cc08145319ea",
+      "official_corroboration_id": "11060238"
+    },
+    {
+      "establishment_id": "70bc6e60-00db-445e-a044-950b864d3cfc",
+      "staging_id": "4f7f669e-561e-4fad-b059-ddd7fa75e9e6",
+      "official_corroboration_id": "11060243"
+    },
+    {
+      "establishment_id": "3cd671af-d5c4-42a3-a577-bbf762216c88",
+      "staging_id": "428c7a73-0361-4a1c-ad12-3c2eb036d325",
+      "official_corroboration_id": "11060227"
+    },
+    {
+      "establishment_id": "5ac037c1-b8b0-4ad5-ac71-44157924ef87",
+      "staging_id": "81c07c58-3f3b-4e1f-94c1-d462e39879e6",
+      "official_corroboration_id": "11080071"
+    },
+    {
+      "establishment_id": "92530da2-c98f-4ff5-8a8d-61d2bb537519",
+      "staging_id": "80359441-b27d-4b47-99de-ae717c2c1d6d",
+      "official_corroboration_id": "11060180"
+    },
+    {
+      "establishment_id": "fb1edb97-6716-4bda-837b-e2b334007940",
+      "staging_id": "d40ca96f-9a30-45af-8f33-f887cbdf67b8",
+      "official_corroboration_id": "11060253"
+    },
+    {
+      "establishment_id": "586e776a-38df-46b8-902f-7c826b3ce515",
+      "staging_id": "586458ce-d8a2-4187-aae5-66d106ffaaa3",
+      "official_corroboration_id": "11060254"
+    },
+    {
+      "establishment_id": "6ccae484-c25d-4d2c-b9e5-53d49d3d42e9",
+      "staging_id": "7bcfba36-b85f-42c9-9aa0-3097fd298e95",
+      "official_corroboration_id": "11060259"
+    },
+    {
+      "establishment_id": "8d656310-d8da-42a0-9d22-8fc242506f2e",
+      "staging_id": "b5954d99-2fcd-49ea-afd4-03a2f608b52a",
+      "official_corroboration_id": "11060138"
+    },
+    {
+      "establishment_id": "a25f866d-9aa7-4116-820f-290c89f8ffe5",
+      "staging_id": "4338dcb3-e32b-48e2-9988-a10de8b86dd1",
+      "official_corroboration_id": "11060255"
+    },
+    {
+      "establishment_id": "6fa544f1-bbd9-4510-81b2-21afab6d09cb",
+      "staging_id": "17fee469-6890-4db2-8d30-52c5ace6116a",
+      "official_corroboration_id": "11060265"
+    },
+    {
+      "establishment_id": "dbcd9f13-2e44-4ddb-b813-f7ae19ac53c7",
+      "staging_id": "dec117b7-e851-49a9-b240-f09cfd318908",
+      "official_corroboration_id": "11060268"
+    },
+    {
+      "establishment_id": "90e369b5-7c77-4410-9c98-3a22c71dbb21",
+      "staging_id": "861c2a3e-dc85-4ac1-8f78-681378ef2801",
+      "official_corroboration_id": "11060269"
+    },
+    {
+      "establishment_id": "88823fc1-8ac3-46ed-b5e0-0036fa8897dc",
+      "staging_id": "0178ee83-9fe5-4f98-a9bb-40003f4880d1",
+      "official_corroboration_id": "11060288"
+    },
+    {
+      "establishment_id": "7fe4702b-c995-49d7-9b79-99f0b232389c",
+      "staging_id": "882e1de3-1585-4d13-9dbd-fa5446a2fb7e",
+      "official_corroboration_id": "11060386"
+    },
+    {
+      "establishment_id": "094a933d-d1c9-4e26-8904-34e11cba43bf",
+      "staging_id": "4d924a96-2952-4046-9a79-539a20aae423",
+      "official_corroboration_id": "11060278"
+    },
+    {
+      "establishment_id": "3119ee09-3826-41ed-b4e1-fd9272aed6bb",
+      "staging_id": "1dfcf4ce-7f71-4658-920e-7f3d8d61ffee",
+      "official_corroboration_id": "11060272"
+    },
+    {
+      "establishment_id": "faf7f4b4-e818-40c0-9b6d-04edaa8c0859",
+      "staging_id": "e2634b89-1f8e-4a3f-96ec-abc3c666fff2",
+      "official_corroboration_id": "11060275"
+    },
+    {
+      "establishment_id": "744fec9f-9aa6-40e9-b941-7f206e806bbe",
+      "staging_id": "92b02867-e5ba-4ae7-8fa9-362f012c6610",
+      "official_corroboration_id": "11060276"
+    },
+    {
+      "establishment_id": "ce1d7c83-15ff-4771-a0d5-92a94642037a",
+      "staging_id": "6f0a2fa0-2309-4ac3-807b-b4a018aa6f84",
+      "official_corroboration_id": "11060277"
+    },
+    {
+      "establishment_id": "592c1219-f9fa-461b-8967-e21c3946d133",
+      "staging_id": "eddf5b93-6998-494c-8605-0cf355251464",
+      "official_corroboration_id": "11060285"
+    },
+    {
+      "establishment_id": "591798df-50dd-4ac6-9ad2-2654ffab1de3",
+      "staging_id": "339015db-9ebe-4dcb-b3f9-ecaf35a847d1",
+      "official_corroboration_id": "10040008"
+    },
+    {
+      "establishment_id": "d12c6add-663d-4684-9ea9-ec5279bf2a6c",
+      "staging_id": "27b93a4c-3be8-434c-93b4-25919966cde8",
+      "official_corroboration_id": "11060394"
+    },
+    {
+      "establishment_id": "cc2feae6-8cdc-41c5-bc6d-13c477fa1b26",
+      "staging_id": "68e1972d-9afa-496f-a950-38c94bcc7f7d",
+      "official_corroboration_id": "18511140"
+    },
+    {
+      "establishment_id": "b89f915e-0c94-4a3f-9d36-22a2f94f241e",
+      "staging_id": "bf4d29ca-4641-4004-a913-66d067fbaaa1",
+      "official_corroboration_id": "11060287"
+    },
+    {
+      "establishment_id": "43c8e2a8-0878-4108-8ec0-6c033e0ebf65",
+      "staging_id": "b2ab5725-506c-4e29-bfc3-16d039f16afe",
+      "official_corroboration_id": "11060299"
+    },
+    {
+      "establishment_id": "5afb727e-50de-451e-9a90-0707927bd4ca",
+      "staging_id": "c9f87cc1-e086-49e8-adf6-d4fdc8188c24",
+      "official_corroboration_id": "11060300"
+    },
+    {
+      "establishment_id": "66927690-77ca-46c8-923b-eb41ff5ea208",
+      "staging_id": "0dd94fb2-76eb-4730-ba53-b4064f58aaa9",
+      "official_corroboration_id": "11060303"
+    },
+    {
+      "establishment_id": "875104a0-52ba-45ab-9201-bc111e6b6d0f",
+      "staging_id": "9f31f4bc-6a8d-4ec0-b4f8-c0e342c18f73",
+      "official_corroboration_id": "11060304"
+    },
+    {
+      "establishment_id": "8a058ce1-cb14-42f5-aa9e-a0bfcd70fa3c",
+      "staging_id": "ee5dd1ed-65c8-4f9d-b083-56f7c8435e88",
+      "official_corroboration_id": "11060643"
+    },
+    {
+      "establishment_id": "435aca16-43db-431f-a93d-0efe659da554",
+      "staging_id": "5c8dac5e-9568-4ec5-a55d-e5c106ac8309",
+      "official_corroboration_id": "11060308"
+    },
+    {
+      "establishment_id": "5a3f4fd5-0768-46ef-9bae-fc3fe4c736ee",
+      "staging_id": "b00bd65c-a306-4a0b-81b7-5c418aab445b",
+      "official_corroboration_id": "11060309"
+    },
+    {
+      "establishment_id": "220089dc-3475-43d7-a7f1-d8f20be7f3ab",
+      "staging_id": "7df68ae0-b020-4616-b2be-a1e3879e4101",
+      "official_corroboration_id": "11060310"
+    },
+    {
+      "establishment_id": "cc9b31d6-7ab3-4128-82d5-3866faaa6bc9",
+      "staging_id": "fdb65238-b2fc-4075-a235-028578884e8f",
+      "official_corroboration_id": "11060176"
+    },
+    {
+      "establishment_id": "1d439054-ecbb-4dca-8a39-22c1593f1a63",
+      "staging_id": "e5f81eb8-0528-4ad5-a43e-631724e1104e",
+      "official_corroboration_id": "11060421"
+    },
+    {
+      "establishment_id": "bd351526-56f2-424a-8db2-51fdf10d3b06",
+      "staging_id": "607717e1-cea8-4a86-9521-079bd9ea4865",
+      "official_corroboration_id": "11060422"
+    },
+    {
+      "establishment_id": "7675581d-6246-4b5e-8c7d-1fd9f6ec5393",
+      "staging_id": "cef708f0-f3ed-407f-8a5b-c45c293222cd",
+      "official_corroboration_id": "11060420"
+    },
+    {
+      "establishment_id": "c0ec0ac7-d1fe-4da9-bb3a-75b1eea7dd56",
+      "staging_id": "ac520461-ca61-4052-bdcc-726b3174450b",
+      "official_corroboration_id": "11060425"
+    },
+    {
+      "establishment_id": "f23145b2-c66b-480c-9237-2ba45d8d0dc6",
+      "staging_id": "ef9ee312-c438-40af-8062-7ae219f1fb3e",
+      "official_corroboration_id": "11060428"
+    },
+    {
+      "establishment_id": "c31c058a-0e5b-4d02-adf8-846e508f95aa",
+      "staging_id": "5bbf3ea1-923d-4257-82d4-6aed699322a6",
+      "official_corroboration_id": "11060429"
+    },
+    {
+      "establishment_id": "ee57daf1-64bd-40ae-a01e-54301f28fdc3",
+      "staging_id": "e3dce4a5-ab81-4572-b080-bbd08ae81602",
+      "official_corroboration_id": "11060430"
+    },
+    {
+      "establishment_id": "ba7d6add-08b8-4166-8e9c-06e22b03ea7c",
+      "staging_id": "35a002d1-e2f6-4a52-b380-7ec427c83731",
+      "official_corroboration_id": "11060437"
+    },
+    {
+      "establishment_id": "766ffa81-4ec7-406a-885e-769e1543d5e8",
+      "staging_id": "951f6dba-1ebe-4014-a8f6-dc208a8801b8",
+      "official_corroboration_id": "11060427"
+    },
+    {
+      "establishment_id": "7f048ca7-a71b-4431-a6d6-62ef34c47cd8",
+      "staging_id": "94f09f83-40dd-4bf0-ac22-c32af8106641",
+      "official_corroboration_id": "11060419"
+    }
+  ]
+}

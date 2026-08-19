@@ -1,0 +1,17 @@
+{
+  "operator": "jean-merlain",
+  "approved_by": "Eddy",
+  "git_commit": "1a8df8c06a577b0fc6739d9d25bf70023adf03da",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "timestamp": "2026-08-19T04:01:03.903Z",
+  "approval_checksum": "d7f7cb6eef13cd59304e0dcbe0e6223f8ab1557a1e95dec667afbed630cb3025",
+  "registry_import_batch": "major-cities-official-corroboration-v1",
+  "eligible": 161,
+  "inserted": 161,
+  "skipped": 0,
+  "created": 161,
+  "linked": 161,
+  "failed": 0,
+  "failed_rows": [],
+  "outcome": "SUCCESS"
+}
