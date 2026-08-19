@@ -137,3 +137,95 @@ Conformément à la consigne "ne rien importer massivement" :
 - Aucun crawl complet d'aucune source (MINESEC testé sur une fixture de 8 lignes, pas les ~1960 enregistrements réels estimés)
 - Aucune promotion staging → establishments (logique non écrite)
 - Aucune interface d'administration pour revoir les doublons `duplicate_review`
+
+---
+
+## 9. Mise à jour réalité — SPRINT R.4 (2026-08-19)
+
+Les sections 1-8 ci-dessus décrivent l'architecture **telle que livrée par
+la mission DATA-REGISTRY-01 initiale** — figées, non réécrites. Depuis,
+plusieurs sprints (N à R.3.2) ont réellement construit ce que la section 8
+listait comme non fait : écritures Supabase réelles, crawl complet MINESEC
+(1942 lignes), promotion staging → establishments (1938 MINESEC + 161
+Major Cities live à ce jour), garde-fou de production
+(`scripts/school-registry/lib/productionGuard.ts`), et le framework
+d'extraction déterministe complet
+(`docs/03_DATA_REGISTRY/REGISTRY_EXTRACTION_SAFETY.md`,
+`scripts/school-registry/lib/extraction/`). Ne pas se fier à la section 8
+pour l'état actuel — elle documente un point de départ historique.
+
+### 9.1 Audit multi-identifiant (SPRINT R.4 §7 — AUDIT SEULEMENT, aucune migration)
+
+**Constat** (SPRINT MINESEC V1.1) : MINESEC opère au moins deux espaces de
+matricules structurellement incompatibles pour ce qui semble être la même
+population d'établissements — le format ESG à 17 caractères de MINESEC V1
+et le format cartescolaire.cm (préfixe régional à 2 lettres ou préfixe
+numérique non décodé). Zéro recouvrement direct d'identifiant entre les
+deux ; la seule corroboration possible passe par nom + géographie.
+
+**Implication architecturale** : `establishments.official_id` (colonne
+unique, `text`) suppose implicitement qu'un établissement a AU PLUS un
+identifiant officiel, provenant d'AU PLUS un registre. Ce postulat est déjà
+faux pour les établissements Major Cities corroborés (SPRINT R.3.2) — ils
+n'ont volontairement PAS d'`official_id` (l'identifiant cartescolaire vit
+dans `source_reference`, en texte libre, faute de colonne dédiée) alors
+qu'ils possèdent bien un identifiant officiel réel dans un registre réel.
+
+Avant MINESUP/MINEFOP/MINSANTE/Transport — chacun avec vraisemblablement
+son propre schéma de matricule, indépendant de MINESEC — ce postulat va se
+heurter au même problème à plus grande échelle : un établissement supérieur
+pourrait avoir un identifiant MINESUP ET un identifiant MINESANTE (école de
+santé rattachée à une université), un centre de formation professionnelle
+pourrait relever à la fois de MINEFOP et du Ministère des Transports.
+
+**Recommandation** (à valider par l'équipe/l'architecte avant MINESUP, pas
+décidée par ce sprint) : un modèle relationnel séparé plutôt qu'une
+extension de colonnes sur `establishments` :
+
+```
+establishment_registry_identifiers
+  id                  uuid primary key
+  establishment_id    uuid references establishments(id)
+  authority           text        -- ex. 'MINESEC', 'MINESUP', 'cartescolaire.cm'
+  registry            text        -- ex. 'ESG_V1', 'MINESEC_CARTESCOLAIRE'
+  identifier           text        -- la valeur brute du matricule/identifiant
+  identifier_type      text        -- ex. 'DIGIT_PREFIX_17', 'ALPHA_PREFIX_2LETTER'
+  source_url            text
+  verified_at            timestamptz
+  unique (registry, identifier)  -- unicité PAR registre, jamais globale
+```
+
+Avantages par rapport à l'ajout de colonnes `official_id_minesup`,
+`official_id_minesante`, etc. : nombre de registres non plafonné à l'avance,
+`unique(registry, identifier)` empêche un doublon interne à un registre
+sans jamais supposer que deux registres partagent un espace d'identifiants,
+et l'historique de vérification (`verified_at`) devient possible par
+identifiant plutôt que par établissement entier.
+
+**Aucune migration n'a été créée ni exécutée pour cette recommandation** —
+décision d'architecture qui dépasse le périmètre d'un sprint d'audit.
+
+### 9.2 Réutilisabilité du framework pour REGISTRY-MULTI-A (SPRINT R.4 §8)
+
+Le pipeline déjà construit et éprouvé sur MINESEC + Major Cities + audit
+cartescolaire reste, à évaluer composant par composant, directement
+réutilisable pour MINESUP/MINEFOP/MINSANTE/Transport :
+
+| Étape | Composant existant | Réutilisable tel quel |
+|---|---|---|
+| Raw source + SHA256 | `lib/extraction/sourceSnapshot.ts` | OUI |
+| fetched_at / parser_version | `lib/extraction/types.ts` (contrat `ExtractionResult`) | OUI |
+| Completeness verdict | `lib/extraction/completeness.ts` | OUI |
+| Source authority (Tier 1-3) | Politique documentée (`REGISTRY_EXTRACTION_SAFETY.md`), pas de code dédié | OUI (politique), à appliquer par ministère |
+| Normalized candidate | `lib/normalize.ts` + adaptateurs par ministère | PARTIEL — chaque ministère a son propre parseur HTML (déjà anticipé : `sources/minesup.ts` etc. existent en stub) |
+| Matching (official_id / identity / fuzzy) | Logique dupliquée par script de promotion (`promote-*.ts`) | À FACTORISER — actuellement recopiée par sprint, candidate à extraction en module partagé avant MINESUP |
+| Staging | `establishment_import_staging` (table unique, `source_ministry` distingue déjà) | OUI |
+| Human review + approval snapshot | Convention de fichiers `reports/registry/*-approval.json` + checksum déterministe | OUI |
+| Controlled promotion | `lib/productionGuard.ts` (`assertRegistryProductionWriteAllowed`) | OUI, générique par ministère/batch |
+| Audit trail | `*-promotion-summary.json` + `*-created-ids.json` | OUI |
+
+Aucun besoin de dupliquer quatre pipelines incompatibles. Le seul point non
+encore factorisé est le MATCHING (chaque script de promotion recalcule sa
+propre logique de correspondance) — recommandé comme nettoyage avant
+MINESUP plutôt qu'une nouvelle copie du même code, mais non bloquant pour
+démarrer.
