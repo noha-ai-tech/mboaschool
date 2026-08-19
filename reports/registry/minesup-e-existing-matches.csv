@@ -1,0 +1,285 @@
+candidate_name,match_type,matched_target_id,matched_target_name,reason
+"Institut Supérieur des Sciences, de Technologie, de Management et Développement Durable (ISSTMADD)",PROBABLE_MATCH,3fba2a5d-6438-4f0d-8307-ca2b1b3e9a53,Higher Institute for Business and management Sciences,"chevauchement de mots (33%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Sanda Institut Supérieur de Management (SISMA),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut d’Emergence de la Santé et des Sciences Biomédicales de Ngaoundéré ( INESSBIN),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (17%) — pas de gagnant clair.
+Institut Supérieur Yérima    Dewa,EXACT_IDENTITY,staging:2a1726f8-d206-432a-bbf8-5e36bfd05cc6,Institut Supérieur Yérima    Dewa,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur Fondation Mamadou Bako,EXACT_IDENTITY,staging:6f7c1286-c274-4a2b-9309-0f225b8c7526,Institut Supérieur Fondation Mamadou Bako,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur du Septentrion Informatique,EXACT_IDENTITY,staging:034563dc-d15e-4bf8-8c38-403f479e6223,Institut Supérieur du Septentrion Informatique,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur Industriel et Commercial de Garoua,PROBABLE_MATCH,c9ab3adf-edda-4d95-bfd7-2cbce3a64b20,ISTDI – Institut Sup. de Technologie et du Design Industriel,"chevauchement de mots (33%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Supérieur des Sciences et Techniques de la Santé,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Kesmonds International University Institute,PROBABLE_MATCH,57cae063-bccf-4727-82ad-d3eb70259205,International University of Bamenda,"chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+WALYA SUP,EXACT_IDENTITY,staging:b6e152f1-a14b-4782-b755-d3d6eda77f81,WALYA SUP,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Jagora University,EXACT_IDENTITY,staging:be6396c7-d8c0-470b-aaf3-ac6379b0a45f,Jagora University,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Cameroon Bilingual Higher Institute (CBHI),EXACT_IDENTITY,staging:918ab878-574f-4383-9733-659ff92bdca3,Cameroon Bilingual Higher Institute (CBHI),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Centre International des Etudes Polytechniques d’Obala,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+Citec Higher Institute of Technology and Management (ICTU),PROBABLE_MATCH,0b253a9f-bb04-47d9-8934-8d9f5a231ef6,"Paul Nkwi Higher Institute of Management, Science, Arts and Technology (PN-HIMSAT)","chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+"Comfort Higher Institute of Health, Management and Education (CHIHME)",AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+Ecole Sup Prépa,EXACT_IDENTITY,staging:1bae808d-159e-448d-8956-fc54c892b36a,Ecole Sup Prépa,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Ecole Supérieure Africaine de Technologies Appliquées et de Gestion (ESATAG),PROBABLE_MATCH,staging:a79be0ce-d561-4a1f-8de6-c55dfe2f50cc,Institut Supérieur de Technologies Appliquées (INSTAP),"chevauchement de mots (40%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Ecole Supérieure de Commerce et de Gestion des Entreprises (SUP de CO),PROBABLE_MATCH,be435b04-bf87-44da-808d-0033c60c6e66,Institut Supérieur de Commerce et de Gestion (ISCG),"chevauchement de mots (67%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Ecole Supérieure de Commerce et de Gestion de Yaoundé (ESCGY),PROBABLE_MATCH,be435b04-bf87-44da-808d-0033c60c6e66,Institut Supérieur de Commerce et de Gestion (ISCG),"chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Ecole Supérieure de Management et des Technologies Appliquées « ESMATA»,PROBABLE_MATCH,staging:a79be0ce-d561-4a1f-8de6-c55dfe2f50cc,Institut Supérieur de Technologies Appliquées (INSTAP),"chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+"Ecole Supérieure des Sciences de la Finance, de l’Assurance et des Risques de Yaoundé (ESSFAR)",AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (17%) — pas de gagnant clair.
+Ecole Supérieure Spéciale d’Architecture du Cameroun (ESSACA),EXACT_IDENTITY,staging:d99c77c8-7477-4eeb-a842-ffb14e7a7557,Ecole Supérieure Spéciale d’Architecture du Cameroun (ESSACA),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Experiental Higher Institute of Science and Technology (EXHIST),EXACT_IDENTITY,1b46177a-5d8c-4b26-9877-11bf4a8a8e53,Experiental Higher Institute of Science and Technology (EXHIST),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Heritage Higher Institute of Peace Development Studies (HEHIPEDS),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+HIPTEX University Institute,EXACT_IDENTITY,staging:19481c97-20a6-4ba4-a560-c053dc2db3d5,HIPTEX University Institute,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Higher Institute for Professionalism and Excellence (HIPTEX),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Higher Institute of Management and Entrepreneurship (HIME),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Higher Institute of technology and Management (CITEC HITM),PROBABLE_MATCH,0b253a9f-bb04-47d9-8934-8d9f5a231ef6,"Paul Nkwi Higher Institute of Management, Science, Arts and Technology (PN-HIMSAT)","chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Information and Communication Technology University Institute (ICTU),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut AGENLA Academy,EXACT_IDENTITY,staging:1b2b37f7-d3c9-4551-bb04-6a8f17e249d6,Institut AGENLA Academy,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Catholique de Yaoundé,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Institut de Haute Technologie et Management (IHTM),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut de Management et de Marketing Supérieur de Commerce (I2M Sup de Co Cameroun),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut des Beaux-Arts CHEIKH ANTA DIOP,PROBABLE_MATCH,0b253a9f-bb04-47d9-8934-8d9f5a231ef6,"Paul Nkwi Higher Institute of Management, Science, Arts and Technology (PN-HIMSAT)","chevauchement de mots (20%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut des Sciences Economiques et Informatiques de Gestion (ISEIG),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+Institut MBASSI Supérieur,EXACT_IDENTITY,staging:17e1598c-1f0b-4ab1-ad58-bc7aea1558f6,Institut MBASSI Supérieur,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Saint Jean,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+"Institut Supérieur Azimut de Commerce, de Technologie et de Santé",AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur d’Agriculture et de Gestion,PROBABLE_MATCH,be435b04-bf87-44da-808d-0033c60c6e66,Institut Supérieur de Commerce et de Gestion (ISCG),"chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Supérieur d’Enseignement Managérial et Technologique,EXACT_IDENTITY,staging:cc4196f4-f96b-404c-9bf9-82549af3862b,Institut Supérieur d’Enseignement Managérial et Technologique,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+"Institut Supérieur d’Etudes Scientifiques, Technologiques et Managériales (ISESTMA)",PROBABLE_MATCH,staging:2613924e-2a12-48bb-9529-de1ae82a6bc6,Institut des Hautes Etudes Supérieures (IHES),"chevauchement de mots (20%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Supérieur de Chimie et de Gestion,PROBABLE_MATCH,be435b04-bf87-44da-808d-0033c60c6e66,Institut Supérieur de Commerce et de Gestion (ISCG),"chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+"Institut Supérieur de Formation aux Métiers de Télécommunications, de l’Innovation Technologique, de Commerce et de Gestion (IFTIC-SUP)",PROBABLE_MATCH,be435b04-bf87-44da-808d-0033c60c6e66,Institut Supérieur de Commerce et de Gestion (ISCG),"chevauchement de mots (25%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Supérieur de Génie Civil (ISGeC),EXACT_IDENTITY,staging:3e0d99d2-d882-4eeb-8a58-e223c4cc25ab,Institut Supérieur de Génie Civil (ISGeC),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur de Gestion et d’Hôtellerie (ISGHO),PROBABLE_MATCH,be435b04-bf87-44da-808d-0033c60c6e66,Institut Supérieur de Commerce et de Gestion (ISCG),"chevauchement de mots (33%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Supérieur de l’Emergence (ISE),EXACT_IDENTITY,staging:4b585880-14ad-49ce-9019-0d5d97106292,Institut Supérieur de l’Emergence (ISE),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur de Management et des Sciences Appliquées (ISMASA),PROBABLE_MATCH,3fba2a5d-6438-4f0d-8307-ca2b1b3e9a53,Higher Institute for Business and management Sciences,"chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Supérieur de Management et des Technologies Industrielles (ISMTI),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur de Management International (ISMI),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut Supérieur de Pétrochimie et d’Ingénierie Mathématique (ISPIM),EXACT_IDENTITY,staging:bfb68d32-efb8-40df-b796-051b6c9e26f2,Institut Supérieur de Pétrochimie et d’Ingénierie Mathématique (ISPIM),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+"Institut Supérieur de Pétrochimie, de l'Informatique et des Sciences Appliquées (ISPISA)",AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+Institut Supérieur de Technologie Appliquée et de Gestion (ISTAG).,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur de Technologie le Bon Berger,PROBABLE_MATCH,c9ab3adf-edda-4d95-bfd7-2cbce3a64b20,ISTDI – Institut Sup. de Technologie et du Design Industriel,"chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Supérieur de Technologie Médicale de Nkolodom,PROBABLE_MATCH,c9ab3adf-edda-4d95-bfd7-2cbce3a64b20,ISTDI – Institut Sup. de Technologie et du Design Industriel,"chevauchement de mots (33%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+"Institut Supérieur de Traduction, d’Interprétariat et de Communication (ISTIC)",PROBABLE_MATCH,staging:89cadd55-58ec-4dd6-be10-a162750257ca,Institut Supérieur d’Informatique et de la Communication (ISICOM),"chevauchement de mots (25%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Supérieur des Affaires (ISA),EXACT_IDENTITY,staging:38900775-9726-4ec2-8f8b-535d15eca4ac,Institut Supérieur des Affaires (ISA),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur des métiers Notre Dame,PROBABLE_MATCH,staging:2f012236-4131-492f-956e-71f67eebbfb3,Institut Supérieur des Métiers (ISMET),"chevauchement de mots (33%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+"Institut Supérieur des Sciences Agronomiques, de l’Environnement et de l’Entrepreneuriat Rural (ISSAEER)",AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (17%) — pas de gagnant clair.
+Institut Supérieur des Sciences Biologiques et Appliquées (ISSBA),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur des Sciences de la Santé « le Millenium »,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut Supérieur des Sciences de l’Education (ISSED),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut Supérieur des Sciences de l’Entreprise (ISSE),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut Supérieur des Sciences et de Management (I2SM),PROBABLE_MATCH,3fba2a5d-6438-4f0d-8307-ca2b1b3e9a53,Higher Institute for Business and management Sciences,"chevauchement de mots (67%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Supérieur des Sciences et des Technologies Sainte Maria,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur des Sciences et Techniques de Yaoundé (ISSTY),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur des Sciences et Technologies de la Santé (ISSTS),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur des Sciences et Technologies la Sapience,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut Supérieur des Sciences Sociales et Appliquées (I3SA),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+"Institut Supérieur des Sciences, Arts et Métiers (ISSAM)",AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur des Techniques Agricoles d’Ombessa,EXACT_IDENTITY,staging:7c6337bb-c8d3-45fd-97ac-86cae7ec79dd,Institut Supérieur des Techniques Agricoles d’Ombessa,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur des Technologies et de l’Innovation,EXACT_IDENTITY,staging:76c314c0-5332-47e9-8129-5b0051ead7f1,Institut Supérieur des Technologies et de l’Innovation,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur du Personnel Médico- Sanitaire (ISPM),EXACT_IDENTITY,staging:fbd3b291-3dcf-4c67-97db-8b77c5a20502,Institut Supérieur du Personnel Médico- Sanitaire (ISPM),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur Jimit (ISJ),EXACT_IDENTITY,staging:4a880cb7-389b-455f-a512-9792f8248a0f,Institut Supérieur Jimit (ISJ),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur la Rosière,EXACT_IDENTITY,staging:04d41866-c920-4993-8d61-e30711ed5506,Institut Supérieur la Rosière,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur Kalata (ISKA),EXACT_IDENTITY,staging:40873d9e-ddfa-464b-b286-5abca970501e,Institut Supérieur Kalata (ISKA),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur Maritime et de Gestion (ISUMAG),PROBABLE_MATCH,be435b04-bf87-44da-808d-0033c60c6e66,Institut Supérieur de Commerce et de Gestion (ISCG),"chevauchement de mots (33%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Supérieur Saint Jean-Paul II (ISJP),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur Technologique,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (100%) — pas de gagnant clair.
+Institut Universitaire Agricole de Management des Métiers de la Production (IUAMMP),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (17%) — pas de gagnant clair.
+Institut universitaire Bengono Touré,PROBABLE_MATCH,a987ba57-1b71-44d1-9f78-d25041a5a306,Institut Universitaire du Golfe de Guinée (IUG),"chevauchement de mots partiel (33%), insuffisant pour STRONG_MATCH."
+Institut Universitaire Catholique Sainte Thérèse de Yaoundé (INUCASTY),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (17%) — pas de gagnant clair.
+Institut Universitaire d’Eseka (IUE),PROBABLE_MATCH,a987ba57-1b71-44d1-9f78-d25041a5a306,Institut Universitaire du Golfe de Guinée (IUG),"chevauchement de mots partiel (50%), insuffisant pour STRONG_MATCH."
+Institut Universitaire des Sciences et de Management (IUSM),PROBABLE_MATCH,3fba2a5d-6438-4f0d-8307-ca2b1b3e9a53,Higher Institute for Business and management Sciences,"chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Universitaire des Sciences Pétrolières et de Magement (IUSPM),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+"Institut Universitaire des Sciences, des Technologies et de l’Ethique (IUSTE).",AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+Institut Universitaire International,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Institut Universitaire J. NDI SAMBA,PROBABLE_MATCH,a987ba57-1b71-44d1-9f78-d25041a5a306,Institut Universitaire du Golfe de Guinée (IUG),"chevauchement de mots partiel (50%), insuffisant pour STRONG_MATCH."
+Institut Universitaire LA VISION,PROBABLE_MATCH,a987ba57-1b71-44d1-9f78-d25041a5a306,Institut Universitaire du Golfe de Guinée (IUG),"chevauchement de mots partiel (50%), insuffisant pour STRONG_MATCH."
+Institut Universitaire Protestant de Yaoundé,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut Universitaire SIANTOU,PROBABLE_MATCH,a987ba57-1b71-44d1-9f78-d25041a5a306,Institut Universitaire du Golfe de Guinée (IUG),"chevauchement de mots partiel (50%), insuffisant pour STRONG_MATCH."
+International Bilingual Academy Yaoundé (IBAY-SUP),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+La Centrale des Mé4tiers du Numérique et des Affaires Diockni (CEMENAD),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (17%) — pas de gagnant clair.
+"Laureats Higher Institute of Business, Administration and Technology Sciences (LAHIBATS)",AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Prépa Vogt,PROBABLE_MATCH,staging:1bae808d-159e-448d-8956-fc54c892b36a,Ecole Sup Prépa,"chevauchement de mots partiel (50%), insuffisant pour STRONG_MATCH."
+PRIMETEC Higher Institute of Technology,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+RAPUS International Institute School (RIIS),PROBABLE_MATCH,57cae063-bccf-4727-82ad-d3eb70259205,International University of Bamenda,"chevauchement de mots (33%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Yaounde School of Economics and Management (YSEM),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Yaoundé International Business School (YIBS),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur d’Agronomie (ISA),EXACT_IDENTITY,staging:5b1055ed-2197-4b06-b8b2-e7f729c534e9,Institut Supérieur d’Agronomie (ISA),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Universitaire Catholique de Bertoua (IUCAB),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur des Métiers de Technologies d'Afrique Centrale,PROBABLE_MATCH,c28c6f88-589f-41b3-834a-e80a7a0a3192,Université Catholique d'Afrique Centrale (UCAC),"chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Ecole Supérieure des Sciences Appliquées de Bertoua,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Higher Institute for Technology and Professional Studies (HITEPS),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Institut Supérieur des Techniques Appliquées et de Management,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut Supérieur Walya (WALYASUP),PROBABLE_MATCH,staging:b6e152f1-a14b-4782-b755-d3d6eda77f81,WALYA SUP,"chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Impact Higher Institute of Leadership and International Development,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Universitaire de Technologie et des Sciences du Sahel (IUTESSA),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+Institut Supérieur du Sahel pour le Développement Durable (ISSDD),PROBABLE_MATCH,staging:99db304c-1df0-4d0b-9dfd-34fd381c87e7,Institut panafricain pour le Développement (IPD),"chevauchement de mots (40%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Access Higher Institute of Professional Studies (Access-HIPS),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (40%) — pas de gagnant clair.
+Alpha Higher Institute of Biomedical and Technological Sciences,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Century Innovating Higher Institute (CINNOHI),EXACT_IDENTITY,staging:bfd3b609-852e-4027-95a1-cd2b421f234c,Century Innovating Higher Institute (CINNOHI),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Douala Higher Institute of Technology (DIT),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Dunamis Higher Institute of Applied Professional Studies (DHIAPS),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (40%) — pas de gagnant clair.
+Ecole Supérieure d’Ingénieur d’Afrique Centrale (ESIAC),PROBABLE_MATCH,c28c6f88-589f-41b3-834a-e80a7a0a3192,Université Catholique d'Afrique Centrale (UCAC),"chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Ecole Supérieure de Commerce et de Management PIGIER Cameroun,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Ecole Supérieure des Sciences et Techniques (ESSET),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Ecole Supérieure Technique la Salle (EST),EXACT_IDENTITY,staging:ebd42661-4b47-47d9-8120-791e7abb74ce,Ecole Supérieure Technique la Salle (EST),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Higher Institute for Nursing and Technico-Sanitary Personals (HINTP),PROBABLE_MATCH,ae31d758-9761-48cb-9940-364ed017f7e4,ST Jude’s Higher Institute of Nursing and Biomedical,"chevauchement de mots (20%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Higher Institute of Business,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (100%) — pas de gagnant clair.
+Higher Institute of Professional Excellence (HIPE),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut des Hautes Etudes Supérieures (IHES),EXACT_IDENTITY,staging:2613924e-2a12-48bb-9529-de1ae82a6bc6,Institut des Hautes Etudes Supérieures (IHES),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+"Institut des Etudes Supérieures de Science, d’Industrie et des Techniques de Gestion (IHES-SITG)",PROBABLE_MATCH,staging:2613924e-2a12-48bb-9529-de1ae82a6bc6,Institut des Hautes Etudes Supérieures (IHES),"chevauchement de mots partiel (38%), insuffisant pour STRONG_MATCH."
+Institut panafricain pour le Développement (IPD),EXACT_IDENTITY,staging:99db304c-1df0-4d0b-9dfd-34fd381c87e7,Institut panafricain pour le Développement (IPD),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur Africain d’Enseignement Managérial et Technologique,EXACT_IDENTITY,staging:a8067013-bc95-46de-852a-110762c47cb5,Institut Supérieur Africain d’Enseignement Managérial et Technologique,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur Africain des Technologies de l'Information et de la Connaissance (ISATIC),EXACT_IDENTITY,staging:c013af83-a753-446e-a587-0a7679a1a56d,Institut Supérieur Africain des Technologies de l'Information et de la Connaissance (ISATIC),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur d’Etudes Commerciales et de Management (ISECMA),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur d’Informatique et de la Communication (ISICOM),EXACT_IDENTITY,staging:89cadd55-58ec-4dd6-be10-a162750257ca,Institut Supérieur d’Informatique et de la Communication (ISICOM),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur Dale Kietzman,EXACT_IDENTITY,staging:f57c1522-de0b-45d3-b673-4b63d1b3e6c7,Institut Supérieur Dale Kietzman,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur de Commerce et d’Administration des Collectivités (ISCAC),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur de Commerce et de management,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Institut Supérieur de Comptabilité et Management (ISCM),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut Supérieur de Gestion (ISG),STRONG_MATCH,be435b04-bf87-44da-808d-0033c60c6e66,Institut Supérieur de Commerce et de Gestion (ISCG),chevauchement de mots fort (100%) + géographie cohérente.
+Institut Supérieur de Gestion et de Management (ISGEM),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut Supérieur de Gestion et de Technologie (ISGET),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut Supérieur de Gestion et du Design (ISGD),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut Supérieur de l’Entreprise et du Management (ISEM),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut Supérieur de Management de Manengouba (ISMAM),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut Supérieur de Management (ISMA),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Institut Supérieur de Management et de l’Entrepreneuriat,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Institut Supérieur de Management et de Technologies Avancées (ISMT),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur de Psychopédagogie Appliquée (ISPPA),EXACT_IDENTITY,staging:16cff835-0e65-4ef9-b883-99653444a183,Institut Supérieur de Psychopédagogie Appliquée (ISPPA),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur de Technologie Avancée et du Management Douala (ISTAMA),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+Institut Supérieur de Technologie et de Gestion,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Institut Supérieur de Technologie et de Gestion d’Afrique centrale (ISTG-AC),PROBABLE_MATCH,c28c6f88-589f-41b3-834a-e80a7a0a3192,Université Catholique d'Afrique Centrale (UCAC),"chevauchement de mots (40%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Supérieur de Technologie et de Management (ISTM),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut Supérieur de Technologies Appliquées (INSTAP),EXACT_IDENTITY,staging:a79be0ce-d561-4a1f-8de6-c55dfe2f50cc,Institut Supérieur de Technologies Appliquées (INSTAP),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+"Institut Supérieur de Transport, de Tourisme, des Affaires et de Management (ISTTAM)",AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+Institut Supérieur des Formations Appliquées (ISFA),EXACT_IDENTITY,staging:2b3b42da-927c-4fd9-863f-dc2044b76105,Institut Supérieur des Formations Appliquées (ISFA),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur des Hautes Etudes Commerciales et Industrielles SIGMEN,PROBABLE_MATCH,staging:2613924e-2a12-48bb-9529-de1ae82a6bc6,Institut des Hautes Etudes Supérieures (IHES),"chevauchement de mots partiel (40%), insuffisant pour STRONG_MATCH."
+Institut Supérieur des Métiers (ISMET),EXACT_IDENTITY,staging:2f012236-4131-492f-956e-71f67eebbfb3,Institut Supérieur des Métiers (ISMET),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur des Métiers de Gestion et Technologie (ISMEGET),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur des Sciences Appliquées au  Management (ISSAM-ESSAMA),PROBABLE_MATCH,3fba2a5d-6438-4f0d-8307-ca2b1b3e9a53,Higher Institute for Business and management Sciences,"chevauchement de mots (40%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+"Institut Supérieur des Sciences, de Technologie et de Commerce",AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut Supérieur des Techniques Economiques et Comptables,EXACT_IDENTITY,staging:13ce9bc3-8af3-4936-b2bb-5e9c97588ea1,Institut Supérieur des Techniques Economiques et Comptables,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Universitaires des Grandes Ecoles des Tropiques (IUGET),EXACT_IDENTITY,staging:aeb993e7-fc07-41a4-b208-b3e67707a014,Institut Universitaires des Grandes Ecoles des Tropiques (IUGET),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur du Génie Thermique et Énergétique,EXACT_IDENTITY,staging:252d1e2d-20a1-47e6-a46d-c4e8fd9de04c,Institut Supérieur du Génie Thermique et Énergétique,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+"Institut Supérieur du Tourisme, de l’Hôtellerie et des Arts Culinaires (ISTHAC)",PROBABLE_MATCH,0b253a9f-bb04-47d9-8934-8d9f5a231ef6,"Paul Nkwi Higher Institute of Management, Science, Arts and Technology (PN-HIMSAT)","chevauchement de mots (20%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Supérieur Evangélique des Technologies et de Gestion (ISETAG),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur la Perle (ISLAPE),EXACT_IDENTITY,staging:8f019111-012d-4548-a3f5-5b5e156b14ee,Institut Supérieur la Perle (ISLAPE),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur Lumière,EXACT_IDENTITY,staging:55f943e5-176a-41b8-9427-82e68c5fa31b,Institut Supérieur Lumière,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur MINGOLE (ISM),EXACT_IDENTITY,staging:34c654c6-57ac-45b9-9c05-0025fd68d70e,Institut Supérieur MINGOLE (ISM),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieure d’Informatique et de Commerce (ISICO),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut Universitaire Catholique de Douala Saint Jérôme,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+Institut Universitaire de la Côte (IUC),PROBABLE_MATCH,a987ba57-1b71-44d1-9f78-d25041a5a306,Institut Universitaire du Golfe de Guinée (IUG),"chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Universitaire du Golfe de Guinée (IUG),AMBIGUOUS,,,nom exact trouvé mais géographie contradictoire ou correspondance multiple non résolue — revue humaine requise.
+Institut Universitaire et Stratégique de l’Estuaire,PROBABLE_MATCH,a987ba57-1b71-44d1-9f78-d25041a5a306,Institut Universitaire du Golfe de Guinée (IUG),"chevauchement de mots (33%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Universitaire Louis Yinda (IULY),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur de Gestion et d’Hotellerie KELLA GAMO Sidonie (ISGH-KGS),PROBABLE_MATCH,be435b04-bf87-44da-808d-0033c60c6e66,Institut Supérieur de Commerce et de Gestion (ISCG),"chevauchement de mots partiel (17%), insuffisant pour STRONG_MATCH."
+Institut Supérieur des Sciences et des Energies Renouvelables (ISSER),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+International School of Hospitality and Professional Education (ISHOPE),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+Panafrican Institute of Strategy and Technology (PIST),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Professional Higher Institute of Business Management and Technology (PHIBMAT),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (40%) — pas de gagnant clair.
+Sabena Flight Academy Africa,EXACT_IDENTITY,staging:db2bbcf8-21dd-4769-9863-bb20943e2cad,Sabena Flight Academy Africa,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+The Vaal Institute of Technology (VIT),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Higher Institute of Sciences and Technology (HIST),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+St Louis Higher Institute of Medical Studies – Douala (SLHIMS),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+Saint Louis Higher Institute of Engineering and Technology (SLHIET),PROBABLE_MATCH,3479cf30-a1cc-4f75-a3e5-95a20a5f41bd,Saint Louis Higher Institute of Health and Biomedical Sciences,"chevauchement de mots (40%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+STALWART HIGHER INSTITUTE (SHI),EXACT_IDENTITY,staging:c93ae2bf-c393-4b7e-9931-17036eceabca,STALWART HIGHER INSTITUTE (SHI),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Sky High Higher Institute of Engineering and Business (SHIIEB),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Canadian Higher Institute of Technology (CHIT),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+British Higher Institute of Science and Technology (BHIST),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Institut Supérieur des Sciences et Techniques de la Santé et de Management (ISSTSM),PROBABLE_MATCH,3fba2a5d-6438-4f0d-8307-ca2b1b3e9a53,Higher Institute for Business and management Sciences,"chevauchement de mots (40%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Supérieur Fondation MAMADOU BAKO,EXACT_IDENTITY,staging:6f7c1286-c274-4a2b-9309-0f225b8c7526,Institut Supérieur Fondation Mamadou Bako,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur Industriel et Commercial de Garoua (ISIC),PROBABLE_MATCH,c9ab3adf-edda-4d95-bfd7-2cbce3a64b20,ISTDI – Institut Sup. de Technologie et du Design Industriel,"chevauchement de mots (25%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Supérieur Septentrion Informatique,EXACT_IDENTITY,staging:034563dc-d15e-4bf8-8c38-403f479e6223,Institut Supérieur du Septentrion Informatique,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Supérieur Yérima DEWA (ISYD),STRONG_MATCH,staging:2a1726f8-d206-432a-bbf8-5e36bfd05cc6,Institut Supérieur Yérima    Dewa,chevauchement de mots fort (67%) + géographie cohérente.
+Acces Care Institute (ACI),EXACT_IDENTITY,6a1e08bd-6184-422a-b253-b91b5015f350,Acces Care Institute (ACI),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Bamenda University Institute of Science and Technology (BUIST),EXACT_IDENTITY,d9498d3a-e88f-465b-b6b6-14873460da2f,Bamenda University Institute of Science and Technology (BUIST),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Baptist Institute of Higher Learning,EXACT_IDENTITY,400301dc-cfaf-4076-8468-566dd5efa401,Baptist Institute of Higher Learning,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Capitol Higher Institute of Health Sciences and Beauty Therapy,EXACT_IDENTITY,8a5786e1-2c4a-4340-b827-a6c286f8990d,Capitol Higher Institute of Health Sciences and Beauty Therapy,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Catholic University Institute of Bamenda,EXACT_IDENTITY,60e1c9cd-31eb-4236-a67e-664a60c74a98,Catholic University Institute of Bamenda,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Central Higher Institute (CHI),EXACT_IDENTITY,d548473d-7abf-45ad-a688-28f88067bfe6,Central Higher Institute (CHI),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Christian University Institute,EXACT_IDENTITY,f5795c8a-cef9-4b8d-870e-f6bfc9ef025b,Christian University Institute,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Continental University Institute of science and Technology (CUIST),EXACT_IDENTITY,68fc19ff-c654-4597-9feb-ac8379ad8bab,Continental University Institute of science and Technology (CUIST),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Experiental Higher Institute of Science and Technology (EXHIST),EXACT_IDENTITY,1b46177a-5d8c-4b26-9877-11bf4a8a8e53,Experiental Higher Institute of Science and Technology (EXHIST),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Florence Nigtingale Higher Institute of Health and Biomedical Sciences,EXACT_IDENTITY,staging:88dd575f-5dfe-4578-9fdb-92c8c7b27577,Florence Nigtingale Higher Institute of Health and Biomedical Sciences,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Fonab Polytechnic,EXACT_IDENTITY,7a653532-f62f-42b6-8795-0bae452569da,Fonab Polytechnic,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Havard Higher Institute of Science and Technology,EXACT_IDENTITY,68cc179b-d322-42a5-9bc3-2417f502c188,Havard Higher Institute of Science and Technology,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Higher Institute for Business and management Sciences,EXACT_IDENTITY,3fba2a5d-6438-4f0d-8307-ca2b1b3e9a53,Higher Institute for Business and management Sciences,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Higher Institute for Professional Development and Training (HIPDET),EXACT_IDENTITY,411a9767-a23e-43a2-ab72-33c0f4affad4,Higher Institute for Professional Development and Training (HIPDET),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Higher Institute of Professionalism and Technology (HIPT),EXACT_IDENTITY,37715786-0746-4f3b-8911-8f2fec72bad3,Higher Institute of Professionalism and Technology (HIPT),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Impact Polytechnic,EXACT_IDENTITY,staging:5e1f5128-0739-4655-94c0-9ee4fe57a6a0,Impact Polytechnic,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+International University of Bamenda,EXACT_IDENTITY,57cae063-bccf-4727-82ad-d3eb70259205,International University of Bamenda,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Jomatt Polytechnic Institute of Education,EXACT_IDENTITY,2652a1de-e072-4b98-9830-1aefe532fc78,Jomatt Polytechnic Institute of Education,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Laureate Higher Institute of Business and Administration (LAHIBA),EXACT_IDENTITY,ed4f6502-2121-4806-b902-e6cdc79db00c,Laureate Higher Institute of Business and Administration (LAHIBA),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+"National Higher Institute of Business, Tourism and Hotel Management (NAHIBUTH)",EXACT_IDENTITY,9dce018e-1378-49fb-8c9d-6b9e170f9aad,"National Higher Institute of Business, Tourism and Hotel Management (NAHIBUTH)",nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+National Polytechnic University Institute (NPUI),EXACT_IDENTITY,752068fd-cf3f-4415-b9df-c7227b1a79b6,National Polytechnic University Institute (NPUI),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+"Paul Nkwi Higher Institute of Management, Science, Arts and Technology (PN-HIMSAT)",EXACT_IDENTITY,0b253a9f-bb04-47d9-8934-8d9f5a231ef6,"Paul Nkwi Higher Institute of Management, Science, Arts and Technology (PN-HIMSAT)",nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Pauls’s Computer Higher Institute of Technology (PC-HITECH),EXACT_IDENTITY,28f2a08f-2ea9-4881-a1f1-b4ae23b54d39,Pauls’s Computer Higher Institute of Technology (PC-HITECH),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Pyramid Higher Institute of Professional Studies,EXACT_IDENTITY,6e17ea8a-9108-4ed1-b3cb-e7ae66c3485a,Pyramid Higher Institute of Professional Studies,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Saint Louis Higher Institute of Health and Biomedical Sciences,EXACT_IDENTITY,3479cf30-a1cc-4f75-a3e5-95a20a5f41bd,Saint Louis Higher Institute of Health and Biomedical Sciences,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+ST Jude’s Higher Institute of Nursing and Biomedical,EXACT_IDENTITY,ae31d758-9761-48cb-9940-364ed017f7e4,ST Jude’s Higher Institute of Nursing and Biomedical,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+ST Thierry Higher Institute of Health Science and Technology (SHIHSAT),EXACT_IDENTITY,65e33024-e0fb-40c0-a518-4a47a6d5253e,ST Thierry Higher Institute of Health Science and Technology (SHIHSAT),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Taniform Higher Institute of Learning (THIL),EXACT_IDENTITY,e3acd884-6f56-4846-8e0c-e889637e4798,Taniform Higher Institute of Learning (THIL),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Saint Laurence Higher Institute (SLHI),EXACT_IDENTITY,60c33474-78b0-4877-a876-70637359eb44,Saint Laurence Higher Institute (SLHI),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Saint Michael Higher Institute of Professional Studies (SHIPS),EXACT_IDENTITY,caada710-d33f-4ad9-b12f-434c0b29c79f,Saint Michael Higher Institute of Professional Studies (SHIPS),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Catholic School of Health Sciences Shisong,EXACT_IDENTITY,71d1c40e-7b52-4e8a-86f7-2d89b23218a9,Catholic School of Health Sciences Shisong,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Groupe Tankou Enseignement Supérieur (GTES),EXACT_IDENTITY,staging:e5954b71-21a8-4a00-8dee-ada9c90a997a,Groupe Tankou Enseignement Supérieur (GTES),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Catholique de Bafoussam (ICAB),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Institut d’Afrique Unie,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Institut d’Enseignement Supérieur Foyaguem (IESF),EXACT_IDENTITY,staging:2b6e1998-9f6e-4063-b30a-ca6d695fffd0,Institut d’Enseignement Supérieur Foyaguem (IESF),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+"Institut de Technologie de l’Industrie, du Management et de l’Entrepreneuriat (INTIME)",AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+Institut Supérieur des Sciences et de Technologie de Bangangté (ISST),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur de Gestion et d’Economie Appliquée de Bafoussam (SUP GECO),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+Institut Supérieur de Management et des Technologies Appliquées (ISMTA),PROBABLE_MATCH,staging:a79be0ce-d561-4a1f-8de6-c55dfe2f50cc,Institut Supérieur de Technologies Appliquées (INSTAP),"chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Supérieur de Technologie et d’Etudes Commerciales (ISTEC),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur des Arts et des Métiers de Bafoussam (ISAMET),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur des Sciences Appliquées à la Santé (INSSAS),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur des Sciences de la Santé  de Bangangté (ISSS),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur des Sciences et Technologies NANFAH (ISSTN),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+"Institut Supérieur des Sciences, de Technologie, de Commerce et d’Agriculture (ISSTECOA)",AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+Institut Supérieur des Techniques Industrielles et Commerciales,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+"Institut Supérieur des Technologies, d’Agriculture et de Commerce (ISTACO)",AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Supérieur Islamique de Foumban (ISIF),EXACT_IDENTITY,staging:788d6625-3879-424d-87b9-120336a135f4,Institut Supérieur Islamique de Foumban (ISIF),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Institut Universitaire Evangélique du Cameroun,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+"Pro Africa Higher Institute of Medical, Management Science and Technology (PAMTS)",PROBABLE_MATCH,0b253a9f-bb04-47d9-8934-8d9f5a231ef6,"Paul Nkwi Higher Institute of Management, Science, Arts and Technology (PN-HIMSAT)","chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+ROTAS Institut Supérieur de Management et de Gestion (ROTAS-ISMG),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+Institut Catholique Bonneau d’Ebolowa (ICABE),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Privé des Sciences de la Santé de Sangmelima (IPSSSA),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+"Institut Supérieur de l’Entreprise, du Management, de l’Industrie et des Technologies (ISEMIT)",AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair.
+Institut Supérieur des Technologies de l’Information et de la Communication,PROBABLE_MATCH,staging:c013af83-a753-446e-a587-0a7679a1a56d,Institut Supérieur Africain des Technologies de l'Information et de la Connaissance (ISATIC),"chevauchement de mots (67%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institut Supérieur Protestant des Sciences et de Technologie d’Elat,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Institut Universitaire Privé Laïc de L’Equateur,PROBABLE_MATCH,a987ba57-1b71-44d1-9f78-d25041a5a306,Institut Universitaire du Golfe de Guinée (IUG),"chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Access Higher Institute of Professional Studies (Access-HIPS),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (40%) — pas de gagnant clair.
+"ACHAS Higher Institute of Sustainable Tourism, Hospitality and Business Management",PROBABLE_MATCH,9dce018e-1378-49fb-8c9d-6b9e170f9aad,"National Higher Institute of Business, Tourism and Hotel Management (NAHIBUTH)","chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Biaka University Institute of Buea (BUIB),EXACT_IDENTITY,staging:920acd74-98dd-43c0-b1e3-04eee5335b21,Biaka University Institute of Buea (BUIB),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Buea Polytechnic,EXACT_IDENTITY,staging:f8d88d0f-3418-49bf-82be-7efd5fe72d6e,Buea Polytechnic,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Cameroon Institute of Renewable Energy (CIRE),EXACT_IDENTITY,staging:ea537c3f-14d9-4ca2-a321-074964e69edb,Cameroon Institute of Renewable Energy (CIRE),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Catholic University Institute of Buea,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Catholic University Institute of Mamfe,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Chartered Higher Institute of Cameroon (CHIC),EXACT_IDENTITY,staging:563b9780-92e6-4345-be03-9242c768afae,Chartered Higher Institute of Cameroon (CHIC),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Chartered Higher Institute of Technology and Management (CHITECHMA),PROBABLE_MATCH,0b253a9f-bb04-47d9-8934-8d9f5a231ef6,"Paul Nkwi Higher Institute of Management, Science, Arts and Technology (PN-HIMSAT)","chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+DAJA Higher Institute (DHI),EXACT_IDENTITY,staging:b4d989ce-f013-4ed5-8ccc-ee59484a8b30,DAJA Higher Institute (DHI),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Ejed Higher Institute of Management and Biomedical Sciences (EHIMBS),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (40%) — pas de gagnant clair.
+FOMIC Polytechnic,EXACT_IDENTITY,staging:59b938e8-34b9-4ad9-8b7c-a3e666fc555a,FOMIC Polytechnic,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Fotabe Higher Institute (FHI),EXACT_IDENTITY,staging:ad675094-d457-4974-861a-601dc1440d09,Fotabe Higher Institute (FHI),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+"Gulf-Field Higher Institute of Petroleum, Mining, Business and Management Sciences (GFHIP)",PROBABLE_MATCH,3fba2a5d-6438-4f0d-8307-ca2b1b3e9a53,Higher Institute for Business and management Sciences,"chevauchement de mots (38%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Gracious Higher Institute of Excellence (GRHIEX),EXACT_IDENTITY,staging:c7c053dc-f03f-445c-b43f-56c691cf4e82,Gracious Higher Institute of Excellence (GRHIEX),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+HIBMAT University Institute of Buea (HUIB),EXACT_IDENTITY,staging:f02418be-128a-480d-91cf-da873cc054d3,HIBMAT University Institute of Buea (HUIB),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Higher Institute of Applied Medical Sciences Buea,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Higher Institute of Business and Management Studies (HIBMS),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Higher Institute of Management Studies,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Higher Institute of Technology and Management Sciences (PAC-LAB HITMS),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+ANDANGKENG Higher Institute of Professional Studies (AHIPS),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Higher Institute of Professional Studies and Career Development,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Higher Institute of Technology,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (100%) — pas de gagnant clair.
+H.O.P.E University  Institute (HUI) Limbe,EXACT_IDENTITY,staging:ce71f0d1-d60c-461e-ad21-1e3b2df6dd05,H.O.P.E University  Institute (HUI) Limbe,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Horti-Florale Institute (HFI),EXACT_IDENTITY,staging:7a50ab4d-ab9e-4e69-aa78-6300420a8533,Horti-Florale Institute (HFI),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Pan African Institute for Development (PAID),PROBABLE_MATCH,411a9767-a23e-43a2-ab72-33c0f4affad4,Higher Institute for Professional Development and Training (HIPDET),"chevauchement de mots (33%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Institute of Professional Studies (IPS),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (100%) — pas de gagnant clair.
+ISEC Higher Institute of Health and Human Services,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+JSF Polytechnic,EXACT_IDENTITY,staging:eb9c99ff-b2eb-43e2-8a13-3ec1aeaf671c,JSF Polytechnic,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Landmark Higher Institute (LHI),EXACT_IDENTITY,staging:1621cf2d-5165-458e-87c9-396a9e0ca79c,Landmark Higher Institute (LHI),nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+Maflekumen Higher Institute of Health Sciences Buea,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Meridian Higher Institute of Professional Studies (MHIPS),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Rapha Higher Institute of Health and Biomedical Sciences Kumba (RAPHIHK),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+Redemption Higher Institute of Biomedical and Management Sciences,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair.
+SMU Higher Institute,EXACT_IDENTITY,staging:47a93286-fcda-405c-b08d-ceef00655046,SMU Higher Institute,nom exact (mots de catégorie préservés) + géographie confirmée cohérente.
+ST Joan of Arc Higher Institute of Medical and Management Sciences,PROBABLE_MATCH,3fba2a5d-6438-4f0d-8307-ca2b1b3e9a53,Higher Institute for Business and management Sciences,"chevauchement de mots (50%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+Saint Mary's Higher Institution (SMHI),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+Swisslink Higher Institute of Business and Technology (SHIBAT),AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair.
+TRUSTECH Higher Institute of Technology and Professional,AMBIGUOUS,,,plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair.
+Formulaire pour la demande d'équivalence des diplômes au MINESUP : Version française   ;  Version anglaise,PROBABLE_MATCH,staging:99db304c-1df0-4d0b-9dfd-34fd381c87e7,Institut panafricain pour le Développement (IPD),"chevauchement de mots (10%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."
+"Formulaire pour le Duplicata, Attestation de non délivrance de diplôme, Correction, Attestation de diplôme non éditée, Relevé échec non édité, Diplôme non édité, certification/Authentification : Formulaire",PROBABLE_MATCH,staging:99db304c-1df0-4d0b-9dfd-34fd381c87e7,Institut panafricain pour le Développement (IPD),"chevauchement de mots (6%) mais géographie CONTRADICTOIRE — signal affaibli, revue requise."

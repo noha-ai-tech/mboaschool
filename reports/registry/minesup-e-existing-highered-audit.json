@@ -1,0 +1,188 @@
+{
+  "generated_at": "2026-08-19T18:54:17.654Z",
+  "total_higher_ed_live": 38,
+  "ucac_case": null,
+  "other_signals": [
+    {
+      "a": "Bamenda University Institute of Science and Technology (BUIST)",
+      "b": "(multiple)",
+      "level": "AMBIGUOUS",
+      "reason": "plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair."
+    },
+    {
+      "a": "Baptist Institute of Higher Learning",
+      "b": "Taniform Higher Institute of Learning (THIL)",
+      "level": "PROBABLE_MATCH",
+      "reason": "chevauchement de mots partiel (50%), insuffisant pour STRONG_MATCH."
+    },
+    {
+      "a": "Capitol Higher Institute of Health Sciences and Beauty Therapy",
+      "b": "(multiple)",
+      "level": "AMBIGUOUS",
+      "reason": "plusieurs cibles à égalité de chevauchement (40%) — pas de gagnant clair."
+    },
+    {
+      "a": "Catholic School of Health Sciences Shisong",
+      "b": "(multiple)",
+      "level": "AMBIGUOUS",
+      "reason": "plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair."
+    },
+    {
+      "a": "Catholic University Institute of Bamenda",
+      "b": "(multiple)",
+      "level": "AMBIGUOUS",
+      "reason": "plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair."
+    },
+    {
+      "a": "Continental University Institute of science and Technology (CUIST)",
+      "b": "(multiple)",
+      "level": "AMBIGUOUS",
+      "reason": "plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair."
+    },
+    {
+      "a": "Experiental Higher Institute of Science and Technology (EXHIST)",
+      "b": "(multiple)",
+      "level": "AMBIGUOUS",
+      "reason": "plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair."
+    },
+    {
+      "a": "Havard Higher Institute of Science and Technology",
+      "b": "(multiple)",
+      "level": "AMBIGUOUS",
+      "reason": "plusieurs cibles à égalité de chevauchement (67%) — pas de gagnant clair."
+    },
+    {
+      "a": "Higher Institute for Business and management Sciences",
+      "b": "National Higher Institute of Business, Tourism and Hotel Management (NAHIBUTH)",
+      "level": "STRONG_MATCH",
+      "reason": "chevauchement de mots fort (67%) + géographie cohérente."
+    },
+    {
+      "a": "Higher Institute for Professional Development and Training (HIPDET)",
+      "b": "(multiple)",
+      "level": "AMBIGUOUS",
+      "reason": "plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair."
+    },
+    {
+      "a": "Higher Institute of Professionalism and Technology (HIPT)",
+      "b": "(multiple)",
+      "level": "AMBIGUOUS",
+      "reason": "plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair."
+    },
+    {
+      "a": "International University of Bamenda",
+      "b": "(multiple)",
+      "level": "AMBIGUOUS",
+      "reason": "plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair."
+    },
+    {
+      "a": "IUT de Douala",
+      "b": "Université de Douala",
+      "level": "STRONG_MATCH",
+      "reason": "chevauchement de mots fort (100%) + géographie cohérente."
+    },
+    {
+      "a": "Laureate Higher Institute of Business and Administration (LAHIBA)",
+      "b": "(multiple)",
+      "level": "AMBIGUOUS",
+      "reason": "plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair."
+    },
+    {
+      "a": "National Higher Institute of Business, Tourism and Hotel Management (NAHIBUTH)",
+      "b": "Higher Institute for Business and management Sciences",
+      "level": "PROBABLE_MATCH",
+      "reason": "chevauchement de mots partiel (33%), insuffisant pour STRONG_MATCH."
+    },
+    {
+      "a": "National Polytechnic University Institute (NPUI)",
+      "b": "National Higher Institute of Business, Tourism and Hotel Management (NAHIBUTH)",
+      "level": "PROBABLE_MATCH",
+      "reason": "chevauchement de mots partiel (50%), insuffisant pour STRONG_MATCH."
+    },
+    {
+      "a": "Paul Nkwi Higher Institute of Management, Science, Arts and Technology (PN-HIMSAT)",
+      "b": "(multiple)",
+      "level": "AMBIGUOUS",
+      "reason": "plusieurs cibles à égalité de chevauchement (29%) — pas de gagnant clair."
+    },
+    {
+      "a": "Pauls’s Computer Higher Institute of Technology (PC-HITECH)",
+      "b": "(multiple)",
+      "level": "AMBIGUOUS",
+      "reason": "plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair."
+    },
+    {
+      "a": "Pyramid Higher Institute of Professional Studies",
+      "b": "Saint Michael Higher Institute of Professional Studies (SHIPS)",
+      "level": "STRONG_MATCH",
+      "reason": "chevauchement de mots fort (67%) + géographie cohérente."
+    },
+    {
+      "a": "Saint Laurence Higher Institute (SLHI)",
+      "b": "(multiple)",
+      "level": "AMBIGUOUS",
+      "reason": "plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair."
+    },
+    {
+      "a": "Saint Louis Higher Institute of Health and Biomedical Sciences",
+      "b": "(multiple)",
+      "level": "AMBIGUOUS",
+      "reason": "plusieurs cibles à égalité de chevauchement (40%) — pas de gagnant clair."
+    },
+    {
+      "a": "Saint Michael Higher Institute of Professional Studies (SHIPS)",
+      "b": "Pyramid Higher Institute of Professional Studies",
+      "level": "PROBABLE_MATCH",
+      "reason": "chevauchement de mots partiel (40%), insuffisant pour STRONG_MATCH."
+    },
+    {
+      "a": "ST Jude’s Higher Institute of Nursing and Biomedical",
+      "b": "Saint Louis Higher Institute of Health and Biomedical Sciences",
+      "level": "PROBABLE_MATCH",
+      "reason": "chevauchement de mots partiel (33%), insuffisant pour STRONG_MATCH."
+    },
+    {
+      "a": "ST Thierry Higher Institute of Health Science and Technology (SHIHSAT)",
+      "b": "(multiple)",
+      "level": "AMBIGUOUS",
+      "reason": "plusieurs cibles à égalité de chevauchement (40%) — pas de gagnant clair."
+    },
+    {
+      "a": "Taniform Higher Institute of Learning (THIL)",
+      "b": "Baptist Institute of Higher Learning",
+      "level": "PROBABLE_MATCH",
+      "reason": "chevauchement de mots partiel (33%), insuffisant pour STRONG_MATCH."
+    },
+    {
+      "a": "Université Catholique d’Afrique",
+      "b": "Université Catholique d'Afrique Centrale (UCAC)",
+      "level": "STRONG_MATCH",
+      "reason": "chevauchement de mots fort (100%) + géographie cohérente."
+    },
+    {
+      "a": "Université Catholique d'Afrique Centrale (UCAC)",
+      "b": "Université Catholique d’Afrique",
+      "level": "PROBABLE_MATCH",
+      "reason": "chevauchement de mots partiel (50%), insuffisant pour STRONG_MATCH."
+    },
+    {
+      "a": "Université de Douala",
+      "b": "IUT de Douala",
+      "level": "STRONG_MATCH",
+      "reason": "chevauchement de mots fort (100%) + géographie cohérente."
+    },
+    {
+      "a": "Université de Yaoundé I",
+      "b": "Université de Yaoundé II – Soa",
+      "level": "PROBABLE_MATCH",
+      "reason": "chevauchement de mots partiel (50%), insuffisant pour STRONG_MATCH."
+    },
+    {
+      "a": "Université de Yaoundé II – Soa",
+      "b": "Université de Yaoundé I",
+      "level": "PROBABLE_MATCH",
+      "reason": "chevauchement de mots partiel (50%), insuffisant pour STRONG_MATCH."
+    }
+  ],
+  "note": "Audit READ-ONLY, aucune modification production. UCAC/UCA reste PROBABLE_MATCH/AMBIGUOUS (revue humaine requise), jamais fusionné automatiquement."
+}

@@ -1,0 +1,10 @@
+{
+  "generated_at": "2026-08-19T18:50:33.284Z",
+  "pages_fetched_with_detail": 227,
+  "pages_containing_pii_field": 215,
+  "pii_persisted_in_staging": 0,
+  "url_pii_redacted_count": 2,
+  "raw_snapshot_pii_scan": "0 (rédaction en mémoire AVANT tout writeSourceSnapshot — jamais de fichier brut non rédigé écrit sur disque)",
+  "residual_scan_before_write": 0,
+  "safe": true
+}

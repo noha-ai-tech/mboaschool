@@ -156,10 +156,53 @@ describe("SPRINT MINESUP-C — un nom de ville partagé n'est jamais un signal d
   });
 
   test("categoryMatch=true (même catégorie connue) reste un STRONG_MATCH normal, non affecté par le filtre", () => {
-    const t = target({ id: "t1", name: "Institut Superieur de Bamenda Technologies", region: "Nord-Ouest", category: "higher_education" });
-    const c = candidate({ name: "Institut Superieur de Bamenda Technologie", region: "Nord-Ouest", category: "higher_education" });
+    // Mots significatifs choisis pour rester robustes même après le retrait
+    // de "superieur"/"institut" des mots flous (SPRINT MINESUP-E) — le
+    // chevauchement doit reposer sur des mots de spécialité réels
+    // ("bamenda", "excellence", "sciences"), pas sur un mot de type
+    // d'établissement.
+    const t = target({ id: "t1", name: "Institut Superieur Bamenda Excellence Sciences", region: "Nord-Ouest", category: "higher_education" });
+    const c = candidate({ name: "Ecole Superieure Bamenda Excellence Sciences Appliquees", region: "Nord-Ouest", category: "higher_education" });
     const result = matchCandidate(c, [t]);
     assert.equal(result.level, "STRONG_MATCH");
+  });
+});
+
+describe("SPRINT MINESUP-E — vocabulaire générique de l'enseignement supérieur exclu du chevauchement flou (bug réel, collecte nationale)", () => {
+  test('"Jagora University" ne devient jamais AMBIGUOUS contre 7 institutions Nord-Ouest par le seul mot "university"', () => {
+    // Cas réel : le mot "university" n'était pas dans FUZZY_STOPWORDS (la
+    // liste ne couvrait que le vocabulaire secondaire MINESEC) — un nom à
+    // 2 mots comme "Jagora University" produisait un chevauchement à 50%
+    // (1 mot sur 2) contre CHAQUE institution contenant "University",
+    // créant une égalité massive (AMBIGUOUS) sans aucun rapport réel.
+    const targets = [
+      target({ id: "t1", name: "Bamenda University Institute of Science and Technology (BUIST)", region: "Nord-Ouest", category: "higher_education" }),
+      target({ id: "t2", name: "Catholic University Institute of Bamenda", region: "Nord-Ouest", category: "higher_education" }),
+      target({ id: "t3", name: "International University of Bamenda", region: "Nord-Ouest", category: "higher_education" }),
+    ];
+    const c = candidate({ name: "Jagora University", region: "Centre", category: "higher_education" });
+    const result = matchCandidate(c, targets);
+    assert.equal(result.level, "NO_MATCH");
+  });
+
+  test('"university"/"institute"/"higher"/"supérieur" sont retirés du chevauchement flou, jamais un mot de spécialité (science/technology/management)', () => {
+    assert.deepEqual(fuzzyWords("Jagora University"), ["jagora"]);
+    assert.deepEqual(fuzzyWords("Higher Institute of Science and Technology"), ["science", "technology"].sort());
+  });
+
+  test('un token numérique isolé (ex. "1"/"2", issu de la normalisation romaine) reste significatif malgré sa longueur ≤3 — "Yaoundé I" et "Yaoundé II" ne partagent plus 100% de chevauchement', () => {
+    // Cas réel : sans cette exception, les deux universités perdaient leur
+    // seul mot distinctif ("1" ou "2", 1 caractère, filtré par le seuil de
+    // longueur >3) et ne partageaient plus que "yaounde" — chevauchement à
+    // 100% entre deux universités DIFFÉRENTES (jamais un auto-merge, mais
+    // une ambiguïté évitable).
+    assert.ok(fuzzyWords("Université de Yaoundé I").includes("1"));
+    assert.ok(fuzzyWords("Université de Yaoundé II").includes("2"));
+    const t = target({ id: "uy1", name: "Université de Yaoundé I", region: "Centre", city: "Yaoundé", category: "higher_education" });
+    const c = candidate({ name: "Université de Yaoundé II", region: "Centre", city: "Yaoundé", category: "higher_education" });
+    const result = matchCandidate(c, [t]);
+    assert.notEqual(result.level, "STRONG_MATCH");
+    assert.notEqual(result.level, "AMBIGUOUS");
   });
 });
 

@@ -1,0 +1,90 @@
+{
+  "sprint": "MINESUP-E",
+  "operator": "jean-merlain",
+  "generated_at": "2026-08-19T18:50:34.131Z",
+  "batch": "minesup-national-v1",
+  "database": {
+    "establishments_before": 2180,
+    "establishments_after": 2180,
+    "staging_before": 2344,
+    "staging_after": 2344,
+    "registry_identifiers_before": 2145,
+    "registry_identifiers_after": 2145
+  },
+  "national_collection": {
+    "source_rows": 304,
+    "unique_institutions": 304,
+    "ipes": 304,
+    "state_universities": 11,
+    "regions_covered": 10,
+    "detail_pages_fetched": 227
+  },
+  "completeness": {
+    "status": "PASS",
+    "safeForNormalization": true,
+    "safeForStaging": true,
+    "accounted": 304,
+    "expected": 304,
+    "explanation": "304/304 lignes comptabilisées — équation vérifiée."
+  },
+  "pilot_reconciliation": {
+    "pilot_found_in_national_source": 32,
+    "pilot_already_promoted": 29,
+    "pilot_still_staging": 0,
+    "pilot_source_review": 3,
+    "pilot_missing": 0,
+    "pilot_unexpected_duplicate": 0
+  },
+  "matching": {
+    "exact_identifier": 0,
+    "exact_identity": 94,
+    "strong": 2,
+    "probable": 57,
+    "ambiguous": 131,
+    "new": 20
+  },
+  "classification": {
+    "already_live": 30,
+    "already_staging": 64,
+    "clean_approvable": 0,
+    "duplicate_review": 190,
+    "identity_review": 0,
+    "source_review": 20,
+    "identifier_collision_review": 0,
+    "entity_model_review": 0,
+    "invalid": 11
+  },
+  "identifier_collisions": {
+    "values_examined": 0,
+    "collision_values": 0,
+    "cross_institution_collisions": 0
+  },
+  "staging": {
+    "would_stage": 0,
+    "inserted": 0,
+    "skipped_idempotent": 0,
+    "invalid": 11
+  },
+  "pii": {
+    "generated_at": "2026-08-19T18:50:33.284Z",
+    "pages_fetched_with_detail": 227,
+    "pages_containing_pii_field": 215,
+    "pii_persisted_in_staging": 0,
+    "url_pii_redacted_count": 2,
+    "raw_snapshot_pii_scan": "0 (rédaction en mémoire AVANT tout writeSourceSnapshot — jamais de fichier brut non rédigé écrit sur disque)",
+    "residual_scan_before_write": 0,
+    "safe": true
+  },
+  "approval": {
+    "candidates": 60,
+    "checksum": "4b398dab3443d5d1d24030b2f7677f5eeacad5c572648c99bed37f306cb6a65b"
+  },
+  "run_history_note": "Le collecteur a été exécuté 4 fois : (1) premier passage — bug de matching découvert (staging-ghost dupliqué + vocabulaire supérieur manquant des stopwords flous), 9 candidats insérés avant correctif ; (2) second passage après correctif partiel — 0 nouveau (déjà présents) ; (3) troisième passage après correctif complet — 51 nouveaux candidats insérés (total cumulé 60) ; (4) quatrième passage — idempotence prouvée (0 nouveau, tout déjà reconnu ALREADY_STAGING). Ce résumé reflète les totaux CUMULATIFS réels lus depuis la base, pas la vue partielle du seul dernier passage.",
+  "staging_cumulative": {
+    "total_national_staging_rows": 60,
+    "by_status": {
+      "ready": 60
+    },
+    "clean_approvable_total": 60
+  }
+}

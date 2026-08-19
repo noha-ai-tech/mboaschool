@@ -58,11 +58,34 @@ const FUZZY_STOPWORDS = new Set([
   "school", "secondary", "high", "bilingual", "bilingue", "prive", "privee", "privé", "private",
   "laic", "laique", "laïc", "institut", "complexe", "scolaire", "groupe", "ecole", "école",
   "polyvalent", "technique", "public", "comprehensive",
+  // SPRINT MINESUP-E — vocabulaire générique de l'enseignement SUPÉRIEUR,
+  // jamais couvert avant (la liste ci-dessus vient du travail MINESEC
+  // primaire/secondaire). Bug réel trouvé sur données nationales : "Jagora
+  // University" (fuzzyWords = ["jagora","university"]) produisait un
+  // chevauchement à 50% contre SEPT institutions Nord-Ouest différentes
+  // rien qu'en partageant le mot "university" — un mot structurel de type
+  // d'établissement, jamais un signal d'identité, exactement comme
+  // "lycée"/"institut" ci-dessus. Mêmes principe et prudence : on ne
+  // retire QUE les mots de TYPE d'établissement (university/institute/
+  // higher/polytechnic/supérieur), jamais un mot de spécialité
+  // (science/technology/management/business) qui reste un signal réel de
+  // différenciation entre deux établissements.
+  "university", "universite", "université", "institute", "higher", "polytechnic", "polytechnique",
+  "superieur", "supérieur", "superieure", "supérieure",
 ]);
 
 /** Mots significatifs pour le chevauchement flou (REVIEW uniquement, jamais une preuve d'identité). */
 export function fuzzyWords(name: string): string[] {
-  return exactIdentityKey(name).split(" ").filter((w) => w.length > 3 && !FUZZY_STOPWORDS.has(w));
+  // SPRINT MINESUP-E — un token purement numérique (ex. "1"/"2", issu de
+  // la normalisation romaine/arabe I->1/II->2) reste significatif même
+  // sous le seuil de longueur >3 : sans cette exception, "Université de
+  // Yaoundé I" et "Université de Yaoundé II" perdaient TOUTES DEUX leur
+  // seul mot distinctif ("1"/"2", 1 caractère) et ne partageaient plus que
+  // "yaounde", produisant un chevauchement à 100% entre deux universités
+  // pourtant différentes (jamais un auto-merge — safeForAutoLink reste
+  // false — mais une fausse ambiguïté évitable). Un mot alphabétique court
+  // (ex. "de", déjà filtré par GENERIC_ARTICLES) n'est pas concerné.
+  return exactIdentityKey(name).split(" ").filter((w) => (w.length > 3 || /^\d+$/.test(w)) && !FUZZY_STOPWORDS.has(w));
 }
 
 function normalizeGeo(v: string | null | undefined): string {
