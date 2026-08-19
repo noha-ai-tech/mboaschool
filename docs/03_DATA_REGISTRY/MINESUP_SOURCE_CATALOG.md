@@ -235,5 +235,126 @@ NOTES:                 **DONNÉE SENSIBLE REPÉRÉE** : champ "Nom du promoteur"
 | Source | Tier | Structuré | Identifiant officiel | Complétude prouvée |
 |---|---|---|---|---|
 | A — Universités d'État (nav) | 2 | Faible | Non | N/A (11 universités, liste fermée connue par ailleurs) |
-| B — IPES agrégé | 2 | Moyen | Non (liste seule) | NON — 304 trouvés vs "~430" annoncé, écart non résolu |
-| C — Fiche détail IPES | 2 | Fort | OUI (arrêté) | N/A (1 seul échantillon vérifié) |
+| B — IPES agrégé | 2 | Moyen | Non (liste seule) | NON — 304 trouvés vs "~430" annoncé, écart expliqué (voir SPRINT MINESUP-B ci-dessous), non résolu |
+| C — Fiche détail IPES | 2 | Fort | OUI (arrêté), format instable | LIKELY_UNIQUE quand présent, mais absent sur ~50% de l'échantillon (voir ci-dessous) |
+
+---
+
+# SPRINT MINESUP-B — Investigation complétude + échantillon d'identifiants
+
+2026-08-19. Opérateur : jean-merlain. READ-ONLY strict. Rapport machine
+complet (hash SHA256 par page, aucune page brute committée) :
+`reports/registry/minesup-b-identifier-and-completeness-audit.json`.
+Script réutilisable : `scripts/school-registry/audit-minesup-ipes-identifiers.ts`.
+
+## Objectif B — résolution 304 vs ~430
+
+**Résultat : différentiel EXPLIQUÉ, mais NON RÉSOLU.**
+
+- Extraction déterministe re-confirmée : **304 entrées non vides** sur la
+  page IPES agrégée (structure de page ré-auditée intégralement : `<nav
+  class="pagination group">` **vide** → aucune pagination cachée ; aucun
+  endpoint `wp-json`/AJAX supplémentaire trouvé au-delà du miroir REST
+  standard de la page elle-même ; les 10 en-têtes de région couvrent tout
+  le contenu de la liste, aucune section orpheline).
+- Après dédoublonnage inter-régions (3 institutions listées deux fois sous
+  deux régions différentes — "Institut Supérieur Fondation Mamadou Bako",
+  "Experiental Higher Institute of Science and Technology (EXHIST)",
+  "Access Higher Institute of Professional Studies (Access-HIPS)") : **301
+  institutions uniques**.
+- Le "~430" provient d'**une phrase en prose** tout en haut de la page :
+  *« L'Enseignement Supérieur compte environ 430 Instituts Privés
+  d'Enseignement Supérieur répartis comme suit : »* — **PAS** un total
+  structuré, **PAS** accompagné de sous-totaux par région qui somment à
+  430 (les 10 sous-totaux réels somment à 304), **PAS** daté.
+  `COUNT_SOURCE = prose de présentation MINESUP` · `COUNT_DATE = inconnue`
+  · `COUNT_MEANING = estimation globale hedgée par "environ", pas un total
+  vérifiable de la liste qui suit` · `CONFIDENCE = LOW`.
+- **Conclusion** : ce n'est pas un bug de parser côté Écoles237 — la page
+  MINESUP elle-même contient deux chiffres non réconciliés (une liste
+  précise à 304/301, une estimation en prose à ~430). Le gap (126) ne peut
+  être expliqué avec certitude sans une source MINESUP supplémentaire
+  (registre interne, PDF consolidé) non trouvée à ce jour. **Le total
+  "~430" ne doit plus jamais servir d'`expected_count` pour un futur
+  import** — traiter le total comme `EXPECTED_COUNT_UNKNOWN`, la LISTE
+  elle-même comme extraite de façon déterministe et auditée
+  (`PASS_WITH_EXPLAINED_EXCLUSIONS` pour la liste, distinct du statut du
+  total).
+
+Bonus structurel confirmé : **240/304 entrées seulement ont un lien de
+fiche détail** ; 64 entrées sont un nom seul sans page consultable —
+aucun identifiant ne sera jamais disponible pour ces 64-là via cette
+source.
+
+## Objectif A — échantillon d'identifiants (20 fiches, 10 régions couvertes)
+
+Échantillon déterministe : 1 fiche en début + 1 en milieu de chaque
+région (parmi les entrées ayant un vrai lien de fiche détail — un lien
+PDF de formulaire et un lien vers une page d'index régional trouvés dans
+la liste brute ont été explicitement exclus de l'échantillonnage, cf.
+NOTES ci-dessous), plafonné à 20.
+
+```
+SAMPLE SIZE:                     20
+CREATION ORDER PRESENT:          10/20
+OPENING AUTHORIZATION PRESENT:   10/20
+NEITHER PRESENT:                 10/20 (champs présents dans le template mais VIDES)
+PROVISIONAL COMBINED PRESENT:    0/20 (label existe sur le site, vide sur cet échantillon)
+STATUS CHANGE PRESENT:           0/20 (idem)
+DUPLICATE REFS (institutions DIFFÉRENTES): 0/10 valeurs non nulles
+SAME-INSTITUTION CROSS-REGION CONSISTENCY: 1 cas testé (Access-HIPS,
+                                  listée sous 2 régions) — référence
+                                  IDENTIQUE dans les deux occurrences,
+                                  cohérent avec l'hypothèse d'unicité.
+```
+
+Réponses aux 10 questions d'identifiant (§5) :
+
+1. **Existe-t-il sur toutes les fiches ?** NON — présent sur 10/20 seulement.
+2. **Parfois vide ?** OUI — 10/20, champ affiché mais sans valeur.
+3. **Plusieurs institutions partagent-elles la même référence ?** NON observé (0 collision sur 10 valeurs non nulles), mais échantillon trop petit (10/301 ≈ 3%) pour conclure à l'échelle nationale.
+4. **Une institution peut-elle avoir plusieurs arrêtés ?** Pas observé dans cet échantillon (jamais 2 valeurs distinctes pour "Arrêtés portant création" sur une même fiche) — mais un 4e champ distinct existe sur le site (voir point 10 ci-dessous), donc "plusieurs actes juridiques par institution" reste vrai au niveau du MODÈLE, juste pas au niveau d'un seul champ.
+5. **L'autorisation d'ouverture est-elle distincte ?** OUI — présence parfaitement corrélée avec la création dans cet échantillon (10/10 institutions qui ont l'une ont aussi l'autre), mais la VALEUR diffère selon les cas : identique dans 3 cas (ISGeC, BHIST, Access-HIPS ×2), différente dans les 6 autres — confirmant que ce sont deux actes juridiques distincts dont la valeur PEUT coïncider sans que ce soit garanti.
+6. **Peut-elle servir d'identifiant stable seule ?** PARTIEL — même limite de disponibilité (~50%) que la création.
+7. **Format stable selon l'année ?** **NON.** Variance réelle observée : préfixe "N°"/"n°"/absent ; séparateur "/" vs "-" entre segments ; nombre de segments variable (ex. `N°05/0006/MINESUP du 03 janvier 2005` vs `19-05013/L/MINESUP/SG/DDES/ESUP/SDA/AOSB du 29 avril 2019`) ; au moins **une référence tronquée dans la source elle-même** (International University of Bamenda : `N°11/00507/MINESUP/SG/DDES du` — coupée avant la date) ; une anomalie apparente de segment (`n°120361/MINESUP...` sans le `/` interne attendu par comparaison aux autres échantillons).
+8. **Réellement parseable de façon stable ?** **NON** — texte libre, jamais un format fixe. Toute tentative de validation stricte de format créerait de faux rejets sur des données réelles.
+9. **La date fait-elle partie de l'identité ou de l'affichage ?** Ambigu par construction du champ (numéro + date dans la même chaîne libre) — traiter la chaîne ENTIÈRE comme la valeur brute, ne jamais tenter d'isoler "juste le numéro" comme clé sans preuve que cela reste unique (risque réel : deux arrêtés de dates différentes pourraient partager un même numéro de séquence dans un sous-registre, non vérifié).
+10. **Un identifier normalisé est-il possible sans perdre la valeur source ?** OUI mais NON recommandé pour l'instant — `raw_identifier` (texte intégral tel quel) DOIT toujours être conservé ; une normalisation (ex. isoler `NN/NNNN/MINESUP`) resterait une hypothèse non prouvée sûre sur ce seul échantillon de 20— à ne pas adopter avant un échantillon plus large.
+
+**Découverte supplémentaire non anticipée par MINESUP-A** : le libellé du
+champ identifiant lui-même n'est PAS stable sur le site — variantes
+trouvées dans le HTML brut sur cet échantillon : *"Arrêté portant
+création"* (singulier), *"Arrêtés portant création"* (pluriel), *"Arrêté
+provisoire de création et d'ouverture N°"* (troisième variante qui
+COMBINE création+ouverture en un seul champ pour certaines fiches), et un
+**quatrième champ entièrement distinct** : *"Arrêté(s) portant changement
+de statut de fonctionnement (agrément/homologation)"* — un acte de
+changement de statut, différent d'une création. **Conclusion : il existe
+potentiellement JUSQU'À 4 types d'actes juridiques distincts par
+institution** (création, ouverture, création+ouverture combinée pour
+certaines fiches plus anciennes, changement de statut) — jamais à fusionner
+en un seul champ `official_identifier`.
+
+**PII confirmée sur 19/20 fiches** : label *"Nom du promoteur"* et/ou
+*"Nom du représentant légal"* présent sur le template — **valeur JAMAIS
+extraite** dans ce sprint (seule la présence booléenne est enregistrée
+dans le rapport). Découverte aggravante : sur une fiche listée dans la
+sélection brute (Institut Supérieur de Bafoussam, région Ouest, EXCLU de
+l'échantillon final), **l'URL elle-même contient le nom du promoteur en
+clair dans le slug** (`...nom-du-promoteur-tahofo-tanguieng-dieudonne...`)
+— confirme qu'une politique de minimisation doit aussi considérer les
+`source_url` comme potentiellement porteurs de PII, pas seulement les
+champs de contenu.
+
+## §16 — Universités d'État, ré-audit rapide
+
+11 confirmées (liste nav intégrale extraite : Bamenda, Bertoua, Buea,
+Douala, Dschang, Ebolowa, Garoua, Maroua, Ngaoundéré, Yaoundé 1, Yaoundé
+2 — chiffres ARABES dans le libellé de menu MINESUP, cohérent avec le
+gap de normalisation déjà documenté en MINESUP-A). **Les 11 liens
+pointent à 100% vers des domaines EXTERNES** (`univ-douala.cm`,
+`uniba.cm`, etc.) — confirmé : **aucune fiche détail MINESUP-hébergée
+pour les universités d'État**, donc aucun identifiant officiel
+MINESUP-émis observable pour ce sous-ensemble via cette source
+spécifique. Entity model reconfirmé cohérent (YES) : 1 entrée nav = 1
+établissement, aucune subdivision campus observée.

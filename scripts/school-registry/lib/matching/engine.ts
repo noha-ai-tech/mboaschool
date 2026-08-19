@@ -19,6 +19,24 @@ import type { MatchCandidate, MatchLevel, MatchResult, MatchTarget, RegistryIden
 
 const GENERIC_ARTICLES = new Set(["de", "du", "des", "la", "le", "les", "d", "l", "et", "a", "au", "aux"]);
 
+/**
+ * SPRINT MINESUP-B §18 — un même établissement peut être écrit avec un
+ * chiffre arabe (source MINESUP : "Université de Yaoundé 1") ou romain
+ * (fiche live : "Université de Yaoundé I"). Ne convertit QUE des tokens
+ * qui sont EXACTEMENT un numéral romain isolé (I-X) — jamais une lettre
+ * romaine à l'intérieur d'un autre mot — pour éviter toute transformation
+ * arbitraire d'un mot ordinaire (§18 : "ne pas transformer arbitrairement
+ * toute lettre romaine dans tous les noms"). `official_name` n'est jamais
+ * modifié : cette normalisation ne sert qu'à la clé de matching.
+ */
+const ROMAN_NUMERAL_TO_ARABIC: Record<string, string> = {
+  i: "1", ii: "2", iii: "3", iv: "4", v: "5", vi: "6", vii: "7", viii: "8", ix: "9", x: "10",
+};
+
+function normalizeInstitutionalNumeral(word: string): string {
+  return ROMAN_NUMERAL_TO_ARABIC[word] ?? word;
+}
+
 /** Clé d'identité EXACTE — normalisation minimale, préserve les mots de catégorie. */
 export function exactIdentityKey(name: string): string {
   return (name || "")
@@ -29,6 +47,7 @@ export function exactIdentityKey(name: string): string {
     .split(/\s+/)
     .filter(Boolean)
     .filter((w) => !GENERIC_ARTICLES.has(w))
+    .map(normalizeInstitutionalNumeral)
     .sort()
     .join(" ");
 }

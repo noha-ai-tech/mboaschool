@@ -251,3 +251,129 @@ Avant toute promotion contrôlée MINESUP (hors périmètre de ce sprint) :
 6. Pilote limité (quelques dizaines d'établissements, une région) avant
    toute collecte nationale — cohérent avec la politique déjà appliquée
    pour MINESEC (pilote Centre/Littoral avant national).
+
+---
+
+## 12. MISE À JOUR — SPRINT MINESUP-B (2026-08-19)
+
+Investigation READ-ONLY complète : voir
+`docs/03_DATA_REGISTRY/MINESUP_SOURCE_CATALOG.md` (section SPRINT
+MINESUP-B) et `reports/registry/minesup-b-identifier-and-completeness-audit.json`
+pour les données brutes (hash SHA256 par page, aucune page committée).
+
+### 12.1 Official identifier strategy — RÉVISÉE
+
+`identifier_type` ne peut plus être un singleton "ARRETE_CREATION" — la
+source expose potentiellement **jusqu'à 4 types d'actes distincts** par
+institution, avec des libellés eux-mêmes instables :
+
+```
+identifier_type = CREATION_ORDER              ("Arrêté(s) portant création", singulier/pluriel)
+identifier_type = OPENING_AUTHORIZATION        ("Autorisation d'ouverture")
+identifier_type = PROVISIONAL_COMBINED_ORDER   ("Arrêté provisoire de création et d'ouverture N°" — remplace les deux ci-dessus sur certaines fiches plus anciennes, jamais les deux structures en même temps observées sur un échantillon)
+identifier_type = STATUS_CHANGE_ORDER          ("Arrêté(s) portant changement de statut de fonctionnement (agrément/homologation)")
+```
+
+Chacun vit comme une ligne `establishment_registry_identifiers` séparée
+(`registry = MINESUP_IPES`, `identifier_type` distinct) — **jamais fusionné**.
+`raw_identifier` (texte intégral, jamais tronqué/reformaté) est le SEUL
+champ fiable ; un `normalized_identifier` (ex. isoler `NN/NNNN/MINESUP`)
+n'est PAS adopté à ce stade — format prouvé non stable sur l'échantillon
+(préfixe "N°"/"n°"/absent, séparateur "/" vs "-", nombre de segments
+variable, au moins une référence tronquée dans la source elle-même).
+
+### 12.2 Uniqueness — RÉSULTAT ÉCHANTILLON
+
+`sample_size = 20` (10 régions couvertes) : `creation_order` présent sur
+10/20, `opening_authorization` présent sur 10/20 (corrélation parfaite
+présence/absence dans cet échantillon), **0 collision** entre institutions
+différentes sur les 10 valeurs non nulles. Un cas de ré-apparition de la
+même institution sous deux régions (Access-HIPS) montre une référence
+**identique** dans les deux occurrences — cohérent avec l'hypothèse
+d'unicité, mais 10 valeurs sur 301 institutions (~3%) reste **insuffisant**
+pour conclure à l'unicité nationale.
+
+```
+IDENTIFIER ASSESSMENT — creation_order_reference : LIKELY_UNIQUE (0 collision observée, cohérence cross-région confirmée) mais NON PROUVÉ à l'échelle nationale
+STABLE OVER TIME : YES pour la valeur elle-même une fois émise (rien n'indique de ré-émission), UNKNOWN pour la garantie qu'un futur MINESUP-B élargi ne trouve pas de contre-exemple
+SUITABLE AS REGISTRY IDENTIFIER : PARTIAL — fiable comme signal fort quand présent (EXACT_IDENTIFIER-grade), mais couvre au mieux ~50% des institutions listées (celles ayant une fiche détail ET un champ rempli) — ne peut PAS être la seule clé de dédoublonnage, le nom+géographie doit rester le mécanisme de repli pour l'autre moitié
+```
+
+### 12.3 source_record_id
+
+`page_id` WordPress (ex. `8064`) — confirmé technique, **jamais** stocké
+comme `official_identifier`. Conservé uniquement comme `source_record_id`
+pour permettre un re-fetch ciblé d'une fiche précise lors d'un futur audit
+ou d'une collecte réelle. Absent pour les entrées dont l'URL est un slug
+`index.php/...` plutôt qu'un `?page_id=` — dans ce cas `source_record_id
+= null`, jamais deviné depuis le slug.
+
+### 12.4 Completeness proof — RÉSOLUTION PARTIELLE
+
+Écart 304/301 (liste) vs "~430" (prose) **expliqué mais non résolu** :
+les deux chiffres coexistent sur la même page MINESUP sans être
+réconciliés par la source elle-même (voir source catalog pour le détail
+complet). **Décision** : la LISTE (304 entrées, 301 institutions uniques)
+est traitée comme extraite de façon exhaustive et auditée pour cette page
+précise (`PASS_WITH_EXPLAINED_EXCLUSIONS`, structure de page entièrement
+vérifiée : pas de pagination, pas d'AJAX, pas de section manquante) ; le
+TOTAL "~430" ne sert plus jamais d'`expected_count`
+(`EXPECTED_COUNT_UNKNOWN` pour le total global du Cameroun). Un futur
+MINESUP-C devra soit trouver une source MINESUP alternative avec un total
+structuré vérifiable, soit accepter `MANUAL_REVIEW_REQUIRED` en
+permanence pour ce point.
+
+### 12.5 Entity model — RECONFIRMÉ
+
+Aucun changement : 1 institution listée = 1 `establishment`, aucune
+subdivision campus/faculté observée ni pour les universités d'État
+(§16 du source catalog, 11/11 confirmées, liens 100% externes) ni pour
+les IPES échantillonnés.
+
+### 12.6 Matching normalization — IMPLÉMENTÉE
+
+`scripts/school-registry/lib/matching/engine.ts::exactIdentityKey`
+normalise désormais les numéraux romains/arabes institutionnels isolés
+(I↔1 … X↔10) — corrige le gap "Yaoundé I" (fiche live) vs "Yaoundé 1"
+(MINESUP) identifié en MINESUP-A. Revalidé : le test réel
+`minesup-matching-sample-test.ts` passe désormais de `AMBIGUOUS` à
+`EXACT_IDENTITY` pour ce cas précis, sans introduire de faux positif sur
+les autres candidats testés (IPES sans correspondance restent
+`PROBABLE_MATCH`/`AMBIGUOUS`, jamais auto-fusionnés). 8 nouveaux tests de
+régression ajoutés à `matching.test.ts` (27/27 passent).
+
+### 12.7 PII exclusion — RENFORCÉE
+
+Constat aggravant : le nom du promoteur peut apparaître **dans l'URL
+elle-même** (slug WordPress), pas seulement dans un champ de contenu — un
+futur collecteur devra donc aussi traiter `source_url` comme
+potentiellement sensible avant tout affichage public brut (l'URL peut
+rester en interne pour la traçabilité/re-fetch, mais ne devrait jamais
+être affichée telle quelle sur une fiche publique Écoles237 sans
+vérification). `pii_field_present` (booléen) est le seul signal collecté
+sur la présence de "Nom du promoteur"/"Nom du représentant légal" — leur
+VALEUR n'est jamais extraite ni committée (confirmé : le rapport
+`minesup-b-identifier-and-completeness-audit.json` ne contient que des
+booléens pour ces champs, jamais les noms eux-mêmes).
+
+### 12.8 MINESUP V1 Acceptance Criteria
+
+```
+[ ] Écart de complétude IPES (304/301 liste vs ~430 prose) documenté et accepté comme EXPECTED_COUNT_UNKNOWN pour le total — la LISTE elle-même n'a pas besoin d'être "résolue" davantage, elle est déjà auditée.
+[ ] Échantillon d'identifiants élargi (50-100 fiches, pas 20) confirmant LIKELY_UNIQUE à une échelle plus significative avant toute promotion contrôlée.
+[ ] official_identifier JAMAIS requis pour le staging (couvre au mieux ~50% des IPES) — nom + région + ville reste le mécanisme de repli obligatoire.
+[ ] PII (promoteur/représentant légal, y compris dans les URLs) exclue à 100% de tout champ collecté et de tout affichage public.
+[ ] Catégorie higher_education validée sans migration (déjà le cas, RAS).
+[ ] Matching validé sans faux positif sur un lot pilote réel (universités d'État + un échantillon d'IPES d'une région).
+[ ] Dry-run staging propre (0 écriture) avant toute collecte réelle.
+[ ] Pilote limité à une seule région avant toute collecte nationale.
+[ ] QA publique (recherche/fiche établissement) vérifiée sur le pilote avant extension.
+```
+
+### 12.9 Décisions
+
+```
+MIGRATION 0021 : WAIT_FOR_MORE_EVIDENCE — le schéma texte ouvert (authority/registry/identifier/identifier_type) reste structurellement compatible (YES), mais imposer UNIQUE(registry, identifier) avant qu'un échantillon plus large (50-100 fiches) confirme LIKELY_UNIQUE à l'échelle nationale risquerait de bloquer un futur backfill sur une fausse collision. Réévaluer après un échantillon élargi, pas après ce sprint de 20 fiches.
+BACKFILL TIMING : AFTER_MINESUP_PILOT — aucune donnée MINESUP réelle n'est en staging/production à ce jour ; le backfill MINESEC/cartescolaire existant peut attendre le premier pilote MINESUP réel pour être exécuté dans le même mouvement plutôt que deux fois.
+NEXT COLLECTION DECISION : D — MORE SOURCE WORK REQUIRED (échantillon d'identifiants élargi à 50-100 fiches IPES, PAS un pilote de collecte complet) avant même un MINESUP-C pilote — l'échantillon de 20 fiches de ce sprint est suffisant pour comprendre la SÉMANTIQUE de l'identifiant, insuffisant pour garantir son UNICITÉ nationale.
+```

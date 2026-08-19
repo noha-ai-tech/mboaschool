@@ -186,6 +186,41 @@ describe("Briques — exactIdentityKey préserve les mots de catégorie (régres
   });
 });
 
+describe("Briques — exactIdentityKey normalise les numéraux romains/arabes institutionnels (SPRINT MINESUP-B §18)", () => {
+  test("\"Université de Yaoundé I\" et \"Université de Yaoundé 1\" partagent la même clé exacte", () => {
+    assert.equal(exactIdentityKey("Université de Yaoundé I"), exactIdentityKey("Université de Yaoundé 1"));
+  });
+  test("\"Université de Yaoundé II\" et \"Université de Yaoundé 2\" partagent la même clé exacte", () => {
+    assert.equal(exactIdentityKey("Université de Yaoundé II"), exactIdentityKey("Université de Yaoundé 2"));
+  });
+  test("\"Université de Yaoundé III\" et \"Université de Yaoundé 3\" partagent la même clé exacte", () => {
+    assert.equal(exactIdentityKey("Université de Yaoundé III"), exactIdentityKey("Université de Yaoundé 3"));
+  });
+  test("Yaoundé I et Yaoundé II restent des clés DIFFÉRENTES entre elles (pas de sur-fusion)", () => {
+    assert.notEqual(exactIdentityKey("Université de Yaoundé I"), exactIdentityKey("Université de Yaoundé II"));
+  });
+  test("le matching engine produit EXACT_IDENTITY pour la variante MINESUP (arabe) contre la fiche live (romain), géographie cohérente", () => {
+    const t = target({ id: "uy1", name: "Université de Yaoundé I", region: "Centre", city: "Yaoundé" });
+    const c = candidate({ name: "Université de Yaoundé 1", region: "Centre", city: "Yaoundé" });
+    const result = matchCandidate(c, [t]);
+    assert.equal(result.level, "EXACT_IDENTITY");
+    assert.equal(result.target?.id, "uy1");
+  });
+  test("une lettre romaine à l'intérieur d'un autre mot n'est jamais convertie (pas de transformation arbitraire)", () => {
+    // "Institut Vision" ne doit pas voir son "i" ou son "v" transformés : ce sont des mots entiers, pas des tokens isolés.
+    assert.equal(exactIdentityKey("Institut Vision"), "institut vision");
+  });
+  test("variantes UCAC (sigle vs nom complet) restent des clés différentes — pas une fusion automatique par le seul sigle", () => {
+    assert.notEqual(
+      exactIdentityKey("Université Catholique d'Afrique Centrale (UCAC)"),
+      exactIdentityKey("UCAC"),
+    );
+  });
+  test("nom exact avec/sans accents reste identique (régression accents déjà couverte, revalidée ici)", () => {
+    assert.equal(exactIdentityKey("Université de Yaoundé I"), exactIdentityKey("Universite de Yaounde I"));
+  });
+});
+
 describe("Briques — fuzzyWords reste un signal REVIEW uniquement (jamais safeForAutoLink)", () => {
   test("un chevauchement même à 100% ne produit jamais safeForAutoLink=true", () => {
     const t = target({ id: "t1", name: "Institut Bilingue Toumwa (IBT)" });

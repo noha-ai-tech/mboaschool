@@ -1,0 +1,440 @@
+{
+  "sprint": "MINESUP-B",
+  "operator": "jean-merlain",
+  "generated_at": "2026-08-19T05:39:04.417Z",
+  "source": {
+    "url": "https://www.minesup.gov.cm/index.php/instituts-prives-denseignement-superieur/",
+    "fetched_at": "2026-08-19T05:38:45.674Z",
+    "http_status": 200,
+    "content_sha256": "11e036219470a9550d61d1b46d62a5eb9b9baa28e9236d579b00dda1625fa977",
+    "parser_version": "minesup-b-2026-08-19"
+  },
+  "completeness_investigation": {
+    "raw_li_count_including_empty": 304,
+    "extracted_non_empty_count": 304,
+    "unique_institution_count_after_cross_region_dedup": 301,
+    "cross_region_duplicate_institution_names": [
+      "institut supérieur fondation mamadou bako",
+      "experiental higher institute of science and technology (exhist)",
+      "access higher institute of professional studies (access-hips)"
+    ],
+    "by_region_count": {
+      "Région de l’Adamaoua": 10,
+      "Région du Centre": 100,
+      "Région de l’EST": 5,
+      "Région de l’Extrême de Nord": 5,
+      "Région du Littoral": 74,
+      "Région du Nord": 5,
+      "Région Nord-Ouest": 31,
+      "Région de l’Ouest": 26,
+      "Région du Sud": 7,
+      "Région du Sud-ouest": 41
+    },
+    "entries_with_detail_page_link": 240,
+    "entries_without_detail_page_link": 64,
+    "announced_count_in_page_prose": 430,
+    "announced_count_context_sentence": "L'Enseignement Supérieur compte environ 430 Instituts Privés d'Enseignement Supérieur répartis comme suit :",
+    "count_source": "Paragraphe de présentation en prose, EN HAUT de la page IPES elle-même (pas un total structuré, pas de sous-totaux par région qui somment à ce chiffre)",
+    "count_meaning": "Estimation globale du nombre d'IPES existants au Cameroun selon MINESUP, explicitement hedgée par 'environ' — PAS un total de la liste ci-dessous",
+    "count_date": "Non daté explicitement sur la page (pas de date de dernière mise à jour visible)",
+    "confidence": "LOW — chiffre approximatif auto-qualifié 'environ', sans preuve de recalcul récent, sans sous-totaux vérifiables",
+    "gap": 126,
+    "root_cause": "La liste structurée (304 entrées, 301 institutions uniques après dédoublonnage inter-régions) et le chiffre en prose ('environ 430') sont deux sources DIFFÉRENTES sur la même page, non réconciliées par MINESUP lui-même — pas un bug d'extraction côté Écoles237 (confirmé : aucune pagination, aucun lazy-loading, aucun endpoint JSON supplémentaire, aucune section régionale manquante — nav de la page = <nav class=\"pagination group\"></nav> vide).",
+    "resolved": false,
+    "extraction_verdict": "PASS_WITH_EXPLAINED_EXCLUSIONS_FOR_LIST / EXPECTED_COUNT_UNKNOWN_FOR_TOTAL — la liste elle-même est extraite de façon exhaustive et déterministe (304/304 entrées non vides confirmées, structure de page entièrement auditée), mais le total \"environ 430\" ne peut pas servir d'expected_count car ce n'est pas un total structuré vérifiable."
+  },
+  "identifier_sample": {
+    "sample_size": 20,
+    "with_creation_order_reference": 10,
+    "with_opening_authorization_reference": 10,
+    "with_provisional_combined_reference": 0,
+    "with_status_change_reference": 0,
+    "with_neither_creation_nor_opening": 10,
+    "duplicate_creation_references_across_different_institutions": [],
+    "same_institution_cross_region_reference_consistency": [
+      {
+        "institution_name": "Access Higher Institute of Professional Studies (Access-HIPS)",
+        "region": "Région du Littoral",
+        "creation_order_reference": "N°15/02237/L/ MINESUP/SG/DDES/ESUP/SSIPES/OAGS du 16 mars 2015."
+      },
+      {
+        "institution_name": "Access Higher Institute of Professional Studies (Access-HIPS)",
+        "region": "Région du Sud-ouest",
+        "creation_order_reference": "N°15/02237/L/ MINESUP/SG/DDES/ESUP/SSIPES/OAGS du 16 mars 2015."
+      }
+    ],
+    "entries": [
+      {
+        "institution_name": "Institut Supérieur des Sciences, de Technologie, de Management et Développement Durable (ISSTMADD)",
+        "region_from_list": "Région de l’Adamaoua",
+        "source_url": "https://minesup.gov.cm/?page_id=8064&preview=true",
+        "source_record_id": "8064",
+        "fetched_at": "2026-08-19T05:38:46.690Z",
+        "http_status": 200,
+        "content_sha256": "63f65e4795b746e541562afeb530c0f1930ebd775aef23dafff19c6b0f77e151",
+        "creation_order_reference": null,
+        "opening_authorization_reference": null,
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "Adamaoua",
+        "city_field": null,
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "Jagora University",
+        "region_from_list": "Région du Centre",
+        "source_url": "https://minesup.gov.cm/index.php/jagora-university/",
+        "source_record_id": null,
+        "fetched_at": "2026-08-19T05:38:47.887Z",
+        "http_status": 200,
+        "content_sha256": "dfcc7fe10bd33c614286ba50a76f9d41c9fbbcf72b2ed5930aefb6134b5c332a",
+        "creation_order_reference": null,
+        "opening_authorization_reference": null,
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": null,
+        "city_field": null,
+        "pii_field_present_but_not_collected": false
+      },
+      {
+        "institution_name": "Institut Supérieur d’Agronomie (ISA)",
+        "region_from_list": "Région de l’EST",
+        "source_url": "https://minesup.gov.cm/?page_id=8053&preview=true",
+        "source_record_id": "8053",
+        "fetched_at": "2026-08-19T05:38:48.646Z",
+        "http_status": 200,
+        "content_sha256": "dd2954c02004fe495a6818fa2f02daea4267d8de28b29b169f46dcaea8a96fa4",
+        "creation_order_reference": "15/0015/MINESUP/SG/DDES/ESUP du 28 Janvier 2015",
+        "opening_authorization_reference": "16/0635/L/MINESUP/SG/DDES/ESUP du 17 JUIN 2016",
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "EST",
+        "city_field": null,
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "Institut Supérieur des Techniques Appliquées et de Management",
+        "region_from_list": "Région de l’Extrême de Nord",
+        "source_url": "https://minesup.gov.cm/?page_id=8037&preview=true",
+        "source_record_id": "8037",
+        "fetched_at": "2026-08-19T05:38:49.399Z",
+        "http_status": 200,
+        "content_sha256": "e150966f44280858137430be41c5db2671ab25e388fa496b3dafeefeb1f4e6da",
+        "creation_order_reference": "n°120361/MINESUP/SG/DDES/ESUP du 16 aout 2012",
+        "opening_authorization_reference": "n° 11/0056/MINESUP/SG/DDES/ESUP du 12 Janvier 2011",
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "Extrême Nord",
+        "city_field": null,
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "Access Higher Institute of Professional Studies (Access-HIPS)",
+        "region_from_list": "Région du Littoral",
+        "source_url": "https://minesup.gov.cm/?page_id=7834&preview=true",
+        "source_record_id": "7834",
+        "fetched_at": "2026-08-19T05:38:50.224Z",
+        "http_status": 200,
+        "content_sha256": "d45553addfb45042008b142ae4cd21dcceb7925782ac9b5ef7059b9897bed30b",
+        "creation_order_reference": "N°15/02237/L/ MINESUP/SG/DDES/ESUP/SSIPES/OAGS du 16 mars 2015.",
+        "opening_authorization_reference": "N°15/02237/L/ MINESUP/SG/DDES/ESUP/SSIPES/OAGS du 16 mars 2015.",
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "Littoral",
+        "city_field": "Bonapriso-rue Njonjo",
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "Acces Care Institute (ACI)",
+        "region_from_list": "Région Nord-Ouest",
+        "source_url": "http://www.minesup.gov.cm/index.php/acces-care-institute-aci/",
+        "source_record_id": null,
+        "fetched_at": "2026-08-19T05:38:51.071Z",
+        "http_status": 200,
+        "content_sha256": "9c3b426f51bb7927279562373c82f3e0e41eec105feb77d57c55aa082244d27f",
+        "creation_order_reference": null,
+        "opening_authorization_reference": null,
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "North West",
+        "city_field": "Nkwen",
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "Groupe Tankou Enseignement Supérieur (GTES)",
+        "region_from_list": "Région de l’Ouest",
+        "source_url": "https://minesup.gov.cm/index.php/region-de-louest/groupe-tankou-enseignement-superieur-gtes/",
+        "source_record_id": null,
+        "fetched_at": "2026-08-19T05:38:52.294Z",
+        "http_status": 200,
+        "content_sha256": "01f61a061796f1523f50ca568f1af6040c031f95f76fec400b511c314838522d",
+        "creation_order_reference": "N°02/0050/MINESUP du 12 juin  2002.",
+        "opening_authorization_reference": "N°02 / 0064 / MINESUP du 16 juillet 2002.",
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "Ouest",
+        "city_field": "Mairie rurale",
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "Access Higher Institute of Professional Studies (Access-HIPS)",
+        "region_from_list": "Région du Sud-ouest",
+        "source_url": "https://minesup.gov.cm/?page_id=8070&preview=true",
+        "source_record_id": "8070",
+        "fetched_at": "2026-08-19T05:38:53.214Z",
+        "http_status": 200,
+        "content_sha256": "a8f57cd608ba0ec95b9a7edee1baca556b40062725405a182e0e442365e26e7a",
+        "creation_order_reference": "N°15/02237/L/ MINESUP/SG/DDES/ESUP/SSIPES/OAGS du 16 mars 2015.",
+        "opening_authorization_reference": "N°15/02237/L/ MINESUP/SG/DDES/ESUP/SSIPES/OAGS du 16 mars 2015",
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "Sud-Ouest",
+        "city_field": null,
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "Institut Supérieur du Septentrion Informatique",
+        "region_from_list": "Région de l’Adamaoua",
+        "source_url": "https://minesup.gov.cm/?page_id=8055&preview=true",
+        "source_record_id": "8055",
+        "fetched_at": "2026-08-19T05:38:54.197Z",
+        "http_status": 200,
+        "content_sha256": "d912dd1c8a43eb9c80ae91c145c261a07f8e5ad9ce3a0052207c8db708e1bd56",
+        "creation_order_reference": "n° 08/0266/MINESUP/SG/DDES/ESUP",
+        "opening_authorization_reference": "n°12/0374/MINESUP/SG/DDES/ESUP du 17 AOUT 2012",
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "Nord",
+        "city_field": null,
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "Institut Supérieur de Génie Civil (ISGeC)",
+        "region_from_list": "Région du Centre",
+        "source_url": "https://minesup.gov.cm/index.php/institut-superieur-du-genie-civil-isgec/",
+        "source_record_id": null,
+        "fetched_at": "2026-08-19T05:38:55.166Z",
+        "http_status": 200,
+        "content_sha256": "e2ac508f370bca92292ceae9bc333b9d6e6922e5cc33223810408d9987815e18",
+        "creation_order_reference": "N°22/01569/L/MINESUP/SG/DDES/SD-ESUP/SDA/LMN du 16 Mars 2022.",
+        "opening_authorization_reference": "N°22/01569/L/MINESUP/SG/DDES/SD-ESUP/SDA/LMN du 16 Mars 2022.",
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "Centre",
+        "city_field": null,
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "Institut Supérieur des Métiers de Technologies d'Afrique Centrale",
+        "region_from_list": "Région de l’EST",
+        "source_url": "https://minesup.gov.cm/?page_id=8046&preview=true",
+        "source_record_id": "8046",
+        "fetched_at": "2026-08-19T05:38:56.166Z",
+        "http_status": 200,
+        "content_sha256": "1a23654a6e2c541c0a7d56bc89ca5d443c2358e2bd44d57c3e43630abc3cc05c",
+        "creation_order_reference": null,
+        "opening_authorization_reference": null,
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "EST",
+        "city_field": "Bonis I",
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "Institut Universitaire de Technologie et des Sciences du Sahel (IUTESSA)",
+        "region_from_list": "Région de l’Extrême de Nord",
+        "source_url": "https://www.minesup.gov.cm/index.php/institut-universitaire-de-technologie-et-des-sciences-du-sahel-iutessa/",
+        "source_record_id": null,
+        "fetched_at": "2026-08-19T05:38:57.198Z",
+        "http_status": 200,
+        "content_sha256": "84c3cbb5fec5367439108294bdbabe6d166fc200a2026f98f1abebddec4747c9",
+        "creation_order_reference": null,
+        "opening_authorization_reference": null,
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "Extrême Nord",
+        "city_field": "quartier Mendeze au lieu-dit ancien Sonel",
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "Institut Supérieur de Technologie et de Management (ISTM)",
+        "region_from_list": "Région du Littoral",
+        "source_url": "https://minesup.gov.cm/?page_id=7903&preview=true",
+        "source_record_id": "7903",
+        "fetched_at": "2026-08-19T05:38:57.884Z",
+        "http_status": 200,
+        "content_sha256": "e5cb1a90400c79d536eb7a424de2db79d1a26d8a9b5cfafd04dbc1ca78c204ef",
+        "creation_order_reference": "N°05/0006/MINESUP du 03 janvier 2005",
+        "opening_authorization_reference": "N°05/0090/MINESUP du 07 septembre 2005",
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "Littoral",
+        "city_field": "Bonabéri",
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "International University of Bamenda",
+        "region_from_list": "Région Nord-Ouest",
+        "source_url": "https://minesup.gov.cm/?page_id=7795&preview=true",
+        "source_record_id": "7795",
+        "fetched_at": "2026-08-19T05:38:58.617Z",
+        "http_status": 200,
+        "content_sha256": "6add35d72d8cfbda9d497da779e0cb03855a38dca30e151a088c2d9726a2cbfd",
+        "creation_order_reference": "N°11/00507/MINESUP/SG/DDES du",
+        "opening_authorization_reference": "N°12/0363/MINESUP du 17 août 2012",
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "Nord-ouest",
+        "city_field": "Kumbo",
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "Institut de Technologie de l’Industrie, du Management et de l’Entrepreneuriat (INTIME)",
+        "region_from_list": "Région de l’Ouest",
+        "source_url": "https://minesup.gov.cm/index.php/region-de-louest/institut-de-technologie-de-lindustrie-du-management-et-de-lentrepreneuriat-intime/",
+        "source_record_id": null,
+        "fetched_at": "2026-08-19T05:38:59.400Z",
+        "http_status": 200,
+        "content_sha256": "a51b1879e2dff72712f1c323e930e5751756c89188e8f5df2c1fe701121b58bf",
+        "creation_order_reference": "N°12/0658/MINESUP du 23 novembre 2012.",
+        "opening_authorization_reference": "N°13/0587/MINESUP du 02 décembre 2013.",
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "Ouest",
+        "city_field": "carrefour total",
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "ANDANGKENG Higher Institute of Professional Studies (AHIPS)",
+        "region_from_list": "Région du Sud-ouest",
+        "source_url": "https://minesup.gov.cm/index.php/instituts-prives-denseignement-superieur/andangkeng-higher-institute-of-professional-studies-ahips/",
+        "source_record_id": null,
+        "fetched_at": "2026-08-19T05:39:00.137Z",
+        "http_status": 200,
+        "content_sha256": "689de84a9752ee05eb1d79f3b1ddf2c0c38ea037f6e2732e6fe7e114f2cdad99",
+        "creation_order_reference": null,
+        "opening_authorization_reference": null,
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "Sud-Ouest",
+        "city_field": null,
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "WALYA SUP",
+        "region_from_list": "Région de l’Adamaoua",
+        "source_url": "https://minesup.gov.cm/?page_id=8066&preview=true",
+        "source_record_id": "8066",
+        "fetched_at": "2026-08-19T05:39:01.139Z",
+        "http_status": 200,
+        "content_sha256": "cee9a856cbf896a994d53016870e148fb1b5f28557123f704e4e1e1f8b0695e3",
+        "creation_order_reference": null,
+        "opening_authorization_reference": null,
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "Nord",
+        "city_field": "guere",
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "Yaoundé International Business School (YIBS)",
+        "region_from_list": "Région du Centre",
+        "source_url": "https://www.minesup.gov.cm/index.php/yaounde-international-business-school-yibs/",
+        "source_record_id": null,
+        "fetched_at": "2026-08-19T05:39:02.146Z",
+        "http_status": 200,
+        "content_sha256": "aa71ba5b2170a7ddd1279eeea3d336d4d60a9d98b41dcd63793bb11447b084e5",
+        "creation_order_reference": null,
+        "opening_authorization_reference": null,
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "Centre",
+        "city_field": "Mendong /Carrefour Simbock",
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "Higher Institute for Technology and Professional Studies (HITEPS)",
+        "region_from_list": "Région de l’EST",
+        "source_url": "https://www.minesup.gov.cm/index.php/higher-institute-for-technology-and-professional-studies-hiteps/",
+        "source_record_id": null,
+        "fetched_at": "2026-08-19T05:39:02.902Z",
+        "http_status": 200,
+        "content_sha256": "a837ffa6ffae2e7b2fb74754c244b149c8c4b2f73380df87a25c25a5fcd3bfd9",
+        "creation_order_reference": null,
+        "opening_authorization_reference": null,
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "Est",
+        "city_field": "quartier Kpoklota au lieu-dit à côté de FALSH de l'Université de Bertoua",
+        "pii_field_present_but_not_collected": true
+      },
+      {
+        "institution_name": "Institut Supérieur du Sahel pour le Développement Durable (ISSDD)",
+        "region_from_list": "Région de l’Extrême de Nord",
+        "source_url": "https://www.minesup.gov.cm/index.php/institut-superieur-du-sahel-pour-le-developpement-durable-issdd/",
+        "source_record_id": null,
+        "fetched_at": "2026-08-19T05:39:03.684Z",
+        "http_status": 200,
+        "content_sha256": "154ec832beefc225416a26beb2b71310e72f687bad7471dc5a7ab3b34e0b793c",
+        "creation_order_reference": null,
+        "opening_authorization_reference": null,
+        "provisional_combined_reference": null,
+        "status_change_reference": null,
+        "region_field": "Extrême Nord",
+        "city_field": "Lopere en face Maroua Palace",
+        "pii_field_present_but_not_collected": true
+      }
+    ]
+  },
+  "state_universities": {
+    "nav_list_count": 11,
+    "all_link_to_external_domain": true,
+    "entries": [
+      {
+        "name": "University of Bamenda",
+        "url": "https://uniba.cm/"
+      },
+      {
+        "name": "Université de Bertoua",
+        "url": "https://www.univ-bertoua.cm/"
+      },
+      {
+        "name": "University of Buea",
+        "url": "https://www.ubuea.cm/"
+      },
+      {
+        "name": "Université de Douala",
+        "url": "https://www.univ-douala.cm/"
+      },
+      {
+        "name": "Université de Dschang",
+        "url": "https://www.univ-dschang.org/"
+      },
+      {
+        "name": "Université d&rsquo;Ebolowa",
+        "url": "http://www.univ-ebolowa.cm"
+      },
+      {
+        "name": "Université de Garoua",
+        "url": "https://univ-garoua.cm/"
+      },
+      {
+        "name": "Université de Maroua",
+        "url": "http://www.univ-maroua.cm/"
+      },
+      {
+        "name": "Université de Ngaoundéré",
+        "url": "https://www.univ-ndere.cm/"
+      },
+      {
+        "name": "Université de Yaoundé 1",
+        "url": "https://facsciences.uy1.cm/"
+      },
+      {
+        "name": "Université de Yaoundé 2",
+        "url": "https://www.univ-yaounde2.org/"
+      }
+    ],
+    "finding": "Les 11 universités d'État ne pointent que vers des sites externes (domaines propres à chaque université) — aucune fiche détail MINESUP-hébergée, donc aucun identifiant officiel MINESUP-émis observable pour ce sous-ensemble via cette source."
+  }
+}
