@@ -236,9 +236,148 @@ Avant toute collecte MINEFOP réelle (hors périmètre de ce sprint) :
 [ ] Pilote limité à une seule région avant toute collecte nationale.
 ```
 
-## 14. Décision — SOURCE PRIORITY PLAN
+## 14. Décision — SOURCE PRIORITY PLAN (MINEFOP-A initiale)
 
 ```
 NEXT STEP DECISION : E — SOURCE ACCESS RESOLUTION REQUIRED FIRST (ni un pilote de collecte, ni même un échantillon d'identifiants n'est possible tant que minefop.cm reste inaccessible ou qu'une source primaire alternative structurée n'a pas été trouvée). Aucune collecte, même légère, ne doit être tentée sur la Source B (article de presse, Tier 3/Discovery) — elle ne fournit aucune fiche individuelle à extraire.
 PILOT STRATEGY : Ne peut pas être proposée ce sprint — aucune région, aucun sous-ensemble de centres n'a pu être observé pour en évaluer la faisabilité. À reprendre entièrement une fois §14 ci-dessus résolu.
+```
+
+---
+
+## 15. SPRINT MINEFOP-A.1 — MISE À JOUR (2026-08-20)
+
+Fait suite à une recherche systématique de sources alternatives (voir
+`MINEFOP_SOURCE_CATALOG.md`, section "ALTERNATIVE SOURCE RECOVERY —
+MINEFOP-A.1"). `minefop.cm` reste inaccessible (retest minimal confirmé :
+`CERT_HAS_EXPIRED`, identique à MINEFOP-A). **Aucune source alternative
+fournissant des fiches d'établissements individuelles n'a été trouvée.**
+La meilleure source trouvée (Source D — Annuaire Statistique ONEFOP/MINEFOP
+2020-2021, ins-cameroun.cm) est un document STATISTIQUE AGRÉGÉ, pas un
+registre nominatif.
+
+### 15.1 Source hierarchy (mise à jour)
+
+```
+1. minefop.cm (Source A)                 — TOUJOURS BLOQUÉ, TIER 1 potentiel non exploitable
+2. Annuaire ONEFOP/MINEFOP (Source D)     — TIER 1 réel, mais AGRÉGATS SEULEMENT — sert d'EXPECTED_COUNT
+                                             et de vocabulaire/typologie officiels, jamais de source d'extraction
+                                             d'établissements individuels
+3. Décret 2005/123 + Arrêté 007/PM 2002   — TIER 2, cadre légal/autorité, aucune fiche
+   (Sources E, F)
+4. Pattern d'identifiant d'agrément       — Format confirmé sur 5 exemples indépendants, mais AUCUNE liste
+   (Source G)                              centralisée trouvée — inutilisable en collecte tant qu'une liste
+                                             n'existe pas
+5. Cameroon Tribune 2018 (Source B)       — TIER 3/Discovery, historique, jamais un expected_count actuel
+6. vitrineducameroun.com (Source H)       — DISCOVERY ONLY, PDF scanné illisible, provenance non établie
+```
+
+**FALLBACK SOURCE STRATEGY : aucun fallback praticable ce sprint pour
+l'EXTRACTION d'établissements.** La Source D (meilleure source trouvée) ne
+change PAS la conclusion du §2 (entity model) ni du §3 (identifier
+strategy) ci-dessus au niveau "fiche individuelle" — mais elle permet de
+lever partiellement l'inconnu du §6 (completeness proof) au niveau
+national/régional agrégé, et du §4 (taxonomie) au niveau vocabulaire réel.
+
+### 15.2 Entity model — mise à jour partielle du §2
+
+```
+UNKNOWN AU NIVEAU FICHE INDIVIDUELLE — toujours vrai, aucune fiche de centre observée.
+CONNU AU NIVEAU TYPOLOGIQUE (nouveau, Source D) :
+  Types officiels confirmés : SAR/SM (Section Artisanale Rurale/Section Ménagère, PUBLIC),
+  CFPR/IVTC (Centre de Formation Professionnelle Rapide), CFPE/AVTC (Centre de Formation
+  Professionnelle d'Excellence), CFM/CFPM/TTC (Centre de Formation aux Métiers), INFFDP/NITTPD
+  (Institut National des Formations des Formateurs et du Développement des Programmes, PUBLIC,
+  cas particulier — institution de formation de formateurs, PAS un CFP grand public : à
+  classifier séparément si rencontré, PROBABLE=OTHER plutôt que TRAINING_ESTABLISHMENT standard),
+  et pour le PRIVÉ : Confessionnel / Laïc (avec ou sans convention avec l'État — Tableau 24 de
+  la Source D, non détaillé dans le catalogue par manque de nécessité ce sprint).
+  Un centre = une ligne dans les tableaux ONEFOP (comptage), cohérent avec l'hypothèse déjà
+  posée en MINEFOP-A, mais RESTE UNE INFÉRENCE — les tableaux comptent des CENTRES, pas des
+  franchises/réseaux, sans qu'on sache si un opérateur peut détenir plusieurs CFP comptés
+  séparément (probable, non vérifié).
+```
+
+**Can current establishments model represent MINEFOP : TOUJOURS PROBABLE
+mais NON CONFIRMÉ** — la Source D renforce la plausibilité (comptage par
+centre discret) sans la prouver formellement.
+
+### 15.3 Official Identifier Strategy — mise à jour partielle du §3
+
+```
+IDENTIFIER NAME (nouveau, Source G) : numéro d'arrêté d'agrément/d'ouverture, format
+  "N°<numéro>/MINEFOP/SG/DFOP/<sous-direction>/<date>" — confirmé sur 5 exemples publiés
+  indépendamment par les centres eux-mêmes (pas un seul agrégateur, donc pas une convention
+  inventée par un tiers).
+FORMAT :               Numérique variable (3-8 chiffres) + code sous-direction (SDGSF, CSACD, CBAC,
+                        SDECC, SOEC, BOEC observés — sous-directions différentes selon le type de
+                        structure, à ne pas traiter comme un seul type homogène) + date complète.
+UNIQUENESS :            Présumée unique par décision (un arrêté = un acte daté), NON vérifiée sur volume
+                        (5 échantillons seulement, aucune liste consolidée pour tester les collisions).
+STABLE OVER TIME :      Le NUMÉRO est stable (acte administratif historique), mais le STATUT d'agrément
+                        associé NE L'EST PAS — la Source D (Tableau 23) confirme explicitement l'existence
+                        de deux catégories bien distinctes et actualisées annuellement : "CFP AGREE"
+                        (733 au national en 2020-2021) vs "CFP NON AGREE" (730) — un centre peut détenir
+                        un numéro d'arrêté historique sans être actuellement agréé. CONFIRME l'hypothèse
+                        posée en MINEFOP-A (§3) qu'un `status`/`valid_until` séparé de l'identifiant est
+                        nécessaire pour modéliser correctement ce registre.
+```
+
+**Décision (inchangée) : aucun `identifier_type` figé ce sprint.** Le
+format est maintenant OBSERVÉ (contrairement à MINEFOP-A où il était
+purement hypothétique), ce qui permettrait de proposer `AGREMENT_ORDER`
+lors d'un futur sprint avec accès à une vraie liste — mais AUCUNE liste
+consolidée n'a été trouvée pour valider ce format à l'échelle, donc pas de
+nom de `registry`/`identifier_type` figé ici non plus.
+
+### 15.4 Completeness Proof Strategy — mise à jour du §6
+
+```
+COMPLETENESS_PROOF AU NIVEAU AGRÉGÉ NATIONAL/RÉGIONAL : DISPONIBLE (nouveau) via la Source D —
+  l'ONEFOP déclare explicitement procéder à un "recensement EXHAUSTIF" annuel des structures de
+  formation professionnelle sur l'ensemble du territoire (méthodologie décrite : délégations
+  régionales/départementales, agents de collecte formés, questionnaire structuré). Chiffre
+  2020-2021 : 1 761 CFP (298 public + 1 463 privé, dont 733 agréés/730 non agréés).
+COMPLETENESS_PROOF AU NIVEAU FICHE INDIVIDUELLE : TOUJOURS UNKNOWN — le recensement exhaustif
+  allégué N'EST PAS publié sous forme de liste nominative accessible ce sprint. On ne peut donc
+  PAS l'utiliser comme preuve d'exhaustivité d'un futur import d'établissements individuels, même
+  si le CHIFFRE AGRÉGÉ peut servir de cible de validation ("combien d'établissements MINEFOP
+  devrait-on avoir au total, par région, une fois la collecte terminée ?").
+Le chiffre "730 centres en règle" (Source B, 2018) reste écarté comme expected_count actuel — la
+  Source D fournit un chiffre 2020-2021 nettement plus récent et officiel (733 CFP privés agréés)
+  qui devrait lui être préféré SI un jour un expected_count est nécessaire pour validation — mais
+  ATTENTION à la coïncidence numérique documentée dans le catalogue (730 en 2018 = "en règle" ;
+  730 en 2020-2021 = CFP privés NON agréés dans un tableau différent — ne jamais citer "730" sans
+  préciser l'année ET la définition exacte).
+```
+
+### 15.5 Cross-source reconciliation (§17 du brief)
+
+Une seule source quantitative comparable trouvée cette fois-ci (Source D)
+en plus de la Source B déjà connue — comparaison à deux termes seulement,
+PAS de fusion de listes nominatives (aucune des deux n'en fournit) :
+
+```
+SOURCE A (Cameroon Tribune 2018) : "730 centres en règle" — total national, type non précisé, presse
+SOURCE B (ONEFOP/MINEFOP 2020-2021) : 733 CFP PRIVÉS agréés (+ 298 publics, non comparables au chiffre 2018 qui ne précise pas public/privé)
+Overlap exact : impossible à établir (granularité différente, pas de liste nominative des deux côtés)
+Conflit apparent : aucun conflit réel détecté — les deux chiffres (730 et 733) sont dans le même ordre de grandeur sur 2 ans d'écart, ce qui est cohérent plutôt que contradictoire, mais ne constitue PAS une validation croisée forte vu les définitions imprécises de la source 2018
+Conclusion : PAS de fusion, PAS de nouvel expected_count figé — seulement une corroboration faible que l'ordre de grandeur "quelques centaines de CFP privés agréés au national" est stable dans le temps.
+```
+
+### 15.6 Décision — SOURCE PRIORITY PLAN (mise à jour MINEFOP-A.1)
+
+```
+NEXT STEP DECISION : E — SECONDARY STRUCTURED SOURCE FOUND, CORROBORATION OFFICIELLE ENCORE REQUISE.
+  La Source D est officielle (Tier 1, ONEFOP/MINEFOP) et structurée, mais elle est agrégée — elle
+  NE PEUT PAS remplacer un registre nominatif pour l'extraction d'établissements. Aucune source
+  Tier 1/2 fournissant des fiches individuelles n'a été trouvée ce sprint malgré une recherche
+  large (registres, PDF/XLS gouvernementaux, sources régionales, documents légaux, sources
+  d'examen, partenaires internationaux, sondes sur entités connues, pattern d'identifiant).
+PILOT STRATEGY : PAS DE PILOTE D'EXTRACTION D'ÉTABLISSEMENTS proposé ce sprint (aucune fiche
+  individuelle disponible dans aucune source trouvée). Un futur sprint pourrait en revanche
+  exploiter la Source D comme référence de VALIDATION (cible ~1 761 CFP, réparties par région)
+  si/quand une source nominative est enfin trouvée ou si l'accès à minefop.cm est restauré.
+MINEFOP DEFERRED : OUI — inchangé depuis MINEFOP-A, pour une raison différente (source agrégée
+  trouvée mais insuffisante pour l'extraction, plutôt que source totalement bloquée).
 ```

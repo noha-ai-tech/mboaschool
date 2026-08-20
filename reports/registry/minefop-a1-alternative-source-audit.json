@@ -1,0 +1,252 @@
+{
+  "sprint": "MINEFOP-A.1",
+  "type": "ALTERNATIVE_OFFICIAL_SOURCE_DISCOVERY_AND_RECOVERY_AUDIT",
+  "operator": "jean-merlain",
+  "search_date": "2026-08-20",
+  "read_only": true,
+  "production_writes": 0,
+  "predecessor_sprint": "MINEFOP-A (commit f30c3ea16c6ac848860a04be222f07809e147f99)",
+
+  "primary_minefop_access": {
+    "domain": "minefop.cm",
+    "retested_this_sprint": true,
+    "retest_scope": "minimal, per sprint instruction not to repeat MINEFOP-A",
+    "tls_status": "CERT_HAS_EXPIRED",
+    "homepage_status": "fetch failed at TLS layer (no bypass attempted)",
+    "content_routes_status": "fetch failed at TLS layer (no bypass attempted)",
+    "direct_static_documents": "presumed still reachable if URL known (established in MINEFOP-A, not fully retested)",
+    "access_restored": "NO",
+    "bypass_attempted": false
+  },
+
+  "search_strategy": {
+    "query_families_investigated": [
+      "A - registres/listes (FR + EN, MINEFOP centres agréés/structures/SAR-SM/vocational training)",
+      "B - document discovery (filetype:pdf/xls/xlsx/doc)",
+      "C - official domain search (site:minefop.cm, gov.cm, spm.gov.cm)",
+      "D - other Cameroon government sources (spm.gov.cm decree, open data search)",
+      "E - regional/delegation sources (partial - Littoral/Centre/Ouest queries, found MINFOPRA false-positive)",
+      "F - legal/administrative documents (décret 2005/123, arrêté 007/PM 2002, individual agrément arrêtés)",
+      "G - exam/certification sources (CQP/DQP queries - no consolidated exam center list found)",
+      "H - international/development partner sources (ILO NATLEX, UNESCO-UNEVOC attempted)",
+      "I - archived/historical discovery (Cameroon Tribune 2018 re-examined for lineage)",
+      "J - known entity probes (2 of the 8 live 'autres' establishments searched, no MINEFOP corroboration found)",
+      "K - identifier pattern discovery (arrêté number format confirmed on 5 independent center websites)"
+    ],
+    "government_domains_investigated": [
+      "minefop.cm (blocked, retested)",
+      "spm.gov.cm (accessible, decree found)",
+      "ins-cameroun.cm (accessible, best source found)",
+      "orientation.cm (referenced, not deep-dived - same statistical series)",
+      "minfopra.gov.cm (false positive - different ministry, excluded)",
+      "opendatacam.cm (false positive - unrelated NGO platform, excluded)"
+    ],
+    "regional_searches_done": true,
+    "regional_searches_scope": "partial - Centre/Littoral/Ouest explicit queries only, not all 10 regions individually queried",
+    "document_searches_done": true,
+    "legal_document_searches_done": true,
+    "known_entity_probes_done": 2,
+    "known_entity_probes_total_available": 8
+  },
+
+  "sources_discovered": {
+    "total_serious_candidates": 5,
+    "tier_1": 1,
+    "tier_2": 2,
+    "tier_3_or_discovery_only": 2,
+    "excluded_false_positives": 3
+  },
+
+  "official_sources": [
+    {
+      "id": "SOURCE_D",
+      "name": "Annuaire Statistique de la Formation Professionnelle (ASFOP) 2020/2021",
+      "publisher": "ONEFOP / MINEFOP (Secrétariat Général), hosted via INS (Institut National de la Statistique)",
+      "url": "https://ins-cameroun.cm/wp-content/uploads/2025/06/ANNUAIRE-STATISTIQUE-DE-LA-FOP-2020-2021-FINAL.pdf",
+      "authority": "TIER 1",
+      "date": "édition 2021 (données 2020-2021)",
+      "current_or_historical": "recent, part of a maintained annual series",
+      "format": "PDF, native text (extractable via pdftotext)",
+      "coverage": "national, 10 regions, public + private",
+      "entity_type": "CFP (Centre de Formation Professionnelle) - AGGREGATE COUNTS ONLY, no individual records",
+      "count": {
+        "total_cfp_2020_2021": 1761,
+        "public_cfp_2020_2021": 298,
+        "private_cfp_2020_2021": 1463,
+        "private_cfp_agree_2020_2021": 733,
+        "private_cfp_non_agree_2020_2021": 730,
+        "historical_series": { "2016-2017": 1591, "2017-2018": 1612, "2018-2019": 1321 }
+      },
+      "identifier_present": false,
+      "regions_covered": ["Adamaoua", "Centre", "Est", "Extrême-Nord", "Littoral", "Nord", "Nord-Ouest", "Ouest", "Sud", "Sud-Ouest"],
+      "extraction_possible_for_establishments": false,
+      "completeness_claim": "ONEFOP states it conducts an exhaustive annual census (\"recensement exhaustif\") of vocational training structures nationwide - methodologically credible, not independently verifiable this sprint",
+      "pii_found": false,
+      "snapshot": {
+        "sha256": "44494dcfef5afcd2a983b707892fc65daac4785a4835b81c25cada1e251f997d",
+        "content_type": "application/pdf",
+        "size_bytes": 3638460,
+        "retrieved_at": "2026-08-20T13:42:00Z",
+        "committed_to_repo": false
+      }
+    },
+    {
+      "id": "SOURCE_E",
+      "name": "Décret n°2005/123 du 15 avril 2005 portant organisation du MINEFOP",
+      "publisher": "Services du Premier Ministre (spm.gov.cm)",
+      "url": "https://www.spm.gov.cm/site/?q=fr/content/d%C3%A9cret-n%C2%B0-2005123-du-15-avril-2005-portant-organisation-du-minist%C3%A8re-de-lemploi-et-de-la",
+      "authority": "TIER 2",
+      "date": "2005-04-15",
+      "format": "HTML",
+      "coverage": "organizational/legal, not a list of establishments",
+      "entity_type": "N/A - describes ministry services, not regulated entities",
+      "extraction_possible_for_establishments": false,
+      "notes": "identifies 'Service de Gestion des Centres, Instituts et Structures Spécialisées de Formation Professionnelle et d'Apprentissage' as responsible for the 'répertoire des filières de formation' (training-track directory, not explicitly an establishment directory)"
+    },
+    {
+      "id": "SOURCE_F",
+      "name": "Arrêté n°007/PM du 13 février 2002 (création ONEFOP)",
+      "publisher": "Services du Premier Ministre, mirrored by ILO/NATLEX",
+      "url": "https://webapps.ilo.org/dyn/natlex/natlex4.detail?p_isn=60811&p_lang=fr",
+      "authority": "TIER 2 (text) / TIER 3 (this access channel)",
+      "date": "2002-02-13",
+      "format": "HTML",
+      "extraction_possible_for_establishments": false,
+      "notes": "establishes ONEFOP's statutory authority, corroborates Source D's publisher legitimacy"
+    }
+  ],
+
+  "secondary_sources": [
+    {
+      "id": "SOURCE_G",
+      "name": "Agrément arrêté identifier pattern",
+      "type": "IDENTIFIER_PATTERN_DISCOVERY",
+      "pattern": "N°<numéro>/MINEFOP/SG/DFOP/<sous-direction>/<date>",
+      "examples_found": 5,
+      "examples_independent": true,
+      "consolidated_list_found": false,
+      "authority": "format confirmed structurally, but no centralized registry located"
+    },
+    {
+      "id": "SOURCE_B",
+      "name": "Cameroon Tribune - \"730 centres sont en règle\" (2018)",
+      "type": "HISTORICAL_SECONDARY_DISCOVERY",
+      "already_documented_in": "MINEFOP-A",
+      "note": "re-examined for lineage this sprint; no primary source document found behind the 2018 press figure"
+    }
+  ],
+
+  "historical_sources": [
+    {
+      "id": "SOURCE_B",
+      "name": "Cameroon Tribune 2018 article",
+      "status": "HISTORICAL, never usable as current expected_count"
+    }
+  ],
+
+  "usable_sources": [],
+  "unusable_sources": [
+    {
+      "id": "SOURCE_H",
+      "name": "vitrineducameroun.com - Liste des centres de formation préselectionnés du MINEFOP",
+      "reason": "scanned PDF with no extractable text layer (pdftotext returns 0 lines); unofficial third-party host; provenance/authority not established; not OCR'd per PII-minimization policy"
+    },
+    {
+      "id": "MINFOPRA_FALSE_POSITIVE",
+      "domain": "minfopra.gov.cm",
+      "reason": "different ministry (Fonction Publique et Réforme Administrative), name-similarity false positive, excluded"
+    },
+    {
+      "id": "OPENDATACAM_FALSE_POSITIVE",
+      "domain": "opendatacam.cm",
+      "reason": "unrelated NGO health-data platform, not a government open-data portal"
+    }
+  ],
+
+  "best_source": "SOURCE_D - Annuaire Statistique de la Formation Professionnelle (ONEFOP/MINEFOP) 2020/2021",
+  "best_source_tier": "TIER 1 (aggregate statistics, not a nominative registry)",
+  "best_source_coverage": "national, 10 regions, public + private, 1761 CFP total for 2020-2021",
+
+  "expected_count": {
+    "value_national_total_cfp_2020_2021": 1761,
+    "value_public_2020_2021": 298,
+    "value_private_2020_2021": 1463,
+    "value_private_agree_2020_2021": 733,
+    "value_private_non_agree_2020_2021": 730,
+    "source": "SOURCE_D",
+    "date": "2020-2021 training year, published 2021 edition",
+    "scope": "national exhaustive census (claimed)",
+    "explicit": true,
+    "current": true,
+    "reliable_as_expected_count_for_extraction_target": false,
+    "reliable_as_aggregate_validation_reference": true,
+    "note": "usable only to sanity-check a FUTURE nominative collection's totals, not as a substitute for one"
+  },
+
+  "identifier_types": [
+    {
+      "type": "AGREMENT_ORDER (proposed name only, not committed)",
+      "format": "N°<numéro>/MINEFOP/SG/DFOP/<sous-direction>/<date>",
+      "coverage": "5 independent examples, no consolidated list",
+      "uniqueness": "presumed, unverified at scale",
+      "stability": "number stable; approval STATUS is time-limited (see CFP AGREE vs NON AGREE in Source D)",
+      "multi_id_schema_compatible": true
+    }
+  ],
+
+  "entity_model": {
+    "observed_types": ["SAR/SM", "CFPR/IVTC", "CFPE/AVTC", "CFM-CFPM/TTC", "INFFDP/NITTPD", "private confessionnel", "private laïc"],
+    "establishment_model_compatible": "PARTIAL - typology confirmed, individual-record structure still unconfirmed",
+    "programs_separated": true,
+    "exam_centers_distinguished": "UNKNOWN - no consolidated exam-center list found this sprint, kept conceptually distinct per sprint instruction (exam_center != training_establishment by default)"
+  },
+
+  "regions": ["Adamaoua", "Centre", "Est", "Extrême-Nord", "Littoral", "Nord", "Nord-Ouest", "Ouest", "Sud", "Sud-Ouest"],
+
+  "source_access_status": {
+    "minefop_cm": "BLOCKED (TLS certificate expired, unchanged from MINEFOP-A)",
+    "ins_cameroun_cm": "ACCESSIBLE",
+    "spm_gov_cm": "ACCESSIBLE"
+  },
+
+  "cross_source_reconciliation": {
+    "sources_compared": 2,
+    "comparison": "Cameroon Tribune 2018 (730 centres 'en règle', national, type unspecified) vs ONEFOP/MINEFOP 2020-2021 (733 private CFP 'agréé')",
+    "exact_overlap": "not measurable (no nominative lists on either side)",
+    "probable_overlap": "same order of magnitude across a 2-year gap - weak corroboration only",
+    "conflicts": "none detected, but definitions are not strictly comparable (2018 figure's public/private scope is unstated)",
+    "caution": "numeric coincidence noted: 730 also appears in the 2020-2021 table as the count of NON-approved private CFP - different meaning, same number, must never be cited without year+definition"
+  },
+
+  "recommended_strategy": "E - SECONDARY STRUCTURED SOURCE FOUND, official corroboration for individual-establishment extraction still required. No usable nominative source found this sprint. Source D usable only as an aggregate validation target for a future collection, not as an extraction source.",
+
+  "decision": "E",
+  "pilot_gate": {
+    "ready_for_minefop_b": "NO",
+    "reason": "no source found this sprint provides individual establishment records with traceable authority; Source D is aggregate-only"
+  },
+
+  "database_before": {
+    "timestamp": "2026-08-20T13:41:20.642Z",
+    "establishments_count": 2240,
+    "staging_count": 2344,
+    "registry_identifiers_count": 2242,
+    "minefop_staging_count": 0,
+    "vocational_training_staging_count": 0
+  },
+  "database_after": {
+    "timestamp": "2026-08-20T13:47:30.146Z",
+    "establishments_count": 2240,
+    "staging_count": 2344,
+    "registry_identifiers_count": 2242,
+    "minefop_staging_count": 0,
+    "vocational_training_staging_count": 0
+  },
+  "database_verification_method": "live Supabase REST queries (Prefer: count=exact) via .env.local service role key, before and after the sprint",
+
+  "qa": {
+    "tsc_app_noemit": "PASS",
+    "tsc_registry_noemit": "PASS",
+    "npm_run_build": "PASS (exit code 0)"
+  }
+}
