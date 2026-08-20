@@ -492,3 +492,156 @@ PILOT STRATEGY (proposée, NON EXÉCUTÉE) : voir §26 du rapport final — un p
   clairement identifiables) serait la première étape recommandée d'un futur MINSANTE-B, APRÈS
   développement de l'extracteur PDF déterministe (§12.1).
 ```
+
+## MISE À JOUR SPRINT MINSANTE-C (2026-08-20) — CATEGORY MODEL RESOLUTION + REVIEW CENTER COMPATIBILITY
+
+Opérateur : jean-merlain. Portée : reclassification de métadonnées (additive)
+sur les 22 lignes staging MINSANTE déjà écrites en MINSANTE-B (batch
+`minsante-pilot-v1`, région Ouest) + correction du Review Center. **AUCUNE
+nouvelle ligne staging, AUCUNE écriture `establishments`/
+`establishment_registry_identifiers`, AUCUNE promotion, AUCUNE migration
+exécutée.**
+
+### C.1 — Modèle de catégorie retenu : MODEL A
+
+`health_training` (`education_family`, inchangé) se traduit en
+`main_category` selon la preuve disponible — **jamais** une règle
+automatique sur le seul mot "Institut"/"École" :
+
+```
+SUPERIEUR_CONFIRMED -> main_category = 'superieur'
+AUTRES_CONFIRMED    -> main_category = 'autres', sub_category = 'Santé'
+CATEGORY_REVIEW     -> main_category = NULL (jamais promu tant que non résolu)
+```
+
+**Hiérarchie de preuve (déterministe, appliquée dans cet ordre)** :
+
+1. `EXPLICIT_LEVEL_WORD_IN_OFFICIAL_TITLE` — le titre officiel MINSANTE
+   contient un mot de niveau explicite (`supérieur(e)`/`universitaire`/
+   `université`/`faculté`), auto-déclaré par l'établissement lui-même ->
+   `SUPERIEUR_CONFIRMED`. Hérité identique de MINSANTE-B, aucune
+   régression.
+2. `OFFICIAL_CYCLE_DIPLOMA_NAME_IN_TITLE` — le titre officiel contient lui-
+   même une désignation de cycle/diplôme reconnue et non-supérieure (ex.
+   "Infirmier(s) Diplômé(s) d'État", diplôme de cycle B au sens du Décret
+   80/198) -> `AUTRES_CONFIRMED`. Même standard de preuve que la règle 1
+   (auto-déclaration dans le titre officiel), appliqué symétriquement côté
+   "autres" — nouveau ce sprint.
+3. Corroboration officielle externe **vérifiée directement ce sprint**
+   (page institutionnelle officielle récupérée + citation d'un acte
+   MINSANTE, identité confirmée par nom/région/commune) -> selon la preuve.
+   2 candidats CATEGORY_REVIEW résolus ainsi (§C.3).
+4. Aucune preuve suffisante -> `CATEGORY_REVIEW` (défaut). **Le but n'est
+   jamais de maximiser `CLEAN_APPROVABLE`** — une population plus petite
+   mais correcte est préférée à une catégorie devinée.
+
+**Migration requise : NON.** Les deux valeurs (`superieur`/`autres`)
+existent déjà dans `src/lib/categories.ts` (`superieur` : Université/Grande
+école/Institut supérieur ; `autres` : sous-catégorie Santé) — aucune
+modification de schéma ni de taxonomie produit.
+
+### C.2 — Sub_category
+
+Aucun nouveau `sub_category` créé. "Santé" (déjà présent sous `autres`
+dans `src/lib/categories.ts`) suffit à représenter toute formation MINSANTE
+non-supérieure. Les filières (Infirmiers, Analyses Médicales…) restent des
+attributs (`raw_data.programs_normalized`), jamais une sous-catégorie par
+programme (§15 du brief).
+
+### C.3 — Recherche ciblée de corroboration (§9 du brief)
+
+Pour les 9 candidats `CATEGORY_REVIEW` hérités de MINSANTE-B, une
+recherche officielle ciblée a été menée (sources : pages institutionnelles
+officielles récupérées directement, jamais un annuaire commercial utilisé
+seul comme autorité finale). Résultat : **2/9 résolus avec preuve directe
+vérifiée**, 7/9 restent `CATEGORY_REVIEW` faute de preuve suffisante
+(traçabilité complète par candidat : `reports/registry/minsante-c-category-audit.csv`,
+colonne `research_note`).
+
+| Candidat | Décision | Preuve |
+|---|---|---|
+| Complexe Privé de Formation des Personnels Médico-Sanitaires "Fondation Tsopjio et Takoudjou" de Dschang | `AUTRES_CONFIRMED` | Page officielle (ftt-dschang.cm/a-propos) : création par DECISION N°0344/D/MINSANTE/SG/DRH du 28/04/2010 — acte MINSANTE-DRH (jamais un acte MINESUP d'enseignement supérieur), aucune mention "enseignement supérieur", positionné explicitement comme formation technique/vocationnelle. Corroboré indépendamment par kamerpower.com (même nom exact, même commune). |
+| École Privée des Sciences de la Santé Meno de Bamena | `AUTRES_CONFIRMED` | Page officielle (epssmeno.com) : admission explicite "Niveau BEPC"/"Niveau BAC" (entrée pré-bac), filières "Aides soignants-généralistes"/"Techniciens principaux médico-sanitaires" — désignations techniques explicites, aucune mention "enseignement supérieur". |
+
+Les 7 candidats non résolus (COFPSAROMA Baleng, Complexe Mbouo Bandjoun,
+Complexe Mbouda, EPS Les Étoiles Bafoussam, École Privée de Formation du
+Personnel de la Santé de Bafoussam, IFOPP Foumbot, Institut Tropical
+"Moullec" Baleveng) ont chacun une note de recherche documentée (site
+identifié mais récupération de page échouée en HTTP 403/DNS/SSL, identité
+insuffisamment confirmée pour une piste trouvée sous un autre nom, ou
+seulement le mot "Institut" trouvé sans mot de niveau explicite — jamais
+suffisant seul, §4).
+
+### C.4 — Frontière inter-ministérielle (§10-12)
+
+Les 22 candidats ont été comparés au registre MINESUP (`establishment_registry_identifiers.authority='MINESUP'`,
+`registry='MINESUP_IPES'`, 74 établissements liés) avec le moteur de
+matching partagé **inchangé** (`scripts/school-registry/lib/matching/engine.ts`).
+Seuil retenu pour cette vérification spécifique : `EXACT_IDENTIFIER`/
+`EXACT_IDENTITY` -> `SAME_INSTITUTION_CROSS_MINISTRY` ; `STRONG_MATCH`
+(chevauchement ≥66%) -> `AMBIGUOUS` (revue requise) ; en-dessous (y
+compris `PROBABLE_MATCH`/`AMBIGUOUS` faible, souvent un simple nom de
+ville partagé — "Bafoussam"/"Bafang" — sans rapport réel) -> `DISTINCT`,
+publié en transparence dans le rapport (jamais une ligne cachée).
+
+**Résultat : 22/22 `DISTINCT`, 0 `SAME_INSTITUTION_CROSS_MINISTRY`, 0
+`AMBIGUOUS`.** Aucun des 22 candidats MINSANTE Ouest ne coïncide avec une
+institution MINESUP existante. Rapport complet :
+`reports/registry/minsante-c-cross-ministry-review.csv`. Aucune écriture
+DB, aucun auto-merge — cohérent avec la règle absolue FUZZY MATCH != IDENTITY
+PROOF.
+
+### C.5 — États de revue normalisés (Review Center)
+
+Nouvel adaptateur `registryReviewClassification()` (`src/lib/registryReview.ts`,
+§19-20 du brief) — corrige le bug identifié en MINSANTE-B (`classify()` du
+Review Center ne comprenait que `raw_data._matchAudit`/`_localityAudit`,
+propres à MINESEC ; les lignes MINSANTE s'affichaient toutes comme
+"Nouveaux candidats" génériques quel que soit leur vrai état). Design :
+chaque ministère fournit un "reader" traduisant sa forme de `raw_data` en
+signaux communs ; un seul résolveur partagé décide de l'état normalisé —
+`CLEAN_APPROVABLE`/`DUPLICATE_REVIEW`/`CATEGORY_REVIEW`/`SOURCE_REVIEW`/
+`IDENTITY_REVIEW`/`IDENTIFIER_COLLISION_REVIEW`/`CROSS_MINISTRY_REVIEW`/
+`PROMOTED`/`OTHER_REVIEW`. Tout ministère sans reader dédié (MINESUP
+aujourd'hui, tout futur ministère) retombe sur un filet générique basé
+uniquement sur la colonne `status` — jamais un if-chain géant par
+ministère. 18 tests de non-régression :
+`src/lib/__tests__/registryReview.test.ts`.
+
+### C.6 — Éligibilité à la promotion (rappel, §26 du brief — inchangé)
+
+Un candidat MINSANTE ne devient `CLEAN_APPROVABLE` que si : source sûre
+(`PROBABLE_TIER_1`, inchangé), PII sûre (0 persistée), identité
+d'établissement sûre (aucun signal live/staging), catégorie résolue
+(`SUPERIEUR_CONFIRMED`/`AUTRES_CONFIRMED`, jamais devinée),
+`DUPLICATE_REVIEW` non déclenché, aucun risque de doublon inter-ministères.
+**Aucun identifiant officiel requis** (toujours inconnu pour MINSANTE,
+§3). `PROMOTION = NON` ce sprint, quel que soit le nombre de candidats
+`CLEAN_APPROVABLE` — la promotion reste un sprint dédié futur
+(MINSANTE-D).
+
+### C.7 — Reclassification finale des 22 lignes pilote
+
+```
+AVANT (MINSANTE-B) : CLEAN_APPROVABLE=2, CATEGORY_REVIEW=9, DUPLICATE_REVIEW=11
+APRÈS (MINSANTE-C) : CLEAN_APPROVABLE=4, CATEGORY_REVIEW=7, DUPLICATE_REVIEW=11, CROSS_MINISTRY_REVIEW=0, OTHER_REVIEW=0
+```
+
+**Règle stricte respectée (§17 du brief) : aucune des 11 lignes
+`DUPLICATE_REVIEW` n'a été reclassifiée** malgré une catégorie désormais
+mieux comprise pour 4 d'entre elles (2 `AUTRES_CONFIRMED` via la règle
+`OFFICIAL_CYCLE_DIPLOMA_NAME_IN_TITLE` — "École des Infirmiers Diplômés
+d'État" de Bafoussam/Foumban) — seule leur `category_decision` a été mise
+à jour, leur `classification` reste `DUPLICATE_REVIEW`, prête à profiter
+d'une éventuelle résolution de dédoublonnage lors d'un futur sprint.
+
+Détail complet, ligne par ligne, depuis zéro (§16) :
+`reports/registry/minsante-c-reclassification.csv`. Script :
+`scripts/school-registry/minsante-c-reclassify.ts` (idempotent, revérifié
+par exécution répétée — même tally, même checksum d'approbation).
+
+Nouveau snapshot d'approbation : `reports/registry/minsante-c-pilot-approval.json`
+(4 candidats, checksum `4bb2d39855d1aa04f53ab6540d120b236942aae42699e86e19d22bd87678e6cc`)
+— l'ancien snapshot MINSANTE-B (2 candidats, checksum
+`a9c38a42a060cb27651768ee1efa24a7905eb054c23d2e42e869fc2268abc2ad`)
+reste inchangé sur disque, jamais écrasé.

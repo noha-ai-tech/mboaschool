@@ -1,0 +1,39 @@
+{
+  "generated_at": "2026-08-20T16:53:21.808Z",
+  "operator": "jean-merlain",
+  "sprint": "MINSANTE-C",
+  "batch": "minsante-pilot-v1",
+  "database": {
+    "establishments_before": 2240,
+    "establishments_after": 2240,
+    "staging_before": 2366,
+    "staging_after": 2366,
+    "registry_identifiers_before": 2242,
+    "registry_identifiers_after": 2242
+  },
+  "rows_inserted": 0,
+  "rows_classification_updated": 22,
+  "idempotent": true,
+  "before": {
+    "DUPLICATE_REVIEW": 11,
+    "CATEGORY_REVIEW": 9,
+    "CLEAN_APPROVABLE": 2
+  },
+  "after": {
+    "DUPLICATE_REVIEW": 11,
+    "CLEAN_APPROVABLE": 4,
+    "CATEGORY_REVIEW": 7
+  },
+  "cross_ministry": {
+    "candidates_checked": 22,
+    "same_institution_cross_ministry": 0,
+    "ambiguous": 0,
+    "distinct": 22
+  },
+  "approval_snapshot": {
+    "previous_count": 2,
+    "previous_checksum": "a9c38a42a060cb27651768ee1efa24a7905eb054c23d2e42e869fc2268abc2ad",
+    "new_count": 4,
+    "new_checksum": "4bb2d39855d1aa04f53ab6540d120b236942aae42699e86e19d22bd87678e6cc"
+  }
+}

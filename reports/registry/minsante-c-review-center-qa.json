@@ -1,0 +1,94 @@
+{
+  "generated_at": "2026-08-20T17:05:00.000Z",
+  "operator": "jean-merlain",
+  "sprint": "MINSANTE-C",
+  "scope": "Review Center classification adapter (src/lib/registryReview.ts) + wiring into src/app/dashboard/admin/registre/page.tsx",
+  "adapter": {
+    "implemented": true,
+    "file": "src/lib/registryReview.ts",
+    "design": "readers ministère (MINESEC, MINSANTE) traduisent raw_data en ReviewSignals communs ; un seul resolveReviewState() partagé décide de l'état normalisé ; tout ministère non listé (MINESUP, futurs) retombe sur un filet générique status-only — aucun if-chain géant par ministère.",
+    "normalized_states": [
+      "CLEAN_APPROVABLE",
+      "DUPLICATE_REVIEW",
+      "CATEGORY_REVIEW",
+      "SOURCE_REVIEW",
+      "IDENTITY_REVIEW",
+      "IDENTIFIER_COLLISION_REVIEW",
+      "CROSS_MINISTRY_REVIEW",
+      "PROMOTED",
+      "OTHER_REVIEW"
+    ]
+  },
+  "review_center_page_changes": [
+    "classify() route désormais les lignes portant raw_data.classification (MINSANTE aujourd'hui) via registryReviewClassification() + toLegacyClassification() — chemin MINESEC/MINESUP strictement inchangé (garde explicite sur la forme de raw_data).",
+    "Colonne 'Programmes' ajoutée à l'onglet 'Nouveaux candidats' (extractPrograms(), lecture seule, jamais inventé pour un ministère sans champ programme structuré).",
+    "Filtre 'Ministère' ajouté à l'onglet 'Nouveaux candidats' (additif, ne modifie aucun filtre existant).",
+    "Onglet 'À revoir' généralisé : motif affiché adapté à la forme réelle de raw_data (localité MINESEC inchangée, classification_reason pour MINSANTE) au lieu d'un texte 'localité problématique' toujours affiché même pour des lignes sans _localityAudit.",
+    "Bandeau d'en-tête généralisé ('registre MINESEC' -> 'registre national (MINESEC, MINESUP, MINSANTE…)') — cosmétique, aucune logique changée."
+  ],
+  "regression_tests": {
+    "file": "src/lib/__tests__/registryReview.test.ts",
+    "run_command": "npx tsx --test src/lib/__tests__/registryReview.test.ts",
+    "total": 18,
+    "pass": 18,
+    "fail": 0,
+    "fixtures_required_by_spec": {
+      "MINESEC_clean": "PASS",
+      "MINESEC_duplicate": "PASS",
+      "MINESUP_clean": "PASS",
+      "MINSANTE_clean": "PASS",
+      "MINSANTE_category_review": "PASS",
+      "MINSANTE_duplicate_review": "PASS",
+      "promoted_row": "PASS"
+    },
+    "additional_fixtures": [
+      "MINESEC identity review (REVIEW_REQUIRED)",
+      "MINESEC source review (locality CLEARLY_INVALID)",
+      "MINESUP duplicate (status-only fallback)",
+      "MINSANTE identity review",
+      "MINSANTE cross-ministry review (raw_data.cross_ministry_review overrides stale classification)",
+      "MINSANTE pre-reclassification row without `classification` field (match_audit fallback)",
+      "unknown/future ministry, status='ready' -> CLEAN_APPROVABLE",
+      "unknown/future ministry, status='pending' -> OTHER_REVIEW (never presumed clean)",
+      "extractPrograms — programs_normalized, programs_raw fallback, empty for ministries without structured programs"
+    ]
+  },
+  "minesec_regression": "PASS",
+  "minesup_regression": "PASS",
+  "minsante_classification": "PASS",
+  "programs_visible": true,
+  "filters": {
+    "ministry_filter": "added (Nouveaux candidats tab)",
+    "region_filter": "unchanged (pre-existing)",
+    "category_filter": "unchanged (pre-existing)",
+    "review_state_filter": "not added — out of scope this sprint, low priority given ministry filter + per-row state badge already narrow the list; no regression risk taken on the existing filter architecture (§22: 'do not redesign whole filter architecture')"
+  },
+  "full_qa": {
+    "npm_run_build": "PASS",
+    "tsc_app_noEmit": "PASS (0 errors)",
+    "tsc_registry_noEmit": "PASS (0 errors, scripts/school-registry/tsconfig.json)",
+    "test_suites_run": [
+      "scripts/school-registry/lib/matching/__tests__/matching.test.ts (46 tests)",
+      "scripts/school-registry/lib/extraction/__tests__/minsanteDedup.test.ts",
+      "scripts/school-registry/lib/extraction/__tests__/pdfMinsanteA1.test.ts (19 tests)",
+      "scripts/school-registry/lib/extraction/__tests__/extraction.test.ts",
+      "scripts/school-registry/lib/__tests__/normalize.test.ts",
+      "scripts/school-registry/lib/__tests__/piiRedaction.test.ts",
+      "scripts/school-registry/lib/__tests__/approvedPopulationFilter.test.ts",
+      "scripts/school-registry/lib/__tests__/registryBackfill.test.ts",
+      "scripts/school-registry/lib/__tests__/minesupPromotionGuard.test.ts",
+      "scripts/school-registry/lib/__tests__/minesupNationalPromotionGuard.test.ts",
+      "src/lib/__tests__/registryReview.test.ts (18 tests, new this sprint)"
+    ],
+    "total_tests": 166,
+    "pass": 166,
+    "fail": 0
+  },
+  "search_v2": {
+    "checked_files": ["src/app/api/recherche/route.ts", "src/app/recherche/page.tsx"],
+    "staging_table_references": 0,
+    "queried_tables": ["establishments"],
+    "staging_leakage": "NONE",
+    "regression": "PASS (public search untouched this sprint, queries establishments only, no reference to establishment_import_staging in either file)"
+  }
+}

@@ -23,6 +23,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { includesInsensitive, normalizeForSearch, dedupeInsensitive } from "@/lib/textSearch";
+import { registryReviewClassification, extractPrograms, type ReviewState } from "@/lib/registryReview";
 
 type MatchType =
   | "EXISTING_OFFICIAL_ID"
@@ -58,6 +59,11 @@ interface StagingRow {
     _matchAudit?: { matchType: MatchType; matchReason: string; confidence: string };
     _localityAudit?: { rawLocality: string | null; localityStatus: LocalityStatus };
     _review?: ReviewMeta;
+    // SPRINT MINSANTE-C — d'autres ministères (MINSANTE, futurs) portent des
+    // champs riches supplémentaires (classification, category_decision,
+    // match_audit, cross_ministry_review…) lus par registryReview.ts —
+    // jamais typés en dur ici, index signature volontairement large.
+    [key: string]: unknown;
   } | null;
 }
 
@@ -77,7 +83,44 @@ type Classification =
   | "CLEAN_NEW_CANDIDATE"
   | "NEW_CANDIDATE_REVIEW_REQUIRED";
 
+// SPRINT MINSANTE-C §19-20 — traduit l'état normalisé ministère-agnostique
+// (registryReviewClassification, src/lib/registryReview.ts) vers l'enum
+// Classification historique de CETTE page (tabs/KPI), pour ne RIEN
+// réécrire de la logique d'affichage existante. Utilisé UNIQUEMENT pour les
+// lignes dont raw_data porte une `classification` riche (aujourd'hui :
+// MINSANTE) — voir garde dans classify() ci-dessous.
+function toLegacyClassification(state: ReviewState): Classification {
+  switch (state) {
+    case "PROMOTED":
+      return "EXISTING_LEGACY_CONFIRMED";
+    case "IDENTIFIER_COLLISION_REVIEW":
+    case "CROSS_MINISTRY_REVIEW":
+    case "IDENTITY_REVIEW":
+      return "EXISTING_AMBIGUOUS";
+    case "DUPLICATE_REVIEW":
+      return "EXISTING_PROBABLE";
+    case "SOURCE_REVIEW":
+    case "CATEGORY_REVIEW":
+    case "OTHER_REVIEW":
+      return "NEW_CANDIDATE_REVIEW_REQUIRED";
+    case "CLEAN_APPROVABLE":
+    default:
+      return "CLEAN_NEW_CANDIDATE";
+  }
+}
+
 function classify(row: StagingRow): Classification {
+  // SPRINT MINSANTE-C §19 — les lignes MINSANTE (et tout futur ministère qui
+  // écrit `raw_data.classification`, cf. registryReview.ts) N'utilisent
+  // JAMAIS `_matchAudit`/`_localityAudit` (spécifiques au pipeline MINESEC)
+  // — sans cette garde, elles retombaient toutes silencieusement en
+  // "CLEAN_NEW_CANDIDATE" quel que soit leur vrai état. MINESEC/MINESUP
+  // n'écrivent jamais `raw_data.classification` — chemin ci-dessous
+  // strictement INCHANGÉ pour ces deux ministères (§23, régression testée
+  // dans src/lib/__tests__/registryReview.test.ts).
+  if (row.raw_data && typeof (row.raw_data as Record<string, unknown>).classification === "string") {
+    return toLegacyClassification(registryReviewClassification(row));
+  }
   const matchType = row.raw_data?._matchAudit?.matchType;
   if (matchType === "EXISTING_OFFICIAL_ID") return "EXISTING_OFFICIAL_ID";
   if (matchType === "EXISTING_LEGACY_CONFIRMED") return "EXISTING_LEGACY_CONFIRMED";
@@ -126,6 +169,10 @@ export default function RegistreNationalPage() {
   const [query, setQuery] = useState("");
   const [regionFilter, setRegionFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  // SPRINT MINSANTE-C §22 — filtre Ministère/Autorité, additif, bas-risque
+  // (ne change ni les tabs ni les KPI existants — filtre uniquement la
+  // liste affichée dans l'onglet "Nouveaux candidats").
+  const [ministryFilter, setMinistryFilter] = useState("all");
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -175,17 +222,19 @@ export default function RegistreNationalPage() {
   );
   const regions = useMemo(() => dedupeInsensitive(newCandidates.map((c) => c.row.region)), [newCandidates]);
   const categories = useMemo(() => dedupeInsensitive(newCandidates.map((c) => c.row.education_family)), [newCandidates]);
+  const ministries = useMemo(() => dedupeInsensitive(newCandidates.map((c) => c.row.source_ministry)), [newCandidates]);
 
   const filteredNewCandidates = useMemo(() => {
     return newCandidates.filter((c) => {
       if (regionFilter !== "all" && normalizeForSearch(c.row.region) !== normalizeForSearch(regionFilter)) return false;
       if (categoryFilter !== "all" && normalizeForSearch(c.row.education_family) !== normalizeForSearch(categoryFilter)) return false;
+      if (ministryFilter !== "all" && normalizeForSearch(c.row.source_ministry) !== normalizeForSearch(ministryFilter)) return false;
       if (query && !includesInsensitive(`${c.row.name_raw} ${c.row.official_identifier ?? ""} ${c.row.locality ?? ""}`, query)) {
         return false;
       }
       return true;
     });
-  }, [newCandidates, regionFilter, categoryFilter, query]);
+  }, [newCandidates, regionFilter, categoryFilter, ministryFilter, query]);
 
   const doubtfulMatches = useMemo(
     () => classified.filter((c) => c.classification === "EXISTING_PROBABLE" || c.classification === "EXISTING_AMBIGUOUS"),
@@ -255,7 +304,7 @@ export default function RegistreNationalPage() {
         <p className="text-xs font-semibold tracking-widest uppercase text-slate-400 mb-1">Plateforme</p>
         <h1 className="text-3xl font-black tracking-tight text-[#0a0a0a]">Registre national</h1>
         <p className="text-sm text-slate-500 mt-1">
-          {rows.length} ligne(s) importées du registre MINESEC — revue humaine avant toute promotion. Aucune action ici ne crée d&apos;établissement.
+          {rows.length} ligne(s) importées du registre national (MINESEC, MINESUP, MINSANTE…) — revue humaine avant toute promotion. Aucune action ici ne crée d&apos;établissement.
         </p>
       </div>
 
@@ -326,6 +375,12 @@ export default function RegistreNationalPage() {
                 <option key={c} value={c}>{c}</option>
               ))}
             </select>
+            <select value={ministryFilter} onChange={(e) => setMinistryFilter(e.target.value)} className="border border-[#ebebeb] rounded-xl px-3 py-2.5 text-sm bg-white">
+              <option value="all">Tous les ministères</option>
+              {ministries.map((m) => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </select>
           </div>
 
           {selected.size > 0 && (
@@ -378,6 +433,7 @@ export default function RegistreNationalPage() {
                     <th className="px-4 py-3">Région</th>
                     <th className="px-4 py-3">Localité</th>
                     <th className="px-4 py-3">Catégorie</th>
+                    <th className="px-4 py-3">Programmes</th>
                     <th className="px-4 py-3">Source</th>
                     <th className="px-4 py-3">Statut</th>
                   </tr>
@@ -385,6 +441,11 @@ export default function RegistreNationalPage() {
                 <tbody className="divide-y divide-[#f5f5f5]">
                   {filteredNewCandidates.slice(0, 300).map((c) => {
                     const reviewAction = c.row.raw_data?._review?.review_action;
+                    // SPRINT MINSANTE-C §21 — affichage minimal des
+                    // programmes (lecture seule, pas de nouvelle UI de
+                    // curriculum). Vide pour tout ministère sans champ
+                    // programme structuré (ex. MINESEC) — jamais inventé.
+                    const programs = extractPrograms(c.row);
                     return (
                       <tr key={c.row.id} className="hover:bg-slate-50/50">
                         <td className="px-4 py-3">
@@ -395,6 +456,9 @@ export default function RegistreNationalPage() {
                         <td className="px-4 py-3 text-slate-500">{c.row.region}</td>
                         <td className="px-4 py-3 text-slate-500">{c.row.locality || "—"}</td>
                         <td className="px-4 py-3 text-slate-500">{c.row.education_family}</td>
+                        <td className="px-4 py-3 text-slate-500 max-w-[220px] truncate" title={programs.join(", ")}>
+                          {programs.length > 0 ? programs.join(", ") : "—"}
+                        </td>
                         <td className="px-4 py-3 text-slate-500">{c.row.source_ministry}</td>
                         <td className="px-4 py-3">
                           <StatusPill classification={c.classification} reviewAction={reviewAction} />
@@ -494,23 +558,38 @@ export default function RegistreNationalPage() {
       {tab === "review" && (
         <div className="bg-white border border-[#ebebeb] rounded-2xl overflow-hidden">
           <div className="px-6 py-4 border-b border-[#ebebeb]">
-            <p className="text-sm font-semibold">{reviewRequired.length} candidat(s) à revoir — localité problématique</p>
+            <p className="text-sm font-semibold">{reviewRequired.length} candidat(s) à revoir</p>
           </div>
           {reviewRequired.length === 0 ? (
             <EmptyState label="Rien à revoir" />
           ) : (
             <div className="divide-y divide-[#f5f5f5]">
               {reviewRequired.map((c) => {
-                const reason = c.row.raw_data?._localityAudit?.localityStatus === "CLEARLY_INVALID" ? "CLEARLY_INVALID_LOCALITY" : "NEEDS_REVIEW_LOCALITY";
+                // SPRINT MINSANTE-C §19/§21 — cette file mélange désormais des
+                // lignes MINESEC (localité problématique, comportement
+                // INCHANGÉ) et des lignes MINSANTE (catégorie/source non
+                // résolue, cf. registryReview.ts). Le motif affiché s'adapte
+                // à la forme de raw_data réellement présente, jamais un
+                // texte "localité" faux pour une ligne MINSANTE.
+                const hasLocalityAudit = !!c.row.raw_data?._localityAudit;
+                const reason = hasLocalityAudit
+                  ? c.row.raw_data?._localityAudit?.localityStatus === "CLEARLY_INVALID"
+                    ? "CLEARLY_INVALID_LOCALITY"
+                    : "NEEDS_REVIEW_LOCALITY"
+                  : registryReviewClassification(c.row);
+                const detail = hasLocalityAudit
+                  ? `localité brute : "${c.row.raw_data?._localityAudit?.rawLocality}"`
+                  : typeof c.row.raw_data?.classification_reason === "string"
+                    ? (c.row.raw_data.classification_reason as string)
+                    : "motif non détaillé";
                 const busy = busyIds.has(c.row.id);
                 const decided = c.row.raw_data?._review?.review_action;
                 return (
                   <div key={c.row.id} className="flex items-center gap-4 px-6 py-4">
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-sm text-[#0a0a0a] truncate">{c.row.name_raw}</p>
-                      <p className="text-xs text-slate-400 mt-0.5">
-                        {c.row.region} · localité brute : &quot;{c.row.raw_data?._localityAudit?.rawLocality}&quot; ·{" "}
-                        <span className="font-semibold text-amber-600">{reason}</span>
+                      <p className="text-xs text-slate-400 mt-0.5 truncate" title={detail}>
+                        {c.row.region} · {detail} · <span className="font-semibold text-amber-600">{reason}</span>
                       </p>
                     </div>
                     {decided ? (
