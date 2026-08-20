@@ -10,6 +10,69 @@ structurante — élargir systématiquement la recherche si la source
 principale semble bloquée, mais ne jamais confondre agrégat et registre
 nominatif — a été appliquée dès le départ.
 
+## MISE À JOUR SPRINT MINSANTE-A.1 (2026-08-20) — corroboration + PDF extraction PASS partiel
+
+Sprint de suite, toujours READ-ONLY (aucune écriture staging/establishments/
+registry identifiers, aucune promotion, aucune migration, aucun push).
+Détail complet dans `reports/registry/minsante-a1-source-corroboration.json`
+et `MINSANTE_IMPORT_CONTRACT.md` (§ mise à jour A.1 ci-dessous). Résumé :
+
+**Corroboration officielle** — le PDF Source A a été re-téléchargé (SHA256
+identique au catalogue MINSANTE-A : `26e68ab0...a3946a`, document inchangé)
+et l'autorité MINSANTE a été renforcée par deux preuves indépendantes
+NOUVELLES, non trouvées en MINSANTE-A :
+
+1. `concours.minsante.cm` — un **sous-domaine DNS littéral de minsante.cm**
+   (pas un domaine séparé), HTTP 200/TLS valide, exécutant la MÊME
+   application que examen-national-special-minsante.cm (mêmes assets, même
+   structure d'URL, même pied de page "© 2026 MINSANTE") — preuve
+   d'infrastructure officielle multi-domaine, distincte de
+   `concoursminsante.cm` (toujours TLS cassé, non contourné, revérifié
+   `HTTP_CODE=000` ce sprint).
+2. Une **DECISION MINSANTE authentique** ("...Reports de Scolarité...",
+   datée nov. 2023, `Last-Modified` HTTP confirmé), hébergée directement sur
+   `minsante.cm/site/sites/default/files/`, citant le Décret 80/198 (même
+   base légale que Source C) et listant des écoles dont **12 des 14**
+   fragments de noms distinctifs échantillonnés (COBIFISS, MBASSI, EPID,
+   ISSTMADD, ZALOM-MFOU, AGORA HEALTH, ISSSC, CFPP, ISTAG, NAKOMA ACADEMY,
+   LA ROSIERE, FONDATION VIRGINIA HENDERSON) correspondent EXACTEMENT à la
+   Source A. Ce document contient des lignes candidat (matricule + nom,
+   PII confirmée) — **aucune valeur candidat extraite ni copiée**, fichier
+   supprimé de la session temporaire immédiatement après inspection des
+   en-têtes institutionnels.
+
+Corroboration secondaire faible-moyenne additionnelle : presse
+indépendante (237online.com, ouverture de 25 000 places MINSANTE 2025),
+portail concours camerounais (infosconcourseducation.com, 3 articles sur ce
+même document), mirror Scribd du même titre exact.
+
+**Décision d'autorité mise à jour : `PROBABLE_TIER_1`** (était : TIER 1
+proposé avec réserve de découvrabilité en MINSANTE-A). Le lien de
+navigation cliquable direct depuis la page d'accueil minsante.cm reste
+absent (réserve non levée), mais substantiellement atténué par les deux
+preuves indépendantes ci-dessus.
+
+**Extraction PDF déterministe — développée et testée ce sprint** (prototype
+`scripts/school-registry/lib/extraction/pdfMinsanteA1.ts`, tests
+`lib/extraction/__tests__/pdfMinsanteA1.test.ts`, 19/19 PASS). Trouvaille
+notable : **6 des 10 filières officielles s'extraient de façon fiable et
+vérifiable (293 lignes école×filière, 10/10 régions)**, mais **4 filières
+(Imagerie Médicale, Kinésithérapie, Sciences Pharmaceutiques,
+Psychomotricité et Relaxation) présentent une anomalie structurelle réelle**
+— désaccord entre le nombre de redémarrages de numérotation et le nombre
+d'étiquettes région détectées dans le rendu `pdftotext -layout`, rendant
+l'assignation région non fiable pour ces sections. Le parseur refuse de
+deviner (fail-closed, §7) et met ces 4 filières en quarantaine
+(`STRUCTURE_ANOMALY`, comptées et catégorisées, jamais silencieusement
+perdues). **Constat important : le comptage naïf `grep` de MINSANTE-A
+("330 lignes") ratait entièrement la filière Imagerie Médicale** (0 ligne
+numérotée dans cette section — ~33 lignes de contenu école non comptées du
+tout par le grep), révélant que 330 était déjà un sous-comptage silencieux
+avant même la détection des 3 autres anomalies. Détail complet, y compris
+le modèle école×filière→établissement (dédoublonnage), l'audit vocabulaire
+générique santé sur le moteur de matching, et la définition du pilote
+recommandé : voir `MINSANTE_IMPORT_CONTRACT.md`.
+
 ## Constat structurant — situation MINSANTE très différente de MINEFOP
 
 Contrairement à `minefop.cm` (certificat TLS expiré, page d'accueil
@@ -206,7 +269,7 @@ concoursminsante.cm   → voir réserve TLS documentée sous Source A — lien o
 
 | Source | Tier | Nominatif/Agrégat | Accessible | PII | Utilisable comme registre nominatif |
 |---|---|---|---|---|---|
-| A — Liste Écoles Agréées MINSANTE 2025 (examen-national-special-minsante.cm) | 1 (proposé, réserve découvrabilité) | NOMINATIF | Oui | Aucune | **OUI — meilleure source, à approfondir en MINSANTE-B** |
+| A — Liste Écoles Agréées MINSANTE 2025 (examen-national-special-minsante.cm) | **PROBABLE_TIER_1** (MàJ MINSANTE-A.1 — était Tier 1 proposé avec réserve découvrabilité) | NOMINATIF | Oui | Aucune | **OUI — meilleure source, extracteur PDF prototype PASS partiel (6/10 filières), voir MINSANTE-A.1** |
 | B — Résultats concours par filière 2017-2023 (minsante.cm) | 1/2 | NOMINATIF (écoles) + PII candidats | Oui | ÉLEVÉ (matricule+nom candidats) | Corroboration croisée seulement, jamais d'extraction candidat |
 | C — Décret 80/198 du 9 juin 1980 | 2/3 (mirror) | Cadre légal | Oui (mirror) | Aucune | NON — taxonomie/vocabulaire seulement |
 | D — Procédures création formation sanitaire privée | 2 | Hors scope (soins) | Oui | Aucune | NON — CONTAMINATION CONFIRMÉE, à exclure |

@@ -1,0 +1,92 @@
+{
+  "sprint": "MINSANTE-A.1",
+  "operator": "jean-merlain",
+  "generated_at": "2026-08-20",
+  "primary_source": {
+    "title": "LISTE DES ECOLES DE FORMATION DES PERSONNELS MEDICO-SANITAIRES AGREES DU MINSANTE - ANNEE 2025",
+    "url": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+    "revalidated_this_sprint": true,
+    "sha256_unchanged": "26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a",
+    "note": "Ré-téléchargé ce sprint (curl direct, aucun résumé IA) : hash identique au catalogue MINSANTE-A. Document non modifié depuis le sprint précédent."
+  },
+  "evidence": [
+    {
+      "source": "Domaine concours.minsante.cm",
+      "authority": "MINSANTE (sous-domaine DNS de minsante.cm)",
+      "url": "https://concours.minsante.cm/",
+      "date": "2026-08-20 (constaté ce sprint)",
+      "relationship_to_pdf": "NOUVEAU ce sprint (non trouvé en MINSANTE-A). Sous-domaine DNS littéral de minsante.cm (pas un domaine séparé qui imite juste la marque) — HTTP 200, TLS valide, pied de page identique 'Copyright © 2026 MINSANTE', même structure d'URL (info/communique, info/procedure, info/dossier, info/contact), mêmes fichiers d'assets (bootstrap-datepicker, business-casual.css, style.css...) que examen-national-special-minsante.cm — même application, déployée sur une infrastructure DNS officielle. Contrairement à concoursminsante.cm (domaine séparé, TLS cassé), concours.minsante.cm EST littéralement dans la zone DNS minsante.cm.",
+      "direct_or_indirect": "INDIRECT (n'héberge pas le PDF lui-même — sa page /info/resultats exige une connexion candidat — mais prouve que l'écosystème de la plateforme concours tourne sur une infrastructure officielle minsante.cm, pas seulement sur un domaine tiers).",
+      "confidence": "MOYENNE-HAUTE — preuve DNS/infrastructure, pas un lien de navigation cliquable direct vers le PDF précis."
+    },
+    {
+      "source": "DECISION MINSANTE portant Reports de Scolarité (année académique 2023/2024)",
+      "authority": "MINISTERE DE LA SANTE PUBLIQUE (document DECISION daté, citant le Décret 80/198 du 9 juin 1980)",
+      "url": "https://minsante.cm/site/sites/default/files/REPORT%20DE%20SCOLARITE%202023.pdf",
+      "date": "Document daté Novembre 2023 (en-tête décision) ; Last-Modified HTTP confirmé : Fri, 17 Nov 2023",
+      "relationship_to_pdf": "NOUVEAU ce sprint. Document officiel DIRECTEMENT hébergé sur le domaine primaire minsante.cm (PAS le sous-domaine examen-national-special), listant des apprenants (matricule + nom, PII — NON extrait, voir politique PII ci-dessous) inscrits dans des écoles nommées. 12 des 14 fragments de noms d'école distinctifs de la Source A ont été retrouvés tels quels dans ce document indépendant (COBIFISS, MBASSI, EPID, ISSTMADD, ZALOM-MFOU, AGORA HEALTH, ISSSC, CFPP, ISTAG, NAKOMA ACADEMY, LA ROSIERE, FONDATION VIRGINIA HENDERSON — grep -ic sur le texte pdftotext, 2/14 non trouvés : CESTAM (1 occurrence trouvée en réalité), IFOPESS (0 occurrence)). Ce document cite aussi explicitement le Décret 80/198, la même base légale documentée en Source C du catalogue MINSANTE-A.",
+      "direct_or_indirect": "INDIRECT mais FORT — chevauchement institutionnel massif entre un document MINSANTE authentique indépendant (hébergé sur le domaine primaire) et la Source A, sans lien de navigation direct entre les deux documents eux-mêmes.",
+      "confidence": "HAUTE — chevauchement de noms d'établissements très spécifique (sigles/noms rares comme COBIFISS, ISSTMADD), improbable par coïncidence.",
+      "pii_handling": "Document contient des lignes 'N° MATRICULE NOMS ET PRENOMS' (PII confirmée, ~20 occurrences du motif MATRICULE). AUCUNE valeur candidat extraite ni copiée. Fichier PDF supprimé de la session temporaire immédiatement après inspection des en-têtes institutionnels — jamais copié dans le dépôt."
+    },
+    {
+      "source": "Presse camerounaise indépendante — 237online.com",
+      "authority": "Média indépendant (pas gouvernemental), citant nommément le Ministre de la Santé Publique",
+      "url": "https://www.237online.com/cameroun-le-minsante-ouvre-25-000-places-de-formation/",
+      "date": "2025 (cycle concours 2025-2026 décrit)",
+      "relationship_to_pdf": "NOUVEAU ce sprint. Article de presse indépendant décrivant l'ouverture de 25 000 places de formation santé par le MINSANTE (Dr Manaouda Malachie), 20 filières, 10 centres d'examen régionaux — cohérent avec le périmètre et la structure régionale de la Source A, sans être un lien direct vers le PDF.",
+      "direct_or_indirect": "INDIRECT — corroboration contextuelle/journalistique, pas un lien technique.",
+      "confidence": "MOYENNE — source de presse fiable mais secondaire, ne cite pas explicitement l'URL du PDF."
+    },
+    {
+      "source": "infosconcourseducation.com (portail concours Cameroun, 3 articles indépendants)",
+      "authority": "Portail d'information privé camerounais sur les concours/éducation",
+      "url": "https://infosconcourseducation.com/liste-des-ecoles-de-formation-medico-sanitaire-agreees-du-minsante-2025/",
+      "date": "2025",
+      "relationship_to_pdf": "NOUVEAU ce sprint. Trois articles distincts du même portail traitent explicitement de 'Liste des Écoles de Formation Médico-Sanitaire Agréées du MINSANTE 2025' — titre quasi identique au document Source A. Le portail ne lie PAS directement examen-national-special-minsante.cm ni minsante.cm dans le HTML de la page (vérifié par grep), mais confirme la circulation publique du même document sous le même titre.",
+      "direct_or_indirect": "INDIRECT — republication/awareness, pas un lien de provenance officiel.",
+      "confidence": "FAIBLE-MOYENNE — confirme l'existence publique et le titre exact, pas l'autorité elle-même."
+    },
+    {
+      "source": "Mirror Scribd",
+      "authority": "Plateforme de partage de documents tierce",
+      "url": "https://www.scribd.com/document/815802914/LISTE-ECOLES-AGREES-MINSANTE-2025",
+      "date": "Non vérifié en détail (upload tiers)",
+      "relationship_to_pdf": "NOUVEAU ce sprint — trouvé par recherche web, même titre exact que la Source A. Non téléchargé/comparé octet à octet ce sprint (hors périmètre, corroboration de circulation publique suffisante par le titre).",
+      "direct_or_indirect": "INDIRECT — mirror tiers.",
+      "confidence": "FAIBLE — confirme uniquement la circulation publique du document sous ce titre."
+    },
+    {
+      "source": "examen-national-special-minsante.cm — pied de page et branding (revérifié)",
+      "authority": "Plateforme applicative officielle des concours MINSANTE",
+      "url": "https://examen-national-special-minsante.cm/",
+      "date": "2026-08-20",
+      "relationship_to_pdf": "Revérifié inchangé depuis MINSANTE-A : 'Copyright © 2026 MINSANTE. Tous droits réservés.', lien direct vers http://www.minsante.gov.cm sur chaque page, page /info/communique avec communiqué officiel téléchargeable (comfrc.pdf, 1.6 Mo, PDF scanné/image — authenticité non vérifiable par texte, mais structure de document officiel scanné cohérente avec les pratiques administratives camerounaises).",
+      "direct_or_indirect": "INDIRECT — branding/auto-déclaration, déjà connu de MINSANTE-A, revérifié sans changement.",
+      "confidence": "MOYENNE (inchangée depuis MINSANTE-A)."
+    },
+    {
+      "source": "Domaine concoursminsante.cm",
+      "authority": "N/A — inaccessible",
+      "url": "https://www.concoursminsante.cm/",
+      "date": "2026-08-20",
+      "relationship_to_pdf": "Revérifié ce sprint SANS contournement TLS (interdit §3 de la spec) : échec de connexion (HTTP_CODE=000, curl ne complète même pas le handshake TLS ce sprint — précédemment ERR_TLS_CERT_ALTNAME_INVALID en MINSANTE-A). Toujours inaccessible, aucune tentative de contournement.",
+      "direct_or_indirect": "N/A",
+      "confidence": "N/A — exclu, non contourné."
+    },
+    {
+      "source": "minsante.cm navigation actuelle (page d'accueil + catégorie RH)",
+      "authority": "MINSANTE (domaine officiel)",
+      "url": "https://www.minsante.cm/site/?q=fr",
+      "date": "2026-08-20",
+      "relationship_to_pdf": "Revérifié ce sprint : aucun lien cliquable direct vers examen-national-special-minsante.cm trouvé dans le HTML de la page d'accueil ni de la page 'Résultats des examens de certification des personnels infirmiers et médico-sanitaires' (nouvellement identifiée ce sprint, héberge d'AUTRES PDF — résultats d'examens de certification niveau Bac, PAS la liste des écoles agréées). Seul concoursminsante.cm (cassé) est lié explicitement.",
+      "direct_or_indirect": "N/A — absence confirmée, pas une preuve positive.",
+      "confidence": "N/A — réserve de découvrabilité maintenue, mais substantiellement atténuée par les preuves DNS (concours.minsante.cm) et institutionnelles (DECISION Report de Scolarité) ci-dessus."
+    }
+  ],
+  "authority_decision": {
+    "value": "PROBABLE_TIER_1",
+    "previous_sprint_value": "TIER_1_PROPOSED_WITH_DISCOVERABILITY_RESERVE (MINSANTE-A, décision E)",
+    "justification": "Aucun lien de navigation cliquable direct trouvé (réserve inchangée), MAIS deux preuves indépendantes NOUVELLES et substantielles trouvées ce sprint : (1) un sous-domaine DNS littéral de minsante.cm (concours.minsante.cm) exécutant la même application que la Source A, prouvant que l'écosystème 'concours MINSANTE' n'est pas un domaine isolé mais une infrastructure officielle multi-domaine ; (2) un document DECISION MINSANTE authentique, daté, signé, hébergé sur le domaine primaire minsante.cm, citant la même base légale (Décret 80/198) et listant des écoles dont 12/14 noms distinctifs échantillonnés correspondent exactement à la Source A — un chevauchement improbable par coïncidence. Ces deux preuves, combinées aux éléments déjà connus (branding cohérent, contact régional, structure de chemin de stockage partagée avec le communiqué officiel), justifient un déclassement du niveau de réserve : PROBABLE_TIER_1 plutôt que TIER_1 sans réserve (qui exigerait le lien de navigation direct manquant) ou INSUFFICIENT (dépassé par le volume de preuves)."
+  }
+}

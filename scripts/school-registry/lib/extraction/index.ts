@@ -5,3 +5,5 @@ export * from "./pagination";
 export * from "./validation";
 export * from "./completeness";
 export * from "./htmlExtractor";
+export * from "./pdfMinsanteA1";
+export * from "./minsanteDedup";

@@ -287,6 +287,194 @@ Avant toute collecte MINSANTE réelle (hors périmètre de ce sprint) :
 [ ] Pilote limité à une seule région avant toute collecte nationale.
 ```
 
+## MISE À JOUR SPRINT MINSANTE-A.1 (2026-08-20)
+
+Toujours READ-ONLY — aucune écriture staging/establishments/registry
+identifiers ce sprint, aucune promotion, aucune migration. Détail complet :
+`reports/registry/minsante-a1-source-corroboration.json`,
+`data/registry/normalized/minsante-a1-*.json`,
+`reports/registry/minsante-a1-*.csv`.
+
+### A.1.1 — Source authority
+
+`SOURCE_AUTHORITY` mis à jour : **`PROBABLE_TIER_1`** (voir catalogue,
+§MISE À JOUR ci-dessus, pour le détail des deux preuves indépendantes
+nouvelles : sous-domaine DNS `concours.minsante.cm` + DECISION MINSANTE
+"Reports de Scolarité 2023" listant 12/14 écoles-témoins identiques à la
+Source A).
+
+### A.1.2 — Contrat du parseur PDF (§12.1 de la version précédente, RÉSOLU)
+
+```
+Module :          scripts/school-registry/lib/extraction/pdfMinsanteA1.ts
+parser_version :   minsante-a1-pdf-text@1
+Input :            texte pdftotext -layout (data/registry/raw/minsante-a1/liste-ecoles-agrees-minsante-2025.txt)
+Vocabulaire :       10 filières officielles connues (OFFICIAL_PROGRAMS) — toute filière hors de cette liste = FAIL-CLOSED (throw), jamais acceptée silencieusement
+Détection région :  redémarrage de numérotation ("1.") = nouvelle région ; étiquette région (ligne autonome OU préfixe avant "N.") appariée 1:1 en ordre document. Désaccord de compte = STRUCTURE_ANOMALY pour cette filière, jamais une région devinée
+Continuation :      lignes de nom d'école repliées sur 2 lignes rejointes (avec/sans tiret de fin de ligne)
+FAIL-CLOSED réel :  throw si texte vide, page manquante dans la séquence déclarée, aucun en-tête FILIERE, filière inconnue, ou 0 ligne extraite au total. Jamais `catch { return [] }` (audit du fichier confirmé)
+```
+
+**Résultat réel sur le document 2025 (revérifié SHA256 identique)** :
+
+| Filière | Statut | Lignes | Anomalie |
+|---|---|---|---|
+| Analyses Médicales | PARSED | 82 | — |
+| Imagerie Médicale | STRUCTURE_ANOMALY | 0 (quarantaine) | 0 redémarrage détecté — filière rendue sans numérotation dans ce document, jamais vue par le grep MINSANTE-A |
+| Infirmiers | PARSED | 121 | — |
+| Kinésithérapie | STRUCTURE_ANOMALY | 0 (quarantaine) | 9 redémarrages vs 7 étiquettes région |
+| Odontostomatologie | PARSED | 23 | — |
+| Optique Réfraction | PARSED | 4 | — |
+| Prothèse Dentaire | PARSED | 6 | — |
+| Sages-femmes/Maïeuticiens | PARSED | 57 | — |
+| Sciences Pharmaceutiques | STRUCTURE_ANOMALY | 0 (quarantaine) | 8 redémarrages vs 6 étiquettes région |
+| Psychomotricité et Relaxation | STRUCTURE_ANOMALY | 0 (quarantaine) | 3 redémarrages vs 2 étiquettes région |
+| **Total fiable** | **6/10 PARSED** | **293** | 4/10 filières exclues, comptées et catégorisées (jamais silencieuses) |
+
+Verdict `evaluateCompleteness()` (framework partagé, inchangé) :
+**`SOURCE_STRUCTURE_CHANGED`**, `safeForStaging: false` — cohérent et
+attendu (§17 : aucune écriture staging ce sprint de toute façon). Ce statut
+signifie : le SOUS-ENSEMBLE de 293 lignes/6 filières est extrait de façon
+fiable et vérifiable, mais le DOCUMENT COMPLET n'est pas encore sûr pour un
+staging automatique tant que les 4 filières en anomalie n'ont pas été
+retraitées (piste probable pour MINSANTE-B : re-extraction depuis le PDF
+natif avec une bibliothèque consciente des coordonnées de caractères plutôt
+que `pdftotext -layout`, qui perd l'alignement colonne région/école sur ces
+4 sections précises).
+
+19 tests de non-régression : `lib/extraction/__tests__/pdfMinsanteA1.test.ts`
+(19/19 PASS), couvrant l'extraction réelle, le PII, le fail-closed
+(document vide, page manquante, filière inconnue, 0 ligne, désaccord
+région) et la jointure de noms coupés sur 2 lignes.
+
+### A.1.3 — Modèle école×filière → établissement unique (§8-9, RÉSOLU)
+
+```
+Module :  scripts/school-registry/lib/extraction/minsanteDedup.ts
+```
+
+Fusion automatique **UNIQUEMENT** sur `(région, exactIdentityKey(nom))` —
+réutilise `exactIdentityKey` du moteur de matching partagé (accents/casse
+retirés, mots de catégorie PRÉSERVÉS, jamais un fuzzy). Résultat sur les
+293 lignes fiables : **169 établissements uniques**, 124 lignes fusionnées
+par la règle exacte, **79/169 établissements multi-filières** (jusqu'à
+plusieurs filières par école, conforme au modèle attendu §2).
+
+Classification des paires restantes (jamais fusionnées automatiquement,
+§9) : `EXACT_SAME_SCHOOL` (fusion), `LIKELY_SAME_SCHOOL` (11 paires
+détectées — chevauchement de mots ≥80%, signalées pour revue humaine, PAS
+fusionnées), `AMBIGUOUS` (203 paires — chevauchement partiel 34-79%, OU
+même nom exact mais région différente, signalées, PAS résolues
+automatiquement), `DISTINCT` (aucun rapport généré, cas majoritaire, pas de
+bruit). 7 tests de non-régression :
+`lib/extraction/__tests__/minsanteDedup.test.ts` (7/7 PASS).
+
+Rapport de revue complet : `reports/registry/minsante-a1-dedup-review.csv`.
+
+### A.1.4 — Matching sample (§14, TEST RÉEL — le gap latent §11 est maintenant CONFIRMÉ)
+
+20 établissements uniques échantillonnés (2 par région, priorisés sur la
+densité de vocabulaire santé générique — école/formation/santé/sanitaire/
+centre/medical/personnel) testés en lecture seule contre les **2240**
+établissements réels de production (`minsante-a1-matching-sample.ts`,
+moteur `lib/matching/engine.ts` INCHANGÉ). Résultat :
+**16 AMBIGUOUS, 4 PROBABLE_MATCH, 0 EXACT/STRONG, 0 NO_MATCH,
+`safeForAutoLink` jamais `true`** (garantie de sécurité du moteur
+confirmée intacte).
+
+**Le gap `FUZZY_STOPWORDS` documenté comme "latent, non démontré" en
+MINSANTE-A §11 est maintenant démontré réel sur données de production** :
+
+- "CENTRE DE FORMATION DU PERSONNEL PARAMEDICAL (CFPP) DE YAOUNDE" (école
+  santé) → `PROBABLE_MATCH` contre "**Centre de Formation en Couture et
+  Mode de Yaoundé**" (école de couture, aucun rapport avec la santé) — 50%
+  de chevauchement de mots purement dû à "Centre de Formation ... de
+  Yaoundé".
+- Deux candidats MINSANTE **différents** (régions Littoral et Ouest) →
+  `PROBABLE_MATCH` contre la **même** cible unique "Institut Supérieur du
+  Personnel Médico-Sanitaire (ISPM)" (région Centre) — géographie
+  contradictoire dans les deux cas, chevauchement dû à "Personnel
+  Médico-Sanitaire".
+- "...FONDATION EVA POUR LA SANTE A L'EST" (région Est) → `PROBABLE_MATCH`
+  contre "Institut Supérieur de Santé" (région Littoral) — géographie
+  contradictoire.
+
+Aucun de ces cas n'a produit `safeForAutoLink: true` (aucun risque de
+fusion automatique erronée), mais le signal `PROBABLE_MATCH`/`AMBIGUOUS`
+est bruité par le vocabulaire générique santé au point de produire des
+suggestions cross-catégorie (santé vs couture) et cross-région. **Recommandation pour MINSANTE-B (non exécutée ce sprint, modification du
+moteur partagé hors périmètre DISCOVERY)** : étendre `FUZZY_STOPWORDS`
+(`lib/matching/engine.ts`) avec au minimum "santé", "sante", "sanitaire",
+"medico", "personnel", "personnels", avant tout pilote réel — le §11
+précédent listait ce risque comme théorique, il est désormais prouvé sur
+20/20 candidats réels. Rapport complet :
+`reports/registry/minsante-a1-matching-sample.csv`.
+
+### A.1.5 — Pilote recommandé (§16, affiné)
+
+Volume réel par région post-dédoublonnage (169 établissements uniques sur
+les 6 filières fiables, compté directement sur
+`minsante-a1-unique-schools.csv`) :
+
+| Région | Établissements uniques (6 filières fiables) |
+|---|---|
+| Centre | 53 |
+| Extrême-Nord | 22 |
+| Ouest | 22 |
+| Littoral | 17 |
+| Est | 11 |
+| Adamaoua | 10 |
+| Nord | 9 |
+| Nord-Ouest | 9 |
+| Sud | 9 |
+| Sud-Ouest | 7 |
+
+Étant donné la fourchette cible de la spec (20-50 établissements uniques),
+le risque de dédup/matching plus élevé que prévu (vocabulaire santé
+générique confirmé bruyant, §A.1.4), et le fait que les 4 filières en
+anomalie doivent être retraitées avant tout staging national :
+**pilote recommandé = région Extrême-Nord OU Ouest (22 établissements
+uniques chacune, au centre de la fourchette cible) sur les 6 filières
+PARSED uniquement**, PAS Centre (53, au-dessus de la fourchette, et
+concentration la plus forte de paires `AMBIGUOUS`/`LIKELY_SAME_SCHOOL`
+attendue vu sa densité). Les 4 filières en anomalie structurelle restent
+hors périmètre de tout pilote tant qu'elles n'ont pas été retraitées avec
+un extracteur PDF plus robuste que `pdftotext -layout` pour ces sections
+précises (piste : bibliothèque consciente des coordonnées de caractères,
+ex. `pdfjs-dist` en mode texte positionné, pour reconstruire l'alignement
+colonne région/école que `-layout` a perdu sur ces 4 sections).
+
+### A.1.6 — PII
+
+`PII persisted = 0`, revérifié ce sprint sur un nouveau document (DECISION
+"Reports de Scolarité 2023") en plus de la Source B déjà auditée en
+MINSANTE-A : fichier contenant ~20 occurrences du motif MATRICULE lu
+uniquement pour compter le chevauchement de noms d'écoles, jamais copié,
+supprimé de la session temporaire immédiatement après lecture. Test
+automatisé dédié désormais en place :
+`lib/extraction/__tests__/pdfMinsanteA1.test.ts` (`describe("PII")`)
+vérifie qu'aucune ligne extraite ne correspond à un motif matricule/candidat
+ni ne contient "MATRICULE"/"NOMS ET PRENOMS" — item ouvert §13
+acceptance criteria (`[ ] test de non-régression PII dédié à écrire`)
+maintenant **RÉSOLU**.
+
+### A.1.7 — Acceptance criteria (§13) mis à jour
+
+```
+[x] Compatibilité schéma — inchangé, confirmé.
+[x] Accès fonctionnel à une source MINSANTE primaire structurée — inchangé.
+[x] Échantillon réel observé — affiné : 293 lignes fiables / 169 établissements uniques (6/10 filières), 4/10 filières en quarantaine documentée.
+[ ] Format/unicité d'un identifiant officiel — toujours INCONNU, aucun exemple observé ce sprint non plus (hors périmètre corroboration).
+[x] Preuve d'exhaustivité — affinée : structurelle et vérifiable pour 6/10 filières (redémarrages=étiquettes région), MANUAL_REVIEW_REQUIRED explicite pour les 4 autres (jamais un PASS forcé).
+[x] Extracteur PDF texte déterministe développé + testé — RÉSOLU ce sprint (19 tests).
+[ ] Gap de mapping santé secondaire/supérieure résolu — toujours NON FAIT (hors périmètre A.1).
+[x] FUZZY_STOPWORDS réévalué sur échantillon réel — RÉSOLU : gap CONFIRMÉ réel (voir A.1.4), extension recommandée mais NON codée ce sprint (modification du moteur partagé hors périmètre DISCOVERY).
+[ ] Nom de registre confirmé — toujours PROPOSÉ (`MINSANTE_ECOLES_AGREEES`), pas d'usage réel encore.
+[x] PII exclue à 100% — test automatisé désormais en place (A.1.6).
+[ ] Dry-run staging propre — toujours NON FAIT (aucune écriture ce sprint, cohérent avec le périmètre).
+[ ] Pilote limité à une seule région — scope proposé (A.1.5), NON EXÉCUTÉ.
+```
+
 ## 14. Décision — SOURCE PRIORITY PLAN
 
 ```

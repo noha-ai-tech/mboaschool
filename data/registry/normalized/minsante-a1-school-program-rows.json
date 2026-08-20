@@ -1,0 +1,2194 @@
+{
+  "sprint": "MINSANTE-A.1",
+  "generated_at": "2026-08-20T15:11:06.469Z",
+  "parser_version": "minsante-a1-pdf-text@1",
+  "source_pdf_sha256": "26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a",
+  "source_text_sha256": "f7c8b712d1dd9f694118a923beb941d4320773c863ed7d350ab5c364acbba830",
+  "extraction_status": "SOURCE_STRUCTURE_CHANGED",
+  "safe_for_staging": false,
+  "declared_total_pages": 11,
+  "pages_found": 11,
+  "filiere_sections": [
+    {
+      "filiere_raw": "ANALYSES MEDICALES",
+      "program_normalized": "Analyses Médicales",
+      "status": "PARSED",
+      "row_count": 82,
+      "region_reset_count": 10,
+      "region_label_count": 10,
+      "anomaly_reason": null
+    },
+    {
+      "filiere_raw": "IMAGERIE MEDICALE",
+      "program_normalized": "Imagerie Médicale",
+      "status": "STRUCTURE_ANOMALY",
+      "row_count": 0,
+      "region_reset_count": 0,
+      "region_label_count": 1,
+      "anomaly_reason": "Aucune numérotation \"1.\" détectée (0 redémarrage de région) — structure non conforme au modèle numéroté attendu. 0 ligne(s) de contenu candidates non exploitables sans invention de région."
+    },
+    {
+      "filiere_raw": "INFIRMIERS",
+      "program_normalized": "Infirmiers",
+      "status": "PARSED",
+      "row_count": 121,
+      "region_reset_count": 10,
+      "region_label_count": 10,
+      "anomaly_reason": null
+    },
+    {
+      "filiere_raw": "KINESITHERAPIE",
+      "program_normalized": "Kinésithérapie",
+      "status": "STRUCTURE_ANOMALY",
+      "row_count": 0,
+      "region_reset_count": 9,
+      "region_label_count": 7,
+      "anomaly_reason": "Désaccord structurel : 9 redémarrage(s) de numérotation vs 7 étiquette(s) région détectée(s) — assignation région non fiable, section mise en quarantaine plutôt que devinée."
+    },
+    {
+      "filiere_raw": "ODONTOSTOMATOLOGIE",
+      "program_normalized": "Odontostomatologie",
+      "status": "PARSED",
+      "row_count": 23,
+      "region_reset_count": 9,
+      "region_label_count": 9,
+      "anomaly_reason": null
+    },
+    {
+      "filiere_raw": "OPTIQUE REFRACTION",
+      "program_normalized": "Optique Réfraction",
+      "status": "PARSED",
+      "row_count": 4,
+      "region_reset_count": 2,
+      "region_label_count": 2,
+      "anomaly_reason": null
+    },
+    {
+      "filiere_raw": "PROTHESE DENTAIRE",
+      "program_normalized": "Prothèse Dentaire",
+      "status": "PARSED",
+      "row_count": 6,
+      "region_reset_count": 2,
+      "region_label_count": 2,
+      "anomaly_reason": null
+    },
+    {
+      "filiere_raw": "SAGES-FEMMES/MAIEUTICIENS",
+      "program_normalized": "Sages-femmes/Maïeuticiens",
+      "status": "PARSED",
+      "row_count": 57,
+      "region_reset_count": 10,
+      "region_label_count": 10,
+      "anomaly_reason": null
+    },
+    {
+      "filiere_raw": "SCIENCES PHARMACEUTIQUES",
+      "program_normalized": "Sciences Pharmaceutiques",
+      "status": "STRUCTURE_ANOMALY",
+      "row_count": 0,
+      "region_reset_count": 8,
+      "region_label_count": 6,
+      "anomaly_reason": "Désaccord structurel : 8 redémarrage(s) de numérotation vs 6 étiquette(s) région détectée(s) — assignation région non fiable, section mise en quarantaine plutôt que devinée."
+    },
+    {
+      "filiere_raw": "PSYCHOMOTRICITE ET RELAXATION",
+      "program_normalized": "Psychomotricité et Relaxation",
+      "status": "STRUCTURE_ANOMALY",
+      "row_count": 0,
+      "region_reset_count": 3,
+      "region_label_count": 2,
+      "anomaly_reason": "Désaccord structurel : 3 redémarrage(s) de numérotation vs 2 étiquette(s) région détectée(s) — assignation région non fiable, section mise en quarantaine plutôt que devinée."
+    }
+  ],
+  "explained_exclusions": [
+    {
+      "category": "STRUCTURE_ANOMALY",
+      "count": 33,
+      "reason": "Aucune numérotation \"1.\" détectée (0 redémarrage de région) — structure non conforme au modèle numéroté attendu. 0 ligne(s) de contenu candidates non exploitables sans invention de région.",
+      "filiere": "IMAGERIE MEDICALE"
+    },
+    {
+      "category": "STRUCTURE_ANOMALY",
+      "count": 54,
+      "reason": "Désaccord structurel : 9 redémarrage(s) de numérotation vs 7 étiquette(s) région détectée(s) — assignation région non fiable, section mise en quarantaine plutôt que devinée.",
+      "filiere": "KINESITHERAPIE"
+    },
+    {
+      "category": "STRUCTURE_ANOMALY",
+      "count": 40,
+      "reason": "Désaccord structurel : 8 redémarrage(s) de numérotation vs 6 étiquette(s) région détectée(s) — assignation région non fiable, section mise en quarantaine plutôt que devinée.",
+      "filiere": "SCIENCES PHARMACEUTIQUES"
+    },
+    {
+      "category": "STRUCTURE_ANOMALY",
+      "count": 5,
+      "reason": "Désaccord structurel : 3 redémarrage(s) de numérotation vs 2 étiquette(s) région détectée(s) — assignation région non fiable, section mise en quarantaine plutôt que devinée.",
+      "filiere": "PSYCHOMOTRICITE ET RELAXATION"
+    }
+  ],
+  "regions_observed": [
+    "Adamaoua",
+    "Centre",
+    "Est",
+    "Extrême-Nord",
+    "Littoral",
+    "Nord",
+    "Nord-Ouest",
+    "Ouest",
+    "Sud",
+    "Sud-Ouest"
+  ],
+  "rows": [
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Adamaoua",
+      "rawSchoolName": "ECOLE DE FORMATION DU PERSONNEL DE SANTE ISSTMADD",
+      "sourceLine": 16
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Adamaoua",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PROFESSIONNELS DE LA SANTE DE MEIGANGA",
+      "sourceLine": 17
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Adamaoua",
+      "rawSchoolName": "INSTITUT SUPERIEUR DES SCIENCES DE LA SANTE ABBOU DE NGAOUNDERE",
+      "sourceLine": 18
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "CENTRE DE FORMATION DES SCIENCES DE LA SANTE DE LA CROIX ROUGE CAMEROUNAISE",
+      "sourceLine": 19
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "CENTRE DE FORMATION DU PERSONNEL PARAMEDICAL (CFPP) DE YAOUNDE",
+      "sourceLine": 20
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "CENTRE SPECIALISE DES TECHNIQUES D'ANALYSES MEDICALES (CESTAM) DE YAOUNDE",
+      "sourceLine": 21
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE (ECOLE PRIVEE CATHOLIQUE) DE YAOUNDE",
+      "sourceLine": 22
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE � LE PHENIX � DE SOA",
+      "sourceLine": 23
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE DE NDIKINIMEKI",
+      "sourceLine": 24
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE ET D'APPLICATION � LUMIERE� DE MBALMAYO",
+      "sourceLine": 25
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES SCIENCES MEDICALES ET D'APPLICATION MARIE ZAMBO DE MFOU",
+      "sourceLine": 26
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES TECHNICIENS MEDICO-SANITAIRES DE YAOUNDE",
+      "sourceLine": 27
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE \"FONDATION VIRGINIA HENDERSON\" DE YAOUNDE",
+      "sourceLine": 28
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE LA SANTE HOSANNA DE MAKAK",
+      "sourceLine": 29
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE \"MBIDA VALERIEN\" D'OBALA",
+      "sourceLine": 30
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE FIDELIE AMOGO",
+      "sourceLine": 31
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES LIFE INSTITUT DE MBANKOMO",
+      "sourceLine": 32
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DU PERSONNEL DE LA SANTE \"LA ROSIERE\" DE YAOUNDE",
+      "sourceLine": 35
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE PARAMEDICALE DE BALAMBA",
+      "sourceLine": 36
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DE FORMATION DES PERSONNELS DE LA SANTE NAKOMA ACADEMY DE MBALMAYO",
+      "sourceLine": 37
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DE FORMATION DES PERSONNELS SPECIALISES EN SANTE (IFOPESS) - MFOU",
+      "sourceLine": 38
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DES SCIENCES DE LA SANTE \"SAINT CHRISTOPHE\" (ISSSC) D'EBOLMEDZOM -NKOABANG",
+      "sourceLine": 39
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DES SCIENCES ET TECHNIQUES APPLIQUEES A LA SANTE DE YAOUNDE",
+      "sourceLine": 42
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DES SCIENCES ET TECHNOLOGIE DE LA SANTE (ISTS)",
+      "sourceLine": 43
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DES SCIENCES MEDICALES DE YAOUNDE",
+      "sourceLine": 44
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT MBASSI SUPERIEUR DE MONATELE",
+      "sourceLine": 45
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT PRIVE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES D'OKOLA",
+      "sourceLine": 46
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT PRIVE DE FORMATION DES PERSONNELS SANITAIRES SAINT JOEL DE YAOUNDE",
+      "sourceLine": 47
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT PRIVE DE FORMATION MEDICO-SANITAIRE AGORA HEALTH LEKIE CENTRE D'ELIG-MFOMO",
+      "sourceLine": 48
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT PRIVE DES SCIENCES APPLIQUEES A LA SANTE DE BAFIA",
+      "sourceLine": 51
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT SUPERIEUR DE TECHNOLOGIE APPLIQUEE DE GESTION (ISTAG) DE YAOUNDE",
+      "sourceLine": 52
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT SUPERIEUR DES SCIENCES DE LA SANTE DE ZALOM-MFOU",
+      "sourceLine": 53
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT SUPERIEUR DES SCIENCES ET DES TECHNOLOGIES ISST LA SAPIENCE",
+      "sourceLine": 54
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT SUPERIEUR POLYTECHNIQUE BILINGUE LES ARMANDINS",
+      "sourceLine": 55
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT UNIVERSITAIRE PROTESTANT DE YAOUNDE",
+      "sourceLine": 56
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Est",
+      "rawSchoolName": "ECOLE PRIVEE \"FONDATION DOCTEUR YELE\" DE BERTOUA",
+      "sourceLine": 61
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Est",
+      "rawSchoolName": "ECOLE PRIVEE CATHOLIQUE DE FORMATION DU PERSONNEL PARAMEDICAL DE BATOURI",
+      "sourceLine": 63
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Est",
+      "rawSchoolName": "ECOLE PRIVEE MEDICO-SANITAIRE DE DOUMAINTANG",
+      "sourceLine": 65
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Est",
+      "rawSchoolName": "INSTITUT PRIVE FANG DE MESSAMENA",
+      "sourceLine": 67
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "COMPLEXE BILINGUE DE FORMATION INTERDISCIPLINAIRE EN SCIENCES DE LA SANTE COBIFISS DE MAROUA",
+      "sourceLine": 68
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE DE FORMATION AUX METIERS DE LA SANTE (EFMS) DE MAROUA",
+      "sourceLine": 72
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE DES SCIENCES MEDICALES DE KANI-KAELE",
+      "sourceLine": 74
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE DES SCIENCES MEDICO-SANITAIRES DE MAROUA (ESMRA)",
+      "sourceLine": 76
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES (EFOPSA) DE MOKOLO",
+      "sourceLine": 78
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS PARAMEDICAUX FONDATION AMINA DE MORA",
+      "sourceLine": 79
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE PRIVEE PROTESTANTE DE FORMATION EN SANTE DE KOZA (EPPFSAK)",
+      "sourceLine": 83
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "INSTITUT DE FORMATION EN SANTE DE MAROUA",
+      "sourceLine": 85
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "INSTITUT DE FORMATION EN SANTE DU SAHEL IFOSSA DE MOKOLO",
+      "sourceLine": 87
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "INSTITUT DES SCIENCES MEDICO-SANITAIRES DE MAROUA (ISMESMA)",
+      "sourceLine": 89
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Littoral",
+      "rawSchoolName": "COMPLEXE PRIVE DE FORMATION DU PERSONNEL MEDICO-SANITAIRE \"ALPHA OMEGA\" DE NDOUNGUE",
+      "sourceLine": 90
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE DE FORMATION DES PERSONNELS DE SANTE FONDATION BOBUIN DE DOUALA",
+      "sourceLine": 94
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE DE FORMATION DES PERSONNELS DE SANTE LA PERLE DE DOUALA",
+      "sourceLine": 96
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE DE FORMATION PRIVEE DU PERSONNEL DE LA SANTE HELENE ET DEOGRACE DE DOUALA",
+      "sourceLine": 97
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE INTERNATIONALE DES INFIRMIERS ET DES MEDICO-SANITAIRES DE DOUALA",
+      "sourceLine": 101
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE INTERNATIONALE PARAMEDICALE DE DOUALA (EPID)",
+      "sourceLine": 102
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE PRIVEE \"LUMIERE DES JUSTES\" DE DOUALA",
+      "sourceLine": 104
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE PRIVEE \"SANTE SANS FRONTIERE\" DE LA SANAGA MARITIME D'EDEA",
+      "sourceLine": 106
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS SANITAIRES (EFPSA) DE DOUALA",
+      "sourceLine": 108
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PROFESSIONNELS DE SANTE DE BWANG DOUALA",
+      "sourceLine": 110
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE PRIVEE FONDATION JEUGEUVOU FOWANG DE DOUALA",
+      "sourceLine": 112
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Littoral",
+      "rawSchoolName": "INSTITUT DES SCIENCES DE LA SANTE INNOVANTES DE DOUALA",
+      "sourceLine": 114
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Nord",
+      "rawSchoolName": "ECOLE DE FORMATION DES PERSONNELS DE SANTE DE GUIDER (EFOPSAG)",
+      "sourceLine": 116
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Nord",
+      "rawSchoolName": "ECOLE DES PROFESSIONS DE SANTE � LES AIGLES � DE GAROUA",
+      "sourceLine": 118
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Nord",
+      "rawSchoolName": "INSTITUT DES SCIENCES DE LA SANTE DE PITOA (ISSP)",
+      "sourceLine": 119
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Nord",
+      "rawSchoolName": "INSTITUT SUPERIEUR DES SCIENCES DE LA SANTE DE NGONG (I3SN)",
+      "sourceLine": 121
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Nord-Ouest",
+      "rawSchoolName": "ECOLE DES TECHNICIENS MEDICO-SANITAIRES DE BAMENDA",
+      "sourceLine": 123
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Nord-Ouest",
+      "rawSchoolName": "ECOLE PRIVEE CATHOLIQUE DE SHISONG",
+      "sourceLine": 125
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Ouest",
+      "rawSchoolName": "COMPLEXE PRIVE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES \"FONDATION TSOPJIO ET TAKOUDJOU\" DE DSCHANG",
+      "sourceLine": 126
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Ouest",
+      "rawSchoolName": "COMPLEXE PRIVE DE FORMATION DU PERSONNEL DE LA SANTE DE MBOUO BANDJOUN",
+      "sourceLine": 130
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE DES METIERS DE LA SANTE DE BAMOUGOUM",
+      "sourceLine": 132
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE DES PROFESSIONNELS DE LA SANTE LES ETOILES DE BAFOUSSAM",
+      "sourceLine": 134
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG",
+      "sourceLine": 136
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS SANITAIRES \"SAINT JOSEPH\" DE BAFOUSSAM",
+      "sourceLine": 137
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DU PERSONNEL DE LA SANTE DE BAFOUSSAM",
+      "sourceLine": 139
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE PRIVEE FONDATION JEUGEUVOU FOWANG DE BAFOUSSAM",
+      "sourceLine": 141
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Ouest",
+      "rawSchoolName": "INSTITUT DES SCIENCES DE LA SANTE POOLA DE BAFOUSSAM",
+      "sourceLine": 143
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Ouest",
+      "rawSchoolName": "INSTITUT DES SCIENCES ET TECHNIQUES MEDICO-SANITAIRES DE BAFOUSSAM",
+      "sourceLine": 145
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Sud",
+      "rawSchoolName": "CENTRE DE FORMATION DU PERSONNEL PARAMEDICAL CAMELOS (CFPS) DE BIWONG BANE",
+      "sourceLine": 146
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Sud",
+      "rawSchoolName": "ECOLE DE FORMATION DES PERSONNELS SANITAIRES � ECOLE PRIVEE LA GRACE� D'EBOLOWA",
+      "sourceLine": 151
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Sud",
+      "rawSchoolName": "ECOLE DES SCIENCES MEDICALES DE BISOK (EBOLOWA)",
+      "sourceLine": 154
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Sud",
+      "rawSchoolName": "ECOLE PRIVEE DES INFIRMIERS DE SANGMELIMA",
+      "sourceLine": 156
+    },
+    {
+      "filiereRaw": "ANALYSES MEDICALES",
+      "programNormalized": "Analyses Médicales",
+      "region": "Sud-Ouest",
+      "rawSchoolName": "MAFLEKUMEN SCHOOL OF HEALTH SCIENCES OF TIKO",
+      "sourceLine": 158
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Adamaoua",
+      "rawSchoolName": "COMPLEXE PRIVE FONDATION LA SAHELIENNE DE NGAOUNDERE",
+      "sourceLine": 202
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Adamaoua",
+      "rawSchoolName": "ECOLE DE FORMATION DU PERSONNEL DE SANTE ISSTMADD",
+      "sourceLine": 203
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Adamaoua",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE NGAOUNDERE",
+      "sourceLine": 204
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Adamaoua",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES DE NGAOUNDERE",
+      "sourceLine": 205
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Adamaoua",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PROFESSIONNELS DE LA SANTE DE MEIGANGA",
+      "sourceLine": 206
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Adamaoua",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DU PERSONNEL PARAMEDICAL AREWA DE BANYO",
+      "sourceLine": 207
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Adamaoua",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION EN SANTE � FONDATION DJOULDE LAMBA SAMUEL� DE MBE",
+      "sourceLine": 208
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ACADEMIE SUPERIEURE DES SCIENCES DE LA SANTE (NURSING ACADEMY) DE YAOUNDE",
+      "sourceLine": 209
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "CENTRE DE FORMATION DES SCIENCES DE LA SANTE DE LA CROIX ROUGE CAMEROUNAISE",
+      "sourceLine": 210
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "COMPLEXE DE FORMATION DES SCIENCES DE SANTE MARC VIVIEN FOE DE YAOUNDE - BITENG",
+      "sourceLine": 211
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DE FORMATION DES PERSONNELS DE LA SANTE (EFOPS) DE BATCHENGA",
+      "sourceLine": 212
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DES TECHNICIENS MEDICO-SANITAIRES ET DU GENIE-SANITAIRE DE YAOUNDE",
+      "sourceLine": 213
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT D'AYOS",
+      "sourceLine": 214
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE SA'A",
+      "sourceLine": 215
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE (ECOLE PRIVEE CATHOLIQUE) DE YAOUNDE",
+      "sourceLine": 216
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE � LE PHENIX � DE SOA",
+      "sourceLine": 217
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE DE NDIKINIMEKI",
+      "sourceLine": 218
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE ET D'APPLICATION � LUMIERE� DE MBALMAYO",
+      "sourceLine": 219
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES SCIENCES MEDICALES ET D'APPLICATION MARIE ZAMBO DE MFOU",
+      "sourceLine": 220
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE \"FONDATION TOUT EST GRACE\" DE MFOU",
+      "sourceLine": 221
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE \"FONDATION VIRGINIA HENDERSON\" DE YAOUNDE",
+      "sourceLine": 222
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE LA SANTE HOSANNA DE MAKAK",
+      "sourceLine": 223
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE \"MBIDA VALERIEN\" D'OBALA",
+      "sourceLine": 224
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE FIDELIE AMOGO",
+      "sourceLine": 225
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES LIFE INSTITUT DE MBANKOMO",
+      "sourceLine": 226
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DU PERSONNEL DE LA SANTE \"LA ROSIERE\" DE YAOUNDE",
+      "sourceLine": 227
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DES PERSONNELS DE SANTE \"INSTITUT TEGZAGON\" DE NYOM II",
+      "sourceLine": 228
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE PARAMEDICALE DE BALAMBA",
+      "sourceLine": 229
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DE FORMATION DES PERSONNELS DE LA SANTE NAKOMA ACADEMY DE MBALMAYO",
+      "sourceLine": 230
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DE FORMATION DES PERSONNELS SPECIALISES EN SANTE (IFOPESS) - MFOU",
+      "sourceLine": 231
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DES SCIENCES DE LA SANTE \"SAINT CHRISTOPHE\" (ISSSC) D'EBOLMEDZOM - NKOABANG",
+      "sourceLine": 232
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DES SCIENCES ET TECHNOLOGIE DE LA SANTE (ISTS)",
+      "sourceLine": 233
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DES SCIENCES MEDICALES DE YAOUNDE (ISMY)",
+      "sourceLine": 234
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT MBASSI SUPERIEUR DE MONATELE",
+      "sourceLine": 235
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT PRIVE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES D'OKOLA",
+      "sourceLine": 236
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT PRIVE DE FORMATION DES PERSONNELS SANITAIRES SAINT JOEL DE YAOUNDE",
+      "sourceLine": 237
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT PRIVE DE FORMATION MEDICO-SANITAIRE AGORA HEALTH LEKIE CENTRE D'ELIG-MFOMO",
+      "sourceLine": 238
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT PRIVE DES SCIENCES APPLIQUEES A LA SANTE DE BAFIA",
+      "sourceLine": 239
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT PRIVE LAMIDO HALIM HAYATOU",
+      "sourceLine": 240
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT SUPERIEUR DES SCIENCES DE LA SANTE DE ZALOM-MFOU",
+      "sourceLine": 241
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT SUPERIEUR DES SCIENCES ET DES TECHNOLOGIES ISST LA SAPIENCE",
+      "sourceLine": 242
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT SUPERIEUR POLYTECHNIQUE BILINGUE LES ARMANDINS",
+      "sourceLine": 247
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT UNIVERSITAIRE PROTESTANT DE YAOUNDE",
+      "sourceLine": 248
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT UNIVERSITAIRE SOUS-REGIONAL BILINGUE AGENLA ACADEMY",
+      "sourceLine": 249
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Est",
+      "rawSchoolName": "COMPLEXE PRIVE DE FORMATION DU PERSONNEL SANITAIRE DE YOKADOUMA",
+      "sourceLine": 250
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Est",
+      "rawSchoolName": "COMPLEXE SANTE FLORENCE NIGHTINGALE D'ABONG-MBANG",
+      "sourceLine": 251
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Est",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE BERTOUA",
+      "sourceLine": 252
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Est",
+      "rawSchoolName": "ECOLE PRIVEE CATHOLIQUE DE FORMATION DU PERSONNEL PARAMEDICAL DE BATOURI",
+      "sourceLine": 253
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Est",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE FONDATION EVA POUR LA SANTE A L'EST",
+      "sourceLine": 254
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Est",
+      "rawSchoolName": "ECOLE PRIVEE DES PERSONNELS SANITAIRES DE L'EST (EPPSE)",
+      "sourceLine": 255
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Est",
+      "rawSchoolName": "ECOLE PRIVEE MEDICO-SANITAIRE DE DOUMAINTANG",
+      "sourceLine": 256
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Est",
+      "rawSchoolName": "INSTITUT PRIVE FANG DE MESSAMENA",
+      "sourceLine": 257
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "COMPLEXE BILINGUE DE FORMATION INTERDISCIPLINAIRE EN SCIENCES DE LA SANTE COBIFISS DE MAROUA",
+      "sourceLine": 258
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE DE FORMATION AUX METIERS DE LA SANTE (EFMS) DE MAROUA",
+      "sourceLine": 261
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE MAROUA",
+      "sourceLine": 262
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE DES SCIENCES MEDICALES DE KANI-KAELE",
+      "sourceLine": 263
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE DES SCIENCES MEDICO-SANITAIRES DE MAROUA (ESMRA)",
+      "sourceLine": 264
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE DE LARA-KAELE",
+      "sourceLine": 265
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES (EFOPSA) DE MOKOLO",
+      "sourceLine": 266
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS PARAMEDICAUX FONDATION AMINA DE MORA",
+      "sourceLine": 267
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE PRIVEE PROTESTANTE DE FORMATION EN SANTE DE KOZA (EPPFSAK)",
+      "sourceLine": 268
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "INSTITUT DE FORMATION EN SANTE DE MAROUA (IFS)",
+      "sourceLine": 269
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "INSTITUT DE FORMATION EN SANTE DU SAHEL IFOSSA DE MOKOLO",
+      "sourceLine": 270
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "INSTITUT DES SCIENCES MEDICO-SANITAIRES DE MAROUA (ISMESMA)",
+      "sourceLine": 271
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Littoral",
+      "rawSchoolName": "COMPLEXE PRIVE DE FORMATION DES PERSONNELS INFIRMIERS ET MEDICO-SANITAIRES FONDATION NYACKE NGOLLO DE KAKE-SOUZA",
+      "sourceLine": 272
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE DE FORMATION DES PERSONNELS DE SANTE FONDATION BOBUIN DE DOUALA",
+      "sourceLine": 275
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE DE FORMATION DES PERSONNELS DE SANTE LA PERLE DE DOUALA",
+      "sourceLine": 276
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE DOUALA",
+      "sourceLine": 277
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE NKONGSAMBA",
+      "sourceLine": 278
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DIPLOMES LA ROCHE DE SOUZA",
+      "sourceLine": 279
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE INTERNATIONALE DES INFIRMIERS ET DES MEDICO-SANITAIRES DE DOUALA",
+      "sourceLine": 280
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE INTERNATIONALE PARAMEDICALE DE DOUALA (EPID)",
+      "sourceLine": 281
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE PRIVEE \"SANTE SANS FRONTIERE\" DE LA SANAGA MARITIME D'EDEA",
+      "sourceLine": 282
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS SANITAIRES (EFPSA) DE DOUALA",
+      "sourceLine": 283
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PROFESSIONNELS DE SANTE DE BWANG DOUALA",
+      "sourceLine": 284
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE PRIVEE FONDATION JEUGEUVOU FOWANG DE DOUALA",
+      "sourceLine": 285
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Littoral",
+      "rawSchoolName": "INSTITUT DES SCIENCES DE LA SANTE INNOVANTES DE DOUALA",
+      "sourceLine": 286
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Littoral",
+      "rawSchoolName": "INSTITUT SUPERIEUR DE SANTE DE LA SANAGA MARITIME D'EDEA",
+      "sourceLine": 287
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Nord",
+      "rawSchoolName": "ECOLE DE FORMATION DES PERSONNELS DE SANTE DE GUIDER (EFOPSAG)",
+      "sourceLine": 288
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Nord",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE GAROUA",
+      "sourceLine": 289
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Nord",
+      "rawSchoolName": "ECOLE DES PROFESSIONS DE SANTE � LES AIGLES � DE GAROUA",
+      "sourceLine": 290
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Nord",
+      "rawSchoolName": "ECOLE PRIVEE DES INFIRMIERS DE GAROUA",
+      "sourceLine": 291
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Nord",
+      "rawSchoolName": "INSTITUT DES SCIENCES DE LA SANTE DE PITOA (ISSP)",
+      "sourceLine": 292
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Nord",
+      "rawSchoolName": "INSTITUT SUPERIEUR DES SCIENCES DE LA SANTE DE NGONG (I3SN)",
+      "sourceLine": 293
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Nord-Ouest",
+      "rawSchoolName": "BAMENDA FLORENCE NIGHTINGAL (HIH-BS) SCHOOL FOR HEALTH",
+      "sourceLine": 298
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Nord-Ouest",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE BAMENDA",
+      "sourceLine": 299
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Nord-Ouest",
+      "rawSchoolName": "ECOLE PRIVEE \"FULL GOSPEL TRAINING SCHOOL FOR HEALTH PERSONNEL\" DE BAMENDA",
+      "sourceLine": 300
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Nord-Ouest",
+      "rawSchoolName": "ECOLE PRIVEE \"NATIONAL POLYTECHNIC\" DE BAMBUI",
+      "sourceLine": 301
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Nord-Ouest",
+      "rawSchoolName": "HAMANI FOUNDATION SCHOOL OF SANTA",
+      "sourceLine": 302
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Nord-Ouest",
+      "rawSchoolName": "ECOLE PRIVEE CATHOLIQUE DE SHISONG",
+      "sourceLine": 303
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Ouest",
+      "rawSchoolName": "COMPLEXE DE FORMATION DES PERSONNELS DE SANTE � ROIS MAGES � COFPSAROMA DE BALENG",
+      "sourceLine": 304
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Ouest",
+      "rawSchoolName": "COMPLEXE PRIVE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES \"FONDATION TSOPJIO ET TAKOUDJOU\" DE DSCHANG",
+      "sourceLine": 305
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Ouest",
+      "rawSchoolName": "COMPLEXE PRIVE DE FORMATION DU PERSONNEL MEDICO-SANITAIRE DE MBOUDA",
+      "sourceLine": 308
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE BAFOUSSAM",
+      "sourceLine": 309
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE FOUMBAN",
+      "sourceLine": 310
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE DES METIERS DE LA SANTE DE BAMOUGOUM",
+      "sourceLine": 311
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG",
+      "sourceLine": 312
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE FONDATION SAINT MAURICE DE BAFOUSSAM",
+      "sourceLine": 313
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS SANITAIRES \"SAINT JOSEPH\" DE BAFOUSSAM",
+      "sourceLine": 316
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DU PERSONNEL DE LA SANTE DE BAFOUSSAM",
+      "sourceLine": 317
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE PRIVEE FONDATION JEUGEUVOU FOWANG DE BAFOUSSAM",
+      "sourceLine": 318
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE PRIVEE FONDATION TCHUENTE DE BAFOUSSAM",
+      "sourceLine": 319
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Ouest",
+      "rawSchoolName": "INSTITUT DES SCIENCES DE LA SANTE POOLA DE BAFOUSSAM",
+      "sourceLine": 320
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Ouest",
+      "rawSchoolName": "INSTITUT INTERNATIONAL DE FORMATION DE PERSONNELS PARAMEDICAUX IFOPP DE FOUMBOT",
+      "sourceLine": 321
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Ouest",
+      "rawSchoolName": "INSTITUT TROPICAL DE FORMATION EN PLAIES CHRONIQUES ET EN SOINS INFIRMIERS \"MOULLEC\" DE BALEVENG",
+      "sourceLine": 322
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Ouest",
+      "rawSchoolName": "INSTITUT UNIVERSITAIRE ROYAL BABOUTCHA NINTCHEU (IURB) DE BAFANG",
+      "sourceLine": 325
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Sud",
+      "rawSchoolName": "CENTRE DE FORMATION DU PERSONNEL PARAMEDICAL CAMELOS (CFPS) DE BIWONG BANE",
+      "sourceLine": 326
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Sud",
+      "rawSchoolName": "ECOLE DE FORMATION DES PERSONNELS SANITAIRES � ECOLE PRIVEE LA GRACE� D'EBOLOWA",
+      "sourceLine": 327
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Sud",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE SANGMELIMA",
+      "sourceLine": 328
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Sud",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT D'EBOLOWA",
+      "sourceLine": 329
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Sud",
+      "rawSchoolName": "ECOLE DES SCIENCES MEDICALES DE BISOK (EBOLOWA)",
+      "sourceLine": 330
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Sud",
+      "rawSchoolName": "ECOLE PRIVEE DES INFIRMIERS \"FONDATION INSOLAFRICA\" DE KRIBI",
+      "sourceLine": 331
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Sud",
+      "rawSchoolName": "ECOLE PRIVEE DES INFIRMIERS DE SANGMELIMA",
+      "sourceLine": 332
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Sud",
+      "rawSchoolName": "ECOLE PRIVEE D'INFIRMIERS (EPI) D'ENONGAL - EBOLOWA",
+      "sourceLine": 333
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Sud",
+      "rawSchoolName": "INSTITUT SUPERIEUR POLYVALENT ETOA AZEGUE ET KAS DE ZOETELE",
+      "sourceLine": 334
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Sud-Ouest",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE LIMBE",
+      "sourceLine": 335
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Sud-Ouest",
+      "rawSchoolName": "ECOLE PRIVEE \"BIAKA UNIVERSITY INSTITUTE\" (ST. FRANCIS) DE BUEA",
+      "sourceLine": 336
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Sud-Ouest",
+      "rawSchoolName": "ECOLE PRIVEE \"SWEPHTS\" DE MAMFE",
+      "sourceLine": 337
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Sud-Ouest",
+      "rawSchoolName": "ECOLE PRIVEE DIVINE AMORE SCHOOL FOR MIDWIVES AND HEALTH PERSONNEL DE KUMBA",
+      "sourceLine": 338
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Sud-Ouest",
+      "rawSchoolName": "MAFLEKUMEN SCHOOL OF HEALTH SCIENCES OF TIKO",
+      "sourceLine": 339
+    },
+    {
+      "filiereRaw": "INFIRMIERS",
+      "programNormalized": "Infirmiers",
+      "region": "Sud-Ouest",
+      "rawSchoolName": "REDEMPTION MEDICAL FONDATION OF MUYUKA",
+      "sourceLine": 340
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Adamaoua",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PROFESSIONNELS DE LA SANTE DE MEIGANGA",
+      "sourceLine": 445
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE � LE PHENIX � DE SOA",
+      "sourceLine": 446
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES TECHNICIENS DENTAIRES DE YAOUNDE",
+      "sourceLine": 447
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DES PERSONNELS DE SANTE \"INSTITUT TEGZAGON\" DE NYOM II",
+      "sourceLine": 448
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE MILLENIUM DE YAOUNDE",
+      "sourceLine": 449
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DE FORMATION DES PERSONNELS SPECIALISES EN SANTE (IFOPESS) - MFOU",
+      "sourceLine": 450
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DES SCIENCES DE LA SANTE \"SAINT CHRISTOPHE\" (ISSSC) D'EBOLMEDZOM -NKOABANG",
+      "sourceLine": 451
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DES SCIENCES MEDICALES DE YAOUNDE",
+      "sourceLine": 454
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT PRIVE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES D'OKOLA",
+      "sourceLine": 455
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT PRIVE DE FORMATION MEDICO-SANITAIRE AGORA HEALTH LEKIE CENTRE D'ELIG-MFOMO",
+      "sourceLine": 456
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT UNIVERSITAIRE SOUS-REGIONAL BILINGUE AGENLA ACADEMY",
+      "sourceLine": 459
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Est",
+      "rawSchoolName": "ECOLE PRIVEE DES PERSONNELS SANITAIRES DE L'EST (EPPSE)",
+      "sourceLine": 460
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE DE FORMATION AUX METIERS DE LA SANTE (EFMS) DE MAROUA",
+      "sourceLine": 461
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE DE FORMATION DES PERSONNELS DE SANTE FONDATION BOBUIN DE DOUALA",
+      "sourceLine": 462
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE INTERNATIONALE PARAMEDICALE DE DOUALA (EPID)",
+      "sourceLine": 463
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Littoral",
+      "rawSchoolName": "ECOLE PRIVEE FONDATION JEUGEUVOU FOWANG DE DOUALA",
+      "sourceLine": 464
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Littoral",
+      "rawSchoolName": "INSTITUT DES SCIENCES DE LA SANTE INNOVANTES DE DOUALA",
+      "sourceLine": 465
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Nord",
+      "rawSchoolName": "ECOLE DE FORMATION DES PERSONNELS DE SANTE DE GUIDER (EFOPSAG)",
+      "sourceLine": 466
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Nord",
+      "rawSchoolName": "ECOLE DES PROFESSIONS DE SANTE � LES AIGLES � DE GAROUA",
+      "sourceLine": 467
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Nord-Ouest",
+      "rawSchoolName": "INSTITUT PRIVE \"ST. LOUIS HIGHER INSTITUTE OF HEALTH AND BIOMEDICAL SCIENCES\" DE BAMENDA",
+      "sourceLine": 468
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG",
+      "sourceLine": 471
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Ouest",
+      "rawSchoolName": "INSTITUT DES SCIENCES MEDICO-SANITAIRES LES ARGUS DE BANDJOUN",
+      "sourceLine": 472
+    },
+    {
+      "filiereRaw": "ODONTOSTOMATOLOGIE",
+      "programNormalized": "Odontostomatologie",
+      "region": "Sud-Ouest",
+      "rawSchoolName": "ST JOAN OF ARC HIGHER INSTITUTE OF MEDICAL AND MANAGEMENT SCIENCES - BUEA",
+      "sourceLine": 473
+    },
+    {
+      "filiereRaw": "OPTIQUE REFRACTION",
+      "programNormalized": "Optique Réfraction",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES INFIRMIERS SPECIALISES EN SANTE MENTALE, OPHTALMOLOGIE, SAGES-FEMMES/MAIEUTICIENS, ANESTHESIE ET REANIMATION DE YAOUNDE",
+      "sourceLine": 479
+    },
+    {
+      "filiereRaw": "OPTIQUE REFRACTION",
+      "programNormalized": "Optique Réfraction",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DES SCIENCES MEDICALES DE YAOUNDE (ISMY)",
+      "sourceLine": 482
+    },
+    {
+      "filiereRaw": "OPTIQUE REFRACTION",
+      "programNormalized": "Optique Réfraction",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT UNIVERSITAIRE SOUS-REGIONAL BILINGUE AGENLA ACADEMY",
+      "sourceLine": 484
+    },
+    {
+      "filiereRaw": "OPTIQUE REFRACTION",
+      "programNormalized": "Optique Réfraction",
+      "region": "Littoral",
+      "rawSchoolName": "INSTITUT DES SCIENCES DE LA SANTE INNOVANTES DE DOUALA",
+      "sourceLine": 486
+    },
+    {
+      "filiereRaw": "PROTHESE DENTAIRE",
+      "programNormalized": "Prothèse Dentaire",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES TECHNICIENS DENTAIRES DE YAOUNDE",
+      "sourceLine": 493
+    },
+    {
+      "filiereRaw": "PROTHESE DENTAIRE",
+      "programNormalized": "Prothèse Dentaire",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DE PROTHESISTES ET AUXILIAIRES DENTAIRES GERVAIS ZANG DE YAOUNDE",
+      "sourceLine": 495
+    },
+    {
+      "filiereRaw": "PROTHESE DENTAIRE",
+      "programNormalized": "Prothèse Dentaire",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DES SCIENCES DE LA SANTE \"SAINT CHRISTOPHE\" (ISSSC) D'EBOLMEDZOM -NKOABANG",
+      "sourceLine": 496
+    },
+    {
+      "filiereRaw": "PROTHESE DENTAIRE",
+      "programNormalized": "Prothèse Dentaire",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT PRIVE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES D'OKOLA",
+      "sourceLine": 499
+    },
+    {
+      "filiereRaw": "PROTHESE DENTAIRE",
+      "programNormalized": "Prothèse Dentaire",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT UNIVERSITAIRE SOUS-REGIONAL BILINGUE AGENLA ACADEMY",
+      "sourceLine": 501
+    },
+    {
+      "filiereRaw": "PROTHESE DENTAIRE",
+      "programNormalized": "Prothèse Dentaire",
+      "region": "Sud",
+      "rawSchoolName": "INSTITUT SUPERIEUR POLYVALENT ETOA AZEGUE ET KAS DE ZOETELE",
+      "sourceLine": 503
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Adamaoua",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DU PERSONNEL PARAMEDICAL AREWA DE BANYO",
+      "sourceLine": 509
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Adamaoua",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE LA SANTE DE MEIGANGA",
+      "sourceLine": 510
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Adamaoua",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES DE NGAOUNDERE",
+      "sourceLine": 511
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Adamaoua",
+      "rawSchoolName": "ECOLE DE FORMATION DU PERSONNEL DE SANTE ISSTMADD (NGAOUNDERE)",
+      "sourceLine": 512
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES INFIRMIERS SPECIALISES EN SANTE MENTALE, OPHTALMOLOGIE, SAGES-FEMMES/MAIEUTICIENS, ANESTHESIE ET REANIMATION DE YAOUNDE",
+      "sourceLine": 513
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE ECOLE PRIVEE CATHOLIQUE DE YAOUNDE",
+      "sourceLine": 516
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT PRIVE DE FORMATION DES PERSONNELS SPECIALISES EN SANTE (IFOPESS)- MFOU",
+      "sourceLine": 517
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE DE NDIKINIMEKI",
+      "sourceLine": 518
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE MBIDA VALERIEN D'OBALA",
+      "sourceLine": 519
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DES SCIENCES DE LA SANTE SAINT CHRISTOPHE ISSSC EBOLMEDZOM NKOABANG",
+      "sourceLine": 520
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DES SCIENCES MEDICALES DE YAOUNDE (ISMY)",
+      "sourceLine": 521
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE ET D'APPLICATION LUMIERE DE MBALMAYO",
+      "sourceLine": 522
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES SCIENCES MEDICALES ET D'APPLICATION MARIE ZAMBO DE MFOU",
+      "sourceLine": 523
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DE FORMATION DES PERSONNELS DE LA SANTE NAKOMA ACADEMY DE MBALMAYO",
+      "sourceLine": 524
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT UNIVERSITAIRE PROTESTANT DE YAOUNDE",
+      "sourceLine": 525
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "COMPLEXE DE FORMATION DES SCIENCES DE SANTE MARC VIVIEN FOE DE YAOUNDE BITENG",
+      "sourceLine": 526
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT UNIVERSITAIRE SOUS REGIONAL BILINGUE AGENLA ACADEMY",
+      "sourceLine": 527
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE � LE PHOENIX � DE SOA",
+      "sourceLine": 528
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE LA SANTE HOSANNA DE MAKAK",
+      "sourceLine": 529
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT DES SCIENCES ET TECHNOLOGIES DE LA SANTE ISTS",
+      "sourceLine": 530
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE FIDELIE AMOGO D'EVODOULA",
+      "sourceLine": 531
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT PRIVE DE FORMATION DES PERSONNELS SANITAIRES SAINT JOEL D'ODZA",
+      "sourceLine": 532
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "INSTITUT SUPERIEUR POLYTECHNIQUE BILINGUE � LES ARMANDINS � DE YAOUNDE",
+      "sourceLine": 533
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Centre",
+      "rawSchoolName": "ECOLE PRIVEE PARAMEDICALE DE BALAMBA",
+      "sourceLine": 534
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Est",
+      "rawSchoolName": "ECOLE DE SAGES- FEMMES DE BERTOUA",
+      "sourceLine": 535
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Est",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE FONDATION EVA POUR LA SANTE D'AKOK MAKA",
+      "sourceLine": 536
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE DES SAGES-FEMMES DE MAROUA",
+      "sourceLine": 539
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "INSTITUT DE FORMATION EN SANTE DU SAHEL IFOSSA DE MOKOLO",
+      "sourceLine": 540
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "COMPLEXE BILINGUE DE FORMATION INTERDISCIPLINAIRE EN SCIENCES DE LA SANTE COBIFISS DE LITTORAL MAROUA",
+      "sourceLine": 545
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE DES SCIENCES MEDICALES DE KANI KAELE",
+      "sourceLine": 548
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "INSTITUT DE FORMATION EN SANTE DE MAROUA (IFS)",
+      "sourceLine": 549
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES EFOPSA DE MOKOLO",
+      "sourceLine": 550
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE DES SCIENCES MEDICO SANITAIRES DE MAROUA (ESMRA)",
+      "sourceLine": 551
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "INSTITUT DES SCIENCES MEDICO SANITAIRES DE MAROUA (ISMESMA)",
+      "sourceLine": 552
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE DES SAGES FEMMES MAIEUTICIENS DE DOUALA",
+      "sourceLine": 553
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "INSTITUT SUPERIEUR DE SANTE DE LA SANAGA MARITIME D'EDEA",
+      "sourceLine": 554
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE DE FORMATION DES PERSONNELS DE SANTE FONDATION BOBUIN DE DOUALA",
+      "sourceLine": 555
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE INTERNATIONALE PARAMEDICALE DE DOUALA EPID",
+      "sourceLine": 556
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "INSTITUT SUPERIEUR DES SCIENCES DE LA SANTE INNOVANTES DE DOUALA",
+      "sourceLine": 557
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE DES INFIRMIERS DIPLOMES LA ROCHE DE SOUZA",
+      "sourceLine": 558
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Extrême-Nord",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DES PROFESSIONNELS DE SANTE DE BWANG DOUALA",
+      "sourceLine": 559
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Nord",
+      "rawSchoolName": "ECOLE PRIVEE DES INFIRMIERS DE GAROUA (EPIG)",
+      "sourceLine": 560
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Nord",
+      "rawSchoolName": "INSTITUT DES SCIENCES DE LA SANTE DE PITOA",
+      "sourceLine": 561
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Nord",
+      "rawSchoolName": "INSTITUT DES SCIENCES DE LA SANTE DE NGONG (I3SN)",
+      "sourceLine": 562
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Nord",
+      "rawSchoolName": "ECOLE DE FORMATION DES PERSONNELS DE SANTE DE GUIDER EFOPSAG",
+      "sourceLine": 563
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Nord",
+      "rawSchoolName": "ECOLE DES PROFESSIONS DE SANTE LES AIGLES DE GAROUA",
+      "sourceLine": 564
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Nord-Ouest",
+      "rawSchoolName": "ECOLE PRIVEE CATHOLIQUE DE SHISONG",
+      "sourceLine": 565
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Nord-Ouest",
+      "rawSchoolName": "ECOLE DES SAGES FEMMES DE BAMENDA",
+      "sourceLine": 566
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE PRIVEE DE FORMATION DU PERSONNEL DE LA SANTE DE BAFOUSSAM",
+      "sourceLine": 567
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Ouest",
+      "rawSchoolName": "INSTITUT DES SCIENCES DE LA SANTE POOLA DE BAFOUSSAM",
+      "sourceLine": 568
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE DES METIERS DE LA SANTE EMES DE BAMOUGOUM",
+      "sourceLine": 569
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG",
+      "sourceLine": 570
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Ouest",
+      "rawSchoolName": "ECOLE PRIVEE DES SCIENCES DE LA SANTE MENO DE BAMENA",
+      "sourceLine": 571
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Sud",
+      "rawSchoolName": "CENTRE DE FORMATION DU PERSONNEL PARAMEDICAL CAMELOS CFPS DE BIWONG BANE",
+      "sourceLine": 572
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Sud",
+      "rawSchoolName": "ECOLE DES SCIENCES MEDICALES DE BISOK EBOLOWA",
+      "sourceLine": 573
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Sud",
+      "rawSchoolName": "INSTITUT SUPERIEUR POLYVALENT ETOA AZEGUE ET KAS DE ZOETELE",
+      "sourceLine": 574
+    },
+    {
+      "filiereRaw": "SAGES-FEMMES/MAIEUTICIENS",
+      "programNormalized": "Sages-femmes/Maïeuticiens",
+      "region": "Sud-Ouest",
+      "rawSchoolName": "ECOLE PRIVEE BIAKA UNIVERSITY INSTITUTE ST FRANCIS DE BUEA",
+      "sourceLine": 575
+    }
+  ]
+}
