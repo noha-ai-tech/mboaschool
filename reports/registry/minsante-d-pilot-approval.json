@@ -1,0 +1,91 @@
+{
+  "generated_at": "2026-08-20T19:06:04.563Z",
+  "operator": "jean-merlain",
+  "sprint": "MINSANTE-D",
+  "batch": "minsante-pilot-v1",
+  "previous_snapshot": {
+    "sprint": "MINSANTE-C",
+    "candidate_count": 4,
+    "checksum": "4bb2d39855d1aa04f53ab6540d120b236942aae42699e86e19d22bd87678e6cc"
+  },
+  "candidate_count": 6,
+  "candidates": [
+    {
+      "staging_id": "109f38dc-ff92-4fb9-9028-f2f1fb065042",
+      "name": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE BAFOUSSAM",
+      "region": "Ouest",
+      "programs": [
+        "Infirmiers"
+      ],
+      "education_family": "health_training",
+      "main_category": "autres",
+      "source": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+      "decision": "CLEAN_APPROVABLE"
+    },
+    {
+      "staging_id": "273f8980-4983-4ae8-b3c1-8b1036dfd43d",
+      "name": "ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG",
+      "region": "Ouest",
+      "programs": [
+        "Analyses Médicales",
+        "Infirmiers",
+        "Odontostomatologie",
+        "Sages-femmes/Maïeuticiens"
+      ],
+      "education_family": "health_training",
+      "main_category": "superieur",
+      "source": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+      "decision": "CLEAN_APPROVABLE"
+    },
+    {
+      "staging_id": "6b365ea6-5cb6-43b0-ac22-cabd3a60b8e5",
+      "name": "INSTITUT UNIVERSITAIRE ROYAL BABOUTCHA NINTCHEU (IURB) DE BAFANG",
+      "region": "Ouest",
+      "programs": [
+        "Infirmiers"
+      ],
+      "education_family": "health_training",
+      "main_category": "superieur",
+      "source": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+      "decision": "CLEAN_APPROVABLE"
+    },
+    {
+      "staging_id": "79370ccb-3f09-426f-bdc7-bc6ac9055345",
+      "name": "ECOLE PRIVEE DES SCIENCES DE LA SANTE MENO DE BAMENA",
+      "region": "Ouest",
+      "programs": [
+        "Sages-femmes/Maïeuticiens"
+      ],
+      "education_family": "health_training",
+      "main_category": "autres",
+      "source": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+      "decision": "CLEAN_APPROVABLE"
+    },
+    {
+      "staging_id": "b92dd780-b05c-4b47-aaa4-e6d0b6783778",
+      "name": "COMPLEXE PRIVE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES \"FONDATION TSOPJIO ET TAKOUDJOU\" DE DSCHANG",
+      "region": "Ouest",
+      "programs": [
+        "Analyses Médicales",
+        "Infirmiers"
+      ],
+      "education_family": "health_training",
+      "main_category": "autres",
+      "source": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+      "decision": "CLEAN_APPROVABLE"
+    },
+    {
+      "staging_id": "ba827d94-6542-40fd-b811-a0d964a8bceb",
+      "name": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE FOUMBAN",
+      "region": "Ouest",
+      "programs": [
+        "Infirmiers"
+      ],
+      "education_family": "health_training",
+      "main_category": "autres",
+      "source": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+      "decision": "CLEAN_APPROVABLE"
+    }
+  ],
+  "checksum": "2d7d75e273777c50dd73ee4e1447a5613cbb0eb64db3d4bfc170eb4251529d1f"
+}
