@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-08-20T19:34:22.530Z",
+  "operator": "jean-merlain",
+  "sprint": "MINSANTE-E",
+  "batch": "minsante-pilot-v1",
+  "starting_counts": {
+    "total": 22,
+    "CLEAN_APPROVABLE": 6,
+    "DUPLICATE_REVIEW": 1,
+    "CATEGORY_REVIEW": 15,
+    "CROSS_MINISTRY_REVIEW": 0
+  },
+  "category_review_decisions": {
+    "candidates_processed": 15,
+    "superieur_confirmed": 0,
+    "autres_confirmed": 1,
+    "still_category_review": 14
+  },
+  "reclassification_after_category_review": {
+    "CATEGORY_REVIEW": 14,
+    "CLEAN_APPROVABLE": 1
+  },
+  "full_pilot_population_after": {
+    "CATEGORY_REVIEW": 14,
+    "CLEAN_APPROVABLE": 7,
+    "DUPLICATE_REVIEW": 1
+  },
+  "total_reconciled": true,
+  "approval_snapshot": {
+    "previous_sprint": "MINSANTE-D",
+    "previous_count": 6,
+    "previous_checksum": "2d7d75e273777c50dd73ee4e1447a5613cbb0eb64db3d4bfc170eb4251529d1f",
+    "new_count": 7,
+    "new_checksum": "43e6f55393823970a0332d1feed62f3ec84b1b7761fe0a288df4819a28aaf792"
+  },
+  "database_post_condition": {
+    "establishments_before": 2240,
+    "establishments_after": 2240,
+    "staging_before": 2366,
+    "staging_after": 2366,
+    "registry_identifiers_before": 2242,
+    "registry_identifiers_after": 2242,
+    "rows_inserted": 0,
+    "rows_metadata_updated": 16,
+    "idempotent": true
+  },
+  "promotion": "NO"
+}

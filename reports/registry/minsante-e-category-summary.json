@@ -1,0 +1,35 @@
+{
+  "generated_at": "2026-08-20T19:34:22.524Z",
+  "operator": "jean-merlain",
+  "sprint": "MINSANTE-E",
+  "batch": "minsante-pilot-v1",
+  "model": "MODEL_A",
+  "model_description": "health_training (education_family, inchangé) se traduit en main_category='superieur' UNIQUEMENT si preuve explicite de niveau supérieur (mot de niveau auto-déclaré dans le titre officiel, ou corroboration officielle externe vérifiée), sinon 'autres'/sous-catégorie 'Santé' SI une preuve explicite de niveau non-supérieur existe, sinon CATEGORY_REVIEW — jamais une valeur devinée depuis 'Institut'/'École' seuls. Modèle inchangé depuis MINSANTE-C, hiérarchie non affaiblie.",
+  "migration_required": false,
+  "category_evidence_hierarchy": [
+    "1. EXPLICIT_LEVEL_WORD_IN_OFFICIAL_TITLE (supérieur/universitaire/université/faculté) -> SUPERIEUR_CONFIRMED",
+    "2. OFFICIAL_CYCLE_DIPLOMA_NAME_IN_TITLE (ex. 'Infirmiers Diplômés d'État') -> AUTRES_CONFIRMED",
+    "3. Corroboration officielle externe vérifiée DIRECTEMENT ce sprint (page institutionnelle officielle récupérée avec succès + identité confirmée) -> SUPERIEUR_CONFIRMED ou AUTRES_CONFIRMED selon la preuve",
+    "4. Aucune preuve suffisante -> CATEGORY_REVIEW (défaut, jamais une catégorie inventée, §13)"
+  ],
+  "starting_candidates": 15,
+  "superieur_confirmed": 0,
+  "autres_confirmed": 1,
+  "still_category_review": 14,
+  "cross_ministry_review": 0,
+  "before": {
+    "CLEAN_APPROVABLE": 6,
+    "CATEGORY_REVIEW": 15,
+    "DUPLICATE_REVIEW": 1
+  },
+  "after": {
+    "CLEAN_APPROVABLE": 7,
+    "CATEGORY_REVIEW": 14,
+    "DUPLICATE_REVIEW": 1,
+    "CROSS_MINISTRY_REVIEW": 0,
+    "OTHER_REVIEW": 0
+  },
+  "total": 22,
+  "reconciled": true,
+  "taxonomy_validity_check": "superieur/autres restent sémantiquement suffisants pour les 15 candidats observés ce sprint — aucune catégorie officielle distincte rencontrée qui ne rentrerait dans ni l'une ni l'autre valeur. Aucun CATEGORY MODEL GAP identifié, aucune migration proposée."
+}

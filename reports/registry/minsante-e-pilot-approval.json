@@ -1,0 +1,110 @@
+{
+  "generated_at": "2026-08-20T19:34:22.084Z",
+  "operator": "jean-merlain",
+  "sprint": "MINSANTE-E",
+  "batch": "minsante-pilot-v1",
+  "previous_snapshot": {
+    "sprint": "MINSANTE-D",
+    "candidate_count": 6,
+    "checksum": "2d7d75e273777c50dd73ee4e1447a5613cbb0eb64db3d4bfc170eb4251529d1f"
+  },
+  "candidate_count": 7,
+  "candidates": [
+    {
+      "staging_id": "109f38dc-ff92-4fb9-9028-f2f1fb065042",
+      "name": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE BAFOUSSAM",
+      "region": "Ouest",
+      "programs": [
+        "Infirmiers"
+      ],
+      "education_family": "health_training",
+      "main_category": "autres",
+      "category_evidence": "Titre officiel MINSANTE contient la désignation explicite du diplôme d'État \"Infirmier(s) Diplômé(s) d'État\" — diplôme de cycle B (Décret 80/198), formation non-supérieure reconnue, auto-déclarée dans le nom officiel lui-même (même standard de preuve que la Règle 1, appliqué symétriquement, hérité identique de MINSANTE-C).",
+      "source": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+      "decision": "CLEAN_APPROVABLE"
+    },
+    {
+      "staging_id": "273f8980-4983-4ae8-b3c1-8b1036dfd43d",
+      "name": "ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG",
+      "region": "Ouest",
+      "programs": [
+        "Analyses Médicales",
+        "Infirmiers",
+        "Odontostomatologie",
+        "Sages-femmes/Maïeuticiens"
+      ],
+      "education_family": "health_training",
+      "main_category": "superieur",
+      "category_evidence": "Titre officiel MINSANTE contient un mot de niveau explicite (supérieur/universitaire/université/faculté) — auto-déclaré par l'établissement lui-même dans son nom officiel.",
+      "source": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+      "decision": "CLEAN_APPROVABLE"
+    },
+    {
+      "staging_id": "6b365ea6-5cb6-43b0-ac22-cabd3a60b8e5",
+      "name": "INSTITUT UNIVERSITAIRE ROYAL BABOUTCHA NINTCHEU (IURB) DE BAFANG",
+      "region": "Ouest",
+      "programs": [
+        "Infirmiers"
+      ],
+      "education_family": "health_training",
+      "main_category": "superieur",
+      "category_evidence": "Titre officiel MINSANTE contient un mot de niveau explicite (supérieur/universitaire/université/faculté) — auto-déclaré par l'établissement lui-même dans son nom officiel.",
+      "source": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+      "decision": "CLEAN_APPROVABLE"
+    },
+    {
+      "staging_id": "79370ccb-3f09-426f-bdc7-bc6ac9055345",
+      "name": "ECOLE PRIVEE DES SCIENCES DE LA SANTE MENO DE BAMENA",
+      "region": "Ouest",
+      "programs": [
+        "Sages-femmes/Maïeuticiens"
+      ],
+      "education_family": "health_training",
+      "main_category": "autres",
+      "category_evidence": "Page officielle de l'établissement (epssmeno.com, récupérée ce sprint) : admission explicitement \"Niveau BEPC\"/\"Niveau BAC\" (entrée pré-bac, jamais post-bac), filières nommées \"Aides soignants-généralistes\" et \"Techniciens principaux médico-sanitaires\" — désignations techniques/vocationnelles explicites, aucune mention d'\"enseignement supérieur\" sur le site.",
+      "source": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+      "decision": "CLEAN_APPROVABLE"
+    },
+    {
+      "staging_id": "9c4b9a28-1aa2-4fc2-baa8-48d3919758f7",
+      "name": "ECOLE PRIVEE FONDATION TCHUENTE DE BAFOUSSAM",
+      "region": "Ouest",
+      "programs": [
+        "Infirmiers"
+      ],
+      "education_family": "health_training",
+      "main_category": "autres",
+      "category_evidence": "Page officielle de l'établissement (epfpsa-ft.org/Formation.php, récupérée directement ce sprint) : nom officiel complet \"ÉCOLE PRIVÉE DE FORMATION PROFESSIONNELLE DES PERSONNELS SANITAIRES FONDATION TCHUENTE\" — auto-désignation explicite \"formation professionnelle\" (jamais \"enseignement supérieur\"/\"université\"). Deux cycles listés, tous deux à niveau d'entrée secondaire/technique : Infirmiers Diplômés d'État (entrée Baccalauréat A/C/D/F8/ESF/GCE A-Level, 3 ans) et Aides-Soignants Généralistes (entrée BEPC/GCE O-Level, 12 mois). Identité confirmée : même patronage distinctif \"Tchuente\" (nom de famille fondateur, jamais un mot générique), même ville Bafoussam, même secteur (personnels sanitaires) que la ligne staging \"ECOLE PRIVEE FONDATION TCHUENTE DE BAFOUSSAM\".",
+      "source": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+      "decision": "CLEAN_APPROVABLE"
+    },
+    {
+      "staging_id": "b92dd780-b05c-4b47-aaa4-e6d0b6783778",
+      "name": "COMPLEXE PRIVE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES \"FONDATION TSOPJIO ET TAKOUDJOU\" DE DSCHANG",
+      "region": "Ouest",
+      "programs": [
+        "Analyses Médicales",
+        "Infirmiers"
+      ],
+      "education_family": "health_training",
+      "main_category": "autres",
+      "category_evidence": "Page officielle de l'établissement (ftt-dschang.cm/a-propos, récupérée ce sprint) : création par DECISION N°0344/D/MINSANTE/SG/DRH DU 28/04/2010 du Ministre de la Santé Publique (acte MINSANTE-DRH, jamais un acte MINESUP de création d'enseignement supérieur) — aucune mention d'\"enseignement supérieur\", établissement explicitement positionné comme complexe de formation technique/vocationnelle des personnels médico-sanitaires. Corroboré indépendamment par kamerpower.com (annuaire, jamais utilisé seul comme autorité) qui liste le même établissement sous le même nom exact, même commune (Dschang).",
+      "source": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+      "decision": "CLEAN_APPROVABLE"
+    },
+    {
+      "staging_id": "ba827d94-6542-40fd-b811-a0d964a8bceb",
+      "name": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE FOUMBAN",
+      "region": "Ouest",
+      "programs": [
+        "Infirmiers"
+      ],
+      "education_family": "health_training",
+      "main_category": "autres",
+      "category_evidence": "Titre officiel MINSANTE contient la désignation explicite du diplôme d'État \"Infirmier(s) Diplômé(s) d'État\" — diplôme de cycle B (Décret 80/198), formation non-supérieure reconnue, auto-déclarée dans le nom officiel lui-même (même standard de preuve que la Règle 1, appliqué symétriquement, hérité identique de MINSANTE-C).",
+      "source": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+      "decision": "CLEAN_APPROVABLE"
+    }
+  ],
+  "checksum": "43e6f55393823970a0332d1feed62f3ec84b1b7761fe0a288df4819a28aaf792"
+}

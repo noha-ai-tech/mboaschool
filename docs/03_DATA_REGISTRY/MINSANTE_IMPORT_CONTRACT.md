@@ -645,3 +645,210 @@ Nouveau snapshot d'approbation : `reports/registry/minsante-c-pilot-approval.jso
 — l'ancien snapshot MINSANTE-B (2 candidats, checksum
 `a9c38a42a060cb27651768ee1efa24a7905eb054c23d2e42e869fc2268abc2ad`)
 reste inchangé sur disque, jamais écrasé.
+
+## MISE À JOUR SPRINT MINSANTE-D (2026-08-20) — DUPLICATE REVIEW & APPROVAL POPULATION CONSOLIDATION (récapitulatif)
+
+Opérateur : jean-merlain. Portée : résolution des 11 lignes staging
+MINSANTE `DUPLICATE_REVIEW` héritées de MINSANTE-B (mêmes garanties —
+additif, read-only sur `establishments`/`establishment_registry_identifiers`,
+aucune promotion). Décisions de dédoublonnage documentées cas par cas
+(`reports/registry/minsante-d-duplicate-review.csv`, script
+`scripts/school-registry/minsante-d-reclassify.ts`) : **2 candidats
+`CONFIRMED_SAME_ESTABLISHMENT`** (École des Métiers de la Santé de
+Bamougoum — canonique `7517d1df…`, doublon non-canonique `276633af…`
+conservé avec `duplicate_of_staging_id` renseigné, jamais supprimé
+physiquement) et **9 `CONFIRMED_DISTINCT`**. Une fois le blocage de
+doublon levé pour les 9 distincts + le canonique, la matrice de catégorie
+MINSANTE-C (inchangée) a été réappliquée : 2 résolus `CLEAN_APPROVABLE`
+(les deux "École des Infirmiers Diplômés d'État" de Bafoussam/Foumban,
+règle `OFFICIAL_CYCLE_DIPLOMA_NAME_IN_TITLE`), 8 retombés
+`CATEGORY_REVIEW` faute de preuve de catégorie. Population complète du
+pilote après MINSANTE-D : **`CLEAN_APPROVABLE`=6, `CATEGORY_REVIEW`=15,
+`DUPLICATE_REVIEW`=1** (le doublon non-canonique restant). Nouveau
+snapshot : `reports/registry/minsante-d-pilot-approval.json` (6 candidats,
+checksum `2d7d75e273777c50dd73ee4e1447a5613cbb0eb64db3d4bfc170eb4251529d1f`).
+
+## MISE À JOUR SPRINT MINSANTE-E (2026-08-20) — CATEGORY REVIEW RESOLUTION + APPROVAL POPULATION CONSOLIDATION
+
+Opérateur : jean-merlain. Portée : résolution ciblée, candidat par
+candidat, des 15 lignes staging MINSANTE `CATEGORY_REVIEW` héritées de
+MINSANTE-D (batch `minsante-pilot-v1`, région Ouest). **AUCUNE nouvelle
+ligne staging, AUCUNE écriture `establishments`/
+`establishment_registry_identifiers`, AUCUNE promotion, AUCUNE migration
+exécutée** — mêmes garanties que MINSANTE-C/D. Script :
+`scripts/school-registry/minsante-e-reclassify.ts` (idempotent, revérifié
+par 3 exécutions réelles consécutives — mêmes tallies, même checksum
+d'approbation à chaque passage).
+
+### E.1 — Hiérarchie de preuve de catégorie finale (Model A, inchangé)
+
+Aucune modification de la hiérarchie validée en MINSANTE-C — appliquée à
+l'identique, jamais affaiblie :
+
+```
+1. EXPLICIT_LEVEL_WORD_IN_OFFICIAL_TITLE (supérieur/universitaire/université/faculté dans le titre officiel MINSANTE) -> SUPERIEUR_CONFIRMED
+2. OFFICIAL_CYCLE_DIPLOMA_NAME_IN_TITLE ("Infirmiers Diplômés d'État" dans le titre officiel) -> AUTRES_CONFIRMED
+3. Corroboration officielle externe VÉRIFIÉE DIRECTEMENT ce sprint (page institutionnelle officielle récupérée avec succès, identité confirmée par nom distinctif + ville) -> SUPERIEUR_CONFIRMED ou AUTRES_CONFIRMED selon la preuve
+4. Aucune preuve suffisante -> CATEGORY_REVIEW (défaut, §13 : jamais une catégorie devinée par popularité, branding, ou apparence du nom — "Institut"/"École"/"Centre" seuls ne suffisent JAMAIS)
+```
+
+### E.2 — Signaux officiels de catégorie rencontrés ce sprint
+
+Recherche ciblée candidat par candidat menée sur les 15 lignes
+`CATEGORY_REVIEW` (sources Tier 1/2 uniquement comme autorité finale —
+minsante.cm, pages institutionnelles officielles récupérées directement,
+registre officiel MINESUP ; annuaires commerciaux/Facebook utilisés
+seulement pour la découverte de piste, jamais comme preuve finale, §6) :
+
+- **1/15 résolu avec preuve directe vérifiée** : "École Privée Fondation
+  Tchuente de Bafoussam" -> `AUTRES_CONFIRMED`. Page officielle
+  (`epfpsa-ft.org/Formation.php`, récupérée directement) : nom officiel
+  complet "École Privée de Formation **Professionnelle** des Personnels
+  Sanitaires Fondation Tchuente" — auto-désignation explicite "formation
+  professionnelle" (jamais "enseignement supérieur"), deux cycles à
+  niveau d'entrée secondaire/technique (Infirmiers D.E. dès le
+  Baccalauréat, Aides-Soignants dès le BEPC). Identité confirmée par le
+  patronage distinctif "Tchuente".
+- **14/15 restent `CATEGORY_REVIEW`** — traçabilité complète par
+  candidat dans `reports/registry/minsante-e-category-review.csv`
+  (colonne `official_level_evidence`) : majorité des sites institutionnels
+  probables identifiés mais **injoignables** ce sprint (erreurs SSL/DNS/
+  timeout/403 reproductibles, y compris sur des domaines déjà documentés
+  défaillants en MINSANTE-C ET sur de nouveaux domaines candidats), un
+  document MINSANTE primaire confirmé à nouveau comme image scannée sans
+  texte extractible, et pour "Institut des Sciences et Techniques
+  Médico-Sanitaires (ISTMS) de Bafoussam" un cas de **frontière
+  inter-ministérielle nuancé** (voir E.3) qui n'atteint pas le seuil de
+  preuve malgré une proximité structurelle avec une institution MINESUP
+  voisine.
+
+### E.3 — Frontière inter-ministérielle (§7, §16 du brief)
+
+Aucun candidat n'a été nouvellement classé `superieur` ce sprint — la
+revalidation MINESUP obligatoire pour les nouveaux `superieur` (§16) n'a
+donc rencontré aucun cas déclencheur. Néanmoins, une vérification
+d'identité approfondie a été menée par prudence sur "Institut des
+Sciences et Techniques Médico-Sanitaires de Bafoussam" (ISTMS) après
+qu'une source secondaire l'ait décrit comme l'une des 5 écoles du
+complexe "Institut Universitaire de la Pointe" (ex-"3i Santé"), aux côtés
+de "Institut Supérieur des Sciences Appliquées à la Santé (INSSAS)".
+Vérification directe sur le registre officiel MINESUP
+(`minesup.gov.cm/index.php/instituts-prives-denseignement-superieur/`) :
+**seul INSSAS y figure comme IPES autorisé** (décret N°12/0664/MINESUP du
+23/11/2012, promoteur KUE Richard) — **ISTMS n'y figure PAS comme entité
+distincte autorisée**. Conformément à la règle §7 ("ne jamais classer un
+établissement différent — même structurellement proche — comme
+`superieur` simplement parce qu'un établissement MINESUP voisin partage
+un nom de complexe"), ISTMS **n'a PAS été classé `superieur`** malgré la
+proximité de marque : identité ISTMS≠INSSAS non confirmée (noms
+officiels différents, actes de création cités sous des autorités
+différentes — MINSANTE pour ISTMS d'après une source secondaire non
+vérifiée directement, MINESUP pour INSSAS confirmé directement). Résultat
+publié en transparence : `reports/registry/minsante-e-cross-ministry-review.csv`
+(15/15 `DISTINCT` au sens du moteur de matching partagé, aucun
+`SAME_INSTITUTION_CROSS_MINISTRY`, aucun `AMBIGUOUS`).
+
+### E.4 — Politique du candidat non résolu (§13 du brief)
+
+`STILL_CATEGORY_REVIEW` reste un état terminal légitime, jamais un échec
+à corriger par relâchement de preuve. Les 14 candidats non résolus ce
+sprint conservent leur `category_decision=CATEGORY_REVIEW` et leur
+`classification=CATEGORY_REVIEW` — chacun avec une note de recherche
+documentée (`RESEARCH_NOTES` dans `minsante-e-reclassify.ts`, reprise
+dans le CSV) précisant la piste suivie et la raison précise de l'échec de
+vérification (jamais un silence).
+
+### E.5 — Règle de blocage doublon (§17 du brief)
+
+La ligne `DUPLICATE_REVIEW` restante depuis MINSANTE-D
+(`276633af-df10-4d1e-b91e-596c7a50ed34`, doublon non-canonique de
+"École des Métiers de la Santé de Bamougoum") a vu sa `category_decision`
+rafraîchie (`CATEGORY_REVIEW`, cohérente avec son canonique) mais sa
+`classification` est restée **volontairement inchangée**
+(`DUPLICATE_REVIEW`) — le blocage de doublon prime toujours sur la
+résolution de catégorie, même informative, conformément à la règle
+absolue déjà appliquée en MINSANTE-C/D.
+
+### E.6 — Règle d'éligibilité à la promotion (rappel, inchangée)
+
+Un candidat MINSANTE ne devient `CLEAN_APPROVABLE` que si : source sûre
+(`PROBABLE_TIER_1`, inchangé — aucune nouvelle recherche d'autorité
+large ce sprint, §25), PII sûre (0 persistée, revérifié), identité
+d'établissement sûre (aucun signal live/staging), catégorie résolue
+(`SUPERIEUR_CONFIRMED`/`AUTRES_CONFIRMED`, jamais devinée), aucun blocage
+de doublon, aucun blocage frontière inter-ministérielle. **Aucun
+identifiant officiel requis** (toujours inconnu pour MINSANTE, §3).
+`PROMOTION = NON` ce sprint.
+
+### E.7 — Reclassification finale des 22 lignes pilote
+
+```
+AVANT (MINSANTE-D) : CLEAN_APPROVABLE=6, CATEGORY_REVIEW=15, DUPLICATE_REVIEW=1
+APRÈS (MINSANTE-E) : CLEAN_APPROVABLE=7, CATEGORY_REVIEW=14, DUPLICATE_REVIEW=1, CROSS_MINISTRY_REVIEW=0, OTHER_REVIEW=0
+```
+
+Détail complet, ligne par ligne : `reports/registry/minsante-e-reclassification.csv`,
+`reports/registry/minsante-e-category-review.csv`,
+`reports/registry/minsante-e-category-summary.json`,
+`reports/registry/minsante-e-cross-ministry-review.csv`,
+`reports/registry/minsante-e-run-summary.json`.
+
+Nouveau snapshot d'approbation : `reports/registry/minsante-e-pilot-approval.json`
+(7 candidats, checksum `43e6f55393823970a0332d1feed62f3ec84b1b7761fe0a288df4819a28aaf792`)
+— l'ancien snapshot MINSANTE-D (6 candidats, checksum
+`2d7d75e273777c50dd73ee4e1447a5613cbb0eb64db3d4bfc170eb4251529d1f`) reste
+inchangé sur disque, jamais écrasé.
+
+### E.8 — Validité de la taxonomie (§14 du brief)
+
+`superieur`/`autres` restent sémantiquement suffisants pour l'intégralité
+de la population pilote observée à ce jour (22/22 candidats). Aucun
+candidat n'a révélé une catégorie officielle distincte qui ne rentrerait
+dans aucune des deux valeurs — **aucun CATEGORY MODEL GAP identifié,
+aucune migration proposée ni exécutée**.
+
+### E.9 — Décision de seuil de promotion (§24 du brief)
+
+`PROMOTION_PILOT_MEANINGFUL` : **NON**, pas encore, sur la base d'un
+jugement motivé (pas un seuil de pourcentage automatique) :
+
+- **Volume absolu** : 7 candidats `CLEAN_APPROVABLE` sur 22 (population
+  pilote mono-région, mono-lot) reste un échantillon modeste pour valider
+  un pipeline de promotion contrôlée de bout en bout — suffisant pour un
+  DRY-RUN/PRE-FLIGHT technique, pas nécessairement pour juger de la
+  représentativité nationale.
+- **Représentativité** : les 7 candidats propres couvrent un mélange
+  `autres`/`superieur` et plusieurs filières (Infirmiers, Analyses
+  Médicales, Sages-femmes, Odontostomatologie) — représentativité
+  qualitative correcte pour la région Ouest, mais aucune preuve de
+  généralisation aux 9 autres régions.
+- **Volume non résolu restant** : 14/22 (64%) restent `CATEGORY_REVIEW`
+  — majorité de la population encore bloquée, principalement par
+  l'injoignabilité technique de sites institutionnels plutôt que par une
+  preuve négative — un futur sprint de recherche ciblée (relance des
+  domaines injoignables, ou recherche d'actes MINSANTE alternatifs)
+  pourrait réduire significativement ce volume avant un pilote de
+  promotion.
+- **Qualité de source** : `PROBABLE_TIER_1` inchangé pour la source
+  primaire (Liste des Écoles Agréées MINSANTE 2025) ; la nouvelle preuve
+  de catégorie (Tchuente) provient d'une page institutionnelle officielle
+  récupérée directement — qualité suffisante pour ce candidat précis.
+- **Sécurité production** : aucune preuve de risque de doublon
+  supplémentaire ou de collision cross-ministry détectée sur les 15
+  candidats revalidés — signal positif, mais sur un échantillon encore
+  trop petit pour conclure à une sécurité de promotion nationale.
+
+**Conclusion** : le volume `CLEAN_APPROVABLE` a progressé (6 -> 7) mais
+la population non résolue reste majoritaire (14/22) pour des raisons
+majoritairement techniques (injoignabilité de sites), pas des raisons de
+preuve négative. Un `CONTROLLED_PROMOTION_PRE-FLIGHT` réel sur seulement
+7 candidats serait prématuré comme validation de représentativité
+nationale, mais reste **techniquement exécutable** comme DRY-RUN limité
+si un futur sprint souhaite valider le pipeline lui-même plutôt que le
+volume. Recommandation : un sprint de recherche ciblée supplémentaire
+(retry des domaines injoignables avec des méthodes de récupération
+alternatives, ou recherche de sources primaires alternatives pour les 14
+candidats restants) avant tout pilote de promotion, OU accepter le volume
+actuel et lancer un PRE-FLIGHT limité aux 7 candidats déjà propres en
+excluant explicitement les 14 non résolus (option A du brief, à la
+discrétion de l'architecte/Jean-Merlain/Eddy).
