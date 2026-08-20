@@ -1,0 +1,47 @@
+{
+  "generated_at": "2026-08-20T16:23:45.362Z",
+  "operator": "jean-merlain",
+  "sprint": "MINSANTE-B",
+  "batch": "minsante-pilot-v1",
+  "candidate_count": 2,
+  "candidates": [
+    {
+      "staging_id": "273f8980-4983-4ae8-b3c1-8b1036dfd43d",
+      "name": "ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG",
+      "region": "Ouest",
+      "programs": [
+        "Analyses Médicales",
+        "Infirmiers",
+        "Odontostomatologie",
+        "Sages-femmes/Maïeuticiens"
+      ],
+      "education_family": "health_training",
+      "main_category": "superieur",
+      "source": {
+        "authority": "MINSANTE",
+        "source_decision": "PROBABLE_TIER_1",
+        "url": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm"
+      },
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": []
+    },
+    {
+      "staging_id": "6b365ea6-5cb6-43b0-ac22-cabd3a60b8e5",
+      "name": "INSTITUT UNIVERSITAIRE ROYAL BABOUTCHA NINTCHEU (IURB) DE BAFANG",
+      "region": "Ouest",
+      "programs": [
+        "Infirmiers"
+      ],
+      "education_family": "health_training",
+      "main_category": "superieur",
+      "source": {
+        "authority": "MINSANTE",
+        "source_decision": "PROBABLE_TIER_1",
+        "url": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm"
+      },
+      "decision": "CLEAN_APPROVABLE",
+      "identifiers": []
+    }
+  ],
+  "checksum": "a9c38a42a060cb27651768ee1efa24a7905eb054c23d2e42e869fc2268abc2ad"
+}

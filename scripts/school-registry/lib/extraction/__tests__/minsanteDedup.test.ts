@@ -90,6 +90,27 @@ describe("§9 — pas de fuzzy auto merge : LIKELY/AMBIGUOUS restent séparés",
   });
 });
 
+describe("SPRINT MINSANTE-B §8.C — sous-ensemble de mots significatifs robuste à l'ordre alphabétique (bug réel trouvé après durcissement FUZZY_STOPWORDS)", () => {
+  test("une variante avec UNIQUEMENT un mot ajouté (ville) reste LIKELY_SAME_SCHOOL même quand ce mot s'insère au milieu de l'ordre alphabétique des mots restants", () => {
+    // Avant correctif : le test de sous-chaîne comparait des clés
+    // ALPHABÉTISÉES (exactIdentityKey trie les mots) — "NGAOUNDERE" s'insère
+    // entre "ISSTMADD" et "PERSONNEL" dans cet ordre, cassant la contiguïté
+    // de sous-chaîne bien que la variante B soit un vrai sur-ensemble de A.
+    // Une fois formation/personnel/sante retirés (SPRINT MINSANTE-B §7), le
+    // seul mot distinctif restant ("isstmadd") ne suffisait plus (ratio 0.5
+    // < seuil 0.8) sans la relation de sous-ensemble — régression réelle
+    // observée puis corrigée dans buildUniqueSchoolCandidates.
+    const rows: RawSchoolProgramRow[] = [
+      row({ rawSchoolName: "ECOLE DE FORMATION DU PERSONNEL DE SANTE ISSTMADD", region: "Adamaoua", sourceLine: 1 }),
+      row({ rawSchoolName: "ECOLE DE FORMATION DU PERSONNEL DE SANTE ISSTMADD (NGAOUNDERE)", region: "Adamaoua", sourceLine: 2 }),
+    ];
+    const dedup = buildUniqueSchoolCandidates(rows);
+    assert.equal(dedup.candidates.length, 2, "jamais fusionné automatiquement (§9)");
+    const likely = dedup.reviewEntries.filter((r) => r.relationship === "LIKELY_SAME_SCHOOL");
+    assert.equal(likely.length, 1, "doit rester détecté comme LIKELY_SAME_SCHOOL malgré le retrait des mots génériques");
+  });
+});
+
 describe("Comptabilité — input/output toujours cohérents, jamais de perte silencieuse", () => {
   test("totalInputRows = somme des mergedRowCount de tous les candidats", () => {
     const rows: RawSchoolProgramRow[] = [

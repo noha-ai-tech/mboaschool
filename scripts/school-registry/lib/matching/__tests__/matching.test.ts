@@ -391,3 +391,61 @@ describe("Pas de match", () => {
     assert.equal(result.level, "NO_MATCH");
   });
 });
+
+describe("SPRINT MINSANTE-B §8 — scénarios A-E de régression matching, vocabulaire santé/formation générique", () => {
+  test("A. école de santé vs centre de formation couture/mode, même ville partagée -> ne devient jamais STRONG/PROBABLE via 'Centre de Formation ... Yaoundé' seul (bug réel MINSANTE-A.1)", () => {
+    // Reproduit exactement le cas réel : reports/registry/minsante-a1-matching-sample.csv
+    // "CENTRE DE FORMATION DU PERSONNEL PARAMEDICAL (CFPP) DE YAOUNDE" (santé)
+    // matchait PROBABLE_MATCH (50%) contre "Centre de Formation en Couture et
+    // Mode de Yaoundé" (couture/mode) avant durcissement des stopwords.
+    const t = target({ id: "couture-1", name: "Centre de Formation en Couture et Mode de Yaoundé", region: "Centre", category: "vocational_training" });
+    const c = candidate({ name: "CENTRE DE FORMATION DU PERSONNEL PARAMEDICAL (CFPP) DE YAOUNDE", region: "Centre", category: "health_training" });
+    const result = matchCandidate(c, [t]);
+    assert.notEqual(result.level, "STRONG_MATCH");
+    assert.notEqual(result.level, "PROBABLE_MATCH");
+    assert.notEqual(result.level, "AMBIGUOUS");
+    assert.equal(result.level, "NO_MATCH");
+  });
+
+  test("B. deux écoles MINSANTE au vocabulaire santé générique mais régions différentes -> la contradiction géographique empêche tout lien fort", () => {
+    const t = target({ id: "sante-nw", name: "Ecole Privee Full Gospel Training School for Health Personnel de Bamenda", region: "Nord-Ouest", category: "health_training" });
+    const c = candidate({ name: "Ecole Privee Divine Amore School for Midwives and Health Personnel de Kumba", region: "Sud-Ouest", category: "health_training" });
+    const result = matchCandidate(c, [t]);
+    assert.notEqual(result.level, "STRONG_MATCH");
+    assert.notEqual(result.level, "EXACT_IDENTITY");
+    assert.equal(result.safeForAutoLink, false);
+  });
+
+  test("C. vraie variante de la même école, mots génériques retirés -> matche toujours grâce aux mots distinctifs (sigle ISSTMADD)", () => {
+    // Reproduit le cas réel MINSANTE-A.1 (minsante-a1-dedup-review.csv) :
+    // "ECOLE DE FORMATION DU PERSONNEL DE SANTE ISSTMADD" vs sa variante
+    // "(NGAOUNDERE)" — même après retrait de école/formation/personnel/sante,
+    // le sigle ISSTMADD reste un signal distinctif suffisant (STRONG_MATCH).
+    const t = target({ id: "isstmadd-1", name: "Ecole de Formation du Personnel de Sante ISSTMADD (Ngaoundere)", region: "Adamaoua", category: "health_training" });
+    const c = candidate({ name: "Ecole de Formation du Personnel de Sante ISSTMADD", region: "Adamaoua", category: "health_training" });
+    const result = matchCandidate(c, [t]);
+    assert.equal(result.level, "STRONG_MATCH");
+    assert.equal(result.safeForAutoLink, false);
+  });
+
+  test("D. catégories/familles différentes -> aucun lien automatique dangereux même avec chevauchement de mots santé génériques", () => {
+    const t = target({ id: "sup-sante", name: "Institut Superieur de Sante", region: "Littoral", category: "higher_education" });
+    const c = candidate({ name: "Ecole Privee de Formation des Personnels de Sante Fondation Eva pour la Sante a l'Est", region: "Est", category: "health_training" });
+    const result = matchCandidate(c, [t]);
+    assert.notEqual(result.level, "STRONG_MATCH");
+    assert.notEqual(result.level, "EXACT_IDENTITY");
+    assert.equal(result.safeForAutoLink, false);
+  });
+
+  test("E. accents / variantes français-anglais du vocabulaire générique -> traités de façon identique, jamais un signal résiduel", () => {
+    assert.deepEqual(fuzzyWords("École de Santé"), fuzzyWords("Ecole de Sante"));
+    // "santé"/"sanitaire"/"médico"/"personnel(s)"/"centre"/"formation" ne
+    // laissent aucun résidu significatif isolé — seul un nom propre reste.
+    assert.deepEqual(fuzzyWords("Centre de Formation du Personnel Medico-Sanitaire"), []);
+    assert.deepEqual(fuzzyWords("Centre de Formation du Personnel Médico-Sanitaire de Mbouda"), ["mbouda"]);
+  });
+
+  test("les nouveaux mots-vides ne retirent jamais un nom propre/sigle distinctif (fuzzyWords reste exploitable)", () => {
+    assert.deepEqual(fuzzyWords("Institut Superieur du Personnel Medico-Sanitaire (ISPM)"), ["ispm"]);
+  });
+});

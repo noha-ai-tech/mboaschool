@@ -140,11 +140,32 @@ export function buildUniqueSchoolCandidates(rows: RawSchoolProgramRow[]): DedupR
       const bWords = fuzzyWords(b.displayName);
       const ratio = wordOverlapMinRatio(aWords, bWords);
 
-      const aIsSubstring = b.normalizedKey.includes(a.normalizedKey) || a.normalizedKey.includes(b.normalizedKey);
+      // SPRINT MINSANTE-B §8.C — bug réel trouvé APRÈS durcissement des
+      // FUZZY_STOPWORDS (santé/sanitaire/personnel/formation/centre/medico
+      // ajoutés au moteur partagé, voir engine.ts) : l'ancien calcul
+      // `normalizedKey.includes(...)` comparait des clés ALPHABÉTISÉES
+      // (exactIdentityKey trie les mots) — un mot distinctif inséré au
+      // milieu de l'ordre alphabétique (ex. "NGAOUNDERE" entre "ISSTMADD" et
+      // "PERSONNEL") cassait la contiguïté de sous-chaîne même quand une
+      // variante était structurellement un sur-ensemble exact de l'autre.
+      // Cas réel régressé par le durcissement : "ECOLE DE FORMATION DU
+      // PERSONNEL DE SANTE ISSTMADD" vs sa variante "(NGAOUNDERE)" tombait
+      // de LIKELY_SAME_SCHOOL à AMBIGUOUS une fois formation/personnel/sante
+      // retirés (ratio 0.8 -> 0.5, sous le seuil sans la relation
+      // sous-ensemble). Remplacé par un vrai test d'inclusion ENSEMBLISTE
+      // sur les mots significatifs (ordre non pertinent, exactement ce que
+      // "une variante est un sur-ensemble de l'autre" doit vérifier) —
+      // jamais un signal d'auto-fusion (§9 toujours respecté), seulement un
+      // signal LIKELY_SAME_SCHOOL plus fiable pour la revue humaine.
+      const aWordSet = new Set(aWords);
+      const bWordSet = new Set(bWords);
+      const oneIsWordSubsetOfOther =
+        (aWords.length > 0 && aWords.every((w) => bWordSet.has(w))) ||
+        (bWords.length > 0 && bWords.every((w) => aWordSet.has(w)));
 
-      if (ratio === 0 && !aIsSubstring) continue; // DISTINCT — pas de rapport.
+      if (ratio === 0 && !oneIsWordSubsetOfOther) continue; // DISTINCT — pas de rapport.
 
-      if (ratio >= 0.8 || (aIsSubstring && ratio >= 0.5)) {
+      if (ratio >= 0.8 || (oneIsWordSubsetOfOther && ratio >= 0.5)) {
         reviewEntries.push({
           relationship: "LIKELY_SAME_SCHOOL",
           schoolAId: a.id,
@@ -154,7 +175,7 @@ export function buildUniqueSchoolCandidates(rows: RawSchoolProgramRow[]): DedupR
           schoolBName: b.displayName,
           schoolBRegion: b.region,
           overlapRatio: ratio,
-          reason: `Chevauchement de mots significatifs élevé (${Math.round(ratio * 100)}%)${aIsSubstring ? " + relation sous-chaîne" : ""}, même région — probablement la même école (variante de saisie), mais PAS fusionné automatiquement (§9 : pas de fuzzy auto merge).`,
+          reason: `Chevauchement de mots significatifs élevé (${Math.round(ratio * 100)}%)${oneIsWordSubsetOfOther ? " + mots significatifs d'un candidat inclus dans l'autre" : ""}, même région — probablement la même école (variante de saisie), mais PAS fusionné automatiquement (§9 : pas de fuzzy auto merge).`,
         });
       } else if (ratio >= 0.34) {
         reviewEntries.push({

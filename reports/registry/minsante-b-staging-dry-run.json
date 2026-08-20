@@ -1,0 +1,14 @@
+{
+  "generated_at": "2026-08-20T16:23:41.515Z",
+  "batch": "minsante-pilot-v1",
+  "operator": "jean-merlain",
+  "region": "Ouest",
+  "raw_rows": 33,
+  "unique_establishments": 22,
+  "tally": {
+    "CATEGORY_REVIEW": 9,
+    "DUPLICATE_REVIEW": 11,
+    "CLEAN_APPROVABLE": 2
+  },
+  "reconciled": true
+}

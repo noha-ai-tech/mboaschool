@@ -1,0 +1,14 @@
+{
+  "generated_at": "2026-08-20T16:23:39.632Z",
+  "sprint": "MINSANTE-B",
+  "scope": "Ouest — 22 candidats",
+  "fields_scanned": [
+    "display_name",
+    "raw_name_variants",
+    "programs_raw"
+  ],
+  "personal_fields_ever_collected": [],
+  "pii_pattern_matches": [],
+  "pii_persisted": 0,
+  "safe": true
+}

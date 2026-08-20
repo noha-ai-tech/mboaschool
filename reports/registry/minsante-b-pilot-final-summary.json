@@ -1,0 +1,68 @@
+{
+  "generated_at": "2026-08-20T16:23:45.769Z",
+  "batch": "minsante-pilot-v1",
+  "operator": "jean-merlain",
+  "region": "Ouest",
+  "database": {
+    "establishments_before": 2240,
+    "establishments_after": 2240,
+    "staging_before": 2344,
+    "staging_after": 2366,
+    "registry_identifiers_before": 2242,
+    "registry_identifiers_after": 2242,
+    "minsante_staging_before": 0,
+    "health_training_staging_before": 0
+  },
+  "extraction": {
+    "parser_version": "minsante-a1-pdf-text@1",
+    "source_pdf_sha256": "26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a",
+    "source_text_sha256": "f7c8b712d1dd9f694118a923beb941d4320773c863ed7d350ab5c364acbba830",
+    "completeness": {
+      "status": "PASS_WITH_EXPLAINED_EXCLUSIONS",
+      "safeForNormalization": true,
+      "safeForStaging": true,
+      "accounted": 425,
+      "expected": 425,
+      "explanation": "425/425 lignes comptabilisées — équation vérifiée."
+    }
+  },
+  "pilot": {
+    "raw_rows": 33,
+    "unique_establishments": 22,
+    "exact_merges": 11,
+    "dedup_review_pairs": 9,
+    "dedup_review_by_relationship": {
+      "LIKELY_SAME_SCHOOL": 1,
+      "AMBIGUOUS": 8
+    }
+  },
+  "tally": {
+    "CATEGORY_REVIEW": 9,
+    "DUPLICATE_REVIEW": 11,
+    "CLEAN_APPROVABLE": 2
+  },
+  "first_pass": {
+    "inserted": 22,
+    "skipped": 0
+  },
+  "second_pass": {
+    "inserted": 0,
+    "skipped": 22
+  },
+  "clean_approvable": 2,
+  "approval_checksum": "a9c38a42a060cb27651768ee1efa24a7905eb054c23d2e42e869fc2268abc2ad",
+  "pii": {
+    "generated_at": "2026-08-20T16:23:39.632Z",
+    "sprint": "MINSANTE-B",
+    "scope": "Ouest — 22 candidats",
+    "fields_scanned": [
+      "display_name",
+      "raw_name_variants",
+      "programs_raw"
+    ],
+    "personal_fields_ever_collected": [],
+    "pii_pattern_matches": [],
+    "pii_persisted": 0,
+    "safe": true
+  }
+}

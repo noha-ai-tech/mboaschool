@@ -72,6 +72,56 @@ const FUZZY_STOPWORDS = new Set([
   // différenciation entre deux établissements.
   "university", "universite", "université", "institute", "higher", "polytechnic", "polytechnique",
   "superieur", "supérieur", "superieure", "supérieure",
+  // SPRINT MINSANTE-B §6-7 — vocabulaire générique santé/formation, jamais
+  // couvert avant (liste ci-dessus centrée MINESEC/MINESUP). Chaque mot
+  // ci-dessous est ajouté sur la base d'un FAUX POSITIF RÉEL observé dans
+  // reports/registry/minsante-a1-matching-sample.csv (échantillon MINSANTE-A.1,
+  // moteur EXÉCUTÉ TEL QUEL, aucune modification à l'époque) — jamais une
+  // supposition théorique :
+  //  - "centre" + "formation" : "CENTRE DE FORMATION DU PERSONNEL PARAMEDICAL
+  //    (CFPP) DE YAOUNDE" (école de santé) -> PROBABLE_MATCH à 50% contre
+  //    "Centre de Formation en Couture et Mode de Yaoundé" (école de
+  //    COUTURE/MODE, aucun rapport avec la santé) — uniquement par
+  //    "centre"+"formation"+"yaounde" partagés. "centre" est un mot de TYPE
+  //    d'établissement (comme "ecole"/"institut"/"college" déjà retirés cf.
+  //    ligne ~59), pas un signal d'identité. "formation" décrit l'ACTE de
+  //    former, présent dans la quasi-totalité des noms MINSANTE/MINEFOP.
+  //    Risque de sur-suppression : aucune institution du corpus ne s'appuie
+  //    sur "centre" ou "formation" SEUL comme identifiant — toujours
+  //    accompagné d'un nom propre/ville/sigle qui reste, lui, significatif.
+  //  - "personnel"/"personnels" + "medico" + "sanitaire" : "COMPLEXE PRIVE DE
+  //    FORMATION DU PERSONNEL MEDICO-SANITAIRE DE MBOUDA" (Ouest) ->
+  //    PROBABLE_MATCH à 60% contre "Institut Supérieur du Personnel
+  //    Médico-Sanitaire (ISPM)" (Centre, institution SANS RAPPORT, déjà
+  //    affaibli en PROBABLE par le conflit géographique mais ne devrait même
+  //    pas apparaître comme candidat). "personnel(s)" est un descripteur
+  //    administratif ("staff") présent dans la quasi-totalité des noms
+  //    MINSANTE ; "medico"/"sanitaire" nomment le DOMAINE (santé) entier,
+  //    pas une institution précise. Risque de sur-suppression : aucun nom du
+  //    corpus n'utilise "personnel"/"medico"/"sanitaire" seul(s) comme
+  //    identifiant — un nom propre, un sigle ou une ville reste toujours
+  //    disponible comme signal.
+  //  - "sante"/"santé" : "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE
+  //    FONDATION EVA POUR LA SANTE A L'EST" (Est) -> PROBABLE_MATCH à 33%
+  //    contre "Institut Supérieur de Santé" (Littoral, institution SANS
+  //    RAPPORT, géographie contradictoire) — "santé" est le SEUL mot
+  //    significatif restant de la cible une fois "institut"/"supérieur"
+  //    retirés (SPRINT MINESUP-E), exactement le même problème que
+  //    "university" pour Jagora University. "santé" nomme tout le domaine
+  //    (education_family=health_training), jamais une institution
+  //    spécifique. Risque de sur-suppression : même raisonnement que
+  //    "university" — accepté par précédent direct.
+  // Volontairement PAS ajoutés faute de faux positif réel documenté ce
+  // sprint (§7 : "ne pas ajouter aveuglément chaque mot listé") :
+  // "medical" (forme anglaise — "medico" du corpus FR suffit, jamais observé
+  // séparément), "health"/"nursing"/"training" (aucun faux positif anglophone
+  // observé dans l'échantillon MINSANTE-A.1 — seulement testé en régression
+  // §8.E, pas ajouté en stopword sans preuve), "professionnel"/
+  // "professionnelle" (le couple réel "PROFESSIONNELS DE LA SANTE" vs
+  // "PERSONNELS DE LA SANTE" DE MEIGANGA reste correctement classé AMBIGUOUS
+  // — pas une fusion automatique à corriger, "professionnels" n'est pas la
+  // cause du problème).
+  "centre", "formation", "personnel", "personnels", "sante", "santé", "sanitaire", "medico", "médico",
 ]);
 
 /** Mots significatifs pour le chevauchement flou (REVIEW uniquement, jamais une preuve d'identité). */

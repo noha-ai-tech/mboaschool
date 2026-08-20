@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-08-20T16:23:45.364Z",
+  "operator": "jean-merlain",
+  "batch": "minsante-pilot-v1",
+  "total_pilot_staging_rows": 22,
+  "by_status": {
+    "normalized": 9,
+    "duplicate_review": 11,
+    "ready": 2
+  },
+  "by_classification": {
+    "CATEGORY_REVIEW": 9,
+    "DUPLICATE_REVIEW": 11,
+    "CLEAN_APPROVABLE": 2
+  },
+  "clean_approvable_count": 2,
+  "approval_checksum": "a9c38a42a060cb27651768ee1efa24a7905eb054c23d2e42e869fc2268abc2ad"
+}
