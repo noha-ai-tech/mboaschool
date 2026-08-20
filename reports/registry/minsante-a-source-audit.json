@@ -1,0 +1,280 @@
+{
+  "sprint": "MINSANTE-A",
+  "type": "OFFICIAL_SOURCE_DISCOVERY_AND_ALTERNATIVE_SOURCE_RECOVERY_AUDIT",
+  "operator": "jean-merlain",
+  "search_date": "2026-08-20",
+  "read_only": true,
+  "production_writes": 0,
+  "predecessor_lesson_applied": "MINEFOP-A/A.1 (commit bb036c0) — élargir la recherche si la source principale semble bloquée, mais ne jamais confondre agrégat et registre nominatif",
+
+  "primary_minsante_access": {
+    "domain": "minsante.cm",
+    "homepage_status": 200,
+    "homepage_last_modified": "2024-03-05",
+    "portal_status": "https://www.minsante.cm/site/?q=fr — Drupal, ACCESSIBLE, actualités datées août 2026",
+    "relevant_category_found": "/site/?q=fr/catégories/développement-des-ressources-humaines",
+    "access_restored_vs_minefop": true,
+    "bypass_attempted": false,
+    "concoursminsante_cm_status": "TLS_CERT_MISMATCH (CN=*.minsante.cm ne couvre pas concoursminsante.cm) — lien officiel présent sur la page d'accueil, techniquement inaccessible ce sprint, aucun contournement tenté (refusé par le contrôle de permission de l'environnement)",
+    "cm_minsante_drh_com_status": "DNS_DEAD (ENOTFOUND) — domaine historique référencé en pied de page des PDF de concours 2020, remplacé probablement par examen-national-special-minsante.cm"
+  },
+
+  "search_strategy": {
+    "query_families_investigated": [
+      "A - registres/listes officielles FR+EN (liste écoles agréées, écoles infirmiers/sages-femmes, établissements formation médico-sanitaire)",
+      "B - document discovery (filetype:pdf sur minsante.cm et domaines liés)",
+      "C - official domain search (site:minsante.cm, gov.cm, spm.gov.cm)",
+      "D - legal/administrative documents (Décret 80/198 du 9 juin 1980, arrêtés ouverture concours, procédures création/ouverture)",
+      "E - exam/competition sources (résultats concours 2017/2020/2021/2022/2023 par filière)",
+      "F - regional discovery (10 régions confirmées présentes dans la Source A par grep direct)",
+      "G - historical aggregate corroboration (étude OMS/AFRO citant MINSANTE 2010)",
+      "H - cross-ministry boundary check (presse MINESUP/MINSANTE frontière IPES)"
+    ],
+    "government_domains_investigated": [
+      "minsante.cm (ACCESSIBLE, portail Drupal actif)",
+      "examen-national-special-minsante.cm (ACCESSIBLE, plateforme officielle-adjacente confirmée par indices internes)",
+      "concoursminsante.cm (lien officiel, TLS misconfiguré)",
+      "cm-minsante-drh.com (DNS mort, historique)",
+      "spm.gov.cm (non exploré en profondeur ce sprint, pas nécessaire — source primaire minsante.cm suffisante)",
+      "ins-cameroun.cm (INS — annuaire éducation/formation général identifié, pas dépouillé en détail, périmètre MINEDUB/MINESEC/MINESUP/MINEFOP plutôt que MINSANTE)"
+    ],
+    "regional_searches_done": true,
+    "regional_searches_scope": "10/10 régions confirmées présentes dans la Source A par grep déterministe sur le texte extrait, pas par requête région-par-région séparée",
+    "document_searches_done": true,
+    "legal_document_searches_done": true,
+    "competition_exam_searches_done": true,
+    "pdf_documents_downloaded_and_parsed": 3
+  },
+
+  "sources_discovered": {
+    "total_serious_candidates": 8,
+    "tier_1": 1,
+    "tier_2": 4,
+    "tier_3_or_discovery_only": 3,
+    "excluded_out_of_scope_healthcare": 2
+  },
+
+  "best_source": {
+    "id": "SOURCE_A",
+    "name": "LISTE DES ECOLES DE FORMATION DES PERSONNELS MEDICO-SANITAIRES AGREES DU MINSANTE - ANNEE 2025",
+    "publisher": "MINISTERE DE LA SANTE PUBLIQUE (MINSANTE)",
+    "url": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+    "authority": "TIER_1_PROPOSED_WITH_DISCOVERABILITY_CAVEAT",
+    "date": "2025",
+    "format": "PDF, texte natif (pdftotext -layout intégral, 11 pages)",
+    "nominative_or_aggregate": "NOMINATIVE",
+    "coverage": "national, 10/10 régions confirmées",
+    "regions": ["Adamaoua", "Centre", "Est", "Extrême-Nord", "Littoral", "Nord", "Nord-Ouest", "Ouest", "Sud", "Sud-Ouest"],
+    "entity_types": ["TRAINING_ESTABLISHMENT"],
+    "filieres_officielles": [
+      "Analyses Médicales", "Imagerie Médicale", "Infirmiers", "Kinésithérapie",
+      "Odontostomatologie", "Optique Réfraction", "Prothèse Dentaire",
+      "Sages-femmes/Maïeuticiens", "Sciences Pharmaceutiques", "Psychomotricité et Relaxation"
+    ],
+    "count": {
+      "numbered_rows_school_x_filiere_pairs": 330,
+      "count_method": "grep déterministe '^\\s*[0-9]+\\.' sur texte pdftotext -layout intégral",
+      "unique_establishments_estimate": "~100-150 (estimation grossière non finale, 196 chaînes obtenues par un script de test avec artefacts de mise en page connus non corrigés — un vrai dédoublonnage nécessite un parseur région/école dédié, hors périmètre de ce sprint)"
+    },
+    "identifier_present": false,
+    "expected_count_explicit_in_source": false,
+    "completeness": "MANUAL_REVIEW_REQUIRED (signal structurel faible : 10/10 filières + 11/11 pages lues, pas un compteur source explicite)",
+    "pii_found": false,
+    "snapshot": {
+      "sha256": "26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a",
+      "content_type": "application/pdf",
+      "size_bytes": 699343,
+      "retrieved_at": "2026-08-20",
+      "committed_to_repo": false
+    }
+  },
+
+  "other_sources": [
+    {
+      "id": "SOURCE_B",
+      "name": "Résultats concours d'entrée écoles formation personnels sanitaires (2017-2023, par filière)",
+      "url_example": "https://www.minsante.cm/site/sites/default/files/concours2020/IGEO2020.pdf",
+      "publisher": "MINSANTE - Direction des Ressources Humaines",
+      "authority": "TIER_1_2",
+      "nominative_or_aggregate": "NOMINATIVE (écoles, en-tête de section) + PII HAUT RISQUE (matricule+nom candidats admis, tableau complet)",
+      "pii_found": true,
+      "pii_extracted": false,
+      "pii_persisted": false,
+      "extraction_possible": "PARTIELLE — en-têtes institutionnels seulement, jamais les lignes candidat",
+      "used_for": "cross-source corroboration only (§21) — voir minsante-a-source-comparison.csv"
+    },
+    {
+      "id": "SOURCE_C",
+      "name": "Décret n°80/198 du 9 juin 1980 portant statut des établissements de formation des personnels sanitaires",
+      "url": "https://opms-amsp.com/wp-content/uploads/2022/03/DECRET-N%C2%B0-80-198-DU-9-JUIN-1980-PORTANT-STATUT-DES-ETABLISSEMENTS-DE-FORMATION-DES-PERSONNELS-SANITAIRES.pdf",
+      "authority": "TIER_2_TEXT_TIER_3_ACCESS_CHANNEL",
+      "nominative_or_aggregate": "N/A - cadre légal",
+      "extraction_possible": false,
+      "used_for": "taxonomie officielle (cycles B/C/D), identifiant public = décret présidentiel de création (Article 3)",
+      "snapshot_sha256": "e11d79b0e1effb9419657065b8200bc875f1df3830301b3a1ce90e1d4c28b3cc"
+    },
+    {
+      "id": "SOURCE_D",
+      "name": "Procédures de création et d'ouverture Formation Sanitaire privée",
+      "url": "https://minsante.cm/site/?q=fr/content/proc%C3%A9dures-de-cr%C3%A9ation-et-douverture-formation-sanitaire-priv%C3%A9e-0",
+      "authority": "TIER_2",
+      "classification": "OUT_OF_SCOPE_HEALTHCARE_CONFIRMED",
+      "notes": "Concerne des Cabinets de Soins/Cabinets dentaires — établissements de SOINS, pas des écoles. 'Formation sanitaire' = terme camerounais désignant un établissement de santé (FOSA), pas une école."
+    },
+    {
+      "id": "SOURCE_E",
+      "name": "Formations Sanitaires Publiques / Situations comptables annuelles des FOSA (10 pages régionales)",
+      "url": "https://www.minsante.cm/site/?q=fr%2Forganigramme%2Fformations-sanitaires-publiques",
+      "authority": "TIER_2",
+      "classification": "OUT_OF_SCOPE_HEALTHCARE_CONFIRMED",
+      "notes": "FOSA = FOrmation SAnitaire = établissement de soins dans la terminologie du système de santé camerounais. Deuxième confirmation indépendante du piège terminologique."
+    },
+    {
+      "id": "SOURCE_F",
+      "name": "Arrêtés portant ouverture des concours directs (ex. 2017)",
+      "url_example": "https://www.minsante.cm/site/?q=fr/content/arretes-portant-ouverture-des-concours-directs-2017",
+      "authority": "TIER_2",
+      "nominative_or_aggregate": "N/A - cadre légal/calendaire",
+      "extraction_possible": false
+    },
+    {
+      "id": "SOURCE_G",
+      "name": "Étude de faisabilité OMS/AFRO citant MINSANTE 2010",
+      "url": "https://www.researchgate.net/publication/276272360_Etude_de_faisabilite_du_Programme_destine_au_renforcement_des_ecoles_de_medecine_et_des_soins_infirmiers_en_ouvrages_et_materiels_didactiques_dans_la_Region_Africaine",
+      "authority": "TIER_3_DISCOVERY",
+      "nominative_or_aggregate": "AGGREGATE",
+      "count": { "public_schools_2010": 40, "private_schools_2010": 29, "total_2010": 69, "note": "MINESUP medical schools 2011 (17) also cited but different ministry/scope, never to be merged" },
+      "date": "2010 (16 ans avant ce sprint, PÉRIMÉ, jamais un expected_count actuel)",
+      "used_for": "ordre de grandeur historique seulement — corroboration faible avec l'estimation ~100-150 (2025)"
+    },
+    {
+      "id": "SOURCE_H",
+      "name": "Presse — frontière MINESUP/MINSANTE (IPES santé sans agrément MINSANTE)",
+      "authority": "TIER_3_DISCOVERY",
+      "notes": "Signal de vigilance inter-registre : un établissement lié à MINESUP_IPES ne doit jamais être automatiquement traité comme équivalent MINSANTE agréé."
+    }
+  ],
+
+  "entity_model": {
+    "row_represents": "TRAINING_ESTABLISHMENT, avec duplication structurelle par filière proposée (une école = plusieurs lignes si multi-filières) — dédoublonnage requis avant staging",
+    "source_row_equals_ecoles237_establishment": "PARTIAL",
+    "dual_function_review_needed": false,
+    "healthcare_contamination_risk": "CONFIRMÉ RÉEL sur 2 sources distinctes (Source D, Source E) — terme 'formation sanitaire' seul = piège quasi systématique dans le vocabulaire MINSANTE camerounais, à documenter explicitement dans tout futur prompt/requête"
+  },
+
+  "identifier_discovery": {
+    "public_establishments": {
+      "identifier_type": "PRESIDENTIAL_DECREE_CREATION (proposé, Article 3 Décret 80/198)",
+      "real_example_observed": false,
+      "coverage": "UNKNOWN"
+    },
+    "private_establishments": {
+      "identifier_type": "MINISTERIAL_ORDER (probable par analogie, non confirmé pour les écoles spécifiquement)",
+      "real_example_observed": false,
+      "coverage": "UNKNOWN"
+    },
+    "safe_as_registry_identifier": "STRUCTURALLY_COMPATIBLE_NO_REAL_EXAMPLE_YET"
+  },
+
+  "taxonomy": {
+    "education_family_health_training_exists": true,
+    "main_category_sub_category_sante_exists": true,
+    "migration_required": false,
+    "gap_identified": "Ambiguïté main_category='autres' vs 'superieur' pour les instituts supérieurs santé (ex. noms contenant 'Institut Supérieur') — à trancher au cas par cas, pas par règle automatique"
+  },
+
+  "geography": {
+    "region_field_present_in_source": true,
+    "regions_confirmed": 10,
+    "city_field_present_in_source": "PARTIAL — dérivable du nom dans la majorité des cas, pas un champ structuré séparé",
+    "department_arrondissement_present": false
+  },
+
+  "pii_risk": {
+    "source_a_pii_found": false,
+    "source_b_pii_found": true,
+    "source_b_pii_type": "matricule de concours + nom complet des candidats admis, par centaines par document",
+    "personal_values_extracted_this_sprint": 0,
+    "personal_values_persisted_this_sprint": 0,
+    "raw_pii_pdf_committed_to_repo": false
+  },
+
+  "matching_test": {
+    "engine": "scripts/school-registry/lib/matching/engine.ts",
+    "live_targets_tested_against": 3,
+    "synthetic_candidates_tested": 5,
+    "candidates_source": "noms réels tirés de la Source A, aucune donnée candidat utilisée",
+    "false_positives": 0,
+    "auto_merge_triggered": 0,
+    "fuzzy_stopwords_health_vocabulary_gap": "confirmé toujours absent (santé/sanitaire/médico/formation/centre) — latent, non démontré comme problème réel sur cet échantillon de 3 cibles"
+  },
+
+  "source_priority_decision": {
+    "code": "E",
+    "label": "SECONDARY NOMINATIVE SOURCE FOUND, OFFICIAL CORROBORATION REQUIRED",
+    "reason": "Source A nominative, structurée, sans PII, forte cohérence interne d'authenticité MINSANTE — mais non liée depuis la navigation officielle actuelle de minsante.cm (réserve de découvrabilité), ce qui empêche une classification TIER 1 sans réserve ce sprint."
+  },
+
+  "pilot_gate": {
+    "ready_for_minsante_b": "PARTIAL",
+    "source": "SOURCE_A — Liste des Écoles Agréées MINSANTE 2025",
+    "scope": "1 filière (proposé: Infirmiers) x 1 région (proposé: Centre ou Littoral)",
+    "expected_size": "10-30 établissements estimés pour ce sous-ensemble (non compté précisément)",
+    "completeness_method": "signal structurel (filière/région complètes dans le document), pas un compteur source strict — MANUAL_REVIEW_REQUIRED",
+    "identifier_strategy": "aucun identifiant individuel disponible ce sprint — staging sans official_identifier au départ, à enrichir plus tard",
+    "prerequisites_before_execution": [
+      "extracteur PDF texte déterministe avec dédoublonnage école×filière",
+      "résolution gap mapping santé secondaire/supérieure",
+      "test de non-régression PII dédié si la Source B est utilisée"
+    ]
+  },
+
+  "migration_check": {
+    "registry_source_ministry_minsante_present": true,
+    "registry_education_family_health_training_present": true,
+    "establishment_registry_identifiers_table_status": "TABLE EXISTS AND CONTAINS LIVE DATA IN PRODUCTION (2242 rows read this sprint) — DISCREPANCY vs prior project memory which stated migration 0021 was 'prepared but not executed'; documented as a finding requiring human correction of that memory note, not acted upon further this sprint",
+    "migration_required_before_pilot": false,
+    "prepared": "N/A - no new migration proposed",
+    "executed": false
+  },
+
+  "database_baseline": {
+    "read_method": "live Supabase read via service_role key from .env.local, project umcwwynrftidytxgqkwi",
+    "before": {
+      "establishments_total": 2240,
+      "staging_total": 2344,
+      "staging_minsante": 0,
+      "staging_health_training": 0,
+      "registry_identifiers_total": 2242,
+      "registry_identifiers_minsante_authority": 0,
+      "data_sources_total": 9
+    },
+    "after": {
+      "establishments_total": 2240,
+      "staging_total": 2344,
+      "staging_minsante": 0,
+      "staging_health_training": 0,
+      "registry_identifiers_total": 2242,
+      "registry_identifiers_minsante_authority": 0,
+      "data_sources_total": 9
+    },
+    "delta": "0 (confirmed identical — no write script was ever executed this sprint, read-only counts re-verified at sprint close)"
+  },
+
+  "live_overlap_audit": {
+    "establishments_sub_category_sante": 1,
+    "establishments_name_matches_health_keywords": 3,
+    "examples": [
+      { "name": "Institut Supérieur de Santé", "main_category": "autres", "sub_category": "Santé", "region": "Littoral", "city": "Douala", "source_ministry": null },
+      { "name": "Institut Supérieur du Personnel Médico-Sanitaire (ISPM)", "main_category": "superieur", "sub_category": null, "region": "Centre", "source_ministry": null },
+      { "name": "ST Jude's Higher Institute of Nursing and Biomedical", "main_category": "superieur", "sub_category": null, "region": "Nord-Ouest", "source_ministry": null }
+    ],
+    "none_modified": true
+  },
+
+  "no_mass_collection_confirmed": true,
+  "no_national_collection": true,
+  "no_staging_write": true,
+  "no_promotion": true,
+  "no_mass_download": true
+}

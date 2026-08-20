@@ -1,0 +1,306 @@
+# MINSANTE Import Contract
+
+SPRINT MINSANTE-A, 2026-08-20. Opérateur : jean-merlain. Contrat de
+collecte pour un futur MINSANTE-B — **PAS exécuté ce sprint**, DISCOVERY
+uniquement. S'appuie sur `MULTI_REGISTRY_CONTRACT.md`,
+`REGISTRY_EXTRACTION_SAFETY.md` et sur les sources documentées dans
+`MINSANTE_SOURCE_CATALOG.md`. Contrairement à MINEFOP-A (source
+totalement bloquée, contrat presque entièrement `UNKNOWN`), ce contrat
+peut renseigner la plupart des sections avec un niveau de confiance
+correct grâce à la Source A (Liste des Écoles Agréées MINSANTE 2025) —
+mais AUCUNE section n'autorise une collecte réelle sans un futur sprint
+dédié à l'extraction déterministe.
+
+## 1. Authority / Registry
+
+```
+authority = MINSANTE   (déjà dans l'enum registry_source_ministry, migration 0006 — CONFIRMÉ en lecture directe ce sprint, aucune migration requise)
+registry  = MINSANTE_ECOLES_AGREEES   (PROPOSÉ, pas encore utilisé nulle part dans le code ni la base — nom dérivé directement du titre officiel du document Source A : "LISTE DES ECOLES DE FORMATION DES PERSONNELS MEDICO-SANITAIRES AGREES DU MINSANTE". Le champ `registry` de `establishment_registry_identifiers` est TEXT libre (pas un enum fermé) — aucune migration requise pour utiliser cette valeur le jour où une vraie collecte a lieu. AUCUNE écriture faite ce sprint.)
+```
+
+Contrairement à MINEFOP-A où aucun nom de registre n'a été proposé faute
+de structure observée, ce sprint dispose d'une source réelle avec un
+titre officiel explicite — proposer un nom devient raisonnable, mais
+reste une PROPOSITION documentaire, pas une valeur figée en code.
+
+## 2. Entity Model
+
+```
+Une LIGNE de la Source A = un nom d'établissement sous un couple (RÉGION, FILIERE).
+UNE ÉCOLE PEUT APPARAÎTRE PLUSIEURS FOIS dans le document (une fois par filière qu'elle propose) —
+confirmé directement (ex. "INSTITUT PANAFRICAIN DE PSYCHOMOTRICITE..." apparaît sous sa propre
+filière ; plusieurs grandes écoles de Yaoundé/Douala apparaissent sous Analyses Médicales ET
+Infirmiers). Le modèle Écoles237 (une ligne = un établissement) reste VALIDE, mais un futur
+extracteur DOIT dédoublonner par nom+région AVANT tout staging — sinon un même établissement
+génèrerait jusqu'à 10 lignes staging distinctes (une par filière), ce qui casserait à la fois le
+compte et le matching. Ceci est un GAP RÉEL IDENTIFIÉ ce sprint (pas hypothétique comme en
+MINEFOP-A) : le futur pipeline devra traiter la FILIÈRE comme un ATTRIBUT de l'établissement
+(liste de filières proposées), jamais comme une clé de duplication de fiche.
+```
+
+**Can current establishments model represent MINSANTE : OUI, avec un
+dédoublonnage explicite école×filière→école en amont du staging.**
+`raw_data` (jsonb, déjà présent côté staging) peut absorber la liste des
+filières proposées sans migration.
+
+## 3. Official Identifier Strategy
+
+```
+IDENTIFIER NAME (établissements PUBLICS) : numéro de DÉCRET PRÉSIDENTIEL de création — Article 3
+  du Décret n°80/198 du 9 juin 1980 (Source C) : "Les établissements et centres de formation des
+  personnels sanitaires créés par décret du Président de la République, sont placés sous
+  l'autorité du Ministre chargé de la Santé publique." AUCUN exemple réel de ce numéro n'a été
+  observé ce sprint (le Décret 80/198 est le texte-cadre, pas un exemple de décret de création
+  individuel) — format INCONNU en pratique, à confirmer sur un échantillon réel avant de coder un
+  `identifier_type`.
+IDENTIFIER NAME (établissements PRIVÉS) : probablement un arrêté ministériel d'autorisation de
+  création + un arrêté distinct d'ouverture (par analogie avec la procédure "Formation Sanitaire
+  privée" trouvée en Source D — MAIS cette procédure précise concerne les structures de SOINS,
+  PAS les écoles ; l'existence d'une procédure équivalente et distincte pour les ÉCOLES privées est
+  PROBABLE (cohérente avec le principe général du Décret 80/198) mais NON CONFIRMÉE par un document
+  spécifique aux écoles trouvé ce sprint. Piste explicite pour MINSANTE-B : chercher "arrêté portant
+  autorisation d'ouverture" + nom d'une école privée précise de la Source A, par analogie avec la
+  méthode qui a fonctionné pour retrouver le pattern d'identifiant MINEFOP en MINEFOP-A.1.
+FORMAT :               INCONNU dans les deux cas — AUCUN identifiant individuel observé dans la
+  Source A elle-même (elle ne liste que des noms, pas de matricule/numéro d'arrêté).
+UNIQUENESS :            INCONNU.
+STABLE OVER TIME :      Probable pour le numéro d'acte lui-même (acte administratif daté), mais le
+  statut "agréé" associé peut changer d'une édition à l'autre du document Source A (l'édition 2025
+  peut différer de futures éditions — pas de preuve de stabilité inter-édition observée, un seul
+  millésime consulté ce sprint).
+```
+
+**Décision : aucun `identifier_type` figé ce sprint** — même prudence
+que MINEFOP-A/MINESUP-A avant observation d'un échantillon réel
+d'identifiant. Le modèle `establishment_registry_identifiers`
+(`authority`/`registry`/`identifier`/`identifier_type` nullable) reste
+structurellement compatible pour accueillir ces deux types d'actes
+(`CREATION_ORDER` public vs privé) séparément le jour où ils sont
+observés, sur le même schéma qui a déjà servi pour MINESUP-B.1
+(`CREATION_ORDER` / `OPENING_AUTHORIZATION` distincts sur la même
+institution).
+
+## 4. Category Mapping — MINSANTE TAXONOMY GAP ANALYSIS
+
+```
+registry_education_family : 'health_training' — DÉJÀ PRÉSENT dans l'enum (scripts/school-registry/types.ts, ligne 24 ; migration 0006), CONFIRMÉ ce sprint par lecture directe du code. AUCUNE migration requise.
+main_category (établissements, produit)      : 'autres' — sous-catégorie "Santé" DÉJÀ PRÉSENTE dans src/lib/categories.ts (ligne 48). AUCUNE migration requise pour un mapping minimal.
+```
+
+| Type source (vocabulaire officiel Décret 80/198 + Source A) | `education_family` | `main_category`/`sub_category` produit | Migration needed? |
+|---|---|---|---|
+| École d'infirmiers (Cycle B) | `health_training` | `autres` / "Santé" | NON |
+| École d'infirmiers adjoints / agents techniques médico-sanitaires (Cycle C) | `health_training` | `autres` / "Santé" | NON |
+| Centre de formation d'aides-soignants (Cycle D) | `health_training` | `autres` / "Santé" | NON |
+| École de sages-femmes/maïeuticiens | `health_training` | `autres` / "Santé" | NON |
+| Institut/École supérieure des sciences de la santé (filières type Analyses Médicales, Imagerie Médicale...) | `health_training` | `autres` / "Santé" (ou `superieur` selon niveau réel — GAP, voir ci-dessous) | À TRANCHER |
+
+**GAP RÉEL IDENTIFIÉ (contrairement à MINEFOP-A qui n'en trouvait
+aucun)** : plusieurs noms de la Source A portent explicitement "INSTITUT
+SUPÉRIEUR" (ex. "INSTITUT SUPERIEUR DES SCIENCES DE LA SANTE ABBOU DE
+NGAOUNDERE", "INSTITUT SUPERIEUR DE TECHNOLOGIE APPLIQUEE DE GESTION
+(ISTAG) DE YAOUNDE" apparaissant sous une filière santé) — ces
+établissements ressemblent structurellement aux entrées `main_category
+= 'superieur'` déjà en production (ex. "Institut Supérieur du Personnel
+Médico-Sanitaire (ISPM)", trouvé en base avec `main_category=
+'superieur'`, PAS `'autres'`/"Santé"). **Il existe donc une ambiguïté de
+mapping non résolue** : certaines écoles agréées MINSANTE relèvent
+probablement de `main_category='superieur'` plutôt que `'autres'`/"Santé"
+selon leur niveau réel — à trancher au cas par cas lors d'un futur
+MINSANTE-B, PAS par une règle automatique sur la seule présence du mot
+"Institut Supérieur" dans le nom (risque de faux négatif/positif
+symétrique à celui documenté §23).
+
+**Conclusion : MIGRATION REQUIRED BEFORE PILOT = NON** au niveau schéma
+(les deux familles/catégories existent déjà) — mais une **règle de
+mapping main_category/sub_category plus fine que MINEFOP** devra être
+écrite avant tout pilote réel, car MINSANTE contient un mélange
+secondaire/supérieur que MINEFOP (`autres` uniforme) n'avait pas.
+
+## 5. Geography Mapping
+
+```
+Source A fournit RÉGION explicitement pour chaque ligne (10/10 régions confirmées présentes).
+VILLE/LOCALITÉ : présente dans le NOM de l'établissement lui-même ("... DE YAOUNDE", "... DE
+  NGAOUNDERE") pour la quasi-totalité des entrées observées, PAS dans un champ structuré séparé —
+  un futur extracteur devra PARSER la ville depuis la fin du nom (motif "DE <VILLE>" observé de
+  façon quasi systématique), avec le risque connu de ce type de parsing (villes composées,
+  quartiers vs villes, ex. "DE MBOUO BANDJOUN", "D'EBOLMEDZOM-NKOABANG" — noms composés/quartiers
+  qui ne sont pas des villes officielles au sens de cameroonRegions.ts, à traiter au cas par cas,
+  NULL acceptable plutôt qu'une déduction incertaine).
+Département/arrondissement : ABSENTS de la Source A — NULL acceptable par défaut (§17 : ne jamais
+  inventer).
+Réutiliser normalizeRegionCasing()/cameroonRegions.ts existants sans modification — les 10 noms de
+  région observés dans la Source A (ADAMAOUA, CENTRE, EST, EXTREME-NORD/EXTREME NORD [orthographe
+  incohérente observée — avec et sans tiret selon la page], LITTORAL, NORD, NORD-OUEST, OUEST, SUD,
+  SUD-OUEST) sont cohérents avec le référentiel déjà utilisé par MINESEC/MINESUP/Major Cities,
+  MODULO la normalisation habituelle de la casse et du tiret déjà gérée par normalizeRegionCasing().
+```
+
+## 6. Completeness Proof Strategy
+
+```
+COMPLETENESS_PROOF = EXPECTED_COUNT_UNKNOWN pour la Source A (voir catalogue §COMPLETENESS) — pas
+de total explicite dans le document lui-même. Preuve d'exhaustivité disponible SEULEMENT au niveau
+structurel faible : "10/10 filières officielles avec en-tête FILIERE: présentes, 11/11 pages du PDF
+lues intégralement" — signal raisonnable, PAS une preuve stricte au sens `REGISTRY_EXTRACTION_
+SAFETY.md` (qui exige un compteur source explicite ou une preuve d'épuisement de pagination/table).
+Le chiffre "69 écoles (MINSANTE 2010)" (Source G du catalogue) NE DOIT JAMAIS servir d'expected_count
+actuel : 16 ans d'écart, source secondaire (OMS/AFRO citant MINSANTE, pas MINSANTE directement), et
+la Source A (2025) suggère déjà un ordre de grandeur nettement supérieur (~100-150 établissements
+uniques estimés grossièrement, PAS un chiffre final).
+Toute future collecte MINSANTE devra soit (a) trouver un total explicite ailleurs sur le portail
+examen-national-special-minsante.cm ou minsante.cm (non trouvé ce sprint), soit (b) accepter un
+statut `MANUAL_REVIEW_REQUIRED`/`PASS_WITH_EXPLAINED_EXCLUSIONS` documenté page par page (11 pages,
+comptage déterministe ligne par ligne comme fait ce sprint) plutôt qu'un PASS silencieux.
+```
+
+## 7. Raw Snapshot Strategy
+
+```
+source_url        = URL exacte du PDF Source A (et de chaque PDF filière de la Source B si jamais utilisée pour corroboration, jamais pour extraction candidat)
+fetched_at         = horodatage de la requête
+content_type       = application/pdf — donc un extracteur PDF est nécessaire, PAS seulement HTML comme MINESEC/MINESUP (MINEFOP-A avait déjà anticipé ce besoin sans jamais l'exécuter ; MINSANTE-A est le premier sprint à confirmer concrètement que `pdftotext -layout` fonctionne correctement sur ce type de document gouvernemental camerounais — texte natif, pas de scan)
+SHA256             = writeSourceSnapshot() existant, réutilisable tel quel (SHA256 déjà calculé ce sprint pour la Source A, voir catalogue)
+parser_version      = à définir lors de l'écriture d'un futur collecteur PDF réel (nouveau : `scripts/school-registry/lib/extraction/` n'a aujourd'hui que des utilitaires HTML — extractTableFirstColumn/extractSelectOptions/segmentByHeading — un utilitaire équivalent pour texte PDF segmenté par en-têtes RÉGION/FILIERE serait un développement réel nécessaire avant MINSANTE-B, PAS juste une adaptation)
+expected_count      = UNKNOWN (§6)
+completeness_status  = MANUAL_REVIEW_REQUIRED par défaut
+```
+
+## 8. PII / Data Minimization Policy — SPÉCIFIQUE MINSANTE, RISQUE RÉEL CONFIRMÉ (pas hypothétique)
+
+```
+Contrairement à MINEFOP/MINESUP où le risque PII était surtout théorique, ce sprint a DIRECTEMENT
+observé des centaines de couples (matricule de concours, nom complet de candidat) dans la Source B
+(résultats de concours par filière). AUCUNE valeur candidat n'a été extraite, copiée dans un
+fichier, ni committée — seuls les en-têtes institutionnels (nom d'école, région) ont été lus et
+notés dans le catalogue. Le PDF source (igeo2020.pdf, téléchargé pour inspection technique) a été
+supprimé de l'environnement de session temporaire, jamais copié dans le dépôt.
+RÈGLE FERME POUR MINSANTE-B : si la Source B est un jour utilisée pour extraire des noms d'écoles
+(corroboration géographique/filière), l'extracteur DOIT ignorer structurellement toute ligne
+correspondant au motif "N° MATRICULE NOMS ET PRENOMS" et tout ce qui suit jusqu'au prochain en-tête
+"Région:"/nom d'école — avec un test de non-régression dédié vérifiant qu'AUCUNE chaîne ressemblant
+à un nom de candidat (regex approximative : ligne commençant par un nombre suivi d'un matricule
+"20XXX-NNNN") n'atteint jamais `raw_data` ou tout autre champ persisté.
+La Source A, elle, est structurellement SANS PII (confirmé par recherche de motifs) — c'est la
+source à privilégier précisément pour cette raison en plus de sa qualité institutionnelle.
+```
+
+## 9. Staging Contract
+
+`STAGING COMPATIBLE : YES` (même conclusion structurelle que
+MINESEC/MINESUP/MINEFOP, revérifiée) :
+
+- `education_family = 'health_training'` — déjà présent, aucune migration.
+- `official_identifier` (staging, texte libre) — prêt à accueillir un futur numéro de décret/arrêté MINSANTE, format encore inconnu (§3).
+- `raw_data` (jsonb) — peut absorber la liste des filières proposées par école (résolution du gap de dédoublonnage §2) sans migration de schéma.
+- `region`/`city` — suffisants ; `city` nécessitera un parsing dédié depuis le nom (§5), pas un champ déjà structuré côté source.
+
+**Gap réel à combler avant tout pilote (pas seulement théorique)** :
+absence d'un utilitaire d'extraction PDF texte segmenté par en-têtes
+répétés (Région > École, avec gestion du cas "une école apparaît sous
+plusieurs filières") dans `scripts/school-registry/lib/extraction/` —
+développement réel nécessaire, pas une simple réutilisation de
+l'existant HTML.
+
+## 10. Review Rules
+
+Reprendre la matrice de déduplication inter-ministères
+(`MULTI_REGISTRY_CONTRACT.md` §5). Risque de doublon confirmé réel avec
+au moins 3 établissements déjà en production portant un vocabulaire
+santé (`Institut Supérieur de Santé`, `Institut Supérieur du Personnel
+Médico-Sanitaire (ISPM)`, `ST Jude's Higher Institute of Nursing and
+Biomedical`) — testés ce sprint contre le moteur de matching partagé
+avec des candidats synthétiques dérivés de vrais noms de la Source A
+(§ Matching ci-dessous, aucune fusion automatique observée).
+**Règle spécifique MINSANTE (§10 Source H du catalogue)** : un
+établissement déjà lié à un registre MINESUP (`MINESUP_IPES`) ne doit
+JAMAIS être considéré automatiquement comme équivalent à une entrée
+MINSANTE — les deux autorités opèrent des régimes d'agrément distincts
+et, selon la presse (Source H), potentiellement CONTRADICTOIRES pour
+certaines filières santé proposées par des IPES sans agrément MINSANTE.
+Toujours créer un `establishment_registry_identifiers` DISTINCT par
+autorité sur la même fiche établissement si un lien réel est confirmé,
+jamais fusionner les deux registres en un seul enregistrement.
+
+## 11. Matching Rules — TEST RÉEL AVEC CANDIDATS SYNTHÉTIQUES (§20/§23)
+
+Le moteur partagé (`scripts/school-registry/lib/matching/engine.ts`) a
+été testé ce sprint avec 5 candidats **synthétiques** (noms réels tirés
+de la Source A, aucune donnée candidat/PII utilisée) contre les 3
+établissements santé actuellement en production (`Institut Supérieur de
+Santé`, `Institut Supérieur du Personnel Médico-Sanitaire (ISPM)`, `ST
+Jude's Higher Institute of Nursing and Biomedical`) :
+
+| Candidat synthétique | Résultat | safeForAutoLink |
+|---|---|---|
+| "Institut Panafricain de Psychomotricité et Relaxation de Douala" | NO_MATCH | false |
+| "Ecole des Sciences de la Santé de Ndikinimeki" | NO_MATCH | false |
+| "Institut Supérieur des Sciences de la Santé de Zalom-Mfou" | NO_MATCH | false |
+| "Institut Supérieur de Santé" (collision de nom exact délibérée) | EXACT_IDENTITY, géographie cohérente | false |
+| "Centre de Formation des Sciences de la Santé de la Croix Rouge Camerounaise" | NO_MATCH | false |
+
+**Aucun faux positif dangereux observé** sur cet échantillon (jamais de
+fusion automatique, `safeForAutoLink` toujours `false` même sur la
+collision de nom exact — cohérent avec la règle absolue FUZZY MATCH !=
+IDENTITY PROOF). **Gap latent identifié mais NON DÉMONTRÉ comme
+problème réel ce sprint** (contrairement à MINEFOP où le problème était
+prouvé) : `FUZZY_STOPWORDS`
+(`scripts/school-registry/lib/matching/engine.ts`) ne contient toujours
+aucun vocabulaire santé générique ("santé", "sanitaire", "médico",
+"formation", "centre") ni vocationnel (déjà noté MINEFOP-A, toujours
+absent). Sur cet échantillon de 3 cibles live seulement, aucune
+ambiguïté n'a été produite — mais le risque théorique reste identique à
+celui documenté en MINEFOP-A : à réévaluer avec un échantillon plus
+large de candidats réels lors d'un futur MINSANTE-B, avant de considérer
+le volume de résultats `AMBIGUOUS`/`PROBABLE_MATCH` comme fiable à
+l'échelle nationale. Non corrigé ce sprint (DISCOVERY read-only, pas un
+sprint de code).
+
+## 12. Future Promotion Prerequisites
+
+Avant toute collecte MINSANTE réelle (hors périmètre de ce sprint) :
+
+1. Développer un extracteur PDF texte déterministe pour la structure Région>Filière>École de la Source A, AVEC dédoublonnage école×filière→école (§2, §9) et un manifest de complétude conforme à `REGISTRY_EXTRACTION_SAFETY.md`.
+2. Résoudre le gap de mapping `main_category`/`sub_category` "santé secondaire vs santé supérieure" (§4) — probablement au cas par cas, jamais par règle automatique sur le seul mot "Institut Supérieur".
+3. Retrouver au moins un exemple réel d'identifiant officiel (décret présidentiel pour le public, arrêté pour le privé) pour proposer un `identifier_type` fondé (§3) — actuellement zéro exemple observé, contrairement au pattern d'agrément MINEFOP qui avait 5 exemples indépendants.
+4. Écrire un test de non-régression PII dédié garantissant qu'aucune ligne candidat (Source B) n'atteint jamais un champ persisté, si la Source B est utilisée pour corroboration (§8).
+5. Étendre `FUZZY_STOPWORDS` avec le vocabulaire santé générique si un échantillon réel plus large démontre le même problème que MINEFOP (§11) — pas préventif tant que non démontré.
+6. Décider explicitement du nom final du `registry` (`MINSANTE_ECOLES_AGREEES` proposé ici, à confirmer) une fois un premier extracteur réel testé.
+7. Tenter de retrouver un lien de navigation direct depuis minsante.cm vers examen-national-special-minsante.cm/la Source A, pour renforcer la classification TIER 1 sans réserve (actuellement TIER 1 proposé AVEC réserve de découvrabilité, voir catalogue).
+8. Pilote limité à une seule région avant toute collecte nationale — même politique que tous les registres précédents.
+
+## 13. MINSANTE V1 Acceptance Criteria
+
+```
+[x] Compatibilité schéma (education_family='health_training', main_category='autres'/"Santé") confirmée sans migration.
+[x] Accès fonctionnel à une source MINSANTE primaire structurée — RÉSOLU ce sprint (Source A), contrairement à MINEFOP toujours bloqué.
+[x] Au moins un échantillon réel de fiches MINSANTE observé (330 lignes école×filière, ~100-150 établissements uniques estimés) — RÉSOLU.
+[ ] Format/unicité d'un identifiant officiel MINSANTE vérifié sur un échantillon représentatif — INCONNU, zéro exemple observé (contrairement au pattern MINEFOP qui avait 5 exemples).
+[ ] Preuve d'exhaustivité stricte (compteur source explicite ou pagination épuisée) — actuellement signal structurel faible seulement (10/10 filières, 11/11 pages), pas un compteur explicite.
+[ ] Extracteur PDF texte déterministe développé + testé (structure Région>Filière>École, dédoublonnage) — NON FAIT ce sprint (DISCOVERY seulement).
+[ ] Gap de mapping santé secondaire/supérieure résolu — NON FAIT.
+[ ] FUZZY_STOPWORDS réévalué sur échantillon réel plus large — NON FAIT, pas nécessaire tant que non démontré.
+[ ] Nom de registre confirmé (`MINSANTE_ECOLES_AGREEES` proposé) — PROPOSÉ, pas confirmé par un usage réel.
+[ ] PII exclue à 100% — politique appliquée et testée manuellement ce sprint (Source B), test automatisé dédié à écrire avant tout usage réel de la Source B.
+[ ] Dry-run staging propre (0 écriture) avant toute collecte réelle — NON FAIT (pas nécessaire ce sprint, aucune extraction tentée).
+[ ] Pilote limité à une seule région avant toute collecte nationale.
+```
+
+## 14. Décision — SOURCE PRIORITY PLAN
+
+```
+NEXT STEP DECISION : E — SECONDARY NOMINATIVE SOURCE FOUND, OFFICIAL CORROBORATION REQUIRED
+  (voir justification complète dans le rapport final du sprint). La Source A est nominative,
+  structurée, sans PII, et présente un faisceau d'indices d'authenticité MINSANTE fort — mais reste
+  classée avec une réserve de découvrabilité (non liée depuis la navigation officielle actuelle de
+  minsante.cm) qui empêche une classification TIER 1 sans réserve ce sprint. Elle constitue
+  néanmuse la meilleure source jamais trouvée sur l'ensemble des sprints de registre national à ce
+  jour (MINESEC/MINESUP/MINEFOP/MINSANTE) en termes de proximité avec un registre nominatif borné
+  exploitable.
+PILOT STRATEGY (proposée, NON EXÉCUTÉE) : voir §26 du rapport final — un pilote MONO-RÉGION
+  (probablement Centre ou Littoral, les deux régions les mieux représentées dans la Source A) sur
+  une seule filière (ex. "Infirmiers", la plus large avec institutions publiques ET privées
+  clairement identifiables) serait la première étape recommandée d'un futur MINSANTE-B, APRÈS
+  développement de l'extracteur PDF déterministe (§12.1).
+```
