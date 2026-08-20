@@ -1,0 +1,32 @@
+{
+  "generated_at": "2026-08-20T19:57:57.692Z",
+  "operator": "jean-merlain",
+  "sprint": "MINSANTE-F",
+  "batch": "minsante-pilot-v1",
+  "pilot_total": 22,
+  "final_classification": {
+    "CLEAN_APPROVABLE": 8,
+    "CATEGORY_REVIEW": 13,
+    "DUPLICATE_REVIEW": 1,
+    "CROSS_MINISTRY_REVIEW": 0,
+    "OTHER": 0
+  },
+  "unresolved_candidates": 13,
+  "deferred_candidates_documented": 14,
+  "safety_blockers_unknown": 0,
+  "minsante_pilot_closed": true,
+  "closure_rationale": "Les 22 lignes du pilote ont une classification explicite et justifiée. 13 candidat(s) CATEGORY_REVIEW restent isolés et documentés (RESEARCH_NOTES complètes, aucune promotion, aucun blocage de sécurité inconnu) ; 1 candidat DUPLICATE_REVIEW reste exclu (§16). La population CLEAN_APPROVABLE (8/22, 36%) est significative pour une promotion contrôlée future limitée à ce snapshot exact. Le pilote peut être formellement clos sans exiger 100% de propreté (§22 du brief) — les candidats non résolus restent différés, pas bloquants pour la clôture.",
+  "promotion_readiness": {
+    "ready_for_controlled_promotion_preflight": true,
+    "promotion_population_rule": "Population de promotion = EXACTEMENT le snapshot minsante-f-pilot-approval.json (candidate_count + checksum ci-dessous), jamais une reclassification partielle au moment de la promotion. Les candidats CATEGORY_REVIEW/DUPLICATE_REVIEW restent différés indéfiniment jusqu'à preuve Tier 1/2 future.",
+    "promotion_population_snapshot": {
+      "sprint": "MINSANTE-F",
+      "candidate_count": 8,
+      "checksum": "26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653"
+    }
+  },
+  "national_expansion_readiness": {
+    "ready_to_expand_pdf_parser_to_10_10_filieres": false,
+    "rationale": "Indépendant de la clôture du pilote régional. Ce sprint a confirmé que le parser PDF MINSANTE échoue encore sur des documents de décision individuels scannés (ex. décision N°2938/D/MINSANTE) même quand la liste consolidée 2025 a une couche de texte exploitable — le comportement du parser sur des documents hétérogènes (certains avec texte, certains scannés) n'a pas été testé à l'échelle nationale (10/10 filières) ce sprint. Évaluation seule ce sprint, AUCUNE expansion exécutée."
+  }
+}

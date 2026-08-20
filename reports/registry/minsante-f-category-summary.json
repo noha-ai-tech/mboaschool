@@ -1,0 +1,54 @@
+{
+  "generated_at": "2026-08-20T19:57:57.689Z",
+  "operator": "jean-merlain",
+  "sprint": "MINSANTE-F",
+  "batch": "minsante-pilot-v1",
+  "model": "MODEL_A",
+  "model_description": "health_training (education_family, inchangé) se traduit en main_category='superieur' UNIQUEMENT si preuve explicite de niveau supérieur (mot de niveau auto-déclaré dans le titre officiel, ou corroboration officielle externe Tier 1/2 vérifiée directement), sinon 'autres' SI une preuve explicite de niveau non-supérieur existe, sinon CATEGORY_REVIEW — jamais une valeur devinée depuis 'Institut'/'École' seuls. Modèle inchangé depuis MINSANTE-C, hiérarchie non affaiblie.",
+  "migration_required": false,
+  "category_evidence_hierarchy": [
+    "1. EXPLICIT_LEVEL_WORD_IN_OFFICIAL_TITLE (supérieur/universitaire/université/faculté) -> SUPERIEUR_CONFIRMED",
+    "2. OFFICIAL_CYCLE_DIPLOMA_NAME_IN_TITLE (ex. 'Infirmiers Diplômés d'État') -> AUTRES_CONFIRMED",
+    "3. Corroboration officielle externe Tier 1/2 vérifiée DIRECTEMENT ce sprint (page institutionnelle officielle récupérée avec succès + identité confirmée) -> SUPERIEUR_CONFIRMED ou AUTRES_CONFIRMED selon la preuve",
+    "4. Aucune preuve suffisante -> CATEGORY_REVIEW (défaut, jamais une catégorie inventée, §13)"
+  ],
+  "starting_candidates": 14,
+  "superieur_confirmed": 0,
+  "autres_confirmed": 1,
+  "still_category_review": 13,
+  "cross_ministry_review": 0,
+  "before": {
+    "CLEAN_APPROVABLE": 7,
+    "CATEGORY_REVIEW": 14,
+    "DUPLICATE_REVIEW": 1
+  },
+  "after": {
+    "CLEAN_APPROVABLE": 8,
+    "CATEGORY_REVIEW": 13,
+    "DUPLICATE_REVIEW": 1,
+    "CROSS_MINISTRY_REVIEW": 0,
+    "OTHER_REVIEW": 0
+  },
+  "total": 22,
+  "reconciled": true,
+  "taxonomy_validity_check": "superieur/autres restent sémantiquement suffisants pour les 14 candidats observés ce sprint — aucune catégorie officielle distincte rencontrée qui ne rentrerait dans ni l'une ni l'autre valeur. Aucun CATEGORY MODEL GAP identifié, aucune migration proposée.",
+  "database_post_condition": {
+    "establishments_before": 2240,
+    "establishments_after": 2240,
+    "staging_before": 2366,
+    "staging_after": 2366,
+    "registry_identifiers_before": 2242,
+    "registry_identifiers_after": 2242,
+    "rows_inserted": 0,
+    "rows_metadata_updated": 15,
+    "idempotent": true
+  },
+  "approval_snapshot": {
+    "previous_sprint": "MINSANTE-E",
+    "previous_count": 7,
+    "previous_checksum": "43e6f55393823970a0332d1feed62f3ec84b1b7761fe0a288df4819a28aaf792",
+    "new_count": 8,
+    "new_checksum": "26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653"
+  },
+  "promotion": "NO"
+}

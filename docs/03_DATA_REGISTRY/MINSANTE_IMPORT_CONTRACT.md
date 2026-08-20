@@ -852,3 +852,163 @@ candidats restants) avant tout pilote de promotion, OU accepter le volume
 actuel et lancer un PRE-FLIGHT limité aux 7 candidats déjà propres en
 excluant explicitement les 14 non résolus (option A du brief, à la
 discrétion de l'architecte/Jean-Merlain/Eddy).
+
+## MISE À JOUR SPRINT MINSANTE-F (2026-08-20) — CATEGORY EVIDENCE RECOVERY & PILOT CLOSURE
+
+Opérateur : jean-merlain. Portée : dernière passe ciblée sur les 14 lignes
+staging MINSANTE `CATEGORY_REVIEW` héritées de MINSANTE-E (batch
+`minsante-pilot-v1`, région Ouest), avec une stratégie de **découverte de
+sources alternatives** (routes A-K : nom exact, acronyme, nom+région,
+nom+MINSANTE/MINESUP, nom+arrêté/décret, nom+"enseignement
+supérieur"/"école de formation"/"institut supérieur", domaines
+gouvernementaux) plutôt qu'un simple re-essai des URLs mortes déjà
+documentées en MINSANTE-C/D/E. **AUCUNE nouvelle ligne staging, AUCUNE
+écriture `establishments`/`establishment_registry_identifiers`, AUCUNE
+promotion, AUCUNE migration exécutée** — mêmes garanties que
+MINSANTE-C/D/E. Script : `scripts/school-registry/minsante-f-reclassify.ts`
+(idempotent, revérifié par 2 exécutions réelles consécutives — même
+tally, même checksum d'approbation).
+
+### F.1 — Politique finale de catégorie du pilote
+
+La hiérarchie de preuve Model A (§C.1, inchangée depuis MINSANTE-C) reste
+la référence **définitive** pour ce pilote : `EXPLICIT_LEVEL_WORD_IN_
+OFFICIAL_TITLE` -> `SUPERIEUR_CONFIRMED` ; `OFFICIAL_CYCLE_DIPLOMA_NAME_
+IN_TITLE` -> `AUTRES_CONFIRMED` ; corroboration officielle **Tier 1/2**
+vérifiée **directement** (jamais un snippet de moteur de recherche, jamais
+Facebook/annuaire seul, §6 du brief F) -> selon la preuve ; sinon
+`CATEGORY_REVIEW` (défaut permanent, jamais une catégorie devinée). Cette
+politique est désormais **figée pour ce pilote** : tout candidat futur
+(nouvelle région, nouvelle filière) réutilise la même hiérarchie sans
+l'affaiblir.
+
+**1/14 nouvelle résolution ce sprint** : "Institut des Sciences et
+Techniques Médico-Sanitaires de Bafoussam" (ISTMS) -> `AUTRES_CONFIRMED`,
+via une source Tier 2 vérifiée directement (`iu-pointe.fr`, site
+institutionnel officiel du groupe parent "Institut Universitaire de la
+Pointe" dont ISTMS est l'une des 6 écoles constitutives) — désignation
+explicite du cycle "TMS" (Technicien Médico-Sanitaire, cycle non-supérieur
+reconnu) appliquée nommément à ISTMS, corroborée indépendamment par 3
+sources externes sur la signification du sigle, recoupée avec le signal
+négatif déjà établi en MINSANTE-E (ISTMS absent du registre IPES MINESUP).
+Détail complet : `reports/registry/minsante-f-category-recovery.csv`.
+
+### F.2 — Politique du candidat non résolu (permanente)
+
+`STILL_CATEGORY_REVIEW` est un **état terminal légitime et permanent**,
+jamais un échec à corriger par relâchement de preuve — confirmé à nouveau
+ce sprint (§14 du brief F : le succès du sprint n'était PAS de résoudre
+14/14, mais que chaque candidat reçoive une décision finale justifiée).
+**13/14 candidats restent `CATEGORY_REVIEW`** malgré une recherche
+alternative ciblée par routes A-K pour chacun ce sprint — traçabilité
+complète (`RESEARCH_NOTES` dans `minsante-f-reclassify.ts`, reprise dans
+`minsante-f-category-recovery.csv`) : sites institutionnels toujours
+injoignables (SSL reproductible sur `univ-jeuguevou.com/*`, revérifié via
+DEUX voies indépendantes ce sprint — WebFetch direct ET proxy de lecture
+tiers, échec identique confirmant un blocage serveur réel), DNS sur
+`eps-lesetoiles.com`/`fondation-monga.org`/`inssas.com`, HTTP 403 sur
+`cpfmbouocmr.org`, timeout DNS sur `cpfmbouocmr.net`, empreinte numérique
+nulle pour "Les Argus" de Bandjoun, contenu institutionnel prometteur mais
+Tier 3 uniquement (snippets de moteur de recherche, jamais une page
+récupérée directement) pour COFPSAROMA/EPS Les Étoiles. Un candidat
+(Bamougoum/EMES) a une décision MINSANTE primaire localisée mais
+délibérément non récupérée (`MANUAL_SOURCE_REVIEW_REQUIRED`) car le
+document mélange la décision avec des données d'évaluation d'étudiants
+(risque PII, §12 du brief F) — accès humain direct requis, pas de
+re-scraping automatisé.
+
+**Politique retenue : les candidats non résolus restent différés
+indéfiniment**, jamais bloquants pour la clôture du pilote (§F.4), jamais
+promus tant qu'une preuve Tier 1/2 future ne les résout pas explicitement.
+
+### F.3 — Règles de récupération de preuve officielle (retenues pour tout sprint futur)
+
+1. **Ne jamais se contenter de re-tester une URL déjà morte sans variante**
+   — toujours tenter routes A-K (acronyme, nom+région, nom+ministère,
+   nom+acte légal, nom+niveau, domaines gouvernementaux) avant de conclure
+   à un blocage structurel.
+2. **Un snippet de moteur de recherche n'est jamais une preuve finale**
+   (§6, Tier 3 = découverte uniquement) — même quand son contenu est très
+   favorable (ex. EPS Les Étoiles : snippet décrivant un cursus ATMS/TPMS
+   explicitement non-supérieur), la page doit être récupérée **directement**
+   pour faire autorité. Documenté comme piste prioritaire de vérification
+   humaine plutôt que comme preuve.
+3. **Un deuxième chemin de récupération indépendant (proxy de lecture
+   tiers) renforce la confiance qu'un blocage est réel** (serveur), pas un
+   artefact de l'outil de fetch — utilisé ce sprint sur `univ-jeuguevou.com`
+   avec échec identique aux deux voies.
+4. **Un PDF de décision individuelle mélangeant acte administratif et
+   données d'évaluation d'étudiants ne doit jamais être récupéré/analysé
+   pour la seule preuve de catégorie** — `MANUAL_SOURCE_REVIEW_REQUIRED`
+   est le résultat correct, pas un contournement automatisé (§11-12).
+5. **Un signal négatif (absence d'un établissement d'un registre officiel
+   voisin) ne suffit jamais seul à confirmer une catégorie positive** —
+   utilisé uniquement en recoupement d'une preuve positive déjà trouvée
+   (ex. ISTMS : absence du registre IPES MINESUP recoupée avec la
+   désignation "TMS" trouvée sur le site du groupe, jamais utilisée seule).
+
+### F.4 — Critères de clôture du pilote (§22 du brief F)
+
+Le pilote MINSANTE peut être considéré **CLOS** sans exiger une population
+100% propre, dès lors que :
+
+```
+[x] Les 22 lignes ont une classification explicite et documentée.
+[x] Les candidats non résolus (13 CATEGORY_REVIEW + 1 DUPLICATE_REVIEW) sont isolés et documentés (RESEARCH_NOTES complètes, traçables).
+[x] La population CLEAN_APPROVABLE (8/22, ~36%) est jugée significative pour une promotion contrôlée limitée à ce snapshot exact.
+[x] Aucun problème de sécurité inconnu ne subsiste (0 doublon non traité, 0 collision cross-ministry non résolue, PII persistée = 0).
+[x] Le comportement source/matching/catégorie est compris et documenté (F.1-F.3).
+```
+
+**`MINSANTE PILOT CLOSED : YES`** — voir `reports/registry/minsante-f-pilot-closure.json`
+pour le détail machine-lisible complet.
+
+### F.5 — Règle de population de promotion (§23 du brief F)
+
+Si une future promotion contrôlée est exécutée pour ce pilote (sprint
+futur, distinct, **NON exécuté ce sprint**) : la population de promotion
+doit être **EXACTEMENT** le snapshot `minsante-f-pilot-approval.json`
+(8 candidats, checksum ci-dessous) — **jamais** une reclassification
+partielle au moment de la promotion, jamais un candidat `CATEGORY_REVIEW`/
+`DUPLICATE_REVIEW` ajouté après coup sans repasser par un sprint de
+reclassification dédié avec preuve Tier 1/2 documentée. Les candidats
+différés restent différés jusqu'à preuve future, indéfiniment si
+nécessaire.
+
+### F.6 — Traitement des candidats différés (résumé opérationnel)
+
+```
+CATEGORY_REVIEW (13)     -> classification INCHANGÉE, category_evidence rafraîchie, exclu de toute promotion, réévaluable par un futur sprint de recherche (aucune date limite imposée).
+DUPLICATE_REVIEW (1)     -> classification INCHANGÉE (§16 du brief F, blocage de doublon prime toujours), category_decision rafraîchie pour information seulement.
+CLEAN_APPROVABLE (8)     -> seule population éligible à une promotion contrôlée future (§F.5), snapshot figé.
+```
+
+### F.7 — Reclassification finale des 22 lignes pilote
+
+```
+AVANT (MINSANTE-E) : CLEAN_APPROVABLE=7, CATEGORY_REVIEW=14, DUPLICATE_REVIEW=1
+APRÈS (MINSANTE-F) : CLEAN_APPROVABLE=8, CATEGORY_REVIEW=13, DUPLICATE_REVIEW=1, CROSS_MINISTRY_REVIEW=0, OTHER_REVIEW=0
+```
+
+Détail complet, ligne par ligne :
+`reports/registry/minsante-f-category-recovery.csv`,
+`reports/registry/minsante-f-category-summary.json`,
+`reports/registry/minsante-f-cross-ministry-review.csv`,
+`reports/registry/minsante-f-reclassification.csv`,
+`reports/registry/minsante-f-pilot-closure.json`.
+
+Nouveau snapshot d'approbation : `reports/registry/minsante-f-pilot-approval.json`
+(8 candidats, checksum `26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653`)
+— l'ancien snapshot MINSANTE-E (7 candidats, checksum
+`43e6f55393823970a0332d1feed62f3ec84b1b7761fe0a288df4819a28aaf792`) reste
+inchangé sur disque, jamais écrasé.
+
+### F.8 — Décisions séparées, non exécutées ce sprint (§23-24 du brief F)
+
+```
+READY FOR CONTROLLED PROMOTION PRE-FLIGHT : YES (population = snapshot minsante-f-pilot-approval.json uniquement, §F.5) — évaluation seule, PAS exécuté.
+READY TO EXPAND PDF PARSER TO 10/10 FILIERES : NON — indépendant de la clôture du pilote régional ; le comportement du parser sur des documents hétérogènes (certains avec texte natif, certains scannés) n'a pas été testé à l'échelle nationale ce sprint. Évaluation seule, PAS exécuté.
+```
+
+**Aucune promotion, aucune expansion nationale exécutée ce sprint — décision
+en attente de validation Jean-Merlain + Eddy + architecte.**
