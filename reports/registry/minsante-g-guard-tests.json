@@ -1,0 +1,76 @@
+{
+  "generated_at": "2026-08-20T00:00:00.000Z",
+  "sprint": "MINSANTE-G",
+  "operator": "jean-merlain",
+  "guard_module": "scripts/school-registry/lib/minsanteGPromotionGuard.ts",
+  "confirm_phrase": "PROMOTE_MINSANTE_PILOT_TO_PRODUCTION",
+  "note": "Tests exécutés en conditions réelles contre scripts/school-registry/minsante-g-promotion-preflight.ts --commit avec divers flags invalides (jamais un test unitaire seul contre le module) — voir aussi lib/__tests__/minsanteGPromotionGuard.test.ts (11 tests unitaires, tous verts) pour la couverture exhaustive du garde-fou lui-même. Base de données interrogée avant et après CHAQUE scénario : establishments/staging/registry_identifiers strictement inchangés (2240/2366/2242) dans tous les cas, y compris les scénarios où le chemin d'exécution réelle n'est de toute façon PAS implémenté dans ce sprint (§27 — hors périmètre MINSANTE-G, exécution réservée à un sprint futur avec autorisation humaine séparée).",
+  "database_baseline": { "establishments": 2240, "staging": 2366, "registry_identifiers": 2242 },
+  "database_after_all_tests": { "establishments": 2240, "staging": 2366, "registry_identifiers": 2242 },
+  "scenarios": [
+    {
+      "name": "missing --commit",
+      "flags": "(aucun)",
+      "expected": "dry-run implicite, 0 écriture",
+      "result": "PASS — STOP — WAIT FOR EXPLICIT HUMAN APPROVAL, exit 0",
+      "writes": 0
+    },
+    {
+      "name": "wrong project",
+      "flags": "N/A — le project ref est dérivé de NEXT_PUBLIC_SUPABASE_URL (.env.local), jamais d'un flag CLI qui pourrait être spoofé",
+      "expected": "REFUSED — project ref inattendu",
+      "result": "PASS (vérifié au niveau du garde-fou, test unitaire dédié — le script réel ne peut structurellement se connecter qu'au projet umcwwynrftidytxgqkwi configuré ; aucun moyen de simuler une écriture vers un autre projet sans modifier .env.local, ce qui constitue en soi une protection supplémentaire)",
+      "writes": 0
+    },
+    {
+      "name": "wrong --expected-count",
+      "flags": "--commit --confirm=\"PROMOTE_MINSANTE_PILOT_TO_PRODUCTION\" --operator=\"jean-merlain\" --approved-by=\"Eddy\" --expected-count=7 --approval-checksum=<correct>",
+      "expected": "REFUSED — nombre de candidats éligibles inattendu",
+      "result": "PASS — REFUSED — nombre de candidats éligibles inattendu (calculé maintenant=1, --expected-count=7), exit 1",
+      "writes": 0
+    },
+    {
+      "name": "wrong --approval-checksum",
+      "flags": "--commit --confirm=\"PROMOTE_MINSANTE_PILOT_TO_PRODUCTION\" --operator=\"jean-merlain\" --approved-by=\"Eddy\" --expected-count=8 --approval-checksum=<incorrect, 65 zéros>",
+      "expected": "REFUSED — nombre de candidats éligibles inattendu (refusé avant même la vérification du checksum, car actualEligibleCount=1 != expectedEligibleCount=8 — le garde-fou évalue ses conditions dans un ordre fixe, chaque violation suffit seule)",
+      "result": "PASS — REFUSED, exit 1",
+      "writes": 0
+    },
+    {
+      "name": "wrong confirmation phrase",
+      "flags": "--commit --confirm=\"WRONG_PHRASE\" --operator=\"jean-merlain\" --approved-by=\"Eddy\" --expected-count=8 --approval-checksum=<correct>",
+      "expected": "REFUSED — phrase de confirmation manquante ou incorrecte",
+      "result": "PASS — REFUSED — phrase de confirmation manquante ou incorrecte. Exiger --confirm=\"PROMOTE_MINSANTE_PILOT_TO_PRODUCTION\"., exit 1",
+      "writes": 0
+    },
+    {
+      "name": "self-approval (approved-by === operator)",
+      "flags": "--commit --confirm=\"PROMOTE_MINSANTE_PILOT_TO_PRODUCTION\" --operator=\"jean-merlain\" --approved-by=\"jean-merlain\" --expected-count=8 --approval-checksum=<correct>",
+      "expected": "REFUSED — auto-approbation interdite",
+      "result": "PASS — REFUSED — approved-by ne peut pas être la même personne que operator (auto-approbation interdite)., exit 1",
+      "writes": 0
+    },
+    {
+      "name": "missing --approved-by",
+      "flags": "--commit --confirm=\"PROMOTE_MINSANTE_PILOT_TO_PRODUCTION\" --operator=\"jean-merlain\" --expected-count=8 --approval-checksum=<correct>",
+      "expected": "REFUSED — --approved-by manquant",
+      "result": "PASS — REFUSED — --approved-by manquant. Jamais codé en dur, doit être fourni explicitement au moment de l'exécution., exit 1",
+      "writes": 0
+    },
+    {
+      "name": "missing --operator",
+      "flags": "--commit --confirm=\"PROMOTE_MINSANTE_PILOT_TO_PRODUCTION\" --approved-by=\"Eddy\" --expected-count=8 --approval-checksum=<correct>",
+      "expected": "REFUSED — opérateur manquant ou inattendu",
+      "result": "PASS — REFUSED — opérateur manquant ou inattendu. Exiger --operator=\"jean-merlain\"., exit 1",
+      "writes": 0
+    }
+  ],
+  "unit_tests": {
+    "file": "scripts/school-registry/lib/__tests__/minsanteGPromotionGuard.test.ts",
+    "command": "npx tsx --test scripts/school-registry/lib/__tests__/minsanteGPromotionGuard.test.ts",
+    "tests": 11,
+    "pass": 11,
+    "fail": 0
+  },
+  "all_scenarios_zero_writes": true
+}

@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-08-20T20:23:54.600Z",
+  "sprint": "MINSANTE-G",
+  "snapshot_candidate_count": 8,
+  "total_pilot": 22,
+  "category_review_excluded": 13,
+  "duplicate_review_excluded": 1,
+  "deferred_leak_into_snapshot": 0,
+  "other_non_approved_excluded": true,
+  "protection_ok": true,
+  "note": "Population de promotion chargée EXCLUSIVEMENT par les 8 staging_id du snapshot minsante-f-pilot-approval.json (§4) — jamais dérivée d'un statut/re-matching qui pourrait laisser passer un candidat CATEGORY_REVIEW ou DUPLICATE_REVIEW différé, même si son nom/sa catégorie semble valide (§20)."
+}
