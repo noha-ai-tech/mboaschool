@@ -9,24 +9,9 @@ import {
   Phone,
   Mail,
   Globe,
-  FileText,
-  Bell,
-  Wifi,
-  Bus,
-  Utensils,
-  Monitor,
-  ShieldCheck,
   MessageCircle,
   ClipboardList,
-  GraduationCap,
   School,
-  AlertCircle,
-  BookOpen,
-  Download,
-  FlaskConical,
-  Dumbbell,
-  BedDouble,
-  HeartPulse,
   UserCheck,
   Share2,
   Navigation as NavigationIcon,
@@ -35,40 +20,11 @@ import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SchoolHeroCarousel, type SchoolHeroSlide } from "@/components/school/SchoolHeroCarousel";
 import { SchoolGallery } from "@/components/school/SchoolGallery";
-
-// Correspond aux colonnes réelles de la table infrastructures
-const INFRA_LABELS: Record<string, { label: string; icon: React.ElementType }> = {
-  library:      { label: "Bibliothèque",      icon: BookOpen },
-  laboratory:   { label: "Laboratoire",       icon: FlaskConical },
-  computer_room:{ label: "Salle informatique",icon: Monitor },
-  sports_field: { label: "Terrain de sport",  icon: Dumbbell },
-  canteen:      { label: "Cantine scolaire",  icon: Utensils },
-  boarding:     { label: "Internat",          icon: BedDouble },
-  transport:    { label: "Transport scolaire",icon: Bus },
-  security:     { label: "Sécurité",          icon: ShieldCheck },
-  wifi:         { label: "Connexion Wi-Fi",   icon: Wifi },
-  infirmary:    { label: "Infirmerie",        icon: HeartPulse },
-};
-
-// Frais fixes de la table fees (une ligne par école)
-const FEE_COLS: { key: string; label: string }[] = [
-  { key: "registration_fee", label: "Inscription" },
-  { key: "tuition_fee",      label: "Scolarité" },
-  { key: "transport_fee",    label: "Transport" },
-  { key: "canteen_fee",      label: "Cantine" },
-  { key: "uniform_fee",      label: "Uniforme" },
-  { key: "exam_fee",         label: "Examens" },
-  { key: "other_fees",       label: "Autres frais" },
-];
-
-const DOC_TYPE_LABELS: Record<string, string> = {
-  fiche:       "Fiche de renseignements",
-  inscription: "Fiche d'inscription",
-  fournitures: "Liste des fournitures",
-  reglement:   "Règlement intérieur",
-  calendrier:  "Calendrier scolaire",
-  autre:       "Document",
-};
+import { GeneralTab } from "@/components/school/GeneralTab";
+import { DocumentsTab } from "@/components/school/DocumentsTab";
+import { AnnouncementsTab } from "@/components/school/AnnouncementsTab";
+import { ParentTab } from "@/components/school/ParentTab";
+import { ContactRow } from "@/components/school/ContactRow";
 
 export default function SchoolPage() {
   const params = useParams();
@@ -147,7 +103,6 @@ export default function SchoolPage() {
     );
   }
 
-  const infraItems = Object.keys(INFRA_LABELS).filter((k) => infra?.[k] === true);
   const isPremium = school.subscription_plan === "premium";
   const preinscriptionHref = `/preinscription?ecole=${school.id}`;
   const address = [school.address, school.neighborhood, school.city].filter(Boolean).join(", ");
@@ -219,7 +174,7 @@ export default function SchoolPage() {
       <div className="max-w-[1520px] mx-auto px-[18px] py-8 grid lg:grid-cols-[1fr_300px] gap-8 items-start">
 
         <div className="space-y-5 pb-16 lg:pb-0">
-          <GeneralTab school={school} fees={fees} infra={infra} infraItems={infraItems} />
+          <GeneralTab school={school} fees={fees} infra={infra} />
 
           <div id="galerie" className="scroll-mt-20">
             <h2 className="font-bold text-sm mb-3 px-1">Galerie{images.length > 0 ? ` (${images.length})` : ""}</h2>
@@ -388,213 +343,3 @@ function ShareAction({ schoolName }: { schoolName: string }) {
   );
 }
 
-function ContactRow({ icon: Icon, label, value, href }: { icon: React.ElementType; label: string; value: string; href?: string }) {
-  const content = (
-    <div className="flex items-start gap-3">
-      <Icon size={15} className="text-text-secondary mt-0.5 shrink-0" />
-      <div className="min-w-0">
-        <p className="text-xs text-text-secondary">{label}</p>
-        <p className="text-sm font-semibold text-text-primary truncate">{value}</p>
-      </div>
-    </div>
-  );
-  if (!href) return content;
-  return (
-    <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noopener noreferrer" : undefined} className="hover:opacity-80 transition-opacity duration-base">
-      {content}
-    </a>
-  );
-}
-
-function GeneralTab({ school, fees, infra, infraItems }: {
-  school: any;
-  fees: any | null;
-  infra: any | null;
-  infraItems: string[];
-}) {
-  const feeRows = fees
-    ? FEE_COLS.filter((f) => fees[f.key] && Number(fees[f.key]) > 0)
-    : [];
-  const currency = fees?.currency ?? "FCFA";
-
-  return (
-    <div className="space-y-5">
-      <div id="presentation" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
-        <h2 className="font-bold text-sm mb-4">Présentation</h2>
-        <p className="text-text-secondary text-sm leading-relaxed">
-          {school.description || "Aucune description disponible pour le moment."}
-        </p>
-        <div className="grid sm:grid-cols-2 gap-3 mt-6">
-          {[
-            { label: "Catégorie", value: school.main_category },
-            { label: "Ville",     value: school.city },
-            { label: "Quartier",  value: school.neighborhood },
-            { label: "Téléphone", value: school.phone },
-          ].filter((r) => r.value).map((row) => (
-            <div key={row.label} className="bg-muted rounded-xl p-4">
-              <p className="text-[10px] font-semibold text-text-secondary uppercase tracking-wider">{row.label}</p>
-              <p className="font-bold text-text-primary mt-1 text-sm">{row.value}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div id="tarifs" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
-        <h2 className="font-bold text-sm mb-4">Tarifs</h2>
-        {feeRows.length === 0 ? (
-          <p className="text-sm text-text-secondary">Tarifs non renseignés par l&apos;établissement.</p>
-        ) : (
-          <div className="divide-y divide-border">
-            {feeRows.map((f) => (
-              <div key={f.key} className="flex items-center justify-between py-3">
-                <span className="text-sm text-text-secondary">{f.label}</span>
-                <span className="text-sm font-bold text-text-primary">
-                  {Number(fees[f.key]).toLocaleString("fr-FR")} {currency}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div id="infrastructures" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
-        <h2 className="font-bold text-sm mb-4">Infrastructures</h2>
-        {infraItems.length === 0 ? (
-          <p className="text-sm text-text-secondary">Infrastructures non renseignées par l&apos;établissement.</p>
-        ) : (
-          <div className="grid sm:grid-cols-2 gap-3">
-            {infraItems.map((key) => {
-              const item = INFRA_LABELS[key];
-              const Icon = item.icon;
-              return (
-                <div key={key} className="flex items-center gap-3 bg-muted rounded-xl p-3">
-                  <Icon size={15} className="text-primary shrink-0" />
-                  <span className="text-sm font-semibold text-text-primary">{item.label}</span>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function DocumentsTab({ docs }: { docs: any[] }) {
-  return (
-    <div className="space-y-3">
-      {docs.map((doc) => {
-        const typeLabel = DOC_TYPE_LABELS[doc.type] ?? doc.type;
-        return (
-          <div key={doc.id} className="bg-white border border-border rounded-card p-4 flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center shrink-0">
-              <FileText size={16} className="text-text-secondary" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-semibold text-sm text-text-primary truncate">{doc.name}</p>
-              <p className="text-xs text-text-secondary mt-0.5">{typeLabel}</p>
-            </div>
-            <a
-              href={doc.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="shrink-0 flex items-center gap-1.5 text-xs font-bold text-primary border border-primary/30 bg-primary-light px-3 py-1.5 rounded-lg hover:bg-primary/10 transition-colors duration-base"
-            >
-              <Download size={12} />
-              Télécharger
-            </a>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-function AnnouncementsTab({ schoolId }: { schoolId: string }) {
-  const [announcements, setAnnouncements] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    supabase
-      .from("school_announcements")
-      .select("*")
-      .eq("establishment_id", schoolId)
-      .order("created_at", { ascending: false })
-      .then(({ data }) => {
-        if (data) setAnnouncements(data);
-        setLoading(false);
-      });
-  }, [schoolId]);
-
-  if (loading) {
-    return (
-      <div className="space-y-3">
-        {[1, 2].map((i) => (
-          <div key={i} className="h-24 bg-white border border-border rounded-card animate-pulse" />
-        ))}
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-3">
-      {announcements.length === 0 ? (
-        <div className="bg-white border border-border rounded-card py-14 text-center">
-          <Bell size={28} className="mx-auto text-text-secondary/30 mb-4" />
-          <p className="text-sm text-text-secondary">Aucune actualité publiée.</p>
-        </div>
-      ) : (
-        announcements.map((a) => (
-          <div key={a.id} className={`bg-white border rounded-card p-5 ${a.is_important ? "border-danger/30" : "border-border"}`}>
-            <div className="flex items-center gap-2 mb-2 flex-wrap">
-              {a.is_important && (
-                <span className="flex items-center gap-1 text-[10px] font-bold text-danger bg-red-50 border border-red-200 px-2 py-0.5 rounded-full">
-                  <AlertCircle size={9} /> Important
-                </span>
-              )}
-              <span className="text-[10px] text-text-secondary font-medium">
-                {new Date(a.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
-              </span>
-            </div>
-            <h3 className="font-bold text-text-primary mb-1">{a.title}</h3>
-            <p className="text-sm text-text-secondary leading-relaxed">{a.content}</p>
-          </div>
-        ))
-      )}
-    </div>
-  );
-}
-
-function ParentTab({ schoolId }: { schoolId: string }) {
-  const cards = [
-    { icon: ClipboardList, title: "Dossier de l'enfant",  text: "Statut d'admission, pièces manquantes, décision de l'école." },
-    { icon: GraduationCap,  title: "Classe assignée",     text: "Classe, enseignant, annonces et documents de classe." },
-    { icon: Bell,           title: "Messages école",      text: "Communiqués, rappels, réunions et urgences." },
-    { icon: FileText,       title: "Documents & frais",   text: "Reçus, frais à payer, calendrier et documents scolaires." },
-  ];
-
-  return (
-    <div id="admissions" className="bg-accent text-white rounded-card p-6 scroll-mt-20">
-      <h2 className="font-black text-2xl mb-2">Admissions</h2>
-      <p className="text-white/60 text-sm mb-6 leading-relaxed">
-        Préinscrivez votre enfant en ligne. Une fois le dossier accepté, cet
-        espace devient le lien entre le parent, l&apos;élève et l&apos;école.
-      </p>
-      <div className="grid sm:grid-cols-2 gap-3 mb-6">
-        {cards.map(({ icon: Icon, title, text }) => (
-          <div key={title} className="bg-white/5 rounded-xl p-4 border border-white/8">
-            <Icon size={15} className="text-primary-light mb-3" />
-            <h3 className="font-bold text-sm text-white mb-1">{title}</h3>
-            <p className="text-xs text-white/60 leading-relaxed">{text}</p>
-          </div>
-        ))}
-      </div>
-      <Link
-        href={`/preinscription?ecole=${schoolId}`}
-        className="inline-block bg-[#FCD116] text-[#0A0A0A] px-5 py-2.5 rounded-card text-sm font-bold hover:bg-[#FCD116]/90 transition-colors duration-base"
-      >
-        Préinscrire mon enfant
-      </Link>
-    </div>
-  );
-}
