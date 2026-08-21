@@ -1,0 +1,18 @@
+candidate_id,name,tier3_confidence,note,meets_2plus_independent_threshold
+TC-01,AUTO ECOLE ASTRALE,T3_SINGLE_SOURCE,,NO
+TC-02,AUTO ECOLE FRANCAISE,T3_SINGLE_SOURCE,,NO
+TC-03,AUTO ECOLE GERMANIA,T3_SINGLE_SOURCE,,NO
+TC-04,AUTO ECOLE LEO,T3_SINGLE_SOURCE,,NO
+TC-05,AUTO ECOLE TRECY,T3_SINGLE_SOURCE,,NO
+TC-06,AUTO ECOLE TURBO,T3_SINGLE_SOURCE,,NO
+TC-07,AUTO ECOLE TURBO NKOMKANA,T3_SINGLE_SOURCE,,NO
+TC-08,METROPOLITAINE INTERNATIONALE SCES,T3_IDENTITY_REVIEW,,NO
+TC-09,AUTO ECOLE MONTHE,T3_SINGLE_SOURCE,,NO
+TC-10,AUTO ECOLE APPRENDRE & AIMER LA CONDUITE,T3_SINGLE_SOURCE,,NO
+TC-11,EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale),T3_CORROBORATED,"First genuine TIER3_CORROBORATED case built this sprint with real, directly-verified evidence: >=2 independent sources (S01+S02), both T3-C, identity consistent ('EMIPAC' / full name matches exactly in both), no geographic contradiction (S01 states Douala explicitly, S02 is silent on city — silence is not a contradiction). STILL NOT CLEAN_APPROVABLE, STILL human-review-only (brief section 17 absolute rule).",YES
+TC-12,IT2MIP (Institut des Technologies de la Marine Marchande et Industrie Portuaire),T3_SINGLE_SOURCE,,NO
+TC-13,Centre de formation professionnelle maritime « Le Paquebot »,T3_SINGLE_SOURCE,,NO
+TC-14,Centre d'Instruction Maritime et Portuaire,T3_SINGLE_SOURCE,,NO
+TC-15,École de Formation (EFO) - CCAA,ABOVE_TIER3_CORROBORATED,"Non-standard label, used deliberately: both sources are ABOVE Tier 3 (Tier 1/2 authority-level), stronger evidence than the brief's Tier-3-only confidence model anticipates. Documented explicitly rather than mis-labeled as ordinary T3_CORROBORATED. Existence is strongly corroborated; this does NOT resolve the still-open public-admission-scope ambiguity, and does NOT change the absolute rule (section 0) that this sprint produces no CLEAN_APPROVABLE / no promotion for ANY candidate regardless of source tier.",YES
+TC-16,IRDSM Aviation,T3_MULTI_SOURCE_WEAK,"Downgraded from what would otherwise look like TIER3_CORROBORATED because the primary institutional source (groupe-dsm.net) is no longer reachable/re-verifiable this sprint (brief section 24 activity-status caution applies to the SOURCE itself, not only the institution) — conservative treatment, not a silent carry-forward of an unverified status.",YES
+TC-17,Fleet Management Academy,T3_SINGLE_SOURCE,"The identifier itself (MINEFOP N°000471, 19-09-2022) was already confirmed real by TRANSPORT-A directly against a primary MINEFOP-adjacent page, not a search-summary fabrication — different situation from the IT2MIP/TC-12 case above.",NO

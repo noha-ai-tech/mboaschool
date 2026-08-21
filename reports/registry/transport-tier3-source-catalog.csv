@@ -1,0 +1,26 @@
+candidate_id,name,source_id,domain,tier3_class,verified_this_sprint,note,verification_method
+TC-01,AUTO ECOLE ASTRALE,S04,africannuaire.com,T3-D,YES,,WebFetch/direct
+TC-02,AUTO ECOLE FRANCAISE,TRANSPORT-A.1,africannuaire.com,T3-D,NO,,WebFetch/direct
+TC-03,AUTO ECOLE GERMANIA,TRANSPORT-A.1,africannuaire.com,T3-D,NO,,WebFetch/direct
+TC-04,AUTO ECOLE LEO,TRANSPORT-A.1,africannuaire.com,T3-D,NO,,WebFetch/direct
+TC-05,AUTO ECOLE TRECY,TRANSPORT-A.1,africannuaire.com,T3-D,NO,,WebFetch/direct
+TC-06,AUTO ECOLE TURBO,TRANSPORT-A.1,africannuaire.com,T3-D,NO,"re-searched this sprint (WebSearch), no second independent source found",WebFetch/direct
+TC-07,AUTO ECOLE TURBO NKOMKANA,TRANSPORT-A.1,africannuaire.com,T3-D,NO,,WebFetch/direct
+TC-08,METROPOLITAINE INTERNATIONALE SCES,TRANSPORT-A.1,africannuaire.com,T3-D,NO,,WebFetch/direct
+TC-09,AUTO ECOLE MONTHE,TRANSPORT-A.1,sites.google.com,T3-A,NO,"institutional self-published page (Google Sites) — still only ONE publisher, T3-A alone does not satisfy the >=2-source corroboration rule (brief section 4)",WebFetch/direct
+TC-10,AUTO ECOLE APPRENDRE & AIMER LA CONDUITE,TRANSPORT-A.1,road-safety-charter.ec.europa.eu,T3-B,NO,"EU Road Safety Charter signatory profile — reputable platform (European Commission), but profile content is self-submitted by the institution, single source",WebFetch/direct
+TC-11,EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale),S01,maritimafrica.com,T3-C,YES,,WebFetch/direct
+TC-11,EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale),S02,kamerpower.com,T3-C,YES,,WebFetch/direct
+TC-11,EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale),N/A,facebook.com/ecole.emipac,T3-D,NO,"seen in search index only, not fetched",WebFetch/direct
+TC-11,EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale),N/A,schoolandcollegelistings.com,T3-D,NO,"two directory listing pages seen in search index, not fetched",WebFetch/direct
+TC-11,EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale),N/A,emipac-cm.com,"T3-A (claimed, unverifiable)",NO,domain DOES NOT RESOLVE this sprint (see S07) — NOT counted as a source,WebFetch/direct
+TC-12,IT2MIP (Institut des Technologies de la Marine Marchande et Industrie Portuaire),S03,kamerpower.com,T3-C,YES,,WebFetch/direct
+TC-12,IT2MIP (Institut des Technologies de la Marine Marchande et Industrie Portuaire),TRANSPORT-A.1,kamerpower.com (other page),T3-C,NO,SAME publisher as S03 — does not count as a second INDEPENDENT source (brief section 5),WebFetch/direct
+TC-13,Centre de formation professionnelle maritime « Le Paquebot »,TRANSPORT-A,"unspecified (reported, prior sprint)",T3-D,NO,,WebFetch/direct
+TC-13,Centre de formation professionnelle maritime « Le Paquebot »,S05,facebook.com,T3-D,YES,,"WebSearch result snippet only, not a full WebFetch"
+TC-14,Centre d'Instruction Maritime et Portuaire,TRANSPORT-A,"unspecified (reported, prior sprint)",T3-D,NO,,WebFetch/direct
+TC-15,École de Formation (EFO) - CCAA,TRANSPORT-A,ccaa.aero,Tier 2 (national regulator's own site),NO,,WebFetch/direct
+TC-15,École de Formation (EFO) - CCAA,S06,igat.icao.int,"Tier 1/2 (ICAO international training catalogue, 'Legal Status: Governmental')",YES,,WebFetch/direct
+TC-16,IRDSM Aviation,TRANSPORT-A.1,groupe-dsm.net/aviation,"T3-A (claimed by A.1, NOT re-verifiable this sprint)",NO,"domain DOES NOT RESOLVE this sprint — see S07. Downgraded from 'verified T3-A' to 'previously observed, unconfirmed today'.",WebFetch/direct
+TC-16,IRDSM Aviation,TRANSPORT-A.1,"journalducameroun.com / afriksurseine.com (press, per A.1)","T3-C (claimed by A.1, not re-verified this sprint)",NO,,WebFetch/direct
+TC-17,Fleet Management Academy,TRANSPORT-A,MINEFOP institutional page (per TRANSPORT-A report),Tier 2 (real MINEFOP-issued identifier cited),NO,,WebFetch/direct

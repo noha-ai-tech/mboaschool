@@ -1,0 +1,46 @@
+{
+  "sprint": "TRANSPORT-A.1-T3",
+  "date": "2026-08-21",
+  "policy": "NO STAGING WRITE this sprint (brief section 18) — this object is a CLASSIFICATION EXERCISE ONLY, simulating what a FUTURE authorized staging sprint would do with each candidate. Zero establishment_import_staging INSERT/UPDATE/DELETE calls were made anywhere in this pipeline run.",
+  "bucket_priority_order": "Each candidate is assigned to exactly ONE bucket, in this priority order: (1) would_skip if already EXACT_IDENTIFIER/EXACT_IDENTITY live -> (2) would_duplicate_review if ANY live overlap signal exists (STRONG/PROBABLE_MATCH/AMBIGUOUS/EXACT_*) -> (3) would_out_of_scope if entity_family=OUT_OF_SCOPE -> (4) would_cross_ministry_review if cross_ministry_decision is AMBIGUOUS/SAME_INSTITUTION_OTHER_AUTHORITY -> (5) would_source_review otherwise. IMPORTANT: TC-12 (IT2MIP) has BOTH a PROBABLE_MATCH live-matching signal AND an AMBIGUOUS cross-ministry signal — it is counted under would_duplicate_review (step 2 wins), not would_cross_ministry_review, per this ordering. Its cross-ministry note remains fully visible in transport-tier3-cross-ministry-review.csv regardless of which staging bucket it falls into.",
+  "would_stage_total": 17,
+  "would_stage_note": "Sum of would_duplicate_review + would_cross_ministry_review + would_source_review — the subset of candidates that WOULD receive a NEW staging row (always classification != CLEAN_APPROVABLE, per the absolute rule of brief section 0) in a future authorized sprint.",
+  "would_skip": 0,
+  "would_duplicate_review": 4,
+  "would_cross_ministry_review": 0,
+  "would_source_review": 13,
+  "would_out_of_scope": 0,
+  "would_insert_clean_approvable": 0,
+  "would_insert_clean_approvable_note": "ALWAYS 0 for Tier-3-only candidates — absolute rule, brief section 0/17.",
+  "buckets_detail": {
+    "would_duplicate_review": [
+      "TC-02",
+      "TC-11",
+      "TC-12",
+      "TC-17"
+    ],
+    "would_cross_ministry_review": [],
+    "would_out_of_scope": [],
+    "would_skip": [],
+    "would_source_review": [
+      "TC-01",
+      "TC-03",
+      "TC-04",
+      "TC-05",
+      "TC-06",
+      "TC-07",
+      "TC-08",
+      "TC-09",
+      "TC-10",
+      "TC-13",
+      "TC-14",
+      "TC-15",
+      "TC-16"
+    ]
+  },
+  "actual_writes_this_sprint": {
+    "establishments": 0,
+    "establishment_import_staging": 0,
+    "establishment_registry_identifiers": 0
+  }
+}

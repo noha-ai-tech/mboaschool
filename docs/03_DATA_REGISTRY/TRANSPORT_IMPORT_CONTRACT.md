@@ -539,3 +539,77 @@ ci-dessus) → reports/registry/transport-a1-matching-sample.csv.
 DECISION (§22 du brief) : C — sources discovery/agrégat uniquement,
 TRANSPORT DEFERRED. READY_FOR_TRANSPORT_B : NO.
 ```
+
+## 19. Addendum TRANSPORT-A.1-T3 (2026-08-21) — pipeline de découverte Tier 3, dry-run staging uniquement
+
+```
+SPRINT DISTINCT, même jour, même opérateur, toujours READ-ONLY vis-à-vis
+de establishments/staging/registry_identifiers (0 écriture réelle des
+trois côtés, vérifié en direct au début ET à la fin du sprint). Ce
+sprint NE cherche PAS de nouvelle source officielle MINT — il construit
+et exécute le pipeline de DISCOVERY/REVIEW Tier 3 annoncé comme
+"prochaine étape possible" par les sprints précédents, avec un dry-run
+staging exclusivement (aucune ligne réellement insérée).
+
+RÉSULTAT PRINCIPAL : décision A — TIER3_PIPELINE_VALIDATED (voir
+TRANSPORT_SOURCE_CATALOG.md, addendum TRANSPORT-A.1-T3, et
+reports/registry/transport-tier3-summary.json pour le détail complet).
+IMPORTANT : la décision A n'autorise PAS la promotion — elle autorise
+seulement la PLANIFICATION d'un futur sprint TRANSPORT-A.2-T3 qui
+pourrait insérer des candidats en staging UNIQUEMENT comme lignes de
+revue (SOURCE_REVIEW / REVIEW_REQUIRED, jamais CLEAN_APPROVABLE).
+
+ACCEPTANCE CRITERIA POUR UN FUTUR TRANSPORT-A.2-T3 (staging contrôlé,
+Tier 3 review-only — DISTINCT des critères §16 ci-dessus qui restent
+réservés à un futur pilote sur SOURCE OFFICIELLE) :
+  - Autorisation explicite de jean-merlain + Eddy + architecte
+    (brief §18 — non obtenue ce sprint, non demandée ce sprint)
+  - Chaque ligne staging porte `raw_data.transport_tier3` avec la
+    provenance complète (source_id, domaine, tier3_class,
+    independent_source_count, tier3_confidence) — structure déjà
+    prête dans data/registry/normalized/transport-tier3-v1/
+    transport-tier3-candidates.json, réutilisable telle quelle
+  - `classification` = SOURCE_REVIEW ou équivalent — JAMAIS
+    CLEAN_APPROVABLE, quel que soit le tier3_confidence (même
+    TIER3_CORROBORATED reste review-only, règle absolue §17 du brief)
+  - `source_ministry` : NE PAS forcer 'MINTRANSPORT' tant que la
+    migration enum §6/§19bis n'est pas exécutée — utiliser
+    `establishment_registry_identifiers.authority`='MINTRANSPORT' en
+    texte libre si un identifiant doit être rattaché (ex. Fleet
+    Management Academy garde son identifiant MINEFOP existant, jamais
+    réécrit sous une autorité Transport qu'il n'a pas)
+  - `education_family` : 'other' par défaut (auto-écoles), cas par cas
+    'vocational_training' pour maritime/aviation admettant dès le
+    niveau CEP (IT2MIP) — inchangé depuis TRANSPORT-A.1 §5
+  - Revue humaine prioritaire dans l'ordre déjà calculé par
+    reports/registry/transport-tier3-human-review.csv (1.
+    TIER3_CORROBORATED+NO_MATCH, 2. TIER3_CORROBORATED+cross-ministère,
+    3. T3_CONFLICTING, 4. identité AMBIGUOUS, 5. T3_SINGLE_SOURCE)
+
+MIGRATION ENUM MINTRANSPORT (§19 ci-dessus, rappel inchangé) : NON
+préparée, NON exécutée ce sprint non plus — `ALTER TYPE
+registry_source_ministry ADD VALUE IF NOT EXISTS 'MINTRANSPORT';`
+resterait la commande exacte SI un futur sprint autorisé décidait
+d'écrire directement `source_ministry`='MINTRANSPORT' plutôt que de
+passer par `establishment_registry_identifiers.authority` en texte
+libre (option toujours disponible sans migration, cf. §6).
+
+MATCHING ENGINE — durci ce sprint (contrairement à TRANSPORT-A.1 qui
+était resté volontairement read-only sur le moteur) : "auto" et
+"autoecole" ajoutés à WEAK_GENERIC_TOKENS (pas un stopword aveugle),
+voir TRANSPORT_SOURCE_CATALOG.md addendum T3 et le commentaire dédié
+dans scripts/school-registry/lib/matching/engine.ts. 86/86 tests
+passent (suite complète). Le faux-positif "AUTO ECOLE LEO" documenté
+en TRANSPORT-A.1 est maintenant NO_MATCH.
+
+STAGING DRY-RUN (§18 du brief, aucune écriture réelle) :
+would_stage_total=17, would_duplicate_review=4, would_source_review=13,
+would_cross_ministry_review=0, would_out_of_scope=0,
+would_insert_clean_approvable=0 (toujours 0). Détail complet :
+reports/registry/transport-tier3-staging-dry-run.json.
+
+READY_FOR_TRANSPORT_A2_T3_STAGING (nouveau sprint distinct requis) :
+YES, sous réserve de l'autorisation explicite ci-dessus.
+READY_FOR_TRANSPORT_PROMOTION : NO (inchangé, ne changera pas tant
+qu'aucune source officielle MINT nominative n'existe).
+```

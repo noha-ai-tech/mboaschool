@@ -1,0 +1,211 @@
+{
+  "sprint": "TRANSPORT-A.1-T3",
+  "date": "2026-08-21",
+  "operator": "jean-merlain",
+  "reference_sprint": "TRANSPORT-A.1",
+  "reference_commit_start": "ce2493bcddf1c8aacf51fbac6fdbd2658b41ee26",
+  "database": {
+    "establishments": 2248,
+    "staging": 2366,
+    "registry_identifiers": 2242,
+    "expected_baseline": {
+      "establishments": 2248,
+      "staging": 2366,
+      "registry_identifiers": 2242
+    },
+    "baseline_drift_detected": false,
+    "mintransport_enum_present": false,
+    "production_writes": 0,
+    "staging_writes": 0,
+    "verified_live_this_sprint": true
+  },
+  "candidates_total": 17,
+  "entity_family_breakdown": {
+    "DRIVING_SCHOOL": {
+      "raw": 9,
+      "unique": 9,
+      "single_source": 9,
+      "multi_source": 0,
+      "corroborated": 0,
+      "conflicting": 0,
+      "already_live": 0,
+      "cross_ministry": 0,
+      "new": 9,
+      "out_of_scope": 0
+    },
+    "MARITIME_TRAINING": {
+      "raw": 4,
+      "unique": 4,
+      "single_source": 3,
+      "multi_source": 1,
+      "corroborated": 1,
+      "conflicting": 0,
+      "already_live": 0,
+      "cross_ministry": 1,
+      "new": 3,
+      "out_of_scope": 0
+    },
+    "AVIATION_TRAINING": {
+      "raw": 2,
+      "unique": 2,
+      "single_source": 0,
+      "multi_source": 2,
+      "corroborated": 1,
+      "conflicting": 0,
+      "already_live": 0,
+      "cross_ministry": 0,
+      "new": 2,
+      "out_of_scope": 0
+    },
+    "TRANSPORT_LOGISTICS_TRAINING": {
+      "raw": 1,
+      "unique": 1,
+      "single_source": 1,
+      "multi_source": 0,
+      "corroborated": 0,
+      "conflicting": 0,
+      "already_live": 0,
+      "cross_ministry": 0,
+      "new": 1,
+      "out_of_scope": 0
+    },
+    "OTHER_TRANSPORT_EDUCATION": {
+      "raw": 1,
+      "unique": 1,
+      "single_source": 0,
+      "multi_source": 0,
+      "corroborated": 0,
+      "conflicting": 0,
+      "already_live": 0,
+      "cross_ministry": 0,
+      "new": 1,
+      "out_of_scope": 0
+    }
+  },
+  "region_coverage_discovery_only": {
+    "Centre": {
+      "discovered": 8,
+      "corroborated": 1
+    },
+    "Littoral": {
+      "discovered": 5,
+      "corroborated": 1
+    },
+    "UNKNOWN": {
+      "discovered": 4,
+      "corroborated": 0
+    }
+  },
+  "region_coverage_caveat": "DISCOVERY COUNTS ONLY — never a claim of regional/national completeness (brief section 22). Only 2 of 10 regions (Centre, Littoral) have any discovered candidate at all this sprint.",
+  "tier3_confidence_totals": {
+    "T3_SINGLE_SOURCE": 13,
+    "T3_MULTI_SOURCE_WEAK": 1,
+    "T3_CORROBORATED": 1,
+    "T3_CONFLICTING": 0,
+    "T3_IDENTITY_REVIEW": 1,
+    "ABOVE_TIER3_CORROBORATED_non_standard": 1
+  },
+  "matching_totals": {
+    "EXACT_IDENTIFIER": 0,
+    "EXACT_IDENTITY": 0,
+    "STRONG_MATCH": 0,
+    "PROBABLE_MATCH": 3,
+    "AMBIGUOUS": 1,
+    "NO_MATCH": 13
+  },
+  "matching_hardening": {
+    "tokens_added_to_weak_generic": [
+      "auto",
+      "autoecole"
+    ],
+    "tokens_kept_stopword_unchanged": [
+      "ecole/école",
+      "formation"
+    ],
+    "tokens_deliberately_not_added": [
+      "conduite",
+      "permis",
+      "route"
+    ],
+    "key_regression_case": "AUTO ECOLE LEO vs Auto-École La Route Sûre: STRONG_MATCH (100%) before this sprint -> NO_MATCH after.",
+    "cross_registry_regression_tests_pass": true,
+    "total_matching_tests_pass": "86/86 (npx tsx --test scripts/school-registry/lib/matching/__tests__/*.test.ts)"
+  },
+  "cross_ministry": {
+    "staging_keyword_hits": 0,
+    "same_institution_duplicate_cases": 0,
+    "review_required_cross_ministry": 1
+  },
+  "pii_persisted": 0,
+  "fabrications_caught_and_rejected_this_sprint": 1,
+  "fabrication_detail": "WebSearch AI summary claimed IT2MIP accreditation number N°352/MINEFOP/SG/DFOP/SDGSF/SACD (14-12-2022); absent from primary page when fetched directly — rejected. See data/registry/raw/transport-tier3-v1/s03-kamerpower-it2mip.txt.",
+  "dead_domains_found_this_sprint": 3,
+  "dead_domains_detail": "emipac-cm.com, irdsm-aviation.com, groupe-dsm.net — see data/registry/raw/transport-tier3-v1/s07-dead-domains-check.txt.",
+  "staging_dry_run": {
+    "sprint": "TRANSPORT-A.1-T3",
+    "date": "2026-08-21",
+    "policy": "NO STAGING WRITE this sprint (brief section 18) — this object is a CLASSIFICATION EXERCISE ONLY, simulating what a FUTURE authorized staging sprint would do with each candidate. Zero establishment_import_staging INSERT/UPDATE/DELETE calls were made anywhere in this pipeline run.",
+    "bucket_priority_order": "Each candidate is assigned to exactly ONE bucket, in this priority order: (1) would_skip if already EXACT_IDENTIFIER/EXACT_IDENTITY live -> (2) would_duplicate_review if ANY live overlap signal exists (STRONG/PROBABLE_MATCH/AMBIGUOUS/EXACT_*) -> (3) would_out_of_scope if entity_family=OUT_OF_SCOPE -> (4) would_cross_ministry_review if cross_ministry_decision is AMBIGUOUS/SAME_INSTITUTION_OTHER_AUTHORITY -> (5) would_source_review otherwise. IMPORTANT: TC-12 (IT2MIP) has BOTH a PROBABLE_MATCH live-matching signal AND an AMBIGUOUS cross-ministry signal — it is counted under would_duplicate_review (step 2 wins), not would_cross_ministry_review, per this ordering. Its cross-ministry note remains fully visible in transport-tier3-cross-ministry-review.csv regardless of which staging bucket it falls into.",
+    "would_stage_total": 17,
+    "would_stage_note": "Sum of would_duplicate_review + would_cross_ministry_review + would_source_review — the subset of candidates that WOULD receive a NEW staging row (always classification != CLEAN_APPROVABLE, per the absolute rule of brief section 0) in a future authorized sprint.",
+    "would_skip": 0,
+    "would_duplicate_review": 4,
+    "would_cross_ministry_review": 0,
+    "would_source_review": 13,
+    "would_out_of_scope": 0,
+    "would_insert_clean_approvable": 0,
+    "would_insert_clean_approvable_note": "ALWAYS 0 for Tier-3-only candidates — absolute rule, brief section 0/17.",
+    "buckets_detail": {
+      "would_duplicate_review": [
+        "TC-02",
+        "TC-11",
+        "TC-12",
+        "TC-17"
+      ],
+      "would_cross_ministry_review": [],
+      "would_out_of_scope": [],
+      "would_skip": [],
+      "would_source_review": [
+        "TC-01",
+        "TC-03",
+        "TC-04",
+        "TC-05",
+        "TC-06",
+        "TC-07",
+        "TC-08",
+        "TC-09",
+        "TC-10",
+        "TC-13",
+        "TC-14",
+        "TC-15",
+        "TC-16"
+      ]
+    },
+    "actual_writes_this_sprint": {
+      "establishments": 0,
+      "establishment_import_staging": 0,
+      "establishment_registry_identifiers": 0
+    }
+  },
+  "review_center_compatibility_audit": {
+    "brief_section": 30,
+    "method": "read-only code audit, no UI redesign performed this sprint",
+    "location": "src/app/dashboard/admin/registre/page.tsx + src/lib/registryReview.ts",
+    "source_ministry": "YES — selected, table column, filter dropdown",
+    "confidence": "PARTIAL — only rendered for MINESEC rows via raw_data._matchAudit.confidence; MINSANTE/new-candidate rows show no confidence value. Smallest change: extend the match-tab confidence line to also read MINSANTE's raw_data.match_audit.{live,staging}.level (already parsed, not surfaced).",
+    "entity_family_education_family": "YES — selected, table column, category filter",
+    "source_urls": "NO — schema has establishment_import_staging.source_url, but it is neither selected by fetchAllStaging() nor rendered anywhere. Smallest change: add source_url to the select list and render as a link.",
+    "cross_source_count": "NO — no such column/raw_data field exists or is computed anywhere yet. Needs a new field (e.g. raw_data.cross_source_count) written by a future staging pipeline before any UI change is meaningful.",
+    "cross_ministry_status": "PARTIAL — CROSS_MINISTRY_REVIEW is a real detected state fed by MINSANTE's raw_data.cross_ministry_review.decision, but toLegacyClassification() collapses it into the generic EXISTING_AMBIGUOUS bucket ('Ambiguë', no distinct badge). Smallest change: give CROSS_MINISTRY_REVIEW its own UI case instead of folding it in.",
+    "no_ui_redesign_performed": true
+  },
+  "search_v2_public_leakage_check": {
+    "brief_section": 31,
+    "method": "read-only code audit — grepped src/app for establishment_import_staging|data/registry|transport-tier3|reports/registry, read src/app/api/recherche/route.ts and src/lib/search/queryBuilder.ts in full",
+    "finding": "Search V2 (src/app/api/recherche/route.ts) queries ONLY the establishments Postgres table (single .from('establishments') call, PUBLIC_FIELDS excludes raw_data/staging fields). No app/api route reads local files under data/registry/ or reports/registry/. All 17 files created this sprint (raw snapshots, normalized candidates, CSV/JSON reports) live only on local disk, never written to Supabase.",
+    "tier3_discovery_data_can_leak_to_public_search": false
+  },
+  "promotion": false,
+  "push": false,
+  "deploy": false
+}

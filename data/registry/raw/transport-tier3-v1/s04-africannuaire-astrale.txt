@@ -1,0 +1,29 @@
+SOURCE_ID: S04
+URL: https://africannuaire.com/entreprise/auto-ecole-astrale-cameroun/
+PUBLISHER_DOMAIN: africannuaire.com (SPHM Editions, private commercial
+  directory — same publisher already used for 7 other auto-école names in
+  TRANSPORT-A.1)
+FETCHED_AT: 2026-08-21 (this sprint)
+FETCH_METHOD: WebFetch
+PARSER_VERSION: transport-tier3-v1-manual-excerpt-1
+OPERATOR: jean-merlain
+SOURCE_TIER3_CLASS: T3-D (unverified commercial directory listing — no
+  identifiable editorial verification process observed, self-submitted
+  business listing pattern typical of this directory type)
+
+VERBATIM-QUOTED FIELDS EXTRACTED:
+
+Business name (exact quote): "AUTO ECOLE ASTRALE"
+Location (exact quote): "Yaoundé, Cameroun"
+Category (exact quote): "Auto-écoles (Driving Schools)"
+Registration/license number: NONE shown.
+
+PII NOTE: a business phone number is shown on the page. NOT persisted
+here (brief section 7 — institutional data only; a shared business line
+on a commercial directory is borderline but excluded by this sprint's
+conservative default, consistent with S01 treatment).
+
+STATUS: T3_SINGLE_SOURCE for this institution — africannuaire.com is the
+ONLY publisher found for AUTO ECOLE ASTRALE this sprint or in TRANSPORT-A.1.
+No second independent source located despite a targeted search this
+sprint (see reports/registry/transport-tier3-source-catalog.csv).

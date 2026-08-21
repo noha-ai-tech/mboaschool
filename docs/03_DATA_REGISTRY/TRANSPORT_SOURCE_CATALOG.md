@@ -608,3 +608,139 @@ moteur de matching partagé. DÉCISION : **C — sources discovery/agrégat
 uniquement, TRANSPORT DEFERRED**. Voir
 `reports/registry/transport-a1-run-summary.json` pour le détail
 chiffré complet.
+
+---
+
+## TRANSPORT-A.1-T3 — Addendum (2026-08-21, sprint distinct : pipeline de découverte Tier 3)
+
+Sprint distinct, même jour, opérateur jean-merlain, READ-ONLY vis-à-vis
+de `establishments`/`establishment_import_staging`/
+`establishment_registry_identifiers` (0 écriture réelle des trois
+côtés, vérifié en direct au début ET à la fin du sprint — voir
+`reports/registry/transport-tier3-summary.json`, section `database`).
+Ne refait PAS la recherche de zéro : **structure et étend** les 17
+institutions Tier 3 déjà trouvées en TRANSPORT-A.1 avec (1) un modèle
+formel de sous-tiers T3-A/B/C/D, (2) une analyse d'indépendance des
+sources, (3) un statut de corroboration multi-source, (4) un matching
+live réel (moteur durci) et un contrôle inter-ministériel réel.
+
+### Nouvelles sources vérifiées directement ce sprint (WebFetch, jamais un résumé IA compté comme extraction)
+
+- **EMIPAC** obtient sa **première corroboration Tier 3 réelle et
+  vérifiée** du programme Transport : `maritimafrica.com` (T3-C,
+  article du 27-02-2020) ET `kamerpower.com` (T3-C, article concours)
+  ont été récupérés directement, sont bien deux éditeurs distincts,
+  sans texte partagé, avec une identité institutionnelle cohérente
+  ("EMIPAC" / nom complet identique des deux côtés) et sans
+  contradiction géographique (Douala confirmé par l'un, silencieux
+  chez l'autre). Statut : `TIER3_CORROBORATED` — **reste
+  human-review-only, jamais CLEAN_APPROVABLE** (règle absolue §0/§17
+  du brief).
+- **EFO (CCAA)** obtient une seconde source indépendante de niveau
+  autorité : le catalogue de formation international de l'OACI/ICAO
+  (`igat.icao.int`, "Legal Status: Governmental"), en plus du site
+  propre de la CCAA déjà connu. Les deux sources sont au-dessus du
+  Tier 3 (Tier 1/2) — étiqueté `ABOVE_TIER3_CORROBORATED` (label non
+  standard, documenté explicitement plutôt que forcé dans le modèle du
+  brief) plutôt que confondu avec une corroboration Tier 3 ordinaire.
+  Ne résout PAS l'ambiguïté déjà connue sur l'ouverture au public de
+  l'admission.
+- **IT2MIP** : la page `kamerpower.com` déjà citée en TRANSPORT-A.1 a
+  été relue directement ce sprint. **Second cas confirmé de
+  fabrication par la couche de résumé IA d'un moteur de recherche** :
+  un résumé WebSearch affirmait un numéro d'agrément
+  "N°352/MINEFOP/SG/DFOP/SDGSF/SACD du 14-12-2022" — **absent du texte
+  réel de la page** une fois celle-ci récupérée directement. REJETÉ,
+  non utilisé. Précédent direct : le cas "Decision N° 000083/D/MINT/..."
+  déjà attrapé en TRANSPORT-A.1. Deux occurrences confirmées du même
+  mode de défaillance suffisent à établir une règle méthodologique
+  permanente : **ne jamais persister un identifiant vu uniquement dans
+  un résumé IA sans vérification directe de la page source**.
+- **3 domaines "site propre" précédemment cités comme sources
+  institutionnelles se révèlent morts** ce sprint (`emipac-cm.com`,
+  `irdsm-aviation.com`, `groupe-dsm.net`) — confirmé par échec DNS
+  direct, ET distingué d'une panne d'environnement générale en
+  vérifiant que des domaines de contrôle (`kamerpower.com`,
+  `africannuaire.com`) se chargent normalement dans la même session.
+  Conséquence : le statut de corroboration d'IRDSM Aviation est
+  **rétrogradé** en `T3_MULTI_SOURCE_WEAK` (au lieu d'un
+  `TIER3_CORROBORATED` qui aurait semblé valide en se fiant seulement
+  au rapport TRANSPORT-A.1 sans revérification).
+- **Risque de collision de nom identifié** : "Le Paquebot" (centre de
+  formation maritime, Douala) partage son nom avec un restaurant de
+  fruits de mer bien connu et sans rapport à Douala — signalé
+  explicitement comme un risque de désambiguïsation pour tout futur
+  outillage de recherche automatisée, sans remettre en doute
+  l'existence propre du centre de formation (page Facebook active
+  distincte confirmée).
+
+### Durcissement du moteur de matching — vocabulaire auto-école (§13-§14 du brief)
+
+Root cause du faux-positif TRANSPORT-A.1 ("AUTO ECOLE LEO" vs
+"Auto-École La Route Sûre", STRONG_MATCH à 100%) rejouée précisément :
+une fois "ecole" retiré (déjà stopword) et "leo" éliminé par le filtre
+de longueur (≤3 caractères), il ne restait plus qu'UN SEUL mot flou
+côté candidat — "auto" — mécaniquement identique au problème
+"sciences" déjà résolu en MINSANTE-G.2. Correctif appliqué (PAS un
+stopword global aveugle, conformément à l'interdiction explicite du
+brief) : `auto` et `autoecole` (forme collée) ajoutés à
+`WEAK_GENERIC_TOKENS` dans `scripts/school-registry/lib/matching/engine.ts`
+— réutilisation intégrale du mécanisme de pondération contextuelle
+("distinctive overlap gate") déjà introduit pour "sciences", jamais
+une nouvelle logique séparée. `conduite`/`permis`/`route` **non**
+ajoutés, faute de faux positif réel observé sur le corpus disponible
+(17 institutions) — décision documentée dans le commentaire de code,
+pas seulement ici.
+
+Résultat rejoué directement : `AUTO ECOLE LEO` vs `Auto-École La Route
+Sûre` -> **NO_MATCH** après correctif (était STRONG_MATCH avant).
+7 familles de tests A-G ajoutées
+(`scripts/school-registry/lib/matching/__tests__/matching-transport-tier3.test.ts`),
+**86/86 tests passent** au total (suite complète, aucune régression
+MINSANTE/MINESUP) — voir `reports/registry/transport-tier3-summary.json`.
+
+### Matching live réel (lecture seule, 2248 établissements)
+
+Exécuté pour les 17 candidats via
+`scripts/school-registry/transport-tier3-pipeline.ts` (clé anon,
+lecture seule) : 0 `EXACT_IDENTIFIER`/`EXACT_IDENTITY`, 4
+`PROBABLE_MATCH` (chevauchements réels mais faibles — ex. "AUTO ECOLE
+FRANCAISE" vs "École Française de Douala – Pierre Loti" via le mot
+distinctif partagé "française", pas un artefact du correctif
+générique), 1 `AMBIGUOUS` (Fleet Management Academy, plusieurs cibles
+à égalité), 12 `NO_MATCH`. **`safeForAutoLink`=false partout, 0 fusion
+automatique.** Détail complet :
+`reports/registry/transport-tier3-matching.csv`.
+
+### Contrôle inter-ministériel (lecture seule, staging + live)
+
+0 collision staging trouvée sur un filtre par mots-clés transport
+large (auto/conduite/maritime/aviation/emipac/it2mip/paquebot/
+fleet/irdsm + noms propres des 17 candidats). IT2MIP reste le seul cas
+`AMBIGUOUS` (revendication MINEFOP auto-déclarée, non corroborée par
+la source relue ce sprint). Fleet Management Academy confirmé `NEW`
+du point de vue Transport (aucun établissement MINT/MINTRANSPORT à
+dupliquer, 0 collision) tout en restant une institution MINEFOP par son
+propre identifiant. Détail : `reports/registry/transport-tier3-cross-ministry-review.csv`.
+
+### Dry-run staging (0 écriture réelle, classification uniquement)
+
+`would_stage_total`=17 (dont `would_duplicate_review`=4,
+`would_source_review`=13, `would_cross_ministry_review`=0 — voir la
+note d'ordre de priorité des paniers dans
+`reports/registry/transport-tier3-staging-dry-run.json`, IT2MIP compte
+dans `would_duplicate_review` malgré son signal cross-ministère),
+`would_out_of_scope`=0, `would_insert_clean_approvable`=0 (toujours 0,
+règle absolue). **0 écriture staging réelle.**
+
+### Décision TRANSPORT-A.1-T3
+
+**A — TIER3_PIPELINE_VALIDATED.** Le pipeline de découverte/dry-run
+fonctionne de bout en bout (extraction déterministe, snapshots SHA256,
+classification T3-A/B/C/D, indépendance, corroboration, matching live
+durci, contrôle inter-ministériel, dry-run staging, 0 PII, 0 écriture).
+Un cas `TIER3_CORROBORATED` réel et vérifié existe désormais (EMIPAC).
+**Ceci n'autorise PAS la promotion** — voir
+`reports/registry/transport-tier3-summary.json` pour le détail
+chiffré complet et `TRANSPORT_IMPORT_CONTRACT.md` §19 pour les
+conditions d'un futur sprint `TRANSPORT-A.2-T3` de staging contrôlé.

@@ -1,0 +1,40 @@
+SOURCE_ID: S01
+URL: https://maritimafrica.com/ecole-maritime-industrielle-et-portuaire-de-lafrique-centrale-emipac-cameroun/
+PUBLISHER_DOMAIN: maritimafrica.com
+FETCHED_AT: 2026-08-21 (this sprint, TRANSPORT-A.1-T3)
+FETCH_METHOD: WebFetch (raw bytes not retrievable in this environment; tool
+  returns HTML-to-markdown conversion, not original bytes — same tooling
+  limitation already documented in TRANSPORT_SOURCE_CATALOG.md for
+  TRANSPORT-A/A.1). SHA256 below covers this persisted excerpt file,
+  NOT the original page bytes — documented explicitly, not claimed
+  otherwise.
+PARSER_VERSION: transport-tier3-v1-manual-excerpt-1
+OPERATOR: jean-merlain (session continued after transient interruption,
+  independently re-verified before resuming — see manifest.json note)
+SOURCE_TIER3_CLASS: T3-C (press/professional article — named platform
+  "Maritimafrica", maritime news portal with editorial byline/date, not
+  the institution's own site, not a raw unverified directory)
+
+VERBATIM-QUOTED FIELDS EXTRACTED (institutional data only, PII stripped
+per brief section 7 — no owner/director/personal contact persisted):
+
+Institution full name (exact quote):
+"Ecole Maritime Industrielle et Portuaire de l'Afrique Centrale (EMIPAC)"
+
+Location (exact quote):
+"Ndogsimbi entrée collège Bénédicte immeuble ZICO, Douala, Cameroun"
+
+Official accreditation/registration numbers found: NONE. Explicit check
+performed for MINT, DAMVN, MINEFOP or any other ministry reference — none
+present in the article text.
+
+Publisher note (exact, from WebFetch extraction):
+"This article appears on Maritimafrica, a maritime news platform based in
+Africa, published on February 27, 2020."
+
+FIELDS DELIBERATELY NOT PERSISTED (PII policy, brief section 7):
+institution phone number, institution email address — present on source
+page but out of scope for this institutional-only snapshot (professional/
+business contact for the institution itself, not a person, but excluded
+by default per this sprint's conservative PII policy; can be re-collected
+in a future authorized staging sprint if needed).

@@ -1,0 +1,18 @@
+candidate_id,name,entity_family,cross_ministry_decision,staging_keyword_hits,note
+TC-01,AUTO ECOLE ASTRALE,DRIVING_SCHOOL,NEW,,
+TC-02,AUTO ECOLE FRANCAISE,DRIVING_SCHOOL,NEW,,
+TC-03,AUTO ECOLE GERMANIA,DRIVING_SCHOOL,NEW,,
+TC-04,AUTO ECOLE LEO,DRIVING_SCHOOL,NEW,,
+TC-05,AUTO ECOLE TRECY,DRIVING_SCHOOL,NEW,,
+TC-06,AUTO ECOLE TURBO,DRIVING_SCHOOL,NEW,,
+TC-07,AUTO ECOLE TURBO NKOMKANA,DRIVING_SCHOOL,NEW,,
+TC-08,METROPOLITAINE INTERNATIONALE SCES,OTHER_TRANSPORT_EDUCATION,NEW,,
+TC-09,AUTO ECOLE MONTHE,DRIVING_SCHOOL,NEW,,
+TC-10,AUTO ECOLE APPRENDRE & AIMER LA CONDUITE,DRIVING_SCHOOL,NEW,,
+TC-11,EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale),MARITIME_TRAINING,NEW,,
+TC-12,IT2MIP (Institut des Technologies de la Marine Marchande et Industrie Portuaire),MARITIME_TRAINING,AMBIGUOUS,,"IT2MIP's own site previously claimed a MINEFOP affiliation (per TRANSPORT-A.1 report, self-declared, not corroborated). This sprint, the primary kamerpower.com page (S03) was fetched directly and does NOT mention MINEFOP or any accreditation number at all. IMPORTANT METHODOLOGICAL FINDING: a WebSearch AI-generated summary of this SAME page fabricated a specific accreditation number ('N°352/MINEFOP/SG/DFOP/SDGSF/SACD, 14-12-2022') that is absent from the actual page content when fetched directly — REJECTED, not used anywhere in this dataset (see S03 snapshot file for full detail). This is the second confirmed instance of this exact failure mode across TRANSPORT-A.1/-T3 (first: 'Decision N° 000083/D/MINT/...' in TRANSPORT-A.1)."
+TC-13,Centre de formation professionnelle maritime « Le Paquebot »,MARITIME_TRAINING,NEW,,
+TC-14,Centre d'Instruction Maritime et Portuaire,MARITIME_TRAINING,NEW,,
+TC-15,École de Formation (EFO) - CCAA,AVIATION_TRAINING,NEW,,
+TC-16,IRDSM Aviation,AVIATION_TRAINING,NEW,,
+TC-17,Fleet Management Academy,TRANSPORT_LOGISTICS_TRAINING,NEW,,"Authority is MINEFOP (own confirmed identifier), content is transport-adjacent (defensive driving / simulator refresher training) — NOT a MINT institution. No live or staging MINT/MINTRANSPORT record exists to duplicate against (verified live this sprint, zero hits). Kept in this dataset for domain cross-reference only, per TRANSPORT_IMPORT_CONTRACT.md section 3."

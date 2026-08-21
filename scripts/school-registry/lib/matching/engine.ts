@@ -221,7 +221,68 @@ const FUZZY_STOPWORDS = new Set([
  * la fonction `hasDistinctiveOverlap` ci-dessous l'ignore pour décider si UN
  * chevauchement est une preuve d'identité suffisante.
  */
-const WEAK_GENERIC_TOKENS = new Set(["sciences", "science"]);
+/**
+ * SPRINT TRANSPORT-A.1-T3 §13-§14 — vocabulaire générique AUTO-ÉCOLE.
+ *
+ * Root cause exacte du faux-positif trouvé (et laissé délibérément non
+ * corrigé, read-only) en TRANSPORT-A.1 : "AUTO ECOLE LEO" (Tier 3, Yaoundé)
+ * produisait un STRONG_MATCH à 100% de chevauchement contre la fiche seed
+ * "Auto-École La Route Sûre" (Yaoundé, elle-même une donnée de seed/démo,
+ * pas une source officielle — voir TRANSPORT_IMPORT_CONTRACT.md §13).
+ * Rejoué ici : `fuzzyWords("AUTO ECOLE LEO")` = ["auto"] seulement — "ecole"
+ * est déjà un stopword (ligne ~59), et "leo" (3 caractères) est éliminé par
+ * le filtre de longueur >3 de `fuzzyWords()`. Il ne reste donc QU'UN SEUL
+ * mot flou du côté candidat : "auto". Comme il apparaît aussi dans
+ * "Auto-École La Route Sûre" (mots flous restants : auto/route/sure), le
+ * ratio de chevauchement candidat atteint 100% alors qu'aucune identité
+ * réelle n'est démontrée — exactement le même mécanisme que "sciences"
+ * (SPRINT MINSANTE-G.2 ci-dessus), pas une coïncidence.
+ *
+ * "auto" NE PEUT PAS devenir un STOPWORD global à l'aveugle (interdiction
+ * explicite du brief §13) : contrairement à "école"/"institut"/"formation",
+ * il peut légitimement participer à un VRAI signal d'identité s'il
+ * accompagne un autre mot distinctif partagé (ex. deux variantes du même
+ * nom "AUTO ECOLE TURBO NKOMKANA" vs "AUTO-ECOLE TURBO NKOMKANA DOUALA" —
+ * le retirer complètement romprait ce genre de correspondance légitime,
+ * même si "nkomkana" seul suffirait déjà ici). La solution retenue est donc
+ * la MÊME que pour "sciences" : `WEAK_GENERIC_TOKENS`, pas
+ * `FUZZY_STOPWORDS` — "auto" reste dans la sortie de `fuzzyWords()` (le
+ * ratio affiché ne change pas), mais ne peut plus, À LUI SEUL, produire un
+ * niveau bloquant via le "distinctive overlap gate" déjà en place.
+ *
+ * "autoecole" (forme SANS séparateur, ex. une source qui écrit
+ * "AUTOECOLE MONTHE" en un seul mot) est ajouté par le même raisonnement,
+ * préventivement : le tokenizer (`exactIdentityKey`/`fuzzyWords`) ne scinde
+ * QUE sur les caractères non alphanumériques (espace/tiret/apostrophe...),
+ * donc "autoecole" écrit collé ne serait JAMAIS découpé en "auto"+"ecole"
+ * et échapperait entièrement au stopword "ecole" existant — un candidat
+ * "AUTOECOLE X" partagerait alors le seul mot "autoecole" avec un autre
+ * "AUTOECOLE Y" sans rapport, exactement le même risque de faux-positif
+ * que "auto" seul, avant même d'atteindre le filtre "ecole". Ajouté ici de
+ * façon structurelle (même mécanisme, même preuve directe), pas comme une
+ * supposition théorique séparée.
+ *
+ * Audit complet du vocabulaire auto-école demandé par le brief §13 (voir
+ * aussi reports/registry/transport-tier3-matching-hardening-audit.json) :
+ *   - "ecole"/"école"                -> STOPWORD (déjà présent, inchangé)
+ *   - "formation"                    -> STOPWORD (déjà présent, inchangé)
+ *   - "auto"                         -> WEAK_GENERIC (ajouté ce sprint, preuve directe ci-dessus)
+ *   - "autoecole" (forme collée)     -> WEAK_GENERIC (ajouté ce sprint, même mécanisme structurel)
+ *   - "auto-ecole" (forme à tiret)   -> N/A séparément : le tiret est déjà normalisé en espace par
+ *                                       exactIdentityKey/fuzzyWords, donc cette forme se scinde
+ *                                       automatiquement en "auto"+"ecole", chacun déjà couvert
+ *                                       ci-dessus — aucune entrée de Set dédiée nécessaire.
+ *   - "conduite"/"permis"/"route"    -> NON ajoutés ce sprint, volontairement — aucun faux positif
+ *                                       RÉEL observé sur le corpus Transport disponible (17
+ *                                       institutions, voir data/registry/normalized/transport-tier3-v1/),
+ *                                       cohérent avec le principe déjà appliqué en MINSANTE-B/G.1/G.2
+ *                                       ("ne pas ajouter aveuglément chaque mot générique plausible
+ *                                       sans preuve — un nom propre/ville/sigle reste toujours le
+ *                                       signal réel restant"). À RÉÉVALUER si un futur sprint de
+ *                                       collecte réelle (TRANSPORT-A.2-T3 ou suivant) documente un
+ *                                       faux positif concret impliquant l'un de ces trois mots.
+ */
+const WEAK_GENERIC_TOKENS = new Set(["sciences", "science", "auto", "autoecole"]);
 
 /**
  * SPRINT MINSANTE-G.2 §9 — extraction d'un sigle/acronyme explicite entre

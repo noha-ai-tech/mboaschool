@@ -1,0 +1,49 @@
+SOURCE_ID: S07 (negative-result / tooling-verification record, not an
+  institutional data source)
+FETCHED_AT: 2026-08-21 (this sprint)
+FETCH_METHOD: WebFetch, DNS resolution attempts
+OPERATOR: jean-merlain
+
+PURPOSE: document domains referenced by search-engine results or prior
+sprint reports as apparent "institutional own-site" sources, which FAILED
+to resolve when fetched directly this sprint — distinguished explicitly
+from a general environment/network failure by confirming CONTROL domains
+resolved successfully in the same session (kamerpower.com and
+africannuaire.com both fetched successfully — see S02-S04).
+
+DOMAINS THAT FAILED TO RESOLVE THIS SPRINT (getaddrinfo ENOTFOUND):
+  - https://www.emipac-cm.com/la-formation/matelotage-2/
+  - https://emipac-cm.com/la-formation/matelotage-2/
+    (cited by a WebSearch result title as EMIPAC's apparent own domain;
+    NOT counted as a verified source for EMIPAC this sprint as a result —
+    EMIPAC's TIER3_CORROBORATED status rests entirely on S01+S02, both
+    directly fetched successfully)
+  - https://irdsm-aviation.com
+    (cited by a WebSearch AI summary as IRDSM Aviation's contact
+    website+email domain; NOT counted as a verified source)
+  - https://groupe-dsm.net/aviation
+    (the URL TRANSPORT-A.1 previously classified as IRDSM's T3-A
+    institutional self-published source, per
+    TRANSPORT_SOURCE_CATALOG.md/transport-a1-aviation-sources.csv; NOT
+    re-verifiable this sprint — status carried forward as "previously
+    observed by a prior sprint, not independently re-confirmed this
+    sprint" rather than silently treated as still-current evidence)
+
+CONTROL DOMAINS CONFIRMED RESOLVING NORMALLY THIS SPRINT (proves the
+above are genuine dead/unreachable domains, not an environment-wide DNS
+issue):
+  - https://kamerpower.com — resolved, fetched successfully (S02/S03)
+  - https://africannuaire.com/entreprise/auto-ecole-astrale-cameroun/ —
+    resolved, fetched successfully (S04)
+
+CONSEQUENCE FOR THIS SPRINT'S DATASET: IRDSM Aviation's corroboration
+status is NOT upgraded on the strength of groupe-dsm.net this sprint
+(cannot re-verify it exists/what it says today) — IRDSM remains
+T3_MULTI_SOURCE_WEAK at best, carried forward from TRANSPORT-A.1 sourcing
+(groupe-dsm.net/aviation + press mentions), not independently
+strengthened. This is a genuinely useful negative finding for a future
+sprint: at least 3 previously-cited "institutional own-site" domains in
+the Transport space may now be dead/lapsed — a pattern worth checking
+again before any future controlled staging import (an institution whose
+own site has gone dark since discovery is a plausible ACTIVITY_UNKNOWN /
+possibly-closed signal, never assumed either way without more evidence).

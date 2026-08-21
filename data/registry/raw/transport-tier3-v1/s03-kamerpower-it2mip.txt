@@ -1,0 +1,53 @@
+SOURCE_ID: S03
+URL: https://kamerpower.com/fr/institut-des-technologies-de-la-marine-marchande-et-industrie-portuaire-it2mip-douala/
+PUBLISHER_DOMAIN: kamerpower.com
+FETCHED_AT: 2026-08-21 (this sprint)
+FETCH_METHOD: WebFetch
+PARSER_VERSION: transport-tier3-v1-manual-excerpt-1
+OPERATOR: jean-merlain
+SOURCE_TIER3_CLASS: T3-C (press/professional article, same publisher as S02)
+
+VERBATIM-QUOTED FIELDS EXTRACTED:
+
+Institution name (exact quote):
+"Institut des Technologies de la Marine Marchande et Industrie Portuaire
+(IT2MIP)"
+
+Location (exact quote):
+"quartier Ecole Publique Deido, Douala-Cameroun"
+
+Admission requirements (exact quotes):
+"être âgé de 17 a 35 ans"
+"être titulaire d'un des diplômes suivants : Baccalauréat ou GCE A Level,
+Probatoire, BEPC, CAP ou GCE O Level, CEP"
+(=> admits candidates from CEP level, NOT exclusively post-bac — same
+conclusion already documented in TRANSPORT_SOURCE_CATALOG.md Addendum
+TRANSPORT-A.1, reconfirmed here directly against the primary page rather
+than by report citation.)
+
+Official accreditation/registration number found: NONE — explicit,
+important negative finding (see below).
+
+*** METHODOLOGICAL GUARDRAIL FINDING (brief section 0 / repo precedent) ***
+A separate WebSearch AI-generated summary for this same URL claimed:
+  "Official Recognition: The institution has accreditation number
+  N°352/MINEFOP/SG/DFOP/SDGSF/SACD from December 14, 2022"
+This exact page was then fetched DIRECTLY (this file) specifically to
+verify that claim. RESULT: the string "MINEFOP" and the number
+"N°352/MINEFOP/SG/DFOP/SDGSF/SACD" do NOT appear anywhere in the actual
+page content. CONCLUSION: fabrication by the search-engine AI summary
+layer — same failure mode already caught once in TRANSPORT-A.1 (the
+"Decision N° 000083/D/MINT/SG/DTR/SDPSR/SFCAM" case, documented in
+reports/registry/transport-a1-identifier-sample.csv). REJECTED, not used
+anywhere in this sprint's dataset. Documented here as a second concrete
+occurrence, reinforcing the absolute rule: never trust a search-summary
+identifier without direct primary-document verification.
+
+INDEPENDENCE NOTE: S02 and S03 share the SAME publisher (kamerpower.com).
+Per brief section 5, multiple pages from the SAME publisher are NOT
+treated as two independent sources of each other (same editorial origin,
+possible shared internal data feed) — this affects IT2MIP's OWN
+corroboration status (S03 alone = single-publisher source for IT2MIP,
+no second independent publisher found for IT2MIP this sprint), it does
+NOT affect EMIPAC's status (S01 vs S02 are genuinely different
+publishers/domains).

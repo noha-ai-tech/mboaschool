@@ -1,0 +1,18 @@
+priority,candidate_id,name,entity_family,city,region,tier3_confidence,matching_decision,cross_ministry_decision,note
+4,TC-08,METROPOLITAINE INTERNATIONALE SCES,OTHER_TRANSPORT_EDUCATION,Yaoundé,Centre,T3_IDENTITY_REVIEW,NO_MATCH,NEW,
+4,TC-17,Fleet Management Academy,TRANSPORT_LOGISTICS_TRAINING,,,T3_SINGLE_SOURCE,AMBIGUOUS,NEW,"The identifier itself (MINEFOP N°000471, 19-09-2022) was already confirmed real by TRANSPORT-A directly against a primary MINEFOP-adjacent page, not a search-summary fabrication — different situation from the IT2MIP/TC-12 case above."
+5,TC-01,AUTO ECOLE ASTRALE,DRIVING_SCHOOL,Yaoundé,Centre,T3_SINGLE_SOURCE,NO_MATCH,NEW,
+5,TC-02,AUTO ECOLE FRANCAISE,DRIVING_SCHOOL,Douala,Littoral,T3_SINGLE_SOURCE,PROBABLE_MATCH,NEW,
+5,TC-03,AUTO ECOLE GERMANIA,DRIVING_SCHOOL,Douala,Littoral,T3_SINGLE_SOURCE,NO_MATCH,NEW,
+5,TC-04,AUTO ECOLE LEO,DRIVING_SCHOOL,Yaoundé,Centre,T3_SINGLE_SOURCE,NO_MATCH,NEW,
+5,TC-05,AUTO ECOLE TRECY,DRIVING_SCHOOL,Yaoundé,Centre,T3_SINGLE_SOURCE,NO_MATCH,NEW,
+5,TC-06,AUTO ECOLE TURBO,DRIVING_SCHOOL,Yaoundé,Centre,T3_SINGLE_SOURCE,NO_MATCH,NEW,
+5,TC-07,AUTO ECOLE TURBO NKOMKANA,DRIVING_SCHOOL,Yaoundé,Centre,T3_SINGLE_SOURCE,NO_MATCH,NEW,
+5,TC-09,AUTO ECOLE MONTHE,DRIVING_SCHOOL,,,T3_SINGLE_SOURCE,NO_MATCH,NEW,
+5,TC-10,AUTO ECOLE APPRENDRE & AIMER LA CONDUITE,DRIVING_SCHOOL,,,T3_SINGLE_SOURCE,NO_MATCH,NEW,
+5,TC-11,EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale),MARITIME_TRAINING,Douala,Littoral,T3_CORROBORATED,PROBABLE_MATCH,NEW,"First genuine TIER3_CORROBORATED case built this sprint with real, directly-verified evidence: >=2 independent sources (S01+S02), both T3-C, identity consistent ('EMIPAC' / full name matches exactly in both), no geographic contradiction (S01 states Douala explicitly, S02 is silent on city — silence is not a contradiction). STILL NOT CLEAN_APPROVABLE, STILL human-review-only (brief section 17 absolute rule)."
+5,TC-12,IT2MIP (Institut des Technologies de la Marine Marchande et Industrie Portuaire),MARITIME_TRAINING,Douala,Littoral,T3_SINGLE_SOURCE,PROBABLE_MATCH,AMBIGUOUS,
+5,TC-13,Centre de formation professionnelle maritime « Le Paquebot »,MARITIME_TRAINING,Douala,Littoral,T3_SINGLE_SOURCE,NO_MATCH,NEW,"NAME-COLLISION RISK: 'Le Paquebot' is also the name of an unrelated, well-known Douala seafood restaurant. Future automated search/matching against this name must disambiguate. See S05 snapshot for detail. This is a T3_IDENTITY_REVIEW-adjacent flag, kept in the maritime family since the training-center identity itself is not doubted."
+5,TC-14,Centre d'Instruction Maritime et Portuaire,MARITIME_TRAINING,,,T3_SINGLE_SOURCE,NO_MATCH,NEW,
+5,TC-15,École de Formation (EFO) - CCAA,AVIATION_TRAINING,Yaoundé,Centre,ABOVE_TIER3_CORROBORATED,NO_MATCH,NEW,"Non-standard label, used deliberately: both sources are ABOVE Tier 3 (Tier 1/2 authority-level), stronger evidence than the brief's Tier-3-only confidence model anticipates. Documented explicitly rather than mis-labeled as ordinary T3_CORROBORATED. Existence is strongly corroborated; this does NOT resolve the still-open public-admission-scope ambiguity, and does NOT change the absolute rule (section 0) that this sprint produces no CLEAN_APPROVABLE / no promotion for ANY candidate regardless of source tier."
+5,TC-16,IRDSM Aviation,AVIATION_TRAINING,Yaoundé,Centre,T3_MULTI_SOURCE_WEAK,NO_MATCH,NEW,"Downgraded from what would otherwise look like TIER3_CORROBORATED because the primary institutional source (groupe-dsm.net) is no longer reachable/re-verifiable this sprint (brief section 24 activity-status caution applies to the SOURCE itself, not only the institution) — conservative treatment, not a silent carry-forward of an unverified status."

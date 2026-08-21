@@ -1,0 +1,130 @@
+{
+  "sprint": "TRANSPORT-A.1-T3",
+  "date": "2026-08-21",
+  "operator": "jean-merlain",
+  "note_on_session_continuity": "Session was NOT actually interrupted before this work — independently verified at the start of this sprint via `git status`/`git rev-parse HEAD` (clean tree, HEAD=ce2493b, zero untracked transport-tier3-* files, zero diff on lib/matching/engine.ts) before trusting an in-conversation message that claimed a transient interruption had occurred. Documented here per the standing operational rule of this repository: never rely on an unverified claim about system state, always check independently first (see prior incident notes carried in project memory).",
+  "raw_bytes_limitation": "This environment's WebFetch tool converts fetched HTML to markdown/summarized text server-side and does not expose original response bytes. SHA256 values below are computed over the locally persisted, manually-quoted excerpt .txt files (verbatim quotes extracted from the tool's output), NOT over the original page bytes. This limitation is stated explicitly rather than presented as a raw-byte snapshot capability the environment does not actually have — same honesty standard already applied to the PDF-tooling limitations documented in TRANSPORT_SOURCE_CATALOG.md.",
+  "sources": [
+    {
+      "source_id": "S01",
+      "url": "https://maritimafrica.com/ecole-maritime-industrielle-et-portuaire-de-lafrique-centrale-emipac-cameroun/",
+      "publisher_domain": "maritimafrica.com",
+      "fetched_at": "2026-08-21",
+      "fetch_method": "WebFetch",
+      "source_tier3_class": "T3-C",
+      "parser_version": "transport-tier3-v1-manual-excerpt-1",
+      "operator": "jean-merlain",
+      "snapshot_file": "s01-maritimafrica-emipac.txt",
+      "sha256_of_snapshot_file": "1241e88ad664a7b78d7f295e60c8d3e7e6e102b060f82346d0da9c729e0beb42",
+      "candidate": "EMIPAC",
+      "pii_stripped": true
+    },
+    {
+      "source_id": "S02",
+      "url": "https://kamerpower.com/fr/concours-emipac-afrique-centrale-2020-2021-ecole-maritime-industrielle-et-portuaire/",
+      "publisher_domain": "kamerpower.com",
+      "fetched_at": "2026-08-21",
+      "fetch_method": "WebFetch",
+      "source_tier3_class": "T3-C",
+      "parser_version": "transport-tier3-v1-manual-excerpt-1",
+      "operator": "jean-merlain",
+      "snapshot_file": "s02-kamerpower-emipac.txt",
+      "sha256_of_snapshot_file": "139825f925160201e697e28c6cd9548e1c6ee9b27f3aaacd7c752befbe5f862f",
+      "candidate": "EMIPAC",
+      "pii_stripped": true,
+      "independent_of": [
+        "S01"
+      ]
+    },
+    {
+      "source_id": "S03",
+      "url": "https://kamerpower.com/fr/institut-des-technologies-de-la-marine-marchande-et-industrie-portuaire-it2mip-douala/",
+      "publisher_domain": "kamerpower.com",
+      "fetched_at": "2026-08-21",
+      "fetch_method": "WebFetch",
+      "source_tier3_class": "T3-C",
+      "parser_version": "transport-tier3-v1-manual-excerpt-1",
+      "operator": "jean-merlain",
+      "snapshot_file": "s03-kamerpower-it2mip.txt",
+      "sha256_of_snapshot_file": "b69f39695dfb5fa23cffc581d8a7d0a723e410f0eedf3282b62fc989a3aee0ba",
+      "candidate": "IT2MIP",
+      "pii_stripped": true,
+      "fabrication_caught_and_rejected": "AI-search-summary claimed accreditation number N°352/MINEFOP/SG/DFOP/SDGSF/SACD; verified absent from primary page content; REJECTED, not used."
+    },
+    {
+      "source_id": "S04",
+      "url": "https://africannuaire.com/entreprise/auto-ecole-astrale-cameroun/",
+      "publisher_domain": "africannuaire.com",
+      "fetched_at": "2026-08-21",
+      "fetch_method": "WebFetch",
+      "source_tier3_class": "T3-D",
+      "parser_version": "transport-tier3-v1-manual-excerpt-1",
+      "operator": "jean-merlain",
+      "snapshot_file": "s04-africannuaire-astrale.txt",
+      "sha256_of_snapshot_file": "48d6092a49454f227a8a171ff469e59a2ca5b1d2fd647108901cfdea9f5c9d06",
+      "candidate": "AUTO ECOLE ASTRALE",
+      "pii_stripped": true
+    },
+    {
+      "source_id": "S05",
+      "url": "https://www.facebook.com/p/Centre-de-formation-professionnelle-maritime-le-paquebot-de-Douala-100075842125767/",
+      "publisher_domain": "facebook.com",
+      "fetched_at": "2026-08-21",
+      "fetch_method": "WebSearch result snippet only (not opened via WebFetch)",
+      "source_tier3_class": "T3-D",
+      "parser_version": "transport-tier3-v1-manual-excerpt-1",
+      "operator": "jean-merlain",
+      "snapshot_file": "s05-facebook-lepaquebot.txt",
+      "sha256_of_snapshot_file": "2f95168f6f6f82c8c96d020f8d3a1ee140ad5fcc0a4b5ad89c42bb3f7a92b630",
+      "candidate": "Centre de formation professionnelle maritime Le Paquebot",
+      "pii_stripped": true,
+      "name_collision_risk": "distinct unrelated restaurant of the same name exists in Douala"
+    },
+    {
+      "source_id": "S06",
+      "url": "https://igat.icao.int/ated/TrainingCatalogue/Profile/1293",
+      "publisher_domain": "igat.icao.int",
+      "fetched_at": "2026-08-21",
+      "fetch_method": "WebFetch",
+      "source_tier3_class": "N/A (Tier 1/2 international authority, kept for cross-reference only, never relabeled Tier 3)",
+      "parser_version": "transport-tier3-v1-manual-excerpt-1",
+      "operator": "jean-merlain",
+      "snapshot_file": "s06-icao-igat-efo.txt",
+      "sha256_of_snapshot_file": "e42dc7275e4e9ac3622b2acb3d6d6801d57e31df1b8caea60b4aeabbc564fa6f",
+      "candidate": "Ecole de Formation (EFO) - CCAA",
+      "pii_stripped": true,
+      "independent_of": [
+        "ccaa.aero (TRANSPORT-A, Source G)"
+      ]
+    },
+    {
+      "source_id": "S07",
+      "url": "N/A - tooling verification record",
+      "publisher_domain": "N/A",
+      "fetched_at": "2026-08-21",
+      "fetch_method": "WebFetch DNS resolution attempts",
+      "source_tier3_class": "N/A - negative-result record, not an institutional data source",
+      "parser_version": "transport-tier3-v1-manual-excerpt-1",
+      "operator": "jean-merlain",
+      "snapshot_file": "s07-dead-domains-check.txt",
+      "sha256_of_snapshot_file": "dede15f7ff3224d8af5cb85f0fbf8ccafa5076fcdce56316d66770f04f61eccf",
+      "candidate": "N/A",
+      "pii_stripped": true
+    }
+  ],
+  "carried_forward_from_transport_a1_not_reverified_this_sprint": [
+    "AUTO ECOLE FRANCAISE (africannuaire.com)",
+    "AUTO ECOLE GERMANIA (africannuaire.com)",
+    "AUTO ECOLE LEO (africannuaire.com)",
+    "AUTO ECOLE TRECY (africannuaire.com)",
+    "AUTO ECOLE TURBO (africannuaire.com) - re-searched this sprint, no new source found",
+    "AUTO ECOLE TURBO NKOMKANA (africannuaire.com)",
+    "METROPOLITAINE INTERNATIONALE SCES (africannuaire.com, uncertain category)",
+    "AUTO ECOLE MONTHE (Google Sites, own page)",
+    "AUTO ECOLE APPRENDRE & AIMER LA CONDUITE (road-safety-charter.ec.europa.eu)",
+    "Centre d'Instruction Maritime et Portuaire (reported TRANSPORT-A, source not re-identified)",
+    "IRDSM Aviation (groupe-dsm.net/aviation + press, per TRANSPORT-A.1 - own-site domain now unreachable, see S07)",
+    "Fleet Management Academy (MINEFOP N°000471, 19-09-2022, per TRANSPORT-A - real identifier, not re-verified this sprint)"
+  ],
+  "pii_persisted": 0
+}

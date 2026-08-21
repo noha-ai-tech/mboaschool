@@ -1,0 +1,18 @@
+candidate_id,name,source_count,independent_source_count,independence_assessment
+TC-01,AUTO ECOLE ASTRALE,1,1,N/A (single source)
+TC-02,AUTO ECOLE FRANCAISE,1,1,N/A (single source)
+TC-03,AUTO ECOLE GERMANIA,1,1,N/A (single source)
+TC-04,AUTO ECOLE LEO,1,1,N/A (single source)
+TC-05,AUTO ECOLE TRECY,1,1,N/A (single source)
+TC-06,AUTO ECOLE TURBO,1,1,N/A (single source)
+TC-07,AUTO ECOLE TURBO NKOMKANA,1,1,N/A (single source)
+TC-08,METROPOLITAINE INTERNATIONALE SCES,1,1,N/A (single source)
+TC-09,AUTO ECOLE MONTHE,1,1,N/A (single source)
+TC-10,AUTO ECOLE APPRENDRE & AIMER LA CONDUITE,1,1,N/A (single source)
+TC-11,EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale),2,2,"INDEPENDENT (S01 vs S02 — different publisher/domain, different wording, different content emphasis, no shared paragraph/typo/image-filename observed)"
+TC-12,IT2MIP (Institut des Technologies de la Marine Marchande et Industrie Portuaire),2,1,SAME_PUBLISHER (both kamerpower.com pages — not treated as independent of each other)
+TC-13,Centre de formation professionnelle maritime « Le Paquebot »,2,1,"UNKNOWN — the TRANSPORT-A source domain was never recorded precisely enough to compare against S05; per brief section 5 an UNKNOWN pair does not count toward the corroboration threshold, conservative default applied"
+TC-14,Centre d'Instruction Maritime et Portuaire,1,1,N/A (single source)
+TC-15,École de Formation (EFO) - CCAA,2,2,INDEPENDENT (different publisher: national regulator vs international UN specialized agency; different platform type; no shared wording)
+TC-16,IRDSM Aviation,2,2,"PREVIOUSLY ASSESSED INDEPENDENT by TRANSPORT-A.1, NOT RE-VERIFIED this sprint (both sources stale — primary institutional domain now dead, press mentions not re-fetched)"
+TC-17,Fleet Management Academy,1,1,"N/A (single source, not re-verified this sprint)"

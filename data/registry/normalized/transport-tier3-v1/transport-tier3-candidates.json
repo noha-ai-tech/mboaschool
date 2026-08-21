@@ -1,0 +1,519 @@
+{
+  "sprint": "TRANSPORT-A.1-T3",
+  "date": "2026-08-21",
+  "operator": "jean-merlain",
+  "status": "DISCOVERY / REVIEW ONLY. Tier 3 sources alone can NEVER produce CLEAN_APPROVABLE, trigger PROMOTION, or set verified=true/owner_id (brief section 0). Every candidate below defaults to SOURCE_REVIEW / REVIEW_REQUIRED regardless of tier3_confidence.",
+  "pii_persisted": 0,
+  "base_extends_transport_a1": "This dataset EXTENDS the 17 institutions already discovered in TRANSPORT-A.1 (data/registry/normalized/transport-a1/discovery-institutions.json) with a formal T3-A/B/C/D sub-tier model, source independence analysis, a multi-source corroboration status, and live matching/cross-ministry results. No brand-new institution NAMES were added this sprint (per the operator brief: 'la base de données à étendre et structurer, pas à refaire depuis zéro') — 4 additional independent sources were found and verified this sprint for institutions already on the list (EMIPAC x2 press sources, EFO x1 ICAO source, Astrale re-verified), and 3 previously-cited institutional domains were found dead (see data/registry/raw/transport-tier3-v1/s07-dead-domains-check.txt).",
+  "candidates": [
+    {
+      "candidate_id": "TC-01",
+      "name": "AUTO ECOLE ASTRALE",
+      "normalized_name": "auto ecole astrale",
+      "entity_family": "DRIVING_SCHOOL",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "sources": [
+        {
+          "source_id": "S04",
+          "domain": "africannuaire.com",
+          "tier3_class": "T3-D",
+          "verified_this_sprint": true
+        }
+      ],
+      "source_count": 1,
+      "independent_source_count": 1,
+      "source_independence": "N/A (single source)",
+      "completeness_of_source": "DISCOVERY_FEED",
+      "tier3_confidence": "T3_SINGLE_SOURCE",
+      "matching_decision": "NO_MATCH",
+      "cross_ministry_decision": "NEW",
+      "activity_status": "ACTIVITY_UNKNOWN",
+      "review_required": true,
+      "official_corroboration_status": "NOT_SEARCHED"
+    },
+    {
+      "candidate_id": "TC-02",
+      "name": "AUTO ECOLE FRANCAISE",
+      "normalized_name": "auto ecole francaise",
+      "entity_family": "DRIVING_SCHOOL",
+      "city": "Douala",
+      "region": "Littoral",
+      "sources": [
+        {
+          "source_id": "TRANSPORT-A.1",
+          "domain": "africannuaire.com",
+          "tier3_class": "T3-D",
+          "verified_this_sprint": false
+        }
+      ],
+      "source_count": 1,
+      "independent_source_count": 1,
+      "source_independence": "N/A (single source)",
+      "completeness_of_source": "DISCOVERY_FEED",
+      "tier3_confidence": "T3_SINGLE_SOURCE",
+      "matching_decision": "PROBABLE_MATCH",
+      "cross_ministry_decision": "NEW",
+      "activity_status": "ACTIVITY_UNKNOWN",
+      "review_required": true,
+      "official_corroboration_status": "NOT_SEARCHED"
+    },
+    {
+      "candidate_id": "TC-03",
+      "name": "AUTO ECOLE GERMANIA",
+      "normalized_name": "auto ecole germania",
+      "entity_family": "DRIVING_SCHOOL",
+      "city": "Douala",
+      "region": "Littoral",
+      "sources": [
+        {
+          "source_id": "TRANSPORT-A.1",
+          "domain": "africannuaire.com",
+          "tier3_class": "T3-D",
+          "verified_this_sprint": false
+        }
+      ],
+      "source_count": 1,
+      "independent_source_count": 1,
+      "source_independence": "N/A (single source)",
+      "completeness_of_source": "DISCOVERY_FEED",
+      "tier3_confidence": "T3_SINGLE_SOURCE",
+      "matching_decision": "NO_MATCH",
+      "cross_ministry_decision": "NEW",
+      "activity_status": "ACTIVITY_UNKNOWN",
+      "review_required": true,
+      "official_corroboration_status": "NOT_SEARCHED"
+    },
+    {
+      "candidate_id": "TC-04",
+      "name": "AUTO ECOLE LEO",
+      "normalized_name": "auto ecole leo",
+      "entity_family": "DRIVING_SCHOOL",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "sources": [
+        {
+          "source_id": "TRANSPORT-A.1",
+          "domain": "africannuaire.com",
+          "tier3_class": "T3-D",
+          "verified_this_sprint": false
+        }
+      ],
+      "source_count": 1,
+      "independent_source_count": 1,
+      "source_independence": "N/A (single source)",
+      "completeness_of_source": "DISCOVERY_FEED",
+      "tier3_confidence": "T3_SINGLE_SOURCE",
+      "matching_decision": "NO_MATCH",
+      "matching_note": "KEY REGRESSION CASE: produced STRONG_MATCH (100% overlap on 'auto' alone) against live seed record 'Auto-École La Route Sûre' BEFORE this sprint's engine.ts hardening (TRANSPORT-A.1 finding). AFTER adding 'auto' to WEAK_GENERIC_TOKENS this sprint: NO_MATCH. See scripts/school-registry/lib/matching/__tests__/matching-transport-tier3.test.ts section A.",
+      "cross_ministry_decision": "NEW",
+      "activity_status": "ACTIVITY_UNKNOWN",
+      "review_required": true,
+      "official_corroboration_status": "NOT_SEARCHED"
+    },
+    {
+      "candidate_id": "TC-05",
+      "name": "AUTO ECOLE TRECY",
+      "normalized_name": "auto ecole trecy",
+      "entity_family": "DRIVING_SCHOOL",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "sources": [
+        {
+          "source_id": "TRANSPORT-A.1",
+          "domain": "africannuaire.com",
+          "tier3_class": "T3-D",
+          "verified_this_sprint": false
+        }
+      ],
+      "source_count": 1,
+      "independent_source_count": 1,
+      "source_independence": "N/A (single source)",
+      "completeness_of_source": "DISCOVERY_FEED",
+      "tier3_confidence": "T3_SINGLE_SOURCE",
+      "matching_decision": "NO_MATCH",
+      "cross_ministry_decision": "NEW",
+      "activity_status": "ACTIVITY_UNKNOWN",
+      "review_required": true,
+      "official_corroboration_status": "NOT_SEARCHED"
+    },
+    {
+      "candidate_id": "TC-06",
+      "name": "AUTO ECOLE TURBO",
+      "normalized_name": "auto ecole turbo",
+      "entity_family": "DRIVING_SCHOOL",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "sources": [
+        {
+          "source_id": "TRANSPORT-A.1",
+          "domain": "africannuaire.com",
+          "tier3_class": "T3-D",
+          "verified_this_sprint": false,
+          "note": "re-searched this sprint (WebSearch), no second independent source found"
+        }
+      ],
+      "source_count": 1,
+      "independent_source_count": 1,
+      "source_independence": "N/A (single source)",
+      "completeness_of_source": "DISCOVERY_FEED",
+      "tier3_confidence": "T3_SINGLE_SOURCE",
+      "matching_decision": "NO_MATCH",
+      "cross_ministry_decision": "NEW",
+      "activity_status": "ACTIVITY_UNKNOWN",
+      "review_required": true,
+      "official_corroboration_status": "NOT_SEARCHED"
+    },
+    {
+      "candidate_id": "TC-07",
+      "name": "AUTO ECOLE TURBO NKOMKANA",
+      "normalized_name": "auto ecole turbo nkomkana",
+      "entity_family": "DRIVING_SCHOOL",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "sources": [
+        {
+          "source_id": "TRANSPORT-A.1",
+          "domain": "africannuaire.com",
+          "tier3_class": "T3-D",
+          "verified_this_sprint": false
+        }
+      ],
+      "source_count": 1,
+      "independent_source_count": 1,
+      "source_independence": "N/A (single source)",
+      "completeness_of_source": "DISCOVERY_FEED",
+      "tier3_confidence": "T3_SINGLE_SOURCE",
+      "matching_decision": "NO_MATCH",
+      "cross_ministry_decision": "NEW",
+      "activity_status": "ACTIVITY_UNKNOWN",
+      "review_required": true,
+      "official_corroboration_status": "NOT_SEARCHED"
+    },
+    {
+      "candidate_id": "TC-08",
+      "name": "METROPOLITAINE INTERNATIONALE SCES",
+      "normalized_name": "metropolitaine internationale sces",
+      "entity_family": "OTHER_TRANSPORT_EDUCATION",
+      "entity_family_note": "Category UNCERTAIN — listed under africannuaire.com's driving-school category but name does not clearly indicate a DRIVING_SCHOOL specifically (possibly a broader training/vocational entity misfiled by the directory). Never assumed IN_SCOPE by default (brief section 11/12).",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "sources": [
+        {
+          "source_id": "TRANSPORT-A.1",
+          "domain": "africannuaire.com",
+          "tier3_class": "T3-D",
+          "verified_this_sprint": false
+        }
+      ],
+      "source_count": 1,
+      "independent_source_count": 1,
+      "source_independence": "N/A (single source)",
+      "completeness_of_source": "DISCOVERY_FEED",
+      "tier3_confidence": "T3_IDENTITY_REVIEW",
+      "matching_decision": "NO_MATCH",
+      "cross_ministry_decision": "NEW",
+      "activity_status": "ACTIVITY_UNKNOWN",
+      "review_required": true,
+      "official_corroboration_status": "NOT_SEARCHED"
+    },
+    {
+      "candidate_id": "TC-09",
+      "name": "AUTO ECOLE MONTHE",
+      "normalized_name": "auto ecole monthe",
+      "entity_family": "DRIVING_SCHOOL",
+      "city": null,
+      "region": null,
+      "sources": [
+        {
+          "source_id": "TRANSPORT-A.1",
+          "domain": "sites.google.com",
+          "tier3_class": "T3-A",
+          "verified_this_sprint": false,
+          "note": "institutional self-published page (Google Sites) — still only ONE publisher, T3-A alone does not satisfy the >=2-source corroboration rule (brief section 4)"
+        }
+      ],
+      "source_count": 1,
+      "independent_source_count": 1,
+      "source_independence": "N/A (single source)",
+      "completeness_of_source": "SINGLE_RECORD",
+      "tier3_confidence": "T3_SINGLE_SOURCE",
+      "matching_decision": "NO_MATCH",
+      "cross_ministry_decision": "NEW",
+      "activity_status": "ACTIVITY_UNKNOWN",
+      "review_required": true,
+      "official_corroboration_status": "NOT_SEARCHED"
+    },
+    {
+      "candidate_id": "TC-10",
+      "name": "AUTO ECOLE APPRENDRE & AIMER LA CONDUITE",
+      "normalized_name": "auto ecole apprendre aimer la conduite",
+      "entity_family": "DRIVING_SCHOOL",
+      "city": null,
+      "region": null,
+      "sources": [
+        {
+          "source_id": "TRANSPORT-A.1",
+          "domain": "road-safety-charter.ec.europa.eu",
+          "tier3_class": "T3-B",
+          "verified_this_sprint": false,
+          "note": "EU Road Safety Charter signatory profile — reputable platform (European Commission), but profile content is self-submitted by the institution, single source"
+        }
+      ],
+      "source_count": 1,
+      "independent_source_count": 1,
+      "source_independence": "N/A (single source)",
+      "completeness_of_source": "SINGLE_RECORD",
+      "tier3_confidence": "T3_SINGLE_SOURCE",
+      "matching_decision": "NO_MATCH",
+      "cross_ministry_decision": "NEW",
+      "activity_status": "ACTIVITY_UNKNOWN",
+      "review_required": true,
+      "official_corroboration_status": "NOT_SEARCHED"
+    },
+    {
+      "candidate_id": "TC-11",
+      "name": "EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale)",
+      "normalized_name": "ecole maritime industrielle et portuaire de l afrique centrale emipac",
+      "entity_family": "MARITIME_TRAINING",
+      "city": "Douala",
+      "region": "Littoral",
+      "sources": [
+        {
+          "source_id": "S01",
+          "domain": "maritimafrica.com",
+          "tier3_class": "T3-C",
+          "verified_this_sprint": true
+        },
+        {
+          "source_id": "S02",
+          "domain": "kamerpower.com",
+          "tier3_class": "T3-C",
+          "verified_this_sprint": true
+        },
+        {
+          "source_id": "N/A",
+          "domain": "facebook.com/ecole.emipac",
+          "tier3_class": "T3-D",
+          "verified_this_sprint": false,
+          "note": "seen in search index only, not fetched"
+        },
+        {
+          "source_id": "N/A",
+          "domain": "schoolandcollegelistings.com",
+          "tier3_class": "T3-D",
+          "verified_this_sprint": false,
+          "note": "two directory listing pages seen in search index, not fetched"
+        },
+        {
+          "source_id": "N/A",
+          "domain": "emipac-cm.com",
+          "tier3_class": "T3-A (claimed, unverifiable)",
+          "verified_this_sprint": false,
+          "note": "domain DOES NOT RESOLVE this sprint (see S07) — NOT counted as a source"
+        }
+      ],
+      "source_count": 2,
+      "independent_source_count": 2,
+      "source_independence": "INDEPENDENT (S01 vs S02 — different publisher/domain, different wording, different content emphasis, no shared paragraph/typo/image-filename observed)",
+      "completeness_of_source": "DISCOVERY_FEED",
+      "tier3_confidence": "T3_CORROBORATED",
+      "tier3_confidence_note": "First genuine TIER3_CORROBORATED case built this sprint with real, directly-verified evidence: >=2 independent sources (S01+S02), both T3-C, identity consistent ('EMIPAC' / full name matches exactly in both), no geographic contradiction (S01 states Douala explicitly, S02 is silent on city — silence is not a contradiction). STILL NOT CLEAN_APPROVABLE, STILL human-review-only (brief section 17 absolute rule).",
+      "matching_decision": "PROBABLE_MATCH",
+      "cross_ministry_decision": "NEW",
+      "activity_status": "ACTIVITY_UNKNOWN",
+      "review_required": true,
+      "official_corroboration_status": "NOT_SEARCHED"
+    },
+    {
+      "candidate_id": "TC-12",
+      "name": "IT2MIP (Institut des Technologies de la Marine Marchande et Industrie Portuaire)",
+      "normalized_name": "institut des technologies de la marine marchande et industrie portuaire it2mip",
+      "entity_family": "MARITIME_TRAINING",
+      "city": "Douala",
+      "region": "Littoral",
+      "sources": [
+        {
+          "source_id": "S03",
+          "domain": "kamerpower.com",
+          "tier3_class": "T3-C",
+          "verified_this_sprint": true
+        },
+        {
+          "source_id": "TRANSPORT-A.1",
+          "domain": "kamerpower.com (other page)",
+          "tier3_class": "T3-C",
+          "verified_this_sprint": false,
+          "note": "SAME publisher as S03 — does not count as a second INDEPENDENT source (brief section 5)"
+        }
+      ],
+      "source_count": 2,
+      "independent_source_count": 1,
+      "source_independence": "SAME_PUBLISHER (both kamerpower.com pages — not treated as independent of each other)",
+      "completeness_of_source": "SINGLE_RECORD",
+      "tier3_confidence": "T3_SINGLE_SOURCE",
+      "matching_decision": "PROBABLE_MATCH",
+      "cross_ministry_decision": "AMBIGUOUS",
+      "cross_ministry_note": "IT2MIP's own site previously claimed a MINEFOP affiliation (per TRANSPORT-A.1 report, self-declared, not corroborated). This sprint, the primary kamerpower.com page (S03) was fetched directly and does NOT mention MINEFOP or any accreditation number at all. IMPORTANT METHODOLOGICAL FINDING: a WebSearch AI-generated summary of this SAME page fabricated a specific accreditation number ('N°352/MINEFOP/SG/DFOP/SDGSF/SACD, 14-12-2022') that is absent from the actual page content when fetched directly — REJECTED, not used anywhere in this dataset (see S03 snapshot file for full detail). This is the second confirmed instance of this exact failure mode across TRANSPORT-A.1/-T3 (first: 'Decision N° 000083/D/MINT/...' in TRANSPORT-A.1).",
+      "activity_status": "ACTIVITY_UNKNOWN",
+      "review_required": true,
+      "official_corroboration_status": "NOT_SEARCHED"
+    },
+    {
+      "candidate_id": "TC-13",
+      "name": "Centre de formation professionnelle maritime « Le Paquebot »",
+      "normalized_name": "centre de formation professionnelle maritime le paquebot",
+      "entity_family": "MARITIME_TRAINING",
+      "city": "Douala",
+      "region": "Littoral",
+      "sources": [
+        {
+          "source_id": "TRANSPORT-A",
+          "domain": "unspecified (reported, prior sprint)",
+          "tier3_class": "T3-D",
+          "verified_this_sprint": false
+        },
+        {
+          "source_id": "S05",
+          "domain": "facebook.com",
+          "tier3_class": "T3-D",
+          "verified_this_sprint": true,
+          "verification_method": "WebSearch result snippet only, not a full WebFetch"
+        }
+      ],
+      "source_count": 2,
+      "independent_source_count": 1,
+      "source_independence": "UNKNOWN — the TRANSPORT-A source domain was never recorded precisely enough to compare against S05; per brief section 5 an UNKNOWN pair does not count toward the corroboration threshold, conservative default applied",
+      "completeness_of_source": "DISCOVERY_FEED",
+      "tier3_confidence": "T3_SINGLE_SOURCE",
+      "matching_decision": "NO_MATCH",
+      "cross_ministry_decision": "NEW",
+      "activity_status": "ACTIVITY_UNKNOWN",
+      "review_required": true,
+      "review_note": "NAME-COLLISION RISK: 'Le Paquebot' is also the name of an unrelated, well-known Douala seafood restaurant. Future automated search/matching against this name must disambiguate. See S05 snapshot for detail. This is a T3_IDENTITY_REVIEW-adjacent flag, kept in the maritime family since the training-center identity itself is not doubted.",
+      "official_corroboration_status": "NOT_SEARCHED"
+    },
+    {
+      "candidate_id": "TC-14",
+      "name": "Centre d'Instruction Maritime et Portuaire",
+      "normalized_name": "centre d instruction maritime et portuaire",
+      "entity_family": "MARITIME_TRAINING",
+      "city": null,
+      "region": null,
+      "sources": [
+        {
+          "source_id": "TRANSPORT-A",
+          "domain": "unspecified (reported, prior sprint)",
+          "tier3_class": "T3-D",
+          "verified_this_sprint": false
+        }
+      ],
+      "source_count": 1,
+      "independent_source_count": 1,
+      "source_independence": "N/A (single source)",
+      "completeness_of_source": "DISCOVERY_FEED",
+      "tier3_confidence": "T3_SINGLE_SOURCE",
+      "matching_decision": "NO_MATCH",
+      "cross_ministry_decision": "NEW",
+      "activity_status": "ACTIVITY_UNKNOWN",
+      "review_required": true,
+      "official_corroboration_status": "NOT_SEARCHED"
+    },
+    {
+      "candidate_id": "TC-15",
+      "name": "École de Formation (EFO) - CCAA",
+      "normalized_name": "ecole de formation efo ccaa",
+      "entity_family": "AVIATION_TRAINING",
+      "entity_family_note": "Public training school run BY the aviation regulator itself (CCAA), not an independent private school. Admission scope (public vs CCAA-internal-personnel-only) remains UNRESOLVED — never assumed IN_SCOPE by default.",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "sources": [
+        {
+          "source_id": "TRANSPORT-A",
+          "domain": "ccaa.aero",
+          "tier3_class": "Tier 2 (national regulator's own site)",
+          "verified_this_sprint": false
+        },
+        {
+          "source_id": "S06",
+          "domain": "igat.icao.int",
+          "tier3_class": "Tier 1/2 (ICAO international training catalogue, 'Legal Status: Governmental')",
+          "verified_this_sprint": true
+        }
+      ],
+      "source_count": 2,
+      "independent_source_count": 2,
+      "source_independence": "INDEPENDENT (different publisher: national regulator vs international UN specialized agency; different platform type; no shared wording)",
+      "completeness_of_source": "SINGLE_RECORD",
+      "tier3_confidence": "ABOVE_TIER3_CORROBORATED",
+      "tier3_confidence_note": "Non-standard label, used deliberately: both sources are ABOVE Tier 3 (Tier 1/2 authority-level), stronger evidence than the brief's Tier-3-only confidence model anticipates. Documented explicitly rather than mis-labeled as ordinary T3_CORROBORATED. Existence is strongly corroborated; this does NOT resolve the still-open public-admission-scope ambiguity, and does NOT change the absolute rule (section 0) that this sprint produces no CLEAN_APPROVABLE / no promotion for ANY candidate regardless of source tier.",
+      "matching_decision": "NO_MATCH",
+      "cross_ministry_decision": "NEW",
+      "activity_status": "ACTIVE (both sources describe current/ongoing operation, 2016-present)",
+      "review_required": true,
+      "official_corroboration_status": "NOT_SEARCHED"
+    },
+    {
+      "candidate_id": "TC-16",
+      "name": "IRDSM Aviation",
+      "normalized_name": "irdsm aviation",
+      "entity_family": "AVIATION_TRAINING",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "sources": [
+        {
+          "source_id": "TRANSPORT-A.1",
+          "domain": "groupe-dsm.net/aviation",
+          "tier3_class": "T3-A (claimed by A.1, NOT re-verifiable this sprint)",
+          "verified_this_sprint": false,
+          "note": "domain DOES NOT RESOLVE this sprint — see S07. Downgraded from 'verified T3-A' to 'previously observed, unconfirmed today'."
+        },
+        {
+          "source_id": "TRANSPORT-A.1",
+          "domain": "journalducameroun.com / afriksurseine.com (press, per A.1)",
+          "tier3_class": "T3-C (claimed by A.1, not re-verified this sprint)",
+          "verified_this_sprint": false
+        }
+      ],
+      "source_count": 2,
+      "independent_source_count": 2,
+      "source_independence": "PREVIOUSLY ASSESSED INDEPENDENT by TRANSPORT-A.1, NOT RE-VERIFIED this sprint (both sources stale — primary institutional domain now dead, press mentions not re-fetched)",
+      "completeness_of_source": "DISCOVERY_FEED",
+      "tier3_confidence": "T3_MULTI_SOURCE_WEAK",
+      "tier3_confidence_note": "Downgraded from what would otherwise look like TIER3_CORROBORATED because the primary institutional source (groupe-dsm.net) is no longer reachable/re-verifiable this sprint (brief section 24 activity-status caution applies to the SOURCE itself, not only the institution) — conservative treatment, not a silent carry-forward of an unverified status.",
+      "matching_decision": "NO_MATCH",
+      "cross_ministry_decision": "NEW",
+      "activity_status": "ACTIVITY_UNKNOWN",
+      "review_required": true,
+      "official_corroboration_status": "NOT_SEARCHED"
+    },
+    {
+      "candidate_id": "TC-17",
+      "name": "Fleet Management Academy",
+      "normalized_name": "fleet management academy",
+      "entity_family": "TRANSPORT_LOGISTICS_TRAINING",
+      "city": null,
+      "region": null,
+      "sources": [
+        {
+          "source_id": "TRANSPORT-A",
+          "domain": "MINEFOP institutional page (per TRANSPORT-A report)",
+          "tier3_class": "Tier 2 (real MINEFOP-issued identifier cited)",
+          "verified_this_sprint": false
+        }
+      ],
+      "source_count": 1,
+      "independent_source_count": 1,
+      "source_independence": "N/A (single source, not re-verified this sprint)",
+      "completeness_of_source": "SINGLE_RECORD",
+      "tier3_confidence": "T3_SINGLE_SOURCE",
+      "tier3_confidence_note": "The identifier itself (MINEFOP N°000471, 19-09-2022) was already confirmed real by TRANSPORT-A directly against a primary MINEFOP-adjacent page, not a search-summary fabrication — different situation from the IT2MIP/TC-12 case above.",
+      "matching_decision": "AMBIGUOUS",
+      "cross_ministry_decision": "NEW",
+      "cross_ministry_note": "Authority is MINEFOP (own confirmed identifier), content is transport-adjacent (defensive driving / simulator refresher training) — NOT a MINT institution. No live or staging MINT/MINTRANSPORT record exists to duplicate against (verified live this sprint, zero hits). Kept in this dataset for domain cross-reference only, per TRANSPORT_IMPORT_CONTRACT.md section 3.",
+      "activity_status": "ACTIVITY_UNKNOWN",
+      "review_required": true,
+      "official_corroboration_status": "NOT_SEARCHED"
+    }
+  ]
+}

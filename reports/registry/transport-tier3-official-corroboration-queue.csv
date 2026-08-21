@@ -1,0 +1,18 @@
+candidate_id,name,city,region,tier3_source_count,best_tier3_class,source_domains,candidate_authority,official_search_query,official_status
+TC-01,AUTO ECOLE ASTRALE,Yaoundé,Centre,1,T3-D,africannuaire.com,MINT/DTT,"site:mintransports.cm ""AUTO ECOLE ASTRALE""",NOT_SEARCHED
+TC-02,AUTO ECOLE FRANCAISE,Douala,Littoral,1,T3-D,africannuaire.com,MINT/DTT,"site:mintransports.cm ""AUTO ECOLE FRANCAISE""",NOT_SEARCHED
+TC-03,AUTO ECOLE GERMANIA,Douala,Littoral,1,T3-D,africannuaire.com,MINT/DTT,"site:mintransports.cm ""AUTO ECOLE GERMANIA""",NOT_SEARCHED
+TC-04,AUTO ECOLE LEO,Yaoundé,Centre,1,T3-D,africannuaire.com,MINT/DTT,"site:mintransports.cm ""AUTO ECOLE LEO""",NOT_SEARCHED
+TC-05,AUTO ECOLE TRECY,Yaoundé,Centre,1,T3-D,africannuaire.com,MINT/DTT,"site:mintransports.cm ""AUTO ECOLE TRECY""",NOT_SEARCHED
+TC-06,AUTO ECOLE TURBO,Yaoundé,Centre,1,T3-D,africannuaire.com,MINT/DTT,"site:mintransports.cm ""AUTO ECOLE TURBO""",NOT_SEARCHED
+TC-07,AUTO ECOLE TURBO NKOMKANA,Yaoundé,Centre,1,T3-D,africannuaire.com,MINT/DTT,"site:mintransports.cm ""AUTO ECOLE TURBO NKOMKANA""",NOT_SEARCHED
+TC-08,METROPOLITAINE INTERNATIONALE SCES,Yaoundé,Centre,1,T3-D,africannuaire.com,MINT/DTT,"site:mintransports.cm ""METROPOLITAINE INTERNATIONALE SCES""",NOT_SEARCHED
+TC-09,AUTO ECOLE MONTHE,,,1,T3-A,sites.google.com,MINT/DTT,"site:mintransports.cm ""AUTO ECOLE MONTHE""",NOT_SEARCHED
+TC-10,AUTO ECOLE APPRENDRE & AIMER LA CONDUITE,,,1,T3-B,road-safety-charter.ec.europa.eu,MINT/DTT,"site:mintransports.cm ""AUTO ECOLE APPRENDRE & AIMER LA CONDUITE""",NOT_SEARCHED
+TC-11,EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale),Douala,Littoral,2,"T3-A (claimed, unverifiable)",maritimafrica.com;kamerpower.com;facebook.com/ecole.emipac;schoolandcollegelistings.com;emipac-cm.com,MINT/DAMVN,"site:mintransports.cm ""EMIPAC""",NOT_SEARCHED
+TC-12,IT2MIP (Institut des Technologies de la Marine Marchande et Industrie Portuaire),Douala,Littoral,2,T3-C,kamerpower.com;kamerpower.com (other page),MINT/DAMVN,"site:mintransports.cm ""IT2MIP""",NOT_SEARCHED
+TC-13,Centre de formation professionnelle maritime « Le Paquebot »,Douala,Littoral,2,T3-D,"unspecified (reported, prior sprint);facebook.com",MINT/DAMVN,"site:mintransports.cm ""Centre de formation professionnelle maritime « Le Paquebot »""",NOT_SEARCHED
+TC-14,Centre d'Instruction Maritime et Portuaire,,,1,T3-D,"unspecified (reported, prior sprint)",MINT/DAMVN,"site:mintransports.cm ""Centre d'Instruction Maritime et Portuaire""",NOT_SEARCHED
+TC-15,École de Formation (EFO) - CCAA,Yaoundé,Centre,2,"Tier 1/2 (ICAO international training catalogue, 'Legal Status: Governmental')",ccaa.aero;igat.icao.int,CCAA,"site:mintransports.cm ""École de Formation""",NOT_SEARCHED
+TC-16,IRDSM Aviation,Yaoundé,Centre,2,"T3-A (claimed by A.1, NOT re-verifiable this sprint)","groupe-dsm.net/aviation;journalducameroun.com / afriksurseine.com (press, per A.1)",CCAA,"site:mintransports.cm ""IRDSM Aviation""",NOT_SEARCHED
+TC-17,Fleet Management Academy,,,1,Tier 2 (real MINEFOP-issued identifier cited),MINEFOP institutional page (per TRANSPORT-A report),MINEFOP/MINT (ambiguous),"site:mintransports.cm ""Fleet Management Academy""",NOT_SEARCHED

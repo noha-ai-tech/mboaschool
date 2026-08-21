@@ -1,0 +1,40 @@
+SOURCE_ID: S05
+URL: https://www.facebook.com/p/Centre-de-formation-professionnelle-maritime-le-paquebot-de-Douala-100075842125767/
+PUBLISHER_DOMAIN: facebook.com (institution-run page, unverified — Meta
+  Business page, no third-party editorial layer)
+FETCHED_AT: observed via WebSearch result snippet 2026-08-21 (this
+  sprint); NOT independently opened via WebFetch (Facebook pages are
+  frequently unreachable/authenticated for automated fetch tools; treated
+  per project policy as "seen in search index", not "content-verified
+  directly" — distinction preserved honestly rather than claimed as a
+  full fetch)
+PARSER_VERSION: transport-tier3-v1-manual-excerpt-1 (search-snippet tier)
+OPERATOR: jean-merlain
+SOURCE_TIER3_CLASS: T3-D (unverified social listing — explicitly the
+  weakest sub-tier per brief section 3, T3-D alone is never sufficient
+  even for "corroborated Tier 3")
+
+DATA OBSERVED (via WebSearch result snippet only, not a direct page
+fetch — completeness/exactness of quoting is therefore weaker than S01-S04):
+
+Institution name referenced: "Centre de formation professionnelle
+maritime le paquebot de Douala"
+Content signal: an admission-exam announcement post for the 2025/2026
+academic year was indexed, referencing candidates "17 a 42 ans"
+(âge, camerounais et étrangers) — consistent with the "concours d'entrée
+annuel" description already carried from TRANSPORT-A.
+
+*** NAME-COLLISION / IDENTITY-AMBIGUITY WARNING ***
+"Le Paquebot" is ALSO the name of a well-known, unrelated seafood
+restaurant in Douala (multiple Tripadvisor/Petit Futé/local-press results
+for "Restaurant Le Paquebot", Rivage Wouri). The training center and the
+restaurant are DISTINCT real entities sharing a common French name
+("Le Paquebot" = "The Liner/Ocean Liner", a generic-sounding commercial
+name). This candidate is flagged T3_IDENTITY_REVIEW-adjacent: not because
+its own existence is doubted (the Facebook page is a real, actively
+posting institutional page, distinct from any restaurant page), but
+because any future automated web search/matching against this name MUST
+disambiguate training-center vs restaurant results — a concrete
+future-tooling risk documented here rather than left implicit.
+
+STATUS: T3_SINGLE_SOURCE (one page, weakest sub-tier, search-snippet only)

@@ -1,0 +1,38 @@
+SOURCE_ID: S06
+URL: https://igat.icao.int/ated/TrainingCatalogue/Profile/1293
+PUBLISHER_DOMAIN: igat.icao.int (ICAO — International Civil Aviation
+  Organization, UN specialized agency — international training catalogue,
+  "iGAT")
+FETCHED_AT: 2026-08-21 (this sprint)
+FETCH_METHOD: WebFetch
+PARSER_VERSION: transport-tier3-v1-manual-excerpt-1
+OPERATOR: jean-merlain
+SOURCE_TIER3_CLASS: N/A — this is a TIER 1/2 international-authority
+  source (ICAO), not Tier 3. Included here because it corroborates the
+  EXISTENCE of a training establishment already tracked in the Transport
+  discovery dataset (EFO/CCAA) — kept alongside Tier-3 sources for
+  cross-reference and corroboration strength, never re-labeled as Tier 3.
+
+VERBATIM-QUOTED FIELDS EXTRACTED:
+
+Training organization name (exact quote):
+"L'Ecole de Formation (EFO) of the Cameroon Civil Aviation Authority"
+
+Country: Cameroon
+Legal status field (exact quote): "Civil Aviation Authority" under
+  "Legal Status: Governmental"
+Membership tier shown: "Gold Member" (ICAO catalogue's own listing tier,
+  not an accreditation grade)
+Additional confirmed detail: established in 2016, located in Yaoundé with
+  an additional center in Douala — consistent with ccaa.aero (already
+  documented in TRANSPORT_SOURCE_CATALOG.md Source G).
+
+INDEPENDENCE ASSESSMENT vs ccaa.aero (CCAA's own site, prior sprint):
+INDEPENDENT — different publisher (ICAO, an international body, vs CCAA,
+the national regulator), different platform type (structured training
+catalogue vs institutional website), no shared wording observed.
+=> Two independent authority-level confirmations of EFO's existence.
+Does NOT resolve the still-open question (TRANSPORT_IMPORT_CONTRACT.md
+section 2) of whether EFO's admission is open to the general public or
+CCAA-internal-personnel-only — that remains AMBIGUOUS, not addressed by
+either source.

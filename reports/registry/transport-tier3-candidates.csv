@@ -1,0 +1,18 @@
+candidate_id,name,normalized_name,entity_family,city,region,source_count,independent_source_count,tier3_confidence,matching_decision,cross_ministry_decision,activity_status,review_required,official_corroboration_status
+TC-01,AUTO ECOLE ASTRALE,auto ecole astrale,DRIVING_SCHOOL,Yaoundé,Centre,1,1,T3_SINGLE_SOURCE,NO_MATCH,NEW,ACTIVITY_UNKNOWN,YES,NOT_SEARCHED
+TC-02,AUTO ECOLE FRANCAISE,auto ecole francaise,DRIVING_SCHOOL,Douala,Littoral,1,1,T3_SINGLE_SOURCE,PROBABLE_MATCH,NEW,ACTIVITY_UNKNOWN,YES,NOT_SEARCHED
+TC-03,AUTO ECOLE GERMANIA,auto ecole germania,DRIVING_SCHOOL,Douala,Littoral,1,1,T3_SINGLE_SOURCE,NO_MATCH,NEW,ACTIVITY_UNKNOWN,YES,NOT_SEARCHED
+TC-04,AUTO ECOLE LEO,auto ecole leo,DRIVING_SCHOOL,Yaoundé,Centre,1,1,T3_SINGLE_SOURCE,NO_MATCH,NEW,ACTIVITY_UNKNOWN,YES,NOT_SEARCHED
+TC-05,AUTO ECOLE TRECY,auto ecole trecy,DRIVING_SCHOOL,Yaoundé,Centre,1,1,T3_SINGLE_SOURCE,NO_MATCH,NEW,ACTIVITY_UNKNOWN,YES,NOT_SEARCHED
+TC-06,AUTO ECOLE TURBO,auto ecole turbo,DRIVING_SCHOOL,Yaoundé,Centre,1,1,T3_SINGLE_SOURCE,NO_MATCH,NEW,ACTIVITY_UNKNOWN,YES,NOT_SEARCHED
+TC-07,AUTO ECOLE TURBO NKOMKANA,auto ecole turbo nkomkana,DRIVING_SCHOOL,Yaoundé,Centre,1,1,T3_SINGLE_SOURCE,NO_MATCH,NEW,ACTIVITY_UNKNOWN,YES,NOT_SEARCHED
+TC-08,METROPOLITAINE INTERNATIONALE SCES,metropolitaine internationale sces,OTHER_TRANSPORT_EDUCATION,Yaoundé,Centre,1,1,T3_IDENTITY_REVIEW,NO_MATCH,NEW,ACTIVITY_UNKNOWN,YES,NOT_SEARCHED
+TC-09,AUTO ECOLE MONTHE,auto ecole monthe,DRIVING_SCHOOL,,,1,1,T3_SINGLE_SOURCE,NO_MATCH,NEW,ACTIVITY_UNKNOWN,YES,NOT_SEARCHED
+TC-10,AUTO ECOLE APPRENDRE & AIMER LA CONDUITE,auto ecole apprendre aimer la conduite,DRIVING_SCHOOL,,,1,1,T3_SINGLE_SOURCE,NO_MATCH,NEW,ACTIVITY_UNKNOWN,YES,NOT_SEARCHED
+TC-11,EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale),ecole maritime industrielle et portuaire de l afrique centrale emipac,MARITIME_TRAINING,Douala,Littoral,2,2,T3_CORROBORATED,PROBABLE_MATCH,NEW,ACTIVITY_UNKNOWN,YES,NOT_SEARCHED
+TC-12,IT2MIP (Institut des Technologies de la Marine Marchande et Industrie Portuaire),institut des technologies de la marine marchande et industrie portuaire it2mip,MARITIME_TRAINING,Douala,Littoral,2,1,T3_SINGLE_SOURCE,PROBABLE_MATCH,AMBIGUOUS,ACTIVITY_UNKNOWN,YES,NOT_SEARCHED
+TC-13,Centre de formation professionnelle maritime « Le Paquebot »,centre de formation professionnelle maritime le paquebot,MARITIME_TRAINING,Douala,Littoral,2,1,T3_SINGLE_SOURCE,NO_MATCH,NEW,ACTIVITY_UNKNOWN,YES,NOT_SEARCHED
+TC-14,Centre d'Instruction Maritime et Portuaire,centre d instruction maritime et portuaire,MARITIME_TRAINING,,,1,1,T3_SINGLE_SOURCE,NO_MATCH,NEW,ACTIVITY_UNKNOWN,YES,NOT_SEARCHED
+TC-15,École de Formation (EFO) - CCAA,ecole de formation efo ccaa,AVIATION_TRAINING,Yaoundé,Centre,2,2,ABOVE_TIER3_CORROBORATED,NO_MATCH,NEW,"ACTIVE (both sources describe current/ongoing operation, 2016-present)",YES,NOT_SEARCHED
+TC-16,IRDSM Aviation,irdsm aviation,AVIATION_TRAINING,Yaoundé,Centre,2,2,T3_MULTI_SOURCE_WEAK,NO_MATCH,NEW,ACTIVITY_UNKNOWN,YES,NOT_SEARCHED
+TC-17,Fleet Management Academy,fleet management academy,TRANSPORT_LOGISTICS_TRAINING,,,1,1,T3_SINGLE_SOURCE,AMBIGUOUS,NEW,ACTIVITY_UNKNOWN,YES,NOT_SEARCHED

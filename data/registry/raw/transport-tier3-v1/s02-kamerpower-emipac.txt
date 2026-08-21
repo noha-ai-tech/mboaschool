@@ -1,0 +1,37 @@
+SOURCE_ID: S02
+URL: https://kamerpower.com/fr/concours-emipac-afrique-centrale-2020-2021-ecole-maritime-industrielle-et-portuaire/
+PUBLISHER_DOMAIN: kamerpower.com
+FETCHED_AT: 2026-08-21 (this sprint)
+FETCH_METHOD: WebFetch (see S01 note on raw-bytes limitation)
+PARSER_VERSION: transport-tier3-v1-manual-excerpt-1
+OPERATOR: jean-merlain
+SOURCE_TIER3_CLASS: T3-C (press/professional article — Kamerpower is a
+  named, identifiable Cameroonian education-information platform with
+  history/editorial structure, distinct publisher from S01)
+
+VERBATIM-QUOTED FIELDS EXTRACTED:
+
+Institution name (exact quote):
+"Ecole maritime industrielle et portuaire de l'Afrique Centrale" (EMIPAC)
+
+Location: NOT STATED on this specific page (no city/address given —
+  contrast with S01 which does give Douala/Ndogsimbi; not a contradiction,
+  simply absent here).
+
+Official accreditation/registration numbers found: NONE. Explicit check
+performed for MINT, DAMVN, MINEFOP or any other ministry reference — none
+present.
+
+Admission requirement note (exact, from WebFetch extraction):
+comments on the page reference holding a "Baccalauréat" as a qualification
+for applying — informal (reader comments), not an official admissions
+statement from the publisher.
+
+INDEPENDENCE ASSESSMENT vs S01 (maritimafrica.com): INDEPENDENT.
+  - Different domain/publisher (kamerpower.com vs maritimafrica.com).
+  - No shared wording, no shared paragraph, no shared image filename
+    observed (different content emphasis: S01 = institutional
+    description/contact, S02 = admission/concours announcement).
+  - No evidence of one citing/mirroring the other.
+  => Counts toward the >=2 independent-source corroboration threshold
+     (brief section 4/5).
