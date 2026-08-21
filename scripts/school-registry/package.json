@@ -9,7 +9,8 @@
     "import:minesec:live": "tsx run-import.ts --source=minesec"
   },
   "dependencies": {
-    "cheerio": "^1.0.0"
+    "cheerio": "^1.0.0",
+    "pdfjs-dist": "^4.10.38"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

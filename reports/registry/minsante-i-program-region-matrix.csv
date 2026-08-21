@@ -1,0 +1,101 @@
+program,region,status,row_count,numbering_reset_ok,program_verdict
+Analyses Médicales,Adamaoua,PARSED,3,true,SAFE
+Analyses Médicales,Centre,PARSED,32,true,SAFE
+Analyses Médicales,Est,PARSED,4,true,SAFE
+Analyses Médicales,Extrême-Nord,PARSED,10,true,SAFE
+Analyses Médicales,Littoral,PARSED,12,true,SAFE
+Analyses Médicales,Nord,PARSED,4,true,SAFE
+Analyses Médicales,Nord-Ouest,PARSED,2,true,SAFE
+Analyses Médicales,Ouest,PARSED,10,true,SAFE
+Analyses Médicales,Sud,PARSED,4,true,SAFE
+Analyses Médicales,Sud-Ouest,PARSED,1,true,SAFE
+Imagerie Médicale,Adamaoua,PARSED,1,N/A,QUARANTINED_NUMBERING_ABSENT
+Imagerie Médicale,Centre,PARSED,15,N/A,QUARANTINED_NUMBERING_ABSENT
+Imagerie Médicale,Est,PARSED,1,N/A,QUARANTINED_NUMBERING_ABSENT
+Imagerie Médicale,Extrême-Nord,PARSED,1,N/A,QUARANTINED_NUMBERING_ABSENT
+Imagerie Médicale,Littoral,PARSED,8,N/A,QUARANTINED_NUMBERING_ABSENT
+Imagerie Médicale,Nord,PARSED,1,N/A,QUARANTINED_NUMBERING_ABSENT
+Imagerie Médicale,Nord-Ouest,ZERO_ROWS_CONFIRMED,0,N/A,QUARANTINED_NUMBERING_ABSENT
+Imagerie Médicale,Ouest,PARSED,3,N/A,QUARANTINED_NUMBERING_ABSENT
+Imagerie Médicale,Sud,ZERO_ROWS_CONFIRMED,0,N/A,QUARANTINED_NUMBERING_ABSENT
+Imagerie Médicale,Sud-Ouest,ZERO_ROWS_CONFIRMED,0,N/A,QUARANTINED_NUMBERING_ABSENT
+Infirmiers,Adamaoua,PARSED,7,true,SAFE
+Infirmiers,Centre,PARSED,37,true,SAFE
+Infirmiers,Est,PARSED,8,true,SAFE
+Infirmiers,Extrême-Nord,PARSED,12,true,SAFE
+Infirmiers,Littoral,PARSED,14,true,SAFE
+Infirmiers,Nord,PARSED,6,true,SAFE
+Infirmiers,Nord-Ouest,PARSED,6,true,SAFE
+Infirmiers,Ouest,PARSED,16,true,SAFE
+Infirmiers,Sud,PARSED,9,true,SAFE
+Infirmiers,Sud-Ouest,PARSED,6,true,SAFE
+Kinésithérapie,Adamaoua,PARSED,1,true,SAFE
+Kinésithérapie,Centre,PARSED,23,true,SAFE
+Kinésithérapie,Est,PARSED,2,true,SAFE
+Kinésithérapie,Extrême-Nord,PARSED,4,true,SAFE
+Kinésithérapie,Littoral,PARSED,5,true,SAFE
+Kinésithérapie,Nord,PARSED,1,true,SAFE
+Kinésithérapie,Nord-Ouest,PARSED,1,true,SAFE
+Kinésithérapie,Ouest,PARSED,7,true,SAFE
+Kinésithérapie,Sud,PARSED,1,true,SAFE
+Kinésithérapie,Sud-Ouest,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Odontostomatologie,Adamaoua,PARSED,1,true,SAFE
+Odontostomatologie,Centre,PARSED,10,true,SAFE
+Odontostomatologie,Est,PARSED,1,true,SAFE
+Odontostomatologie,Extrême-Nord,PARSED,1,true,SAFE
+Odontostomatologie,Littoral,PARSED,4,true,SAFE
+Odontostomatologie,Nord,PARSED,2,true,SAFE
+Odontostomatologie,Nord-Ouest,PARSED,1,true,SAFE
+Odontostomatologie,Ouest,PARSED,2,true,SAFE
+Odontostomatologie,Sud,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Odontostomatologie,Sud-Ouest,PARSED,1,true,SAFE
+Optique Réfraction,Adamaoua,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Optique Réfraction,Centre,PARSED,3,true,SAFE
+Optique Réfraction,Est,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Optique Réfraction,Extrême-Nord,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Optique Réfraction,Littoral,PARSED,1,true,SAFE
+Optique Réfraction,Nord,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Optique Réfraction,Nord-Ouest,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Optique Réfraction,Ouest,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Optique Réfraction,Sud,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Optique Réfraction,Sud-Ouest,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Prothèse Dentaire,Adamaoua,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Prothèse Dentaire,Centre,PARSED,5,true,SAFE
+Prothèse Dentaire,Est,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Prothèse Dentaire,Extrême-Nord,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Prothèse Dentaire,Littoral,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Prothèse Dentaire,Nord,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Prothèse Dentaire,Nord-Ouest,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Prothèse Dentaire,Ouest,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Prothèse Dentaire,Sud,PARSED,1,true,SAFE
+Prothèse Dentaire,Sud-Ouest,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Sages-femmes/Maïeuticiens,Adamaoua,PARSED,4,true,SAFE
+Sages-femmes/Maïeuticiens,Centre,PARSED,20,true,SAFE
+Sages-femmes/Maïeuticiens,Est,PARSED,2,true,SAFE
+Sages-femmes/Maïeuticiens,Extrême-Nord,PARSED,8,true,SAFE
+Sages-femmes/Maïeuticiens,Littoral,PARSED,7,true,SAFE
+Sages-femmes/Maïeuticiens,Nord,PARSED,5,true,SAFE
+Sages-femmes/Maïeuticiens,Nord-Ouest,PARSED,2,true,SAFE
+Sages-femmes/Maïeuticiens,Ouest,PARSED,5,true,SAFE
+Sages-femmes/Maïeuticiens,Sud,PARSED,3,true,SAFE
+Sages-femmes/Maïeuticiens,Sud-Ouest,PARSED,1,true,SAFE
+Sciences Pharmaceutiques,Adamaoua,PARSED,1,true,QUARANTINED_STRUCTURE_AMBIGUOUS
+Sciences Pharmaceutiques,Centre,PARSED,16,true,QUARANTINED_STRUCTURE_AMBIGUOUS
+Sciences Pharmaceutiques,Est,PARSED,3,false,QUARANTINED_STRUCTURE_AMBIGUOUS
+Sciences Pharmaceutiques,Extrême-Nord,REGION_NOT_PARSED,0,N/A,QUARANTINED_STRUCTURE_AMBIGUOUS
+Sciences Pharmaceutiques,Littoral,PARSED,6,true,QUARANTINED_STRUCTURE_AMBIGUOUS
+Sciences Pharmaceutiques,Nord,REGION_NOT_PARSED,0,N/A,QUARANTINED_STRUCTURE_AMBIGUOUS
+Sciences Pharmaceutiques,Nord-Ouest,PARSED,2,true,QUARANTINED_STRUCTURE_AMBIGUOUS
+Sciences Pharmaceutiques,Ouest,PARSED,3,true,QUARANTINED_STRUCTURE_AMBIGUOUS
+Sciences Pharmaceutiques,Sud,PARSED,1,true,QUARANTINED_STRUCTURE_AMBIGUOUS
+Sciences Pharmaceutiques,Sud-Ouest,REGION_NOT_PARSED,0,N/A,QUARANTINED_STRUCTURE_AMBIGUOUS
+Psychomotricité et Relaxation,Adamaoua,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Psychomotricité et Relaxation,Centre,PARSED,1,true,SAFE
+Psychomotricité et Relaxation,Est,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Psychomotricité et Relaxation,Extrême-Nord,PARSED,1,true,SAFE
+Psychomotricité et Relaxation,Littoral,PARSED,1,true,SAFE
+Psychomotricité et Relaxation,Nord,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Psychomotricité et Relaxation,Nord-Ouest,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Psychomotricité et Relaxation,Ouest,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Psychomotricité et Relaxation,Sud,ZERO_ROWS_CONFIRMED,0,N/A,SAFE
+Psychomotricité et Relaxation,Sud-Ouest,ZERO_ROWS_CONFIRMED,0,N/A,SAFE

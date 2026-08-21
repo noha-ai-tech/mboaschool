@@ -1,0 +1,42 @@
+{
+  "sprint": "MINSANTE-I",
+  "generated_at": "2026-08-21T13:17:19.363Z",
+  "note": "DRY-RUN UNIQUEMENT — aucun auto-link, aucune écriture. Basé sur le sous-ensemble SAFE (8/10 filières) uniquement.",
+  "dataset_status": "PARTIAL_EXTRACTION_ONLY_NOT_APPROVED_FOR_NATIONAL_IMPORT",
+  "total_school_program_rows_safe_subset": 341,
+  "unique_normalized_schools_safe_subset": 167,
+  "unique_schools_by_region": {
+    "Adamaoua": 10,
+    "Centre": 54,
+    "Est": 11,
+    "Extrême-Nord": 14,
+    "Littoral": 21,
+    "Nord": 9,
+    "Nord-Ouest": 9,
+    "Ouest": 23,
+    "Sud": 9,
+    "Sud-Ouest": 7
+  },
+  "programs_per_school_distribution": {
+    "1": 75,
+    "2": 42,
+    "3": 25,
+    "4": 20,
+    "5": 3,
+    "6": 2
+  },
+  "exact_dedup_count": 174,
+  "review_pair_counts": {
+    "LIKELY_SAME_SCHOOL": 22,
+    "AMBIGUOUS": 50
+  },
+  "national_matching_against_live_and_staging": {
+    "already_live": 0,
+    "already_staging": 15,
+    "probable": 17,
+    "ambiguous": 125,
+    "no_match": 10
+  },
+  "live_establishments_scanned": 2248,
+  "staging_rows_scanned": 2366
+}

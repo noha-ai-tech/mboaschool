@@ -1,0 +1,28 @@
+{
+  "sprint": "MINSANTE-I",
+  "generated_at": "2026-08-21T13:17:19.363Z",
+  "note": "DRY-RUN UNIQUEMENT — aucune écriture staging. Moteur de dédup MINSANTE-A.1/G.2 réutilisé SANS modification (exactIdentityKey + fuzzyWords).",
+  "dataset_status": "PARTIAL_EXTRACTION_ONLY_NOT_APPROVED_FOR_NATIONAL_IMPORT",
+  "safe_programs_count": 8,
+  "quarantined_programs_count": 2,
+  "safe_subset": {
+    "input_rows": 341,
+    "unique_schools": 167,
+    "exact_merge_count": 174,
+    "review_pairs_by_relationship": {
+      "LIKELY_SAME_SCHOOL": 22,
+      "AMBIGUOUS": 50
+    },
+    "auto_merged_fuzzy": 0
+  },
+  "all_programs_subset_including_quarantined": {
+    "input_rows": 403,
+    "unique_schools": 174,
+    "exact_merge_count": 229,
+    "review_pairs_by_relationship": {
+      "LIKELY_SAME_SCHOOL": 23,
+      "AMBIGUOUS": 63
+    },
+    "auto_merged_fuzzy": 0
+  }
+}

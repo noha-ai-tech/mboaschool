@@ -1,0 +1,3 @@
+program,anomaly_kind,detail
+Sciences Pharmaceutiques,UNKNOWN_REGION_LABEL,"UNKNOWN_REGION_LABEL: 1 étiquette(s) dans la colonne région non reconnue(s) : ""EXTRME NORD"" (page 11, y=568.39)"
+Sciences Pharmaceutiques,NUMBERING_GAP,"NUMBERING_GAP: région ""Est"" — numéros observés [1,1,2] ≠ séquence attendue [1,2,3]."

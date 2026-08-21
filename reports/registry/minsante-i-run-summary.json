@@ -1,0 +1,524 @@
+{
+  "sprint": "MINSANTE-I",
+  "generated_at": "2026-08-21T13:17:19.363Z",
+  "repository": {
+    "branch": "main",
+    "commit_reference": "6f46efc (HEAD au démarrage du sprint)"
+  },
+  "database": {
+    "establishments_before": 2248,
+    "establishments_after": 2248,
+    "staging_before": 2366,
+    "staging_after": 2366,
+    "registry_identifiers_before": 2242,
+    "registry_identifiers_after": 2242,
+    "unchanged": true,
+    "production_writes": 0
+  },
+  "source": {
+    "sprint": "MINSANTE-I",
+    "generated_at": "2026-08-21T13:17:19.363Z",
+    "source_url": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+    "expected_sha256": "26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a",
+    "actual_sha256": "26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a",
+    "source_status": "SOURCE_STABLE",
+    "authority": "PROBABLE_TIER_1",
+    "authority_upgraded_this_sprint": false,
+    "safe_for_national_extraction_source_gate": true,
+    "pdf_byte_length": 699343
+  },
+  "extraction": {
+    "programs_safe": [
+      "Analyses Médicales",
+      "Infirmiers",
+      "Kinésithérapie",
+      "Odontostomatologie",
+      "Optique Réfraction",
+      "Prothèse Dentaire",
+      "Sages-femmes/Maïeuticiens",
+      "Psychomotricité et Relaxation"
+    ],
+    "programs_quarantined": [
+      {
+        "program": "Imagerie Médicale",
+        "verdict": "QUARANTINED_NUMBERING_ABSENT",
+        "reason": "NUMBERING_ABSENT_SOURCE_DEFECT (défaut permanent du PDF source)"
+      },
+      {
+        "program": "Sciences Pharmaceutiques",
+        "verdict": "QUARANTINED_STRUCTURE_AMBIGUOUS",
+        "reason": "STRUCTURE_AMBIGUOUS"
+      }
+    ],
+    "regions_recognized": 10,
+    "school_program_rows_total": 403,
+    "school_program_rows_safe_subset": 341,
+    "unique_schools_safe_subset": 167,
+    "structural_anomalies_total": 2
+  },
+  "legacy_reconciliation": {
+    "old_program_rows": 293,
+    "new_equivalent_rows": 293,
+    "identical": 285,
+    "differences_by_category": {
+      "NORMALIZATION_ONLY": 1,
+      "REGION_REASSIGNED": 7
+    }
+  },
+  "dedup": {
+    "sprint": "MINSANTE-I",
+    "generated_at": "2026-08-21T13:17:19.363Z",
+    "note": "DRY-RUN UNIQUEMENT — aucune écriture staging. Moteur de dédup MINSANTE-A.1/G.2 réutilisé SANS modification (exactIdentityKey + fuzzyWords).",
+    "dataset_status": "PARTIAL_EXTRACTION_ONLY_NOT_APPROVED_FOR_NATIONAL_IMPORT",
+    "safe_programs_count": 8,
+    "quarantined_programs_count": 2,
+    "safe_subset": {
+      "input_rows": 341,
+      "unique_schools": 167,
+      "exact_merge_count": 174,
+      "review_pairs_by_relationship": {
+        "LIKELY_SAME_SCHOOL": 22,
+        "AMBIGUOUS": 50
+      },
+      "auto_merged_fuzzy": 0
+    },
+    "all_programs_subset_including_quarantined": {
+      "input_rows": 403,
+      "unique_schools": 174,
+      "exact_merge_count": 229,
+      "review_pairs_by_relationship": {
+        "LIKELY_SAME_SCHOOL": 23,
+        "AMBIGUOUS": 63
+      },
+      "auto_merged_fuzzy": 0
+    }
+  },
+  "matching": {
+    "sprint": "MINSANTE-I",
+    "generated_at": "2026-08-21T13:17:19.363Z",
+    "note": "DRY-RUN UNIQUEMENT — aucun auto-link, aucune écriture. Basé sur le sous-ensemble SAFE (8/10 filières) uniquement.",
+    "dataset_status": "PARTIAL_EXTRACTION_ONLY_NOT_APPROVED_FOR_NATIONAL_IMPORT",
+    "total_school_program_rows_safe_subset": 341,
+    "unique_normalized_schools_safe_subset": 167,
+    "unique_schools_by_region": {
+      "Adamaoua": 10,
+      "Centre": 54,
+      "Est": 11,
+      "Extrême-Nord": 14,
+      "Littoral": 21,
+      "Nord": 9,
+      "Nord-Ouest": 9,
+      "Ouest": 23,
+      "Sud": 9,
+      "Sud-Ouest": 7
+    },
+    "programs_per_school_distribution": {
+      "1": 75,
+      "2": 42,
+      "3": 25,
+      "4": 20,
+      "5": 3,
+      "6": 2
+    },
+    "exact_dedup_count": 174,
+    "review_pair_counts": {
+      "LIKELY_SAME_SCHOOL": 22,
+      "AMBIGUOUS": 50
+    },
+    "national_matching_against_live_and_staging": {
+      "already_live": 0,
+      "already_staging": 15,
+      "probable": 17,
+      "ambiguous": 125,
+      "no_match": 10
+    },
+    "live_establishments_scanned": 2248,
+    "staging_rows_scanned": 2366
+  },
+  "pilot_regression": {
+    "sprint": "MINSANTE-I",
+    "generated_at": "2026-08-21T13:17:19.363Z",
+    "pilot_rows_expected": 22,
+    "pilot_rows_found_in_staging": 22,
+    "pilot_rows_recovered": 22,
+    "pilot_promoted_expected": 8,
+    "pilot_promoted_recovered": 8,
+    "pilot_deferred_recovered": 14,
+    "pilot_deferred_total": 14,
+    "pilot_identity_conflicts": 0,
+    "pass": true,
+    "details": [
+      {
+        "staging_id": "2c29d228-e387-4db1-a855-7425c05e6a96",
+        "name_raw": "ECOLE PRIVEE FONDATION JEUGEUVOU FOWANG DE BAFOUSSAM",
+        "region": "Ouest",
+        "status": "normalized",
+        "classification": "CATEGORY_REVIEW",
+        "recovered": true,
+        "recovered_programs": [
+          "Analyses Médicales",
+          "Infirmiers"
+        ],
+        "pilot_programs_normalized": [
+          "Analyses Médicales",
+          "Infirmiers"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "79370ccb-3f09-426f-bdc7-bc6ac9055345",
+        "name_raw": "ECOLE PRIVEE DES SCIENCES DE LA SANTE MENO DE BAMENA",
+        "region": "Ouest",
+        "status": "promoted",
+        "classification": "CLEAN_APPROVABLE",
+        "recovered": true,
+        "recovered_programs": [
+          "Kinésithérapie",
+          "Sages-femmes/Maïeuticiens"
+        ],
+        "pilot_programs_normalized": [
+          "Sages-femmes/Maïeuticiens"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "b92dd780-b05c-4b47-aaa4-e6d0b6783778",
+        "name_raw": "COMPLEXE PRIVE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES \"FONDATION TSOPJIO ET TAKOUDJOU\" DE DSCHANG",
+        "region": "Ouest",
+        "status": "promoted",
+        "classification": "CLEAN_APPROVABLE",
+        "recovered": true,
+        "recovered_programs": [
+          "Analyses Médicales",
+          "Infirmiers"
+        ],
+        "pilot_programs_normalized": [
+          "Analyses Médicales",
+          "Infirmiers"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "265476d2-d4fe-4e6d-adc7-39cabdc01fa8",
+        "name_raw": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE FONDATION SAINT MAURICE DE BAFOUSSAM",
+        "region": "Ouest",
+        "status": "normalized",
+        "classification": "CATEGORY_REVIEW",
+        "recovered": true,
+        "recovered_programs": [
+          "Infirmiers"
+        ],
+        "pilot_programs_normalized": [
+          "Infirmiers"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "109f38dc-ff92-4fb9-9028-f2f1fb065042",
+        "name_raw": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE BAFOUSSAM",
+        "region": "Ouest",
+        "status": "promoted",
+        "classification": "CLEAN_APPROVABLE",
+        "recovered": true,
+        "recovered_programs": [
+          "Infirmiers"
+        ],
+        "pilot_programs_normalized": [
+          "Infirmiers"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "7517d1df-be2c-4b4e-bb15-fc4548735739",
+        "name_raw": "ECOLE DES METIERS DE LA SANTE DE BAMOUGOUM",
+        "region": "Ouest",
+        "status": "normalized",
+        "classification": "CATEGORY_REVIEW",
+        "recovered": true,
+        "recovered_programs": [
+          "Analyses Médicales",
+          "Imagerie Médicale",
+          "Infirmiers",
+          "Sciences Pharmaceutiques"
+        ],
+        "pilot_programs_normalized": [
+          "Analyses Médicales",
+          "Infirmiers"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "68c3cd5b-de66-4f3c-9c3c-fdbdaad7f54c",
+        "name_raw": "COMPLEXE DE FORMATION DES PERSONNELS DE SANTE � ROIS MAGES � COFPSAROMA DE BALENG",
+        "region": "Ouest",
+        "status": "normalized",
+        "classification": "CATEGORY_REVIEW",
+        "recovered": true,
+        "recovered_programs": [
+          "Infirmiers",
+          "Kinésithérapie"
+        ],
+        "pilot_programs_normalized": [
+          "Infirmiers"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "3c04b5c8-4a6d-4ad8-b625-bda87186c800",
+        "name_raw": "COMPLEXE PRIVE DE FORMATION DU PERSONNEL DE LA SANTE DE MBOUO BANDJOUN",
+        "region": "Ouest",
+        "status": "normalized",
+        "classification": "CATEGORY_REVIEW",
+        "recovered": true,
+        "recovered_programs": [
+          "Analyses Médicales",
+          "Kinésithérapie"
+        ],
+        "pilot_programs_normalized": [
+          "Analyses Médicales"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "8bf90bbd-3520-4f16-8cd7-e708892473bd",
+        "name_raw": "COMPLEXE PRIVE DE FORMATION DU PERSONNEL MEDICO-SANITAIRE DE MBOUDA",
+        "region": "Ouest",
+        "status": "normalized",
+        "classification": "CATEGORY_REVIEW",
+        "recovered": true,
+        "recovered_programs": [
+          "Infirmiers"
+        ],
+        "pilot_programs_normalized": [
+          "Infirmiers"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "ba827d94-6542-40fd-b811-a0d964a8bceb",
+        "name_raw": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE FOUMBAN",
+        "region": "Ouest",
+        "status": "promoted",
+        "classification": "CLEAN_APPROVABLE",
+        "recovered": true,
+        "recovered_programs": [
+          "Infirmiers"
+        ],
+        "pilot_programs_normalized": [
+          "Infirmiers"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "92c96f6f-bf11-4de7-b9cf-44f2be0564b4",
+        "name_raw": "ECOLE DES PROFESSIONNELS DE LA SANTE LES ETOILES DE BAFOUSSAM",
+        "region": "Ouest",
+        "status": "normalized",
+        "classification": "CATEGORY_REVIEW",
+        "recovered": true,
+        "recovered_programs": [
+          "Analyses Médicales"
+        ],
+        "pilot_programs_normalized": [
+          "Analyses Médicales"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "276633af-df10-4d1e-b91e-596c7a50ed34",
+        "name_raw": "ECOLE DES METIERS DE LA SANTE EMES DE BAMOUGOUM",
+        "region": "Ouest",
+        "status": "duplicate_review",
+        "classification": "DUPLICATE_REVIEW",
+        "recovered": true,
+        "recovered_programs": [
+          "Sages-femmes/Maïeuticiens"
+        ],
+        "pilot_programs_normalized": [
+          "Sages-femmes/Maïeuticiens"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "273f8980-4983-4ae8-b3c1-8b1036dfd43d",
+        "name_raw": "ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG",
+        "region": "Ouest",
+        "status": "promoted",
+        "classification": "CLEAN_APPROVABLE",
+        "recovered": true,
+        "recovered_programs": [
+          "Analyses Médicales",
+          "Infirmiers",
+          "Kinésithérapie",
+          "Odontostomatologie",
+          "Sages-femmes/Maïeuticiens"
+        ],
+        "pilot_programs_normalized": [
+          "Analyses Médicales",
+          "Infirmiers",
+          "Odontostomatologie",
+          "Sages-femmes/Maïeuticiens"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "5f99f3be-fd64-4d9a-a8fd-709d9e4f0821",
+        "name_raw": "ECOLE PRIVEE DE FORMATION DES PERSONNELS SANITAIRES \"SAINT JOSEPH\" DE BAFOUSSAM",
+        "region": "Ouest",
+        "status": "normalized",
+        "classification": "CATEGORY_REVIEW",
+        "recovered": true,
+        "recovered_programs": [
+          "Analyses Médicales",
+          "Infirmiers",
+          "Kinésithérapie",
+          "Sciences Pharmaceutiques"
+        ],
+        "pilot_programs_normalized": [
+          "Analyses Médicales",
+          "Infirmiers"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "0e0202b8-3175-4db9-890d-0294057239a1",
+        "name_raw": "ECOLE PRIVEE DE FORMATION DU PERSONNEL DE LA SANTE DE BAFOUSSAM",
+        "region": "Ouest",
+        "status": "normalized",
+        "classification": "CATEGORY_REVIEW",
+        "recovered": true,
+        "recovered_programs": [
+          "Analyses Médicales",
+          "Infirmiers",
+          "Sages-femmes/Maïeuticiens"
+        ],
+        "pilot_programs_normalized": [
+          "Analyses Médicales",
+          "Infirmiers",
+          "Sages-femmes/Maïeuticiens"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "f56097c9-ac2a-4bae-95af-2838aed0033f",
+        "name_raw": "INSTITUT DES SCIENCES DE LA SANTE POOLA DE BAFOUSSAM",
+        "region": "Ouest",
+        "status": "normalized",
+        "classification": "CATEGORY_REVIEW",
+        "recovered": true,
+        "recovered_programs": [
+          "Analyses Médicales",
+          "Infirmiers",
+          "Kinésithérapie",
+          "Sages-femmes/Maïeuticiens"
+        ],
+        "pilot_programs_normalized": [
+          "Analyses Médicales",
+          "Infirmiers",
+          "Sages-femmes/Maïeuticiens"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "9c4b9a28-1aa2-4fc2-baa8-48d3919758f7",
+        "name_raw": "ECOLE PRIVEE FONDATION TCHUENTE DE BAFOUSSAM",
+        "region": "Ouest",
+        "status": "promoted",
+        "classification": "CLEAN_APPROVABLE",
+        "recovered": true,
+        "recovered_programs": [
+          "Infirmiers"
+        ],
+        "pilot_programs_normalized": [
+          "Infirmiers"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "bbf4f625-3574-4bfa-b17a-278282b3bb6f",
+        "name_raw": "INSTITUT DES SCIENCES ET TECHNIQUES MEDICO-SANITAIRES DE BAFOUSSAM",
+        "region": "Ouest",
+        "status": "promoted",
+        "classification": "CLEAN_APPROVABLE",
+        "recovered": true,
+        "recovered_programs": [
+          "Analyses Médicales"
+        ],
+        "pilot_programs_normalized": [
+          "Analyses Médicales"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "500e77b8-68a9-4e4f-8e0f-032890ff8520",
+        "name_raw": "INSTITUT DES SCIENCES MEDICO-SANITAIRES LES ARGUS DE BANDJOUN",
+        "region": "Ouest",
+        "status": "normalized",
+        "classification": "CATEGORY_REVIEW",
+        "recovered": true,
+        "recovered_programs": [
+          "Imagerie Médicale",
+          "Odontostomatologie"
+        ],
+        "pilot_programs_normalized": [
+          "Odontostomatologie"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "27a2a636-eced-4971-8f62-67d8d1028ab3",
+        "name_raw": "INSTITUT TROPICAL DE FORMATION EN PLAIES CHRONIQUES ET EN SOINS INFIRMIERS \"MOULLEC\" DE BALEVENG",
+        "region": "Ouest",
+        "status": "normalized",
+        "classification": "CATEGORY_REVIEW",
+        "recovered": true,
+        "recovered_programs": [
+          "Infirmiers"
+        ],
+        "pilot_programs_normalized": [
+          "Infirmiers"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "a2f1cf0b-520e-42b1-bb84-81a20f9de8a3",
+        "name_raw": "INSTITUT INTERNATIONAL DE FORMATION DE PERSONNELS PARAMEDICAUX IFOPP DE FOUMBOT",
+        "region": "Ouest",
+        "status": "normalized",
+        "classification": "CATEGORY_REVIEW",
+        "recovered": true,
+        "recovered_programs": [
+          "Infirmiers"
+        ],
+        "pilot_programs_normalized": [
+          "Infirmiers"
+        ],
+        "identity_conflict": false
+      },
+      {
+        "staging_id": "6b365ea6-5cb6-43b0-ac22-cabd3a60b8e5",
+        "name_raw": "INSTITUT UNIVERSITAIRE ROYAL BABOUTCHA NINTCHEU (IURB) DE BAFANG",
+        "region": "Ouest",
+        "status": "promoted",
+        "classification": "CLEAN_APPROVABLE",
+        "recovered": true,
+        "recovered_programs": [
+          "Infirmiers"
+        ],
+        "pilot_programs_normalized": [
+          "Infirmiers"
+        ],
+        "identity_conflict": false
+      }
+    ]
+  },
+  "pii": {
+    "persisted_matches": 0,
+    "hits": []
+  },
+  "decision": "B",
+  "national_extraction_ready": false,
+  "recommended_next_step": "Nouveau sprint d'extraction ciblé sur les filières restant en quarantaine (voir minsante-i-quarantined-program-review.csv et minsante-i-structural-anomalies.csv) avant de retenter une décision A.",
+  "push": "NO",
+  "deploy": "NO"
+}

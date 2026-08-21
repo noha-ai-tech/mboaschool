@@ -1368,3 +1368,227 @@ explicitement hors périmètre — non promus, non touchés.
 
 **MINSANTE-H CLOSED : YES. Pilote MINSANTE (région Ouest) : 8 établissements
 en production, 14 candidats différés en attente d'un futur sprint dédié.**
+
+## I — Extraction nationale coordonnée-consciente : 10/10 filières (2026-08-21)
+
+Sprint **READ-ONLY strict** vis-à-vis de la production et du staging (aucune
+écriture, aucune mise à jour de métadonnées non plus — contrairement aux
+sprints C-F). Le pilote MINSANTE-H (8 établissements, région Ouest) **reste
+inchangé, jamais rouvert**. Objectif : déterminer si les 4 filières
+historiquement quarantainées (Imagerie Médicale, Kinésithérapie, Sciences
+Pharmaceutiques, Psychomotricité et Relaxation) peuvent désormais être
+extraites de façon fiable, avant toute collecte nationale.
+
+Baseline revérifiée fraîchement (lecture Supabase directe, avant et après) :
+`establishments`=2248, `establishment_import_staging`=2366,
+`establishment_registry_identifiers`=2242 — **identiques avant/après, 0
+écriture production**. 22 lignes pilote MINSANTE confirmées en staging (8
+`promoted`, 13 `CATEGORY_REVIEW`/statut `normalized`, 1 `DUPLICATE_REVIEW`).
+
+### Source
+
+PDF source re-téléchargé (HTTP GET direct, pas de cache réutilisé sans
+vérification) depuis l'URL cataloguée MINSANTE_SOURCE_CATALOG.md. SHA256
+recalculé = `26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a`
+— **identique** à la valeur épinglée MINSANTE-A. `SOURCE_STABLE`, autorité
+conservée `PROBABLE_TIER_1` (non upgradée sans nouvelle preuve).
+
+### Investigation de structure — pourquoi `pdftotext -layout` échouait
+
+Le tableau source a deux colonnes (`REGIONS` étroite à gauche, `ECOLES`
+large à droite). La cellule région est **fusionnée sur tout le bloc de
+lignes qu'elle couvre et centrée verticalement** par le générateur PDF —
+son étiquette n'est donc PAS peinte au sommet du bloc, mais au milieu.
+`pdftotext -layout` reconstruit l'ordre de lecture par un heuristique
+géométrique (tri par position Y) : il place l'étiquette de région à la
+ligne correspondant à sa position Y réelle, c'est-à-dire au milieu du bloc,
+ce qui l'associe à une école qui n'est pas la première du bloc. C'est le
+mécanisme exact derrière la "perte/mauvaise association de structure
+région-numérotation" observée depuis MINSANTE-A.
+
+Second défaut, indépendant, propre à **Imagerie Médicale uniquement** :
+aucun glyphe de numéro n'est peint dans le flux de contenu PDF pour cette
+filière. Vérifié à trois niveaux : (1) `page.getTextContent()` — même avec
+`includeMarkedContent: true` — ne retourne aucun item numéro ; (2)
+`page.getOperatorList()` — le nombre d'opérations `showText` (154) égale
+exactement le nombre d'opérations `beginText` (154), et les opérations
+`constructPath`/`eoFill` correspondent aux bordures du tableau, pas à des
+glyphes vectoriels supplémentaires ; (3) l'arbre de structure taggé du PDF
+(`page.getStructTree()`) porte des rôles `L`/`LI`/`LBody` sans aucun texte
+`Lbl`. Conclusion : le numéro n'a jamais été peint dans ce PDF — **aucun
+extracteur (pdftotext, pdf.js, pdfplumber) ne peut récupérer un numéro qui
+n'existe pas**. Kinésithérapie, Sciences Pharmaceutiques et Psychomotricité
+et Relaxation, elles, ONT des numéros peints — leur quarantaine historique
+venait uniquement du premier défaut (association région cassée).
+
+### A.1 vs A.2
+
+| | `minsante-a1-pdf-text@1` | `minsante-a2-pdf-coordinates@1` |
+|---|---|---|
+| Entrée | texte `pdftotext -layout` | items texte `pdf.js` (page, x, y, str), ordre de flux de contenu |
+| Ordre de lecture | reconstruit par tri géométrique Y (fragile) | ordre de peinture natif du PDF (fiable — preuve : une étiquette de région précède toujours la première ligne de son bloc dans cet ordre, même quand sa coordonnée Y la place visuellement au milieu) |
+| Séparation des lignes sans numéro | impossible (regex `N\.`) | écart Y mesuré empiriquement : ~15.0pt entre deux entrées distinctes, ~10.3-10.8pt entre deux lignes physiques d'un même nom déroulé |
+| Statut | INCHANGÉ par ce sprint, reste reproductible tel quel | nouveau, explicitement versionné |
+
+`minsante-a1-pdf-text@1` (`scripts/school-registry/lib/extraction/pdfMinsanteA1.ts`)
+n'a **subi aucune modification** ce sprint. `minsante-a2-pdf-coordinates@1`
+vit dans `pdfMinsanteA2.ts` (logique pure, testable sans PDF réel) +
+`pdfCoordinateLoader.ts` (seule dépendance runtime vers `pdfjs-dist`,
+ajoutée comme dépendance déclarée du paquet isolé `scripts/school-registry`).
+
+Bugs de reconstruction de texte trouvés et corrigés PENDANT ce sprint
+(preuves directes par inspection de coordonnées, pas des suppositions) :
+1. Deux items adjacents partageant la même Y mais SANS item espace entre eux
+   sont le même mot coupé par un changement de glyphe/police en plein
+   milieu (preuve : écart X mesuré = 0.05pt entre "...PERSON" et "NELS...",
+   alors qu'un espace réel est TOUJOURS son propre item explicite dans ce
+   document) — la concaténation doit donc être BRUTE (jamais d'espace
+   synthétique ajouté), en ne perdant JAMAIS les items espace explicites
+   (bug trouvé : un filtre "vide après trim" supprimait par erreur les
+   items " " légitimes, cassant des mots comme "INSTITUT DES SCIENCES...").
+2. Une cellule région fusionnée avec un bloc d'UNE SEULE ligne place son
+   étiquette quasiment à la même Y que cette ligne — sans restriction de
+   fusion par colonne (X<=120 = étiquette, X>120 = école), "SUD-OUEST" et
+   "1. ST JOAN OF ARC..." fusionnaient à tort en une seule ligne
+   illisible.
+3. Le bandeau République/Ministère (français + anglais) est peint APRÈS le
+   tableau principal dans le flux de contenu de chaque page, bien que
+   positionné visuellement en haut de page (Y 763-816) — sans filtre dédié
+   sur cette bande Y, il s'hallucinait dans la dernière école ouverte de la
+   page précédente (y compris le marqueur "Page N sur M", parfois sans
+   espaces explicites entre "Page"/N/"sur"/M selon la page).
+4. Un nom d'école déroulé sur 2 lignes physiques peut se couper en PLEIN
+   MILIEU D'UN MOT sans trait d'union (ex. "...DES PERSON" / "F" puis
+   "ORMATION...") — signal retenu : un retour à la ligne normal ne laisse
+   jamais un fragment final d'UNE SEULE lettre isolée ; ce cas précis
+   concatène sans espace, tous les autres avec un espace.
+
+### Résultat 10/10 filières
+
+| Filière | Verdict A.2 | Lignes | Numérotation |
+|---|---|---|---|
+| Analyses Médicales | **SAFE** | 82 | NUMBERED, 0 anomalie |
+| Infirmiers | **SAFE** | 121 | NUMBERED, 0 anomalie |
+| Odontostomatologie | **SAFE** | 23 | NUMBERED, 0 anomalie |
+| Optique Réfraction | **SAFE** | 4 | NUMBERED, 0 anomalie |
+| Prothèse Dentaire | **SAFE** | 6 | NUMBERED, 0 anomalie |
+| Sages-femmes/Maïeuticiens | **SAFE** | 57 | NUMBERED, 0 anomalie |
+| **Kinésithérapie** | **SAFE (nouveau)** | 45 | NUMBERED, 0 anomalie |
+| **Psychomotricité et Relaxation** | **SAFE (nouveau)** | 3 | NUMBERED, 0 anomalie |
+| Imagerie Médicale | QUARANTINED_NUMBERING_ABSENT | 30 | numéros absents dès la source (défaut permanent) |
+| Sciences Pharmaceutiques | QUARANTINED_STRUCTURE_AMBIGUOUS | 32 | 1 glyphe corrompu ("EXTRME NORD" au lieu de "EXTREME-NORD", page 11, défaut de police du PDF source) + trou de numérotation en cascade sur la région Est |
+
+**8/10 filières SAFE — 2 progressions nettes** (Kinésithérapie et
+Psychomotricité et Relaxation, auparavant quarantainées, sont maintenant
+structurellement fiables). Détail complet :
+`reports/registry/minsante-i-program-region-matrix.csv`,
+`reports/registry/minsante-i-quarantined-program-review.csv`,
+`reports/registry/minsante-i-structural-anomalies.csv`.
+
+Matrice programme×région : 10 régions officielles testées par filière,
+statut `PARSED` / `ZERO_ROWS_CONFIRMED` (région listée sans école — omission
+éditoriale légitime, jamais confondue avec une perte de parsing) /
+`REGION_NOT_PARSED` (région jamais vue ET section par ailleurs anormale —
+fail-closed, ne jamais convertir une absence en zéro).
+
+### Réconciliation legacy (6 filières historiquement fiables)
+
+Référence A.1 : 293 lignes école×filière. A.2 sur le même sous-ensemble :
+293 lignes également. **285 identiques strictement, 8 différences, toutes
+expliquées ligne par ligne** (aucune divergence silencieuse) :
+`reports/registry/minsante-i-legacy-reconciliation.csv`.
+
+- 1 `NORMALIZATION_ONLY` : ponctuation/espacement.
+- 7 `REGION_REASSIGNED` — **preuve concrète que A.2 corrige un vrai défaut
+  d'A.1, même dans les filières jusqu'ici jugées "sûres"** : 7 écoles de
+  Douala (ex. "ECOLE DES SAGES FEMMES MAIEUTICIENS DE DOUALA", "ECOLE
+  INTERNATIONALE PARAMEDICALE DE DOUALA (EPID)") étaient assignées par A.1
+  à la région Extrême-Nord — une erreur géographiquement impossible
+  (Douala est en région Littoral) causée par le bug de linéarisation décrit
+  ci-dessus. A.2 les réassigne correctement à Littoral.
+
+### Analyse dédiée des 4 filières historiquement quarantainées
+
+Voir `reports/registry/minsante-i-quarantined-program-review.csv` pour le
+détail par filière (pages, régions détectées, cause A.1, verdict A.2).
+Résumé :
+
+- **Imagerie Médicale** : structure région/école désormais entièrement
+  reconstruite (30 lignes, 7 régions, 0 anomalie de structure), mais reste
+  en quarantaine car la numérotation — seul mécanisme de recoupement
+  indépendant pour prouver qu'aucune ligne n'a été perdue — est absente dès
+  la source. Une ambiguïté résiduelle documentée et non corrigée par une
+  heuristique fragile : une école à une seule ligne suivie d'une école à
+  deux lignes produit des écarts Y quasi identiques (~10.3 vs ~10.8pt),
+  géométriquement indiscernables sans dictionnaire — cas trouvé
+  (BAFANG/FONDATION SAINT MAURICE fusionnées en une ligne) documenté plutôt
+  que masqué.
+- **Kinésithérapie** : SAFE. Cause A.1 entièrement corrigée par l'ordre de
+  flux de contenu.
+- **Sciences Pharmaceutiques** : reste en quarantaine à cause d'un défaut
+  de police PONCTUEL et indépendant du PDF source (1 glyphe manquant,
+  "EXTREME-NORD" rendu "EXTRME NORD"), qui casse à son tour la
+  numérotation de la région Est voisine (currentRegion non mis à jour tant
+  que l'étiquette n'est pas reconnue). Fail-closed correctement appliqué —
+  pas de correction par heuristique de tolérance aux fautes.
+- **Psychomotricité et Relaxation** : SAFE. Cause A.1 identique à
+  Kinésithérapie (petite filière, blocs à 1 ligne).
+
+**Garde-fou anti-régression Imagerie Médicale** (empêche le retour
+silencieux du bug MINSANTE-A "0 ligne détectée") :
+`lib/extraction/__tests__/pdfMinsanteA2.test.ts`, section I.
+
+### Dédup et matching national — DRY-RUN uniquement
+
+Moteur de matching G.2 (`lib/matching/engine.ts`) **réutilisé sans aucune
+modification** — aucune régression trouvée qui l'aurait justifié. Dédup
+exacte sur le sous-ensemble SAFE (341 lignes, 8 filières) : 167
+établissements uniques, 22 paires `LIKELY_SAME_SCHOOL`, 50 `AMBIGUOUS`, **0
+auto-merge flou**. Matching READ-ONLY contre 2248 établissements live + 2366
+lignes staging : 0 `already_live`, 15 `already_staging`, 17 `probable`, 125
+`ambiguous`, 10 `no_match`. **Aucun auto-link, aucune écriture.** Détail :
+`reports/registry/minsante-i-national-dedup-summary.json`,
+`reports/registry/minsante-i-national-matching-summary.json`.
+
+Extraction nationale non déclarée PASS (2/10 filières restent en
+quarantaine) : `minsante-i-national-school-program-rows.csv` et
+`minsante-i-national-unique-schools.csv` **volontairement non produits**
+(§16 REGISTRY_EXTRACTION_SAFETY.md — ne jamais laisser un fichier pouvoir
+être pris à tort pour un dataset national approuvé). L'artefact normalisé
+local `data/registry/normalized/minsante-a2-school-program-rows.json` porte
+un champ `dataset_status: "PARTIAL_EXTRACTION_ONLY_NOT_APPROVED_FOR_NATIONAL_IMPORT"`
+explicite.
+
+### Régression pilote
+
+Les 22 lignes historiques du pilote Ouest (dont les 8 désormais en
+production) sont toutes retrouvées dans la nouvelle extraction, sans
+seconde identité créée : **22/22 récupérées, 8/8 promus récupérés, 0
+conflit d'identité**. Détail :
+`reports/registry/minsante-i-pilot-regression.json`. Les 8 établissements
+promus lors de MINSANTE-H **n'ont pas été touchés** (sprint strictement
+READ-ONLY).
+
+### PII
+
+0 correspondance sur emails, téléphones, matricules dans l'ensemble des
+lignes école×filière extraites (403 lignes) et des 10 étiquettes de région
+— vérifié programmatiquement (`lib/extraction/piiScan.ts`, testé), pas
+supposé.
+
+### Décision
+
+**B — PARTIAL_EXTRACTION_ONLY.** Amélioration réelle et mesurable (6→8
+filières SAFE, legacy reconciliation 285/293 identiques avec les 8
+différences restantes toutes expliquées et 7 d'entre elles étant des
+corrections de bugs réels d'A.1), mais 2 filières restent structurellement
+incertaines pour des raisons distinctes et bien comprises (numéros
+permanemment absents pour Imagerie Médicale ; un défaut de police ponctuel
+pour Sciences Pharmaceutiques). Conservées en quarantaine. Prochaine étape
+recommandée : un sprint d'extraction ciblé sur ces 2 filières restantes
+avant de retenter une décision nationale A — **pas** MINSANTE-J (collecte
+nationale) tant que 10/10 n'est pas atteint.
+
+**MINSANTE-I : national_extraction_ready = NO. Push = NO. Deploy = NO.
+Aucun import national en staging. Aucune promotion. MINSANTE-H reste le
+pilote production validé, inchangé.**

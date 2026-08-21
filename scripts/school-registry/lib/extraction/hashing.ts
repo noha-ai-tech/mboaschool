@@ -10,6 +10,17 @@ export function sha256(content: string): string {
 }
 
 /**
+ * SPRINT MINSANTE-I §3 — variante binaire pour hasher un PDF (ou tout
+ * artefact non-texte) directement depuis ses octets bruts, sans passer par
+ * un décodage UTF-8 intermédiaire qui altérerait le hash. Additive
+ * uniquement : `sha256()` ci-dessus reste inchangée pour tous les appelants
+ * existants (texte).
+ */
+export function sha256Bytes(content: Uint8Array): string {
+  return createHash("sha256").update(content).digest("hex");
+}
+
+/**
  * §70 — hash déterministe d'un dataset normalisé : le tri doit être stable
  * AVANT hash, sinon le même contenu dans un ordre différent produirait un
  * hash différent (faux négatif de reproductibilité, §47).

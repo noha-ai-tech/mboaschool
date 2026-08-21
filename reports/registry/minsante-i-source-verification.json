@@ -1,0 +1,12 @@
+{
+  "sprint": "MINSANTE-I",
+  "generated_at": "2026-08-21T13:17:19.363Z",
+  "source_url": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+  "expected_sha256": "26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a",
+  "actual_sha256": "26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a",
+  "source_status": "SOURCE_STABLE",
+  "authority": "PROBABLE_TIER_1",
+  "authority_upgraded_this_sprint": false,
+  "safe_for_national_extraction_source_gate": true,
+  "pdf_byte_length": 699343
+}
