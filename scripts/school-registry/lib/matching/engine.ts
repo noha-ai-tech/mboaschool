@@ -121,7 +121,60 @@ const FUZZY_STOPWORDS = new Set([
   // "PERSONNELS DE LA SANTE" DE MEIGANGA reste correctement classé AMBIGUOUS
   // — pas une fusion automatique à corriger, "professionnels" n'est pas la
   // cause du problème).
-  "centre", "formation", "personnel", "personnels", "sante", "santé", "sanitaire", "medico", "médico",
+  "centre", "formation", "personnel", "personnels", "sante", "santé", "sanitaire", "sanitaires", "medico", "médico",
+  // SPRINT MINSANTE-G.1 §5 — "sanitaires" (pluriel) : "sanitaire" (singulier)
+  // était déjà retiré en MINSANTE-B, mais son pluriel avait été omis — même
+  // oubli de pluralisation que "personnel"/"personnels" (les DEUX formes
+  // explicitement ajoutées ensemble en MINSANTE-B, ligne ci-dessus). Preuve
+  // réelle (une des 7 paires signalées MINSANTE-G) : "COMPLEXE PRIVE DE
+  // FORMATION DES PERSONNELS MEDICO-SANITAIRES ... DE DSCHANG" (staging_id
+  // b92dd780-b05c-4b47-aaa4-e6d0b6783778, CLEAN_APPROVABLE) chevauchait via
+  // le seul token "sanitaires" (issu de "MEDICO-SANITAIRES") contre
+  // plusieurs cibles sans rapport. Pas une nouvelle décision de fond, une
+  // correction de complétude d'un stopword déjà approuvé.
+  // SPRINT MINSANTE-G.1 §5-§6 — "infirmier(s)"/"infirmière(s)" : vocabulaire
+  // de RÔLE générique (= "nurse"), jamais un signal d'identité, exactement
+  // le même statut que "santé"/"médico"/"personnel"/"sanitaire" ci-dessus.
+  // Preuve réelle (une des 7 paires signalées MINSANTE-G, jamais théorique) :
+  // "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE FOUMBAN" (staging_id
+  // ba827d94-6542-40fd-b811-a0d964a8bceb, CLEAN_APPROVABLE) -> AVANT ce
+  // sprint, PROBABLE_MATCH (chevauchement 25%) contre "INSTITUT TROPICAL DE
+  // FORMATION EN PLAIES CHRONIQUES ET EN SOINS INFIRMIERS "MOULLEC" DE
+  // BALEVENG" (staging_id 27a2a636-eced-4971-8f62-67d8d1028ab3,
+  // CATEGORY_REVIEW) — deux établissements à Foumban et à Baleveng
+  // (localités différentes une fois city enrichi §8-9 de ce sprint), fondés
+  // par des entités distinctes ("MOULLEC" est un sigle/fondateur propre à la
+  // seconde), sans AUCUN autre mot commun que "infirmiers". Même
+  // raisonnement de sur-suppression que "santé" (SPRINT MINSANTE-B §6-7) :
+  // "infirmier(s)/infirmière(s)" nomme la PROFESSION formée, présente dans
+  // la quasi-totalité des noms d'écoles paramédicales du corpus MINSANTE —
+  // jamais un identifiant d'établissement à lui seul. Un nom propre, un
+  // sigle ou (désormais) une ville distincte reste toujours le signal réel.
+  // Formes accentuées ET non-accentuées listées explicitement : exactIdentityKey
+  // normalise déjà les accents en amont (NFD + strip diacritiques), donc
+  // "infirmière"/"infirmières" produisent au moment du filtre les tokens
+  // "infirmiere"/"infirmieres" (sans accent) — les deux formes accentuées
+  // sont conservées ici pour lisibilité du code/de l'audit, mais seules les
+  // formes SANS accent participent réellement à Set.has() après normalisation.
+  "infirmier", "infirmiers", "infirmiere", "infirmieres", "infirmière", "infirmières",
+  // SPRINT MINSANTE-G.1 §5-§6 — "fondation" : préfixe de STATUT juridique/
+  // institutionnel ("Foundation X"), au même titre que "institut"/
+  // "complexe"/"école" déjà retirés — jamais lui-même un nom propre. Preuve
+  // réelle (une des 7 paires signalées MINSANTE-G, observée APRÈS retrait
+  // du token de ville déjà dupliqué dans city, §8/§12 de ce sprint) :
+  // "ECOLE PRIVEE FONDATION TCHUENTE DE BAFOUSSAM" (staging_id
+  // 9c4b9a28-1aa2-4fc2-baa8-48d3919758f7, CLEAN_APPROVABLE) -> AMBIGUOUS à
+  // 50% à égalité contre DEUX écoles de fondateurs totalement différents,
+  // "ECOLE PRIVEE FONDATION JEUGEUVOU FOWANG DE BAFOUSSAM" (fondateur
+  // "Jeugeuvou Fowang") ET "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE
+  // SANTE FONDATION SAINT MAURICE DE BAFOUSSAM" (fondateur "Saint Maurice")
+  // — le seul mot partagé entre "Tchuente" et ces deux cibles était
+  // "fondation", jamais le nom du fondateur lui-même. Risque de
+  // sur-suppression : aucun nom du corpus ne s'appuie sur "fondation" SEUL
+  // comme identifiant — le nom du fondateur/de la personnalité qui suit
+  // reste toujours le signal réel et distinctif (Tchuente/Jeugeuvou
+  // Fowang/Saint Maurice/Tsopjio et Takoudjou...), jamais retiré ici.
+  "fondation",
 ]);
 
 /** Mots significatifs pour le chevauchement flou (REVIEW uniquement, jamais une preuve d'identité). */
@@ -140,6 +193,48 @@ export function fuzzyWords(name: string): string[] {
 
 function normalizeGeo(v: string | null | undefined): string {
   return (v || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z]/g, "");
+}
+
+/**
+ * SPRINT MINSANTE-G.1 §11-§12 — remplace l'ancien calcul ad hoc
+ * `candidateGeo = normalizeGeo(region) || normalizeGeo(city)` (RÉGION EN
+ * PRIORITÉ, city en simple filet de secours) par une comparaison à
+ * granularité explicite, généralisée à tous les registres (pas seulement
+ * MINSANTE) :
+ *
+ *  1. Si LES DEUX côtés ont une `city` connue -> comparaison au niveau ville
+ *     (le signal le plus spécifique disponible l'emporte toujours).
+ *  2. Sinon, si LES DEUX côtés ont une `region` connue -> comparaison au
+ *     niveau région (signal plus grossier, seulement utilisé quand la ville
+ *     est indisponible d'au moins un côté).
+ *  3. Sinon -> "UNKNOWN" — jamais un accord positif.
+ *
+ * Root cause corrigée (MINSANTE-G, pilote Ouest) : avec l'ancien ordre
+ * `region || city`, `region` (presque toujours renseignée) court-circuitait
+ * TOUJOURS `city` via `||` — la colonne `city`, même une fois enrichie
+ * (§8-9 de ce sprint), n'était jamais réellement consultée par le moteur
+ * tant que `region` était non vide. Deux écoles de Bafoussam et de Bafang
+ * dans la même région 'Ouest' apparaissaient donc "géographiquement
+ * cohérentes par défaut", sans jamais qu'un conflit de ville puisse être
+ * détecté. §11 (sémantique NULL) reste garanti par construction : si les
+ * DEUX villes sont NULL, l'étape 1 est ignorée (aucune città connue des
+ * deux côtés) — un accord positif ne peut alors provenir QUE d'une région
+ * réellement partagée à l'étape 2, jamais d'une paire NULL/NULL comptée
+ * comme "MATCH" (ce cas retourne "UNKNOWN" à l'étape 3 si la région est
+ * elle aussi inconnue des deux côtés).
+ */
+export type GeoAgreement = "MATCH" | "CONFLICT" | "UNKNOWN";
+
+export function geoAgreement(aRegion: string | null | undefined, aCity: string | null | undefined, bRegion: string | null | undefined, bCity: string | null | undefined): GeoAgreement {
+  const aCityN = normalizeGeo(aCity);
+  const bCityN = normalizeGeo(bCity);
+  if (aCityN && bCityN) return aCityN === bCityN ? "MATCH" : "CONFLICT";
+
+  const aRegionN = normalizeGeo(aRegion);
+  const bRegionN = normalizeGeo(bRegion);
+  if (aRegionN && bRegionN) return aRegionN === bRegionN ? "MATCH" : "CONFLICT";
+
+  return "UNKNOWN";
 }
 
 function wordOverlapRatio(a: string[], b: string[]): number {
@@ -222,19 +317,16 @@ export function matchCandidate(candidate: MatchCandidate, targets: MatchTarget[]
   }
 
   const candidateKey = exactIdentityKey(candidate.name);
-  const candidateGeo = normalizeGeo(candidate.region) || normalizeGeo(candidate.city);
 
   // Niveau 2 — EXACT_IDENTITY : nom exact (mots de catégorie préservés) + géographie cohérente quand les deux sont connues.
+  // §11/§12 SPRINT MINSANTE-G.1 — géographie évaluée via geoAgreement (city
+  // en priorité, region en repli SEULEMENT si city inconnue d'un côté ou de
+  // l'autre ; NULL/NULL ne compte jamais comme un accord).
   const exactNameTargets = targets.filter((t) => exactIdentityKey(t.name) === candidateKey);
   if (exactNameTargets.length > 0) {
-    const geoConsistent = exactNameTargets.filter((t) => {
-      const tGeo = normalizeGeo(t.region) || normalizeGeo(t.city);
-      return !candidateGeo || !tGeo || candidateGeo === tGeo;
-    });
-    const geoConfirmed = exactNameTargets.filter((t) => {
-      const tGeo = normalizeGeo(t.region) || normalizeGeo(t.city);
-      return candidateGeo && tGeo && candidateGeo === tGeo;
-    });
+    const exactNameWithGeo = exactNameTargets.map((t) => ({ t, geo: geoAgreement(candidate.region, candidate.city, t.region, t.city) }));
+    const geoConsistent = exactNameWithGeo.filter((x) => x.geo !== "CONFLICT").map((x) => x.t);
+    const geoConfirmed = exactNameWithGeo.filter((x) => x.geo === "MATCH").map((x) => x.t);
     if (geoConfirmed.length === 1) {
       return {
         level: "EXACT_IDENTITY",
@@ -274,19 +366,37 @@ export function matchCandidate(candidate: MatchCandidate, targets: MatchTarget[]
   }
 
   // Niveau 3/4 — chevauchement flou (STRONG_MATCH / PROBABLE_MATCH), jamais une preuve d'identité.
-  const candWords = fuzzyWords(candidate.name);
-  if (candWords.length === 0) {
+  const candWordsBase = fuzzyWords(candidate.name);
+  if (candWordsBase.length === 0) {
     return { level: "NO_MATCH", target: null, alternativeTargets: [], reason: "nom candidat sans mot significatif exploitable.", safeForAutoLink: false };
   }
 
   const scored = targets
     .map((t) => {
-      const tGeo = normalizeGeo(t.region) || normalizeGeo(t.city);
-      const geoMatch = candidateGeo && tGeo ? candidateGeo === tGeo : null; // null = non vérifiable
-      const geoConflict = candidateGeo && tGeo && candidateGeo !== tGeo;
+      const geo = geoAgreement(candidate.region, candidate.city, t.region, t.city);
+      const geoMatch = geo === "MATCH" ? true : geo === "UNKNOWN" ? null : false; // null = non vérifiable — conservé pour compat texte de `reason` ci-dessous
+      const geoConflict = geo === "CONFLICT";
       const categoryMatch = candidate.category && t.category ? candidate.category === t.category : null;
-      const ratio = wordOverlapRatio(candWords, fuzzyWords(t.name));
-      return { target: t, ratio, geoMatch, geoConflict, categoryMatch };
+      // SPRINT MINSANTE-G.1 §8/§12 — un nom de LOCALITÉ qui figure DÉJÀ dans
+      // le champ structuré city/region (des deux côtés, une fois enrichi
+      // §8-9) ne doit pas ÉGALEMENT compter comme un mot "distinctif" du
+      // chevauchement flou : c'est une double comptabilisation du même
+      // signal géographique, pas une preuve d'identité supplémentaire.
+      // Root cause exacte observée ce sprint (pilote Ouest, une fois
+      // "infirmiers" retiré et city enrichi) : PLUSIEURS écoles réelles et
+      // DISTINCTES de Bafoussam restaient à égalité de chevauchement (33%,
+      // 50%...) simplement parce qu'elles partagent le token "bafoussam" —
+      // qui est exactement le contenu de leur `city` déjà comparé par
+      // geoAgreement ci-dessus. Retirer ce token du ratio flou force le
+      // chevauchement à reposer sur un VRAI mot distinctif (nom propre,
+      // sigle, fondateur) — jamais sur la ville seule, qu'il y ait accord ou
+      // conflit géographique. N'affecte JAMAIS geoAgreement lui-même (le
+      // signal géographique structuré reste calculé séparément ci-dessus).
+      const geoTokens = new Set([normalizeGeo(candidate.city), normalizeGeo(candidate.region), normalizeGeo(t.city), normalizeGeo(t.region)].filter((v) => v.length > 0));
+      const candWords = candWordsBase.filter((w) => !geoTokens.has(w));
+      const targetWordsRaw = fuzzyWords(t.name).filter((w) => !geoTokens.has(w));
+      const ratio = candWords.length > 0 ? wordOverlapRatio(candWords, targetWordsRaw) : 0;
+      return { target: t, ratio, geo, geoMatch, geoConflict, categoryMatch };
     })
     // SPRINT MINESUP-C — categoryMatch === false (les deux catégories sont
     // CONNUES et DIFFÉRENTES) exclut la cible du chevauchement flou. Bug réel
@@ -305,13 +415,34 @@ export function matchCandidate(candidate: MatchCandidate, targets: MatchTarget[]
     return { level: "NO_MATCH", target: null, alternativeTargets: [], reason: "aucun mot significatif commun avec une cible.", safeForAutoLink: false };
   }
 
-  const best = scored[0];
-  const runnerUp = scored[1];
+  // SPRINT MINSANTE-G.1 §6/§7.D/§12 — une cible en CONFLIT géographique
+  // explicite (ville ou région CONNUES et DIFFÉRENTES des deux côtés) ne
+  // doit jamais l'emporter sur, ni faire égalité avec, une cible SANS
+  // conflit au même ratio de chevauchement : "different explicit cities ->
+  // strong negative signal" (§7.D). Root cause exacte du blocage MINSANTE-G
+  // (7/8 candidats du pilote AMBIGUOUS/PROBABLE_MATCH) : l'ancien tri ne
+  // triait QUE par `ratio`, jamais par géographie — deux cibles à égalité de
+  // mots génériques partagés ("sciences", "infirmiers"...) restaient
+  // TOUJOURS à égalité même quand l'une était dans la bonne ville et l'autre
+  // dans une ville différente. Correction : si au moins une cible SANS
+  // conflit existe, le pool de désambiguïsation se limite à ces cibles-là ;
+  // les cibles en conflit ne sont ni gagnantes ni décomptées comme égalité
+  // (mais restent visibles ailleurs si besoin — jamais supprimées des
+  // `targets` en entrée, seulement écartées de CE choix de meilleur/égalité).
+  // Si TOUTES les cibles à égalité sont en conflit géographique, aucune n'est
+  // préférée arbitrairement : on retombe sur le comportement historique
+  // (AMBIGUOUS sur l'ensemble complet) — ce correctif ne fabrique jamais un
+  // gagnant depuis un pool entièrement contradictoire.
+  const nonConflicting = scored.filter((s) => !s.geoConflict);
+  const pool = nonConflicting.length > 0 ? nonConflicting : scored;
+
+  const best = pool[0];
+  const runnerUp = pool[1];
   if (runnerUp && runnerUp.ratio === best.ratio && runnerUp.target.id !== best.target.id) {
     return {
       level: "AMBIGUOUS",
       target: null,
-      alternativeTargets: scored.filter((s) => s.ratio === best.ratio).map((s) => s.target),
+      alternativeTargets: pool.filter((s) => s.ratio === best.ratio).map((s) => s.target),
       reason: `plusieurs cibles à égalité de chevauchement (${Math.round(best.ratio * 100)}%) — pas de gagnant clair.`,
       safeForAutoLink: false,
     };

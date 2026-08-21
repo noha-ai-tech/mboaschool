@@ -1012,3 +1012,170 @@ READY TO EXPAND PDF PARSER TO 10/10 FILIERES : NON — indépendant de la clôtu
 
 **Aucune promotion, aucune expansion nationale exécutée ce sprint — décision
 en attente de validation Jean-Merlain + Eddy + architecte.**
+
+## MISE À JOUR SPRINT MINSANTE-G.1 (2026-08-20) — PILOT INTERNAL MATCHING HARDENING + GEO ENRICHMENT
+
+Sprint de suivi de **MINSANTE-G** (`reports/registry/minsante-g-preflight-summary.json`),
+qui avait exécuté le premier pré-vol de promotion contrôlée réel sur les 8
+candidats du snapshot F et trouvé un blocage : **7/8 candidats** revenaient
+`AMBIGUOUS`/`PROBABLE_MATCH` contre leurs frères différés du même pilote
+(les 13 `CATEGORY_REVIEW` + 1 `DUPLICATE_REVIEW`) — la toute première fois
+que ce matching **interne au pilote** était exécuté (B-F ne comparaient les
+candidats qu'à la production live et à MINESUP). §26 de MINSANTE-G interdisait
+explicitement de corriger le moteur et de re-promouvoir dans le même sprint.
+MINSANTE-G.1 fait cette correction, **toujours sans promotion**.
+
+### G.1.1 — Cause racine (revue humaine + inspection technique)
+
+Revue humaine individuelle des 7 paires signalées (hiérarchie de preuve :
+nom source, tokens propres distinctifs, sigle, ville explicite — jamais un
+token générique seul) : **les 21 sous-paires (7 candidats × leurs
+alternatives à égalité) sont toutes `CONFIRMED_DISTINCT`** — aucun doublon
+réel. Détail complet : `reports/registry/minsante-g1-duplicate-pair-review.csv`.
+
+Trois causes techniques distinctes identifiées dans
+`scripts/school-registry/lib/matching/engine.ts`, chacune corrigée :
+
+1. **`region` court-circuitait TOUJOURS `city` via `||`** — même une fois
+   `city` renseignée, `candidateGeo = normalizeGeo(region) || normalizeGeo(city)`
+   ignorait structurellement `city` dès que `region` était non vide (vrai
+   pour les 22 lignes du pilote, `region='Ouest'`). Deux écoles de villes
+   différentes dans la même région paraissaient "géographiquement cohérentes
+   par défaut", sans jamais qu'un conflit de ville puisse être détecté.
+2. **Le vocabulaire de rôle/statut générique n'était pas complet** :
+   `infirmier(s)`/`infirmière(s)` (rôle "nurse") et `fondation` (préfixe de
+   statut juridique, "Foundation X") jouaient exactement le même rôle que
+   `santé`/`médico`/`personnel`/`sanitaire` déjà retirés en MINSANTE-B, sans
+   y être ; `sanitaires` (pluriel) avait été omis alors que `sanitaire`
+   (singulier) était déjà retiré.
+3. **Le tie-break `AMBIGUOUS` ne tenait compte QUE du ratio de mots**, jamais
+   de la géographie — deux cibles à égalité de chevauchement restaient
+   TOUJOURS à égalité même quand l'une partageait la ville du candidat et
+   l'autre non.
+
+### G.1.2 — Corrections apportées au moteur de matching (génériques, tous registres)
+
+`geoAgreement(regionA, cityA, regionB, cityB)` (export nommé de `engine.ts`)
+remplace l'ancien calcul ad hoc. Règle, **applicable à MINESEC/MINESUP/
+MINSANTE et tout futur registre**, pas seulement MINSANTE :
+
+```
+1. Si LES DEUX côtés ont une city connue -> comparaison au niveau ville (signal le plus spécifique).
+2. Sinon, si LES DEUX côtés ont une region connue -> comparaison au niveau région (repli, moins spécifique).
+3. Sinon -> UNKNOWN — JAMAIS un accord positif.
+```
+
+**Sémantique NULL (§11 du brief G.1)** : `city=NULL` des DEUX côtés ne compte
+JAMAIS comme un accord géographique positif — au pire elle retombe sur la
+comparaison de région (un signal réel, pas un artefact NULL/NULL), au pire
+des cas elle retourne `UNKNOWN`. Testé explicitement :
+`geoAgreement(null, null, null, null) === "UNKNOWN"`.
+
+**Tie-break géographique (§12)** : dans le chevauchement flou
+(`STRONG_MATCH`/`PROBABLE_MATCH`/`AMBIGUOUS`), une cible en **conflit**
+géographique explicite (ville OU région connues et différentes) est exclue
+du pool de désambiguïsation dès qu'une cible non-conflictuelle existe au même
+ratio — "different explicit cities -> strong negative signal" (§7.D du
+brief). Si TOUTES les cibles à égalité sont en conflit, aucun gagnant n'est
+fabriqué arbitrairement (comportement `AMBIGUOUS` historique préservé).
+
+**Exclusion des tokens de localité déjà capturés par city/region du calcul
+de chevauchement flou** : un nom de ville qui apparaît DANS le texte du nom
+(ex. "... DE BAFOUSSAM") ET dans le champ structuré `city` ne doit pas
+ÉGALEMENT compter comme un mot "distinctif" de chevauchement — double
+comptage du même signal géographique, jamais une preuve d'identité
+supplémentaire. Root cause exacte observée : plusieurs écoles réelles et
+DISTINCTES de Bafoussam restaient à égalité de chevauchement simplement
+parce qu'elles partagent le token `bafoussam`.
+
+**Politique frères de pilote (§12)** : les candidats approuvés restent
+comparés à leurs frères différés du même batch — un vrai doublon doit
+toujours bloquer la promotion. La correction porte sur la QUALITÉ du signal
+(stopwords + géographie), **jamais** sur l'exclusion des frères eux-mêmes,
+qui masquerait de vrais doublons futurs.
+
+**Stopwords ajoutés** (`FUZZY_STOPWORDS`, justification complète par token
+avec avant/après/risque de régression : `reports/registry/minsante-g1-stopword-audit.json`) :
+`infirmier`, `infirmiers`, `infirmiere`, `infirmieres`, `fondation`, `sanitaires`
+(complète le `sanitaire` singulier déjà présent depuis MINSANTE-B — même
+oubli de pluralisation déjà évité pour `personnel`/`personnels`).
+
+**Explicitement NON ajouté** : `sciences` (pluriel) — bien que ce token
+explique 3/8 signaux résiduels après tous les autres correctifs, SPRINT
+MINESUP-E avait déjà pris une décision documentée de le préserver comme
+différenciateur de spécialité légitime pour l'enseignement supérieur
+(`Higher Institute of Science and Technology`) ; l'ajouter globalement
+aurait silencieusement écrasé cette décision pour TOUS les registres, pas
+seulement MINSANTE — exactement le type d'ajout de terme de domaine "à
+l'aveugle" que le brief G.1 interdit.
+
+**Non-régression** : les 46 tests pré-existants de
+`lib/matching/__tests__/matching.test.ts` passent inchangés (0 régression),
+plus 14 nouveaux tests dédiés dans
+`lib/matching/__tests__/matching-minsante-g1.test.ts` (scénarios A-F du
+brief G.1 : deux écoles d'infirmiers distinctes, vraie variante avec
+"infirmiers", région+city NULL, villes explicites différentes, candidat
+approuvé vs frère différé, cas historiques vrais positifs inchangés).
+
+### G.1.3 — Enrichissement `city` évidence-only (§8-10 du brief G.1)
+
+Les 22 lignes staging du pilote (`batch='minsante-pilot-v1'`) avaient TOUTES
+`city=NULL` malgré `region='Ouest'` non-discriminant. Le nom officiel
+MINSANTE lui-même contient explicitement la localité en suffixe
+(`"... DE <VILLE>"`, §9 : *"the school name itself may be accepted only
+when location is an explicit part of the official name"*). Extraction
+**déterministe** (dernière occurrence de `" DE "` dans `name_raw`, texte
+capturé verbatim) — **jamais** une inférence par capitale régionale,
+popularité, sigle ou extrait web.
+
+Résultat : **22/22 lignes enrichies**, source `MINSANTE_OFFICIAL_NAME_SUFFIX`,
+21 à confiance `HIGH` (nom de ville simple), 1 à confiance `MEDIUM` (nom
+composé, `"MBOUO BANDJOUN"`, capturé verbatim sans interprétation). Écriture
+strictement additive : `city` (colonne, était NULL) + `raw_data.minsante_g1_geo_enrichment`
+(objet de traçabilité — source/preuve/confiance/date). `name_raw`,
+`raw_data.minsante_b_snapshot` à `..._f` et toutes les autres clés
+existantes de `raw_data` **inchangées**, vérifié par relecture après
+écriture. Détail ligne par ligne : `reports/registry/minsante-g1-city-enrichment.csv`.
+
+**Snapshot d'approbation inchangé** : le checksum
+`26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653` reste
+**valide** après enrichissement — `city` ne fait PAS partie des champs
+canoniques hachés par `minsante-f-reclassify.ts`/`minsante-g-promotion-preflight.ts`
+(`staging_id, name, region, programs, education_family, main_category,
+category_evidence, source, decision`). Vérifié programmatiquement ce
+sprint, pas supposé. **Aucun nouveau snapshot requis.**
+
+### G.1.4 — Résultat du re-matching interne au pilote (dry-run, aucune écriture)
+
+`scripts/school-registry/minsante-g1-preflight-recheck.ts` (même logique que
+`minsante-g-promotion-preflight.ts`, mêmes 8 candidats, même checksum, contre
+l'état actuel de la base post-enrichissement) :
+
+```
+AVANT (MINSANTE-G)  : ELIGIBLE=1, DUPLICATE_SIGNAL=7
+APRÈS (MINSANTE-G.1): ELIGIBLE=5, DUPLICATE_SIGNAL=3 (matching_after : EXACT=0 STRONG=0 PROBABLE=1 AMBIGUOUS=2 NO_MATCH=5)
+```
+
+Les 3 signaux résiduels sont **tous** attribuables au seul token générique
+`sciences` (délibérément non retiré, §G.1.2) — **pas** à un doublon réel :
+les 7 paires originales ont toutes été confirmées `CONFIRMED_DISTINCT` en
+revue humaine (§G.1.1). `READY FOR RE-PREFLIGHT : NO` (eligible=5 ≠ 8) —
+conformément au §19 du brief G.1, le sprint s'arrête ici, **aucune
+promotion**. Détail complet : `reports/registry/minsante-g1-preflight-recheck.json`,
+`reports/registry/minsante-g1-matching-after.csv`.
+
+### G.1.5 — Leçons pour une future promotion contrôlée du pilote
+
+```
+1. Le matching interne-au-pilote (candidats vs frères différés du même batch) DOIT être exécuté au moins une fois avant toute promotion contrôlée — B-F ne l'avaient jamais fait.
+2. `city` doit être enrichie AVANT le matching, pas après — sans elle, `region` seule ne discrimine jamais un pilote mono-région.
+3. Un token générique découvert dans UN registre (ex. "infirmiers" MINSANTE) doit être audité avec preuve réelle avant ajout — jamais supposé par analogie seule.
+4. Un token générique NE DOIT PAS être ajouté s'il contredit une décision déjà documentée dans un AUTRE registre (ex. "sciences", protégé par MINESUP-E) — FUZZY_STOPWORDS est un contrat partagé, pas un réglage local.
+5. `eligible != candidate_count` doit STOP le sprint, jamais être "forcé" en abaissant le seuil de preuve localement.
+```
+
+**MINSANTE-G.1 CLOSED : YES — aucune promotion, aucune écriture
+establishments/registry_identifiers. Décision en attente de validation
+Jean-Merlain + Eddy + architecte (recommandation : B — revue
+géographie/doublon supplémentaire requise pour le token `sciences`, voir
+`reports/registry/minsante-g1-summary.json`).**

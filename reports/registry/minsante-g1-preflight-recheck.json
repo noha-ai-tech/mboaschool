@@ -1,0 +1,40 @@
+{
+  "sprint": "MINSANTE-G.1",
+  "generated_at": "2026-08-20T21:01:17.694Z",
+  "database": {
+    "project_ref": "umcwwynrftidytxgqkwi",
+    "establishments": 2240,
+    "staging": 2366,
+    "registry_identifiers": 2242
+  },
+  "approval": {
+    "snapshot_candidates": 8,
+    "checksum_expected": "26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653",
+    "checksum_stored": "26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653",
+    "checksum_recomputed": "26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653",
+    "checksum_valid": true,
+    "new_snapshot_required": false
+  },
+  "deferred_protection": {
+    "category_review_excluded": 13,
+    "duplicate_review_excluded": 1,
+    "deferred_leak_into_snapshot": 0,
+    "protection_ok": true
+  },
+  "matching_after": {
+    "EXACT": 0,
+    "STRONG": 0,
+    "PROBABLE": 1,
+    "AMBIGUOUS": 2,
+    "NO_MATCH": 5
+  },
+  "eligible": 5,
+  "duplicate_signals": 3,
+  "conflicts": 0,
+  "cross_ministry_conflicts": 0,
+  "pii_issues": 0,
+  "category_issues": 0,
+  "slug_issues": 0,
+  "ready_for_repreflight": false,
+  "production_writes": 0
+}

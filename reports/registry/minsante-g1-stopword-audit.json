@@ -1,0 +1,53 @@
+{
+  "sprint": "MINSANTE-G.1",
+  "generated_at": "2026-08-20",
+  "audit_scope": "FUZZY_STOPWORDS in scripts/school-registry/lib/matching/engine.ts — audited BEFORE any change, using the 7 flagged pairs from reports/registry/minsante-g-preflight-summary.json plus the 22 real pilot names (batch minsante-pilot-v1), per §5 of the MINSANTE-G.1 brief.",
+  "explicitly_tested_tokens": {
+    "infirmier": { "was_stopword_before": false, "verdict": "ADDED", "reason": "see stopword_changes[0]" },
+    "infirmiers": { "was_stopword_before": false, "verdict": "ADDED", "reason": "see stopword_changes[0]" },
+    "infirmiere": { "was_stopword_before": false, "verdict": "ADDED (defensive — same normalization family, no corpus occurrence found this sprint but same generic role-word status)" },
+    "infirmieres": { "was_stopword_before": false, "verdict": "ADDED (defensive, same reasoning)" },
+    "ecole": { "was_stopword_before": true, "verdict": "UNCHANGED — already removed since the original REGISTRY-MULTI-A stopword list (institution-type word)." },
+    "institut": { "was_stopword_before": true, "verdict": "UNCHANGED — already removed since REGISTRY-MULTI-A." },
+    "prive": { "was_stopword_before": true, "verdict": "UNCHANGED — already removed since REGISTRY-MULTI-A (as 'prive'/'privee'/'privé'/'private')." },
+    "privee": { "was_stopword_before": true, "verdict": "UNCHANGED — already present." },
+    "professionnel": { "was_stopword_before": false, "verdict": "NOT ADDED — inspected, no real false positive found this sprint. MINSANTE-B already examined 'professionnels' vs 'personnels' de la sante DE MEIGANGA and found the pair correctly classified AMBIGUOUS on other grounds, not caused by 'professionnel(s)'. No new evidence this sprint changes that conclusion." },
+    "professionnelle": { "was_stopword_before": false, "verdict": "NOT ADDED — same reasoning as 'professionnel', no occurrence driving a false positive in the 7 flagged pairs or the 22-row pilot corpus." }
+  },
+  "stopword_changes": [
+    {
+      "token": "infirmier / infirmiers / infirmiere / infirmieres",
+      "real_false_positive": "ba827d94-6542-40fd-b811-a0d964a8bceb 'ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE FOUMBAN' (CLEAN_APPROVABLE, one of the 8 approved candidates) vs 27a2a636-eced-4971-8f62-67d8d1028ab3 'INSTITUT TROPICAL DE FORMATION EN PLAIES CHRONIQUES ET EN SOINS INFIRMIERS \"MOULLEC\" DE BALEVENG' (CATEGORY_REVIEW sibling, same pilot batch) — two real, distinct institutions (different city once evidenced: Foumban vs Baleveng; different founder/brand 'Moullec' present only in the second; different specialization — general state-diploma nursing school vs a specialized chronic-wound-care training institute) whose ONLY shared significant word was the generic role term 'infirmiers'.",
+      "before_result": "PROBABLE_MATCH (25% word overlap) — reports/registry/minsante-g-preflight-summary.json, signal #6.",
+      "after_result": "NO_MATCH — verified in scripts/school-registry/lib/matching/__tests__/matching-minsante-g1.test.ts §7.A and by re-running minsante-g1-preflight-recheck.ts against live Supabase data.",
+      "true_positive_regression_risk": "LOW. 'infirmier(s)/infirmière(s)' names a PROFESSION (= 'nurse'), present in the overwhelming majority of MINSANTE paramedical-school names — never itself an identity token, exactly the same status already established for 'santé'/'médico'/'personnel'/'sanitaire' in MINSANTE-B (§6-7 of that sprint's brief, same precedent format). Verified against the full 46-test pre-existing matching suite (scripts/school-registry/lib/matching/__tests__/matching.test.ts) plus the 14 new MINSANTE-G.1 regression tests — 0 failures. A true same-school variant that also contains 'infirmiers' still matches via its OTHER distinctive tokens (name/founder/acronym) — see §7.B regression test, verified STRONG_MATCH preserved via a shared founder token."
+    },
+    {
+      "token": "fondation",
+      "real_false_positive": "9c4b9a28-1aa2-4fc2-baa8-48d3919758f7 'ECOLE PRIVEE FONDATION TCHUENTE DE BAFOUSSAM' (CLEAN_APPROVABLE, approved candidate) tied at 67% AMBIGUOUS against BOTH 2c29d228-... 'ECOLE PRIVEE FONDATION JEUGEUVOU FOWANG DE BAFOUSSAM' (founder 'Jeugeuvou Fowang') AND 265476d2-... '...FONDATION SAINT MAURICE DE BAFOUSSAM' (founder 'Saint Maurice') — three schools with three completely different founders, whose only shared significant word (once the same-city token was already excluded from fuzzy overlap, §8/§12 of this sprint) was the generic institutional-status prefix 'fondation' ('Foundation X').",
+      "before_result": "AMBIGUOUS (67% tie) — reports/registry/minsante-g-preflight-summary.json, signal #4.",
+      "after_result": "NO_MATCH (verified via minsante-g1-preflight-recheck.ts and the §7.E regression test) — the candidate's real distinctive token 'tchuente' shares nothing with 'fowang'/'jeugeuvou'/'maurice'/'saint', so once 'fondation' stops padding the ratio artificially, scored targets fall to ratio=0 and are filtered out entirely.",
+      "true_positive_regression_risk": "LOW. 'Fondation' is a legal/institutional-type prefix, structurally identical to 'institut'/'complexe'/'école' already in FUZZY_STOPWORDS since REGISTRY-MULTI-A/MINSANTE-B — never itself a proper name. No occurrence in the pre-existing 46-test suite depends on 'fondation' as a shared distinguishing token (grepped scripts/school-registry/lib/matching/__tests__/matching.test.ts — the single occurrence, in the MINSANTE-B §8.D test, is filtered out by a category mismatch before word overlap is even computed, so it is unaffected either way). Full suite re-run: 0 failures."
+    },
+    {
+      "token": "sanitaires (plural)",
+      "real_false_positive": "b92dd780-b05c-4b47-aaa4-e6d0b6783778 'COMPLEXE PRIVE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES \"FONDATION TSOPJIO ET TAKOUDJOU\" DE DSCHANG' (CLEAN_APPROVABLE, approved candidate) shared the token 'sanitaires' (from the hyphenated 'MEDICO-SANITAIRES') with several unrelated targets.",
+      "before_result": "Contributed to the AMBIGUOUS tie at 20% (reports/registry/minsante-g-preflight-summary.json, signal #5) alongside other now-fixed causes.",
+      "after_result": "No longer a shared token once removed; verified via minsante-g1-preflight-recheck.ts (this candidate now resolves to NO_MATCH).",
+      "true_positive_regression_risk": "NONE — this is not a new domain judgment. 'sanitaire' (singular) was already added to FUZZY_STOPWORDS in MINSANTE-B; its plural form 'sanitaires' was simply omitted at the time (the same pluralization omission was explicitly avoided for 'personnel'/'personnels', which were both added together in that same sprint). Adding the missing plural form is a completeness fix of an already-approved decision, not a new one. Full suite re-run: 0 failures."
+    }
+  ],
+  "considered_but_rejected": [
+    {
+      "token": "sciences (plural, French)",
+      "observation": "After all other fixes (geo-token exclusion, tie-break geo-conflict exclusion, infirmier/fondation/sanitaires stopwords, city enrichment), 3 of the original 7 flagged pairs remain AMBIGUOUS or PROBABLE_MATCH purely because 'sciences' is their only remaining shared significant word (e.g. 'ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG' vs two other 'INSTITUT DES SCIENCES ...' targets in different cities).",
+      "why_not_added": "SPRINT MINESUP-E made an explicit, documented decision (see engine.ts comment above FUZZY_STOPWORDS, 'Volontairement PAS ajoutés') to KEEP 'science'/'technology' as legitimate specialty-differentiator words for higher-education institution names, with a real cited example (avoiding conflating 'Higher Institute of Science and Technology' generically). FUZZY_STOPWORDS is shared across ALL registries (MINESEC/MINESUP/MINSANTE/future ministries) — adding 'sciences' globally would silently override that prior, deliberately-scoped decision for every other registry, not just MINSANTE health-training names, which is exactly the kind of blind domain-term stopword addition §6/§7 of this sprint's brief prohibits ('never add a distinctive domain/program term blindly').",
+      "verdict": "NOT ADDED. The 3 remaining pairs are reported as genuinely still ambiguous (see reports/registry/minsante-g1-duplicate-pair-review.csv is scoped to the ORIGINAL 7 flagged pairs, all of which are now resolved to CONFIRMED_DISTINCT via human review — the residual matching-engine AMBIGUOUS/PROBABLE_MATCH signals on 3 of the 8 approved candidates are a separate, honestly-reported blocking outcome, see reports/registry/minsante-g1-preflight-recheck.json)."
+    }
+  ],
+  "null_geography_semantics_fix": {
+    "problem": "Before this sprint, geo comparison used `normalizeGeo(region) || normalizeGeo(city)` — REGION always took priority over city via `||` short-circuit, so `city` was structurally NEVER consulted whenever `region` was non-empty (true for all 22 pilot rows, region='Ouest'). This meant two schools in different cities within the same region always looked 'geographically consistent by default', and — separately — a genuine NULL/NULL city pair never counted as a false positive match ONLY because it fell back to comparing region (which is a legitimate, if coarser, signal, not a NULL/NULL artifact).",
+    "fix": "Replaced with `geoAgreement(regionA, cityA, regionB, regionB)` (exported from engine.ts): compares CITY first if both known (most specific), falls back to REGION only if city is unknown on either side, and returns 'UNKNOWN' (never a positive match) if neither is known on both sides. Generic — applies to every registry (MINESEC/MINESUP/MINSANTE/future), not MINSANTE-specific.",
+    "regression_tests": "scripts/school-registry/lib/matching/__tests__/matching-minsante-g1.test.ts §7.C (geoAgreement(null,null,null,null) === 'UNKNOWN'; region-only fallback verified separately as 'MATCH', never conflated with the NULL/NULL case) and §7.D (explicit city conflict tests)."
+  }
+}

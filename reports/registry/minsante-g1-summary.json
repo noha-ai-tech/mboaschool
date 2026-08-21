@@ -1,0 +1,151 @@
+{
+  "sprint": "MINSANTE-G.1",
+  "operator": "jean-merlain",
+  "generated_at": "2026-08-20",
+  "repository_context": {
+    "repository": "mboaschool",
+    "not_klassia": true,
+    "branch": "main",
+    "reference_commit_start": "74981a8530a4cfaded2102d4345a408c7a4dd886"
+  },
+  "team_sync": {
+    "local_head_start": "74981a8530a4cfaded2102d4345a408c7a4dd886",
+    "noha_main": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+    "origin_main": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+    "ahead_of_noha_main": 27,
+    "worktree_clean_at_start": true
+  },
+  "database": {
+    "project_ref": "umcwwynrftidytxgqkwi",
+    "establishments": 2240,
+    "establishments_unchanged": true,
+    "staging_row_count": 2366,
+    "staging_row_count_unchanged": true,
+    "staging_metadata_updated_rows": 22,
+    "registry_identifiers": 2242,
+    "registry_identifiers_unchanged": true,
+    "production_writes": 0
+  },
+  "flagged_pairs": {
+    "starting_duplicate_signals_g": 7,
+    "decomposed_into_subpairs": 21,
+    "confirmed_distinct": 21,
+    "confirmed_same": 0,
+    "still_ambiguous": 0,
+    "detail_report": "reports/registry/minsante-g1-duplicate-pair-review.csv"
+  },
+  "matching_hardening": {
+    "stopwords_audited": ["infirmier", "infirmiers", "infirmiere", "infirmieres", "ecole", "institut", "prive", "privee", "professionnel", "professionnelle", "fondation", "sanitaires", "sciences"],
+    "stopwords_added": ["infirmier", "infirmiers", "infirmiere", "infirmieres", "fondation", "sanitaires"],
+    "stopwords_considered_and_rejected": ["sciences (plural) — protected by a prior documented MINESUP-E decision as a legitimate specialty differentiator; adding it would silently override that decision across all registries"],
+    "null_city_behavior_before": "geo comparison used `normalizeGeo(region) || normalizeGeo(city)` — region always short-circuited city via `||`, so city was structurally never consulted whenever region was known (true for all 22 pilot rows). NULL/NULL itself never literally counted as a positive match (falsy `||` chain produced an empty string, treated as non-comparable), but city was silently unusable as a discriminator even once populated.",
+    "null_city_behavior_after": "geoAgreement(regionA, cityA, regionB, cityB) — compares city first if both known (most specific), falls back to region only if city unknown on either side, returns UNKNOWN (never a positive match) if neither known on both sides. Exported, generic across all registries.",
+    "geo_conflict_tiebreak_fix": "targets in explicit geo CONFLICT are excluded from the AMBIGUOUS tie-break pool whenever a non-conflicting target exists at the same overlap ratio — a target in a different city never wins or ties against one in the correct city.",
+    "locality_token_double_counting_fix": "a locality name already captured by the structured city/region fields is excluded from the fuzzy word-overlap ratio itself, to stop the same geographic signal being double-counted as a 'distinctive' word.",
+    "true_positive_regressions": 0,
+    "auto_merge": 0,
+    "pre_existing_test_suite_pass": "46/46 (scripts/school-registry/lib/matching/__tests__/matching.test.ts)",
+    "new_regression_tests": "14/14 (scripts/school-registry/lib/matching/__tests__/matching-minsante-g1.test.ts, scenarios A-F)"
+  },
+  "city_enrichment": {
+    "pilot_rows_audited": 22,
+    "cities_confirmed": 22,
+    "cities_still_null": 0,
+    "rows_updated": 22,
+    "evidence_source": "MINSANTE_OFFICIAL_NAME_SUFFIX (Tier 1 — official MINSANTE source document; explicit '... DE <VILLE>' suffix of the official name itself, per §9 evidence hierarchy)",
+    "confidence_high": 21,
+    "confidence_medium": 1,
+    "confidence_medium_reason": "staging_id 3c04b5c8-4a6d-4ad8-b625-bda87186c800 — compound locality string 'MBOUO BANDJOUN' captured verbatim, not interpreted/split.",
+    "additive_only": true,
+    "raw_data_preserved_verified": true,
+    "national_geography_enrichment_attempted": false,
+    "region_capital_inference_used": false,
+    "web_snippet_inference_used": false,
+    "detail_report": "reports/registry/minsante-g1-city-enrichment.csv"
+  },
+  "matching_after": {
+    "approved_candidates": 8,
+    "exact": 0,
+    "strong": 0,
+    "probable": 1,
+    "ambiguous": 2,
+    "no_match": 5,
+    "blocking_duplicate_signals": 3,
+    "blocking_signals_root_cause": "all 3 residual signals share the single generic token 'sciences', deliberately not added to FUZZY_STOPWORDS (see matching_hardening.stopwords_considered_and_rejected) — not attributable to any real duplicate; the underlying 7 original pairs were all CONFIRMED_DISTINCT by human review.",
+    "detail_report": "reports/registry/minsante-g1-matching-after.csv"
+  },
+  "snapshot": {
+    "candidates": 8,
+    "original_checksum": "26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653",
+    "checksum_still_valid": true,
+    "checksum_verified_programmatically_post_enrichment": true,
+    "new_snapshot_required": false,
+    "reason": "city is not one of the fields hashed into the approval checksum (staging_id, name, region, programs, education_family, main_category, category_evidence, source, decision) — verified by recomputation against live DB state after the city UPDATE."
+  },
+  "preflight_recheck": {
+    "eligible": 5,
+    "duplicate_signals": 3,
+    "conflicts": 0,
+    "cross_ministry_conflicts": 0,
+    "pii_issues": 0,
+    "category_issues": 0,
+    "slug_issues": 0,
+    "ready_for_repreflight": false,
+    "detail_report": "reports/registry/minsante-g1-preflight-recheck.json"
+  },
+  "pii": {
+    "persisted": 0,
+    "note": "No director/promoter/student/candidate personal data extracted or persisted this sprint. City values are place names only. Founder names embedded in official institution names (e.g. 'Fondation Tchuente') were already present in name_raw since the original MINSANTE collection sprint (B) and are not newly introduced or separately persisted by this sprint — consistent with existing project PII policy (piiRedaction.ts / pdfMinsanteA1 PII tests, unchanged)."
+  },
+  "production": {
+    "establishments_inserted": 0,
+    "establishments_updated": 0,
+    "establishments_deleted": 0,
+    "registry_identifiers_inserted": 0,
+    "promotion_executed": false
+  },
+  "deferred_protection": {
+    "category_review_excluded": 13,
+    "duplicate_review_excluded": 1,
+    "reclassified_this_sprint": 0,
+    "note": "no reclassification of the 14 deferred rows — only matching-relevant metadata (city) added, strictly needed for this sprint's re-matching, per §15 of the brief."
+  },
+  "qa": {
+    "build": "PASS (npm run build)",
+    "typescript_app": "PASS (npx tsc --noEmit)",
+    "typescript_registry": "PASS (npx tsc --noEmit -p scripts/school-registry/tsconfig.json)",
+    "tests": {
+      "matching_suite_total": "60/60 (46 pre-existing + 14 new MINSANTE-G.1)",
+      "registry_scripts_all_suites_total": "180/180 (matching, MINSANTE parser/extraction, MINSANTE dedup, approved-population protection, promotion guards, normalize, PII redaction, registry backfill)",
+      "registryReview": "18/18 (src/lib/__tests__/registryReview.test.ts)",
+      "search_v2": "static review only — src/app/api/recherche/route.ts imports no code from scripts/school-registry, no staging table reference; unaffected by this sprint's changes.",
+      "promotion_guard": "included in registry_scripts_all_suites_total (minsanteGPromotionGuard.test.ts, minesupPromotionGuard.test.ts, minesupNationalPromotionGuard.test.ts)",
+      "approved_population_protection": "included in registry_scripts_all_suites_total (minsanteApprovedPopulation.test.ts, approvedPopulationFilter.test.ts) — re-verified unchanged this sprint",
+      "sibling_matching_new_tests": "included in matching-minsante-g1.test.ts §7.E",
+      "null_geography_new_tests": "included in matching-minsante-g1.test.ts §7.C/§7.D"
+    }
+  },
+  "files": {
+    "engine_modified": "scripts/school-registry/lib/matching/engine.ts",
+    "new_regression_tests": "scripts/school-registry/lib/matching/__tests__/matching-minsante-g1.test.ts",
+    "city_extraction_helper": "scripts/school-registry/g1-city-extract.ts",
+    "city_enrichment_script": "scripts/school-registry/minsante-g1-city-enrichment.ts",
+    "preflight_recheck_script": "scripts/school-registry/minsante-g1-preflight-recheck.ts",
+    "docs_updated": "docs/03_DATA_REGISTRY/MINSANTE_IMPORT_CONTRACT.md",
+    "reports": [
+      "reports/registry/minsante-g1-duplicate-pair-review.csv",
+      "reports/registry/minsante-g1-stopword-audit.json",
+      "reports/registry/minsante-g1-city-enrichment.csv",
+      "reports/registry/minsante-g1-matching-after.csv",
+      "reports/registry/minsante-g1-preflight-recheck.json",
+      "reports/registry/minsante-g1-summary.json"
+    ]
+  },
+  "minsante_g1_closed": true,
+  "recommended_next_step": "B",
+  "recommended_next_step_reason": "3/8 approved candidates still produce a blocking matching signal, solely via the generic token 'sciences' (deliberately not stopworded this sprint to avoid overriding a documented MINESUP-E cross-registry decision). A dedicated future review (MINSANTE-H or similar) should either (a) find real evidence to narrow a MINSANTE-scoped (not global) generic-term exception for 'sciences de la santé'-type phrases, or (b) accept these 3 candidates as requiring a manual promotion override with explicit human sign-off, never an automatic threshold reduction.",
+  "push": false,
+  "deploy": false,
+  "promotion": false,
+  "next_sprint_started": false
+}
