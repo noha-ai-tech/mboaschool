@@ -1,0 +1,15 @@
+{
+  "sprint": "TRANSPORT-A.2-T3",
+  "brief_section": 20,
+  "method": "read-only code audit, no UI redesign performed this sprint (re-confirms TRANSPORT-A.1-T3 findings, not re-derived from scratch)",
+  "location": "src/app/dashboard/admin/registre/page.tsx + src/lib/registryReview.ts",
+  "ministry_visible": "YES — source_ministry selected/rendered, but MINTRANSPORT cannot appear until the enum migration (§3-4) is applied — until then any future real import must use a fallback ministry value or the write is blocked by the import guard's mintransportEnumPresent check.",
+  "entity_family_visible": "YES via raw_data.transport_tier3.entity_family (custom field, not a native column) — Review Center does not currently render arbitrary raw_data.transport_tier3.* sub-fields, only the top-level classification/education_family/category columns already audited in TRANSPORT-A.1-T3.",
+  "source_confidence_visible": "PARTIAL, unchanged since TRANSPORT-A.1-T3 audit — tier3_confidence lives in raw_data.transport_tier3.tier3_confidence, not surfaced by current UI (smallest future change documented in TRANSPORT-A.1-T3 summary, still valid).",
+  "source_count_visible": "NO — raw_data.transport_tier3.source_count/independent_source_count exist in the contract (§12) but no UI reads them yet.",
+  "review_reason_visible": "PARTIAL — raw_data.classification is read for MINSANTE-style rows; this sprint's rows follow the same convention (raw_data.transport_tier3.staging_classification is a NEW field name, not the established raw_data.classification key) — smallest future change: also write top-level raw_data.classification = staging_classification for Review Center compatibility, or extend the UI to read the nested key.",
+  "source_links_visible": "NO — source_url column exists but is not rendered (same finding as TRANSPORT-A.1-T3).",
+  "matching_status_visible": "PARTIAL — same confidence-rendering gap as source_confidence_visible.",
+  "smallest_future_ui_change": "Mirror raw_data.transport_tier3.staging_classification into top-level raw_data.classification at write time (this sprint's prepared rows already do NOT do this — documented gap, not silently fixed by redesigning Review Center this sprint per brief §20 explicit instruction not to).",
+  "no_ui_redesign_performed": true
+}

@@ -1,0 +1,53 @@
+{
+  "sprint": "TRANSPORT-A.2-T3",
+  "date": "2026-08-21",
+  "operator": "jean-merlain",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "database_baseline": {
+    "establishments": 2248,
+    "staging": 2366,
+    "registry_identifiers": 2242,
+    "mintransport_staging_rows_before": 0,
+    "mintransport_enum_present": false,
+    "baseline_drift_detected": false
+  },
+  "migration": {
+    "migration_required": true,
+    "destructive": false,
+    "establishments_affected": 0,
+    "staging_rows_affected": 0,
+    "prepared_file": "supabase/migrations/0022_transport_source_ministry_enum.sql",
+    "executed_this_sprint": false,
+    "manual_execution_required": true,
+    "manual_execution_method": "Supabase Dashboard SQL Editor (no direct Postgres/psql access from this environment — same precedent as migration 0021)."
+  },
+  "revalidation": {
+    "provenance_complete_count": 5,
+    "provenance_incomplete_count": 12,
+    "already_live_count": 0,
+    "matching_totals_fresh": {
+      "NO_MATCH": 12,
+      "PROBABLE_MATCH": 4,
+      "AMBIGUOUS": 1
+    },
+    "cross_ministry_minefop_hits": 0,
+    "cross_ministry_minesup_hits": 0
+  },
+  "classification_tally": {
+    "SOURCE_REVIEW": 12,
+    "DUPLICATE_REVIEW": 3,
+    "IDENTITY_REVIEW": 2
+  },
+  "clean_approvable_count": 0,
+  "would_insert": 17,
+  "official_identifiers_invented": 0,
+  "registry_identifiers_to_insert": 0,
+  "pii_persisted_count": 0,
+  "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+  "write_performed_this_sprint": false,
+  "write_scope_note": "REVALIDATION/DRY-RUN/REPORTS ONLY (brief §0 human authorization not obtained this sprint). The real import script (transport-a2-t3-import.ts) exists, is guard-gated (lib/transportA2ImportGuard.ts), and was exercised ONLY with invalid/refused flag combinations this sprint (brief §16) — never with a complete valid set.",
+  "decision": "A — TIER3_STAGING_IMPORT_COMPLETE (preparation complete; write pending separate named human authorization)",
+  "ready_for_transport_promotion": false,
+  "push": false,
+  "deploy": false
+}

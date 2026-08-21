@@ -1,0 +1,85 @@
+{
+  "sprint": "TRANSPORT-A.2-T3",
+  "date": "2026-08-21",
+  "method": "REAL CLI invocations of scripts/school-registry/transport-a2-t3-import.ts (not mocks) — establishment_import_staging row count read via live Supabase REST GET immediately before and after every attempt, in addition to the 16 unit tests in scripts/school-registry/lib/__tests__/transportA2ImportGuard.test.ts.",
+  "staging_count_before_all_scenarios": 2366,
+  "staging_count_after_all_scenarios": 2366,
+  "net_rows_written_across_all_scenarios": 0,
+  "scenarios": [
+    {
+      "id": 1,
+      "description": "No --commit at all (default dry-run)",
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts",
+      "result": "REFUSED",
+      "message": "REFUSED — --commit absent. Dry-run par défaut, aucune écriture.",
+      "staging_count_before": 2366,
+      "staging_count_after": 2366
+    },
+    {
+      "id": 2,
+      "description": "--commit present, all other flags missing",
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit",
+      "result": "REFUSED",
+      "message": "REFUSED — phrase de confirmation manquante ou incorrecte.",
+      "staging_count_before": 2366,
+      "staging_count_after": 2366
+    },
+    {
+      "id": 3,
+      "description": "Wrong confirmation phrase",
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit --expected-count=17 --approval-checksum=<real> --confirm=\"WRONG_PHRASE\" --operator=\"jean-merlain\" --approved-by=\"Eddy\"",
+      "result": "REFUSED",
+      "message": "REFUSED — phrase de confirmation manquante ou incorrecte. Exiger --confirm=\"IMPORT_TRANSPORT_TIER3_TO_STAGING\".",
+      "staging_count_before": 2366,
+      "staging_count_after": 2366
+    },
+    {
+      "id": 4,
+      "description": "Wrong --expected-count (99 instead of the fresh dry-run's 17)",
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit --expected-count=99 --approval-checksum=<real> --confirm=\"IMPORT_TRANSPORT_TIER3_TO_STAGING\" --operator=\"jean-merlain\" --approved-by=\"Eddy\"",
+      "result": "REFUSED",
+      "message": "REFUSED — nombre de lignes à insérer inattendu (calculé maintenant=17, --expected-count=99).",
+      "staging_count_before": 2366,
+      "staging_count_after": 2366
+    },
+    {
+      "id": 5,
+      "description": "Wrong --approval-checksum (garbage value)",
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit --expected-count=17 --approval-checksum=deadbeef... --confirm=\"IMPORT_TRANSPORT_TIER3_TO_STAGING\" --operator=\"jean-merlain\" --approved-by=\"Eddy\"",
+      "result": "REFUSED",
+      "message": "REFUSED — checksum d'approbation absent ou différent.",
+      "staging_count_before": 2366,
+      "staging_count_after": 2366
+    },
+    {
+      "id": 6,
+      "description": "Self-approval: --approved-by identical to --operator",
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit --expected-count=17 --approval-checksum=<real> --confirm=\"IMPORT_TRANSPORT_TIER3_TO_STAGING\" --operator=\"jean-merlain\" --approved-by=\"jean-merlain\"",
+      "result": "REFUSED",
+      "message": "REFUSED — approved-by ne peut pas être la même personne que operator (auto-approbation interdite).",
+      "staging_count_before": 2366,
+      "staging_count_after": 2366
+    },
+    {
+      "id": 7,
+      "description": "Wrong --operator",
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit --expected-count=17 --approval-checksum=<real> --confirm=\"IMPORT_TRANSPORT_TIER3_TO_STAGING\" --operator=\"someone-else\" --approved-by=\"Eddy\"",
+      "result": "REFUSED",
+      "message": "REFUSED — opérateur manquant ou inattendu. Exiger --operator=\"jean-merlain\".",
+      "staging_count_before": 2366,
+      "staging_count_after": 2366
+    },
+    {
+      "id": 8,
+      "description": "ALL OTHER FLAGS VALID AND CORRECT (real operator, real distinct approver, real fresh count=17, real checksum) — isolates the enum pre-flight guard specifically. Demonstrates that even a fully-correct human-authorized command would currently still be refused, because the MINTRANSPORT migration (brief §3-4) has not been applied/verified.",
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit --expected-count=17 --approval-checksum=4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7 --confirm=\"IMPORT_TRANSPORT_TIER3_TO_STAGING\" --operator=\"jean-merlain\" --approved-by=\"Eddy\"",
+      "result": "REFUSED",
+      "message": "REFUSED — enum registry_source_ministry ne contient pas encore 'MINTRANSPORT' (vérifié en direct). Migration §3-4 du brief non appliquée/non vérifiée. Aucun contournement automatique vers 'OTHER'.",
+      "staging_count_before": 2366,
+      "staging_count_after": 2366,
+      "note": "This is the ONLY scenario using every genuinely correct value this sprint produced (real checksum, real count, real operator). It was still refused, and 'Eddy' was used only as a placeholder distinct-approver string to isolate the enum check — it does NOT constitute an actual authorization by Eddy, no such authorization was sought or received this sprint."
+    }
+  ],
+  "unit_tests_reference": "scripts/school-registry/lib/__tests__/transportA2ImportGuard.test.ts — 16/16 pass, covers the same 8 branches plus PII/official-identifier/registry-identifier guards not independently reachable via today's real database state.",
+  "conclusion": "Every refusal path is verified in real CLI conditions against the live database, not merely by code inspection or unit test mocks. 0 rows written across all 8 scenarios, confirmed by direct before/after count comparison. No scenario used a genuine, freshly-obtained --approved-by from a real distinct human this sprint — 'Eddy' in scenario 8 is a placeholder string chosen only to isolate the enum guard, not a claim that Eddy authorized anything."
+}

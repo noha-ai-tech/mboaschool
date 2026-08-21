@@ -1,0 +1,16 @@
+{
+  "sprint": "TRANSPORT-A.2-T3",
+  "date": "2026-08-21",
+  "operator": "jean-merlain",
+  "total_candidates": 17,
+  "already_live": 0,
+  "already_staging": 0,
+  "duplicate_review": 3,
+  "source_review": 12,
+  "cross_ministry_review": 0,
+  "identity_review": 2,
+  "conflict_review": 0,
+  "invalid": 0,
+  "would_insert": 17,
+  "clean_approvable": 0
+}

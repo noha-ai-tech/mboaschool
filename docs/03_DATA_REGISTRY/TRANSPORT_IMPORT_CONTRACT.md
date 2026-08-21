@@ -613,3 +613,140 @@ YES, sous réserve de l'autorisation explicite ci-dessus.
 READY_FOR_TRANSPORT_PROMOTION : NO (inchangé, ne changera pas tant
 qu'aucune source officielle MINT nominative n'existe).
 ```
+
+## 20. Addendum TRANSPORT-A.2-T3 (2026-08-21) — préparation/revalidation/dry-run import staging, ÉCRITURE RÉELLE NON EFFECTUÉE
+
+```
+SPRINT DISTINCT, même jour, même opérateur. Contrairement à TRANSPORT-A.1-T3
+(pipeline discovery) ce sprint construit le SCRIPT D'IMPORT RÉEL
+(`scripts/school-registry/transport-a2-t3-import.ts`) et son garde-fou dédié
+(`scripts/school-registry/lib/transportA2ImportGuard.ts`, phrase de
+confirmation `IMPORT_TRANSPORT_TIER3_TO_STAGING`, distincte de toute phrase
+de promotion existante) — mais s'arrête au dry-run et aux TESTS DE REFUS
+(brief §16). AUCUNE autorisation humaine nommée explicite et distincte n'a
+été reçue ce sprint (le brief lui-même n'en constitue pas une) : 0 écriture
+`establishment_import_staging`, 0 migration DDL exécutée, vérifié en direct
+avant ET après chaque tentative de refus (voir
+`reports/registry/transport-a2-t3-guard-refusal-tests.json`, 8 scénarios en
+conditions RÉELLES d'exécution CLI, staging_count=2366 inchangé sur toute
+la séquence).
+
+REVALIDATION COMPLÈTE (§6-9 du brief), pas une simple relecture de
+TRANSPORT-A.1-T3 :
+  - Provenance (§6) : seuls 5/17 candidats ont une preuve de provenance
+    COMPLÈTE (URL + sha256 + classe source) ce sprint — EMIPAC, IT2MIP,
+    Astrale, Le Paquebot, EFO (tous avec un fichier manifeste
+    `data/registry/raw/transport-tier3-v1/manifest.json` dédié). Les 12
+    autres candidats reposent sur une citation TRANSPORT-A/TRANSPORT-A.1
+    sans snapshot/sha256 dédié à cette entrée précise (ex. 6 auto-écoles
+    partagent la même page de résultats africannuaire.com, jamais
+    snapshotée elle-même) — documenté candidat par candidat dans
+    `reports/registry/transport-a2-t3-review.csv`, jamais masqué ni
+    inventé. Conséquence : ces 12 candidats restent au minimum
+    SOURCE_REVIEW (jamais promus à une classification plus favorable sur
+    la base d'une provenance incomplète).
+  - Matching (§8) : moteur relancé À FROID contre les établissements LIVE
+    ET le STAGING existant (TRANSPORT-A.1-T3 n'avait testé que le live).
+    Résultat : METROPOLITAINE INTERNATIONALE SCES (TC-08) obtient
+    maintenant un PROBABLE_MATCH via le staging existant (contre
+    "COMPLEXE SCOLAIRE INTERNATIONALE LA GAIETE") — signal nouveau, non
+    vu en TRANSPORT-A.1-T3, documenté dans
+    `reports/registry/transport-a2-t3-matching-fresh.csv`. Totaux frais :
+    NO_MATCH=12, PROBABLE_MATCH=4, AMBIGUOUS=1, EXACT_*=0.
+  - Cross-ministère (§9) : Fleet Management Academy revérifié EN DIRECT
+    (requête staging fraîche par mots-clés) — 0 ligne MINEFOP staging
+    correspondante trouvée ce sprint (le lien MINEFOP documenté vient
+    uniquement de la source TRANSPORT-A rapportée, non re-corroboré par
+    une nouvelle source indépendante ce sprint). 0 ligne MINESUP live
+    pertinente trouvée.
+
+CLASSIFICATION AFFINÉE (§11 du brief demande 5 états distincts, plus fin
+que le bucketing à 3 catégories de TRANSPORT-A.1-T3) : SOURCE_REVIEW=12,
+DUPLICATE_REVIEW=3 (Auto École Française, EMIPAC, IT2MIP),
+IDENTITY_REVIEW=2 (METROPOLITAINE INTERNATIONALE SCES — catégorie
+d'entité incertaine ET signal de correspondance staging ; Fleet
+Management Academy — AMBIGUOUS en matching frais), CROSS_MINISTRY_REVIEW=0,
+CONFLICT_REVIEW=0. clean_approvable=0 (assertion runtime passée, §7/§11).
+Dry-run réconcilié exactement : 17/17. would_insert=17, would_skip
+(ALREADY_LIVE_REVIEW)=0.
+
+MIGRATION ENUM MINTRANSPORT (§3-4 du brief) : préparée, NON exécutée.
+Fichier exact : `supabase/migrations/0022_transport_source_ministry_enum.sql`
+(`ALTER TYPE registry_source_ministry ADD VALUE IF NOT EXISTS
+'MINTRANSPORT';` — non destructive, 0 établissement affecté, 0 ligne
+staging affectée). Cet environnement n'a pas d'accès Postgres direct
+(pas de psql/pooler exécutable depuis ce poste) — même limitation déjà
+rencontrée pour la migration 0021, qui avait dû être appliquée
+manuellement par jean-merlain via le SQL Editor du Dashboard Supabase
+(projet `umcwwynrftidytxgqkwi`). Vérification post-migration (§4) : ne
+JAMAIS supposer le succès depuis la seule sortie SQL — relancer
+`checkMintransportEnum()` (requête REST GET sur
+`establishment_import_staging?source_ministry=eq.MINTRANSPORT`, HTTP 400
+22P02 = absent, autre code = présent) et confirmer aucune ligne de test
+permanente laissée derrière.
+
+GARDE-FOU D'IMPORT (§16 du brief) — testé en conditions RÉELLES, pas
+seulement unitaires : le garde-fou refuse même une commande où TOUT le
+reste est correct (opérateur réel, approbateur distinct, count frais=17,
+checksum réel) tant que l'enum MINTRANSPORT n'est pas confirmé présent en
+direct — scénario 8 de
+`reports/registry/transport-a2-t3-guard-refusal-tests.json`. Ceci
+garantit qu'une écriture réelle est structurellement impossible tant que
+la migration §3-4 n'a pas été appliquée, indépendamment de toute
+autorisation humaine par ailleurs correcte.
+
+RAW_DATA CONTRACT (§12) : chaque ligne préparée porte
+`raw_data.transport_tier3` complet (pipeline_version, candidate_id,
+entity_family, tier3_confidence, source_count, independent_source_count,
+sources[], source_independence, matching_decision (frais),
+cross_ministry_decision, activity_status, official_corroboration_status,
+review_reason, provenance{url, sha256, complete}). IMPORTANT — écart de
+compatibilité Review Center documenté honnêtement (pas corrigé ce sprint,
+brief §20 interdit la refonte) : la classification vit sous
+`raw_data.transport_tier3.staging_classification`, PAS sous la clé
+`raw_data.classification` déjà lue par l'UI pour les lots MINSANTE — voir
+`reports/registry/transport-a2-t3-review-center-qa.json`, "smallest
+future ui change" (dupliquer la valeur au niveau racine `raw_data` au
+moment d'un futur import réel, ou étendre l'UI).
+
+IDENTIFIANTS (§13) : 0 identifiant officiel inventé, 0 ligne
+`establishment_registry_identifiers` prévue pour ce batch — y compris
+pour Fleet Management Academy, dont l'identifiant MINEFOP N°000471 réel
+(confirmé par TRANSPORT-A, pas re-vérifié indépendamment ce sprint) reste
+préservé UNIQUEMENT dans `raw_data.transport_tier3` à titre documentaire,
+jamais réécrit en `official_identifier` structuré ni en ligne
+`establishment_registry_identifiers` sans re-corroboration primaire
+fraîche.
+
+IDEMPOTENCE (§18) : identité stable prévue = `transport-tier3:v1:<candidate_id>`
+(jamais une clé floue) — un futur script d'import authentifié doit
+sauter toute ligne dont ce fingerprint existe déjà, jamais réinsérer.
+
+RAPPORTS PRODUITS CE SPRINT : `transport-a2-t3-approval.json`,
+`transport-a2-t3-dry-run.json`, `transport-a2-t3-import-summary.json`,
+`transport-a2-t3-review.csv`, `transport-a2-t3-cross-ministry.csv`,
+`transport-a2-t3-post-reconciliation.json`,
+`transport-a2-t3-review-center-qa.json`,
+`transport-a2-t3-matching-fresh.csv` (additionnel),
+`transport-a2-t3-guard-refusal-tests.json` (additionnel).
+
+DECISION (§26 du brief) : A — TIER3_STAGING_IMPORT_COMPLETE au sens
+PRÉPARATION (revalidation + dry-run + garde-fou entièrement construits et
+testés) — PAS au sens écriture réelle effectuée. READY_FOR_TRANSPORT_
+PROMOTION reste NO (inchangé).
+
+ÉCRITURE RÉELLE : PRÊTE TECHNIQUEMENT, EN ATTENTE D'AUTORISATION HUMAINE
+NOMMÉE EXPLICITE ET DISTINCTE (brief §0) — non obtenue ce sprint. Deux
+prérequis SÉPARÉS restent à lever avant toute exécution réelle :
+  1. Migration `supabase/migrations/0022_transport_source_ministry_enum.sql`
+     appliquée manuellement (Supabase Dashboard SQL Editor) et
+     re-vérifiée en direct.
+  2. Autorisation nommée explicite (ex. "Je, <nom>, autorise
+     explicitement...", sur le modèle du sprint MINSANTE-H), avec un
+     `--approved-by` distinct de l'opérateur `jean-merlain`.
+Commande exacte prévue une fois ces deux prérequis levés :
+`npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit
+--expected-count=17 --approval-checksum=<voir
+reports/registry/transport-a2-t3-approval.json> --confirm="IMPORT_TRANSPORT_TIER3_TO_STAGING"
+--operator="jean-merlain" --approved-by="<personne distincte réelle>"`.
+```

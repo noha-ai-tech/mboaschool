@@ -1,0 +1,24 @@
+-- ============================================================================
+-- 0022_transport_source_ministry_enum.sql
+--
+-- PRÉPARÉE SPRINT TRANSPORT-A.2-T3, NON EXÉCUTÉE. Ajoute UNIQUEMENT la
+-- valeur 'MINTRANSPORT' à l'enum registry_source_ministry (migration 0006).
+-- Aucune autre modification de schéma. Non destructive : ADD VALUE ne
+-- retire, ne renomme, ne modifie aucune ligne existante.
+--
+-- PRÉCÉDENT CONNU CE PROJET (migration 0021) : cet environnement ne dispose
+-- pas d'un accès Postgres direct (pas de psql/pooler exécutable depuis ce
+-- poste) — l'exécution DDL doit se faire manuellement via le SQL Editor du
+-- Dashboard Supabase (projet umcwwynrftidytxgqkwi), par jean-merlain ou une
+-- personne habilitée. Ce fichier est le contenu exact à coller/exécuter là.
+--
+-- Après exécution, vérifier en direct (jamais supposer depuis la sortie
+-- SQL seule) via une requête REST GET :
+--   GET {SUPABASE_URL}/rest/v1/establishment_import_staging?source_ministry=eq.MINTRANSPORT&select=id&limit=1
+--   -> HTTP 200 (liste vide) = enum accepté, valeur présente.
+--   -> toujours HTTP 400 22P02 = migration non appliquée ou non propagée.
+-- Voir scripts/school-registry/transport-a2-t3-prepare.ts, fonction
+-- checkMintransportEnum(), pour le même contrôle automatisé.
+-- ============================================================================
+
+ALTER TYPE registry_source_ministry ADD VALUE IF NOT EXISTS 'MINTRANSPORT';

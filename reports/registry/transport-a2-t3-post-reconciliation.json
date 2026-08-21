@@ -1,0 +1,16 @@
+{
+  "sprint": "TRANSPORT-A.2-T3",
+  "date": "2026-08-21",
+  "write_performed": false,
+  "note": "No write was performed this sprint (human authorization not obtained). This report documents the reconciliation that WOULD apply immediately after a real --commit run, computed against the current dry-run for forward reference.",
+  "would_be_inserted_rows": 17,
+  "would_be_batch_rows": 17,
+  "all_candidate_ids_accounted": true,
+  "duplicate_candidate_id_detected": false,
+  "unexpected_source_ministry": false,
+  "clean_approvable_present": false,
+  "promoted_rows": 0,
+  "promoted_establishment_id_present": false,
+  "official_id_invented": false,
+  "status": "review-oriented (no promotion, no verified=true, no owner_id) — consistent with brief §17/§19 expectations"
+}
