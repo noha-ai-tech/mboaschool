@@ -1327,3 +1327,44 @@ MINSANTE-G promotion pre-flight / human approval gate (eligible=8/8,
 duplicate_signals=0). Une autorisation humaine nommée séparée reste requise
 avant tout `--commit` — ce sprint ne l'exécute pas et ne le demande pas.
 Voir `reports/registry/minsante-g2-summary.json`.**
+
+## H — Promotion contrôlée exécutée (2026-08-21)
+
+Autorisation nommée reçue : operator=jean-merlain, approved-by=Eddy, périmètre
+= exactement les 8 candidats du snapshot `minsante-f-pilot-approval.json`
+(checksum `26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653`).
+
+Script d'exécution : `scripts/school-registry/minsante-h-promote.ts` (réutilise
+intégralement la revalidation de `minsante-g-promotion-preflight.ts` — checksum
+triple, protection de population différée, matching/inter-ministériel/
+catégorie/PII/slug/champs requis — puis exécute réellement via le garde-fou
+existant `minsanteGPromotionGuard.ts` uniquement si TOUT correspond
+exactement).
+
+**Résultat : SUCCESS, 8/8 établissements créés, 8/8 liens staging, 0
+identifiant inventé, 0 orphelin, 0 établissement existant modifié, 0
+owner_id assigné, 0 auto-vérification.**
+
+- `establishments` : 2240 → **2248**
+- `establishment_import_staging` : 2366 → 2366 (statut seul modifié sur 8
+  lignes)
+- `establishment_registry_identifiers` : 2242 → 2242 (inchangé, comme prévu
+  — aucun identifiant MINSANTE validé)
+
+Idempotence prouvée par construction : un second passage du même script avec
+les mêmes flags (`--expected-count=8`) a été **refusé fail-closed** par le
+garde-fou car `eligible` recalculé = 0 (les 8 lignes sont désormais exclues
+via `source_issue`, statut `promoted`) — ce refus EST la preuve d'idempotence,
+pas un échec. Vérification finale indépendante et exclusivement en lecture
+(`scripts/school-registry/minsante-h-final-reconciliation.ts`,
+`reports/registry/minsante-h-final-reconciliation.json`) : 8/8 lignes
+staging `status='promoted'` avec `promoted_establishment_id` valide et
+unique, 0 orphelin, 0 doublon, 13 CATEGORY_REVIEW et 1 DUPLICATE_REVIEW
+toujours différés (aucune fuite), QA publique (recherche, fiche école, page
+revendiquer) PASS sur un échantillon.
+
+Les 14 candidats différés (13 CATEGORY_REVIEW + 1 DUPLICATE_REVIEW) restent
+explicitement hors périmètre — non promus, non touchés.
+
+**MINSANTE-H CLOSED : YES. Pilote MINSANTE (région Ouest) : 8 établissements
+en production, 14 candidats différés en attente d'un futur sprint dédié.**

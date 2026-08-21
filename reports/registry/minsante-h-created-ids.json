@@ -1,0 +1,71 @@
+{
+  "generated_at": "2026-08-21T02:55:13.429Z",
+  "registry_import_batch": "minsante-pilot-v1",
+  "count": 8,
+  "establishments": [
+    {
+      "establishment_id": "18fa4aea-9d18-4528-97fe-5d9b0ca9ce2c",
+      "staging_id": "109f38dc-ff92-4fb9-9028-f2f1fb065042",
+      "name": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE BAFOUSSAM",
+      "region": "Ouest",
+      "city": "BAFOUSSAM",
+      "main_category": "autres"
+    },
+    {
+      "establishment_id": "867a6ed2-0ce5-4d50-81bf-0ddb5142a01d",
+      "staging_id": "273f8980-4983-4ae8-b3c1-8b1036dfd43d",
+      "name": "ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG",
+      "region": "Ouest",
+      "city": "BAFANG",
+      "main_category": "superieur"
+    },
+    {
+      "establishment_id": "dc9a9764-ddcf-4c53-b708-6db5d5db22a0",
+      "staging_id": "6b365ea6-5cb6-43b0-ac22-cabd3a60b8e5",
+      "name": "INSTITUT UNIVERSITAIRE ROYAL BABOUTCHA NINTCHEU (IURB) DE BAFANG",
+      "region": "Ouest",
+      "city": "BAFANG",
+      "main_category": "superieur"
+    },
+    {
+      "establishment_id": "fd9f65e4-40a0-4fe4-9271-6453cf971a40",
+      "staging_id": "79370ccb-3f09-426f-bdc7-bc6ac9055345",
+      "name": "ECOLE PRIVEE DES SCIENCES DE LA SANTE MENO DE BAMENA",
+      "region": "Ouest",
+      "city": "BAMENA",
+      "main_category": "autres"
+    },
+    {
+      "establishment_id": "488232bf-d0eb-4baf-8791-9551a287347c",
+      "staging_id": "9c4b9a28-1aa2-4fc2-baa8-48d3919758f7",
+      "name": "ECOLE PRIVEE FONDATION TCHUENTE DE BAFOUSSAM",
+      "region": "Ouest",
+      "city": "BAFOUSSAM",
+      "main_category": "autres"
+    },
+    {
+      "establishment_id": "3010c42d-94af-43c4-856b-4ad194fa18d5",
+      "staging_id": "b92dd780-b05c-4b47-aaa4-e6d0b6783778",
+      "name": "COMPLEXE PRIVE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES \"FONDATION TSOPJIO ET TAKOUDJOU\" DE DSCHANG",
+      "region": "Ouest",
+      "city": "DSCHANG",
+      "main_category": "autres"
+    },
+    {
+      "establishment_id": "e6601716-f6ec-47a2-996a-10d5eeebb407",
+      "staging_id": "ba827d94-6542-40fd-b811-a0d964a8bceb",
+      "name": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE FOUMBAN",
+      "region": "Ouest",
+      "city": "FOUMBAN",
+      "main_category": "autres"
+    },
+    {
+      "establishment_id": "d983e271-8d5f-4342-b0a5-7cf94dd54477",
+      "staging_id": "bbf4f625-3574-4bfa-b17a-278282b3bb6f",
+      "name": "INSTITUT DES SCIENCES ET TECHNIQUES MEDICO-SANITAIRES DE BAFOUSSAM",
+      "region": "Ouest",
+      "city": "BAFOUSSAM",
+      "main_category": "autres"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "generated_at": "2026-08-21T02:55:13.425Z",
+  "operator": "jean-merlain",
+  "approved_by": "Eddy",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "registry_import_batch": "minsante-pilot-v1",
+  "approval_checksum": "26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653",
+  "eligible": 8,
+  "created": 8,
+  "staging_linked": 8,
+  "identifiers_inserted": 0,
+  "establishments_before": 2240,
+  "establishments_after": 2248,
+  "staging_before": 2366,
+  "staging_after": 2366,
+  "registry_identifiers_before": 2242,
+  "registry_identifiers_after": 2242,
+  "promoted_count": 8,
+  "correctly_linked": 8,
+  "orphan_establishments": 0,
+  "audit": {
+    "createdCount": 8,
+    "stagingLinkedCount": 8,
+    "identifiersInsertedCount": 0,
+    "createdWithoutStagingLink": [],
+    "createdWithoutIdentifiers": [],
+    "orphanIdentifiers": [],
+    "outcome": "SUCCESS"
+  }
+}

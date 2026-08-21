@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-08-21T03:03:27.067Z",
+  "checksum_valid": true,
+  "eligible": 0,
+  "reval_tally": {
+    "eligible": 0,
+    "already_live": 0,
+    "conflict": 0,
+    "duplicate_signal": 0,
+    "category_changed": 0,
+    "source_issue": 8,
+    "pii_issue": 0,
+    "cross_ministry_conflict": 0,
+    "invalid": 0
+  },
+  "would_insert_establishments": 0,
+  "would_link_staging": 0,
+  "would_insert_registry_identifiers": 0,
+  "expected_establishments_after": 2248
+}

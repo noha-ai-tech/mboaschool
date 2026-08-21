@@ -1,0 +1,40 @@
+{
+  "generated_at": "2026-08-21T03:06:44.138Z",
+  "sprint": "MINSANTE-H — FINAL RECONCILIATION",
+  "read_only": true,
+  "establishments_total": 2248,
+  "registry_identifiers_total": 2242,
+  "staging_snapshot_rows_present": 8,
+  "all_promoted": true,
+  "all_have_promoted_id": true,
+  "unique_promoted_establishment_ids": 8,
+  "orphan_count": 0,
+  "duplicate_establishment_ids": false,
+  "unique_slugs": 8,
+  "wrong_batch": 0,
+  "wrong_ministry": 0,
+  "auto_owned": 0,
+  "auto_verified": 0,
+  "category_review_deferred": 13,
+  "duplicate_review_deferred": 1,
+  "total_minsante_promoted": 8,
+  "unexpectedly_promoted": 0,
+  "public_qa_sample": [
+    {
+      "id": "18fa4aea-9d18-4528-97fe-5d9b0ca9ce2c",
+      "name": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE BAFOUSSAM",
+      "slug": "ecole-des-infirmiers-diplomes-d-etat-de-bafoussam",
+      "search_found": true,
+      "school_page_status": 200,
+      "claim_page_status": 200
+    },
+    {
+      "id": "3010c42d-94af-43c4-856b-4ad194fa18d5",
+      "name": "COMPLEXE PRIVE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES \"FONDATION TSOPJIO ET TAKOUDJOU\" DE DSCHANG",
+      "slug": "complexe-prive-de-formation-des-personnels-medico-sanitaires-fondation-tsopjio-et-takoudjou-de-dschang",
+      "search_found": true,
+      "school_page_status": 200,
+      "claim_page_status": 200
+    }
+  ]
+}
