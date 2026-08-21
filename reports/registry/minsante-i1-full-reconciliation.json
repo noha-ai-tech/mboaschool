@@ -1,0 +1,267 @@
+{
+  "sprint": "MINSANTE-I.1",
+  "generated_at": "2026-08-21T14:16:32.069Z",
+  "parser_versions": {
+    "previous": "minsante-a2-pdf-coordinates@1",
+    "current": "minsante-a3-pdf-recovery@1",
+    "legacy": "minsante-a1-pdf-text@1"
+  },
+  "document_wide_order_invariant_holds": true,
+  "source_sha256_verified": true,
+  "programs": [
+    {
+      "program": "Analyses Médicales",
+      "regions_detected_in_order": [
+        "Adamaoua",
+        "Centre",
+        "Est",
+        "Extrême-Nord",
+        "Littoral",
+        "Nord",
+        "Nord-Ouest",
+        "Ouest",
+        "Sud",
+        "Sud-Ouest"
+      ],
+      "rows": 82,
+      "rows_a2_reference": 82,
+      "rows_delta": 0,
+      "numbering_status": "NUMBERED",
+      "structural_status": "CLEAN",
+      "structural_anomalies": [],
+      "authority_corroboration": "NONE_NEEDED_ALREADY_SAFE",
+      "recovery_evidence": [],
+      "verdict_minsante_i": "SAFE",
+      "verdict_minsante_i1": "SAFE",
+      "verdict_changed": false
+    },
+    {
+      "program": "Imagerie Médicale",
+      "regions_detected_in_order": [
+        "Adamaoua",
+        "Centre",
+        "Est",
+        "Extrême-Nord",
+        "Littoral",
+        "Nord",
+        "Ouest"
+      ],
+      "rows": 30,
+      "rows_a2_reference": 30,
+      "rows_delta": 0,
+      "numbering_status": "NUMBERING_ABSENT_SOURCE_DEFECT",
+      "structural_status": "CLEAN",
+      "structural_anomalies": [],
+      "authority_corroboration": "NONE_FOUND",
+      "recovery_evidence": [],
+      "verdict_minsante_i": "QUARANTINED_NUMBERING_ABSENT",
+      "verdict_minsante_i1": "QUARANTINED_NUMBERING_ABSENT",
+      "verdict_changed": false
+    },
+    {
+      "program": "Infirmiers",
+      "regions_detected_in_order": [
+        "Adamaoua",
+        "Centre",
+        "Est",
+        "Extrême-Nord",
+        "Littoral",
+        "Nord",
+        "Nord-Ouest",
+        "Ouest",
+        "Sud",
+        "Sud-Ouest"
+      ],
+      "rows": 121,
+      "rows_a2_reference": 121,
+      "rows_delta": 0,
+      "numbering_status": "NUMBERED",
+      "structural_status": "CLEAN",
+      "structural_anomalies": [],
+      "authority_corroboration": "NONE_NEEDED_ALREADY_SAFE",
+      "recovery_evidence": [],
+      "verdict_minsante_i": "SAFE",
+      "verdict_minsante_i1": "SAFE",
+      "verdict_changed": false
+    },
+    {
+      "program": "Kinésithérapie",
+      "regions_detected_in_order": [
+        "Adamaoua",
+        "Centre",
+        "Est",
+        "Extrême-Nord",
+        "Littoral",
+        "Nord",
+        "Nord-Ouest",
+        "Ouest",
+        "Sud"
+      ],
+      "rows": 45,
+      "rows_a2_reference": 45,
+      "rows_delta": 0,
+      "numbering_status": "NUMBERED",
+      "structural_status": "CLEAN",
+      "structural_anomalies": [],
+      "authority_corroboration": "NONE_NEEDED_ALREADY_SAFE",
+      "recovery_evidence": [],
+      "verdict_minsante_i": "SAFE",
+      "verdict_minsante_i1": "SAFE",
+      "verdict_changed": false
+    },
+    {
+      "program": "Odontostomatologie",
+      "regions_detected_in_order": [
+        "Adamaoua",
+        "Centre",
+        "Est",
+        "Extrême-Nord",
+        "Littoral",
+        "Nord",
+        "Nord-Ouest",
+        "Ouest",
+        "Sud-Ouest"
+      ],
+      "rows": 23,
+      "rows_a2_reference": 23,
+      "rows_delta": 0,
+      "numbering_status": "NUMBERED",
+      "structural_status": "CLEAN",
+      "structural_anomalies": [],
+      "authority_corroboration": "NONE_NEEDED_ALREADY_SAFE",
+      "recovery_evidence": [],
+      "verdict_minsante_i": "SAFE",
+      "verdict_minsante_i1": "SAFE",
+      "verdict_changed": false
+    },
+    {
+      "program": "Optique Réfraction",
+      "regions_detected_in_order": [
+        "Centre",
+        "Littoral"
+      ],
+      "rows": 4,
+      "rows_a2_reference": 4,
+      "rows_delta": 0,
+      "numbering_status": "NUMBERED",
+      "structural_status": "CLEAN",
+      "structural_anomalies": [],
+      "authority_corroboration": "NONE_NEEDED_ALREADY_SAFE",
+      "recovery_evidence": [],
+      "verdict_minsante_i": "SAFE",
+      "verdict_minsante_i1": "SAFE",
+      "verdict_changed": false
+    },
+    {
+      "program": "Prothèse Dentaire",
+      "regions_detected_in_order": [
+        "Centre",
+        "Sud"
+      ],
+      "rows": 6,
+      "rows_a2_reference": 6,
+      "rows_delta": 0,
+      "numbering_status": "NUMBERED",
+      "structural_status": "CLEAN",
+      "structural_anomalies": [],
+      "authority_corroboration": "NONE_NEEDED_ALREADY_SAFE",
+      "recovery_evidence": [],
+      "verdict_minsante_i": "SAFE",
+      "verdict_minsante_i1": "SAFE",
+      "verdict_changed": false
+    },
+    {
+      "program": "Sages-femmes/Maïeuticiens",
+      "regions_detected_in_order": [
+        "Adamaoua",
+        "Centre",
+        "Est",
+        "Extrême-Nord",
+        "Littoral",
+        "Nord",
+        "Nord-Ouest",
+        "Ouest",
+        "Sud",
+        "Sud-Ouest"
+      ],
+      "rows": 57,
+      "rows_a2_reference": 57,
+      "rows_delta": 0,
+      "numbering_status": "NUMBERED",
+      "structural_status": "CLEAN",
+      "structural_anomalies": [],
+      "authority_corroboration": "NONE_NEEDED_ALREADY_SAFE",
+      "recovery_evidence": [],
+      "verdict_minsante_i": "SAFE",
+      "verdict_minsante_i1": "SAFE",
+      "verdict_changed": false
+    },
+    {
+      "program": "Sciences Pharmaceutiques",
+      "regions_detected_in_order": [
+        "Adamaoua",
+        "Centre",
+        "Est",
+        "Extrême-Nord",
+        "Littoral",
+        "Nord-Ouest",
+        "Ouest",
+        "Sud"
+      ],
+      "rows": 32,
+      "rows_a2_reference": 32,
+      "rows_delta": 0,
+      "numbering_status": "NUMBERED",
+      "structural_status": "CLEAN",
+      "structural_anomalies": [],
+      "authority_corroboration": "INTERNAL_STRUCTURAL_RECOVERY",
+      "recovery_evidence": [
+        {
+          "method": "CORRUPTED_REGION_LABEL_RECOVERED_BY_STRUCTURE",
+          "rawLabelText": "EXTRME NORD",
+          "page": 11,
+          "x": 58.82,
+          "y": 568.39,
+          "prevRegion": "Est",
+          "nextRegion": "Littoral",
+          "recoveredRegion": "Extrême-Nord",
+          "candidateCount": 1,
+          "firstRowNumberAfterLabel": 1,
+          "residualOverlapRatio": 0.909
+        }
+      ],
+      "verdict_minsante_i": "QUARANTINED_STRUCTURE_AMBIGUOUS",
+      "verdict_minsante_i1": "SAFE",
+      "verdict_changed": true
+    },
+    {
+      "program": "Psychomotricité et Relaxation",
+      "regions_detected_in_order": [
+        "Centre",
+        "Extrême-Nord",
+        "Littoral"
+      ],
+      "rows": 3,
+      "rows_a2_reference": 3,
+      "rows_delta": 0,
+      "numbering_status": "NUMBERED",
+      "structural_status": "CLEAN",
+      "structural_anomalies": [],
+      "authority_corroboration": "NONE_NEEDED_ALREADY_SAFE",
+      "recovery_evidence": [],
+      "verdict_minsante_i": "SAFE",
+      "verdict_minsante_i1": "SAFE",
+      "verdict_changed": false
+    }
+  ],
+  "summary": {
+    "safe_count_minsante_i": 8,
+    "safe_count_minsante_i1": 9,
+    "still_quarantined": [
+      {
+        "program": "Imagerie Médicale",
+        "verdict": "QUARANTINED_NUMBERING_ABSENT"
+      }
+    ]
+  }
+}

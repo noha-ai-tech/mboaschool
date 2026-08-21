@@ -1,0 +1,12 @@
+{
+  "sprint": "MINSANTE-I.1",
+  "generated_at": "2026-08-21T14:00:28.792Z",
+  "establishments_before": 2248,
+  "establishments_after": 2248,
+  "staging_before": 2366,
+  "staging_after": 2366,
+  "registry_identifiers_before": 2242,
+  "registry_identifiers_after": 2242,
+  "unchanged": true,
+  "production_writes": 0
+}

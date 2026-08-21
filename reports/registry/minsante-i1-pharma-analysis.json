@@ -1,0 +1,48 @@
+{
+  "sprint": "MINSANTE-I.1",
+  "generated_at": "2026-08-21T14:14:25.520Z",
+  "program": "Sciences Pharmaceutiques",
+  "source_sha256": "26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a",
+  "section_bounds": {
+    "method": "Découpage EXACT par index d'item global.",
+    "startIdxExclusive": 2186,
+    "endIdxExclusive": 2386,
+    "startPage": 10,
+    "endPage": 11
+  },
+  "corrupted_glyph_isolation": {
+    "to_unicode_mapping_present": "NON_DÉTERMINÉ_DIRECTEMENT — pdf.js n'expose pas le CMap ToUnicode brut via l'API publique getTextContent(); voir low_level_signal ci-dessous pour le signal indirect observé.",
+    "low_level_signal": "Un warning pdf.js de bas niveau 'TT: undefined function' (compteur 32) est émis lors du chargement du document — cohérent avec une table de fonction TrueType défectueuse pour au moins un glyphe de la police embarquée, mais ce warning est global au document (pas isolé à ce seul item) ; il corrobore, sans le prouver isolément, qu'il s'agit d'un défaut de police du PDF source plutôt que d'un artefact de notre pipeline d'extraction.",
+    "context_before": [],
+    "context_after": []
+  },
+  "is_font_wide_or_isolated": {
+    "hyphen_glyph_works_elsewhere_in_same_font": "OUI — le même font_name interne (g_d0_f5) peint correctement le caractère '-' séparément dans 'NORD-OUEST' et 'SUD-OUEST' au sein de la MÊME section Sciences Pharmaceutiques (voir label_items_ordered). Le défaut n'est donc PAS un bris global de la police, mais localisé à CE run de texte précis.",
+    "classification": "A — caractère (È/Ê) mal décodé/absent dans un run de texte isolé, mais l'identité de la région reste structurellement déterminable (voir recovery_evidence) ; PAS (B) une perte totale de la frontière structurelle."
+  },
+  "recovery_evidence": {
+    "parser_version_used": "minsante-a3-pdf-recovery@1",
+    "method": "CORRUPTED_REGION_LABEL_RECOVERED_BY_STRUCTURE",
+    "conditions_evaluated": [
+      "1. Source SHA256 vérifié == attendu (26e68ab0…3946a) : OUI — sinon récupération désactivée (voir test I).",
+      "2. Invariant d'ordre alphabétique canonique des régions validé SANS EXCEPTION sur les 8 autres filières SAFE du MÊME document, dans CETTE exécution (jamais câblé en dur) : OUI, 0 violation observée.",
+      "3. Étiquette non reconnue strictement entre deux étiquettes reconnues (Est, Littoral) avec EXACTEMENT un candidat canonique dans l'intervalle (Extrême-Nord) : OUI.",
+      "4. La toute première ligne numérotée suivant l'étiquette redémarre exactement à '1.' (signal indépendant du texte de l'étiquette elle-même) : OUI — 'INSTITUT DE FORMATION EN SANTE DE MAROUA' est numérotée '1.', suivie de '2. INSTITUT DE FORMATION EN SANTE DU SAHEL IFOSSA DE MOKOLO'.",
+      "5. Garde-fou de similarité résiduelle (recouvrement multi-ensemble de lettres, générique, pas une égalité de chaîne câblée) entre le texte brut corrompu et le nom de la région candidate ≥ 0.75 : OUI, ratio observé = 0.909 (10/11 lettres de 'EXTREMENORD' présentes dans 'EXTRMENORD')."
+    ],
+    "region_boundary_determination": "Frontière EST/EXTRÊME-NORD déterminée sans ambiguïté : EST se termine avec exactement 1 école ('1. INSTITUT PRIVE FANG DE MESSAMENA', numérotation confirmée par le redémarrage à 1 immédiatement après). EXTRÊME-NORD (récupérée) compte exactement 2 écoles, numérotées 1 et 2 sans lacune, avant l'étiquette LITTORAL suivante. Avant récupération (A.2), ces 2 écoles étaient silencieusement mal attribuées à EST (3 lignes au lieu de 1, numérotation cassée [1,1,2] ≠ [1,2,3]) — la cause exacte de l'anomalie NUMBERING_GAP historique de MINSANTE-I est donc désormais expliquée mécaniquement, pas seulement corrigée.",
+    "non_semantic_confirmation_note": "Observation post-hoc (PAS utilisée comme base de la décision, uniquement comme confirmation de vraisemblance) : les deux écoles récupérées sous Extrême-Nord sont situées à Maroua et Mokolo — deux villes de la région Extrême-Nord du Cameroun — cohérent avec la région déterminée par corroboration structurelle.",
+    "recovered_row_count": 2,
+    "est_row_count_after_recovery": 1
+  },
+  "document_wide_invariant_check": {
+    "regions_detected_in_order_all_10_programs": "Voir minsante-i1-full-reconciliation.json — validé indépendamment : les 8 filières SAFE (hors Imagerie/Pharma) présentent TOUJOURS leurs régions détectées dans l'ordre alphabétique canonique exact (Adamaoua < Centre < Est < Extrême-Nord < Littoral < Nord < Nord-Ouest < Ouest < Sud < Sud-Ouest), sans une seule exception sur 8 sections indépendantes, avant même la récupération."
+  },
+  "alternative_official_source": {
+    "searched": true,
+    "found": false,
+    "note": "Voir minsante-i1-source-corroboration.json — aucune source Tier 1/2 indépendante trouvée pour Sciences Pharmaceutiques ; non nécessaire ici, la récupération repose entièrement sur la corroboration structurelle interne au document, jamais sur une source externe."
+  },
+  "verdict": "SAFE",
+  "verdict_basis": "La corruption du glyphe est un défaut de police LOCALISÉ (un seul run de texte), pas une perte structurelle : la frontière de région est démontrée de façon déterministe par corroboration structurelle interne (position + numérotation), avec un garde-fou de similarité textuelle générique en confirmation secondaire — jamais une comparaison de chaîne câblée en dur. Recovery liée explicitement au SHA256 exact du document (désactivée sur toute autre source)."
+}

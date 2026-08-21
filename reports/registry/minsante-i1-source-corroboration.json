@@ -1,0 +1,76 @@
+{
+  "sprint": "MINSANTE-I.1",
+  "generated_at": "2026-08-21T00:00:00.000Z",
+  "note": "Recherche READ-ONLY (web search + web fetch) d'une source officielle alternative pour Imagerie Médicale et Sciences Pharmaceutiques, conformément à la hiérarchie Tier 1/2/3 du brief §4/§8. Aucun fichier téléchargé n'est utilisé pour une écriture DB ; recherche uniquement.",
+  "authority_tiers_defined": {
+    "TIER_1": "minsante.cm et sous-domaines (*.minsante.cm), concours.minsante.cm, document officiel MINSANTE, décision/arrêté du même référentiel.",
+    "TIER_2": "Site institutionnel directement vérifiable, autre organisme public camerounais.",
+    "TIER_3": "Presse/portails privés — discovery uniquement, jamais suffisant seul pour rendre une filière SAFE."
+  },
+  "domain_authority_nuance": {
+    "primary_source_domain": "examen-national-special-minsante.cm",
+    "observation": "Ce domaine N'EST PAS un sous-domaine de minsante.cm (nom de domaine distinct contenant 'minsante' dans son libellé, pas *.minsante.cm). C'est pourquoi MINSANTE-A/I l'a classé PROBABLE_TIER_1 (probable, jamais confirmé TIER_1 strict) plutôt que TIER_1 pur — ce sprint n'a trouvé aucun élément permettant de lever cette réserve, et ne l'a pas non plus dégradée (authority_upgraded_this_sprint=false, cohérent avec MINSANTE-I).",
+    "cross_check": "Le portail confirme lui-même être lié au ministère (liens vers 'www.minsante.gov.cm' sur ses pages), mais aucune page minsante.cm officielle trouvée durant cette recherche ne référence ni ne republie ce document PDF précis — l'attribution reste donc non confirmée de façon indépendante par le domaine officiel du ministère."
+  },
+  "sources_investigated": [
+    {
+      "url": "https://concours.minsante.cm/",
+      "tier": "TIER_1",
+      "date_checked": "2026-08-21",
+      "result": "Aucune liste, décision ou arrêté d'écoles agréées trouvé sur cette page (contenu : procédure de concours, communiqué, dossier, contact).",
+      "relevant_to_imagerie": false,
+      "relevant_to_pharma": false
+    },
+    {
+      "url": "https://examen-national-special-minsante.cm/info/resultats",
+      "tier": "PROBABLE_TIER_1 (même domaine que la source pinnée)",
+      "date_checked": "2026-08-21",
+      "result": "Confirme le lien de téléchargement de 'Liste des écoles agrées MINSANTE 2025' en français ET anglais — LES DEUX POINTENT VERS EXACTEMENT LE MÊME CHEMIN ENCODÉ (identique octet pour octet à la source pinnée SHA256=26e68ab0…3946a). PAS un second document indépendant — la bascule de langue ne change pas le fichier. Un document distinct existe aussi sur cette page : 'Résultats définitifs' (DCS-0018_10_01_25_RESULTATS_DEFINITIFS_EXAMEN_APTITUDE.pdf) — CE N'EST PAS la liste des écoles agréées mais les résultats de l'examen d'aptitude (population de CANDIDATS, risque PII élevé — NOMS PERSONNELS PROBABLES). Ce fichier N'A PAS été téléchargé ni analysé (hors périmètre, §14 PII=0).",
+      "relevant_to_imagerie": false,
+      "relevant_to_pharma": false
+    },
+    {
+      "url": "https://www.minsante.cm/site/?q=en/node/4328",
+      "tier": "TIER_1",
+      "date_checked": "2026-08-21",
+      "result": "Article de 2022 sur les innovations du concours d'entrée médico-sanitaire — hors sujet (pas 2025), aucun lien vers la liste 2025.",
+      "relevant_to_imagerie": false,
+      "relevant_to_pharma": false
+    },
+    {
+      "url": "https://www.minsante.cm/site/?q=fr/documentation/t%C3%A9l%C3%A9chargement",
+      "tier": "TIER_1",
+      "date_checked": "2026-08-21",
+      "result": "Page de téléchargements officielle MINSANTE consultée — ne contient AUCUN arrêté, décision, ni liste d'écoles agréées 2025 (contenu observé : résultats concours 2017, arrêtés de districts sanitaires 2026, rapports MPOX, CAMPHIA). Aucune trace de la liste des écoles agréées 2025 sur le portail officiel du ministère lui-même.",
+      "relevant_to_imagerie": false,
+      "relevant_to_pharma": false
+    },
+    {
+      "url": "https://www.cameroondesks.com/2025/01/liste-des-ecoles-de-formation-medico-sanitaires-agreees-par-le-minsante.html",
+      "tier": "TIER_3",
+      "date_checked": "2026-08-21",
+      "result": "Article de blog (janvier 2025) annonçant la publication MINSANTE et renvoyant vers un mirroir Google Drive (https://drive.google.com/file/d/1UWuvvO4Ndhy7nv2sw7sY6ZN02AamD8C5/view). Le contenu détaillé par filière n'est PAS reproduit sur la page elle-même. Le mirroir Google Drive n'a pas été téléchargé (fichier tiers non vérifiable comme authentique/officiel, hébergement non institutionnel, provenance non confirmée — un téléchargement n'aurait de toute façon pas pu, seul, faire passer une filière en SAFE per la règle Tier 3).",
+      "relevant_to_imagerie": "discovery lead uniquement, non exploité",
+      "relevant_to_pharma": "discovery lead uniquement, non exploité"
+    },
+    {
+      "url": "https://infosconcourseducation.com/liste-des-ecoles-de-formation-medico-sanitaire-agreees-du-minsante-2025/",
+      "tier": "TIER_3",
+      "date_checked": "2026-08-21",
+      "result": "Portail listé dans les résultats de recherche, référence la même annonce MINSANTE 2025 sans reproduire le détail par filière dans les extraits examinés.",
+      "relevant_to_imagerie": "discovery lead uniquement, non exploité",
+      "relevant_to_pharma": "discovery lead uniquement, non exploité"
+    }
+  ],
+  "explicit_total_count_search": {
+    "method": "Recherche exhaustive des tokens 'total', 'effectif', 'nombre' (insensible à la casse) dans le texte extrait des 11 pages du PDF source pinné (SHA256 vérifié avant recherche).",
+    "matches_found": 0,
+    "conclusion": "Aucune déclaration explicite de nombre total d'écoles, par filière ou globalement, n'existe nulle part dans le document source lui-même."
+  },
+  "second_independent_official_document_search": {
+    "found": false,
+    "conclusion": "Aucun second document officiel MINSANTE donnant la même population (écoles agréées 2025 par filière) n'a été localisé. La bascule FR/EN du portail source repointe vers le fichier identique."
+  },
+  "conclusion_imagerie": "Aucune source Tier 1 ou Tier 2 alternative trouvée. Seuls des leads Tier 3 (mirroirs/annonces) existent, insuffisants par construction pour lever la quarantaine. Le défaut de complétude d'Imagerie Médicale reste donc entièrement dépendant d'une preuve interne au document, qui n'existe pas (voir minsante-i1-imagerie-analysis.json) — verdict SOURCE_DEFECT_UNRESOLVED confirmé, aucune source externe ne permet de le lever ce sprint.",
+  "conclusion_pharma": "Aucune source externe n'a été nécessaire ni utilisée pour Sciences Pharmaceutiques : la récupération est entièrement fondée sur une corroboration structurelle INTERNE au document pinné (voir minsante-i1-pharma-analysis.json), ce qui est le résultat le plus robuste possible (indépendant de la fiabilité d'un tiers)."
+}

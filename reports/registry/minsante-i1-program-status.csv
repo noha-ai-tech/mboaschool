@@ -1,0 +1,11 @@
+program,verdict_minsante_i,verdict_minsante_i1,delta,row_count,numbering_mode,structural_anomaly_count,recovery_applied
+Analyses Médicales,SAFE,SAFE,UNCHANGED,82,NUMBERED,0,
+Imagerie Médicale,QUARANTINED_NUMBERING_ABSENT,QUARANTINED_NUMBERING_ABSENT,UNCHANGED,30,NUMBERING_ABSENT_SOURCE_DEFECT,0,
+Infirmiers,SAFE,SAFE,UNCHANGED,121,NUMBERED,0,
+Kinésithérapie,SAFE,SAFE,UNCHANGED,45,NUMBERED,0,
+Odontostomatologie,SAFE,SAFE,UNCHANGED,23,NUMBERED,0,
+Optique Réfraction,SAFE,SAFE,UNCHANGED,4,NUMBERED,0,
+Prothèse Dentaire,SAFE,SAFE,UNCHANGED,6,NUMBERED,0,
+Sages-femmes/Maïeuticiens,SAFE,SAFE,UNCHANGED,57,NUMBERED,0,
+Sciences Pharmaceutiques,QUARANTINED_STRUCTURE_AMBIGUOUS,SAFE,CHANGED,32,NUMBERED,0,EXTRME NORD->Extrême-Nord
+Psychomotricité et Relaxation,SAFE,SAFE,UNCHANGED,3,NUMBERED,0,

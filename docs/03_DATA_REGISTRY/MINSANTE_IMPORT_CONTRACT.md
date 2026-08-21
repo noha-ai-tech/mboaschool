@@ -1592,3 +1592,217 @@ nationale) tant que 10/10 n'est pas atteint.
 **MINSANTE-I : national_extraction_ready = NO. Push = NO. Deploy = NO.
 Aucun import national en staging. Aucune promotion. MINSANTE-H reste le
 pilote production validé, inchangé.**
+
+## I.1 — Source defect recovery : Imagerie Médicale + Sciences Pharmaceutiques (2026-08-21)
+
+Sprint **READ-ONLY strict**, périmètre strictement limité aux 2 filières
+restées en quarantaine après MINSANTE-I. Objectif : déterminer si ces deux
+défauts sont résolubles par **corroboration structurelle/source**, jamais en
+forçant le parseur. Rien d'acquis en MINSANTE-I n'a été refait (PDF stable,
+A.2 inchangé, 8 filières SAFE, legacy 293/293, pilote 22/22, matching G.2).
+
+Baseline revérifiée fraîchement avant et après (deux lectures Supabase
+indépendantes, une par script d'exécution) : `establishments`=2248,
+`establishment_import_staging`=2366,
+`establishment_registry_identifiers`=2242 — **identiques avant/après, 0
+écriture production**. SHA256 source recalculé = identique à la valeur
+épinglée (`26e68ab0…3946a`), `SOURCE_STABLE`.
+
+### Imagerie Médicale — revalidation native, verdict inchangé
+
+Découpage EXACT par index d'item de flux (borne = item `FILIERE : ...`
+suivant), pas par page entière — une page peut être partagée entre deux
+filières (ex. Imagerie se termine et Infirmiers commence tous deux page 4) ;
+un découpage par page aurait faussement attribué les lignes numérotées
+d'Infirmiers à Imagerie lors de l'investigation forensique de ce sprint
+(bug piégé et corrigé avant toute conclusion, voir
+`scripts/school-registry/minsante-i1-forensics.ts`).
+
+Avec ce découpage exact, revalidation multi-niveaux :
+- **Texte** : 0 item contenant un chiffre dans la section exacte, hormis le
+  marqueur de pied de page ("Page 4 sur 11"), hors tableau.
+- **Opérateurs de contenu** (`page.getOperatorList()`) : `showText` =
+  `beginText` = `endText` sur toutes les pages concernées (aucune perte
+  d'extraction) ; `paintImageXObject`=0 et `paintFormXObjectBegin`=0 sur
+  **tout le document** (pas seulement Imagerie) — aucune image ni Form
+  XObject n'est utilisé nulle part dans ce PDF, ce qui exclut
+  catégoriquement l'hypothèse "numéro peint comme graphique".
+- **Annotations** : 0 sur les pages concernées.
+- **Arbre de structure taggé** (`page.getStructTree()`) : rôles
+  `Table`/`TR`/`TH`/`TD`/`P` présents ; les rôles `L`/`LI`/`LBody` (liste
+  numérotée, typiques d'un éditeur type Word/LibreOffice) sont quasi
+  absents de la portion propre à Imagerie comparée aux filières numérotées
+  voisines — signal indicatif, pas une preuve isolée.
+
+**Conclusion : les numéros sont réellement ABSENTS du flux peint, pas
+seulement encodés autrement.** OCR non utilisé (§3 du brief — analyse
+native concluante, pas besoin d'y recourir).
+
+**Recherche de source alternative** (`concours.minsante.cm`, portail
+`minsante.cm` — page téléchargements officielle inspectée directement, page
+d'accueil/résultats du portail source) : **aucune source Tier 1/2
+indépendante trouvée**. La bascule français/anglais du portail source
+repointe vers EXACTEMENT le même fichier encodé (pas un second document).
+Seuls des leads Tier 3 (mirroirs de blogs) existent, insuffisants par
+construction (§4 — jamais suffisants seuls). Détail complet :
+`reports/registry/minsante-i1-source-corroboration.json`.
+
+**Recherche de complétude sans numérotation** : recherche exhaustive des
+tokens "total"/"effectif"/"nombre" sur les 11 pages du document — **0
+occurrence**. Aucun second document officiel, aucune liste alternative
+numérotée. Le fait que l'heuristique de séparation de lignes (écart Y) ait
+été validée sans erreur sur les 8 filières SAFE (numérotation source comme
+vérité terrain) donne une confiance **méthodologique dans l'outil**, mais ne
+constitue **pas un invariant officiel issu de la source elle-même** — le
+seuil de preuve exigé par ce sprint. "On voit ~30 écoles et ça semble
+correct" n'est explicitement pas une preuve recevable.
+
+**Verdict : `SOURCE_DEFECT_UNRESOLVED`** (inchangé par rapport à
+MINSANTE-I). Une validation documentaire humaine directe (arrêté signé ou
+décompte officiel communiqué par le MINSANTE) pourrait raisonnablement
+résoudre ce défaut — ce n'est pas un problème de parsing, mais de preuve de
+complétude. Détail complet : `reports/registry/minsante-i1-imagerie-analysis.json`.
+
+### Sciences Pharmaceutiques — récupération par corroboration structurelle
+
+**Isolation du glyphe corrompu** : page 11, item unique `"EXTRME NORD"`
+(police interne pdf.js `g_d0_f5`), coordonnées x=58.82 y=568.39. Le même
+`fontName` peint correctement le caractère `-` ailleurs dans la même
+section ("NORD-OUEST", "SUD-OUEST") — **le défaut n'est PAS un bris global
+de police**, seulement localisé à ce run de texte précis (classification A
+du brief : caractère mal décodé, identité de région structurellement
+déterminable — pas une perte totale de frontière).
+
+**Corroboration structurelle, deux signaux indépendants, tous deux
+recalculés à l'exécution (jamais câblés en dur)** :
+1. **Ordre alphabétique canonique des régions** — validé **sans une seule
+   exception** sur les 8 autres filières SAFE de ce document, dans cette
+   exécution même. Entre les étiquettes reconnues "Est" et "Littoral", il
+   existe **exactement un** candidat canonique dans l'intervalle :
+   Extrême-Nord.
+2. **Redémarrage de numérotation à 1** immédiatement après l'étiquette
+   corrompue (signal indépendant du texte de l'étiquette elle-même) : "1.
+   Institut de Formation en Santé de Maroua", "2. Institut de Formation en
+   Santé du Sahel Ifossa de Mokolo" — confirmant une VRAIE nouvelle
+   frontière de région, pas une continuation d'Est.
+
+Garde-fou secondaire (générique, jamais une égalité de chaîne câblée en
+dur) : recouvrement multi-ensemble de lettres entre le texte brut corrompu
+et le nom de la région candidate ≥ 0.75 — observé 0.909. Frontière
+EST/EXTRÊME-NORD déterminée sans ambiguïté : Est = 1 école, Extrême-Nord
+(récupérée) = 2 écoles, numérotées 1 et 2 sans lacune. Avant récupération,
+ces 2 écoles étaient silencieusement mal attribuées à Est (numérotation
+cassée [1,1,2]) — l'anomalie `NUMBERING_GAP` de MINSANTE-I est donc
+désormais expliquée mécaniquement. Observation post-hoc de confirmation
+(jamais utilisée comme base de la décision) : les deux écoles récupérées
+sont à Maroua et Mokolo, deux villes de la région Extrême-Nord.
+
+Aucune source externe n'a été nécessaire pour cette filière — la
+récupération est entièrement fondée sur des invariants internes au document
+pinné. Détail complet : `reports/registry/minsante-i1-pharma-analysis.json`.
+
+**Verdict : `SAFE`.**
+
+### Nouveau parseur versionné : `minsante-a3-pdf-recovery@1`
+
+`minsante-a2-pdf-coordinates@1` **n'a subi aucune modification** (fichier
+`pdfMinsanteA2.ts` intact, aucun de ses appelants existants changé).
+`minsante-a3-pdf-recovery@1` vit dans un nouveau fichier autonome
+(`lib/extraction/pdfMinsanteA3.ts`, duplique volontairement les fonctions
+internes non exportées d'A.2 plutôt que de coupler les deux fichiers) et
+ajoute **une seule capacité** : `CORRUPTED_REGION_LABEL_RECOVERED_BY_STRUCTURE`,
+activée seulement si **toutes** ces conditions sont réunies :
+
+1. SHA256 de la source réellement chargée == SHA256 attendu (sinon
+   récupération désactivée pour tout le document — fail-closed, testé).
+2. Ordre alphabétique canonique des régions validé sans exception sur tout
+   le reste du document, dans l'exécution courante (jamais une hypothèse
+   câblée en dur — recalculé à chaque run).
+3. Étiquette non reconnue strictement entre deux étiquettes reconnues, avec
+   EXACTEMENT un candidat canonique dans l'intervalle.
+4. La toute première ligne numérotée après l'étiquette redémarre à 1.
+5. Garde-fou de similarité résiduelle générique (recouvrement multi-ensemble
+   de lettres ≥ 0.75) entre le texte brut et le nom candidat.
+
+Si une seule condition échoue, la section reste
+`QUARANTINED_STRUCTURE_AMBIGUOUS` exactement comme en A.2 — ce module ne
+peut que **retirer** des anomalies déjà présentes, jamais en introduire de
+nouvelles ni changer un verdict SAFE existant.
+
+### Tests (`lib/extraction/__tests__/pdfMinsanteA3.test.ts`, 16 tests, A-O)
+
+Matrice complète, y compris : Imagerie inchangée (A), isolation/évidence de
+récupération (D), récupération correcte + cas d'échec (0 candidat, ≥2
+candidats) (E), frontière de région après récupération (F), redémarrage de
+numérotation comme condition positive/négative (G), généricité — la
+récupération fonctionne sur une corruption synthétique **différente** du
+texte réel du sprint, et un garde-fou bloque une correspondance purement
+positionnelle sans aucun résidu textuel (H), SHA256 incorrect ET invariant
+document-wide violé désactivent la récupération (I), déterminisme (J),
+équivalence A.2≡A.3 en l'absence d'étiquette corrompue — généralise la
+non-régression des 8 filières SAFE (K'), PII=0 (O). Les points B/C/K/L/M/N
+de la matrice du brief, intrinsèquement liés au PDF réel ou à Supabase, sont
+couverts par les scripts d'exécution READ-ONLY (`minsante-i1-forensics.ts`,
+`minsante-i1-run.ts`) plutôt que par des fixtures synthétiques — voir
+l'en-tête du fichier de test pour le mapping exact. **229/229 tests
+existants + nouveaux passent, 0 régression** (`npx tsx --test` sur
+l'ensemble du paquet `scripts/school-registry`).
+
+### Re-run complet 10/10
+
+| Filière | Verdict MINSANTE-I | Verdict MINSANTE-I.1 | Delta |
+|---|---|---|---|
+| Analyses Médicales | SAFE | SAFE | inchangé |
+| Infirmiers | SAFE | SAFE | inchangé |
+| Kinésithérapie | SAFE | SAFE | inchangé |
+| Odontostomatologie | SAFE | SAFE | inchangé |
+| Optique Réfraction | SAFE | SAFE | inchangé |
+| Prothèse Dentaire | SAFE | SAFE | inchangé |
+| Sages-femmes/Maïeuticiens | SAFE | SAFE | inchangé |
+| Psychomotricité et Relaxation | SAFE | SAFE | inchangé |
+| **Sciences Pharmaceutiques** | QUARANTINED_STRUCTURE_AMBIGUOUS | **SAFE** | **récupérée** |
+| Imagerie Médicale | QUARANTINED_NUMBERING_ABSENT | QUARANTINED_NUMBERING_ABSENT | inchangé |
+
+**9/10 SAFE** (8→9). Les 8 filières précédemment SAFE restent **byte-identiques**
+entre A.2 et A.3 (vérifié programmatiquement, pas supposé). Sous-ensemble
+legacy (6 filières historiques, 293 lignes) inchangé. Détail complet :
+`reports/registry/minsante-i1-full-reconciliation.json`,
+`reports/registry/minsante-i1-program-status.csv`.
+
+Comme 10/10 n'est **pas** atteint, aucun dataset national n'a été calculé ni
+produit (§12 du brief — ne jamais produire un fichier qui pourrait être pris
+pour un dataset national approuvé).
+
+### Régression pilote
+
+22/22 lignes pilote retrouvées, **8/8 promus récupérés, 14/14 différés
+récupérés, 0 conflit d'identité, 0 doublon d'identité introduit** — vérifié
+contre la sortie A.3 (donc contre les lignes reclassées de Sciences
+Pharmaceutiques). Les 8 établissements promus lors de MINSANTE-H n'ont pas
+été touchés. Détail : `reports/registry/minsante-i1-pilot-regression.json`.
+
+### PII
+
+0 correspondance sur le sous-ensemble récupéré de Sciences Pharmaceutiques
+— vérifié programmatiquement (`piiScan`).
+
+### Décision
+
+**B — SOURCE_DEFECT_REMAINS.** Sciences Pharmaceutiques est désormais
+`SAFE` par corroboration structurelle interne, sans avoir eu besoin d'une
+source externe — le résultat le plus robuste possible. Imagerie Médicale
+reste `SOURCE_DEFECT_UNRESOLVED` : ce blocage précis correspond à la
+définition de la section C du brief (`ALTERNATE_OFFICIAL_SOURCE_REQUIRED` —
+le PDF 2025 est intrinsèquement insuffisant pour prouver la complétude de
+cette filière, aucune preuve interne n'existe ni ne peut exister par
+construction), mais **aucune source alternative Tier 1/2 n'a pu être
+localisée** ce sprint pour la fournir — d'où la décision formelle B (au
+moins une filière reste impossible à prouver ce sprint), avec cette
+nuance C explicitement documentée. Prochaine étape recommandée : validation
+documentaire humaine directe auprès du MINSANTE, pas un nouveau sprint
+d'extraction automatisée sur cette filière précise.
+
+**MINSANTE-I.1 : national_extraction_ready = NO. READY FOR MINSANTE-J = NO.
+Push = NO. Deploy = NO. Aucun import national en staging. Aucune promotion.
+Aucune modification des 8 établissements MINSANTE déjà live. MINSANTE-H
+reste le pilote production validé, inchangé.**

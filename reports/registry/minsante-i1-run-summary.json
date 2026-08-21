@@ -1,0 +1,71 @@
+{
+  "sprint": "MINSANTE-I.1",
+  "generated_at": "2026-08-21T14:16:32.069Z",
+  "repository": {
+    "branch": "main",
+    "commit_reference": "c69984e (HEAD au démarrage du sprint)"
+  },
+  "database": {
+    "establishments_before": 2248,
+    "establishments_after": 2248,
+    "staging_before": 2366,
+    "staging_after": 2366,
+    "registry_identifiers_before": 2242,
+    "registry_identifiers_after": 2242,
+    "unchanged": true,
+    "production_writes": 0
+  },
+  "source": {
+    "url": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+    "expected_sha256": "26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a",
+    "actual_sha256": "26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a",
+    "source_status": "SOURCE_STABLE",
+    "authority": "PROBABLE_TIER_1",
+    "pdf_byte_length": 0
+  },
+  "extraction": {
+    "parser_version": "minsante-a3-pdf-recovery@1",
+    "programs_safe": [
+      "Analyses Médicales",
+      "Infirmiers",
+      "Kinésithérapie",
+      "Odontostomatologie",
+      "Optique Réfraction",
+      "Prothèse Dentaire",
+      "Sages-femmes/Maïeuticiens",
+      "Sciences Pharmaceutiques",
+      "Psychomotricité et Relaxation"
+    ],
+    "programs_quarantined": [
+      "Imagerie Médicale"
+    ],
+    "quarantined_detail": [
+      {
+        "program": "Imagerie Médicale",
+        "verdict": "QUARANTINED_NUMBERING_ABSENT"
+      }
+    ],
+    "total_rows_all_programs": 403,
+    "document_wide_order_invariant_holds": true
+  },
+  "legacy_regression": {
+    "six_programs_unchanged": true
+  },
+  "eight_previously_safe_unchanged": true,
+  "pilot_regression": {
+    "recovered": 22,
+    "promoted_recovered": 8,
+    "deferred_recovered": 14,
+    "identity_conflicts": 0,
+    "pass": true
+  },
+  "pii": {
+    "persisted_matches": 0
+  },
+  "decision": "B",
+  "national_extraction_ready": false,
+  "ready_for_minsante_j": false,
+  "recommended_next_step": "Imagerie Médicale reste QUARANTINED_NUMBERING_ABSENT (SOURCE_DEFECT_UNRESOLVED) — aucune preuve interne de complétude possible (voir minsante-i1-imagerie-analysis.json). Ce blocage est de la nature décrite en section C du brief (ALTERNATE_OFFICIAL_SOURCE_REQUIRED : le PDF 2025 est intrinsèquement insuffisant pour cette filière) mais aucune source alternative Tier 1/2 n'a été localisée ce sprint (voir minsante-i1-source-corroboration.json). Prochaine étape recommandée : validation documentaire humaine directe auprès du MINSANTE (décompte officiel ou arrêté signé) avant tout nouveau sprint d'extraction automatisée sur cette filière. Sciences Pharmaceutiques est désormais SAFE (9/10).",
+  "push": "NO",
+  "deploy": "NO"
+}
