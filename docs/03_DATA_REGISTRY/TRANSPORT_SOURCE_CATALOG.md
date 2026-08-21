@@ -1,5 +1,21 @@
 # Transport Source Catalog
 
+## Addendum TRANSPORT-A.1 (2026-08-21) — mis à jour après ce sprint, voir en bas de fichier
+
+Un second sprint READ-ONLY (TRANSPORT-A.1, même jour) a repris cette
+recherche avec un outillage PDF récupéré et une recherche élargie. Voir
+la section **« TRANSPORT-A.1 — Addendum »** tout en bas de ce fichier
+pour le détail complet. Résumé : toujours AUCUNE source nominative
+officielle trouvée (CAM-TVET définitivement écarté comme hors-périmètre
+transport, lien mort confirmé irrécupérable via Wayback Machine,
+TRANSTAT MINT 2025 confirmé agrégat pur grâce à une extraction PDF
+désormais réussie), mais 10 noms réels d'auto-écoles/institutions
+maritime/aviation identifiés via annuaires privés et sites institutionnels
+tiers (Tier 3, jamais gouvernemental) — voir
+`reports/registry/transport-a1-*.{json,csv}`.
+
+---
+
 SPRINT TRANSPORT-A, 2026-08-21. Opérateur : jean-merlain. READ-ONLY —
 découverte et audit de sources uniquement, aucun import, aucune écriture
 staging, aucune promotion, aucun pilote lancé. Toutes les pages
@@ -430,3 +446,165 @@ lien mort (Source A), soit par limite technique d'extraction PDF/JS
 (Sources D et H). Voir `TRANSPORT_IMPORT_CONTRACT.md` §20 pour la
 recommandation de pilote (aucun ce sprint) et §23 pour la décision
 finale.
+
+---
+
+## TRANSPORT-A.1 — Addendum (2026-08-21, même opérateur, sprint READ-ONLY distinct)
+
+Reprise de la recherche avec (1) un outil d'extraction PDF texte natif
+désormais disponible et (2) une recherche élargie sur 8 familles de
+sources. AUCUNE écriture staging/promotion/pilote. Voir
+`reports/registry/transport-a1-source-search.json` pour le détail
+complet et `reports/registry/transport-a1-run-summary.json` pour la
+synthèse chiffrée.
+
+### Outillage PDF — RÉCUPÉRÉ
+
+`pdftotext` (poppler 4.00) est en réalité déjà disponible nativement
+via l'installation Git for Windows (`C:\Program Files\Git\mingw64\bin\
+pdftotext.exe`) — contrairement à la conclusion de TRANSPORT-A
+("poppler absent de l'environnement"). `pdfjs-dist` est également déjà
+présent dans `scripts/school-registry/node_modules`. Deux des PDF
+identifiés en TRANSPORT-A ont été relus avec succès (extraction
+déterministe, `pdftotext -layout`, JAMAIS un résumé IA) :
+
+- **TRANSTAT MINT 2025** (118 pages, SHA256
+  `dc608374b54f8631a283dcedf3e58f7f679c196c77bf89ec8602b588f8b1f977`) :
+  confirme que le "Graphique 14 : Auto-écoles nouvellement créées par
+  sexe, 2018-2022" est un **AGRÉGAT STATISTIQUE PUR** ("en moyenne,
+  environ 50 nouvelles auto-écoles sont créées chaque année") — AUCUN
+  nom d'établissement, AUCUN identifiant, ZÉRO occurrence de "DTT"
+  dans tout le document. Source des données citée pour ce graphique :
+  **"DTR"**, pas "DTT" — divergence d'acronyme non résolue (DTT =
+  Direction des Transports Terrestres selon l'Arrêté 2000 ; DTR
+  pourrait être une renomination "Direction des Transports Routiers"
+  ou une direction distincte — à clarifier dans un futur sprint, ne
+  pas supposer). Excerpt brut conservé dans
+  `data/registry/raw/transport-a1/transtat-mint-2025-autoecoles-excerpt.txt`.
+- **decret-n-2023-434-du-04-10-2023.pdf** : hors périmètre transport —
+  concerne l'organisation des Écoles Normales d'Instituteurs
+  (MINESEC), document mal classé ou hébergé pour une raison non
+  déterminée sous le dossier PDF du MINT.
+
+Le dossier `/images/Permis/<date>/<région>/<ville>.pdf` (résultats
+probables d'examen du permis) n'a délibérément PAS été testé même avec
+l'outil désormais disponible — risque PII (candidats nommés) non
+évalué, politique inchangée depuis TRANSPORT-A/MINEFOP-A.1.
+
+### Lien mort — DÉFINITIVEMENT NON RÉCUPÉRABLE
+
+Vérification via l'API Wayback Machine (`archive.org/wayback/
+available`, hôte `archive.org` — `web.archive.org` lui-même est
+inaccessible aux outils de ce sprint) : **AUCUN snapshot archivé**
+n'existe ni pour l'URL exacte
+(`mintransports.net/en/liste-des-auto-ecoles-appelees-a-regulariser-
+leur-situation/`) ni pour le domaine racine `mintransports.net`. Aucune
+page équivalente trouvée sur `mintransports.cm`. Conclusion upgradée
+depuis TRANSPORT-A : ce n'est plus "non tenté", c'est **confirmé
+irrécupérable** par toute méthode légitime disponible ce sprint.
+
+### CAM-TVET — DÉFINITIVEMENT HORS PÉRIMÈTRE TRANSPORT
+
+Investigation complète : la plateforme CAM-TVET
+(traininginformation.cm) est opérée par **PADESCE**, qui déclare
+explicitement les tutelles couvertes : *"Ces différentes offres de
+formation sont dispensées par des structures sous tutelles du
+MINEFOP, du MINESEC, du MINADER, du MINEPIA, du MINPROFF et du
+MINJEC"* — **le MINT est absent de cette liste**. Un sous-domaine
+`cncq-cameroun.traininginformation.cm` expose une structure PHP
+(`carto_certification_detail_view.php?id=N`) mais concerne des fiches
+de certification MINESEC (vérifié : CAP "Producteur de Volaille",
+sans rapport transport). Conclusion : NON APPLICABLE, pas seulement
+"techniquement bloqué" comme conclu en TRANSPORT-A — même avec un
+accès JavaScript complet, cette plateforme ne couvrirait pas le
+secteur transport par construction.
+
+### Nouveaux sous-domaines MINT identifiés
+
+`ssdtmint.cm` (services dématérialisés, confirmé actif — inclut
+"autorisation auto-école" comme catégorie de document mais AUCUNE
+fonction de recherche/liste publique), `badge.mintransports.cm`,
+`cloud.mintransports.cm` (Nextcloud, lien "résultats d'examen" repéré
+mais NON ouvert — risque PII), `concours.mintransports.cm`,
+`mail.mintransports.cm` (sert aussi des PDF institutionnels).
+
+### Auto-écoles — 10 noms réels trouvés (Tier 3, jamais gouvernemental)
+
+Recherche élargie sur les 8 familles de sources du brief §7 — toutes
+épuisées sans trouver de liste OFFICIELLE. En revanche, un annuaire
+privé (`africannuaire.com`, éditeur SPHM Editions) et deux sites
+individuels d'auto-écoles ont livré **10 noms réels** (AUTO ECOLE
+ASTRALE/FRANCAISE/GERMANIA/LEO/TRECY/TURBO/TURBO NKOMKANA à Yaoundé et
+Douala, AUTO ECOLE MONTHE, AUTO ECOLE "Apprendre & Aimer la
+Conduite"), couvrant seulement 2 des 10 régions (Centre, Littoral).
+AUCUN identifiant d'agrément trouvé pour aucune d'entre elles. Détail
+complet avec provenance :
+`reports/registry/transport-a1-autoecoles-sources.csv` et
+`data/registry/normalized/transport-a1/discovery-institutions.json`.
+
+**Garde-fou méthodologique important** : un premier résumé WebSearch
+avait affirmé l'existence d'un identifiant
+"Decision N° 000083/D/MINT/SG/DTR/SDPSR/SFCAM DU 05 MARS 2019" —
+vérification directe de l'article source (237online.com) : ce numéro
+**n'apparaît nulle part** dans le texte réel. Fabrication de la couche
+de synthèse, REJETÉE et non utilisée. Documenté dans
+`reports/registry/transport-a1-identifier-sample.csv` comme exemple de
+vigilance requise.
+
+### Maritime — 4 institutions Tier 3 + 2 signaux MINESUP (spécialité, pas institut dédié)
+
+EMIPAC, IT2MIP (revendique une tutelle MINEFOP sur son propre site,
+non corroborée), Centre "Le Paquebot", Centre d'Instruction Maritime
+et Portuaire — toutes Tier 3, aucune corroboration MINT/DAMVN
+officielle. Par ailleurs, deux IPES déjà présents dans les données
+MINESUP collectées (`data/registry/raw/minesup-national-v1/
+detail-139.html` = IUEs, `detail-080.html` = IUTESSA) proposent
+"Technologies de la marine marchande" comme **une spécialité parmi
+plusieurs** au sein d'une filière Génie mécanique et productique — ce
+N'EST PAS un institut maritime dédié, à ne jamais confondre avec les 4
+institutions ci-dessus. Ni IUEs ni IUTESSA ne sont actuellement promus
+en `establishments` (vérifié live, 0 résultat). Détail :
+`reports/registry/transport-a1-maritime-sources.csv`.
+
+### Aviation — CCAA ne publie aucune liste ATO nominative
+
+Page directe `ccaa.aero/.../organisme-de-formation` testée : HTTP 404.
+Aucune liste d'organismes de formation aéronautique agréés publiée
+publiquement. Deux institutions réelles documentées : **EFO**
+(école propre du régulateur CCAA, Yaoundé + centre Douala — statut
+admission public/interne toujours non tranché) et **IRDSM Aviation**
+(organisme privé, Yaoundé + Douala, conformité CCAA auto-déclarée sur
+son propre site, non confirmée sur une liste officielle). Détail :
+`reports/registry/transport-a1-aviation-sources.csv`.
+
+### Échantillon de matching exécuté (§12 du brief, ≥10 institutions réelles trouvées)
+
+`scripts/school-registry/transport-a1-matching-sample.ts` — 10
+candidats (5 auto-écoles / 2 maritime / 2 aviation / 1
+transport-logistique) testés en lecture seule contre les 2248
+établissements live. Résultat : `STRONG_MATCH`=1, `PROBABLE_MATCH`=4,
+`AMBIGUOUS`=3, `NO_MATCH`=2, **`safeForAutoLink`=0 partout** (aucune
+fusion automatique). Finding notable : **AUTO ECOLE LEO** (Yaoundé)
+produit un `STRONG_MATCH` (100% chevauchement) contre la fiche seed
+"Auto-École La Route Sûre" (Yaoundé) — signal de faux-positif potentiel
+car le token "auto" n'est PAS dans `FUZZY_STOPWORDS` du moteur de
+matching partagé (seul "école" l'est). Confirme concrètement le risque
+déjà anticipé au §12 de `TRANSPORT_IMPORT_CONTRACT.md`. Moteur NON
+modifié ce sprint (read-only) — recommandation à traiter avant tout
+futur pilote réel. Rapport complet :
+`reports/registry/transport-a1-matching-sample.csv`.
+
+### Conclusion TRANSPORT-A.1
+
+Malgré un outillage PDF récupéré et une recherche sensiblement plus
+large que TRANSPORT-A, **aucune source gouvernementale nominative
+n'a été trouvée**. Les gains de ce sprint sont : (1) la confirmation
+DÉFINITIVE (pas juste probable) que TRANSTAT MINT 2025 est un agrégat
+pur et que le lien mort est irrécupérable, (2) l'exclusion DÉFINITIVE
+de CAM-TVET du périmètre transport, (3) 10 noms réels d'auto-écoles et
+6 noms réels d'institutions maritime/aviation supplémentaires
+(Tier 3), (4) une preuve concrète d'un risque de faux-positif dans le
+moteur de matching partagé. DÉCISION : **C — sources discovery/agrégat
+uniquement, TRANSPORT DEFERRED**. Voir
+`reports/registry/transport-a1-run-summary.json` pour le détail
+chiffré complet.

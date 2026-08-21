@@ -461,3 +461,81 @@ spécifique nécessaire : traçabilité absolue de la source (jamais nulle),
 `(registry, identifier_type, identifier)`, matching engine partagé, revue
 humaine obligatoire avant toute écriture `establishments`.
 ```
+
+## 18. Addendum TRANSPORT-A.1 (2026-08-21) — mêmes conclusions structurelles, nouvelles preuves
+
+```
+SPRINT DISTINCT, même jour, même opérateur, toujours READ-ONLY. Aucune
+conclusion structurelle de ce contrat n'est invalidée — au contraire,
+plusieurs sont maintenant confirmées avec des preuves plus fortes
+plutôt que par déduction. Détail complet dans
+TRANSPORT_SOURCE_CATALOG.md §"TRANSPORT-A.1 — Addendum" et
+reports/registry/transport-a1-run-summary.json.
+
+PILOT_POSSIBLE : NON (inchangé) — toujours aucune source nominative
+officielle bornée. Les deux candidats que §14 identifiait comme
+"bloqués par limite technique plutôt que par absence de source" sont
+maintenant CLOS négativement de façon définitive plutôt que laissés
+ouverts :
+  (a) Liste auto-écoles mintransports.cm/.net : confirmé irrécupérable
+      (API Wayback Machine interrogée, zéro snapshot pour le domaine
+      squatté ou l'URL exacte).
+  (b) CAM-TVET/traininginformation.cm : confirmé HORS PÉRIMÈTRE
+      transport par déclaration officielle de son opérateur PADESCE
+      (tutelles couvertes = MINEFOP/MINESEC/MINADER/MINEPIA/MINPROFF/
+      MINJEC, MINT absent) — ce n'était donc pas un problème de rendu
+      JavaScript comme supposé, mais un problème de périmètre.
+  Aucun troisième candidat de pilote n'a émergé ce sprint malgré une
+  recherche élargie sur 8 familles de sources (§7 du brief) — TRANTAT
+  MINT 2025 (annuaire), désormais lisible grâce à un outil pdftotext
+  disponible nativement (poppler 4.00 bundlé avec Git for Windows),
+  est CONFIRMÉ comme agrégat statistique pur ("~50 auto-écoles créées/
+  an"), pas une liste nominative — fermant définitivement cette piste
+  également.
+
+TAXONOMY — précision supplémentaire (§5 inchangé dans son mécanisme,
+affiné dans son application) :
+  - Auto-écoles : 'autres' + sub_category='Auto-école' — inchangé.
+  - Maritime : les institutions Tier 3 réellement trouvées (EMIPAC,
+    IT2MIP, Le Paquebot, Centre d'Instruction Maritime et Portuaire)
+    admettent des candidats dès le niveau CEP (IT2MIP) — PAS
+    uniformément post-bac. `education_family`='vocational_training'
+    est donc plus probable que 'higher_education' pour CES
+    institutions spécifiquement, au cas par cas — à ne jamais déduire
+    par principe. À NE PAS CONFONDRE avec IUEs/IUTESSA (MINESUP), qui
+    sont des IPES d'ingénierie généralistes offrant "Technologies de
+    la marine marchande" comme UNE spécialité parmi plusieurs — ces
+    deux-là restent 'higher_education'/'superieur' au niveau de
+    L'INSTITUTION ENTIÈRE, pas à cause de cette seule spécialité. La
+    distinction filière-vs-institution doit être préservée dans tout
+    futur modèle de données, jamais aplatie.
+  - Aviation : toujours non tranché (admission EFO ambiguë, IRDSM
+    probablement 'vocational_training' — formations courtes
+    métier/sécurité, non confirmé formellement).
+
+MATCHING ENGINE — finding concret (pas seulement anticipé) :
+  L'échantillon de test (§13 ci-dessous, exécuté ce sprint) a produit
+  un STRONG_MATCH (100% chevauchement) entre "AUTO ECOLE LEO" (nom
+  Tier 3 réel, Yaoundé) et la fiche seed déjà en production
+  "Auto-École La Route Sûre" (Yaoundé) — alors que ce sont deux
+  institutions manifestement différentes. Cause : le token "auto"
+  n'est PAS dans `FUZZY_STOPWORDS` de lib/matching/engine.ts (seul
+  "école"/"ecole" y figure). RECOMMANDATION pour un futur sprint de
+  collecte réelle (NON appliquée ce sprint, moteur inchangé par
+  politique read-only) : évaluer l'ajout de "auto" au vocabulaire
+  générique/WEAK_GENERIC avant tout pilote auto-écoles, sous peine de
+  générer des STRONG_MATCH non fiables entre auto-écoles sans rapport
+  partageant juste la même ville. `safeForAutoLink` est resté à 0 sur
+  tout l'échantillon (10/10) — aucune fusion automatique n'aurait eu
+  lieu même sans cette correction, donc AUCUN risque de promotion
+  incorrecte ce sprint (read-only de toute façon), mais le signal doit
+  être traité avant TRANSPORT-B si jamais lancé.
+
+Échantillon complet exécuté :
+scripts/school-registry/transport-a1-matching-sample.ts (réutilise
+lib/matching/engine.ts SANS AUCUNE MODIFICATION, conforme à §12
+ci-dessus) → reports/registry/transport-a1-matching-sample.csv.
+
+DECISION (§22 du brief) : C — sources discovery/agrégat uniquement,
+TRANSPORT DEFERRED. READY_FOR_TRANSPORT_B : NO.
+```

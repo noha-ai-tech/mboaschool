@@ -1,0 +1,39 @@
+{
+  "sprint": "TRANSPORT-A.1",
+  "date": "2026-08-21",
+  "operator": "jean-merlain",
+  "note": "AUCUNE liste nominative officielle n'a été trouvée ce sprint. Ce dossier contient (a) les deux seuls documents PDF officiels MINT extraits DÉTERMINISTIQUEMENT ce sprint (pdftotext, pas un résumé IA), et (b) un manifeste de provenance pour les noms d'institutions Tier 3 (discovery/annuaire privé) repris dans data/registry/normalized/transport-a1/discovery-institutions.json. AUCUN de ces documents/noms n'est une source gouvernementale nominative officielle exploitable pour un pilote.",
+  "official_pdf_documents_extracted": [
+    {
+      "source_url": "https://mintransports.cm/images/news/pdfs/8368812b20a3de079c5a52ba2aea30f1-TRANSTAT-MINT-2025-FR-Ok.pdf",
+      "fetch_timestamp": "2026-08-21T12:26:00Z",
+      "sha256": "dc608374b54f8631a283dcedf3e58f7f679c196c77bf89ec8602b588f8b1f977",
+      "parser": "pdftotext (poppler 4.00, Git for Windows) -layout",
+      "parser_version": "poppler-4.00",
+      "authority": "MINT (Ministère des Transports)",
+      "operator": "MINT",
+      "pages": 118,
+      "size_bytes": 7573935,
+      "content_type": "Annuaire statistique national - AGRÉGAT UNIQUEMENT, aucun nom d'établissement",
+      "excerpt_file": "transtat-mint-2025-autoecoles-excerpt.txt"
+    },
+    {
+      "source_url": "https://mintransports.cm/images/news/pdfs/05c836ecf580d847769d86570a028ace-decret-n-2023-434-du-04-10-2023.pdf",
+      "fetch_timestamp": "2026-08-21T12:30:00Z",
+      "sha256": "e8a8f91de5152ebc1d769801ee63691cbc9980adfdbe988327198247ae460b6c",
+      "parser": "pdftotext (poppler 4.00, Git for Windows) -layout",
+      "parser_version": "poppler-4.00",
+      "authority": "Présidence de la République (décret), hébergé sur mintransports.cm",
+      "operator": "MINT (hébergement, contenu hors périmètre)",
+      "content_type": "HORS PÉRIMÈTRE TRANSPORT - décret sur les Écoles Normales d'Instituteurs (MINESEC), pas un texte transport malgré son hébergement sous le dossier PDF du MINT",
+      "excerpt_file": null
+    }
+  ],
+  "discovery_tier3_sources_consulted": [
+    { "source_url": "https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun", "fetch_timestamp": "2026-08-21", "operator": "SPHM Editions (privé)", "authority": "AUCUNE - annuaire commercial privé", "yield": "8 noms d'auto-écoles + ville + téléphone (téléphones exclus des rapports par politique PII)" },
+    { "source_url": "https://maritimafrica.com/ecole-maritime-industrielle-et-portuaire-de-lafrique-centrale-emipac-cameroun/", "fetch_timestamp": "2026-08-21", "operator": "Maritimafrica (média privé)", "authority": "AUCUNE", "yield": "1 institution maritime (EMIPAC)" },
+    { "source_url": "https://kamerpower.com/fr/institut-des-technologies-de-la-marine-marchande-et-industrie-portuaire-it2mip-douala/", "fetch_timestamp": "2026-08-21", "operator": "Kamerpower (média privé)", "authority": "AUCUNE (MINEFOP auto-déclaré par IT2MIP lui-même)", "yield": "1 institution maritime (IT2MIP)" },
+    { "source_url": "http://groupe-dsm.net/aviation/", "fetch_timestamp": "2026-08-21", "operator": "Groupe DSM (privé)", "authority": "AUCUNE (CCAA auto-déclarée)", "yield": "1 institution aviation (IRDSM Aviation)" },
+    { "source_url": "https://www.ccaa.aero/index.php/fr/", "fetch_timestamp": "2026-08-21", "operator": "CCAA (officiel)", "authority": "CCAA", "yield": "1 institution aviation (EFO, école propre du régulateur)" }
+  ]
+}

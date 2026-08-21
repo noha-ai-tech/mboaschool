@@ -1,0 +1,29 @@
+{
+  "sprint": "TRANSPORT-A.1",
+  "date": "2026-08-21",
+  "status": "DISCOVERY ONLY - AUCUNE institution ci-dessous n'est issue d'une source gouvernementale nominative officielle. NE JAMAIS utiliser cette liste pour staging/import/promotion sans corroboration officielle préalable.",
+  "pii_persisted": 0,
+  "institutions": [
+    { "name": "AUTO ECOLE ASTRALE", "city": "Yaoundé", "region": "Centre", "family": "autoecole", "tier": 3, "source": "africannuaire.com" },
+    { "name": "AUTO ECOLE FRANCAISE", "city": "Douala", "region": "Littoral", "family": "autoecole", "tier": 3, "source": "africannuaire.com" },
+    { "name": "AUTO ECOLE GERMANIA", "city": "Douala", "region": "Littoral", "family": "autoecole", "tier": 3, "source": "africannuaire.com" },
+    { "name": "AUTO ECOLE LEO", "city": "Yaoundé", "region": "Centre", "family": "autoecole", "tier": 3, "source": "africannuaire.com" },
+    { "name": "AUTO ECOLE TRECY", "city": "Yaoundé", "region": "Centre", "family": "autoecole", "tier": 3, "source": "africannuaire.com" },
+    { "name": "AUTO ECOLE TURBO", "city": "Yaoundé", "region": "Centre", "family": "autoecole", "tier": 3, "source": "africannuaire.com" },
+    { "name": "AUTO ECOLE TURBO NKOMKANA", "city": "Yaoundé", "region": "Centre", "family": "autoecole", "tier": 3, "source": "africannuaire.com" },
+    { "name": "METROPOLITAINE INTERNATIONALE SCES", "city": "Yaoundé", "region": "Centre", "family": "autoecole (catégorie incertaine)", "tier": 3, "source": "africannuaire.com" },
+    { "name": "AUTO ECOLE MONTHE", "city": null, "region": null, "family": "autoecole", "tier": 3, "source": "site propre (Google Sites)" },
+    { "name": "AUTO ECOLE APPRENDRE & AIMER LA CONDUITE", "city": null, "region": null, "family": "autoecole", "tier": 3, "source": "road-safety-charter.ec.europa.eu" },
+    { "name": "EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale)", "city": "Douala", "region": "Littoral", "family": "maritime", "tier": 3, "source": "maritimafrica.com" },
+    { "name": "IT2MIP (Institut des Technologies de la Marine Marchande et Industrie Portuaire)", "city": "Douala", "region": "Littoral", "family": "maritime", "tier": 3, "source": "kamerpower.com", "cross_ministry_signal": "MINEFOP (auto-déclaré, non corroboré)" },
+    { "name": "Centre de formation professionnelle maritime « Le Paquebot »", "city": "Douala", "region": "Littoral", "family": "maritime", "tier": 3, "source": "reporté depuis TRANSPORT-A" },
+    { "name": "Centre d'Instruction Maritime et Portuaire", "city": null, "region": null, "family": "maritime", "tier": 3, "source": "reporté depuis TRANSPORT-A" },
+    { "name": "École de Formation (EFO) - CCAA", "city": "Yaoundé", "region": "Centre", "family": "aviation", "tier": 2, "source": "ccaa.aero (officiel)" },
+    { "name": "IRDSM Aviation", "city": "Yaoundé", "region": "Centre", "family": "aviation", "tier": 3, "source": "groupe-dsm.net/aviation" },
+    { "name": "Fleet Management Academy", "city": null, "region": null, "family": "transport-logistique", "tier": 2, "source": "reporté depuis TRANSPORT-A", "identifier": "MINEFOP N°000471 (19-09-2022)", "cross_ministry_signal": "MINEFOP" }
+  ],
+  "not_included_but_relevant": [
+    { "name": "Institut Universitaire et Stratégique de l'Estuaire (IUEs)", "reason": "Déjà collecté côté MINESUP (data/registry/raw/minesup-national-v1/detail-139.html) - une SPÉCIALITÉ 'marine marchande' parmi plusieurs, pas un institut maritime dédié - ne pas dupliquer" },
+    { "name": "Institut Universitaire de Technologie et des Sciences du Sahel (IUTESSA)", "reason": "Idem - data/registry/raw/minesup-national-v1/detail-080.html" }
+  ]
+}

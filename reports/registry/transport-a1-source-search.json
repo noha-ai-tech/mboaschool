@@ -1,0 +1,128 @@
+{
+  "sprint": "TRANSPORT-A.1",
+  "date": "2026-08-21",
+  "operator": "jean-merlain",
+  "read_only": true,
+  "production_writes": 0,
+  "methodology_note": "Toutes les pages ont été consultées par WebFetch/WebSearch bruts. Un cas de fabrication a été détecté et rejeté (voir autoecoles.identifier_hallucination_caught ci-dessous) — jamais un résumé IA pris comme extraction primaire pour compter des lignes ou inventer un identifiant.",
+  "mint_portal_recovery": {
+    "robots_txt": "HTTP 404 — absent",
+    "sitemap_xml": "HTTP 404 — absent",
+    "cms": "Joomla (confirmé — chemins /templates/mint/, /components/, /modules/)",
+    "subdomains_discovered": [
+      { "subdomain": "ssdtmint.cm", "purpose": "Services dématérialisés (permis, cartes grises, cartes bleues, autorisations transport) — confirmé actif, INCLUT 'autorisation auto-école' comme catégorie de document mais AUCUNE fonction de recherche/liste publique trouvée" },
+      { "subdomain": "badge.mintransports.cm", "purpose": "Badges professionnels — non approfondi, hors périmètre auto-école" },
+      { "subdomain": "cloud.mintransports.cm", "purpose": "Instance Nextcloud, lien vers 'résultats d'examen' repéré dans un menu — NON OUVERT, risque PII (résultats nominatifs candidats), cohérent avec la politique déjà appliquée au dossier /images/Permis/" },
+      { "subdomain": "concours.mintransports.cm", "purpose": "Plateforme de concours (recrutement), non pertinent auto-école" },
+      { "subdomain": "mail.mintransports.cm", "purpose": "Sert aussi des PDF institutionnels (ex. Plan d'Action National de Sécurité Routière 2025-2030) — même famille de contenu que /images/news/pdfs/" }
+    ],
+    "auto_ecole_page_found": false,
+    "conclusion": "Aucune page/liste d'auto-écoles localisée malgré recherche approfondie (site:, sous-domaines, PDF repositories). Portail actif et légitime, mais la liste elle-même reste introuvable ce sprint."
+  },
+  "dead_link_recovery": {
+    "original_url": "https://mintransports.net/en/liste-des-auto-ecoles-appelees-a-regulariser-leur-situation/",
+    "status": "HTTP 404 (domaine squatté, reconfirmé)",
+    "wayback_machine_check": {
+      "method": "archive.org/wayback/available API (host archive.org, distinct de web.archive.org qui est bloqué pour cet outil)",
+      "result_exact_url": "archived_snapshots: {} — AUCUN snapshot",
+      "result_root_domain_2021": "archived_snapshots: {} — AUCUN snapshot pour mintransports.net toutes dates confondues testées",
+      "conclusion": "Aucune copie archivée officielle ou mirroir gouvernemental trouvé par méthode légitime. Le lien est DÉFINITIVEMENT NON RÉCUPÉRABLE avec les outils disponibles ce sprint — pas seulement 'non tenté' comme en TRANSPORT-A."
+    },
+    "equivalent_url_on_cm_domain": "NON trouvé — aucune page équivalente localisée sur mintransports.cm"
+  },
+  "pdf_tooling_recovery": {
+    "status": "RÉCUPÉRÉ — pdftotext (poppler, version 4.00) disponible via C:\\Program Files\\Git\\mingw64\\bin\\pdftotext.exe, bundlé avec Git for Windows déjà installé sur la machine. pdfjs-dist également présent dans scripts/school-registry/node_modules (déjà utilisé par les parseurs MINSANTE).",
+    "contradicts_transport_a": "TRANSPORT-A affirmait 'pdftotext/poppler absent de l'environnement' — FAUX ce sprint, l'outil est disponible nativement, pas besoin d'installation.",
+    "tested_documents": [
+      {
+        "file": "TRANSTAT-MINT-2025-FR-Ok.pdf",
+        "size_mb": 7.2,
+        "pages": 118,
+        "extraction": "RÉUSSIE (deterministic, pdftotext -layout, 6389 lignes)",
+        "finding": "Graphique 14 'Auto-écoles nouvellement créées par sexe, 2018-2022' confirmé — AGRÉGAT STATISTIQUE UNIQUEMENT ('En moyenne, environ 50 nouvelles auto-écoles sont créées chaque année'), AUCUN nom d'établissement, AUCUN identifiant, zéro occurrence de 'DTT'. Source des données citée : 'DTR' (pas 'DTT') — DIVERGENCE D'ACRONYME NON RÉSOLUE à noter pour un futur sprint (DTT = Direction des Transports Terrestres selon l'Arrêté 2000 ; DTR pourrait être une renomination en 'Direction des Transports Routiers' ou une direction distincte — non tranché ce sprint)."
+      },
+      {
+        "file": "decret-n-2023-434-du-04-10-2023.pdf",
+        "extraction": "RÉUSSIE (deterministic, pdftotext -layout)",
+        "finding": "Décret HORS PÉRIMÈTRE TRANSPORT — concerne l'organisation des Écoles Normales d'Instituteurs (MINESEC), pas les auto-écoles ni le transport. Document mal classé ou hébergé pour une raison non déterminée sous le dossier PDF du MINT — négatif, mais résolu (avant ce sprint son contenu était juste 'illisible')."
+      }
+    ],
+    "not_attempted_deliberately": {
+      "files": "/images/Permis/<date>/<région>/<ville>.pdf (ex. LIMBE 25-01-2025.pdf)",
+      "reason": "Risque PII élevé non évalué (probable résultats nominatifs de session d'examen du permis de conduire) — décision délibérée de ne PAS tenter l'extraction même avec l'outil désormais disponible, politique inchangée depuis TRANSPORT-A/MINEFOP-A.1 Source H."
+    }
+  },
+  "cam_tvet_investigation": {
+    "operator": "PADESCE (confirmé via padesce.cm, annonce officielle de la plateforme)",
+    "ministries_covered": ["MINEFOP", "MINESEC", "MINADER", "MINEPIA", "MINPROFF", "MINJEC"],
+    "mint_covered": false,
+    "quote": "Ces différentes offres de formation sont dispensées par des structures sous tutelles du MINEFOP, du MINESEC, du MINADER, du MINEPIA, du MINPROFF et du MINJEC",
+    "backend_structure_observed": "Sous-domaine cncq-cameroun.traininginformation.cm expose des vues PHP (ex. carto_certification_detail_view.php?id=87) — vérifié : fiche de certification CAP 'Producteur de Volaille' délivrée par MINESEC, sans rapport avec le transport.",
+    "conclusion": "NON APPLICABLE au secteur transport — confirmé définitivement (MINT absent de la liste officielle des tutelles couvertes par la plateforme). Conclusion plus forte que TRANSPORT-A ('inconnu, bloqué par rendu JS') : ici le problème n'est pas technique, c'est un problème de PÉRIMÈTRE — même avec un accès JS complet, cette plateforme ne couvrirait pas MINT."
+  },
+  "autoecoles": {
+    "source_families_searched": {
+      "A_mint_dtt": "Épuisé — portail actif, aucune liste trouvée (voir mint_portal_recovery)",
+      "B_regional_delegations": "osidimbea.cm (encyclopédie privée) donne l'organigramme de la Délégation Régionale des Transports du Centre (10 délégations départementales nommées) — AUCUNE liste d'auto-écoles, uniquement noms de responsables (NON collectés, hors périmètre)",
+      "C_legal_annexes": "Aucune nouvelle annexe trouvée au-delà de l'Arrêté 2000 déjà connu",
+      "D_road_safety_campaigns": "Recherche 'CNSR Cameroun' renvoie majoritairement des résultats FRANÇAIS (Conseil National de Sécurité Routière, France) — faux positifs écartés. Aucun organe camerounais équivalent avec liste publique trouvé.",
+      "E_driving_test_administration": "ssdtmint.cm inspecté en détail — service dématérialisé incluant 'autorisation auto-école' comme catégorie de document, mais AUCUNE fonction de recherche/vérification publique d'établissement",
+      "F_permit_portals": "Identique à E (même plateforme ssdtmint.cm)",
+      "G_municipal_publications": "Aucune trouvée ce sprint",
+      "H_statistical_directories": "TRANSTAT MINT 2025 confirmé AGRÉGAT UNIQUEMENT (voir pdf_tooling_recovery) — ne contient aucun nom"
+    },
+    "real_names_found": [
+      { "name": "AUTO ECOLE ASTRALE", "city": "Yaoundé", "region": "Centre", "source": "africannuaire.com", "tier": 3 },
+      { "name": "AUTO ECOLE FRANCAISE", "city": "Douala", "region": "Littoral", "source": "africannuaire.com", "tier": 3 },
+      { "name": "AUTO ECOLE GERMANIA", "city": "Douala", "region": "Littoral", "source": "africannuaire.com", "tier": 3 },
+      { "name": "AUTO ECOLE LEO", "city": "Yaoundé", "region": "Centre", "source": "africannuaire.com", "tier": 3 },
+      { "name": "AUTO ECOLE TRECY", "city": "Yaoundé", "region": "Centre", "source": "africannuaire.com", "tier": 3 },
+      { "name": "AUTO ECOLE TURBO", "city": "Yaoundé", "region": "Centre", "source": "africannuaire.com", "tier": 3 },
+      { "name": "AUTO ECOLE TURBO NKOMKANA", "city": "Yaoundé", "region": "Centre", "source": "africannuaire.com", "tier": 3 },
+      { "name": "METROPOLITAINE INTERNATIONALE SCES", "city": "Yaoundé", "region": "Centre", "source": "africannuaire.com", "tier": 3, "note": "Catégorie incertaine — répertoriée sous la rubrique 'Auto-écoles' du site mais le nom ne comporte pas 'auto-école'; NON assimilée sans vérification" },
+      { "name": "AUTO ECOLE MONTHE", "city": "non confirmée", "region": null, "source": "site propre Google Sites", "tier": 3 },
+      { "name": "AUTO ECOLE APPRENDRE & AIMER LA CONDUITE", "city": "non confirmée", "region": null, "source": "road-safety-charter.ec.europa.eu (plateforme UE, profil individuel)", "tier": 3 }
+    ],
+    "regions_covered": ["Centre", "Littoral"],
+    "regions_missing": ["Adamaoua", "Est", "Extrême-Nord", "Nord", "Nord-Ouest", "Ouest", "Sud", "Sud-Ouest"],
+    "nominative_official_source_found": false,
+    "identifier_hallucination_caught": {
+      "description": "Un premier passage WebSearch a produit un résumé synthétique affirmant l'existence de 'Decision N° 000083/D/MINT/SG/DTR/SDPSR/SFCAM DU 05 MARS 2019' comme exemple d'agrément auto-école, attribué à l'article 237online.com.",
+      "verification": "L'article source a été relu directement via WebFetch — CE NUMÉRO N'APPARAÎT NULLE PART dans le texte réel de l'article, qui ne cite que 'l'arrêté du 28 avril 2000' et ne nomme aucune auto-école. Le numéro de décision a été FABRIQUÉ par la couche de synthèse du résultat de recherche.",
+      "action_taken": "REJETÉ — non utilisé, non persisté nulle part dans ce rapport ni dans transport-a1-identifier-sample.csv. Documenté explicitement comme garde-fou méthodologique pour de futurs sprints (conforme à l'interdit absolu du brief §12 : ne jamais inventer/accepter un identifiant non vérifié à la source primaire)."
+    }
+  },
+  "maritime": {
+    "authority": "DAMVN (Direction des Affaires Maritimes et des Voies Navigables), MINT",
+    "institutions_found": [
+      { "name": "EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale)", "city": "Douala", "type": "TRAINING_ESTABLISHMENT", "authority_corroboration": "Aucune trouvée (MINT/DAMVN)", "source": "maritimafrica.com", "tier": 3 },
+      { "name": "IT2MIP (Institut des Technologies de la Marine Marchande et Industrie Portuaire)", "city": "Douala", "type": "TRAINING_ESTABLISHMENT", "authority_corroboration": "MINEFOP revendiqué par le site propre de l'institut, NON vérifié dans un registre MINEFOP consultable ce sprint", "source": "kamerpower.com", "tier": 3 },
+      { "name": "Centre de formation professionnelle maritime « Le Paquebot »", "city": "Douala", "type": "TRAINING_ESTABLISHMENT", "authority_corroboration": "Aucune", "source": "reporté depuis TRANSPORT-A", "tier": 3 },
+      { "name": "Centre d'Instruction Maritime et Portuaire", "city": "non précisée", "type": "TRAINING_ESTABLISHMENT", "authority_corroboration": "Cité comme conforme aux standards OMI, non officiel MINT/DAMVN", "source": "reporté depuis TRANSPORT-A", "tier": 3 }
+    ],
+    "minesup_specialty_overlap_note": "IUEs (Institut Universitaire et Stratégique de l'Estuaire) et IUTESSA (Institut Universitaire de Technologie et des Sciences du Sahel) — deux IPES déjà présents dans data/registry/raw/minesup-national-v1/ (detail-139.html, detail-080.html) — proposent 'Technologies de la marine marchande' comme UNE spécialité parmi plusieurs au sein d'une filière 'Génie mécanique et productique'. CE N'EST PAS un institut maritime dédié — ne pas confondre avec les 4 institutions ci-dessus. Aucune des deux n'est actuellement promue dans establishments (vérifié live, 0 résultat pour 'Estuaire'/'Sahel').",
+    "exam_center_port_operator_distinction": "Non testée ce sprint faute de source listant explicitement des centres d'examen ou opérateurs maritimes distincts d'écoles",
+    "minimum_3_institutions_target": "ATTEINT (4 institutions nommées, toutes Tier 3)"
+  },
+  "aviation": {
+    "authority": "CCAA (Cameroon Civil Aviation Authority)",
+    "official_ato_list_published": false,
+    "ccaa_organisme_formation_subpage": "HTTP 404 (URL essayée directement, page non trouvée à cette adresse)",
+    "institutions_found": [
+      { "name": "École de Formation (EFO) — CCAA", "city": "Yaoundé (+ centre Douala)", "classification": "PUBLIC TRAINING SCHOOL rattachée au régulateur", "admission_status": "NON TRANCHÉ (public externe vs personnel interne uniquement) — même ambiguïté qu'en TRANSPORT-A", "source": "ccaa.aero (officiel)", "tier": 2 },
+      { "name": "IRDSM Aviation", "city": "Yaoundé (+ Douala)", "classification": "PRIVATE TRAINING ORGANIZATION", "admission_status": "Ouvert au public (formations fret aérien, marchandises dangereuses, agent d'assistance, personnel de cabine, sûreté)", "authority_corroboration": "Conformité CCAA auto-déclarée par l'école elle-même, NON confirmée sur une liste CCAA publiée", "source": "groupe-dsm.net/aviation + presse (journalducameroun.com, afriksurseine.com)", "tier": 3 }
+    ],
+    "distinction_applied": "EFO = PUBLIC TRAINING SCHOOL (régulateur) ; IRDSM = PRIVATE TRAINING ORGANIZATION ; aucune compagnie aérienne/opérateur trouvée à tort classée formation"
+  },
+  "cross_ministry_corroboration": {
+    "minefop": [
+      { "institution": "Fleet Management Academy", "minefop_identifier": "N°000471 du 19-09-2022", "content": "conduite défensive", "reported_from": "TRANSPORT-A" },
+      { "institution": "IT2MIP", "minefop_link": "auto-déclaré sur site propre, non vérifié dans un registre MINEFOP officiel ce sprint" }
+    ],
+    "minesup": [
+      { "institution": "IUEs (Institut Universitaire et Stratégique de l'Estuaire)", "specialty": "Technologies de la marine marchande (1 spécialité parmi plusieurs, filière Génie mécanique et productique)", "already_in_data": "data/registry/raw/minesup-national-v1/detail-139.html", "live_status": "NON promu (0 résultat establishments)" },
+      { "institution": "IUTESSA (Institut Universitaire de Technologie et des Sciences du Sahel)", "specialty": "Technologies de la marine marchande (idem)", "already_in_data": "data/registry/raw/minesup-national-v1/detail-080.html", "live_status": "NON promu (0 résultat establishments)" }
+    ],
+    "rule_applied": "UN établissement + PLUSIEURS autorités, aucune fiche dupliquée créée (sprint read-only de toute façon)"
+  }
+}

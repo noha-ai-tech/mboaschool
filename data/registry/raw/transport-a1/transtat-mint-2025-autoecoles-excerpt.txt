@@ -1,0 +1,57 @@
+15000
+
+10000
+
+5000
+
+0
+
+       2018       2019               2020             2021               2022
+
+       plus de 20 ans 15 a 20 ans 10 a 15 ans 5 a 10 ans 1 a 5 ans Moins d'un an    Autres
+
+Source : MINT à partir des données fournies par HTT.
+
+       En moyenne, environ 50 nouvelles auto-écoles sont créées chaque année (Graphique 14). Depuis
+2021, on observe une augmentation du nombre de femmes promotrices d'auto-écoles, signalant une
+évolution progressive vers une plus grande inclusion dans le secteur.
+
+                                                                                            22
+Annuaire Statistique des Transports              Edition 2025             Transport Statistics Yearbook
+
+Graphique 14 : Auto-écoles nouvellement créées par sexe, 2018-2022
+
+  70
+
+60
+
+50
+
+40
+
+30
+
+20
+
+10
+
+0
+
+        2018  2019                         2020          2021       2022
+
+                                     Feminin masculin
+
+Source : MINT à partir des données fournies par la DTR.
+
+Graphique 15 : Evolution du nombre de permis de conduire              La production annuelle de
+par sexe, 2018-2022                                            permis de conduire est en
+                                                               croissance sur la période 2018­
+200000                                                         2022. Bien que la proportion de
+                                                               femmes détentrices de permis
+150000                                                         demeure faible, une tendance
+                                                               haussière est observée depuis
+100000                                                         2019, traduisant un élargissement
+                                                               progressif de l'accès à la mobilité
+50000                                                          formelle.
+
+--- Provenance : voir manifest.json (SHA256 dc608374b54f8631a283dcedf3e58f7f679c196c77bf89ec8602b588f8b1f977, extrait via pdftotext -layout, lignes 1740-1794 du texte complet) ---

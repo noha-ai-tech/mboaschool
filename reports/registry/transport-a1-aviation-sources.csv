@@ -1,0 +1,4 @@
+institution_name,city,classification,publisher_source,authority_corroboration,tier,date_consulted,identifier,pii_risk,completeness
+École de Formation (EFO) - CCAA,Yaoundé (+ centre Douala),PUBLIC TRAINING SCHOOL (rattachée au régulateur),ccaa.aero (officiel),CCAA,2,2026-08-21,NON,NON,N/A - statut admission (public vs interne) non tranché
+IRDSM Aviation,Yaoundé (+ Douala),PRIVATE TRAINING ORGANIZATION,groupe-dsm.net/aviation + presse (journalducameroun.com afriksurseine.com),Conformité CCAA auto-déclarée - NON confirmée sur une liste CCAA publiée,3,2026-08-21,NON,NON,EXPECTED_COUNT_UNKNOWN
+CCAA - liste ATO nominative officielle,N/A,N/A - recherche de registre,ccaa.aero (page /espaceprofessionnels/organisme-de-formation),N/A,N/A,2026-08-21,N/A,N/A,NON PUBLIÉE - page directe testée HTTP 404, aucun registre nominatif public trouvé

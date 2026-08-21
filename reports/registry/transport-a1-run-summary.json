@@ -1,0 +1,114 @@
+{
+  "sprint": "TRANSPORT-A.1",
+  "date": "2026-08-21",
+  "operator": "jean-merlain",
+  "repository": "mboaschool",
+  "branch": "main",
+  "reference_commit_start": "b2e257bbeb10583f658c4367e41aebc58224de69",
+  "remote_sync": {
+    "local_head": "b2e257bbeb10583f658c4367e41aebc58224de69",
+    "remote_noha_main": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+    "ahead": 35,
+    "behind": 0,
+    "worktree_clean_at_start": true
+  },
+  "database": {
+    "establishments_before": 2248,
+    "establishments_after": 2248,
+    "staging_before": 2366,
+    "staging_after": 2366,
+    "registry_identifiers_before": 2242,
+    "registry_identifiers_after": 2242,
+    "production_writes": 0,
+    "mintransport_enum_present": false,
+    "verified_live": true
+  },
+  "mint_access": {
+    "official_portal": "mintransports.cm - actif, Joomla, aucune liste auto-écoles localisée",
+    "dead_list_recovery": "NON RÉCUPÉRABLE - confirmé via archive.org API (0 snapshot)",
+    "cam_tvet": "NON APPLICABLE au transport - confirmé (opéré par PADESCE, tutelles MINEFOP/MINESEC/MINADER/MINEPIA/MINPROFF/MINJEC, MINT absent)",
+    "pdf_tooling": "RÉCUPÉRÉ - pdftotext (poppler 4.00, Git for Windows) + pdfjs-dist déjà présent"
+  },
+  "autoecoles": {
+    "official_sources_found": 0,
+    "nominative_lists": 0,
+    "institutions_found_named": 10,
+    "institutions_tier": "3 (discovery/annuaire privé uniquement)",
+    "regions_covered": 2,
+    "regions_total": 10,
+    "approval_identifiers_found": 0,
+    "expected_count": "UNKNOWN",
+    "completeness": "UNKNOWN"
+  },
+  "maritime": {
+    "official_sources": 0,
+    "institutions_found": 4,
+    "institutions_tier": "3 (discovery)",
+    "minesup_specialty_overlap_examples": 2,
+    "identifiers": 0,
+    "completeness": "UNKNOWN"
+  },
+  "aviation": {
+    "official_sources": 1,
+    "official_source_note": "CCAA site officiel confirme EFO (école propre du régulateur) mais ne publie aucune liste ATO nominative tierce",
+    "institutions_found": 2,
+    "identifiers": 0,
+    "completeness": "UNKNOWN"
+  },
+  "cross_ministry": {
+    "minefop_overlap_examples": 2,
+    "minesup_overlap_examples": 2,
+    "same_institution_duplicate_cases": 0
+  },
+  "identifiers": {
+    "real_examples_confirmed": 1,
+    "real_examples_note": "Fleet Management Academy / MINEFOP N°000471 - reporté depuis TRANSPORT-A, PAS un identifiant MINT/DTT",
+    "fabrication_caught_and_rejected": 1,
+    "types": ["MINEFOP agrément formation professionnelle"],
+    "uniqueness_evidence": "insuffisante - un seul exemple",
+    "multi_id_compatible": "structurellement oui (colonnes texte ouvertes déjà en place), non testé en écriture ce sprint"
+  },
+  "taxonomy": {
+    "ready_for_pilot": "PARTIEL",
+    "mappings": "main_category='autres' (auto-écoles, inchangé, déjà en production) ; maritime probablement 'vocational_training' au cas par cas (admission dès CEP pour IT2MIP) ; MINESUP marine marchande = 'higher_education' MAIS seulement pour la spécialité, pas l'institution entière ; aviation non tranché",
+    "migration_required": "AUCUNE pour main_category/sub_category (mécanisme 'autres' déjà absorbant) ; ALTER TYPE enum MINTRANSPORT resterait nécessaire SEULEMENT si écriture directe sur source_ministry - NON préparée ce sprint (aucun pilote plausible)"
+  },
+  "sample_matching": {
+    "executed": true,
+    "candidates": 10,
+    "breakdown": "5 auto-écoles / 2 maritime / 2 aviation / 1 transport-logistique",
+    "already_live": 0,
+    "exact": 0,
+    "strong": 1,
+    "probable": 4,
+    "ambiguous": 3,
+    "new": 2,
+    "safe_for_auto_link_observed": 0,
+    "key_finding": "AUTO ECOLE LEO (Yaoundé) a produit un STRONG_MATCH (100% chevauchement) contre la fiche seed 'Auto-École La Route Sûre' (Yaoundé) — faux-positif potentiel car le token 'auto' n'est PAS dans FUZZY_STOPWORDS (seul 'école' l'est). Confirme concrètement le risque anticipé au §12 de TRANSPORT_IMPORT_CONTRACT.md. Moteur NON modifié ce sprint (read-only) - recommandation documentée pour un futur sprint de collecte réelle."
+  },
+  "pii": {
+    "persisted": 0,
+    "note": "Téléphones professionnels d'auto-écoles (africannuaire.com) et noms de responsables de délégation régionale (osidimbea.cm) rencontrés mais EXCLUS de tous les rapports produits"
+  },
+  "pilot": {
+    "possible": false,
+    "recommended_family": "N/A",
+    "recommended_source": "N/A",
+    "scope": "N/A",
+    "expected_size": "N/A",
+    "completeness_mechanism": "N/A"
+  },
+  "qa": {
+    "build": "voir section dédiée du rapport final (npm run build)",
+    "typescript_app": "voir section dédiée (npx tsc --noEmit)",
+    "typescript_registry": "voir section dédiée (npx tsc --noEmit -p scripts/school-registry/tsconfig.json)",
+    "new_code_created": "scripts/school-registry/transport-a1-matching-sample.ts (réutilise lib/matching/engine.ts inchangé, aucun nouveau parseur créé donc aucun nouveau test déterministe requis par le brief)"
+  },
+  "decision": "C",
+  "decision_label": "ONLY DISCOVERY / AGGREGATE SOURCES - TRANSPORT DEFERRED",
+  "transport_a1_closed": true,
+  "ready_for_transport_b": "NO",
+  "minsante_status": "BLOCKED_PENDING_HUMAN_DOCUMENTARY_VALIDATION (non touché ce sprint)",
+  "push": false,
+  "deploy": false
+}
