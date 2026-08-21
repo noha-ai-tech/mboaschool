@@ -1,0 +1,14 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-WRITE",
+  "test_files": [
+    "scripts/school-registry/lib/__tests__/transportA2ImportGuard.test.ts",
+    "scripts/school-registry/lib/__tests__/transportTier3TrustModel.test.ts",
+    "scripts/school-registry/lib/__tests__/transportA2StagingPayload.test.ts",
+    "scripts/school-registry/lib/__tests__/transportA2StagingWriter.test.ts"
+  ],
+  "pass": 60,
+  "fail": 0,
+  "all_green": true,
+  "method": "npx tsx --test, captured this run (not fabricated/estimated)",
+  "note": "Covers guard refusal matrix A-I (transportA2ImportGuard.test.ts, +C/D explicit this sprint), trust model N/P/Q/R/S (transportTier3TrustModel.test.ts), payload/idempotence J/K/L/O/T (transportA2StagingPayload.test.ts), absolute write restriction U/V (transportA2StagingWriter.test.ts). NEVER run against live staging — all pure/mocked."
+}

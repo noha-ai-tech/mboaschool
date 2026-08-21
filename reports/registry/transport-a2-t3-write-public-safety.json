@@ -1,0 +1,8 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-WRITE",
+  "search_v2_route_reads_only_establishments": true,
+  "staging_table_referenced_only_in_admin_or_comments": true,
+  "staging_leakage_to_public_routes": false,
+  "public_routes_modified_this_sprint": false,
+  "method": "static grep of src/ for establishment_import_staging + direct read of src/app/api/recherche/route.ts (read-only, no route changes made)"
+}

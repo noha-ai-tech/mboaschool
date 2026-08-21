@@ -1,0 +1,18 @@
+candidate_id,name,staging_classification,matching_decision,cross_ministry_decision,provenance_complete,source_url,buildable
+TC-01,AUTO ECOLE ASTRALE,SOURCE_REVIEW,NO_MATCH,NEW,YES,https://africannuaire.com/entreprise/auto-ecole-astrale-cameroun/,YES
+TC-02,AUTO ECOLE FRANCAISE,DUPLICATE_REVIEW,PROBABLE_MATCH,NEW,NO,https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun,YES
+TC-03,AUTO ECOLE GERMANIA,SOURCE_REVIEW,NO_MATCH,NEW,NO,https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun,YES
+TC-04,AUTO ECOLE LEO,SOURCE_REVIEW,NO_MATCH,NEW,NO,https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun,YES
+TC-05,AUTO ECOLE TRECY,SOURCE_REVIEW,NO_MATCH,NEW,NO,https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun,YES
+TC-06,AUTO ECOLE TURBO,SOURCE_REVIEW,NO_MATCH,NEW,NO,https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun,YES
+TC-07,AUTO ECOLE TURBO NKOMKANA,SOURCE_REVIEW,NO_MATCH,NEW,NO,https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun,YES
+TC-08,METROPOLITAINE INTERNATIONALE SCES,IDENTITY_REVIEW,PROBABLE_MATCH,NEW,NO,https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun,YES
+TC-09,AUTO ECOLE MONTHE,SOURCE_REVIEW,NO_MATCH,NEW,NO,,NO
+TC-10,AUTO ECOLE APPRENDRE & AIMER LA CONDUITE,SOURCE_REVIEW,NO_MATCH,NEW,NO,,NO
+TC-11,EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale),DUPLICATE_REVIEW,PROBABLE_MATCH,NEW,YES,https://maritimafrica.com/ecole-maritime-industrielle-et-portuaire-de-lafrique-centrale-emipac-cameroun/,YES
+TC-12,IT2MIP (Institut des Technologies de la Marine Marchande et Industrie Portuaire),DUPLICATE_REVIEW,PROBABLE_MATCH,AMBIGUOUS,YES,https://kamerpower.com/fr/institut-des-technologies-de-la-marine-marchande-et-industrie-portuaire-it2mip-douala/,YES
+TC-13,Centre de formation professionnelle maritime « Le Paquebot »,SOURCE_REVIEW,NO_MATCH,NEW,YES,https://www.facebook.com/p/Centre-de-formation-professionnelle-maritime-le-paquebot-de-Douala-100075842125767/,YES
+TC-14,Centre d'Instruction Maritime et Portuaire,SOURCE_REVIEW,NO_MATCH,NEW,NO,,NO
+TC-15,École de Formation (EFO) - CCAA,SOURCE_REVIEW,NO_MATCH,NEW,YES,https://www.ccaa.aero/index.php/fr/,YES
+TC-16,IRDSM Aviation,SOURCE_REVIEW,NO_MATCH,NEW,NO,,NO
+TC-17,Fleet Management Academy,IDENTITY_REVIEW,AMBIGUOUS,NEW,NO,,NO

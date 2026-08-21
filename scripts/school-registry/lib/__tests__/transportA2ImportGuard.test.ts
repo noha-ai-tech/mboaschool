@@ -75,6 +75,14 @@ describe("assertTransportA2ImportAllowed — SPRINT TRANSPORT-A.2-T3, garde-fou 
     assert.throws(() => assertTransportA2ImportAllowed(validRequest({ expectedWouldInsertCount: undefined })), TransportA2ImportRefused);
   });
 
+  test("TEST C — --expected-count=16 (population sous-déclarée) alors que le calcul frais trouve 17 -> REFUSED", () => {
+    assert.throws(() => assertTransportA2ImportAllowed(validRequest({ expectedWouldInsertCount: 16, actualWouldInsertCount: EXPECTED_CANDIDATE_COUNT })), TransportA2ImportRefused);
+  });
+
+  test("TEST D — --expected-count=18 (population sur-déclarée) alors que le calcul frais trouve 17 -> REFUSED", () => {
+    assert.throws(() => assertTransportA2ImportAllowed(validRequest({ expectedWouldInsertCount: 18, actualWouldInsertCount: EXPECTED_CANDIDATE_COUNT })), TransportA2ImportRefused);
+  });
+
   test("checksum différent ou absent -> REFUSED", () => {
     assert.throws(() => assertTransportA2ImportAllowed(validRequest({ approvalChecksum: "different" })), TransportA2ImportRefused);
     assert.throws(() => assertTransportA2ImportAllowed(validRequest({ approvalChecksum: undefined })), TransportA2ImportRefused);

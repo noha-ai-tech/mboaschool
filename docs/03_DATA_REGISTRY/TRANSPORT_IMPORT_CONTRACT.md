@@ -749,4 +749,210 @@ Commande exacte prévue une fois ces deux prérequis levés :
 --expected-count=17 --approval-checksum=<voir
 reports/registry/transport-a2-t3-approval.json> --confirm="IMPORT_TRANSPORT_TIER3_TO_STAGING"
 --operator="jean-merlain" --approved-by="<personne distincte réelle>"`.
+
+NOTE DE SUPERSESSION (voir §21 ci-dessous, ne pas réutiliser cette commande
+telle quelle) : la commande exacte ci-dessus est OBSOLÈTE — le sprint
+TRANSPORT-A.2-T3-WRITE a découvert qu'un maximum de 12 des 17 candidats
+sont réellement insérables (contrainte NOT NULL sur `source_url`), donc
+`--expected-count=17` serait désormais REFUSÉ par construction. §21 documente
+la commande et la sémantique à jour.
+```
+
+## 21. Addendum TRANSPORT-A.2-T3-WRITE (2026-08-21) — implémentation réelle de l'écriture staging, TOUJOURS 0 ÉCRITURE CE SPRINT
+
+```
+SPRINT DISTINCT, même jour, même opérateur. Objectif : remplacer le
+SAFETY STOP de `transport-a2-t3-import.ts` par une VRAIE branche d'écriture
+`establishment_import_staging`, tout en garantissant `staging_writes=0` et
+`production_writes=0` à la fin de CE sprint (aucune autorisation humaine
+nommée distincte n'a été donnée — le brief lui-même n'en constitue pas
+une, exactement comme pour TRANSPORT-A.2-T3). Vérifié en direct au début
+ET à la fin : establishments=2248, staging=2366, registry_identifiers=2242,
+MINTRANSPORT staging=0, INCHANGÉ (voir
+`reports/registry/transport-a2-t3-write-preflight.json` §21 "UNCHANGED=true").
+
+### 21.1 Nouvelle stratégie registre — Présence / Identité / Vérification officielle
+
+Trois notions désormais strictement distinctes dans tout le pipeline (et
+documentées comme telles pour tout futur registre, pas seulement
+Transport) :
+
+  1. PRÉSENCE/DÉCOUVERTE — "cet établissement existe probablement", portée
+     par `presence_confidence` (SINGLE_SOURCE / MULTI_SOURCE_WEAK /
+     CORROBORATED / CONFLICTING), dérivée UNIQUEMENT du nombre/de
+     l'indépendance des sources Tier 3.
+  2. IDENTITÉ — "on sait de quelle institution canonique il s'agit, et si
+     elle existe déjà dans l'annuaire", portée par `identity_confidence`
+     (UNRESOLVED / PROBABLE / RESOLVED / CONFLICTING), dérivée du matching
+     FRAIS (live+staging, jamais live-only) et de la clarté de l'entité
+     elle-même (ex. TC-08 reste UNRESOLVED : son PROPRE type d'entité est
+     incertain, indépendamment de tout matching).
+  3. VÉRIFICATION OFFICIELLE — "une autorité compétente confirme
+     officiellement", portée par `official_verification` (UNVERIFIED /
+     OFFICIAL_SOURCE_FOUND / OFFICIALLY_VERIFIED).
+
+RÈGLE ABSOLUE implémentée comme une GARANTIE STRUCTURELLE, pas une
+convention : `computeOfficialVerification()`
+(`scripts/school-registry/lib/transportTier3TrustModel.ts`) a pour type de
+retour `Tier3OfficialVerification = Exclude<OfficialVerification,
+"OFFICIALLY_VERIFIED">` — la valeur "OFFICIALLY_VERIFIED" n'est même pas
+représentable en sortie de cette fonction, quel que soit le nombre ou la
+force des sources Tier 3 en entrée (testé explicitement, y compris avec des
+entrées adversariales imitant un vocabulaire "vérifié", test N de
+`transportTier3TrustModel.test.ts`). Résultat sur les 17 candidats de ce
+sprint : `official_verification`=UNVERIFIED pour les 17/17 (aucune source
+Tier 3 de ce batch n'a de `official_corroboration_status` autre que
+NOT_SEARCHED), `officially_verified_automatically`=0.
+
+### 21.2 publication_readiness — informatif uniquement, ne promeut rien
+
+`computePublicationReadiness()` (même fichier) est une fonction générique
+(ne référence aucun ministère précis) et testable produisant
+PUBLISHABLE_UNVERIFIED / REVIEW_REQUIRED / REJECTED. Critères conservateurs
+implémentés dans cet ordre : PII détecté -> REJECTED ; présence ou identité
+CONFLICTING -> REVIEW_REQUIRED (jamais publishable) ; identité UNRESOLVED
+-> REVIEW_REQUIRED ; doublon non résolu -> REVIEW_REQUIRED ; chevauchement
+inter-ministériel non résolu -> REVIEW_REQUIRED ; provenance incomplète ->
+REVIEW_REQUIRED ; sinon, identité RESOLVED -> PUBLISHABLE_UNVERIFIED.
+`official_verification` N'INTERVIENT JAMAIS dans ce calcul (testé
+explicitement : même résultat quelle que soit sa valeur) — son absence
+reste seulement VISIBLE dans le payload, jamais bloquante ni promotrice.
+
+CE QUE PUBLISHABLE_UNVERIFIED NE SIGNIFIE PAS : ni agréé, ni reconnu MINT,
+ni vérifié officiellement, ni CLEAN_APPROVABLE, ni safeForAutoLink. Cela ne
+change NI `establishments` NI le statut de revue en staging — c'est un
+signal purement informatif pour une décision humaine future, potentiellement
+distante de ce sprint, qui pourrait un jour publier l'établissement dans
+l'annuaire avec un statut explicite NON VÉRIFIÉ. Aucun mécanisme de
+publication automatique n'existe ni n'est ajouté ce sprint.
+
+Résultat sur les 17 candidats : PUBLISHABLE_UNVERIFIED=3 (TC-01 Auto École
+Astrale, TC-13 Le Paquebot, TC-15 EFO/CCAA — tous NO_MATCH frais,
+cross-ministère NEW, provenance URL+sha256+classe complète, aucune PII),
+REVIEW_REQUIRED=14, REJECTED=0. Détail par candidat :
+`reports/registry/transport-a2-t3-write-publication-readiness.csv`.
+
+### 21.3 Découverte technique : contrainte NOT NULL `source_url`, 12/17 réellement insérables
+
+`establishment_import_staging.source_url` est `NOT NULL` (migration 0006).
+5 des 17 candidats approuvés (TC-09, TC-10, TC-14, TC-16, TC-17 — Fleet
+Management Academy incluse) n'ont AUCUNE URL de source localisable dans les
+manifestes `transport-tier3-v1`/`transport-a1` revérifiés ce sprint. Plutôt
+que d'inventer une URL placeholder (interdit — principe absolu du
+commentaire de migration 0006, "jamais un établissement sans pouvoir
+remonter à sa source exacte"), `buildStagingInsertPayload()`
+(`scripts/school-registry/lib/transportA2StagingPayload.ts`) REFUSE
+explicitement (throw) de construire une ligne sans `source_url` — le
+candidat est retenu ("held back"), documenté nommément dans
+`reports/registry/transport-a2-t3-write-preflight.json`
+(`held_back_missing_source_url`) et dans le CSV de revue, jamais
+silencieusement perdu. `maximum_future_inserts` réel pour ce batch = **12**,
+PAS 17 — chiffre à utiliser pour tout futur `--expected-count`, jamais 17
+tel quel (voir note de supersession §20 ci-dessus).
+
+Même précédent déjà appliqué par `import-major-cities-to-staging.ts`
+("SOURCE_VERIFIED_REVIEW SANS source_url : jamais staged") — cohérent, pas
+une nouvelle règle inventée pour ce sprint.
+
+### 21.4 Contrat de payload (`raw_data.transport_tier3`)
+
+Chaque ligne future porte, en plus de la provenance déjà établie par
+TRANSPORT-A.2-T3 (§20 ci-dessus, inchangée) : `presence_confidence`,
+`identity_confidence`, `official_verification`, `publication_readiness`,
+`cross_ministry_evidence[]`, `batch_checksum`, `approval_checksum`,
+`import_provenance`. Rien n'est retiré de la provenance historique
+(`sources[]`, `tier3_confidence`, `matching_decision` frais,
+`cross_ministry_decision`, `provenance{url,sha256,complete}`, etc. — tous
+conservés tels quels).
+
+### 21.5 Identifiants officiels — Fleet Management Academy, sécurité renforcée
+
+`buildStagingInsertPayload()` lève une exception si `cross_ministry_evidence`
+contient un `identifier_authority` égal à "MINTRANSPORT" ou "MINT" —
+impossible, par construction du code (pas seulement par convention), de
+faire passer un identifiant MINEFOP comme preuve d'agrément Transport
+(testé explicitement). L'identifiant MINEFOP N°000471 (19-09-2022) de Fleet
+Management Academy (TC-17, actuellement held-back de toute façon faute de
+`source_url`) reste réservé UNIQUEMENT à `raw_data.transport_tier3.
+cross_ministry_evidence`, jamais à `official_identifier` (toujours `null`
+par construction du type `StagingInsertRow`) ni à une ligne
+`establishment_registry_identifiers` (toujours 0 prévue ce batch).
+
+### 21.6 Restrictions d'écriture absolues — techniquement impossibles, pas seulement documentées
+
+`scripts/school-registry/lib/transportA2StagingWriter.ts` est le SEUL
+module de tout le pipeline capable d'un écriture réseau. Il n'exporte QUE
+DEUX fonctions, toutes deux à cible fixe codée en dur :
+`createTransportDataSourceRow()` -> `establishment_data_sources`
+UNIQUEMENT (prérequis FK obligatoire de la table de staging), et
+`insertStagingRowsOnly()` -> `establishment_import_staging` UNIQUEMENT.
+Garantie vérifiée par test (pas seulement lue dans le code) : analyse
+statique du texte source confirmant l'absence totale des chaînes
+`/rest/v1/establishments` et `/rest/v1/establishment_registry_identifiers`
+dans ce fichier, plus vérification de la surface d'export exacte (2
+fonctions nommées, aucune autre), plus test à `global.fetch` mocké
+confirmant que chaque fonction ne cible que son unique endpoint autorisé
+(tests U et V de `transportA2StagingWriter.test.ts`).
+
+### 21.7 Idempotence
+
+Clé stable inchangée : `transport-tier3:v1:<candidate_id>`. Simulation pure
+via `planStagingInsert()` (aucune écriture) : premier passage frais contre
+staging (0 fingerprint `transport-tier3:v1:*` existant ce sprint) ->
+12 lignes seraient insérées ; second passage théorique (fingerprints du
+premier passage ajoutés à l'ensemble existant) -> 0 lignes insérées
+(assertion runtime dans `transport-a2-t3-write-preflight.ts`, échoue le
+script si jamais > 0). Jamais testé par deux écritures réelles suivies
+d'un nettoyage — uniquement par simulation pure et par mocks (brief §12-13).
+
+### 21.8 Public safety — reconfirmé
+
+`src/app/api/recherche/route.ts` lit exclusivement `.from("establishments")`
+— aucune référence à `establishment_import_staging`. Seuls
+`src/app/dashboard/admin/registre/page.tsx` et `src/lib/registryReview.ts`
+référencent la table de staging (Review Center admin, jamais une route
+publique) ; `src/lib/cameroonRegions.ts`/`cameroonMajorCities.ts` ne la
+mentionnent que dans un commentaire. Staging != publication, reconfirmé par
+grep direct ce sprint (`reports/registry/transport-a2-t3-write-public-safety.json`),
+aucune route publique modifiée.
+
+### 21.9 Politique de promotion future (à terme, PAS ce sprint)
+
+Un établissement Tier 3 avec `identity_confidence`=RESOLVED,
+`presence_confidence` != CONFLICTING, provenance complète, aucun doublon ni
+chevauchement inter-ministériel non résolu (`publication_readiness`=
+PUBLISHABLE_UNVERIFIED) pourra un jour, sur décision humaine explicite d'un
+FUTUR sprint distinct, être promu dans l'annuaire avec un statut
+EXPLICITEMENT NON VÉRIFIÉ (`verified`=false ou équivalent, jamais `true`
+tant qu'aucune vérification officielle n'existe). Cette politique n'est PAS
+implémentée ce sprint — aucun mécanisme de promotion Tier-3 n'existe dans
+le code, `publication_readiness` reste un champ `raw_data` purement
+informatif, illisible par toute route publique.
+
+### 21.10 Rapports produits ce sprint
+
+`transport-a2-t3-write-preflight.json`, `transport-a2-t3-write-payloads.json`
+(12 lignes, contrat complet), `transport-a2-t3-write-review.csv`,
+`transport-a2-t3-write-publication-readiness.csv`,
+`transport-a2-t3-write-guard-tests.json` (60/60 tests, 0 échec),
+`transport-a2-t3-write-idempotence.json`, `transport-a2-t3-write-public-safety.json`,
+`transport-a2-t3-write-summary.json`.
+
+### 21.11 Commande future exacte (une fois autorisation humaine nommée obtenue)
+
+```
+npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit \
+  --expected-count=<recalculé frais au moment de l'exécution, voir
+    reports/registry/transport-a2-t3-write-payloads.json "row_count" MOINS
+    tout candidat déjà en staging entre-temps — PAS 17, PAS un chiffre figé
+    ici> \
+  --approval-checksum=<batch_checksum de transport-a2-t3-write-payloads.json> \
+  --confirm="IMPORT_TRANSPORT_TIER3_TO_STAGING" \
+  --operator="jean-merlain" \
+  --approved-by="<personne distincte réelle>"
+```
+
+DECISION (§23 du brief) : voir `reports/registry/transport-a2-t3-write-summary.json`
+pour l'état final structuré. READY_FOR_TRANSPORT_PROMOTION reste NO
+(inchangé — aucune source officielle MINT nominative n'existe toujours).
 ```

@@ -1,0 +1,11 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-WRITE",
+  "method": "planStagingInsert() pure simulation against fresh fingerprints fetched from live staging (GET only) — NEVER two real writes.",
+  "fingerprint_scheme": "transport-tier3:v1:<candidate_id> — deterministic, candidate_id-based, stable across runs.",
+  "existing_transport_fingerprints_in_staging_before": 0,
+  "first_pass_would_insert": 12,
+  "first_pass_already_staging_skipped": 0,
+  "second_pass_theoretical_would_insert": 0,
+  "second_pass_is_zero": true,
+  "duplicate_inserts_possible": false
+}

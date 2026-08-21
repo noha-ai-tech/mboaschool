@@ -1,0 +1,90 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-WRITE",
+  "date": "2026-08-21",
+  "operator": "jean-merlain",
+  "database_baseline": {
+    "establishments": 2248,
+    "staging": 2366,
+    "registry_identifiers": 2242,
+    "mintransport_staging_rows": 0,
+    "mintransport_enum_present": true
+  },
+  "population": {
+    "candidate_count": 17,
+    "expected": 17,
+    "expected_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+    "stored_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+    "recomputed_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+    "checksum_valid": true
+  },
+  "classification_tally": {
+    "SOURCE_REVIEW": 12,
+    "DUPLICATE_REVIEW": 3,
+    "IDENTITY_REVIEW": 2
+  },
+  "trust_model_tally": {
+    "presence_confidence": {
+      "SINGLE_SOURCE": 14,
+      "CORROBORATED": 2,
+      "MULTI_SOURCE_WEAK": 1
+    },
+    "identity_confidence": {
+      "RESOLVED": 12,
+      "PROBABLE": 2,
+      "UNRESOLVED": 1,
+      "CONFLICTING": 2
+    },
+    "official_verification": {
+      "UNVERIFIED": 17
+    }
+  },
+  "officially_verified_automatically": 0,
+  "publication_readiness_tally": {
+    "PUBLISHABLE_UNVERIFIED": 3,
+    "REVIEW_REQUIRED": 14
+  },
+  "write_implementation": {
+    "real_insert_branch_implemented": true,
+    "target_table": "establishment_import_staging",
+    "maximum_future_inserts": 12,
+    "candidates_held_back_missing_source_url": [
+      "TC-09",
+      "TC-10",
+      "TC-14",
+      "TC-16",
+      "TC-17"
+    ],
+    "establishments_write_path": "TECHNICALLY_IMPOSSIBLE — transportA2StagingWriter.ts exports exactly two write functions (createTransportDataSourceRow -> establishment_data_sources only, insertStagingRowsOnly -> establishment_import_staging only), both hardcoded targets, neither can reach establishments; verified by static source scan + mocked-fetch tests (U).",
+    "registry_identifiers_write_path": "TECHNICALLY_IMPOSSIBLE — same module, same two-function guarantee, verified by static source scan + export-surface test (V).",
+    "safety_stop_replaced": true
+  },
+  "idempotence": {
+    "sprint": "TRANSPORT-A.2-T3-WRITE",
+    "method": "planStagingInsert() pure simulation against fresh fingerprints fetched from live staging (GET only) — NEVER two real writes.",
+    "fingerprint_scheme": "transport-tier3:v1:<candidate_id> — deterministic, candidate_id-based, stable across runs.",
+    "existing_transport_fingerprints_in_staging_before": 0,
+    "first_pass_would_insert": 12,
+    "first_pass_already_staging_skipped": 0,
+    "second_pass_theoretical_would_insert": 0,
+    "second_pass_is_zero": true,
+    "duplicate_inserts_possible": false
+  },
+  "guard_tests": {
+    "pass": 60,
+    "fail": 0
+  },
+  "public_safety": {
+    "sprint": "TRANSPORT-A.2-T3-WRITE",
+    "search_v2_route_reads_only_establishments": true,
+    "staging_table_referenced_only_in_admin_or_comments": true,
+    "staging_leakage_to_public_routes": false,
+    "public_routes_modified_this_sprint": false,
+    "method": "static grep of src/ for establishment_import_staging + direct read of src/app/api/recherche/route.ts (read-only, no route changes made)"
+  },
+  "pii_persisted_count": 0,
+  "official_identifiers_invented": 0,
+  "write_performed_this_sprint": false,
+  "staging_writes_this_sprint": 0,
+  "production_writes_this_sprint": 0,
+  "decision_inputs_ready": true
+}

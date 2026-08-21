@@ -1,0 +1,977 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-WRITE",
+  "generated_at": "2026-08-21T20:21:49.756Z",
+  "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+  "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+  "row_count": 12,
+  "rows": [
+    {
+      "data_source_id": null,
+      "fingerprint": "transport-tier3:v1:TC-01",
+      "name_raw": "AUTO ECOLE ASTRALE",
+      "name_normalized": "auto ecole astrale",
+      "source_ministry": "MINTRANSPORT",
+      "source_url": "https://africannuaire.com/entreprise/auto-ecole-astrale-cameroun/",
+      "source_year": 2026,
+      "official_identifier": null,
+      "education_family": "other",
+      "ownership": null,
+      "subsystem": "unknown",
+      "region": "Centre",
+      "city": "Yaoundé",
+      "locality": null,
+      "status": "ready",
+      "raw_data": {
+        "transport_tier3": {
+          "pipeline_version": "transport-tier3-v1",
+          "write_pipeline_version": "transport-a2-t3-write-v1",
+          "candidate_id": "TC-01",
+          "entity_family": "DRIVING_SCHOOL",
+          "entity_family_note": null,
+          "name": "AUTO ECOLE ASTRALE",
+          "normalized_name": "auto ecole astrale",
+          "source_ministry": "MINTRANSPORT",
+          "sources": [
+            {
+              "source_id": "S04",
+              "domain": "africannuaire.com",
+              "tier3_class": "T3-D",
+              "verified_this_sprint": true
+            }
+          ],
+          "source_count": 1,
+          "independent_source_count": 1,
+          "source_independence": "N/A (single source)",
+          "tier3_confidence": "T3_SINGLE_SOURCE",
+          "tier3_confidence_note": null,
+          "matching_decision": "NO_MATCH",
+          "matching_reason_live": "chevauchement uniquement composé de vocabulaire générique/faible (ex. \"sciences\") sans mot distinctif partagé ni corroboration (sigle exact identique) — signal insuffisant pour un doublon potentiel (SPRINT MINSANTE-G.2 §9).",
+          "matching_reason_staging": "aucun mot significatif commun avec une cible.",
+          "cross_ministry_decision": "NEW",
+          "cross_ministry_note": null,
+          "cross_ministry_evidence": [],
+          "activity_status": "ACTIVITY_UNKNOWN",
+          "official_corroboration_status": "NOT_SEARCHED",
+          "staging_classification": "SOURCE_REVIEW",
+          "classification_reason": "No live/staging duplicate signal, no cross-ministry overlap, no conflicting evidence.",
+          "taxonomy": {
+            "main_category": "autres",
+            "sub_category": "Auto-École",
+            "education_family": "other",
+            "education_family_uncertain": false
+          },
+          "provenance": {
+            "source_url_present": true,
+            "source_url": "https://africannuaire.com/entreprise/auto-ecole-astrale-cameroun/",
+            "sha256_present": true,
+            "sha256": "48d6092a49454f227a8a171ff469e59a2ca5b1d2fd647108901cfdea9f5c9d06",
+            "provenance_complete": true,
+            "provenance_note": "Fully verified."
+          },
+          "presence_confidence": "SINGLE_SOURCE",
+          "identity_confidence": "RESOLVED",
+          "official_verification": "UNVERIFIED",
+          "publication_readiness": "PUBLISHABLE_UNVERIFIED",
+          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "import_provenance": {
+            "sprint": "TRANSPORT-A.2-T3-WRITE",
+            "fingerprint": "transport-tier3:v1:TC-01"
+          }
+        }
+      }
+    },
+    {
+      "data_source_id": null,
+      "fingerprint": "transport-tier3:v1:TC-02",
+      "name_raw": "AUTO ECOLE FRANCAISE",
+      "name_normalized": "auto ecole francaise",
+      "source_ministry": "MINTRANSPORT",
+      "source_url": "https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun",
+      "source_year": 2026,
+      "official_identifier": null,
+      "education_family": "other",
+      "ownership": null,
+      "subsystem": "unknown",
+      "region": "Littoral",
+      "city": "Douala",
+      "locality": null,
+      "status": "duplicate_review",
+      "raw_data": {
+        "transport_tier3": {
+          "pipeline_version": "transport-tier3-v1",
+          "write_pipeline_version": "transport-a2-t3-write-v1",
+          "candidate_id": "TC-02",
+          "entity_family": "DRIVING_SCHOOL",
+          "entity_family_note": null,
+          "name": "AUTO ECOLE FRANCAISE",
+          "normalized_name": "auto ecole francaise",
+          "source_ministry": "MINTRANSPORT",
+          "sources": [
+            {
+              "source_id": "TRANSPORT-A.1",
+              "domain": "africannuaire.com",
+              "tier3_class": "T3-D",
+              "verified_this_sprint": false
+            }
+          ],
+          "source_count": 1,
+          "independent_source_count": 1,
+          "source_independence": "N/A (single source)",
+          "tier3_confidence": "T3_SINGLE_SOURCE",
+          "tier3_confidence_note": null,
+          "matching_decision": "PROBABLE_MATCH",
+          "matching_reason_live": "chevauchement de mots partiel (50%), insuffisant pour STRONG_MATCH.",
+          "matching_reason_staging": "aucun mot significatif commun avec une cible.",
+          "cross_ministry_decision": "NEW",
+          "cross_ministry_note": null,
+          "cross_ministry_evidence": [],
+          "activity_status": "ACTIVITY_UNKNOWN",
+          "official_corroboration_status": "NOT_SEARCHED",
+          "staging_classification": "DUPLICATE_REVIEW",
+          "classification_reason": "Fresh matching level=PROBABLE_MATCH.",
+          "taxonomy": {
+            "main_category": "autres",
+            "sub_category": "Auto-École",
+            "education_family": "other",
+            "education_family_uncertain": false
+          },
+          "provenance": {
+            "source_url_present": true,
+            "source_url": "https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun",
+            "sha256_present": false,
+            "sha256": null,
+            "provenance_complete": false,
+            "provenance_note": "URL recovered from TRANSPORT-A.1 domain-level manifest entry — no dedicated per-institution sha256."
+          },
+          "presence_confidence": "SINGLE_SOURCE",
+          "identity_confidence": "PROBABLE",
+          "official_verification": "UNVERIFIED",
+          "publication_readiness": "REVIEW_REQUIRED",
+          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "import_provenance": {
+            "sprint": "TRANSPORT-A.2-T3-WRITE",
+            "fingerprint": "transport-tier3:v1:TC-02"
+          }
+        }
+      }
+    },
+    {
+      "data_source_id": null,
+      "fingerprint": "transport-tier3:v1:TC-03",
+      "name_raw": "AUTO ECOLE GERMANIA",
+      "name_normalized": "auto ecole germania",
+      "source_ministry": "MINTRANSPORT",
+      "source_url": "https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun",
+      "source_year": 2026,
+      "official_identifier": null,
+      "education_family": "other",
+      "ownership": null,
+      "subsystem": "unknown",
+      "region": "Littoral",
+      "city": "Douala",
+      "locality": null,
+      "status": "ready",
+      "raw_data": {
+        "transport_tier3": {
+          "pipeline_version": "transport-tier3-v1",
+          "write_pipeline_version": "transport-a2-t3-write-v1",
+          "candidate_id": "TC-03",
+          "entity_family": "DRIVING_SCHOOL",
+          "entity_family_note": null,
+          "name": "AUTO ECOLE GERMANIA",
+          "normalized_name": "auto ecole germania",
+          "source_ministry": "MINTRANSPORT",
+          "sources": [
+            {
+              "source_id": "TRANSPORT-A.1",
+              "domain": "africannuaire.com",
+              "tier3_class": "T3-D",
+              "verified_this_sprint": false
+            }
+          ],
+          "source_count": 1,
+          "independent_source_count": 1,
+          "source_independence": "N/A (single source)",
+          "tier3_confidence": "T3_SINGLE_SOURCE",
+          "tier3_confidence_note": null,
+          "matching_decision": "NO_MATCH",
+          "matching_reason_live": "chevauchement uniquement composé de vocabulaire générique/faible (ex. \"sciences\") sans mot distinctif partagé ni corroboration (sigle exact identique) — signal insuffisant pour un doublon potentiel (SPRINT MINSANTE-G.2 §9).",
+          "matching_reason_staging": "aucun mot significatif commun avec une cible.",
+          "cross_ministry_decision": "NEW",
+          "cross_ministry_note": null,
+          "cross_ministry_evidence": [],
+          "activity_status": "ACTIVITY_UNKNOWN",
+          "official_corroboration_status": "NOT_SEARCHED",
+          "staging_classification": "SOURCE_REVIEW",
+          "classification_reason": "No live/staging duplicate signal, no cross-ministry overlap, no conflicting evidence.",
+          "taxonomy": {
+            "main_category": "autres",
+            "sub_category": "Auto-École",
+            "education_family": "other",
+            "education_family_uncertain": false
+          },
+          "provenance": {
+            "source_url_present": true,
+            "source_url": "https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun",
+            "sha256_present": false,
+            "sha256": null,
+            "provenance_complete": false,
+            "provenance_note": "URL recovered from TRANSPORT-A.1 domain-level manifest entry — no dedicated per-institution sha256."
+          },
+          "presence_confidence": "SINGLE_SOURCE",
+          "identity_confidence": "RESOLVED",
+          "official_verification": "UNVERIFIED",
+          "publication_readiness": "REVIEW_REQUIRED",
+          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "import_provenance": {
+            "sprint": "TRANSPORT-A.2-T3-WRITE",
+            "fingerprint": "transport-tier3:v1:TC-03"
+          }
+        }
+      }
+    },
+    {
+      "data_source_id": null,
+      "fingerprint": "transport-tier3:v1:TC-04",
+      "name_raw": "AUTO ECOLE LEO",
+      "name_normalized": "auto ecole leo",
+      "source_ministry": "MINTRANSPORT",
+      "source_url": "https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun",
+      "source_year": 2026,
+      "official_identifier": null,
+      "education_family": "other",
+      "ownership": null,
+      "subsystem": "unknown",
+      "region": "Centre",
+      "city": "Yaoundé",
+      "locality": null,
+      "status": "ready",
+      "raw_data": {
+        "transport_tier3": {
+          "pipeline_version": "transport-tier3-v1",
+          "write_pipeline_version": "transport-a2-t3-write-v1",
+          "candidate_id": "TC-04",
+          "entity_family": "DRIVING_SCHOOL",
+          "entity_family_note": null,
+          "name": "AUTO ECOLE LEO",
+          "normalized_name": "auto ecole leo",
+          "source_ministry": "MINTRANSPORT",
+          "sources": [
+            {
+              "source_id": "TRANSPORT-A.1",
+              "domain": "africannuaire.com",
+              "tier3_class": "T3-D",
+              "verified_this_sprint": false
+            }
+          ],
+          "source_count": 1,
+          "independent_source_count": 1,
+          "source_independence": "N/A (single source)",
+          "tier3_confidence": "T3_SINGLE_SOURCE",
+          "tier3_confidence_note": null,
+          "matching_decision": "NO_MATCH",
+          "matching_reason_live": "chevauchement uniquement composé de vocabulaire générique/faible (ex. \"sciences\") sans mot distinctif partagé ni corroboration (sigle exact identique) — signal insuffisant pour un doublon potentiel (SPRINT MINSANTE-G.2 §9).",
+          "matching_reason_staging": "aucun mot significatif commun avec une cible.",
+          "cross_ministry_decision": "NEW",
+          "cross_ministry_note": null,
+          "cross_ministry_evidence": [],
+          "activity_status": "ACTIVITY_UNKNOWN",
+          "official_corroboration_status": "NOT_SEARCHED",
+          "staging_classification": "SOURCE_REVIEW",
+          "classification_reason": "No live/staging duplicate signal, no cross-ministry overlap, no conflicting evidence.",
+          "taxonomy": {
+            "main_category": "autres",
+            "sub_category": "Auto-École",
+            "education_family": "other",
+            "education_family_uncertain": false
+          },
+          "provenance": {
+            "source_url_present": true,
+            "source_url": "https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun",
+            "sha256_present": false,
+            "sha256": null,
+            "provenance_complete": false,
+            "provenance_note": "URL recovered from TRANSPORT-A.1 domain-level manifest entry — no dedicated per-institution sha256."
+          },
+          "presence_confidence": "SINGLE_SOURCE",
+          "identity_confidence": "RESOLVED",
+          "official_verification": "UNVERIFIED",
+          "publication_readiness": "REVIEW_REQUIRED",
+          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "import_provenance": {
+            "sprint": "TRANSPORT-A.2-T3-WRITE",
+            "fingerprint": "transport-tier3:v1:TC-04"
+          }
+        }
+      }
+    },
+    {
+      "data_source_id": null,
+      "fingerprint": "transport-tier3:v1:TC-05",
+      "name_raw": "AUTO ECOLE TRECY",
+      "name_normalized": "auto ecole trecy",
+      "source_ministry": "MINTRANSPORT",
+      "source_url": "https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun",
+      "source_year": 2026,
+      "official_identifier": null,
+      "education_family": "other",
+      "ownership": null,
+      "subsystem": "unknown",
+      "region": "Centre",
+      "city": "Yaoundé",
+      "locality": null,
+      "status": "ready",
+      "raw_data": {
+        "transport_tier3": {
+          "pipeline_version": "transport-tier3-v1",
+          "write_pipeline_version": "transport-a2-t3-write-v1",
+          "candidate_id": "TC-05",
+          "entity_family": "DRIVING_SCHOOL",
+          "entity_family_note": null,
+          "name": "AUTO ECOLE TRECY",
+          "normalized_name": "auto ecole trecy",
+          "source_ministry": "MINTRANSPORT",
+          "sources": [
+            {
+              "source_id": "TRANSPORT-A.1",
+              "domain": "africannuaire.com",
+              "tier3_class": "T3-D",
+              "verified_this_sprint": false
+            }
+          ],
+          "source_count": 1,
+          "independent_source_count": 1,
+          "source_independence": "N/A (single source)",
+          "tier3_confidence": "T3_SINGLE_SOURCE",
+          "tier3_confidence_note": null,
+          "matching_decision": "NO_MATCH",
+          "matching_reason_live": "chevauchement uniquement composé de vocabulaire générique/faible (ex. \"sciences\") sans mot distinctif partagé ni corroboration (sigle exact identique) — signal insuffisant pour un doublon potentiel (SPRINT MINSANTE-G.2 §9).",
+          "matching_reason_staging": "aucun mot significatif commun avec une cible.",
+          "cross_ministry_decision": "NEW",
+          "cross_ministry_note": null,
+          "cross_ministry_evidence": [],
+          "activity_status": "ACTIVITY_UNKNOWN",
+          "official_corroboration_status": "NOT_SEARCHED",
+          "staging_classification": "SOURCE_REVIEW",
+          "classification_reason": "No live/staging duplicate signal, no cross-ministry overlap, no conflicting evidence.",
+          "taxonomy": {
+            "main_category": "autres",
+            "sub_category": "Auto-École",
+            "education_family": "other",
+            "education_family_uncertain": false
+          },
+          "provenance": {
+            "source_url_present": true,
+            "source_url": "https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun",
+            "sha256_present": false,
+            "sha256": null,
+            "provenance_complete": false,
+            "provenance_note": "URL recovered from TRANSPORT-A.1 domain-level manifest entry — no dedicated per-institution sha256."
+          },
+          "presence_confidence": "SINGLE_SOURCE",
+          "identity_confidence": "RESOLVED",
+          "official_verification": "UNVERIFIED",
+          "publication_readiness": "REVIEW_REQUIRED",
+          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "import_provenance": {
+            "sprint": "TRANSPORT-A.2-T3-WRITE",
+            "fingerprint": "transport-tier3:v1:TC-05"
+          }
+        }
+      }
+    },
+    {
+      "data_source_id": null,
+      "fingerprint": "transport-tier3:v1:TC-06",
+      "name_raw": "AUTO ECOLE TURBO",
+      "name_normalized": "auto ecole turbo",
+      "source_ministry": "MINTRANSPORT",
+      "source_url": "https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun",
+      "source_year": 2026,
+      "official_identifier": null,
+      "education_family": "other",
+      "ownership": null,
+      "subsystem": "unknown",
+      "region": "Centre",
+      "city": "Yaoundé",
+      "locality": null,
+      "status": "ready",
+      "raw_data": {
+        "transport_tier3": {
+          "pipeline_version": "transport-tier3-v1",
+          "write_pipeline_version": "transport-a2-t3-write-v1",
+          "candidate_id": "TC-06",
+          "entity_family": "DRIVING_SCHOOL",
+          "entity_family_note": null,
+          "name": "AUTO ECOLE TURBO",
+          "normalized_name": "auto ecole turbo",
+          "source_ministry": "MINTRANSPORT",
+          "sources": [
+            {
+              "source_id": "TRANSPORT-A.1",
+              "domain": "africannuaire.com",
+              "tier3_class": "T3-D",
+              "verified_this_sprint": false,
+              "note": "re-searched this sprint (WebSearch), no second independent source found"
+            }
+          ],
+          "source_count": 1,
+          "independent_source_count": 1,
+          "source_independence": "N/A (single source)",
+          "tier3_confidence": "T3_SINGLE_SOURCE",
+          "tier3_confidence_note": null,
+          "matching_decision": "NO_MATCH",
+          "matching_reason_live": "chevauchement uniquement composé de vocabulaire générique/faible (ex. \"sciences\") sans mot distinctif partagé ni corroboration (sigle exact identique) — signal insuffisant pour un doublon potentiel (SPRINT MINSANTE-G.2 §9).",
+          "matching_reason_staging": "aucun mot significatif commun avec une cible.",
+          "cross_ministry_decision": "NEW",
+          "cross_ministry_note": null,
+          "cross_ministry_evidence": [],
+          "activity_status": "ACTIVITY_UNKNOWN",
+          "official_corroboration_status": "NOT_SEARCHED",
+          "staging_classification": "SOURCE_REVIEW",
+          "classification_reason": "No live/staging duplicate signal, no cross-ministry overlap, no conflicting evidence.",
+          "taxonomy": {
+            "main_category": "autres",
+            "sub_category": "Auto-École",
+            "education_family": "other",
+            "education_family_uncertain": false
+          },
+          "provenance": {
+            "source_url_present": true,
+            "source_url": "https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun",
+            "sha256_present": false,
+            "sha256": null,
+            "provenance_complete": false,
+            "provenance_note": "URL recovered from TRANSPORT-A.1 domain-level manifest entry — no dedicated per-institution sha256."
+          },
+          "presence_confidence": "SINGLE_SOURCE",
+          "identity_confidence": "RESOLVED",
+          "official_verification": "UNVERIFIED",
+          "publication_readiness": "REVIEW_REQUIRED",
+          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "import_provenance": {
+            "sprint": "TRANSPORT-A.2-T3-WRITE",
+            "fingerprint": "transport-tier3:v1:TC-06"
+          }
+        }
+      }
+    },
+    {
+      "data_source_id": null,
+      "fingerprint": "transport-tier3:v1:TC-07",
+      "name_raw": "AUTO ECOLE TURBO NKOMKANA",
+      "name_normalized": "auto ecole turbo nkomkana",
+      "source_ministry": "MINTRANSPORT",
+      "source_url": "https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun",
+      "source_year": 2026,
+      "official_identifier": null,
+      "education_family": "other",
+      "ownership": null,
+      "subsystem": "unknown",
+      "region": "Centre",
+      "city": "Yaoundé",
+      "locality": null,
+      "status": "ready",
+      "raw_data": {
+        "transport_tier3": {
+          "pipeline_version": "transport-tier3-v1",
+          "write_pipeline_version": "transport-a2-t3-write-v1",
+          "candidate_id": "TC-07",
+          "entity_family": "DRIVING_SCHOOL",
+          "entity_family_note": null,
+          "name": "AUTO ECOLE TURBO NKOMKANA",
+          "normalized_name": "auto ecole turbo nkomkana",
+          "source_ministry": "MINTRANSPORT",
+          "sources": [
+            {
+              "source_id": "TRANSPORT-A.1",
+              "domain": "africannuaire.com",
+              "tier3_class": "T3-D",
+              "verified_this_sprint": false
+            }
+          ],
+          "source_count": 1,
+          "independent_source_count": 1,
+          "source_independence": "N/A (single source)",
+          "tier3_confidence": "T3_SINGLE_SOURCE",
+          "tier3_confidence_note": null,
+          "matching_decision": "NO_MATCH",
+          "matching_reason_live": "chevauchement uniquement composé de vocabulaire générique/faible (ex. \"sciences\") sans mot distinctif partagé ni corroboration (sigle exact identique) — signal insuffisant pour un doublon potentiel (SPRINT MINSANTE-G.2 §9).",
+          "matching_reason_staging": "aucun mot significatif commun avec une cible.",
+          "cross_ministry_decision": "NEW",
+          "cross_ministry_note": null,
+          "cross_ministry_evidence": [],
+          "activity_status": "ACTIVITY_UNKNOWN",
+          "official_corroboration_status": "NOT_SEARCHED",
+          "staging_classification": "SOURCE_REVIEW",
+          "classification_reason": "No live/staging duplicate signal, no cross-ministry overlap, no conflicting evidence.",
+          "taxonomy": {
+            "main_category": "autres",
+            "sub_category": "Auto-École",
+            "education_family": "other",
+            "education_family_uncertain": false
+          },
+          "provenance": {
+            "source_url_present": true,
+            "source_url": "https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun",
+            "sha256_present": false,
+            "sha256": null,
+            "provenance_complete": false,
+            "provenance_note": "URL recovered from TRANSPORT-A.1 domain-level manifest entry — no dedicated per-institution sha256."
+          },
+          "presence_confidence": "SINGLE_SOURCE",
+          "identity_confidence": "RESOLVED",
+          "official_verification": "UNVERIFIED",
+          "publication_readiness": "REVIEW_REQUIRED",
+          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "import_provenance": {
+            "sprint": "TRANSPORT-A.2-T3-WRITE",
+            "fingerprint": "transport-tier3:v1:TC-07"
+          }
+        }
+      }
+    },
+    {
+      "data_source_id": null,
+      "fingerprint": "transport-tier3:v1:TC-08",
+      "name_raw": "METROPOLITAINE INTERNATIONALE SCES",
+      "name_normalized": "metropolitaine internationale sces",
+      "source_ministry": "MINTRANSPORT",
+      "source_url": "https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun",
+      "source_year": 2026,
+      "official_identifier": null,
+      "education_family": null,
+      "ownership": null,
+      "subsystem": "unknown",
+      "region": "Centre",
+      "city": "Yaoundé",
+      "locality": null,
+      "status": "ready",
+      "raw_data": {
+        "transport_tier3": {
+          "pipeline_version": "transport-tier3-v1",
+          "write_pipeline_version": "transport-a2-t3-write-v1",
+          "candidate_id": "TC-08",
+          "entity_family": "OTHER_TRANSPORT_EDUCATION",
+          "entity_family_note": "Category UNCERTAIN — listed under africannuaire.com's driving-school category but name does not clearly indicate a DRIVING_SCHOOL specifically (possibly a broader training/vocational entity misfiled by the directory). Never assumed IN_SCOPE by default (brief section 11/12).",
+          "name": "METROPOLITAINE INTERNATIONALE SCES",
+          "normalized_name": "metropolitaine internationale sces",
+          "source_ministry": "MINTRANSPORT",
+          "sources": [
+            {
+              "source_id": "TRANSPORT-A.1",
+              "domain": "africannuaire.com",
+              "tier3_class": "T3-D",
+              "verified_this_sprint": false
+            }
+          ],
+          "source_count": 1,
+          "independent_source_count": 1,
+          "source_independence": "N/A (single source)",
+          "tier3_confidence": "T3_IDENTITY_REVIEW",
+          "tier3_confidence_note": null,
+          "matching_decision": "PROBABLE_MATCH",
+          "matching_reason_live": "aucun mot significatif commun avec une cible.",
+          "matching_reason_staging": "chevauchement de mots partiel (33%), insuffisant pour STRONG_MATCH.",
+          "cross_ministry_decision": "NEW",
+          "cross_ministry_note": null,
+          "cross_ministry_evidence": [],
+          "activity_status": "ACTIVITY_UNKNOWN",
+          "official_corroboration_status": "NOT_SEARCHED",
+          "staging_classification": "IDENTITY_REVIEW",
+          "classification_reason": "tier3_confidence=T3_IDENTITY_REVIEW.",
+          "taxonomy": {
+            "main_category": null,
+            "sub_category": null,
+            "education_family": null,
+            "education_family_uncertain": true
+          },
+          "provenance": {
+            "source_url_present": true,
+            "source_url": "https://africannuaire.com/resultat/?infos=Auto-%C3%A9coles&ville=Cameroun",
+            "sha256_present": false,
+            "sha256": null,
+            "provenance_complete": false,
+            "provenance_note": "URL recovered from TRANSPORT-A.1 domain-level manifest entry — no dedicated per-institution sha256."
+          },
+          "presence_confidence": "SINGLE_SOURCE",
+          "identity_confidence": "UNRESOLVED",
+          "official_verification": "UNVERIFIED",
+          "publication_readiness": "REVIEW_REQUIRED",
+          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "import_provenance": {
+            "sprint": "TRANSPORT-A.2-T3-WRITE",
+            "fingerprint": "transport-tier3:v1:TC-08"
+          }
+        }
+      }
+    },
+    {
+      "data_source_id": null,
+      "fingerprint": "transport-tier3:v1:TC-11",
+      "name_raw": "EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale)",
+      "name_normalized": "ecole maritime industrielle et portuaire de l afrique centrale emipac",
+      "source_ministry": "MINTRANSPORT",
+      "source_url": "https://maritimafrica.com/ecole-maritime-industrielle-et-portuaire-de-lafrique-centrale-emipac-cameroun/",
+      "source_year": 2026,
+      "official_identifier": null,
+      "education_family": null,
+      "ownership": null,
+      "subsystem": "unknown",
+      "region": "Littoral",
+      "city": "Douala",
+      "locality": null,
+      "status": "duplicate_review",
+      "raw_data": {
+        "transport_tier3": {
+          "pipeline_version": "transport-tier3-v1",
+          "write_pipeline_version": "transport-a2-t3-write-v1",
+          "candidate_id": "TC-11",
+          "entity_family": "MARITIME_TRAINING",
+          "entity_family_note": null,
+          "name": "EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale)",
+          "normalized_name": "ecole maritime industrielle et portuaire de l afrique centrale emipac",
+          "source_ministry": "MINTRANSPORT",
+          "sources": [
+            {
+              "source_id": "S01",
+              "domain": "maritimafrica.com",
+              "tier3_class": "T3-C",
+              "verified_this_sprint": true
+            },
+            {
+              "source_id": "S02",
+              "domain": "kamerpower.com",
+              "tier3_class": "T3-C",
+              "verified_this_sprint": true
+            },
+            {
+              "source_id": "N/A",
+              "domain": "facebook.com/ecole.emipac",
+              "tier3_class": "T3-D",
+              "verified_this_sprint": false,
+              "note": "seen in search index only, not fetched"
+            },
+            {
+              "source_id": "N/A",
+              "domain": "schoolandcollegelistings.com",
+              "tier3_class": "T3-D",
+              "verified_this_sprint": false,
+              "note": "two directory listing pages seen in search index, not fetched"
+            },
+            {
+              "source_id": "N/A",
+              "domain": "emipac-cm.com",
+              "tier3_class": "T3-A (claimed, unverifiable)",
+              "verified_this_sprint": false,
+              "note": "domain DOES NOT RESOLVE this sprint (see S07) — NOT counted as a source"
+            }
+          ],
+          "source_count": 2,
+          "independent_source_count": 2,
+          "source_independence": "INDEPENDENT (S01 vs S02 — different publisher/domain, different wording, different content emphasis, no shared paragraph/typo/image-filename observed)",
+          "tier3_confidence": "T3_CORROBORATED",
+          "tier3_confidence_note": "First genuine TIER3_CORROBORATED case built this sprint with real, directly-verified evidence: >=2 independent sources (S01+S02), both T3-C, identity consistent ('EMIPAC' / full name matches exactly in both), no geographic contradiction (S01 states Douala explicitly, S02 is silent on city — silence is not a contradiction). STILL NOT CLEAN_APPROVABLE, STILL human-review-only (brief section 17 absolute rule).",
+          "matching_decision": "PROBABLE_MATCH",
+          "matching_reason_live": "chevauchement de mots partiel (17%), insuffisant pour STRONG_MATCH.",
+          "matching_reason_staging": "aucun mot significatif commun avec une cible.",
+          "cross_ministry_decision": "NEW",
+          "cross_ministry_note": null,
+          "cross_ministry_evidence": [],
+          "activity_status": "ACTIVITY_UNKNOWN",
+          "official_corroboration_status": "NOT_SEARCHED",
+          "staging_classification": "DUPLICATE_REVIEW",
+          "classification_reason": "Fresh matching level=PROBABLE_MATCH.",
+          "taxonomy": {
+            "main_category": "autres",
+            "sub_category": "Formation Maritime",
+            "education_family": null,
+            "education_family_uncertain": true
+          },
+          "provenance": {
+            "source_url_present": true,
+            "source_url": "https://maritimafrica.com/ecole-maritime-industrielle-et-portuaire-de-lafrique-centrale-emipac-cameroun/",
+            "sha256_present": true,
+            "sha256": "1241e88ad664a7b78d7f295e60c8d3e7e6e102b060f82346d0da9c729e0beb42",
+            "provenance_complete": true,
+            "provenance_note": "Fully verified."
+          },
+          "presence_confidence": "CORROBORATED",
+          "identity_confidence": "PROBABLE",
+          "official_verification": "UNVERIFIED",
+          "publication_readiness": "REVIEW_REQUIRED",
+          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "import_provenance": {
+            "sprint": "TRANSPORT-A.2-T3-WRITE",
+            "fingerprint": "transport-tier3:v1:TC-11"
+          }
+        }
+      }
+    },
+    {
+      "data_source_id": null,
+      "fingerprint": "transport-tier3:v1:TC-12",
+      "name_raw": "IT2MIP (Institut des Technologies de la Marine Marchande et Industrie Portuaire)",
+      "name_normalized": "institut des technologies de la marine marchande et industrie portuaire it2mip",
+      "source_ministry": "MINTRANSPORT",
+      "source_url": "https://kamerpower.com/fr/institut-des-technologies-de-la-marine-marchande-et-industrie-portuaire-it2mip-douala/",
+      "source_year": 2026,
+      "official_identifier": null,
+      "education_family": "vocational_training",
+      "ownership": null,
+      "subsystem": "unknown",
+      "region": "Littoral",
+      "city": "Douala",
+      "locality": null,
+      "status": "duplicate_review",
+      "raw_data": {
+        "transport_tier3": {
+          "pipeline_version": "transport-tier3-v1",
+          "write_pipeline_version": "transport-a2-t3-write-v1",
+          "candidate_id": "TC-12",
+          "entity_family": "MARITIME_TRAINING",
+          "entity_family_note": null,
+          "name": "IT2MIP (Institut des Technologies de la Marine Marchande et Industrie Portuaire)",
+          "normalized_name": "institut des technologies de la marine marchande et industrie portuaire it2mip",
+          "source_ministry": "MINTRANSPORT",
+          "sources": [
+            {
+              "source_id": "S03",
+              "domain": "kamerpower.com",
+              "tier3_class": "T3-C",
+              "verified_this_sprint": true
+            },
+            {
+              "source_id": "TRANSPORT-A.1",
+              "domain": "kamerpower.com (other page)",
+              "tier3_class": "T3-C",
+              "verified_this_sprint": false,
+              "note": "SAME publisher as S03 — does not count as a second INDEPENDENT source (brief section 5)"
+            }
+          ],
+          "source_count": 2,
+          "independent_source_count": 1,
+          "source_independence": "SAME_PUBLISHER (both kamerpower.com pages — not treated as independent of each other)",
+          "tier3_confidence": "T3_SINGLE_SOURCE",
+          "tier3_confidence_note": null,
+          "matching_decision": "PROBABLE_MATCH",
+          "matching_reason_live": "chevauchement de mots partiel (17%), insuffisant pour STRONG_MATCH.",
+          "matching_reason_staging": "chevauchement de mots partiel (17%), insuffisant pour STRONG_MATCH.",
+          "cross_ministry_decision": "AMBIGUOUS",
+          "cross_ministry_note": "IT2MIP's own site previously claimed a MINEFOP affiliation (per TRANSPORT-A.1 report, self-declared, not corroborated). This sprint, the primary kamerpower.com page (S03) was fetched directly and does NOT mention MINEFOP or any accreditation number at all. IMPORTANT METHODOLOGICAL FINDING: a WebSearch AI-generated summary of this SAME page fabricated a specific accreditation number ('N°352/MINEFOP/SG/DFOP/SDGSF/SACD, 14-12-2022') that is absent from the actual page content when fetched directly — REJECTED, not used anywhere in this dataset (see S03 snapshot file for full detail). This is the second confirmed instance of this exact failure mode across TRANSPORT-A.1/-T3 (first: 'Decision N° 000083/D/MINT/...' in TRANSPORT-A.1).",
+          "cross_ministry_evidence": [
+            {
+              "authority": "MINEFOP (self-declared, non corroboré)",
+              "identifier_type": "agrement_number (rejected)",
+              "identifier_value": "N°352/MINEFOP/SG/DFOP/SDGSF/SACD, 14-12-2022 — REJETÉ, fabriqué par un résumé IA, absent de la page source réelle",
+              "identifier_authority": "MINEFOP",
+              "note": "IT2MIP — affiliation MINEFOP auto-déclarée par le site de l'institution, non corroborée par la page primaire (kamerpower.com S03) revérifiée ce sprint. Le numéro d'agrément cité par un résumé de recherche IA est un FAUX confirmé (absent de la page réelle). Conservé pour traçabilité de l'échec de méthode, jamais utilisé comme preuve."
+            }
+          ],
+          "activity_status": "ACTIVITY_UNKNOWN",
+          "official_corroboration_status": "NOT_SEARCHED",
+          "staging_classification": "DUPLICATE_REVIEW",
+          "classification_reason": "Fresh matching level=PROBABLE_MATCH.",
+          "taxonomy": {
+            "main_category": "autres",
+            "sub_category": "Formation Maritime",
+            "education_family": "vocational_training",
+            "education_family_uncertain": false
+          },
+          "provenance": {
+            "source_url_present": true,
+            "source_url": "https://kamerpower.com/fr/institut-des-technologies-de-la-marine-marchande-et-industrie-portuaire-it2mip-douala/",
+            "sha256_present": true,
+            "sha256": "b69f39695dfb5fa23cffc581d8a7d0a723e410f0eedf3282b62fc989a3aee0ba",
+            "provenance_complete": true,
+            "provenance_note": "Fully verified."
+          },
+          "presence_confidence": "SINGLE_SOURCE",
+          "identity_confidence": "CONFLICTING",
+          "official_verification": "UNVERIFIED",
+          "publication_readiness": "REVIEW_REQUIRED",
+          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "import_provenance": {
+            "sprint": "TRANSPORT-A.2-T3-WRITE",
+            "fingerprint": "transport-tier3:v1:TC-12"
+          }
+        }
+      }
+    },
+    {
+      "data_source_id": null,
+      "fingerprint": "transport-tier3:v1:TC-13",
+      "name_raw": "Centre de formation professionnelle maritime « Le Paquebot »",
+      "name_normalized": "centre de formation professionnelle maritime le paquebot",
+      "source_ministry": "MINTRANSPORT",
+      "source_url": "https://www.facebook.com/p/Centre-de-formation-professionnelle-maritime-le-paquebot-de-Douala-100075842125767/",
+      "source_year": 2026,
+      "official_identifier": null,
+      "education_family": null,
+      "ownership": null,
+      "subsystem": "unknown",
+      "region": "Littoral",
+      "city": "Douala",
+      "locality": null,
+      "status": "ready",
+      "raw_data": {
+        "transport_tier3": {
+          "pipeline_version": "transport-tier3-v1",
+          "write_pipeline_version": "transport-a2-t3-write-v1",
+          "candidate_id": "TC-13",
+          "entity_family": "MARITIME_TRAINING",
+          "entity_family_note": null,
+          "name": "Centre de formation professionnelle maritime « Le Paquebot »",
+          "normalized_name": "centre de formation professionnelle maritime le paquebot",
+          "source_ministry": "MINTRANSPORT",
+          "sources": [
+            {
+              "source_id": "TRANSPORT-A",
+              "domain": "unspecified (reported, prior sprint)",
+              "tier3_class": "T3-D",
+              "verified_this_sprint": false
+            },
+            {
+              "source_id": "S05",
+              "domain": "facebook.com",
+              "tier3_class": "T3-D",
+              "verified_this_sprint": true,
+              "verification_method": "WebSearch result snippet only, not a full WebFetch"
+            }
+          ],
+          "source_count": 2,
+          "independent_source_count": 1,
+          "source_independence": "UNKNOWN — the TRANSPORT-A source domain was never recorded precisely enough to compare against S05; per brief section 5 an UNKNOWN pair does not count toward the corroboration threshold, conservative default applied",
+          "tier3_confidence": "T3_SINGLE_SOURCE",
+          "tier3_confidence_note": null,
+          "matching_decision": "NO_MATCH",
+          "matching_reason_live": "aucun mot significatif commun avec une cible.",
+          "matching_reason_staging": "aucun mot significatif commun avec une cible.",
+          "cross_ministry_decision": "NEW",
+          "cross_ministry_note": null,
+          "cross_ministry_evidence": [],
+          "activity_status": "ACTIVITY_UNKNOWN",
+          "official_corroboration_status": "NOT_SEARCHED",
+          "staging_classification": "SOURCE_REVIEW",
+          "classification_reason": "No live/staging duplicate signal, no cross-ministry overlap, no conflicting evidence.",
+          "taxonomy": {
+            "main_category": "autres",
+            "sub_category": "Formation Maritime",
+            "education_family": null,
+            "education_family_uncertain": true
+          },
+          "provenance": {
+            "source_url_present": true,
+            "source_url": "https://www.facebook.com/p/Centre-de-formation-professionnelle-maritime-le-paquebot-de-Douala-100075842125767/",
+            "sha256_present": true,
+            "sha256": "2f95168f6f6f82c8c96d020f8d3a1ee140ad5fcc0a4b5ad89c42bb3f7a92b630",
+            "provenance_complete": true,
+            "provenance_note": "No persisted URL for source \"TRANSPORT-A\"/domain \"unspecified (reported, prior sprint)\"."
+          },
+          "presence_confidence": "SINGLE_SOURCE",
+          "identity_confidence": "RESOLVED",
+          "official_verification": "UNVERIFIED",
+          "publication_readiness": "PUBLISHABLE_UNVERIFIED",
+          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "import_provenance": {
+            "sprint": "TRANSPORT-A.2-T3-WRITE",
+            "fingerprint": "transport-tier3:v1:TC-13"
+          }
+        }
+      }
+    },
+    {
+      "data_source_id": null,
+      "fingerprint": "transport-tier3:v1:TC-15",
+      "name_raw": "École de Formation (EFO) - CCAA",
+      "name_normalized": "ecole de formation efo ccaa",
+      "source_ministry": "MINTRANSPORT",
+      "source_url": "https://www.ccaa.aero/index.php/fr/",
+      "source_year": 2026,
+      "official_identifier": null,
+      "education_family": null,
+      "ownership": null,
+      "subsystem": "unknown",
+      "region": "Centre",
+      "city": "Yaoundé",
+      "locality": null,
+      "status": "ready",
+      "raw_data": {
+        "transport_tier3": {
+          "pipeline_version": "transport-tier3-v1",
+          "write_pipeline_version": "transport-a2-t3-write-v1",
+          "candidate_id": "TC-15",
+          "entity_family": "AVIATION_TRAINING",
+          "entity_family_note": "Public training school run BY the aviation regulator itself (CCAA), not an independent private school. Admission scope (public vs CCAA-internal-personnel-only) remains UNRESOLVED — never assumed IN_SCOPE by default.",
+          "name": "École de Formation (EFO) - CCAA",
+          "normalized_name": "ecole de formation efo ccaa",
+          "source_ministry": "MINTRANSPORT",
+          "sources": [
+            {
+              "source_id": "TRANSPORT-A",
+              "domain": "ccaa.aero",
+              "tier3_class": "Tier 2 (national regulator's own site)",
+              "verified_this_sprint": false
+            },
+            {
+              "source_id": "S06",
+              "domain": "igat.icao.int",
+              "tier3_class": "Tier 1/2 (ICAO international training catalogue, 'Legal Status: Governmental')",
+              "verified_this_sprint": true
+            }
+          ],
+          "source_count": 2,
+          "independent_source_count": 2,
+          "source_independence": "INDEPENDENT (different publisher: national regulator vs international UN specialized agency; different platform type; no shared wording)",
+          "tier3_confidence": "ABOVE_TIER3_CORROBORATED",
+          "tier3_confidence_note": "Non-standard label, used deliberately: both sources are ABOVE Tier 3 (Tier 1/2 authority-level), stronger evidence than the brief's Tier-3-only confidence model anticipates. Documented explicitly rather than mis-labeled as ordinary T3_CORROBORATED. Existence is strongly corroborated; this does NOT resolve the still-open public-admission-scope ambiguity, and does NOT change the absolute rule (section 0) that this sprint produces no CLEAN_APPROVABLE / no promotion for ANY candidate regardless of source tier.",
+          "matching_decision": "NO_MATCH",
+          "matching_reason_live": "aucun mot significatif commun avec une cible.",
+          "matching_reason_staging": "aucun mot significatif commun avec une cible.",
+          "cross_ministry_decision": "NEW",
+          "cross_ministry_note": null,
+          "cross_ministry_evidence": [],
+          "activity_status": "ACTIVE (both sources describe current/ongoing operation, 2016-present)",
+          "official_corroboration_status": "NOT_SEARCHED",
+          "staging_classification": "SOURCE_REVIEW",
+          "classification_reason": "No live/staging duplicate signal, no cross-ministry overlap, no conflicting evidence.",
+          "taxonomy": {
+            "main_category": "autres",
+            "sub_category": "Formation Aéronautique",
+            "education_family": null,
+            "education_family_uncertain": true
+          },
+          "provenance": {
+            "source_url_present": true,
+            "source_url": "https://www.ccaa.aero/index.php/fr/",
+            "sha256_present": true,
+            "sha256": "e42dc7275e4e9ac3622b2acb3d6d6801d57e31df1b8caea60b4aeabbc564fa6f",
+            "provenance_complete": true,
+            "provenance_note": "URL recovered from TRANSPORT-A.1 domain-level manifest entry — no dedicated per-institution sha256."
+          },
+          "presence_confidence": "CORROBORATED",
+          "identity_confidence": "RESOLVED",
+          "official_verification": "UNVERIFIED",
+          "publication_readiness": "PUBLISHABLE_UNVERIFIED",
+          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "import_provenance": {
+            "sprint": "TRANSPORT-A.2-T3-WRITE",
+            "fingerprint": "transport-tier3:v1:TC-15"
+          }
+        }
+      }
+    }
+  ]
+}
