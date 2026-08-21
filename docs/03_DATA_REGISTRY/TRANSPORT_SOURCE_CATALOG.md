@@ -1,0 +1,432 @@
+# Transport Source Catalog
+
+SPRINT TRANSPORT-A, 2026-08-21. Opérateur : jean-merlain. READ-ONLY —
+découverte et audit de sources uniquement, aucun import, aucune écriture
+staging, aucune promotion, aucun pilote lancé. Toutes les pages
+consultées l'ont été par `WebFetch`/`WebSearch` bruts (jamais un résumé
+IA pris comme extraction primaire pour compter des lignes), conformément
+à `REGISTRY_EXTRACTION_SAFETY.md`. MINSANTE reste en pause
+(`BLOCKED_PENDING_HUMAN_DOCUMENTARY_VALIDATION`) — non touché.
+
+## 0. Deux domaines à distinguer immédiatement
+
+```
+mintransports.cm   → domaine OFFICIEL du Ministère des Transports du Cameroun.
+                     Contenu réel (actualités, PDF, communiqués) confirmé
+                     accessible ce sprint (HTTP 200 sur plusieurs pages/PDF).
+
+mintransports.net  → DOMAINE SQUATTÉ/PARKING. Au moment de ce sprint,
+                     héberge du contenu commercial de paris en ligne
+                     (plateforme "1Win", contenu Côte d'Ivoire), SANS
+                     RAPPORT avec le ministère. Un résultat de recherche
+                     avait indexé une ancienne URL de ce domaine
+                     ("liste-des-auto-ecoles-appelees-a-regulariser...")
+                     qui répond aujourd'hui HTTP 404 — soit contenu
+                     supprimé, soit lien d'indexation obsolète d'avant le
+                     rachat du domaine. NE JAMAIS traiter mintransports.net
+                     comme une source officielle, même si un ancien lien
+                     y pointait. Précédent direct avec le pattern déjà vu
+                     sur MINEFOP-A.1 (domaine parqué minefop.gov.cm).
+```
+
+Toute future collecte doit exclure `mintransports.net` de toute
+allow-list de domaine.
+
+---
+
+## Source A — mintransports.cm (portail officiel) — PARTIELLEMENT EXPLOITABLE
+
+```
+SOURCE NAME:           Portail officiel du Ministère des Transports (MINT)
+AUTHORITY:             MINT (Ministère des Transports)
+URL:                   https://mintransports.cm/
+SOURCE TYPE:           Portail institutionnel + dépôt de PDF (actualités,
+                       communiqués, statistiques, décrets)
+DATE:                  Consulté 2026-08-21
+TIER:                  1 (autorité officielle confirmée, domaine actif,
+                       HTTPS valide, contenu réel vérifié)
+COVERAGE:              Page d'accueil accessible ; rubrique dédiée
+                       "auto-écoles" avec liste consultable NON localisée
+                       ce sprint malgré recherche ciblée (menu
+                       "Documentations" > "Textes" présent mais lien non
+                       fonctionnel au moment du test)
+NATIONAL/REGIONAL:     National, avec structure PDF organisée par
+                       région/ville pour au moins un type de document
+                       (voir dossier `/images/Permis/<date>/<région>/`)
+PUBLIC/PRIVATE:        N/A (portail institutionnel)
+ENTITY TYPES:          Le portail couvre transport routier, aérien,
+                       maritime/fluvial et sécurité routière — cohérent
+                       avec le mandat légal du ministère
+REGIONS:               Structure de dossier confirmée par région pour les
+                       PDF "Permis" (ex. `Sud-ouest/LIMBE 25-01-2025.pdf`)
+EXPECTED COUNT:        Non observé directement (aucune page de liste
+                       atteinte avec un total explicite)
+IDENTIFIER PRESENT:    Non confirmé pour les auto-écoles — PDF testés
+                       illisibles avec les outils disponibles ce sprint
+                       (voir NOTES)
+DOWNLOADABLE:          PDF individuels oui quand l'URL exacte est connue
+                       (plusieurs confirmés HTTP 200 : rapports
+                       statistiques, décret, documents "Permis" par
+                       région/ville)
+STRUCTURED:            Portail de type site vitrine, pas d'API structurée
+                       identifiée
+SOURCE TIER:           1 pour l'autorité, mais NON EXPLOITÉ comme registre
+                       nominatif ce sprint faute d'avoir localisé la page
+                       de liste elle-même
+EXTRACTION METHOD:     Aucune — lecture de pages/PDF individuels
+                       uniquement, jamais un résumé IA compté comme
+                       extraction de registre
+NOTES:                 Deux catégories de PDF distinctes repérées sous
+                       `/images/` :
+                       (1) `/images/news/pdfs/...` — rapports/statistiques/
+                       décrets (ex. "TRANSTAT-MINT-2025-FR-Ok.pdf",
+                       "decret-n-2023-434-du-04-10-2023.pdf") ;
+                       (2) `/images/Permis/<AAAA-MM-JJ>/<Région>/<VILLE
+                       date>.pdf` — nature exacte NON déterminée ce
+                       sprint : le fichier testé (LIMBE 25-01-2025.pdf,
+                       1.4 Mo) contient une image JPEG intégrée non
+                       décodable par les outils disponibles (pas de rendu
+                       PDF local — `pdftoppm`/poppler absent de
+                       l'environnement, et l'extraction texte via
+                       WebFetch échoue sur ce fichier). Le nom du dossier
+                       ("Permis") suggère fortement des résultats/listes
+                       liés aux PERMIS DE CONDUIRE par session d'examen —
+                       PAS un registre d'auto-écoles au sens strict. RISQUE
+                       PII ÉLEVÉ NON ÉVALUÉ si ce sont des résultats
+                       nominatifs de candidats (voir §16 du contrat) —
+                       AUCUNE tentative d'extraction plus poussée faite ce
+                       sprint, conformément à la politique OCR
+                       prudente déjà appliquée en MINEFOP-A.1 (Source H).
+                       Les deux PDF "news" testés (TRANSTAT, décret) sont
+                       également restés illisibles avec les outils
+                       disponibles (contenu majoritairement image/police
+                       intégrée) — à retenter avec un outil d'extraction
+                       PDF texte natif (`pdftotext`) dans un futur sprint
+                       si ce ministère est réactivé.
+```
+
+## Source B — Cadre légal : Arrêté N°00406/A/MINT/DTT du 28 avril 2000 — TIER 1 (texte, pas liste)
+
+```
+SOURCE:                Arrêté N°00406/A/MINT/DTT du 28 avril 2000 portant
+                       réglementation du permis de conduire et des
+                       auto-écoles
+PUBLISHER:             Ministère des Transports (texte cité de façon
+                       cohérente par plusieurs sources secondaires
+                       indépendantes — camerlex.com, 237online.com)
+AUTHORITY:             TIER 1 pour le texte lui-même (base légale
+                       officielle citée par son numéro complet), TIER 3
+                       pour les canaux d'accès utilisés ce sprint (aucun
+                       PDF officiel du texte intégral atteint directement
+                       — reconstruit par citation croisée, pas lu en
+                       version primaire)
+DATE:                  28 avril 2000
+FORMAT:                Texte réglementaire (non atteint en version
+                       primaire ce sprint)
+COVERAGE:              Cadre national — procédure d'agrément en 2 niveaux :
+                       chef de service PROVINCIAL/DÉPARTEMENTAL des
+                       Transports Terrestres instruit le dossier (délai 15
+                       jours, Art. 5), transmission à la DIRECTION DES
+                       TRANSPORTS TERRESTRES (DTT), agrément tacite après
+                       60 jours sans réponse
+ENTITY TYPE:           Auto-école (transport routier)
+IDENTIFIER:            Confirme qu'un agrément individuel est délivré par
+                       établissement, mais ne fournit ni format normalisé
+                       ni liste de numéros — AUCUN format inventé ici
+NATIONAL/REGIONAL:     Instruction régionale/départementale, DÉCISION
+                       finale au niveau ministériel (national) — cohérent
+                       avec le principe "agrément national" (par
+                       opposition à une délivrance purement locale)
+COMPLETENESS:          N/A — texte réglementaire, pas un registre
+PII:                   Aucune (texte de portée générale)
+STATUS:                Existence confirmée par citation croisée
+                       indépendante (2 sources secondaires distinctes,
+                       même numéro d'arrêté cité), texte primaire non
+                       localisé ce sprint
+NOTES:                 Confirme la DIRECTION DES TRANSPORTS TERRESTRES
+                       (DTT) comme service gestionnaire pour les
+                       auto-écoles — nom de service directement
+                       réutilisable si un futur registre d'identifiants
+                       est modélisé (cf. §12 du contrat).
+```
+
+## Source C — Presse (Cameroon Tribune, 237online, journalducameroun, etc.) — DISCOVERY / AGGREGATE ONLY
+
+```
+SOURCE TYPE:           Articles de presse rapportant des chiffres et
+                       événements ministériels sur les auto-écoles
+EXEMPLES:
+  - "166 auto-écoles agréées" (Cameroon Tribune, article ~2015, domaine
+    d'archive ct2015.cameroon-tribune.cm — domaine non résolvable ce
+    sprint, DNS en échec)
+  - "Plus de 450 auto-écoles enregistrées, seulement 102 autorisées"
+    (chiffre rapporté sans date précise identifiée avec certitude ce
+    sprint)
+  - "250 auto-écoles clandestines recensées" (237actu.com)
+  - "Près de 50 auto-écoles suspendues" (journalducameroun.com)
+  - Suspension d'un an de la délivrance de nouveaux agréments, décision
+    attribuée au ministre Robert Nkili (cameroun24.net)
+TIER:                  3 / DISCOVERY ONLY — presse, jamais une source
+                       primaire
+DATE:                  Hétérogène, non datée avec précision pour
+                       plusieurs articles — AUCUN chiffre ci-dessus ne
+                       doit être traité comme un expected_count actuel
+COUNT EXPLICIT:        Plusieurs chiffres contradictoires selon l'année/
+                       l'article (166 / 450 / 102 / 250 / ~50 suspendues)
+                       — signal cohérent avec un secteur MOUVANT
+                       (créations, suspensions, retraits répétés), PAS
+                       une preuve de registre stable
+IDENTIFIER PRESENT:    NON — jamais de numéro d'agrément individuel cité
+                       dans ces articles
+EXTRACTION POSSIBLE:   NON — aucune liste nominative, uniquement des
+                       totaux et des événements
+PII:                   Aucune détectée dans les extraits consultés
+                       (agrégats et déclarations institutionnelles)
+NOTES:                 Confirme la RÉALITÉ d'un cycle recensement/
+                       sanction récurrent piloté par le ministère
+                       (cohérent avec l'existence d'une liste interne
+                       tenue par la DTT), mais AUCUNE de ces sources ne
+                       constitue elle-même un registre exploitable. Utile
+                       uniquement comme corroboration contextuelle de
+                       l'existence d'un processus d'agrément actif.
+```
+
+## Source D — TRANSTAT MINT 2025 (annuaire statistique) — TIER 1, AGRÉGAT PROBABLE
+
+```
+SOURCE:                "TRANSTAT MINT 2025" — annuaire statistique des
+                       transports
+URL:                   https://mintransports.cm/images/news/pdfs/8368812b20a3de079c5a52ba2aea30f1-TRANSTAT-MINT-2025-FR-Ok.pdf
+PUBLISHER:             Ministère des Transports (hébergé sur le domaine
+                       officiel)
+AUTHORITY:             TIER 1 — document officiel MINT
+DATE:                  2025 (édition)
+FORMAT:                PDF (7.2 Mo) — contenu textuel NON extrait avec
+                       succès ce sprint (police/image intégrée, outils
+                       disponibles insuffisants — pas de `pdftotext`
+                       local)
+COVERAGE:              Présumée nationale (par analogie avec le titre et
+                       la mention presse d'un tableau "auto-écoles créées
+                       par sexe et département, 2018-2022" dans un
+                       document apparenté "Sur la route de l'émergence")
+ENTITY TYPE:           Statistiques transport toutes filières (probable :
+                       auto-écoles, permis délivrés, parc automobile,
+                       transport aérien/maritime)
+COUNT:                 NON EXTRAIT ce sprint (échec technique, pas un
+                       échec de recherche — le document existe et est
+                       accessible en HTTP 200)
+IDENTIFIER:            Présumé absent (annuaire statistique = agrégats,
+                       cohérent avec le pattern déjà observé pour
+                       l'annuaire ONEFOP/MINEFOP équivalent, Source D de
+                       MINEFOP-A.1)
+EXTRACTION POSSIBLE:   NON ce sprint — À RETENTER avec un outil
+                       d'extraction PDF texte natif (`pdftotext`/poppler)
+                       dans un futur sprint technique. Ne pas confondre
+                       "non extrait par manque d'outil" avec "source
+                       inexistante" — la distinction est documentée ici
+                       explicitement pour ne pas ressaisir la même
+                       recherche inutilement.
+PII:                   Improbable (document statistique agrégé), non
+                       vérifié directement
+STATUS:                ACCESSIBLE (HTTP 200), techniquement non lu ce
+                       sprint
+```
+
+## Source E — DAMVN (Direction des Affaires Maritimes et des Voies Navigables) — cadre légal / autorité
+
+```
+SOURCE:                Page organigramme MINT — direction DAMVN
+AUTHORITY:             MINT
+TIER:                  2/3 (existence confirmée par résultat de recherche
+                       pointant vers une page d'organigramme officielle,
+                       contenu détaillé non lu directement ce sprint)
+COVERAGE:              Confirme que la DAMVN est responsable de la
+                       politique transport maritime/fluvial/lacustre, de
+                       la réglementation du secteur maritime, et de
+                       l'étude des dossiers d'agrément des sociétés
+                       opérant dans le secteur maritime
+ENTITY TYPE:           Autorité (direction ministérielle), pas un
+                       établissement
+IDENTIFIER:            N/A
+EXTRACTION POSSIBLE:   NON — page d'organigramme, pas un registre
+NOTES:                 Nom de direction directement réutilisable comme
+                       `authority`/service émetteur si un futur registre
+                       maritime est modélisé. Confirme le CHEVAUCHEMENT
+                       DE COMPÉTENCE avec l'IMO (Organisation Maritime
+                       Internationale) pour la certification STCW des
+                       gens de mer — un rapport IMO trouvé séparément
+                       confirme qu'un audit de mise en œuvre de la
+                       convention STCW 1978 a eu lieu au Cameroun,
+                       identifiant des lacunes/besoins d'assistance
+                       technique pour la délivrance de certificats et
+                       diplômes maritimes — signal que le dispositif
+                       national de certification maritime n'est
+                       peut-être pas encore pleinement mature/documenté
+                       publiquement.
+```
+
+## Source F — Écoles de formation maritime nommées (EMIPAC et autres) — DISCOVERY, non corroboré officiellement
+
+```
+INSTITUTIONS REPÉRÉES (par recherche, jamais un registre officiel) :
+  - École Maritime Industrielle et Portuaire de l'Afrique Centrale
+    (EMIPAC), Douala — école privée, délivre des formations/diplômes en
+    marine marchande, plusieurs filières citées (maritimafrica.com,
+    site propre camariners.com apparenté au même écosystème)
+  - Centre d'Instruction Maritime et Portuaire — cité comme conforme aux
+    standards de formation OMI (Organisation Maritime Internationale)
+  - Centre de formation professionnelle maritime "Le Paquebot", Douala —
+    concours d'entrée annuel mentionné (candidats camerounais/étrangers,
+    17-42 ans)
+  - Filière maritime et portuaire à ISETAG (Douala) — IPES déjà
+    potentiellement dans le périmètre MINESUP (chevauchement possible,
+    non vérifié ce sprint — aucune correspondance nominative trouvée dans
+    les données MINESUP déjà collectées par Écoles237, voir §9 du
+    contrat)
+TIER:                  3 / DISCOVERY ONLY pour toutes — aucune de ces
+                       institutions n'a été trouvée sur une page/liste
+                       émise directement par le MINT ou la DAMVN ce
+                       sprint. Existence réelle probable (plusieurs
+                       sources indépendantes convergentes pour EMIPAC),
+                       mais AUCUNE preuve d'agrément officiel MINT/DAMVN
+                       localisée — ne pas confondre "existe et opère"
+                       avec "figure sur un registre officiel"
+IDENTIFIER:            Aucun numéro d'agrément trouvé pour aucune de ces
+                       institutions
+PII:                   Aucune donnée personnelle collectée (noms
+                       d'institutions et de villes uniquement)
+EXTRACTION POSSIBLE:   NON — discovery only, aucune tentative de
+                       collecte structurée
+```
+
+## Source G — Cameroon Civil Aviation Authority (CCAA) — cadre légal / autorité, chevauchement de tutelle
+
+```
+SOURCE:                Site officiel CCAA (ccaa.aero) + profil ICAO iGAT
+AUTHORITY:             CCAA — établissement public sous tutelle technique
+                       du MINT (autorité de l'aviation civile, distincte
+                       administrativement du ministère mais rattachée à
+                       son secteur)
+TIER:                  2 (site officiel d'une autorité publique
+                       apparentée, pas le ministère lui-même)
+COVERAGE:              Aucune page listant des organismes de formation
+                       aéronautique APPROUVÉS (ATO tiers) localisée ce
+                       sprint — le site met en avant la propre école de
+                       formation de la CCAA :
+                       - "École de Formation (EFO)" — Yaoundé, ouverte au
+                         public depuis mars 2016, y compris formations
+                         ICAO (formateurs, concepteurs de cours)
+                       - Un centre de formation CCAA à Douala également
+                         mentionné
+ENTITY TYPE:           EFO = institution publique de formation rattachée
+                       à un régulateur (CCAA), pas une école privée
+                       indépendante — classification proposée : TRAINING_
+                       ESTABLISHMENT si elle admet des inscriptions
+                       ouvertes au public au-delà du seul personnel CCAA
+                       (à confirmer), sinon ADMINISTRATIVE_SERVICE/
+                       organe de formation interne d'un régulateur —
+                       AMBIGU, non tranché ce sprint faute de détail
+                       suffisant sur l'admission
+IDENTIFIER:            N/A trouvé
+EXTRACTION POSSIBLE:   NON
+PII:                   Aucune
+NOTES:                 Confirme le chevauchement de tutelle attendu par
+                       le brief (§6) : la CCAA, pas directement le MINT,
+                       est l'interlocuteur technique le plus probable
+                       pour toute future collecte aviation. Aucune preuve
+                       trouvée d'un registre camerounais d'organismes de
+                       formation aéronautique agréés distinct de la CCAA
+                       elle-même — à réévaluer si CAFAC (Commission
+                       Africaine de l'Aviation Civile, partenaire cité
+                       par la page Wikipédia du ministère) publie un
+                       registre régional incluant le Cameroun.
+```
+
+## Source H — CAM-TVET / traininginformation.cm — PISTE PROMETTEUSE, NON EXPLOITÉE (limite technique)
+
+```
+SOURCE:                CAM-TVET — "plateforme numérique sur les
+                       opportunités de formation technique et
+                       professionnelle au Cameroun"
+URL:                   https://traininginformation.cm/home/eftp
+                       (paramètre observé : `?tutelleSigle=MINEFOP` dans
+                       un résultat de recherche indexé, suggérant un
+                       filtre par ministère de tutelle)
+AUTHORITY:             TIER 1/2 potentiel — plateforme à vérifier (nom de
+                       domaine institutionnel plausible, non confirmé
+                       comme émanation directe d'un ministère précis ce
+                       sprint)
+TIER:                  Non déterminé — POTENTIEL FORT mais NON VÉRIFIÉ
+COVERAGE:              Inconnue — la plateforme est une application web
+                       dynamique (rendu JavaScript côté client) ; les
+                       outils disponibles ce sprint (`WebFetch`) ne
+                       peuvent récupérer que la coquille HTML statique
+                       (titre + référence de logo), aucun contenu
+                       listant des établissements n'a pu être observé
+ENTITY TYPE:           Inconnu — si le filtre `tutelleSigle` accepte une
+                       valeur transport (MINT/MINTRANSPORT, non confirmé
+                       existant), ce serait potentiellement une source
+                       structurée par ministère de tutelle couvrant
+                       plusieurs filières professionnelles, y compris
+                       transport
+IDENTIFIER:            Inconnu
+EXTRACTION POSSIBLE:   NON ce sprint — nécessiterait soit un rendu
+                       JavaScript (navigateur headless), soit la
+                       découverte d'une API JSON sous-jacente (non
+                       recherchée ce sprint, hors périmètre d'un audit
+                       documentaire read-only). PISTE À REPRENDRE dans un
+                       futur sprint technique, pour TOUT ministère (pas
+                       seulement Transport) — potentiellement pertinente
+                       aussi pour MINEFOP.
+PII:                   Non évalué (contenu non atteint)
+STATUS:                Accessible en tant que coquille HTML, contenu réel
+                       non observé
+```
+
+## Domaines à écarter explicitement
+
+```
+mintransports.net    → domaine squatté (contenu de paris en ligne),
+                      jamais une source officielle malgré une ancienne
+                      indexation de recherche pointant vers ce domaine —
+                      voir §0.
+ct2015.cameroon-tribune.cm → sous-domaine d'archive, DNS non résolvable
+                      ce sprint (échec ENOTFOUND) — contenu de l'article
+                      "166 auto-écoles agréées" connu uniquement par
+                      extrait de recherche, jamais lu en version
+                      primaire.
+```
+
+## Sources DISCOVERY ONLY consultées sans approfondissement
+
+```
+kamerpower.com, osidimbea.cm, x.com/camertrans, tresorpublic.cm,
+africannuaire.com, road-safety-charter.ec.europa.eu (page profil
+individuel d'une auto-école, hors périmètre — plateforme européenne),
+france-education-international.fr/enic-naric-bdd (fiche pays générique,
+non approfondie).
+```
+
+## Résumé des sources
+
+| Source | Tier | Accessible ce sprint | Nominatif | Identifiant officiel | Utilisable comme registre |
+|---|---|---|---|---|---|
+| A — mintransports.cm (portail) | 1 | Partiel (pages oui, liste auto-écoles non localisée) | Non confirmé | Non confirmé | NON ce sprint |
+| B — Arrêté N°00406/A/MINT/DTT (2000) | 1 (texte) | Non (citation croisée seulement) | N/A (texte réglementaire) | Confirme le principe, pas le format | NON — cadre légal seulement |
+| C — Presse (plusieurs articles) | 3 / Discovery | Oui (lecture) | NON | NON | NON — agrégats contradictoires |
+| D — TRANSTAT MINT 2025 | 1 | Oui (HTTP 200), non lu (échec technique) | Probablement NON (agrégat) | Inconnu | NON ce sprint — à retenter avec pdftotext |
+| E — DAMVN (organigramme) | 2/3 | Partiel | N/A | N/A | NON — autorité, pas registre |
+| F — Écoles maritimes nommées (EMIPAC, etc.) | 3 / Discovery | Oui (sites tiers) | Oui (noms), non corroboré officiellement | NON | NON |
+| G — CCAA (aviation) | 2 | Oui | N/A | NON | NON |
+| H — CAM-TVET / traininginformation.cm | Non déterminé | Coquille seulement (JS) | Inconnu | Inconnu | NON ce sprint — limite technique, piste à reprendre |
+
+**Constat global** : aucune source NOMINATIVE officielle, structurée et
+directement exploitable n'a été confirmée accessible avec les outils de
+ce sprint. Le ministère (MINT) et ses directions (DTT pour les
+auto-écoles, DAMVN pour le maritime) sont clairement identifiés et
+actifs, le cadre légal existe et est citable, mais la LISTE elle-même
+(ou son format d'identifiant réel) n'a pas pu être atteinte — soit par
+lien mort (Source A), soit par limite technique d'extraction PDF/JS
+(Sources D et H). Voir `TRANSPORT_IMPORT_CONTRACT.md` §20 pour la
+recommandation de pilote (aucun ce sprint) et §23 pour la décision
+finale.
