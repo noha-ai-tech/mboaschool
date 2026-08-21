@@ -1,0 +1,627 @@
+{
+  "sprint": "MINSANTE-I.2",
+  "generated_at": "2026-08-21T15:17:41.413Z",
+  "program": "Imagerie Médicale",
+  "source_sha256": "26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a",
+  "parser_version": "minsante-a3-pdf-recovery@1",
+  "verdict": "QUARANTINED_NUMBERING_ABSENT",
+  "verdict_unchanged_from_i1": true,
+  "row_count": 30,
+  "row_count_caveat": "NOUVEAU EN I.2 : 1 ligne(s) parmi les 30 reconstruites sont en réalité la FUSION de 2 écoles distinctes (détecté par cross-référence interne au document pinné, voir merge_risk_analysis). Le nombre physique minimum démontré est donc 31, PAS 30. Ceci est un défaut DIFFÉRENT et ADDITIONNEL au défaut de numérotation absente : sans numérotation, une paire de lignes dont l'écart Y interne tombe sous le seuil de continuation est indiscernable d'une ligne unique qui s'enroule sur 2 lignes physiques. Ce défaut n'a pas été détecté par MINSANTE-I ni MINSANTE-I.1 (leur analyse structurelle a testé l'absence de numéro peint, pas le risque de fusion de lignes).",
+  "regions_detected_in_order": [
+    "Adamaoua",
+    "Centre",
+    "Est",
+    "Extrême-Nord",
+    "Littoral",
+    "Nord",
+    "Ouest"
+  ],
+  "region_distribution": [
+    {
+      "region": "Adamaoua",
+      "rowCount": 1,
+      "status": "PARSED",
+      "numberingResetOk": null
+    },
+    {
+      "region": "Centre",
+      "rowCount": 15,
+      "status": "PARSED",
+      "numberingResetOk": null
+    },
+    {
+      "region": "Est",
+      "rowCount": 1,
+      "status": "PARSED",
+      "numberingResetOk": null
+    },
+    {
+      "region": "Extrême-Nord",
+      "rowCount": 1,
+      "status": "PARSED",
+      "numberingResetOk": null
+    },
+    {
+      "region": "Littoral",
+      "rowCount": 8,
+      "status": "PARSED",
+      "numberingResetOk": null
+    },
+    {
+      "region": "Nord",
+      "rowCount": 1,
+      "status": "PARSED",
+      "numberingResetOk": null
+    },
+    {
+      "region": "Nord-Ouest",
+      "rowCount": 0,
+      "status": "ZERO_ROWS_CONFIRMED",
+      "numberingResetOk": null
+    },
+    {
+      "region": "Ouest",
+      "rowCount": 3,
+      "status": "PARSED",
+      "numberingResetOk": null
+    },
+    {
+      "region": "Sud",
+      "rowCount": 0,
+      "status": "ZERO_ROWS_CONFIRMED",
+      "numberingResetOk": null
+    },
+    {
+      "region": "Sud-Ouest",
+      "rowCount": 0,
+      "status": "ZERO_ROWS_CONFIRMED",
+      "numberingResetOk": null
+    }
+  ],
+  "rows": [
+    {
+      "sequence_in_extraction": 1,
+      "region": "Adamaoua",
+      "school_name": "ECOLE PRIVEE DE FORMATION DES PROFESSIONNELS DE LA SANTE DE MEIGANGA",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 2,
+      "region": "Centre",
+      "school_name": "CENTRE DE FORMATION DU PERSONNEL PARAMEDICAL (CFPP) DE YAOUNDE",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 3,
+      "region": "Centre",
+      "school_name": "ECOLE DES SCIENCES DE LA SANTE « LE PHENIX » DE SOA",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 4,
+      "region": "Centre",
+      "school_name": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE \"MBIDA VALERIEN\" D'OBALA",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 5,
+      "region": "Centre",
+      "school_name": "ECOLE PRIVEE DE RADIOLOGIE \"DORCAS\" DE YAOUNDE",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 6,
+      "region": "Centre",
+      "school_name": "ECOLE PRIVEE PARAMEDICALE DE BALAMBA",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 7,
+      "region": "Centre",
+      "school_name": "INSTITUT DE FORMATION DES PERSONNELS DE LA SANTE NAKOMA ACADEMY DE MBALMAYO",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 8,
+      "region": "Centre",
+      "school_name": "INSTITUT DE FORMATION DES PERSONNELS SPECIALISES EN SANTE (IFOPESS) - MFOU",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 9,
+      "region": "Centre",
+      "school_name": "INSTITUT DES SCIENCES DE LA SANTE \"SAINT CHRISTOPHE\" (ISSSC) D'EBOLMEDZOM - NKOABANG",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 10,
+      "region": "Centre",
+      "school_name": "INSTITUT DES SCIENCES MEDICALES DE YAOUNDE",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 11,
+      "region": "Centre",
+      "school_name": "INSTITUT PANAFRICAIN DE FORMATION PARAMEDICALE (IPAF-PM) DE YAOUNDE",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 12,
+      "region": "Centre",
+      "school_name": "INSTITUT PRIVE DE FORMATION DES PERSONNELS SANITAIRES SAINT JOEL DE YAOUNDE",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 13,
+      "region": "Centre",
+      "school_name": "INSTITUT PRIVE DE FORMATION MEDICO-SANITAIRE AGORA HEALTH LEKIE CENTRE D'ELIG-MFOMO",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 14,
+      "region": "Centre",
+      "school_name": "INSTITUT SUPERIEUR DE TECHNOLOGIE APPLIQUEE DE GESTION (ISTAG) DE YAOUNDE",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 15,
+      "region": "Centre",
+      "school_name": "INSTITUT SUPERIEUR DES SCIENCES DE LA SANTE DE ZALOM-MFOU",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 16,
+      "region": "Centre",
+      "school_name": "INSTITUT SUPERIEUR DES SCIENCES ET DES TECHNOLOGIES ISST LA SAPIENCE",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 17,
+      "region": "Est",
+      "school_name": "INSTITUT PRIVE FANG DE MESSAMENA",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 18,
+      "region": "Extrême-Nord",
+      "school_name": "INSTITUT DE FORMATION EN SANTE DE MAROUA",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 19,
+      "region": "Littoral",
+      "school_name": "COMPLEXE PRIVE DE FORMATION DU PERSONNEL MEDICO-SANITAIRE \"ALPHA OMEGA\" DE NDOUNGUE",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 20,
+      "region": "Littoral",
+      "school_name": "ECOLE DE FORMATION DES PERSONNELS DE SANTE FONDATION BOBUIN DE DOUALA",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 21,
+      "region": "Littoral",
+      "school_name": "ECOLE INTERNATIONALE PARAMEDICALE DE DOUALA (EPID)",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 22,
+      "region": "Littoral",
+      "school_name": "ECOLE PRIVEE \"SANTE SANS FRONTIERE\" DE LA SANAGA MARITIME D'EDEA",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 23,
+      "region": "Littoral",
+      "school_name": "ECOLE PRIVEE DE FORMATION DES PERSONNELS SANITAIRES (EFPSA) DE DOUALA",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 24,
+      "region": "Littoral",
+      "school_name": "ECOLE PRIVEE DE FORMATION DES PROFESSIONNELS DE SANTE DE BWANG DOUALA",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 25,
+      "region": "Littoral",
+      "school_name": "ECOLE PRIVEE FONDATION JEUGEUVOU FOWANG DE DOUALA",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 26,
+      "region": "Littoral",
+      "school_name": "INSTITUT DES SCIENCES DE LA SANTE INNOVANTES DE DOUALA",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 27,
+      "region": "Nord",
+      "school_name": "ECOLE DE FORMATION DES PERSONNELS DE SANTE DE GUIDER (EFOPSAG)",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 28,
+      "region": "Ouest",
+      "school_name": "ECOLE DES METIERS DE LA SANTE DE BAMOUGOUM",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 29,
+      "region": "Ouest",
+      "school_name": "ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE FONDATION SAINT MAURICE DE BAFOUSSAM",
+      "page": 3,
+      "row_number_in_source": null
+    },
+    {
+      "sequence_in_extraction": 30,
+      "region": "Ouest",
+      "school_name": "INSTITUT DES SCIENCES MEDICO-SANITAIRES LES ARGUS DE BANDJOUN",
+      "page": 3,
+      "row_number_in_source": null
+    }
+  ],
+  "merge_risk_analysis": {
+    "method": "Générique, lecture seule, aucune ligne réellement modifiée : (a) repérer les noms >1.4x la longueur du nom le plus long parmi les AUTRES lignes de la section ; (b) essayer tous les points de coupure sur un marqueur institutionnel générique (ECOLE/INSTITUT/CENTRE/COMPLEXE/COLLEGE/UNIVERSITE/FACULTE) hors position 0 ; (c) vérifier si LES DEUX moitiés correspondent (exactIdentityKey, même région) à une ligne déjà connue dans N'IMPORTE QUELLE AUTRE filière de ce même document pinné.",
+    "findings": [
+      {
+        "sequence": 1,
+        "school_name": "ECOLE PRIVEE DE FORMATION DES PROFESSIONNELS DE LA SANTE DE MEIGANGA",
+        "region": "Adamaoua",
+        "name_length": 68,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.45,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 2,
+        "school_name": "CENTRE DE FORMATION DU PERSONNEL PARAMEDICAL (CFPP) DE YAOUNDE",
+        "region": "Centre",
+        "name_length": 62,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.41,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 3,
+        "school_name": "ECOLE DES SCIENCES DE LA SANTE « LE PHENIX » DE SOA",
+        "region": "Centre",
+        "name_length": 51,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.34,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 4,
+        "school_name": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE \"MBIDA VALERIEN\" D'OBALA",
+        "region": "Centre",
+        "name_length": 74,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.49,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 5,
+        "school_name": "ECOLE PRIVEE DE RADIOLOGIE \"DORCAS\" DE YAOUNDE",
+        "region": "Centre",
+        "name_length": 46,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.3,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 6,
+        "school_name": "ECOLE PRIVEE PARAMEDICALE DE BALAMBA",
+        "region": "Centre",
+        "name_length": 36,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.24,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 7,
+        "school_name": "INSTITUT DE FORMATION DES PERSONNELS DE LA SANTE NAKOMA ACADEMY DE MBALMAYO",
+        "region": "Centre",
+        "name_length": 75,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.5,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 8,
+        "school_name": "INSTITUT DE FORMATION DES PERSONNELS SPECIALISES EN SANTE (IFOPESS) - MFOU",
+        "region": "Centre",
+        "name_length": 74,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.49,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 9,
+        "school_name": "INSTITUT DES SCIENCES DE LA SANTE \"SAINT CHRISTOPHE\" (ISSSC) D'EBOLMEDZOM - NKOABANG",
+        "region": "Centre",
+        "name_length": 84,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.56,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 10,
+        "school_name": "INSTITUT DES SCIENCES MEDICALES DE YAOUNDE",
+        "region": "Centre",
+        "name_length": 42,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.28,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 11,
+        "school_name": "INSTITUT PANAFRICAIN DE FORMATION PARAMEDICALE (IPAF-PM) DE YAOUNDE",
+        "region": "Centre",
+        "name_length": 67,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.44,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 12,
+        "school_name": "INSTITUT PRIVE DE FORMATION DES PERSONNELS SANITAIRES SAINT JOEL DE YAOUNDE",
+        "region": "Centre",
+        "name_length": 75,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.5,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 13,
+        "school_name": "INSTITUT PRIVE DE FORMATION MEDICO-SANITAIRE AGORA HEALTH LEKIE CENTRE D'ELIG-MFOMO",
+        "region": "Centre",
+        "name_length": 83,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.55,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 14,
+        "school_name": "INSTITUT SUPERIEUR DE TECHNOLOGIE APPLIQUEE DE GESTION (ISTAG) DE YAOUNDE",
+        "region": "Centre",
+        "name_length": 73,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.48,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 15,
+        "school_name": "INSTITUT SUPERIEUR DES SCIENCES DE LA SANTE DE ZALOM-MFOU",
+        "region": "Centre",
+        "name_length": 57,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.38,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 16,
+        "school_name": "INSTITUT SUPERIEUR DES SCIENCES ET DES TECHNOLOGIES ISST LA SAPIENCE",
+        "region": "Centre",
+        "name_length": 68,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.45,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 17,
+        "school_name": "INSTITUT PRIVE FANG DE MESSAMENA",
+        "region": "Est",
+        "name_length": 32,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.21,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 18,
+        "school_name": "INSTITUT DE FORMATION EN SANTE DE MAROUA",
+        "region": "Extrême-Nord",
+        "name_length": 40,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.26,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 19,
+        "school_name": "COMPLEXE PRIVE DE FORMATION DU PERSONNEL MEDICO-SANITAIRE \"ALPHA OMEGA\" DE NDOUNGUE",
+        "region": "Littoral",
+        "name_length": 83,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.55,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 20,
+        "school_name": "ECOLE DE FORMATION DES PERSONNELS DE SANTE FONDATION BOBUIN DE DOUALA",
+        "region": "Littoral",
+        "name_length": 69,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.46,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 21,
+        "school_name": "ECOLE INTERNATIONALE PARAMEDICALE DE DOUALA (EPID)",
+        "region": "Littoral",
+        "name_length": 50,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.33,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 22,
+        "school_name": "ECOLE PRIVEE \"SANTE SANS FRONTIERE\" DE LA SANAGA MARITIME D'EDEA",
+        "region": "Littoral",
+        "name_length": 64,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.42,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 23,
+        "school_name": "ECOLE PRIVEE DE FORMATION DES PERSONNELS SANITAIRES (EFPSA) DE DOUALA",
+        "region": "Littoral",
+        "name_length": 69,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.46,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 24,
+        "school_name": "ECOLE PRIVEE DE FORMATION DES PROFESSIONNELS DE SANTE DE BWANG DOUALA",
+        "region": "Littoral",
+        "name_length": 69,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.46,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 25,
+        "school_name": "ECOLE PRIVEE FONDATION JEUGEUVOU FOWANG DE DOUALA",
+        "region": "Littoral",
+        "name_length": 49,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.32,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 26,
+        "school_name": "INSTITUT DES SCIENCES DE LA SANTE INNOVANTES DE DOUALA",
+        "region": "Littoral",
+        "name_length": 54,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.36,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 27,
+        "school_name": "ECOLE DE FORMATION DES PERSONNELS DE SANTE DE GUIDER (EFOPSAG)",
+        "region": "Nord",
+        "name_length": 62,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.41,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 28,
+        "school_name": "ECOLE DES METIERS DE LA SANTE DE BAMOUGOUM",
+        "region": "Ouest",
+        "name_length": 42,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.28,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      },
+      {
+        "sequence": 29,
+        "school_name": "ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE FONDATION SAINT MAURICE DE BAFOUSSAM",
+        "region": "Ouest",
+        "name_length": 151,
+        "max_other_row_length_in_section": 84,
+        "length_ratio": 1.8,
+        "flagged_as_merge_suspected": true,
+        "corroborated_split": {
+          "left": "ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG",
+          "right": "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE FONDATION SAINT MAURICE DE BAFOUSSAM",
+          "left_seen_in": [
+            "Analyses Médicales",
+            "Infirmiers",
+            "Kinésithérapie",
+            "Odontostomatologie",
+            "Sages-femmes/Maïeuticiens"
+          ],
+          "right_seen_in": [
+            "Infirmiers"
+          ]
+        }
+      },
+      {
+        "sequence": 30,
+        "school_name": "INSTITUT DES SCIENCES MEDICO-SANITAIRES LES ARGUS DE BANDJOUN",
+        "region": "Ouest",
+        "name_length": 61,
+        "max_other_row_length_in_section": 151,
+        "length_ratio": 0.4,
+        "flagged_as_merge_suspected": false,
+        "corroborated_split": null
+      }
+    ],
+    "corroborated_merge_count": 1,
+    "demonstrated_minimum_physical_row_count": 31
+  },
+  "pii_scan": {
+    "persisted_matches": 0,
+    "hits": []
+  },
+  "numbering_status": "NUMBERING_ABSENT_SOURCE_DEFECT",
+  "completeness_proof_options_checked": {
+    "A_explicit_total_plus_reconciliation": false,
+    "B_second_official_complete_list": false,
+    "C_regional_aggregation_10_of_10_regions": false,
+    "D_explicit_exhaustive_decision_annex": false,
+    "E_formal_minsante_documentary_validation": false,
+    "note": "Aucune des 5 formes de preuve de complétude acceptables (§8 A-E) n'a été localisée pour Imagerie Médicale 2025 après recherche documentaire ciblée (voir minsante-i2-source-search.json). '30 lignes semblent plausibles' et 'aucune autre école trouvée sur Google' sont explicitement refusées comme preuve, conformément au brief."
+  }
+}

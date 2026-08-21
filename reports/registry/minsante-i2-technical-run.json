@@ -1,0 +1,49 @@
+{
+  "sprint": "MINSANTE-I.2",
+  "generated_at": "2026-08-21T15:17:41.413Z",
+  "repository": {
+    "branch": "main",
+    "commit_reference": "2909851 (HEAD au démarrage du sprint)"
+  },
+  "database": {
+    "establishments_before": 2248,
+    "establishments_after": 2248,
+    "staging_before": 2366,
+    "staging_after": 2366,
+    "registry_identifiers_before": 2242,
+    "registry_identifiers_after": 2242,
+    "unchanged": true,
+    "production_writes": 0
+  },
+  "source": {
+    "url": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+    "expected_sha256": "26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a",
+    "actual_sha256": "26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a",
+    "source_status": "SOURCE_STABLE",
+    "authority": "PROBABLE_TIER_1"
+  },
+  "imagerie": {
+    "row_count_as_reconstructed": 30,
+    "corroborated_merged_rows_found": 1,
+    "demonstrated_minimum_physical_row_count": 31,
+    "verdict": "QUARANTINED_NUMBERING_ABSENT",
+    "verdict_unchanged_from_i1": true
+  },
+  "programs_safe_count": 9,
+  "pilot_regression": {
+    "recovered": 22,
+    "promoted_recovered": 8,
+    "deferred_recovered": 14,
+    "identity_conflicts": 0,
+    "pass": true
+  },
+  "pii": {
+    "persisted_matches": 0
+  },
+  "decision": "B",
+  "national_extraction_ready": false,
+  "ready_for_minsante_j": false,
+  "human_validation_required": true,
+  "push": "NO",
+  "deploy": "NO"
+}

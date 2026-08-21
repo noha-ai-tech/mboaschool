@@ -1806,3 +1806,155 @@ d'extraction automatisée sur cette filière précise.
 Push = NO. Deploy = NO. Aucun import national en staging. Aucune promotion.
 Aucune modification des 8 établissements MINSANTE déjà live. MINSANTE-H
 reste le pilote production validé, inchangé.**
+
+## I.2 — Validation documentaire officielle & clôture de source : Imagerie Médicale (2026-08-21)
+
+Sprint **DOCUMENTARY / READ-ONLY strict**, périmètre strictement limité à
+Imagerie Médicale, la seule filière restée en quarantaine après
+MINSANTE-I.1 (9/10 SAFE). Objectif unique : répondre à « les 30 lignes
+Imagerie Médicale extraites représentent-elles la totalité des écoles
+agréées pour cette filière dans le référentiel 2025 ? » par OUI (preuve de
+complétude), NON (source/liste prouvée incomplète), ou INCONNU (aucune
+preuve officielle disponible) — les trois réponses étant explicitement
+acceptables, sans jamais forcer OUI.
+
+Baseline revérifiée fraîchement avant/après (un seul script d'exécution,
+`scripts/school-registry/minsante-i2-run.ts`) : `establishments`=2248,
+`establishment_import_staging`=2366,
+`establishment_registry_identifiers`=2242 — **identiques avant/après, 0
+écriture production**. SHA256 source recalculé = identique à la valeur
+épinglée (`26e68ab0…3946a`), `SOURCE_STABLE`. Ni `pdfMinsanteA2.ts` ni
+`pdfMinsanteA3.ts` n'ont été modifiés.
+
+### Recherche documentaire externe (§4-6 du brief)
+
+Recherches ciblées avec variantes (libellé exact du PDF, radiologie,
+technicien médico-sanitaire, technicien en imagerie médicale, arrêté,
+liste écoles agréées) sur `minsante.cm`, `concours.minsante.cm`, et le web
+ouvert. Un document Tier 1 authentique et jusqu'ici non examiné a été
+trouvé et lu intégralement : `minsante.cm/site/sites/default/files/
+concours2022/TIM2022.pdf` — mais il s'agit d'une décision de **résultats
+de concours 2022** (candidats déclarés admis), **0 occurrence** du terme
+« imagerie » sur ses 27 pages malgré son nom de fichier trompeur — non
+pertinent. Aucune source Tier 1/2 pertinente n'a été localisée ; seuls des
+leads Tier 3 (mirroirs de blogs, dont un lien Google Drive tiers déjà
+repéré en I.1) existent, insuffisants par construction (§4 — jamais
+suffisants seuls). Détail complet :
+`reports/registry/minsante-i2-source-search.json`.
+
+### NOUVEAU — découverte d'une fusion de lignes par corroboration interne
+
+En ré-analysant le document **pinné lui-même** (pas une source externe),
+ce sprint a détecté — avec une méthode **générique, jamais câblée en
+dur** — qu'**une des 30 lignes reconstruites est en réalité la fusion de
+deux écoles distinctes**. Méthode : (a) repérer les noms anormalement
+longs dans la section Imagerie Médicale (>1.4x le nom le plus long parmi
+les autres lignes de la section) ; (b) pour chaque nom suspect, essayer
+tous les points de coupure sur un marqueur institutionnel générique
+(ECOLE/INSTITUT/CENTRE/COMPLEXE/COLLEGE/UNIVERSITE/FACULTE) ; (c) vérifier
+si les deux moitiés correspondent (`exactIdentityKey`, même région) à une
+ligne déjà connue dans **n'importe quelle autre filière** de ce même
+document.
+
+Une seule ligne est flaguée (séquence 29, région Ouest, 151 caractères —
+près du double de la ligne suivante la plus longue) et **corroborée** :
+- `ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG` — vue
+  seule et complète dans Analyses Médicales (rang 5), Infirmiers (rang 7),
+  Kinésithérapie (rang 3), Odontostomatologie (rang 1), Sages-femmes/
+  Maïeuticiens (rang 4).
+- `ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE FONDATION SAINT
+  MAURICE DE BAFOUSSAM` — vue seule et complète dans Infirmiers (rang 8,
+  **immédiatement après** la précédente au rang 7, aucune lacune de
+  numérotation).
+
+Mécanisme : le seuil d'écart Y qui distingue « nouvelle ligne » de « suite
+d'un nom enroulé sur 2-3 lignes physiques » (13.0pt, voir
+`pdfMinsanteA2.ts`) a, à cet endroit précis, classé à tort l'écart entre
+deux écoles réellement distinctes comme une continuation — invisible sans
+les 5 autres occurrences numérotées de ces mêmes noms ailleurs dans le
+document pour trancher. **Nombre physique minimum démontré : 31, pas 30.**
+Ce défaut est **distinct et additionnel** au défaut de numérotation
+absente déjà connu depuis MINSANTE-I, et n'avait été détecté ni par
+MINSANTE-I ni par MINSANTE-I.1 (leur analyse structurelle avait testé
+l'absence de numéro peint, pas le risque de fusion de lignes). Il ne remet
+pas en cause les 9 filières `SAFE` : leur numérotation source aurait
+révélé une telle fusion par un saut de numéro — c'est précisément
+l'absence de cette numérotation pour Imagerie Médicale qui a permis à
+cette fusion de passer inaperçue. Il reste possible que d'autres fusions
+sans nom anormalement long existent ailleurs dans la section, donc
+indétectables par cette méthode — ce qui renforce le besoin de validation
+humaine plutôt que de le réduire. Détail complet, y compris le détail
+machine-lisible des 30 lignes :
+`reports/registry/minsante-i2-imagerie-validation.json`.
+
+**Aucune ligne n'a été modifiée, fusionnée ou divisée dans les données
+réellement utilisées par le parseur** — cette analyse est un rapport en
+lecture seule, jamais un correctif silencieux. Le parseur `minsante-a3-
+pdf-recovery@1` n'a pas été modifié ce sprint : corriger cette fusion
+spécifique ne changerait de toute façon pas le verdict (`31` ne serait pas
+plus prouvé complet que `30` ne l'était).
+
+### Réconciliation croisée (§7 du brief)
+
+Aucune source B externe n'a été trouvée — la comparaison A/B au sens
+strict du brief est donc `NOT_APPLICABLE` pour les 29 lignes non
+concernées par la fusion. La seule ligne avec un statut de réconciliation
+non-trivial est la ligne fusionnée elle-même, classée
+`SOURCE_A_INTERNAL_SPLIT_CORROBORATED` (réconciliation interne au document
+A contre lui-même, pas contre un document B). Détail :
+`reports/registry/minsante-i2-source-comparison.csv`.
+
+### Preuve de complétude (§8 du brief)
+
+Aucune des 5 formes acceptables (A. total explicite + réconciliation ;
+B. seconde liste officielle complète ; C. agrégation régionale 10/10 ;
+D. décision/annexe explicitement exhaustive ; E. validation documentaire
+formelle MINSANTE) n'a été localisée pour établir que 31 (ou tout autre
+nombre) est le total national exact et exhaustif. En revanche, une preuve
+rigoureuse d'**incomplétude/inexactitude** de la reconstruction à 30
+lignes a été établie en interne (§ précédente) — suffisante pour répondre
+**NON** (pas INCONNU) à la question de la reconstruction à 30 lignes,
+sans pour autant prouver que 31 est lui-même le total complet.
+
+### Dossier de validation humaine (§9 du brief)
+
+Produit malgré la décision B, car aucune preuve Tier 1/2 en ligne
+n'établit le total véritablement exhaustif : `reports/registry/
+minsante-i2-human-validation-pack.md` — source, SHA256, 31 établissements
+(30 lignes + la ligne 29 séparée), explication des deux défauts
+(numérotation absente + fusion découverte), question A (total exhaustif)
+et question B (confirmation de la fusion), formats de preuve acceptés.
+Aucun contact institutionnel inventé.
+
+### Régression pilote/legacy (§11 du brief)
+
+Revalidée **sans modification** : 22/22 lignes pilote retrouvées, **8/8
+promus récupérés, 14/14 différés récupérés, 0 conflit d'identité** —
+résultat identique à MINSANTE-I.1. Détail :
+`reports/registry/minsante-i2-pilot-regression.json`.
+
+### PII (§12 du brief)
+
+0 correspondance sur les 30 noms d'établissements Imagerie Médicale
+(scan `piiScan` programmatique). Le document Tier 1 examiné
+(`TIM2022.pdf`) contenait des noms de candidats individuels (résultats de
+concours) — non copiés, non conservés, non exploités au-delà de la
+vérification de pertinence.
+
+### Décision
+
+**B — IMAGERIE_SOURCE_INCOMPLETE.** La reconstruction actuelle à 30
+lignes est démontrée incomplète/inexacte par cross-référence interne
+rigoureuse au document officiel pinné lui-même (au moins 31 lignes
+physiques) — preuve suffisante d'incomplétude au sens du brief §13-B,
+même sans une seconde source externe distincte. La compréhension du
+dataset est corrigée en conséquence (30 → au moins 31, potentiellement
+plus). `national_extraction_ready = NO`, `MINSANTE-J = NO`.
+
+**MINSANTE-I.2 : Programmes SAFE = 9/10 (inchangé). NATIONAL_EXTRACTION_READY
+= NO. READY FOR MINSANTE-J = NO. Push = NO. Deploy = NO. Aucun import
+national en staging. Aucune promotion. Aucune modification des 8
+établissements MINSANTE déjà live. Prochaine étape recommandée :
+transmettre `minsante-i2-human-validation-pack.md` au MINSANTE (question A
++ question B) avant tout nouveau sprint d'extraction automatisée sur
+Imagerie Médicale.**

@@ -1,0 +1,107 @@
+{
+  "sprint": "MINSANTE-I.2",
+  "generated_at": "2026-08-21T15:30:00.000Z",
+  "note": "Recherche READ-ONLY (WebSearch + WebFetch) d'une preuve documentaire officielle (Tier 1/2) de complétude pour Imagerie Médicale dans le référentiel MINSANTE 2025. Complète — ne remplace pas — la recherche déjà effectuée en MINSANTE-I.1 (voir reports/registry/minsante-i1-source-corroboration.json), avec des variantes de requêtes supplémentaires imposées par le brief §5 (radiologie, technicien médico-sanitaire, technicien en imagerie médicale, arrêté, liste écoles).",
+  "authority_tiers": {
+    "TIER_1": "minsante.cm et sous-domaines (*.minsante.cm), concours.minsante.cm, décision/arrêté MINSANTE, document ONEFOP/gouvernement.",
+    "TIER_2": "Institution publique, université publique, délégation régionale citant explicitement l'acte MINSANTE.",
+    "TIER_3": "Discovery uniquement — jamais suffisant seul comme preuve finale."
+  },
+  "queries_run": [
+    "\"Imagerie Médicale\" MINSANTE écoles agréées 2025",
+    "\"écoles agréées\" \"Imagerie Médicale\" Cameroun MINSANTE",
+    "arrêté MINSANTE \"Imagerie Médicale\" liste écoles Cameroun",
+    "\"technicien en imagerie médicale\" MINSANTE écoles Cameroun concours",
+    "radiologie MINSANTE écoles agréées Cameroun liste 2025",
+    "\"formation Imagerie Médicale\" MINSANTE écoles",
+    "\"liste écoles\" \"Imagerie Médicale\" Cameroun",
+    "\"concours Imagerie Médicale\" MINSANTE 2025",
+    "\"écoles de formation\" \"Imagerie Médicale\" MINSANTE Cameroun 30 écoles"
+  ],
+  "sources_investigated": [
+    {
+      "url": "https://concours.minsante.cm/",
+      "tier": "TIER_1",
+      "date_checked": "2026-08-21",
+      "method": "WebFetch (re-vérifié ce sprint)",
+      "result": "Portail de concours officiel — contenu : logistique de dépôt de dossier (date limite reportée au 28 août 2026), procédure, contact. Aucune liste d'écoles agréées ni décompte par filière trouvé.",
+      "relevant_to_imagerie": false
+    },
+    {
+      "url": "https://www.minsante.cm/site/sites/default/files/concours2022/TIM2022.pdf",
+      "tier": "TIER_1",
+      "date_checked": "2026-08-21",
+      "method": "WebFetch (binaire) + extraction texte via pdfjs-dist (l'outil de fetch générique ne rend pas le PDF ; dump texte page par page réalisé avec l'infrastructure d'extraction du dépôt, lecture seule)",
+      "result": "27 pages. Malgré le nom de fichier ('TIM' = Technicien Imagerie Médicale), le contenu est une DÉCISION MINSANTE de publication des résultats du concours d'entrée 2022 (candidats déclarés admis, années académique 2022-2023) — PAS une liste d'écoles agréées. Recherche exhaustive du terme 'imagerie' (insensible à la casse) sur les 27 pages extraites : 0 occurrence. Recherche du terme 'TIM' isolé : 0 occurrence. Document hors-sujet pour cette recherche malgré son nom de fichier trompeur. Contient des noms de candidats individuels (PII) — non copié, non conservé, non exploité davantage au-delà de cette vérification de pertinence.",
+      "relevant_to_imagerie": false,
+      "pii_encountered": true,
+      "pii_persisted": false
+    },
+    {
+      "url": "https://www.minsante.cm/site/sites/default/files/CONCOURS%20MINSANTE%202020-1.pdf",
+      "tier": "TIER_1",
+      "date_checked": "2026-08-21",
+      "method": "Identifié par recherche, NON téléchargé",
+      "result": "Même schéma de nommage que TIM2022.pdf (décision de concours par année). Sur la base du résultat négatif et cohérent obtenu pour TIM2022.pdf (décision de résultats de concours, pas de liste d'écoles agréées, PII de candidats), ce document n'a pas été téléchargé — probabilité très faible qu'il contienne une liste d'écoles agréées par filière plutôt que des résultats de candidats, et cela éviterait une exposition PII inutile pour un résultat attendu négatif.",
+      "relevant_to_imagerie": "non vérifié directement — voir justification",
+      "pii_encountered": false,
+      "pii_persisted": false
+    },
+    {
+      "url": "https://www.cameroondesks.com/2025/01/liste-des-ecoles-de-formation-medico-sanitaires-agreees-par-le-minsante.html",
+      "tier": "TIER_3",
+      "date_checked": "2026-08-21",
+      "method": "WebFetch",
+      "result": "Article de blog. Ne reproduit PAS le détail école×filière sur la page elle-même. Renvoie vers un mirroir Google Drive tiers (id 1UWuvvO4Ndhy7nv2sw7sY6ZN02AamD8C5 — identique au lead déjà repéré en MINSANTE-I.1) — hébergement non institutionnel, provenance non vérifiable comme authentique/officielle, non téléchargé (Tier 3, jamais suffisant seul par construction du brief §4).",
+      "relevant_to_imagerie": "discovery lead uniquement, non exploité"
+    },
+    {
+      "url": "https://infosconcourseducation.com/les-etablissements-de-formation-agrees-par-le-minsante/",
+      "tier": "TIER_3",
+      "date_checked": "2026-08-21",
+      "method": "WebFetch",
+      "result": "Ne reproduit pas la liste détaillée par filière. Cite '\"la liste officielle des écoles de formation médico-sanitaires agréées pour l'année 2025\"' sans numéro d'acte ni date précise. Renvoie vers le même mirroir Google Drive tiers que cameroondesks.com. Portail privé, pas une institution publique — Tier 3.",
+      "relevant_to_imagerie": "discovery lead uniquement, non exploité"
+    },
+    {
+      "url": "https://infosconcourseducation.com/liste-des-ecoles-de-formation-medico-sanitaire-agreees-du-minsante-2025/",
+      "tier": "TIER_3",
+      "date_checked": "2026-08-21",
+      "method": "WebSearch snippet uniquement",
+      "result": "Doublon du même portail, même annonce générique, aucun détail par filière visible dans les extraits.",
+      "relevant_to_imagerie": "discovery lead uniquement, non exploité"
+    },
+    {
+      "url": "https://srnlimbe.org/wp-content/uploads/2023/06/Fr_Annexe_CONCOURS_MINSANTE_2023.pdf",
+      "tier": "TIER_2_CANDIDATE (site d'une institution — Salvation Army Health Board / SRN Limbe — republication, pas la source primaire)",
+      "date_checked": "2026-08-21",
+      "method": "WebFetch",
+      "result": "HTTP 403 Forbidden — inaccessible ce sprint. Titre indexé ('ANNEXE AU COMMUNIQUE RADIO-PRESSE — LISTE DES ETABLISSEMENTS DE FORMATION') suggère une republication d'une annexe MINSANTE 2023 (année différente de la source pinnée 2025), mais le contenu n'a pas pu être vérifié.",
+      "relevant_to_imagerie": "non vérifiable — accès bloqué"
+    },
+    {
+      "url": "https://kamerpower.com/fr/ecoles-de-formation-publiques-et-privees-medico-sanitaires-personnels-cameroun/",
+      "tier": "TIER_3",
+      "date_checked": "2026-08-21",
+      "method": "WebSearch snippet uniquement",
+      "result": "Portail privé listant des écoles médico-sanitaires publiques/privées de manière générale, pas structuré comme le référentiel MINSANTE 2025 par filière avec numérotation/décompte.",
+      "relevant_to_imagerie": "discovery lead uniquement, non exploité"
+    },
+    {
+      "url": "https://lifeinstitutecomplex.com/filiere/radiologie-et-imagerie-medicale/, https://cismed-sante.com/, http://www.univ-catho-sjd.com/index.php/ecoles/saint-jerome-school-of-health-sciences",
+      "tier": "TIER_3",
+      "date_checked": "2026-08-21",
+      "method": "WebSearch snippets uniquement",
+      "result": "Pages marketing d'écoles individuelles présentant LEUR PROPRE programme d'imagerie médicale/radiologie — ne constituent pas une liste MINSANTE consolidée par filière, hors sujet pour la question de complétude.",
+      "relevant_to_imagerie": false
+    }
+  ],
+  "second_independent_official_document_search": {
+    "found": false,
+    "conclusion": "Confirmé cohérent avec MINSANTE-I.1 : aucun deuxième document officiel MINSANTE 2025 donnant la même population (écoles agréées par filière) n'a été localisé. Le portail minsante.cm officiel (page téléchargements, vérifiée en I.1) ne republie pas la liste 2025. Les décisions de concours Tier 1 identifiées cette fois (TIM2022.pdf) sont d'un TYPE différent (résultats de candidats admis) et d'une ANNÉE différente (2022), et ne mentionnent même pas 'Imagerie' dans leur texte malgré leur nom de fichier."
+  },
+  "internal_forensic_finding_not_an_external_source": {
+    "note": "IMPORTANT — distinct de la recherche de source EXTERNE ci-dessus. En ré-analysant le document PINNÉ LUI-MÊME (SHA256=26e68ab0…3946a, déjà utilisé en I/I.1), ce sprint a découvert par cross-référence interne générique (voir reports/registry/minsante-i2-imagerie-validation.json, champ merge_risk_analysis) qu'UNE des 30 lignes Imagerie Médicale reconstruites ('ligne 29', région Ouest) est en réalité la FUSION de DEUX écoles distinctes : 'ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG' et 'ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE FONDATION SAINT MAURICE DE BAFOUSSAM'. Ces deux noms existent CHACUN, séparément et complets, dans d'autres filières numérotées du MÊME document (BAFANG : Analyses Médicales rang 5, Infirmiers rang 7, Kinésithérapie rang 3, Odontostomatologie rang 1, Sages-femmes rang 4 ; FONDATION SAINT MAURICE : Infirmiers rang 8, immédiatement après BAFANG, sans lacune de numérotation). Ce n'est PAS une nouvelle source externe — c'est une preuve d'INCOMPLÉTUDE/INEXACTITUDE de la reconstruction actuelle, dérivée du document officiel pinné lui-même. Nombre physique minimum démontré pour Imagerie Médicale : 31, pas 30. Ce défaut de fusion est DISTINCT du défaut de numérotation absente et n'avait été détecté ni par MINSANTE-I ni par MINSANTE-I.1."
+  },
+  "conclusion": "Aucune source Tier 1 ou Tier 2 externe fournissant un total explicite, une deuxième liste complète, une agrégation régionale 10/10, une annexe exhaustive ou une validation documentaire formelle (options A-E du brief §8) n'a été localisée pour Imagerie Médicale 2025. En revanche, ce sprint a produit une preuve interne rigoureuse (cross-référence générique, non câblée en dur, contre les sections numérotées du document pinné lui-même) que la reconstruction actuelle de 30 lignes est FAUSSE/INCOMPLÈTE : au moins 31 lignes physiques existent. Ceci suffit pour répondre 'NO — la liste actuelle est incomplète' à la question posée en §3 du brief, même sans source externe — voir decision B dans minsante-i2-run-summary.json."
+}

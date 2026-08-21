@@ -1,0 +1,92 @@
+{
+  "sprint": "MINSANTE-I.2",
+  "generated_at": "2026-08-21T15:17:41.413Z",
+  "scope": "READ-ONLY documentary validation, strictly limited to Imagerie Médicale. No DB writes, no staging import, no promotion, no push, no deploy.",
+  "repository": {
+    "branch": "main",
+    "commit_reference_at_start": "2909851 (HEAD au démarrage du sprint)"
+  },
+  "database": {
+    "establishments_before": 2248,
+    "establishments_after": 2248,
+    "staging_before": 2366,
+    "staging_after": 2366,
+    "registry_identifiers_before": 2242,
+    "registry_identifiers_after": 2242,
+    "unchanged": true,
+    "production_writes": 0
+  },
+  "source": {
+    "url": "https://examen-national-special-minsante.cm/loadfile/L2hvbWUvZXhhbWVuL2NvbmNvdXJzZnJhbWV3b3JrL3N0b3JhZ2UvcGRmL3BhZ2VzL3Jlc3VsdGF0cy9MSVNURV9FQ09MRVNfQUdSRUVTX01JTlNBTlRFXzIwMjUucGRm",
+    "expected_sha256": "26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a",
+    "actual_sha256": "26e68ab08092faa18e0fdf604e4ee6b93c229180ec9ea1f0d044f6b1a6a3946a",
+    "source_status": "SOURCE_STABLE",
+    "authority": "PROBABLE_TIER_1",
+    "not_silently_replaced": true
+  },
+  "imagerie_medicale": {
+    "row_count_as_reconstructed_by_unmodified_parser": 30,
+    "corroborated_merged_rows_found": 1,
+    "demonstrated_minimum_physical_row_count": 31,
+    "verdict": "QUARANTINED_NUMBERING_ABSENT",
+    "verdict_unchanged_from_i1": true,
+    "parser_version": "minsante-a3-pdf-recovery@1 (non modifié)",
+    "detail_report": "reports/registry/minsante-i2-imagerie-validation.json",
+    "merge_finding_summary": "Cross-référence interne générique (pas de chaîne câblée en dur) contre les 9 autres filières numérotées du même document pinné a démontré qu'une ligne (séquence 29, région Ouest) est la fusion de 2 écoles distinctes : 'ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG' (vue dans 5 autres filières) et 'ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE FONDATION SAINT MAURICE DE BAFOUSSAM' (vue dans Infirmiers, rang 8, immédiatement après BAFANG au rang 7). Défaut nouveau, distinct du défaut de numérotation absente déjà connu, non détecté par MINSANTE-I ni MINSANTE-I.1."
+  },
+  "official_alternative_sources": {
+    "tier_1_found": 1,
+    "tier_1_relevant_to_imagerie": 0,
+    "tier_1_detail": "https://www.minsante.cm/site/sites/default/files/concours2022/TIM2022.pdf — décision MINSANTE authentique (minsante.cm), mais résultats de concours 2022 (candidats admis), 0 occurrence du terme 'imagerie' sur 27 pages malgré le nom de fichier — non pertinent.",
+    "tier_2_found": 0,
+    "tier_3_discovery_only": 5,
+    "explicit_total_count_found": false,
+    "independent_complete_list_found": false,
+    "detail_report": "reports/registry/minsante-i2-source-search.json"
+  },
+  "cross_document_reconciliation": {
+    "external_source_b_available": false,
+    "note": "Aucune source B externe trouvée — comparaison A/B impossible au sens du brief §7. La seule réconciliation possible ce sprint est INTERNE au document pinné (source A contre elle-même, via ses 9 autres filières numérotées) — voir merge_finding_summary ci-dessus.",
+    "detail_report": "reports/registry/minsante-i2-source-comparison.csv"
+  },
+  "completeness": {
+    "proven": false,
+    "proof_options_A_to_E_satisfied": [],
+    "evidence": "Aucune des 5 formes de preuve de complétude (§8 A-E) n'a été trouvée pour établir que 31 (ou tout autre nombre) est le total national exact et exhaustif pour Imagerie Médicale 2025. En revanche, une preuve RIGOUREUSE d'INCOMPLÉTUDE/INEXACTITUDE de la reconstruction actuelle à 30 lignes a été établie (voir imagerie_medicale.merge_finding_summary) — suffisant pour répondre 'NO' (pas 'UNKNOWN') à la question de complétude de la reconstruction à 30 lignes posée en §3 du brief, sans pour autant prouver que 31 est LUI-MÊME le total complet.",
+    "human_documentary_validation_required": true,
+    "human_validation_pack": "reports/registry/minsante-i2-human-validation-pack.md"
+  },
+  "source_status_imagerie": "SOURCE_INCOMPLETE",
+  "programs_safe_count": 9,
+  "programs_safe_total": 10,
+  "national_extraction_ready": false,
+  "ready_for_minsante_j": false,
+  "pilot_regression": {
+    "pilot_rows_expected": 22,
+    "pilot_rows_recovered": 22,
+    "pilot_promoted_expected": 8,
+    "pilot_promoted_recovered": 8,
+    "pilot_deferred_expected": 14,
+    "pilot_deferred_recovered": 14,
+    "identity_conflicts": 0,
+    "pass": true,
+    "note": "Revalidation SANS MODIFICATION — résultat identique à MINSANTE-I.1.",
+    "detail_report": "reports/registry/minsante-i2-pilot-regression.json"
+  },
+  "pii": {
+    "persisted_matches": 0,
+    "note": "Scan automatique (piiScan) sur les 30 noms d'établissements Imagerie Médicale — 0 correspondance email/téléphone/matricule. TIM2022.pdf (Tier 1 exploré) contenait des noms de candidats individuels (PII) — non copiés, non conservés."
+  },
+  "qa": {
+    "build": "PASS",
+    "typescript_app": "PASS",
+    "typescript_registry": "PASS",
+    "tests": "229/229 PASS, 0 régression (npx tsx --test sur l'ensemble des fichiers *.test.ts du paquet scripts/school-registry — même total qu'en MINSANTE-I.1). Rejoué par prudence bien qu'aucun changement du moteur de matching ni des parseurs existants n'ait été fait ce sprint (le seul code ajouté est un nouveau script d'exécution READ-ONLY, scripts/school-registry/minsante-i2-run.ts, analogue en nature à minsante-i1-run.ts)."
+  },
+  "decision": "B",
+  "decision_label": "IMAGERIE_SOURCE_INCOMPLETE",
+  "decision_rationale": "La reconstruction actuelle à 30 lignes est démontrée incomplète/inexacte par cross-référence interne rigoureuse au document officiel pinné lui-même (au moins 31 lignes physiques, pas 30) — ceci constitue une preuve suffisante d'incomplétude au sens du brief §13-B, même en l'absence d'une SECONDE source externe distincte. La compréhension du dataset est corrigée en conséquence (30 -> au moins 31, potentiellement plus). Un dossier de validation humaine est produit malgré la décision B car aucune preuve TIER 1/2 en ligne n'a été trouvée pour établir le total véritablement exhaustif.",
+  "recommended_next_step": "Transmettre reports/registry/minsante-i2-human-validation-pack.md au MINSANTE (question A : total exhaustif exact ; question B : confirmation de la fusion détectée) avant tout nouveau sprint d'extraction automatisée sur Imagerie Médicale. Si confirmé par le MINSANTE, une future correction ciblée du parseur (nouvelle version versionnée, générique, avec tests) pourrait séparer la ligne fusionnée sans changer le verdict global (toujours pas de preuve de complétude nationale). MINSANTE-J reste bloqué sur cette seule filière.",
+  "push": "NO",
+  "deploy": "NO"
+}
