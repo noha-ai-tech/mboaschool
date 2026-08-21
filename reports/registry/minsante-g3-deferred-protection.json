@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-08-21T02:30:44.396Z",
+  "sprint": "MINSANTE-G.3",
+  "snapshot_candidate_count": 8,
+  "total_pilot": 22,
+  "category_review_excluded": 13,
+  "duplicate_review_excluded": 1,
+  "deferred_leak_into_snapshot": 0,
+  "other_non_approved_excluded": true,
+  "protection_ok": true,
+  "note": "Revalidation MINSANTE-G.3 (re-preuve finale avant approbation humaine, aucune nouvelle règle) : population de promotion chargée EXCLUSIVEMENT par les 8 staging_id du snapshot minsante-f-pilot-approval.json (checksum 26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653) — jamais dérivée d'un statut/re-matching qui pourrait laisser passer un candidat CATEGORY_REVIEW ou DUPLICATE_REVIEW différé, même si son nom/sa catégorie semble valide. Les 13 CATEGORY_REVIEW + 1 DUPLICATE_REVIEW du pilote minsante-pilot-v1 restent hors périmètre, confirmé mécaniquement contre l'état staging ACTUEL (pas un résultat historique réutilisé)."
+}

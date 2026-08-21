@@ -1,0 +1,28 @@
+{
+  "sprint": "MINSANTE-G.3",
+  "generated_at": "2026-08-21T02:30:44.400Z",
+  "guard_module": "scripts/school-registry/lib/minsanteGPromotionGuard.ts",
+  "test_file": "scripts/school-registry/lib/__tests__/minsanteGPromotionGuard.test.ts",
+  "command": "npx tsx --test scripts/school-registry/lib/__tests__/minsanteGPromotionGuard.test.ts",
+  "result": { "tests": 11, "pass": 11, "fail": 0 },
+  "scenarios": [
+    { "name": "fully valid flag set", "expected": "PASS (no throw)", "actual": "PASS" },
+    { "name": "missing --commit", "expected": "REFUSED", "actual": "REFUSED" },
+    { "name": "wrong confirmation phrase (e.g. MINESUP-D/F phrase reused)", "expected": "REFUSED", "actual": "REFUSED" },
+    { "name": "wrong project ref", "expected": "REFUSED", "actual": "REFUSED" },
+    { "name": "missing or wrong operator", "expected": "REFUSED", "actual": "REFUSED" },
+    { "name": "missing --approved-by", "expected": "REFUSED", "actual": "REFUSED" },
+    { "name": "self-approval (approved-by === operator, case-insensitive)", "expected": "REFUSED", "actual": "REFUSED" },
+    { "name": "eligible count != --expected-count=8", "expected": "REFUSED", "actual": "REFUSED" },
+    { "name": "wrong or missing --approval-checksum", "expected": "REFUSED", "actual": "REFUSED" },
+    { "name": "unresolved identifier collision", "expected": "REFUSED", "actual": "REFUSED" },
+    { "name": "unresolved slug collision", "expected": "REFUSED", "actual": "REFUSED" }
+  ],
+  "live_script_project_guard": {
+    "description": "scripts/school-registry/minsante-g-promotion-preflight.ts also independently re-checks the live Supabase project ref before any other work and exits 1 on mismatch — verified this sprint against the real connection (project ref returned: umcwwynrftidytxgqkwi).",
+    "wrong_project_would_refuse": true
+  },
+  "commit_path_invoked_this_sprint": false,
+  "production_writes": 0,
+  "all_blocked": true
+}

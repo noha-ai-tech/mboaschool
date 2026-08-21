@@ -1,0 +1,127 @@
+{
+  "sprint": "MINSANTE-G.3",
+  "title": "FINAL CONTROLLED PROMOTION PRE-FLIGHT + HUMAN APPROVAL GATE",
+  "operator": "jean-merlain",
+  "generated_at": "2026-08-21T02:30:44.400Z",
+  "previous_validated_sprint": "MINSANTE-G.2",
+  "reference_commit": "c708a76",
+  "repository": {
+    "name": "mboaschool",
+    "branch": "main",
+    "head": "c708a761e11f88080996826c0558c9d31c53ddb0",
+    "noha_main": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+    "ahead_of_noha_main": 29,
+    "working_tree_clean_before_sprint": true,
+    "root_claude_or_agents_md_present": false,
+    "cross_project_context_ignored": "klassia AGENTS.md/CLAUDE.md content injected into this session's system context does not apply to this repository and was disregarded."
+  },
+  "database": {
+    "project_ref": "umcwwynrftidytxgqkwi",
+    "project_ref_confirmed_live": true,
+    "establishments": 2240,
+    "staging_total": 2366,
+    "registry_identifiers": 2242,
+    "minsante_pilot_staging_rows": 22,
+    "minsante_pilot_approved_rows": 8,
+    "minsante_pilot_deferred_rows": 14,
+    "production_writes_this_sprint": 0
+  },
+  "snapshot_immutability": {
+    "file": "reports/registry/minsante-f-pilot-approval.json",
+    "stored_candidate_count": 8,
+    "checksum_prompt": "26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653",
+    "checksum_stored": "26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653",
+    "checksum_recomputed_from_current_staging": "26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653",
+    "all_three_match": true,
+    "snapshot_regenerated": false
+  },
+  "live_revalidation": {
+    "eligible": 8,
+    "already_live": 0,
+    "conflict": 0,
+    "duplicate_signal": 0,
+    "category_changed": 0,
+    "source_issue": 0,
+    "pii_issue": 0,
+    "cross_ministry_conflict": 0,
+    "invalid": 0,
+    "report_csv": "reports/registry/minsante-g3-live-revalidation.csv"
+  },
+  "matching_revalidation": {
+    "engine": "scripts/school-registry/lib/matching/engine.ts (current MINSANTE-G.2 shared engine, unmodified this sprint)",
+    "contextual_token_weighting_preserved": true,
+    "sciences_weak_generic_preserved": true,
+    "geoAgreement_preserved": true,
+    "pilot_siblings_included_in_matching": true,
+    "sibling_exclusion_shortcut": false,
+    "fuzzy_auto_link": false,
+    "targets_checked": { "live_establishments": 2240, "staging_outside_approved_set": 843, "minesup_cross_ministry_targets": 74 },
+    "blocking_duplicate_signals": 0,
+    "test_suite": { "command": "npx tsx --test scripts/school-registry/lib/matching/__tests__/*.test.ts", "tests": 193, "pass": 193, "fail": 0 }
+  },
+  "cross_ministry_revalidation": { "same_institution_conflicts": 0, "note": "1 candidate (ISTMS Bafoussam, staging_id bbf4f625) shows a non-blocking AMBIGUOUS cross-ministry signal already documented and evaluated as Tier-2 evidence in the MINSANTE-F approval snapshot itself; AMBIGUOUS is not in the blocking set (EXACT_IDENTIFIER/EXACT_IDENTITY/STRONG_MATCH) so cross_ministry_conflict tally remains 0, consistent with prior sprints." },
+  "category": { "education_family_health_training": 8, "main_category_resolved": 8, "category_changes": 0, "blocking_category_issues": 0 },
+  "pii": { "candidates_checked": 8, "residual_found": 0, "safe": true, "checked_in": ["raw_data", "source_url", "source_reference", "program metadata", "classification metadata", "planned establishment payload", "generated reports"] },
+  "slug_audit": { "candidates": 8, "valid": 8, "existing_live_collisions": 0, "batch_collisions": 0, "deterministic": true, "report_csv": "reports/registry/minsante-g3-live-revalidation.csv" },
+  "required_fields": { "checked_fields": ["name", "slug", "main_category"], "blocking_missing_fields": 0 },
+  "identifiers": { "validated_minsante_official_identifiers": 0, "planned_registry_identifier_inserts": 0, "invented": false },
+  "deferred_population_protection": { "category_review_excluded": 13, "duplicate_review_excluded": 1, "leak_into_snapshot": 0, "protection_ok": true, "report": "reports/registry/minsante-g3-deferred-protection.json" },
+  "dry_run": {
+    "script": "scripts/school-registry/minsante-g-promotion-preflight.ts",
+    "invocation": "npx tsx scripts/school-registry/minsante-g-promotion-preflight.ts (no --commit flag)",
+    "would_insert_establishments": 8,
+    "would_link_staging": 8,
+    "would_insert_registry_identifiers": 0,
+    "would_update_existing": 0,
+    "would_delete": 0,
+    "conflicts": 0,
+    "establishments_before": 2240,
+    "expected_establishments_after": 2248,
+    "post_condition_verified_unchanged": true,
+    "report": "reports/registry/minsante-g3-dry-run.json"
+  },
+  "promotion_guards": {
+    "guard_module": "scripts/school-registry/lib/minsanteGPromotionGuard.ts",
+    "required_flags": ["--commit", "--expected-count=8", "--approval-checksum=26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653", "--confirm=\"PROMOTE_MINSANTE_PILOT_TO_PRODUCTION\"", "--operator=\"jean-merlain\"", "--approved-by=\"<real human approver, never hardcoded, must differ from operator>\""],
+    "expected_project": "umcwwynrftidytxgqkwi",
+    "self_approval_rejected": true,
+    "refusal_test_suite": { "tests": 11, "pass": 11, "fail": 0, "report": "reports/registry/minsante-g3-guard-tests.json" },
+    "all_refusal_scenarios_blocked": true,
+    "writes_during_refusal_tests": 0
+  },
+  "reconciliation_safety": {
+    "note": "Non-transactional REST limitation (honest disclosure, inherited from MINESUP-D/F precedent, unchanged this sprint): Supabase PostgREST inserts are not wrapped in a single multi-table transaction from this client, so a future --commit run must verify created_count === staging_linked_count post-hoc (evaluatePromotionOutcome() pattern in productionGuard.ts) rather than relying on atomicity. This preflight does not execute any insert, so no partial-failure scenario was exercised live this sprint; the check is a documented requirement for the future commit script, not a result produced here."
+  },
+  "idempotence": { "note": "Not executed this sprint (no --commit run). Second-run idempotence remains a requirement for the future execution sprint: a second successful run must yield 0 new establishments, 0 new staging links, 0 identifiers, enforced by promoted_establishment_id checks already present in minsante-g-promotion-preflight.ts (notAlreadyPromoted / status != 'promoted' filters)." },
+  "public_qa": {
+    "method": "npm run build (production build) + npm run start on local port 4123, smoke-tested with curl against the live Supabase project (read-only), then server stopped and port freed.",
+    "routes": {
+      "/recherche": { "status": 200 },
+      "/api/recherche?q=ecole": { "status": 200, "sample_result_present": true },
+      "/ecole/[existing-id]": { "status": 200, "id_used": "268aa2ea-315c-4a3f-a959-7ef1e0f00f49" },
+      "/revendiquer/[existing-id]": { "status": 200, "id_used": "268aa2ea-315c-4a3f-a959-7ef1e0f00f49" }
+    },
+    "regression_found": false,
+    "new_public_data_introduced": false
+  },
+  "database_post_condition": { "establishments_before": 2240, "establishments_after": 2240, "staging_before": 2366, "staging_after": 2366, "registry_identifiers_before": 2242, "registry_identifiers_after": 2242, "unchanged": true, "production_writes": 0 },
+  "qa": {
+    "build": { "command": "npm run build", "result": "PASS", "exit_code": 0 },
+    "typescript_app": { "command": "npx tsc --noEmit", "result": "PASS", "exit_code": 0 },
+    "typescript_registry": { "command": "npx tsc --noEmit -p scripts/school-registry/tsconfig.json", "result": "PASS", "exit_code": 0 },
+    "test_suite": { "command": "npx tsx --test scripts/school-registry/lib/matching/__tests__/*.test.ts scripts/school-registry/lib/__tests__/*.test.ts scripts/school-registry/lib/extraction/__tests__/*.test.ts", "tests": 193, "suites": 61, "pass": 193, "fail": 0, "includes": ["matching engine tests", "MINSANTE matching regression (G/G.1/G.2)", "promotion guard tests (MINSANTE-G, MINESUP-D, MINESUP-F)", "approved population filter tests (MINESUP + MINSANTE)", "normalize/PII redaction/registryBackfill/extraction tests"] }
+  },
+  "final_decision": {
+    "snapshot_candidates_8": true,
+    "checksum_valid": true,
+    "eligible_8": true,
+    "duplicate_signals_0": true,
+    "conflicts_0": true,
+    "pii_0": true,
+    "slug_issues_0": true,
+    "required_field_issues_0": true,
+    "dry_run_8_8_0_0": true,
+    "ready_for_human_approval": "YES"
+  },
+  "action_taken": "DRY-RUN AND VALIDATION ONLY. No --commit invocation with valid flags occurred. No promotion, push, or deploy performed. Awaiting explicit named human approval naming operator, approver, and the exact 8-candidate scope before any future execution sprint."
+}

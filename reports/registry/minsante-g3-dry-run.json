@@ -1,0 +1,15 @@
+{
+  "sprint": "MINSANTE-G.3",
+  "generated_at": "2026-08-21T02:30:44.400Z",
+  "source_run": "scripts/school-registry/minsante-g-promotion-preflight.ts (read-only, no --commit, executed live against umcwwynrftidytxgqkwi this sprint)",
+  "would_insert_establishments": 8,
+  "would_link_staging": 8,
+  "would_update_existing": 0,
+  "would_delete": 0,
+  "would_insert_registry_identifiers": 0,
+  "conflicts": 0,
+  "establishments_before": 2240,
+  "expected_establishments_after": 2248,
+  "commit_executed": false,
+  "production_writes": 0
+}

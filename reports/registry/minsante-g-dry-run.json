@@ -1,9 +1,9 @@
 {
-  "would_insert_establishments": 1,
-  "would_link_staging": 1,
+  "would_insert_establishments": 8,
+  "would_link_staging": 8,
   "would_update_existing": 0,
   "would_delete": 0,
   "would_insert_registry_identifiers": 0,
   "conflicts": 0,
-  "expected_establishments_after": 2241
+  "expected_establishments_after": 2248
 }

@@ -1,7 +1,7 @@
 {
   "sprint": "MINSANTE-G",
   "operator": "jean-merlain",
-  "generated_at": "2026-08-20T20:23:54.604Z",
+  "generated_at": "2026-08-21T02:30:44.400Z",
   "repository_context": {
     "repository": "mboaschool",
     "cross_project_context_safe": true,
@@ -22,10 +22,10 @@
     "checksum_valid": true
   },
   "live_revalidation": {
-    "eligible": 1,
+    "eligible": 8,
     "already_live": 0,
     "conflict": 0,
-    "duplicate_signal": 7,
+    "duplicate_signal": 0,
     "category_changed": 0,
     "source_issue": 0,
     "pii_issue": 0,
@@ -33,94 +33,11 @@
     "invalid": 0
   },
   "duplicate_signal_analysis": {
-    "count": 7,
+    "count": 0,
     "check_is_new_this_sprint": true,
     "note": "§8 exige explicitement de comparer les candidats approuvés contre le staging PERTINENT HORS population approuvée — ce qui inclut, pour la première fois dans ce pilote, les 13 CATEGORY_REVIEW + 1 DUPLICATE_REVIEW du MÊME batch minsante-pilot-v1 (jamais comparés entre eux par MINSANTE-B/C/D/E/F, qui ne matchaient les candidats que contre les établissements déjà en production et contre MINESUP). Root cause observée (inspection manuelle de match.alternativeTargets pour chaque AMBIGUOUS/PROBABLE_MATCH) : (1) toutes les lignes du pilote partagent region='Ouest' et city=NULL (colonne city jamais renseignée pour ce batch) — la géographie ne peut donc JAMAIS départager deux candidats, elle est toujours 'cohérente par défaut' ; (2) le nom de ville figure UNIQUEMENT à l'intérieur du texte du nom officiel (ex. '... DE BAFOUSSAM') et devient donc un mot significatif du chevauchement flou (fuzzyWords) au même titre qu'un nom propre, alors que Bafoussam/Bafang/Dschang hébergent chacune plusieurs établissements MINSANTE réels et DISTINCTS ; (3) le mot de rôle générique 'infirmiers' (et dans une moindre mesure 'diplômés'/'sciences') n'est pas encore dans FUZZY_STOPWORDS (engine.ts) alors qu'il joue exactement le même rôle que 'santé'/'médico'/'personnel'/'sanitaire', déjà retirés sur la base d'un précédent documenté (SPRINT MINSANTE-B §6-7). Évaluation humaine des 7 cas : AUCUN n'apparaît être un doublon réel (noms/fondateurs/sigles distinctifs différents dans chaque paire — ex. 'ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE FOUMBAN' vs 'INSTITUT TROPICAL DE FORMATION EN PLAIES CHRONIQUES ET EN SOINS INFIRMIERS \"MOULLEC\" DE BALEVENG', seul mot commun significatif : 'infirmiers'). Conclusion : très probable limitation connue du moteur de matching (vocabulaire de rôle santé + géographie non discriminante quand city=NULL), PAS une preuve de doublon réel — mais §26 interdit explicitement de corriger le moteur et de re-promouvoir dans le même sprint ('Do not fix and promote'). STOP maintenu, ELIGIBLE=1 rapporté tel quel, sans dégradation locale du seuil de preuve.",
     "recommendation": "Sprint dédié futur (ex. MINSANTE-H) : (a) ajouter 'infirmiers'/'diplome'/'diplomes' à FUZZY_STOPWORDS avec preuve documentée comme les précédents 'santé'/'médico', (b) backfiller la colonne city pour le batch minsante-pilot-v1 depuis le nom officiel (déjà présent en texte libre) pour rendre la géographie réellement discriminante, (c) revue humaine explicite des 7 paires signalées pour confirmer qu'aucune n'est un doublon réel avant toute nouvelle tentative de pre-flight.",
-    "signals": [
-      {
-        "staging_id": "109f38dc-ff92-4fb9-9028-f2f1fb065042",
-        "name": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE BAFOUSSAM",
-        "match_level": "AMBIGUOUS",
-        "matched_target_name": null,
-        "alternative_target_names": [
-          "ECOLE PRIVEE FONDATION JEUGEUVOU FOWANG DE BAFOUSSAM",
-          "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE FONDATION SAINT MAURICE DE BAFOUSSAM",
-          "ECOLE DES PROFESSIONNELS DE LA SANTE LES ETOILES DE BAFOUSSAM",
-          "ECOLE PRIVEE DE FORMATION DES PERSONNELS SANITAIRES \"SAINT JOSEPH\" DE BAFOUSSAM",
-          "ECOLE PRIVEE DE FORMATION DU PERSONNEL DE LA SANTE DE BAFOUSSAM",
-          "INSTITUT TROPICAL DE FORMATION EN PLAIES CHRONIQUES ET EN SOINS INFIRMIERS \"MOULLEC\" DE BALEVENG",
-          "INSTITUT DES SCIENCES DE LA SANTE POOLA DE BAFOUSSAM"
-        ],
-        "reason": "plusieurs cibles à égalité de chevauchement (25%) — pas de gagnant clair."
-      },
-      {
-        "staging_id": "273f8980-4983-4ae8-b3c1-8b1036dfd43d",
-        "name": "ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG",
-        "match_level": "AMBIGUOUS",
-        "matched_target_name": null,
-        "alternative_target_names": [
-          "INSTITUT DES SCIENCES MEDICO-SANITAIRES LES ARGUS DE BANDJOUN",
-          "INSTITUT DES SCIENCES DE LA SANTE POOLA DE BAFOUSSAM"
-        ],
-        "reason": "plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair."
-      },
-      {
-        "staging_id": "79370ccb-3f09-426f-bdc7-bc6ac9055345",
-        "name": "ECOLE PRIVEE DES SCIENCES DE LA SANTE MENO DE BAMENA",
-        "match_level": "AMBIGUOUS",
-        "matched_target_name": null,
-        "alternative_target_names": [
-          "INSTITUT DES SCIENCES MEDICO-SANITAIRES LES ARGUS DE BANDJOUN",
-          "INSTITUT DES SCIENCES DE LA SANTE POOLA DE BAFOUSSAM"
-        ],
-        "reason": "plusieurs cibles à égalité de chevauchement (33%) — pas de gagnant clair."
-      },
-      {
-        "staging_id": "9c4b9a28-1aa2-4fc2-baa8-48d3919758f7",
-        "name": "ECOLE PRIVEE FONDATION TCHUENTE DE BAFOUSSAM",
-        "match_level": "AMBIGUOUS",
-        "matched_target_name": null,
-        "alternative_target_names": [
-          "ECOLE PRIVEE FONDATION JEUGEUVOU FOWANG DE BAFOUSSAM",
-          "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE FONDATION SAINT MAURICE DE BAFOUSSAM"
-        ],
-        "reason": "plusieurs cibles à égalité de chevauchement (67%) — pas de gagnant clair."
-      },
-      {
-        "staging_id": "b92dd780-b05c-4b47-aaa4-e6d0b6783778",
-        "name": "COMPLEXE PRIVE DE FORMATION DES PERSONNELS MEDICO-SANITAIRES \"FONDATION TSOPJIO ET TAKOUDJOU\" DE DSCHANG",
-        "match_level": "AMBIGUOUS",
-        "matched_target_name": null,
-        "alternative_target_names": [
-          "ECOLE PRIVEE FONDATION JEUGEUVOU FOWANG DE BAFOUSSAM",
-          "ECOLE PRIVEE DE FORMATION DES PERSONNELS DE SANTE FONDATION SAINT MAURICE DE BAFOUSSAM",
-          "ECOLE PRIVEE DE FORMATION DES PERSONNELS SANITAIRES \"SAINT JOSEPH\" DE BAFOUSSAM",
-          "INSTITUT DES SCIENCES MEDICO-SANITAIRES LES ARGUS DE BANDJOUN"
-        ],
-        "reason": "plusieurs cibles à égalité de chevauchement (20%) — pas de gagnant clair."
-      },
-      {
-        "staging_id": "ba827d94-6542-40fd-b811-a0d964a8bceb",
-        "name": "ECOLE DES INFIRMIERS DIPLOMES D'ETAT DE FOUMBAN",
-        "match_level": "PROBABLE_MATCH",
-        "matched_target_name": "INSTITUT TROPICAL DE FORMATION EN PLAIES CHRONIQUES ET EN SOINS INFIRMIERS \"MOULLEC\" DE BALEVENG",
-        "alternative_target_names": [],
-        "reason": "chevauchement de mots partiel (25%), insuffisant pour STRONG_MATCH."
-      },
-      {
-        "staging_id": "bbf4f625-3574-4bfa-b17a-278282b3bb6f",
-        "name": "INSTITUT DES SCIENCES ET TECHNIQUES MEDICO-SANITAIRES DE BAFOUSSAM",
-        "match_level": "AMBIGUOUS",
-        "matched_target_name": null,
-        "alternative_target_names": [
-          "ECOLE PRIVEE DE FORMATION DES PERSONNELS SANITAIRES \"SAINT JOSEPH\" DE BAFOUSSAM",
-          "INSTITUT DES SCIENCES MEDICO-SANITAIRES LES ARGUS DE BANDJOUN",
-          "INSTITUT DES SCIENCES DE LA SANTE POOLA DE BAFOUSSAM"
-        ],
-        "reason": "plusieurs cibles à égalité de chevauchement (50%) — pas de gagnant clair."
-      }
-    ]
+    "signals": []
   },
   "pii": {
     "candidates_checked": 8,
@@ -156,16 +73,16 @@
     "blocking_fields": []
   },
   "dry_run": {
-    "would_insert_establishments": 1,
-    "would_link_staging": 1,
+    "would_insert_establishments": 8,
+    "would_link_staging": 8,
     "would_update_existing": 0,
     "would_delete": 0,
     "would_insert_registry_identifiers": 0,
     "conflicts": 0,
-    "expected_establishments_after": 2241
+    "expected_establishments_after": 2248
   },
   "deferred_protection": {
-    "generated_at": "2026-08-20T20:23:54.600Z",
+    "generated_at": "2026-08-21T02:30:44.396Z",
     "sprint": "MINSANTE-G",
     "snapshot_candidate_count": 8,
     "total_pilot": 22,
@@ -185,5 +102,5 @@
     "full_table_fetch": false
   },
   "production_writes": 0,
-  "ready_to_commit": false
+  "ready_to_commit": true
 }
