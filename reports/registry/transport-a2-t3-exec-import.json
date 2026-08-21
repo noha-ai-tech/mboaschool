@@ -1,0 +1,26 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-EXEC",
+  "date": "2026-08-21",
+  "status": "NOT ATTEMPTED — PREFLIGHT ONLY, NO COMMIT",
+  "reason": "Brief §8 (HUMAN APPROVAL GATE): no explicit, named human authorization distinct from operator 'jean-merlain' was provided for this specific execution. The sprint instructions explicitly prohibit invoking --commit under any circumstance this sprint, regardless of preflight outcome.",
+  "commit_flag_invoked": false,
+  "attempted": 0,
+  "inserted": 0,
+  "failed": 0,
+  "unexpected": 0,
+  "production_establishments_written": 0,
+  "would_be_expected_count_if_authorized": 17,
+  "would_be_approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+  "guard_module": "scripts/school-registry/lib/transportA2ImportGuard.ts",
+  "guard_state_this_sprint": "All non-approval preconditions the guard checks now RESOLVE TRUE against live state (mintransportEnumPresent=true, checksum match, expected count match, clean_approvable=0, pii=0, official_id_invented=0, registry_identifiers_to_insert=0). The only unmet precondition is a real --approved-by distinct from --operator, which was never supplied.",
+  "additional_note": "Even with valid approval, scripts/school-registry/transport-a2-t3-import.ts's write branch currently throws an intentional 'SAFETY STOP' — the real INSERT logic is not yet implemented in this script (see transport-a2-t3-exec-preflight.json, additional_structural_blocker_found_this_sprint). This is a second, independent reason no rows could be inserted this sprint even hypothetically.",
+  "real_cli_invocation_log_this_sprint": [
+    {
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts (no --commit)",
+      "result": "REFUSED",
+      "message": "REFUSED — --commit absent. Dry-run par défaut, aucune écriture.",
+      "staging_count_before": 2366,
+      "staging_count_after": 2366
+    }
+  ]
+}

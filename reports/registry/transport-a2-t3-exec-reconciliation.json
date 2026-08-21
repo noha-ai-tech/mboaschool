@@ -1,0 +1,27 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-EXEC",
+  "date": "2026-08-21",
+  "status": "NOT APPLICABLE — PREFLIGHT ONLY, NO COMMIT PERFORMED",
+  "note": "No write occurred this sprint (decision D, brief §8 human approval gate not satisfied). Post-write reconciliation (brief §10) requires a prior real write to reconcile against; documented here as expected/target values for a FUTURE authorized run, not as an actual reconciliation outcome.",
+  "expected_staging_delta_if_authorized": 17,
+  "actual_staging_delta_this_sprint": 0,
+  "expected_establishments_delta": 0,
+  "actual_establishments_delta_this_sprint": 0,
+  "expected_registry_identifiers_delta": 0,
+  "actual_registry_identifiers_delta_this_sprint": 0,
+  "database_counts_before_this_sprint": { "establishments": 2248, "staging": 2366, "registry_identifiers": 2242 },
+  "database_counts_after_this_sprint": { "establishments": 2248, "staging": 2366, "registry_identifiers": 2242 },
+  "duplicate_candidate_ids_this_sprint": 0,
+  "unexpected_inserted_candidates_this_sprint": 0,
+  "missing_expected_inserted_candidates_this_sprint": 0,
+  "per_candidate_field_expectations_for_a_future_write": {
+    "source_ministry": "MINTRANSPORT",
+    "promoted_establishment_id": null,
+    "verified": "unchanged/false — never set true by this import",
+    "owner_id": null,
+    "official_id": "never invented from Tier-3 claims",
+    "review_status_present": true,
+    "candidate_provenance_present": true,
+    "raw_data_transport_tier3_present": true
+  }
+}

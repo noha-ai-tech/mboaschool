@@ -1,0 +1,124 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-EXEC",
+  "date": "2026-08-21",
+  "status": "PREFLIGHT ONLY — NO COMMIT PERFORMED THIS SPRINT",
+  "operator": "jean-merlain",
+  "approved_by": null,
+  "repository": {
+    "repo": "mboaschool",
+    "branch": "main",
+    "head": "1edbc04e87a7189269a24ffaf28d5d31beb6df55",
+    "working_tree_clean_at_start": true,
+    "noha_main_before_fetch_check": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+    "noha_main_is_ancestor_of_head": true,
+    "commits_ahead_of_noha_main": 38,
+    "divergence": "none — noha/main is a strict ancestor of HEAD, fast-forward only, no conflicting work"
+  },
+  "database_baseline_fresh_this_sprint": {
+    "establishments": 2248,
+    "staging": 2366,
+    "registry_identifiers": 2242,
+    "mintransport_staging_rows": 0,
+    "reference_from_prior_sprint": { "establishments": 2248, "staging": 2366, "registry_identifiers": 2242, "mintransport_staging_rows": 0 },
+    "drift_detected": false,
+    "method": "Live PostgREST GET against establishments / establishment_import_staging / establishment_registry_identifiers, Prefer: count=exact, read fresh this sprint (scripts/school-registry/transport-a2-t3-prepare.ts)."
+  },
+  "migration_0022_verification": {
+    "file": "supabase/migrations/0022_transport_source_ministry_enum.sql",
+    "expected_enum_value": "MINTRANSPORT",
+    "mintransport_exists": true,
+    "method": "Authoritative live introspection — GET {SUPABASE_URL}/rest/v1/establishment_import_staging?source_ministry=eq.MINTRANSPORT&select=id&limit=1 ; HTTP status != 400 (22P02) confirms the enum value is accepted by PostgREST/Postgres. NOT inferred from the migration file's existence, prior terminal output, or user narrative — re-verified live this sprint, independently of the previous sprint's state.",
+    "conclusion": "Migration 0022 IS applied to the live database as of this sprint (this is a change from the TRANSPORT-A.2-T3 baseline, where it was prepared-not-executed). Verified fact, not assumption."
+  },
+  "population_freeze_and_checksum": {
+    "expected_population": 17,
+    "candidates_loaded": 17,
+    "duplicate_candidate_ids": 0,
+    "checksum_expected": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+    "checksum_stored_in_approval_json_before_rerun": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+    "checksum_recomputed_fresh_this_sprint": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+    "all_three_identical": true
+  },
+  "source_provenance_revalidation": {
+    "candidates_with_dedicated_source_snapshot": 5,
+    "candidates_without_dedicated_snapshot_min_source_review": 12,
+    "upgraded_beyond_source_review_merely_because_import_authorized": false,
+    "pii_persisted_count": 0,
+    "official_id_writes": 0,
+    "registry_identifier_writes": 0
+  },
+  "fresh_matching_live_and_staging": {
+    "live_targets_loaded": 2248,
+    "staging_targets_loaded": 2366,
+    "raw_match_level_totals": { "NO_MATCH": 12, "PROBABLE_MATCH": 4, "AMBIGUOUS": 1 },
+    "staging_classification_tally": { "SOURCE_REVIEW": 12, "DUPLICATE_REVIEW": 3, "IDENTITY_REVIEW": 2, "CROSS_MINISTRY_REVIEW": 0, "CONFLICT_REVIEW": 0 },
+    "already_live_exact_count": 0,
+    "clean_approvable_count": 0,
+    "engine": "scripts/school-registry/lib/matching/engine.ts, unmodified this sprint (no regression found, per instruction not to modify absent a real bug)."
+  },
+  "cross_ministry_check": {
+    "minefop_staging_keyword_hits": 0,
+    "minesup_live_keyword_hits": 0,
+    "fleet_management_academy": {
+      "candidate_id": "TC-17",
+      "authority": "MINEFOP (own confirmed identifier)",
+      "outcome": "No MINT/MINTRANSPORT live or staging record to duplicate against — classified IDENTITY_REVIEW (matching AMBIGUOUS), NOT auto-linked, NOT CLEAN_APPROVABLE."
+    },
+    "it2mip": {
+      "candidate_id": "TC-12",
+      "note": "Self-declared MINEFOP affiliation NOT corroborated by direct re-fetch of the primary source this sprint; a prior WebSearch AI-generated summary of the same page had fabricated a specific accreditation number not present on the actual page — rejected, documented as a known failure mode (second occurrence across TRANSPORT-A.1/-T3).",
+      "outcome": "PROBABLE_MATCH against an unrelated ISATIC record (name/geography signal only) -> routed to DUPLICATE_REVIEW. No automatic duplicate establishment identity created from the cross-ministry signal."
+    },
+    "invariant_held": "A cross-ministry signal did not produce a duplicate establishment identity automatically for either candidate."
+  },
+  "dry_run_immediately_before_write": {
+    "candidate_count": 17,
+    "already_live": 0,
+    "already_staging": 0,
+    "would_insert": 17,
+    "duplicate_review": 3,
+    "source_review": 12,
+    "identity_review": 2,
+    "cross_ministry_review": 0,
+    "conflict_review": 0,
+    "invalid": 0,
+    "clean_approvable": 0,
+    "reconciled": true,
+    "note": "already_staging = 0, so idempotence is not yet a concern for a first write — nothing was previously staged for MINTRANSPORT."
+  },
+  "real_cli_refusal_verification_this_sprint": {
+    "command_run": "npx tsx scripts/school-registry/transport-a2-t3-import.ts (no --commit)",
+    "result": "REFUSED",
+    "message": "REFUSED — --commit absent. Dry-run par défaut, aucune écriture.",
+    "staging_count_before": 2366,
+    "staging_count_after": 2366,
+    "unchanged": true,
+    "note": "--commit was never invoked this sprint, per the sprint's absolute prohibition. Prior-sprint scenario 8 in transport-a2-t3-guard-refusal-tests.json used every genuinely correct value except a real named approval and was refused solely on the (then-unapplied) migration check; that specific enum blocker no longer holds today (verified above), which narrows the remaining structural blocker to human approval — see human_approval_gate below."
+  },
+  "human_approval_gate": {
+    "required_operator": "jean-merlain",
+    "required_approved_by": "a real named human distinct from jean-merlain",
+    "approval_received_this_sprint": false,
+    "ready_for_human_approval": true,
+    "note": "No named authorization of the form 'Je, <nom>, autorise explicitement...' was received in this sprint's instructions — only the runbook brief itself, which is not itself an authorization. --commit was NOT invoked."
+  },
+  "additional_structural_blocker_found_this_sprint": {
+    "description": "scripts/school-registry/transport-a2-t3-import.ts's allowed-write branch (reached only if the guard passes) unconditionally throws 'SAFETY STOP — actual INSERT logic intentionally not implemented in this sprint's script' (see file, lines ~120-124). This means that even once named human approval is obtained, the script as it exists on disk today STILL cannot perform a real INSERT — a future sprint must implement the real fetch()/POST staging-insert calls (modeled on import-major-cities-to-staging.ts / minsante-b-pilot-collect.ts) before brief §9 can be executed.",
+    "verified_by": "direct reading of scripts/school-registry/transport-a2-t3-import.ts this sprint, not assumed."
+  },
+  "qa": {
+    "npm_run_build": "PASS",
+    "tsc_noemit_app": "PASS",
+    "tsc_noemit_registry": "PASS",
+    "transport_a2_import_guard_tests": "16/16 PASS",
+    "matching_tests_incl_transport_tier3": "59/59 PASS",
+    "registryReview_and_search_queryBuilder_tests": "40/40 PASS"
+  },
+  "decision": "D — WAITING_FOR_HUMAN_APPROVAL",
+  "writes_performed_this_sprint": {
+    "establishments": 0,
+    "establishment_import_staging": 0,
+    "establishment_registry_identifiers": 0,
+    "ddl_executed_by_this_sprint": 0
+  }
+}

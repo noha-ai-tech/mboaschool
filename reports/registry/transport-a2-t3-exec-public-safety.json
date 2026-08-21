@@ -1,0 +1,20 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-EXEC",
+  "date": "2026-08-21",
+  "status": "ARCHITECTURAL CODE AUDIT ONLY — no candidates were actually staged this sprint, so no live spot-check of newly-staged rows in the public search endpoint could be performed",
+  "method": "Grepped src/ for every table-level Supabase query referencing establishment_import_staging vs establishments; read the public search route directly.",
+  "public_search_endpoint": "src/app/api/recherche/route.ts",
+  "public_search_reads_only_establishments_table": true,
+  "public_search_evidence": "line 61: `let q = supabase!.from(\"establishments\").select(PUBLIC_FIELDS, { count: \"exact\" });` — no reference to establishment_import_staging anywhere in this file or elsewhere under src/app/api, src/app/recherche, src/app/categorie, src/app/page.tsx.",
+  "establishment_import_staging_referenced_only_in": [
+    "src/app/dashboard/admin/registre/page.tsx (admin-only Review Center)",
+    "src/lib/registryReview.ts (Review Center helper library)",
+    "src/lib/cameroonRegions.ts / src/lib/cameroonMajorCities.ts (shared lookup tables, not staging-specific reads)"
+  ],
+  "staging_leakage": "NO (by code-path construction — establishment_import_staging is never read by any public-facing route or by src/app/api/recherche/route.ts)",
+  "spot_check_of_3_named_transport_candidates": {
+    "performed": false,
+    "reason": "No Transport candidates were inserted into establishment_import_staging this sprint (decision D — no --commit). There is nothing new to search for; the 17 candidates remain exactly as they were before this sprint (0 in staging).",
+    "candidates_that_would_be_checked_on_a_future_authorized_run": ["TC-01 (Auto Ecole Astrale)", "TC-11 (EMIPAC)", "TC-17 (Fleet Management Academy)"]
+  }
+}

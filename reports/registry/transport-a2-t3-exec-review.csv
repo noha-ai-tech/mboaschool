@@ -1,0 +1,18 @@
+candidate_id,institution_name,entity_family,source_domain,tier3_confidence,review_status,matching_signal,cross_ministry_decision,source_ministry
+TC-01,auto ecole astrale,DRIVING_SCHOOL,africannuaire.com,T3_SINGLE_SOURCE,SOURCE_REVIEW,NO_MATCH,NEW,MINTRANSPORT
+TC-02,auto ecole francaise,DRIVING_SCHOOL,africannuaire.com,T3_SINGLE_SOURCE,DUPLICATE_REVIEW,PROBABLE_MATCH,NEW,MINTRANSPORT
+TC-03,auto ecole germania,DRIVING_SCHOOL,africannuaire.com,T3_SINGLE_SOURCE,SOURCE_REVIEW,NO_MATCH,NEW,MINTRANSPORT
+TC-04,auto ecole leo,DRIVING_SCHOOL,africannuaire.com,T3_SINGLE_SOURCE,SOURCE_REVIEW,NO_MATCH,NEW,MINTRANSPORT
+TC-05,auto ecole trecy,DRIVING_SCHOOL,africannuaire.com,T3_SINGLE_SOURCE,SOURCE_REVIEW,NO_MATCH,NEW,MINTRANSPORT
+TC-06,auto ecole turbo,DRIVING_SCHOOL,africannuaire.com,T3_SINGLE_SOURCE,SOURCE_REVIEW,NO_MATCH,NEW,MINTRANSPORT
+TC-07,auto ecole turbo nkomkana,DRIVING_SCHOOL,africannuaire.com,T3_SINGLE_SOURCE,SOURCE_REVIEW,NO_MATCH,NEW,MINTRANSPORT
+TC-08,metropolitaine internationale sces,OTHER_TRANSPORT_EDUCATION,africannuaire.com,T3_IDENTITY_REVIEW,IDENTITY_REVIEW,PROBABLE_MATCH,NEW,MINTRANSPORT
+TC-09,auto ecole monthe,DRIVING_SCHOOL,sites.google.com,T3_SINGLE_SOURCE,SOURCE_REVIEW,NO_MATCH,NEW,MINTRANSPORT
+TC-10,auto ecole apprendre aimer la conduite,DRIVING_SCHOOL,road-safety-charter.ec.europa.eu,T3_SINGLE_SOURCE,SOURCE_REVIEW,NO_MATCH,NEW,MINTRANSPORT
+TC-11,ecole maritime industrielle et portuaire de l afrique centrale emipac,MARITIME_TRAINING,maritimafrica.com,T3_CORROBORATED,DUPLICATE_REVIEW,PROBABLE_MATCH,NEW,MINTRANSPORT
+TC-12,institut des technologies de la marine marchande et industrie portuaire it2mip,MARITIME_TRAINING,kamerpower.com,T3_SINGLE_SOURCE,DUPLICATE_REVIEW,PROBABLE_MATCH,AMBIGUOUS,MINTRANSPORT
+TC-13,centre de formation professionnelle maritime le paquebot,MARITIME_TRAINING,"unspecified (reported, prior sprint)",T3_SINGLE_SOURCE,SOURCE_REVIEW,NO_MATCH,NEW,MINTRANSPORT
+TC-14,centre d instruction maritime et portuaire,MARITIME_TRAINING,"unspecified (reported, prior sprint)",T3_SINGLE_SOURCE,SOURCE_REVIEW,NO_MATCH,NEW,MINTRANSPORT
+TC-15,ecole de formation efo ccaa,AVIATION_TRAINING,ccaa.aero,ABOVE_TIER3_CORROBORATED,SOURCE_REVIEW,NO_MATCH,NEW,MINTRANSPORT
+TC-16,irdsm aviation,AVIATION_TRAINING,groupe-dsm.net/aviation,T3_MULTI_SOURCE_WEAK,SOURCE_REVIEW,NO_MATCH,NEW,MINTRANSPORT
+TC-17,fleet management academy,TRANSPORT_LOGISTICS_TRAINING,MINEFOP institutional page (per TRANSPORT-A report),T3_SINGLE_SOURCE,IDENTITY_REVIEW,AMBIGUOUS,NEW,MINTRANSPORT

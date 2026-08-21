@@ -1,0 +1,10 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-EXEC",
+  "date": "2026-08-21",
+  "status": "NOT APPLICABLE — PREFLIGHT ONLY, NO COMMIT PERFORMED",
+  "note": "Brief §12 requires a SECOND dry-run after a successful first write, to prove idempotence (would_insert=0, already_staging=17 on rerun). No first write occurred this sprint, so there is nothing to test for idempotence yet.",
+  "current_already_staging_count": 0,
+  "current_would_insert_count": 17,
+  "second_dry_run_performed": false,
+  "expected_behavior_on_future_first_authorized_write": "already_staging should move from 0 to 17 and would_insert should move from 17 to 0 on the immediately-following dry-run rerun; not yet observable this sprint."
+}
