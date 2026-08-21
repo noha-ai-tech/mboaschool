@@ -1,0 +1,58 @@
+{
+  "sprint": "MINSANTE-G.2",
+  "generated_at": "2026-08-21T00:00:00.000Z",
+  "section": "§5 du brief — audit du role de 'sciences'/'science'",
+  "method": "Lecture fraiche Supabase (projet umcwwynrftidytxgqkwi) : establishment_import_staging (batch minsante-pilot-v1, 22 lignes) + establishments (2240 lignes live, dont 74 rattachees a un identifiant MINESUP).",
+  "tokens": [
+    {
+      "token": "sciences",
+      "corpus": "MINSANTE pilote (minsante-pilot-v1, 22 lignes)",
+      "occurrences": 5,
+      "occurrence_names": [
+        "ECOLE PRIVEE DES SCIENCES DE LA SANTE MENO DE BAMENA",
+        "ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG",
+        "INSTITUT DES SCIENCES DE LA SANTE POOLA DE BAFOUSSAM",
+        "INSTITUT DES SCIENCES MEDICO-SANITAIRES LES ARGUS DE BANDJOUN",
+        "INSTITUT DES SCIENCES ET TECHNIQUES MEDICO-SANITAIRES DE BAFOUSSAM"
+      ],
+      "distinctive_in_this_corpus": "NO",
+      "reason": "les 5 occurrences designent 4 etablissements de sante differents (5 lignes, 2 sont deja des cibles CATEGORY_REVIEW du meme pilote) sans aucun rapport d'identite reel entre eux (villes differentes ou, pour la seule paire de meme ville, marque/fondateur different, cf. minsante-g2-residual-pair-review.csv) -- 'sciences' y designe uniquement le DOMAINE d'enseignement (sciences de la sante), jamais une institution precise.",
+      "safe_as_global_stopword": "NO",
+      "safe_as_global_stopword_reason": "voir corpus MINESUP ci-dessous : y retirer 'sciences' casserait un signal reel deja teste et approuve (SPRINT MINESUP-E)."
+    },
+    {
+      "token": "science / sciences",
+      "corpus": "MINESUP (etablissements live rattaches a un identifiant registry authority=MINESUP, 74 lignes)",
+      "occurrences": 7,
+      "occurrence_names": [
+        "Bamenda University Institute of Science and Technology (BUIST)",
+        "Capitol Higher Institute of Health Sciences and Beauty Therapy",
+        "Havard Higher Institute of Science and Technology",
+        "Higher Institute for Business and management Sciences",
+        "Paul Nkwi Higher Institute of Management, Science, Arts and Technology (PN-HIMSAT)",
+        "Saint Louis Higher Institute of Health and Biomedical Sciences",
+        "Catholic School of Health Sciences Shisong"
+      ],
+      "distinctive_in_this_corpus": "PARTIAL",
+      "reason": "toujours accompagne d'un AUTRE mot distinctif reel (fondateur/nom propre -- 'Bamenda'/'Havard'/'Paul Nkwi'/'Saint Louis'/'Capitol'/'Shisong' -- ou d'une specialite composee -- 'Business and Management'/'Health and Biomedical') : jamais le SEUL mot significatif d'un nom MINESUP dans ce corpus. Cas de reference deja teste (matching.test.ts, SPRINT MINESUP-C) : 'Institut Superieur Bamenda Excellence Sciences' vs 'Ecole Superieure Bamenda Excellence Sciences Appliquees' -> STRONG_MATCH legitime car 'sciences' s'ajoute a 'bamenda'+'excellence', jamais un signal isole.",
+      "safe_as_global_stopword": "NO",
+      "safe_as_global_stopword_reason": "le retirer casserait le STRONG_MATCH ci-dessus (perte d'1/3 du chevauchement significatif) sans qu'aucun faux positif MINESUP reel n'ait jamais ete observe attribuable a 'sciences' seul -- pas de justification symetrique a celle qui a fait ajouter 'universite'/'institut' en MINESUP-E (Jagora University)."
+    },
+    {
+      "token": "science / sciences",
+      "corpus": "Ensemble des etablissements live (2240 lignes, tous ministeres/registres confondus)",
+      "occurrences": 10,
+      "distinctive_in_this_corpus": "PARTIAL",
+      "reason": "les 3 occurrences supplementaires hors perimetre MINESUP-registry-identifie (Continental University Institute of science and Technology (CUIST), Experiental Higher Institute of Science and Technology (EXHIST), ST Thierry Higher Institute of Health Science and Technology (SHIHSAT)) suivent exactement le meme motif : toujours accompagnees d'un sigle/nom propre distinctif entre parentheses ou dans le nom.",
+      "safe_as_global_stopword": "NO"
+    }
+  ],
+  "conclusion": {
+    "answer": "CONTEXT_DEPENDENT",
+    "assumed_not_verified": false,
+    "summary": "'sciences'/'science' n'est JAMAIS, dans aucun corpus observe (MINSANTE ou MINESUP), le SEUL mot distinctif legitime d'une identite d'etablissement -- mais il est frequemment PRESENT aux cotes d'un vrai mot distinctif (nom propre, fondateur, sigle, specialite composee), auquel cas il renforce legitimement un signal deja etabli par ailleurs. Un STOPWORD global le supprimerait aussi de ces cas legitimes (perte de signal reel, deja teste et approuve en MINESUP-E) ; le laisser en mot NORMAL (comme avant ce sprint) permet a un chevauchement purement generique de creer un faux blocage (3 candidats MINSANTE-G). Statut retenu : WEAK_GENERIC -- reste dans fuzzyWords()/le ratio affiche (aucune perte de signal quand il accompagne un mot distinctif), mais ne peut plus, SEUL, produire un niveau bloquant (STRONG_MATCH/PROBABLE_MATCH/AMBIGUOUS) sans corroboration structurelle (sigle exact partage)."
+  },
+  "engine_change_reference": "scripts/school-registry/lib/matching/engine.ts — WEAK_GENERIC_TOKENS (§7-9), distinctive overlap gate dans matchCandidate(), extractParentheticalAcronym() pour la corroboration par sigle.",
+  "not_added_to_global_stopwords": true,
+  "no_ministry_specific_hardcoding": true
+}

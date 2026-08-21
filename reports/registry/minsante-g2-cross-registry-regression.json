@@ -1,0 +1,47 @@
+{
+  "sprint": "MINSANTE-G.2",
+  "generated_at": "2026-08-21T00:00:00.000Z",
+  "section": "§15 du brief — suite de matching COMPLETE re-executee (pas seulement MINSANTE)",
+  "command": "npx tsx --test lib/__tests__/*.test.ts lib/extraction/__tests__/*.test.ts lib/matching/__tests__/*.test.ts (execute depuis scripts/school-registry)",
+  "test_files": [
+    "lib/__tests__/approvedPopulationFilter.test.ts",
+    "lib/__tests__/minesupNationalPromotionGuard.test.ts",
+    "lib/__tests__/minesupPromotionGuard.test.ts",
+    "lib/__tests__/minsanteApprovedPopulation.test.ts",
+    "lib/__tests__/minsanteGPromotionGuard.test.ts",
+    "lib/__tests__/normalize.test.ts",
+    "lib/__tests__/piiRedaction.test.ts",
+    "lib/__tests__/registryBackfill.test.ts",
+    "lib/extraction/__tests__/extraction.test.ts",
+    "lib/extraction/__tests__/minsanteDedup.test.ts",
+    "lib/extraction/__tests__/pdfMinsanteA1.test.ts",
+    "lib/matching/__tests__/matching.test.ts",
+    "lib/matching/__tests__/matching-minsante-g1.test.ts",
+    "lib/matching/__tests__/matching-minsante-g2.test.ts (NOUVEAU ce sprint, §13 A-H)"
+  ],
+  "results": {
+    "tests": 193,
+    "suites": 61,
+    "pass": 193,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "coverage_by_registry": {
+    "shared_engine_bricks": "matching.test.ts §23.A-I, exactIdentityKey, fuzzyWords, geoAgreement -- PASS",
+    "minesup_fixtures": "matching.test.ts SPRINT MINESUP-C/E, MINESUP-B/B.1 multi-ID (A-G), minesupPromotionGuard.test.ts, minesupNationalPromotionGuard.test.ts -- PASS, y compris la fixture STRONG_MATCH 'Bamenda Excellence Sciences' (§13.C de ce sprint) qui EXERCE explicitement le token 'sciences' dans son role MINESUP legitime",
+    "minsante_fixtures": "matching-minsante-g1.test.ts (§7.A-F, 1 test reecrit + 1 test ajoute ce sprint suite au changement de comportement attendu, cf. note ci-dessous), matching-minsante-g2.test.ts (§13.A-H, 12 tests nouveaux), minsanteApprovedPopulation.test.ts, minsanteGPromotionGuard.test.ts -- PASS",
+    "multi_id_fixtures": "matching.test.ts SPRINT MINESUP-B.1 §22 scenarios A-G (identifier_type) -- PASS, inchange",
+    "extraction_dedup": "extraction.test.ts, minsanteDedup.test.ts, pdfMinsanteA1.test.ts, normalize.test.ts, registryBackfill.test.ts, piiRedaction.test.ts, approvedPopulationFilter.test.ts -- PASS, aucun de ces modules ne depend de engine.ts modifie ce sprint (verification de non-impact)"
+  },
+  "intentional_test_change": {
+    "file": "lib/matching/__tests__/matching-minsante-g1.test.ts",
+    "test": "§7.C — accord de region (city NULL des 2 cotes) a egalite de chevauchement",
+    "what_changed": "L'assertion originale ('sciences' seul entre 2 cibles a egalite de region -> AMBIGUOUS) refletait EXACTEMENT le faux blocage generique que ce sprint corrige. Le fixture a ete DEDOUBLE : (1) une version conservee avec un vrai mot distinctif partage ('alpha') qui reste AMBIGUOUS (garantie §7.C preservee : un accord de region seul ne fabrique jamais un gagnant), et (2) une version NOUVELLE, fidele a l'original (seul 'sciences' partage), qui documente explicitement le nouveau resultat attendu (NO_MATCH) avec reference a MINSANTE-G.2. Aucune suppression silencieuse — les deux comportements (avant/apres) restent lisibles dans l'historique du fichier et le commit git.",
+    "regression_risk": "NONE — ce changement est le but explicite du sprint (§16 du brief : 'Target: 3 false blockers removed'), pas un effet de bord non voulu."
+  },
+  "cross_registry_regressions_found": 0,
+  "stop_triggered": false,
+  "notes": "Aucune regression detectee sur MINESUP, MINESEC (indirectement via exactIdentityKey/GENERIC_ARTICLES, non touches), multi-ID, extraction ou dedup. Le seul changement de comportement observe est celui explicitement vise par ce sprint (MINSANTE, faux blocages 'sciences')."
+}

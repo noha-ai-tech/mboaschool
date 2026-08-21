@@ -144,6 +144,44 @@ continuent de fonctionner tels quels. Tout NOUVEAU script de promotion
 (MINESUP, etc.) doit importer ce module plutôt que réimplémenter sa propre
 version.
 
+### 6.1 — SPRINT MINSANTE-G.2 : pondération de tokens (STOPWORD / WEAK_GENERIC / NORMAL)
+
+Extension matérielle du module partagé, applicable à TOUT registre (pas une
+règle locale MINSANTE). Constat : un mot peut être significatif dans son
+DOMAINE (ex. "sciences") sans jamais constituer, à lui seul, une preuve
+d'identité institutionnelle — mais un simple STOPWORD (poids 0) serait trop
+brutal quand ce même mot légitime un chevauchement REJOINT par un vrai mot
+distinctif ailleurs dans le corpus (preuve directe : SPRINT MINESUP-E vs
+SPRINT MINSANTE-G, même token `sciences`, deux comportements attendus
+opposés selon ce qui l'accompagne).
+
+Trois statuts désormais distingués dans `engine.ts` :
+
+```
+STOPWORD      (FUZZY_STOPWORDS)     — poids 0, jamais compté dans fuzzyWords()
+WEAK_GENERIC  (WEAK_GENERIC_TOKENS) — compte dans fuzzyWords()/le ratio, MAIS ne peut jamais À LUI SEUL produire un niveau bloquant (STRONG_MATCH/PROBABLE_MATCH/AMBIGUOUS)
+NORMAL/DISTINCTIVE (par défaut)     — compte pleinement, peut à lui seul justifier un niveau bloquant
+```
+
+Mécanisme (`matchCandidate`) : une cible dont le chevauchement flou ne
+contient AUCUN mot hors `WEAK_GENERIC_TOKENS`, et sans corroboration
+structurelle plus forte (sigle explicite entre parenthèses identique des
+deux côtés, `extractParentheticalAcronym()` — exclut stopwords et tokens de
+ville/région structurés), est écartée du pool de candidats à un niveau
+bloquant, exactement comme une cible en `categoryMatch === false` l'était
+déjà (SPRINT MINESUP-C). Explicitement décidé : une géographie (ville)
+identique, SEULE, n'est PAS traitée comme corroboration suffisante en
+l'absence de tout mot distinctif partagé — cohérent avec §5 de ce document
+("géographie contradictoire = REVIEW, jamais résolu par préférence
+arbitraire") et avec le principe déjà retenu pour les programmes
+("supporte l'identité, ne la prouve jamais seul").
+
+Aucune condition par `source_ministry` introduite — le gate s'applique
+identiquement à tous les registres (vérifié par test dédié MINESUP). Détail
+complet, preuve et tests : `docs/03_DATA_REGISTRY/MINSANTE_IMPORT_CONTRACT.md`
+§G.2, `scripts/school-registry/lib/matching/__tests__/matching-minsante-g2.test.ts`,
+`reports/registry/minsante-g2-sciences-token-audit.json`.
+
 ## 7. Staging — évaluation
 
 **STAGING_REUSABLE_AS_IS** pour la quasi-totalité des besoins.

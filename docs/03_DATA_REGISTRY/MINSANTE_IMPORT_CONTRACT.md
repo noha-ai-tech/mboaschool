@@ -1179,3 +1179,151 @@ establishments/registry_identifiers. Décision en attente de validation
 Jean-Merlain + Eddy + architecte (recommandation : B — revue
 géographie/doublon supplémentaire requise pour le token `sciences`, voir
 `reports/registry/minsante-g1-summary.json`).**
+
+## G.2 — Matching contextuel : résolution générique du token `sciences`
+
+**SPRINT MINSANTE-G.2**, commit de référence de départ `93ea686` (MINSANTE-G.1).
+READ-ONLY comme G/G.1 — aucune promotion, aucune écriture
+`establishments`/`registry_identifiers`.
+
+### G.2.1 — Point de départ
+
+Les 3 signaux résiduels de G.1 (`reports/registry/minsante-g1-preflight-recheck.json`,
+`reports/registry/minsante-g1-matching-after.csv`) étaient **tous** attribuables
+au seul token `sciences` : `staging_id` 273f8980 (AMBIGUOUS 100%), 79370ccb
+(AMBIGUOUS 50%), bbf4f625 (PROBABLE_MATCH 50%) — dans chaque cas, "sciences"
+restait le SEUL mot significatif partagé une fois les stopwords déjà établis
+et la ville structurée retirés du chevauchement flou (double-comptage évité
+depuis G.1). `sciences` avait été délibérément laissé hors de
+`FUZZY_STOPWORDS` en G.1 car SPRINT MINESUP-E l'utilise comme vrai
+différenciateur de spécialité dans un autre contexte (`fuzzyWords("Higher
+Institute of Science and Technology")` conserve `science`/`technology`).
+
+### G.2.2 — Politique de mots FAIBLES/GÉNÉRIQUES (WEAK_GENERIC)
+
+Un troisième statut de token est introduit dans
+`scripts/school-registry/lib/matching/engine.ts`, en plus de
+STOPWORD (`FUZZY_STOPWORDS`, poids 0, jamais compté) et NORMAL/DISTINCTIVE
+(mot ordinaire, compte pleinement) :
+
+- **`WEAK_GENERIC_TOKENS`** (actuellement : `sciences`, `science`) — un mot
+  significatif RÉEL, qui reste dans la sortie de `fuzzyWords()` et continue
+  à compter dans le ratio de chevauchement affiché (aucune régression de
+  seuil pour un candidat qui partage AUSSI un mot distinctif réel — cf.
+  fixture MINESUP-E `Bamenda Excellence Sciences`, toujours STRONG_MATCH).
+  Sa seule différence : il ne peut JAMAIS, à lui seul (ou accompagné
+  d'autres mots eux-mêmes WEAK_GENERIC), suffire à produire un niveau
+  bloquant (`STRONG_MATCH`/`PROBABLE_MATCH`/`AMBIGUOUS`).
+
+### G.2.3 — Distinctive overlap gate
+
+Dans `matchCandidate()`, chaque cible candidate au chevauchement flou calcule
+désormais `hasDistinctiveOverlap` (au moins un mot partagé qui N'EST PAS
+dans `WEAK_GENERIC_TOKENS`) et `acronymCorroboration` (sigle explicite entre
+parenthèses, identique des deux côtés — `extractParentheticalAcronym()`,
+qui exclut explicitement les stopwords et les tokens de ville/région
+structurés pour éviter qu'une ville notée entre parenthèses soit prise pour
+un sigle). Une cible qui n'a NI l'un NI l'autre est écartée du pool de
+candidats à un niveau bloquant — exactement comme une cible en conflit de
+catégorie (`categoryMatch === false`, SPRINT MINESUP-C) l'était déjà. Si
+AUCUNE cible n'a d'évidence distinctive, le résultat est `NO_MATCH` (raison
+explicite : "chevauchement uniquement composé de vocabulaire
+générique/faible... insuffisant pour un doublon potentiel").
+
+**Décision explicite sur "même ville"** : le brief liste "same explicit
+city" comme une forme possible de corroboration (§9), mais conclut aussi
+sans exception que "shared generic words alone must not create a promotion
+blocker". Ce sprint tranche : une ville commune, SEULE (sans aucun mot
+distinctif partagé), n'est PAS traitée comme une corroboration suffisante —
+sinon deux établissements de santé sans rapport dans la même ville (très
+fréquent au Cameroun) seraient systématiquement signalés doublons l'un de
+l'autre. Cette règle est appliquée symétriquement au principe déjà retenu
+pour les programmes en G/G.1 ("program overlap may support identity but
+must not prove it alone") — la géographie seule ne prouve jamais non plus.
+Preuve réelle : `staging_id` bbf4f625 (Bafoussam) vs sa cible différée
+(Bafoussam aussi) — même ville, mais spécialités et fondateur/marque
+totalement différents ("Techniques"/"Médico-Sanitaires" vs "Santé Poola") ;
+confirmé `CONFIRMED_DISTINCT` en revue humaine (§G.2.4), le moteur produit
+désormais `NO_MATCH` indépendamment de cette revue.
+
+### G.2.4 — Résolution des 3 paires résiduelles
+
+Toutes confirmées `CONFIRMED_DISTINCT` (revue humaine, corroboration —
+jamais un contournement caché : le moteur cesse indépendamment de produire
+le faux blocage). Détail complet :
+`reports/registry/minsante-g2-residual-pair-review.csv`.
+
+```
+staging_id 273f8980 (Bafang) vs sibling Bafoussam/Bandjoun : villes différentes, aucun nom propre partagé -> CONFIRMED_DISTINCT
+staging_id 79370ccb (Bamena) vs sibling Bafoussam/Bandjoun : villes différentes, fondateurs "Meno"/"Poola"/"Argus" tous distincts -> CONFIRMED_DISTINCT
+staging_id bbf4f625 (Bafoussam) vs sibling Bafoussam       : même ville, spécialités et marque/fondateur différents -> CONFIRMED_DISTINCT
+```
+
+### G.2.5 — Résultat du re-matching (dry-run, live DB)
+
+Script `scripts/school-registry/minsante-g2-preflight-recheck.ts`, même
+logique que G.1, contre l'état actuel de la base :
+
+```
+AVANT (MINSANTE-G.1) : ELIGIBLE=5, DUPLICATE_SIGNAL=3 (PROBABLE=1 AMBIGUOUS=2 NO_MATCH=5)
+APRÈS (MINSANTE-G.2) : ELIGIBLE=8, DUPLICATE_SIGNAL=0 (EXACT=0 STRONG=0 PROBABLE=0 AMBIGUOUS=0 NO_MATCH=8)
+```
+
+Checksum d'approbation `26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653`
+recalculé et **valide, inchangé** (aucun champ hashé n'a changé — seule la
+sémantique du moteur de matching a changé, jamais les données candidates
+elles-mêmes). `city` (enrichie en G.1, 22/22) vérifiée intacte, aucune
+ré-inférence. `READY FOR RE-PREFLIGHT : YES`. Détail complet :
+`reports/registry/minsante-g2-preflight-recheck.json`,
+`reports/registry/minsante-g2-matching-after.csv`,
+`reports/registry/minsante-g2-matching-before-after.csv`.
+
+### G.2.6 — Non-régression cross-registre
+
+Suite de tests complète re-exécutée (pas seulement MINSANTE) :
+193/193 PASS, 0 échec, 0 régression détectée — moteur partagé (§23 A-I),
+fixtures MINESUP-C/E (dont la fixture `sciences` STRONG_MATCH explicitement
+revalidée), MINSANTE-B/G.1, multi-ID (§22 A-G), extraction/dedup/PII/backfill.
+Détail complet : `reports/registry/minsante-g2-cross-registry-regression.json`.
+
+Une fixture G.1 (`matching-minsante-g1.test.ts`, §7.C, 3e cas) a dû être
+mise à jour intentionnellement : elle encodait elle-même, comme vecteur de
+test, le comportement que ce sprint corrige (deux cibles à égalité
+uniquement via "sciences"). Le test a été **dédoublé**, jamais supprimé : une
+version conserve un vrai mot distinctif partagé pour continuer à vérifier la
+garantie réelle du §7.C (un accord de région seul ne fabrique jamais de
+gagnant arbitraire), une nouvelle version documente explicitement le nouveau
+résultat attendu (`NO_MATCH` au lieu d'`AMBIGUOUS`) comme régression **voulue**
+de ce sprint.
+
+Nouvelle suite dédiée `scripts/school-registry/lib/matching/__tests__/matching-minsante-g2.test.ts`
+(12 tests, §13 A-H du brief) : écoles MINSANTE distinctes ne partageant que
+"sciences" (villes différentes et même ville), vraie variante matchant
+toujours via un mot distinctif réel, régression MINESUP explicite (le
+comportement `STRONG_MATCH` légitime est préservé, ET "sciences" seul reste
+insuffisant côté MINESUP aussi — preuve que le correctif est générique,
+jamais une condition `source_ministry === 'MINSANTE'`), acronyme comme
+preuve distinctive (avec garde anti faux-positif : un sigle entre
+parenthèses qui coïncide avec la ville structurée n'est jamais pris pour une
+corroboration).
+
+### G.2.7 — Ce qui N'A PAS changé
+
+- Aucune promotion, aucune écriture `establishments`/`registry_identifiers`
+  (`establishments`=2240, `staging`=2366, `registry_identifiers`=2242,
+  identiques avant/après, vérifié programmatiquement).
+- `safeForAutoLink` reste `false` sur tous les niveaux non-EXACT — aucun
+  auto-merge introduit.
+- Snapshot d'approbation (8 candidats, checksum ci-dessus) — inchangé, non
+  réécrit.
+- `city` — aucune nouvelle inférence, seulement une vérification d'intégrité
+  (8/8 candidats approuvés toujours renseignés).
+- Aucune exception codée en dur par ministère (`source_ministry`) —
+  vérifié explicitement par un test dédié MINESUP dans la nouvelle suite.
+
+**MINSANTE-G.2 CLOSED : YES — aucune promotion, aucune écriture
+establishments/registry_identifiers. Recommandation : A — retour au portail
+MINSANTE-G promotion pre-flight / human approval gate (eligible=8/8,
+duplicate_signals=0). Une autorisation humaine nommée séparée reste requise
+avant tout `--commit` — ce sprint ne l'exécute pas et ne le demande pas.
+Voir `reports/registry/minsante-g2-summary.json`.**

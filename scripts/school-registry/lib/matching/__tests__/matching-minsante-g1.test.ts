@@ -65,14 +65,40 @@ describe("§7.C — même région + city NULL des deux côtés -> jamais un acco
     assert.equal(geoAgreement("Ouest", null, "Ouest", null), "MATCH");
   });
 
-  test("un accord de région (city NULL des 2 côtés) ne suffit PAS à départager deux cibles à égalité de chevauchement — reste AMBIGUOUS, jamais un choix arbitraire", () => {
+  test('un accord de région (city NULL des 2 côtés) avec un chevauchement de noms propres ("Alpha"/"Beta"/"Gamma") reste AMBIGUOUS — un accord de région seul ne départage jamais deux cibles à égalité', () => {
+    // SPRINT MINSANTE-G.2 — ce fixture a été RENFORCÉ (pas contredit) : la
+    // version G.1 originale ne partageait QUE "sciences" entre les 3 noms
+    // (Alpha/Beta/Gamma étaient des mots DIFFÉRENTS, jamais partagés) — avec
+    // le "distinctive overlap gate" de G.2 (§9), ce cas devient désormais
+    // NO_MATCH (aucun mot distinctif partagé, "sciences" seul ne suffit
+    // plus, cf. test suivant). Ce test est réécrit pour vérifier la garantie
+    // RESTANTE de §7.C — un accord de région seul (city NULL des 2 côtés)
+    // NE FABRIQUE JAMAIS un gagnant arbitraire — en gardant ICI un vrai mot
+    // distinctif partagé ("alpha") pour que le scénario reste exercé.
+    const t1 = target({ id: "t1", name: "Institut des Sciences Medico-Sanitaires Alpha de Bandjoun", region: "Ouest", city: null, category: "health_training" });
+    const t2 = target({ id: "t2", name: "Institut des Sciences de la Sante Alpha de Bafoussam", region: "Ouest", city: null, category: "health_training" });
+    const c = candidate({ name: "Ecole Privee des Sciences de la Sante Alpha de Bamena", region: "Ouest", city: null, category: "health_training" });
+    const result = matchCandidate(c, [t1, t2]);
+    // "alpha" (mot distinctif, pas WEAK_GENERIC) chevauche les deux à égalité
+    // -> AMBIGUOUS légitime, PAS un EXACT_IDENTITY/STRONG_MATCH fabriqué
+    // depuis un simple accord de région.
+    assert.equal(result.level, "AMBIGUOUS");
+  });
+
+  test('SPRINT MINSANTE-G.2 §5/§7/§9 — "sciences" SEUL (aucun autre mot partagé, city NULL des 2 côtés) ne produit plus AMBIGUOUS : le "distinctive overlap gate" le déclasse en NO_MATCH', () => {
+    // Root cause exacte des 3 derniers blocages MINSANTE-G (résolue ce
+    // sprint) : "sciences" est un mot WEAK_GENERIC (engine.ts) — un
+    // chevauchement composé UNIQUEMENT de ce mot n'est plus, à lui seul, une
+    // preuve d'identité suffisante pour bloquer un candidat, même si deux
+    // cibles sont à égalité parfaite dessus. AVANT ce sprint (cf. test G.1
+    // ci-dessus, avant réécriture) : AMBIGUOUS à 100%. APRÈS : NO_MATCH.
     const t1 = target({ id: "t1", name: "Institut des Sciences Medico-Sanitaires Alpha de Bandjoun", region: "Ouest", city: null, category: "health_training" });
     const t2 = target({ id: "t2", name: "Institut des Sciences de la Sante Beta de Bafoussam", region: "Ouest", city: null, category: "health_training" });
     const c = candidate({ name: "Ecole Privee des Sciences de la Sante Gamma de Bamena", region: "Ouest", city: null, category: "health_training" });
     const result = matchCandidate(c, [t1, t2]);
-    // "sciences" seul chevauche les deux à égalité -> AMBIGUOUS légitime, PAS
-    // un EXACT_IDENTITY/STRONG_MATCH fabriqué depuis un simple accord de région.
-    assert.equal(result.level, "AMBIGUOUS");
+    assert.equal(result.level, "NO_MATCH");
+    assert.notEqual(result.level, "AMBIGUOUS");
+    assert.notEqual(result.level, "PROBABLE_MATCH");
   });
 });
 

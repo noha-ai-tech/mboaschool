@@ -1,0 +1,48 @@
+{
+  "sprint": "MINSANTE-G.2",
+  "generated_at": "2026-08-21T02:22:18.194Z",
+  "database": {
+    "project_ref": "umcwwynrftidytxgqkwi",
+    "establishments": 2240,
+    "staging": 2366,
+    "registry_identifiers": 2242
+  },
+  "approval": {
+    "snapshot_candidates": 8,
+    "checksum_expected": "26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653",
+    "checksum_stored": "26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653",
+    "checksum_recomputed": "26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653",
+    "checksum_valid": true,
+    "new_snapshot_required": false
+  },
+  "city_integrity": {
+    "checked": 8,
+    "missing": 0,
+    "ok": true,
+    "note": "§20 — vérification seulement, AUCUN ré-enrichissement exécuté ce sprint (déjà fait 22/22 en G.1)."
+  },
+  "deferred_protection": {
+    "category_review_excluded": 13,
+    "duplicate_review_excluded": 1,
+    "deferred_leak_into_snapshot": 0,
+    "protection_ok": true
+  },
+  "matching_after": {
+    "EXACT": 0,
+    "STRONG": 0,
+    "PROBABLE": 0,
+    "AMBIGUOUS": 0,
+    "NO_MATCH": 8
+  },
+  "eligible": 8,
+  "duplicate_signals": 0,
+  "conflicts": 0,
+  "cross_ministry_conflicts": 0,
+  "pii_issues": 0,
+  "category_issues": 0,
+  "slug_issues": 0,
+  "ready_for_repreflight": true,
+  "production_writes": 0,
+  "residual_blockers_resolved": 3,
+  "residual_blockers_total": 3
+}

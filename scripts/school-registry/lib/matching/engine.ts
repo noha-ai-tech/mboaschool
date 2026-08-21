@@ -177,6 +177,86 @@ const FUZZY_STOPWORDS = new Set([
   "fondation",
 ]);
 
+/**
+ * SPRINT MINSANTE-G.2 §5-§9 — "sciences"/"science" : ni un STOPWORD (retrait
+ * total, comme "santé"/"institut"), ni un mot NORMAL/DISTINCTIVE (comme
+ * "Poola"/"Tchuente"/"Excellence") — un troisième statut, WEAK_GENERIC.
+ *
+ * Root cause exacte des 3 derniers blocages MINSANTE-G (pilote Ouest, après
+ * G.1) : "sciences" est le SEUL mot restant dans fuzzyWords() une fois
+ * "institut"/"supérieur"/"santé"/"école" (déjà stopwords) ET la ville
+ * (retirée en aval par geoTokens, cf. matchCandidate ci-dessous) filtrés —
+ * ex. "ECOLE DES SCIENCES DE LA SANTE DE L'INSTITUT SUPERIEUR DE BAFANG" ->
+ * fuzzyWords ne laisse que ["bafang","sciences"], "bafang" étant lui-même la
+ * ville structurée. Deux cibles sans AUCUN rapport ("... POOLA DE
+ * BAFOUSSAM", "... ARGUS DE BANDJOUN") partageaient donc 100% de
+ * chevauchement via CE SEUL mot, produisant un AMBIGUOUS bloquant.
+ *
+ * "sciences" NE PEUT PAS devenir un stopword global (interdit explicitement
+ * §MINSANTE-G.2) : SPRINT MINESUP-E prouve le cas inverse — "Institut
+ * Superieur Bamenda Excellence Sciences" vs "Ecole Superieure Bamenda
+ * Excellence Sciences Appliquees" (matching.test.ts, "categoryMatch=true ...
+ * reste un STRONG_MATCH normal") reste un signal réel, PARCE QUE "sciences"
+ * s'y ajoute à DEUX autres mots distinctifs partagés ("bamenda"/"excellence")
+ * — le retirer de fuzzyWords casserait ce STRONG_MATCH légitime en lui
+ * retirant un tiers de son chevauchement. La solution n'est donc PAS de
+ * retirer "sciences" du calcul, mais d'empêcher qu'il soit, À LUI SEUL (ou
+ * accompagné d'autres mots eux aussi WEAK_GENERIC), suffisant pour produire
+ * un niveau bloquant (STRONG_MATCH/PROBABLE_MATCH/AMBIGUOUS) — cf. le
+ * "distinctive overlap gate" appliqué dans matchCandidate (§9 du brief).
+ *
+ * Audit §5 du brief (voir aussi reports/registry/minsante-g2-sciences-token-audit.json) :
+ * TOKEN "sciences"/"science" est CONTEXT_DEPENDENT — jamais un stopword sûr
+ * globalement (MINESUP-E), jamais un mot d'identité fiable seul (MINSANTE-G).
+ * "science" (singulier) est ajouté par SYMÉTRIE avec "sciences" — même
+ * racine sémantique (domaine académique générique), aucun test existant ne
+ * distingue les deux formes via matchCandidate (seul fuzzyWords() est testé
+ * directement sur la forme anglaise "Science and Technology", jamais une
+ * décision de correspondance) — cohérent avec le principe de complétude de
+ * pluralisation déjà appliqué en G.1 (sanitaire/sanitaires, infirmier(s)).
+ *
+ * IMPORTANT : ce Set est séparé de FUZZY_STOPWORDS. Un mot WEAK_GENERIC
+ * reste dans la sortie de `fuzzyWords()` (le ratio de chevauchement le
+ * compte toujours, comme avant — aucune régression de seuil/ratio) ; seule
+ * la fonction `hasDistinctiveOverlap` ci-dessous l'ignore pour décider si UN
+ * chevauchement est une preuve d'identité suffisante.
+ */
+const WEAK_GENERIC_TOKENS = new Set(["sciences", "science"]);
+
+/**
+ * SPRINT MINSANTE-G.2 §9 — extraction d'un sigle/acronyme explicite entre
+ * parenthèses (ex. "(BUIST)", "(IURB)", déjà présents dans des fiches réelles
+ * du corpus — cf. matching.test.ts/minsante-g1-matching-after.csv) : preuve
+ * de corroboration FORTE et STRUCTURELLE, indépendante du vocabulaire
+ * (générique ou non). Un sigle EXACTEMENT identique des deux côtés reste un
+ * signal d'identité même quand le seul mot flou partagé par ailleurs est
+ * WEAK_GENERIC (§9 : "exact acronym" listé comme corroboration valable).
+ *
+ * Prudence délibérée pour éviter un FAUX signal de corroboration (le corpus
+ * MINSANTE est très souvent intégralement en MAJUSCULES, donc "être en
+ * majuscules" seul ne prouve rien) :
+ *  - seulement un token ENTRE PARENTHÈSES (jamais un mot capitalisé isolé
+ *    dans le corps du nom) ;
+ *  - jamais un article/stopword déjà connu (ex. un nom de catégorie ou un
+ *    mot générique écrit par erreur entre parenthèses) ;
+ *  - jamais un token qui coïncide avec la ville/région STRUCTURÉE (`city`/
+ *    `region`) de l'un OU l'autre côté — sinon une ville notée entre
+ *    parenthèses ("... (Ngaoundéré)") serait prise à tort pour un sigle
+ *    partagé entre deux établissements sans rapport situés dans la même
+ *    ville.
+ */
+function extractParentheticalAcronym(name: string, geoTokens: Set<string>): string | null {
+  const matches = Array.from((name || "").matchAll(/\(([A-Za-z0-9][A-Za-z0-9.\-]{1,9})\)/g));
+  for (const m of matches) {
+    const raw = m[1];
+    const norm = normalizeGeo(raw);
+    if (!norm || GENERIC_ARTICLES.has(norm) || FUZZY_STOPWORDS.has(norm) || WEAK_GENERIC_TOKENS.has(norm)) continue;
+    if (geoTokens.has(norm)) continue;
+    return raw.toUpperCase();
+  }
+  return null;
+}
+
 /** Mots significatifs pour le chevauchement flou (REVIEW uniquement, jamais une preuve d'identité). */
 export function fuzzyWords(name: string): string[] {
   // SPRINT MINESUP-E — un token purement numérique (ex. "1"/"2", issu de
@@ -396,7 +476,21 @@ export function matchCandidate(candidate: MatchCandidate, targets: MatchTarget[]
       const candWords = candWordsBase.filter((w) => !geoTokens.has(w));
       const targetWordsRaw = fuzzyWords(t.name).filter((w) => !geoTokens.has(w));
       const ratio = candWords.length > 0 ? wordOverlapRatio(candWords, targetWordsRaw) : 0;
-      return { target: t, ratio, geo, geoMatch, geoConflict, categoryMatch };
+      // SPRINT MINSANTE-G.2 §7-§9 — "distinctive token evidence" : les mots
+      // PARTAGÉS qui pilotent réellement le ratio ci-dessus, séparés en
+      // WEAK_GENERIC (ex. "sciences") vs le reste (nom propre, sigle,
+      // fondateur, spécialité réelle...). Un chevauchement composé
+      // UNIQUEMENT de mots WEAK_GENERIC n'est jamais, à lui seul, une preuve
+      // d'identité (§9 : "shared generic words alone must not create a
+      // promotion blocker") — sauf corroboration structurelle plus forte
+      // (sigle exact identique des deux côtés, §9).
+      const targetWordsSet = new Set(targetWordsRaw);
+      const overlapWords = candWords.filter((w) => targetWordsSet.has(w));
+      const hasDistinctiveOverlap = overlapWords.some((w) => !WEAK_GENERIC_TOKENS.has(w));
+      const candAcronym = extractParentheticalAcronym(candidate.name, geoTokens);
+      const targetAcronym = extractParentheticalAcronym(t.name, geoTokens);
+      const acronymCorroboration = !!candAcronym && !!targetAcronym && candAcronym === targetAcronym;
+      return { target: t, ratio, geo, geoMatch, geoConflict, categoryMatch, hasDistinctiveOverlap, acronymCorroboration };
     })
     // SPRINT MINESUP-C — categoryMatch === false (les deux catégories sont
     // CONNUES et DIFFÉRENTES) exclut la cible du chevauchement flou. Bug réel
@@ -408,11 +502,45 @@ export function matchCandidate(candidate: MatchCandidate, targets: MatchTarget[]
     // différentes. categoryMatch===null (au moins une catégorie inconnue)
     // reste permissif, comme pour geoConflict — jamais un blocage sur une
     // absence d'information.
-    .filter((s) => s.ratio > 0 && s.categoryMatch !== false)
+    //
+    // SPRINT MINSANTE-G.2 §9 — "distinctive overlap gate" : en plus des
+    // filtres existants, une cible dont le SEUL chevauchement provient de
+    // mot(s) WEAK_GENERIC (ex. "sciences") ET qui n'a AUCUNE corroboration
+    // structurelle (sigle exact partagé) est écartée ICI, au même titre
+    // qu'un ratio nul — ce n'est jamais un candidat de doublon viable, donc
+    // jamais un gagnant ni un participant à une égalité AMBIGUOUS. Ne
+    // retire RIEN de `fuzzyWords()`/du ratio affiché par ailleurs — change
+    // seulement quelles cibles peuvent produire un niveau bloquant.
+    .filter((s) => s.ratio > 0 && s.categoryMatch !== false && (s.hasDistinctiveOverlap || s.acronymCorroboration))
     .sort((a, b) => b.ratio - a.ratio);
 
   if (scored.length === 0) {
-    return { level: "NO_MATCH", target: null, alternativeTargets: [], reason: "aucun mot significatif commun avec une cible.", safeForAutoLink: false };
+    // SPRINT MINSANTE-G.2 — message de `reason` précis : ne prétendre
+    // "chevauchement WEAK_GENERIC uniquement" QUE si c'est réellement la
+    // cause de l'exclusion (même filtre ratio>0 && categoryMatch!==false
+    // que `scored` ci-dessus — sinon un candidat exclu par catégorie
+    // incompatible, ou sans aucun mot commun, afficherait à tort le même
+    // texte que le cas WEAK_GENERIC, ce qui tromperait un audit humain).
+    const excludedOnlyByWeakGate = targets.some((t) => {
+      const geo = geoAgreement(candidate.region, candidate.city, t.region, t.city);
+      const categoryMatch = candidate.category && t.category ? candidate.category === t.category : null;
+      if (categoryMatch === false) return false;
+      const geoTokens = new Set([normalizeGeo(candidate.city), normalizeGeo(candidate.region), normalizeGeo(t.city), normalizeGeo(t.region)].filter((v) => v.length > 0));
+      const candWords = candWordsBase.filter((w) => !geoTokens.has(w));
+      const targetWords = fuzzyWords(t.name).filter((w) => !geoTokens.has(w));
+      const targetWordsSet = new Set(targetWords);
+      const overlap = candWords.filter((w) => targetWordsSet.has(w));
+      return overlap.length > 0 && overlap.every((w) => WEAK_GENERIC_TOKENS.has(w));
+    });
+    return {
+      level: "NO_MATCH",
+      target: null,
+      alternativeTargets: [],
+      reason: excludedOnlyByWeakGate
+        ? 'chevauchement uniquement composé de vocabulaire générique/faible (ex. "sciences") sans mot distinctif partagé ni corroboration (sigle exact identique) — signal insuffisant pour un doublon potentiel (SPRINT MINSANTE-G.2 §9).'
+        : "aucun mot significatif commun avec une cible.",
+      safeForAutoLink: false,
+    };
   }
 
   // SPRINT MINSANTE-G.1 §6/§7.D/§12 — une cible en CONFLIT géographique

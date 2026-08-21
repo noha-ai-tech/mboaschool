@@ -1,0 +1,161 @@
+{
+  "sprint": "MINSANTE-G.2",
+  "operator": "jean-merlain",
+  "generated_at": "2026-08-21",
+  "repository_context": {
+    "repository": "mboaschool",
+    "not_klassia": true,
+    "branch": "main",
+    "reference_commit_start": "93ea686d2b0979ede1abf46970ff4bc4b817df89"
+  },
+  "team_sync": {
+    "local_head_start": "93ea686d2b0979ede1abf46970ff4bc4b817df89",
+    "noha_main": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+    "origin_main": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+    "ahead_of_noha_main": 28,
+    "worktree_clean_at_start": true,
+    "note": "un fichier scratch non versionné (script-registry/g2-probe.ts) était présent au démarrage, artefact d'une tentative antérieure interrompue de ce même sprint sur cette machine — supprimé, jamais commité, aucune donnée perdue."
+  },
+  "database": {
+    "project_ref": "umcwwynrftidytxgqkwi",
+    "establishments_before": 2240,
+    "establishments_after": 2240,
+    "establishments_unchanged": true,
+    "staging_before": 2366,
+    "staging_after": 2366,
+    "staging_unchanged": true,
+    "registry_identifiers_before": 2242,
+    "registry_identifiers_after": 2242,
+    "registry_identifiers_unchanged": true,
+    "production_writes": 0,
+    "promotion_executed": false
+  },
+  "residual_pairs": {
+    "starting_blockers": 3,
+    "confirmed_distinct": 3,
+    "confirmed_same": 0,
+    "still_ambiguous": 0,
+    "detail_report": "reports/registry/minsante-g2-residual-pair-review.csv",
+    "human_review_is_corroboration_not_bypass": true,
+    "engine_independently_resolves": true,
+    "note": "Les 3 paires ont été confirmées CONFIRMED_DISTINCT en revue humaine (villes différentes pour 2/3, même ville mais marque/fondateur et spécialité différents pour la 3e) — MAIS le moteur de matching ne produit plus AMBIGUOUS/PROBABLE_MATCH pour ces 3 candidats INDÉPENDAMMENT de cette revue, une fois le correctif générique appliqué (vérifié : reports/registry/minsante-g2-matching-before-after.csv). La revue humaine corrobore le résultat, elle ne le produit pas."
+  },
+  "sciences_token": {
+    "global_stopword": false,
+    "classification": "WEAK_GENERIC",
+    "reason": "Mot de DOMAINE générique (sciences de la santé / sciences appliquées) dans tous les corpus observés, jamais lui-même un nom propre/marque/sigle d'établissement — mais reste un signal réel et légitime quand il accompagne un autre mot distinctif partagé (preuve directe SPRINT MINESUP-E, fixture STRONG_MATCH revalidée intacte ce sprint). Nouveau statut introduit dans engine.ts : compte toujours dans fuzzyWords()/le ratio, mais ne peut plus jamais, seul, produire un niveau bloquant.",
+    "minesup_compatibility": "PASS",
+    "minesup_compatibility_detail": "Fixture STRONG_MATCH 'Bamenda Excellence Sciences' (SPRINT MINESUP-E) inchangée (toujours STRONG_MATCH, ratio 75% identique). Nouveau test dédié confirme en plus que 'sciences' seul reste également insuffisant côté MINESUP (comportement symétrique, cohérent, sans exception par ministère).",
+    "detail_report": "reports/registry/minsante-g2-sciences-token-audit.json"
+  },
+  "matching_model": {
+    "distinctive_token_logic_added": true,
+    "token_weighting_added": true,
+    "weighting_classes": ["STOPWORD (poids 0)", "WEAK_GENERIC (compte mais jamais suffisant seul)", "NORMAL/DISTINCTIVE (compte pleinement, peut suffire seul)"],
+    "mechanism": "distinctive overlap gate dans matchCandidate() — une cible dont le SEUL chevauchement provient de mot(s) WEAK_GENERIC, sans corroboration structurelle (sigle exact partagé entre parenthèses), est écartée du pool de candidats à un niveau bloquant.",
+    "acronym_corroboration_added": true,
+    "acronym_corroboration_detail": "extractParentheticalAcronym() — sigle explicite entre parenthèses, identique des deux côtés, jamais un stopword ni un token de ville/région structuré (garde anti faux-positif testée explicitement).",
+    "geo_agreement_preserved": true,
+    "geo_agreement_detail": "geoAgreement() (city-first, region-fallback, NULL/NULL jamais un accord) réutilisé tel quel depuis G.1, aucune modification. Décision explicite ce sprint : une ville identique SEULE (sans mot distinctif partagé) n'est PAS traitée comme corroboration suffisante pour maintenir un blocage — cohérent avec le principe déjà retenu pour les programmes ('supporte, ne prouve jamais seul').",
+    "hardcoded_ministry_exception": false,
+    "hardcoded_ministry_exception_detail": "Aucune condition source_ministry==='MINSANTE' introduite nulle part — vérifié par un test MINESUP dédié dans la nouvelle suite (deux instituts MINESUP 'des Sciences' de villes différentes -> NO_MATCH, exactement comme MINSANTE).",
+    "auto_merge_count": 0,
+    "safeForAutoLink_always_false_on_non_exact": true
+  },
+  "pair_results": {
+    "before_blockers": 3,
+    "after_blockers": 0,
+    "detail_report": "reports/registry/minsante-g2-matching-before-after.csv",
+    "target_forced": false,
+    "note": "Résultat honnête du correctif générique — 8/8 atteint sans exception codée en dur, sans abaissement de seuil, sans réécriture de snapshot. Si le résultat avait été <8/8, ce rapport l'aurait indiqué tel quel (recommandation B)."
+  },
+  "approved_population": {
+    "snapshot_candidates": 8,
+    "eligible": 8,
+    "blocking_duplicate_signals": 0,
+    "conflicts": 0,
+    "cross_ministry_conflicts": 0,
+    "matching_after_g2": { "EXACT": 0, "STRONG": 0, "PROBABLE": 0, "AMBIGUOUS": 0, "NO_MATCH": 8 },
+    "siblings_excluded_from_matching": false,
+    "detail_report": "reports/registry/minsante-g2-matching-after.csv"
+  },
+  "snapshot": {
+    "candidates": 8,
+    "checksum": "26ea91c10bb9791dbc2e339bee577ae16d2f31db499411228bf224aa0bd0f653",
+    "checksum_still_valid": true,
+    "checksum_verified_programmatically": true,
+    "new_snapshot_required": false,
+    "reason": "Aucun champ hashé (staging_id/name/region/programs/education_family/main_category/category_evidence/source/decision) n'a changé — seule la sémantique du moteur de matching a évolué, jamais les données candidates elles-mêmes."
+  },
+  "city_enrichment": {
+    "re_enrichment_performed": false,
+    "integrity_check_only": true,
+    "pilot_rows_checked": 22,
+    "approved_candidates_checked": 8,
+    "all_still_populated": true,
+    "note": "Conforme §20 du brief — G.1 avait déjà enrichi 22/22, ce sprint vérifie seulement l'intégrité, aucune nouvelle inférence géographique."
+  },
+  "preflight_recheck": {
+    "eligible": 8,
+    "duplicate_signals": 0,
+    "conflicts": 0,
+    "cross_ministry_conflicts": 0,
+    "pii_issues": 0,
+    "category_issues": 0,
+    "slug_issues": 0,
+    "ready_for_repreflight": true,
+    "commit_executed": false,
+    "detail_report": "reports/registry/minsante-g2-preflight-recheck.json"
+  },
+  "ready_for_human_promotion_approval": true,
+  "pii": {
+    "persisted": 0,
+    "note": "Aucune nouvelle donnée personnelle extraite ou persistée ce sprint. Aucune écriture staging/establishments — travail entièrement en lecture + rapports fichiers."
+  },
+  "production": {
+    "establishments_inserted": 0,
+    "establishments_updated": 0,
+    "establishments_deleted": 0,
+    "registry_identifiers_inserted": 0,
+    "promotion_executed": false
+  },
+  "qa": {
+    "build": "PASS (npm run build)",
+    "typescript_app": "PASS (npx tsc --noEmit)",
+    "typescript_registry": "PASS (npx tsc --noEmit -p scripts/school-registry/tsconfig.json)",
+    "tests": {
+      "matching_suite_total": "73/73 (46 matching.test.ts inchangé + 15 matching-minsante-g1.test.ts [14 précédents +1, 1 fixture mise à jour intentionnellement documentée] + 12 nouveaux matching-minsante-g2.test.ts §13 A-H)",
+      "registry_scripts_all_suites_total": "193/193 (matching, MINSANTE parser/extraction/dedup, approved-population protection, promotion guards MINESUP/MINSANTE, normalize, PII redaction, registry backfill)",
+      "registryReview": "18/18 (src/lib/__tests__/registryReview.test.ts)",
+      "cross_registry_regressions": 0,
+      "minesup_strong_match_sciences_fixture_preserved": true,
+      "auto_merge_tests": "safeForAutoLink=false vérifié sur tous les niveaux non-EXACT, inchangé"
+    }
+  },
+  "files": {
+    "engine_modified": "scripts/school-registry/lib/matching/engine.ts",
+    "regression_test_updated": "scripts/school-registry/lib/matching/__tests__/matching-minsante-g1.test.ts",
+    "new_test_matrix": "scripts/school-registry/lib/matching/__tests__/matching-minsante-g2.test.ts",
+    "preflight_recheck_script": "scripts/school-registry/minsante-g2-preflight-recheck.ts",
+    "docs_updated": [
+      "docs/03_DATA_REGISTRY/MINSANTE_IMPORT_CONTRACT.md",
+      "docs/03_DATA_REGISTRY/MULTI_REGISTRY_CONTRACT.md"
+    ],
+    "reports": [
+      "reports/registry/minsante-g2-residual-pair-review.csv",
+      "reports/registry/minsante-g2-sciences-token-audit.json",
+      "reports/registry/minsante-g2-matching-before-after.csv",
+      "reports/registry/minsante-g2-matching-after.csv",
+      "reports/registry/minsante-g2-cross-registry-regression.json",
+      "reports/registry/minsante-g2-preflight-recheck.json",
+      "reports/registry/minsante-g2-summary.json"
+    ]
+  },
+  "minsante_g2_closed": true,
+  "recommended_next_step": "A",
+  "recommended_next_step_reason": "eligible=8/8, blocking duplicate signals=0, checksum still valid, no new snapshot required, no cross-registry regression. Return to the MINSANTE-G promotion pre-flight / human approval gate. This sprint does NOT execute --commit and does NOT request one — an explicit NAMED human approval remains required before any production write, independent of this READY status.",
+  "push": false,
+  "deploy": false,
+  "promotion": false,
+  "next_sprint_started": false
+}
