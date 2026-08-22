@@ -1,0 +1,8 @@
+{
+  "sprint": "REGISTRY-NATIONAL-B",
+  "generated_at": "2026-08-22T04:50:23.441Z",
+  "PII_CANDIDATES": [],
+  "PII_FIELDS": [],
+  "BLOCKED_BY_PII": 0,
+  "note": "Scan conservateur sur name + region/city + raw_data sérialisé. Aucune valeur PII elle-même n'est écrite dans ce rapport, uniquement les identifiants de candidat et noms de champ détectés."
+}

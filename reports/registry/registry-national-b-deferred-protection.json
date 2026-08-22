@@ -1,0 +1,17 @@
+{
+  "sprint": "REGISTRY-NATIONAL-B",
+  "generated_at": "2026-08-22T04:50:23.480Z",
+  "duplicate_review_excluded": 8,
+  "identity_review_excluded": 2,
+  "source_review_excluded": 6,
+  "category_review_excluded": 10,
+  "conflict_review_excluded": 0,
+  "deferred_excluded": 5,
+  "also_excluded_defensive": {
+    "blocked_required_field": 0,
+    "blocked_slug_collision": 0
+  },
+  "total_excluded_population": 31,
+  "leaked_into_final_snapshot": [],
+  "protection_verified": true
+}

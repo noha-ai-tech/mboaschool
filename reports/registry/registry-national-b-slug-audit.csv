@@ -1,0 +1,4 @@
+candidate_id,proposed_slug,existing_collision,batch_collision_with,valid
+NAT-STG-e32c3ca8-e53b-4ba6-b62f-c65139372373,auto-ecole-astrale,false,,true
+NAT-STG-c8491b99-30b0-449e-9689-97ca3521fd7a,centre-de-formation-professionnelle-maritime-le-paquebot,false,,true
+NAT-STG-b8ddca4c-475c-4320-86e4-d9392f36cb8b,ecole-de-formation-efo-ccaa,false,,true

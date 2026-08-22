@@ -1,0 +1,12 @@
+{
+  "sprint": "REGISTRY-NATIONAL-B",
+  "generated_at": "2026-08-22T04:50:23.496Z",
+  "registry_protected_fields_still_protected": true,
+  "new_blocker_introduced_by_this_batch": false,
+  "reasoning": "Le lot REGISTRY-NATIONAL-B ne crée que des lignes establishments INSERT-only avec owner_id=null/is_verified=false — mêmes colonnes, même modèle de données que l'existant. Aucun nouveau champ, aucune nouvelle table, aucune nouvelle règle d'édition introduite. Les blockers CMS déjà documentés par REGISTRY-NATIONAL-A (§25, decision CMS_BLOCKERS_REMAIN — absence de colonne official_verification dédiée) restent inchangés par ce sprint, qui ne modifie aucun code applicatif.",
+  "status": "PARTIAL",
+  "remaining_blockers": [
+    "Aucune colonne dédiée official_verification/platform_verification n'existe encore sur establishments (résolveur A.1 reste calculé côté code, jamais persisté) — un CMS complet devra soit continuer de dériver ces champs à la volée, soit introduire une migration (hors périmètre déclaré de ce sprint).",
+    "Le flux claim/verify générique (is_verified booléen) n'a pas été retravaillé depuis A.1 au-delà du renommage de libellé — un CMS self-service pour le propriétaire devra confirmer, avant construction, qu'aucun champ de confiance protégé n'est exposé en écriture (vérifié statiquement ce sprint pour /api/admin/claims/[id]/approve uniquement, pas pour un futur endpoint self-service qui n'existe pas encore)."
+  ]
+}

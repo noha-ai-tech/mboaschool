@@ -1,0 +1,125 @@
+{
+  "sprint": "REGISTRY-NATIONAL-B",
+  "generated_at": "2026-08-22T04:50:23.475Z",
+  "algorithm": "computeRegistryNationalApprovalChecksum() — scripts/school-registry/lib/nationalRegistry/registryNationalPublicationGuard.ts. SHA256(hex) de rows.sort((a,b)=>a.national_candidate_id.localeCompare(b.national_candidate_id)).map(r=>[national_candidate_id,name,slug,main_category,sub_category,education_family,city,region,source_ministries,source_url,presence_confidence,identity_confidence,official_verification,publication_readiness].join('|')).join('\\n'). Méthode canonique réutilisée du dépôt (même famille que computeInsertablePopulationChecksum() de transportA2ImportGuard.ts, TRANSPORT-A.2-T3), adaptée aux champs du candidat national.",
+  "candidate_count": 3,
+  "create_officially_verified_count": 0,
+  "create_publishable_unverified_count": 3,
+  "checksum_sha256": "c22e1b88e1cb1026f0115d7d118abcccc4a832bb3375e9fd62e7ed754f7849ce",
+  "candidates": [
+    {
+      "national_candidate_id": "NAT-STG-b8ddca4c-475c-4320-86e4-d9392f36cb8b",
+      "name": "École de Formation (EFO) - CCAA",
+      "slug": "ecole-de-formation-efo-ccaa",
+      "main_category": "autres",
+      "sub_category": null,
+      "education_family": null,
+      "city": "Yaoundé",
+      "region": "Centre",
+      "address": null,
+      "source_ministries": [
+        "MINTRANSPORT"
+      ],
+      "source_url": "https://www.ccaa.aero/index.php/fr/",
+      "source_reference": "establishment_import_staging.id=b8ddca4c-475c-4320-86e4-d9392f36cb8b",
+      "registry_import_batch": "registry-national-b-preflight",
+      "presence_confidence": "CORROBORATED",
+      "identity_confidence": "RESOLVED",
+      "official_verification": "UNVERIFIED",
+      "publication_readiness": "CREATE_PUBLISHABLE_UNVERIFIED",
+      "is_verified": false,
+      "owner_id": null,
+      "source_evidence": {
+        "source_tiers": [
+          "TIER_3_DISCOVERY"
+        ],
+        "source_domains": [
+          "www.ccaa.aero"
+        ],
+        "source_snapshots": [
+          "establishment_import_staging.id=b8ddca4c-475c-4320-86e4-d9392f36cb8b"
+        ],
+        "source_sha256": [
+          "e42dc7275e4e9ac3622b2acb3d6d6801d57e31df1b8caea60b4aeabbc564fa6f"
+        ]
+      },
+      "official_id": null
+    },
+    {
+      "national_candidate_id": "NAT-STG-c8491b99-30b0-449e-9689-97ca3521fd7a",
+      "name": "Centre de formation professionnelle maritime « Le Paquebot »",
+      "slug": "centre-de-formation-professionnelle-maritime-le-paquebot",
+      "main_category": "autres",
+      "sub_category": null,
+      "education_family": null,
+      "city": "Douala",
+      "region": "Littoral",
+      "address": null,
+      "source_ministries": [
+        "MINTRANSPORT"
+      ],
+      "source_url": "https://www.facebook.com/p/Centre-de-formation-professionnelle-maritime-le-paquebot-de-Douala-100075842125767/",
+      "source_reference": "establishment_import_staging.id=c8491b99-30b0-449e-9689-97ca3521fd7a",
+      "registry_import_batch": "registry-national-b-preflight",
+      "presence_confidence": "SINGLE_SOURCE",
+      "identity_confidence": "RESOLVED",
+      "official_verification": "UNVERIFIED",
+      "publication_readiness": "CREATE_PUBLISHABLE_UNVERIFIED",
+      "is_verified": false,
+      "owner_id": null,
+      "source_evidence": {
+        "source_tiers": [
+          "TIER_3_DISCOVERY"
+        ],
+        "source_domains": [
+          "www.facebook.com"
+        ],
+        "source_snapshots": [
+          "establishment_import_staging.id=c8491b99-30b0-449e-9689-97ca3521fd7a"
+        ],
+        "source_sha256": [
+          "2f95168f6f6f82c8c96d020f8d3a1ee140ad5fcc0a4b5ad89c42bb3f7a92b630"
+        ]
+      },
+      "official_id": null
+    },
+    {
+      "national_candidate_id": "NAT-STG-e32c3ca8-e53b-4ba6-b62f-c65139372373",
+      "name": "AUTO ECOLE ASTRALE",
+      "slug": "auto-ecole-astrale",
+      "main_category": "autres",
+      "sub_category": null,
+      "education_family": "other",
+      "city": "Yaoundé",
+      "region": "Centre",
+      "address": null,
+      "source_ministries": [
+        "MINTRANSPORT"
+      ],
+      "source_url": "https://africannuaire.com/entreprise/auto-ecole-astrale-cameroun/",
+      "source_reference": "establishment_import_staging.id=e32c3ca8-e53b-4ba6-b62f-c65139372373",
+      "registry_import_batch": "registry-national-b-preflight",
+      "presence_confidence": "SINGLE_SOURCE",
+      "identity_confidence": "RESOLVED",
+      "official_verification": "UNVERIFIED",
+      "publication_readiness": "CREATE_PUBLISHABLE_UNVERIFIED",
+      "is_verified": false,
+      "owner_id": null,
+      "source_evidence": {
+        "source_tiers": [
+          "TIER_3_DISCOVERY"
+        ],
+        "source_domains": [
+          "africannuaire.com"
+        ],
+        "source_snapshots": [
+          "establishment_import_staging.id=e32c3ca8-e53b-4ba6-b62f-c65139372373"
+        ],
+        "source_sha256": [
+          "48d6092a49454f227a8a171ff469e59a2ca5b1d2fd647108901cfdea9f5c9d06"
+        ]
+      },
+      "official_id": null
+    }
+  ]
+}

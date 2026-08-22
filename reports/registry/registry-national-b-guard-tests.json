@@ -1,0 +1,9 @@
+{
+  "sprint": "REGISTRY-NATIONAL-B",
+  "test_file": "scripts/school-registry/lib/nationalRegistry/__tests__/registryNationalPublicationGuard.test.ts",
+  "scenarios": "A-L (brief §25) : missing --commit, wrong project, wrong count, wrong checksum, wrong confirm phrase, missing operator, missing approved-by, operator==approved-by, snapshot drift, already-live drift, duplicate-signal drift, missing-required-field drift.",
+  "pass": 20,
+  "fail": 0,
+  "all_refused_zero_db_writes": true,
+  "guard_invoked_with_valid_flags_this_sprint": false
+}

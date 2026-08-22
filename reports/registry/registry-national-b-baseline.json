@@ -1,0 +1,112 @@
+{
+  "sprint": "REGISTRY-NATIONAL-B",
+  "generated_at": "2026-08-22T04:50:18.851Z",
+  "repository": {
+    "branch": "main",
+    "head": "b349aa1952774e40150f8e05c677b3009c9e237c",
+    "noha_main": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+    "working_tree_clean_before_sprint_artifacts": true
+  },
+  "reference_sprints": {
+    "REGISTRY-NATIONAL-A": "8609db3",
+    "REGISTRY-NATIONAL-A.1": "b349aa1"
+  },
+  "totals": {
+    "establishments": 2249,
+    "staging": 2378,
+    "registry_identifiers": 2242
+  },
+  "historical_reference_only_not_authoritative": {
+    "note": "Chiffres REGISTRY-NATIONAL-A/A.1 — RÉFÉRENCES HISTORIQUES UNIQUEMENT, jamais recopiées comme état courant.",
+    "establishments": 2249,
+    "staging": 2378,
+    "registry_identifiers": 2242,
+    "already_live": 97,
+    "create_officially_verified": 0,
+    "create_publishable_unverified": 3
+  },
+  "per_ministry": {
+    "MINEDUB": {
+      "live_establishments": 0,
+      "staging_total": 0,
+      "staging_promoted": 0,
+      "staging_unpromoted": 0
+    },
+    "MINESEC": {
+      "live_establishments": 1938,
+      "staging_total": 1942,
+      "staging_promoted": 1265,
+      "staging_unpromoted": 677
+    },
+    "MINESUP": {
+      "live_establishments": 89,
+      "staging_total": 92,
+      "staging_promoted": 89,
+      "staging_unpromoted": 3
+    },
+    "MINEFOP": {
+      "live_establishments": 0,
+      "staging_total": 0,
+      "staging_promoted": 0,
+      "staging_unpromoted": 0
+    },
+    "MINSANTE": {
+      "live_establishments": 8,
+      "staging_total": 22,
+      "staging_promoted": 8,
+      "staging_unpromoted": 14
+    },
+    "MINADER": {
+      "live_establishments": 0,
+      "staging_total": 0,
+      "staging_promoted": 0,
+      "staging_unpromoted": 0
+    },
+    "MINEPIA": {
+      "live_establishments": 0,
+      "staging_total": 0,
+      "staging_promoted": 0,
+      "staging_unpromoted": 0
+    },
+    "MINFOF": {
+      "live_establishments": 0,
+      "staging_total": 0,
+      "staging_promoted": 0,
+      "staging_unpromoted": 0
+    },
+    "MINTRANSPORT": {
+      "live_establishments": 0,
+      "staging_total": 12,
+      "staging_promoted": 0,
+      "staging_unpromoted": 12
+    },
+    "OTHER": {
+      "live_establishments": 161,
+      "staging_total": 310,
+      "staging_promoted": 161,
+      "staging_unpromoted": 149
+    }
+  },
+  "registry_identifiers_by_authority": {
+    "MINESUP": 146,
+    "MINESEC": 2096
+  },
+  "live_schema_audit": {
+    "openapi_required_fields_establishments": [
+      "id",
+      "name",
+      "slug",
+      "main_category",
+      "forfait",
+      "verification_status",
+      "hero_mode"
+    ],
+    "blocking_required_fields_used_this_sprint": [
+      "name",
+      "slug",
+      "main_category"
+    ],
+    "matches_expected": true,
+    "note": "id/forfait/verification_status/hero_mode figurent dans 'required' OpenAPI mais possèdent tous un défaut DB (gen_random_uuid()/'gratuit'/'referenced'/'carousel') — un INSERT qui les omet ne bloque jamais. Seuls name/slug/main_category sont réellement bloquants sans défaut, vérifié en direct ce sprint (pas supposé depuis MINSANTE-G)."
+  }
+}
