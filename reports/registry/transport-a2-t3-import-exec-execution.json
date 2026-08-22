@@ -1,0 +1,18 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-IMPORT-EXEC",
+  "generated_at": "2026-08-22T00:00:00.000Z",
+  "status": "PREFLIGHT_DRY_RUN_ONLY_NO_COMMIT",
+  "write_performed_this_sprint": false,
+  "staging_writes_this_sprint": 0,
+  "production_writes_this_sprint": 0,
+  "establishments_inserted": 0,
+  "establishments_updated": 0,
+  "establishments_deleted": 0,
+  "registry_identifiers_inserted": 0,
+  "promotion_performed": false,
+  "attempted": 0,
+  "inserted": 0,
+  "failed": 0,
+  "skipped": 0,
+  "reason": "Brief §11/§13 — no named, distinct human approval message was received this sprint (the brief text itself is explicitly excluded from counting as approval per its own §11: \"Le brief lui-même ne constitue PAS cette autorisation\"). DECISION = D — WAITING_FOR_HUMAN_APPROVAL (brief §21 option D). The --commit branch of scripts/school-registry/transport-a2-t3-import.ts was never invoked with a complete/valid flag set this sprint — only refusal-path scenarios (see transport-a2-t3-import-guard-refusal-tests.json), all of which were REFUSED with 0 net rows written."
+}

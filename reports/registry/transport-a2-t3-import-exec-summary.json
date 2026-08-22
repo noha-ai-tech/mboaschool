@@ -1,0 +1,110 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-IMPORT-EXEC",
+  "date": "2026-08-22",
+  "team": {
+    "operator": "jean-merlain",
+    "approved_by": null
+  },
+  "repository": {
+    "name": "mboaschool",
+    "branch": "main",
+    "commit_at_start": "ecd76eab497c464f9c59455c7977dffe60c50104",
+    "working_tree_clean_at_start": true,
+    "noha_main_at_fetch": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+    "ahead_of_noha_main": 41
+  },
+  "database": {
+    "establishments": { "before_this_sprint": 2249, "after_this_sprint": 2249 },
+    "staging": { "before_this_sprint": 2366, "after_this_sprint": 2366 },
+    "registry_identifiers": { "before_this_sprint": 2242, "after_this_sprint": 2242 },
+    "mintransport_staging": { "before_this_sprint": 0, "after_this_sprint": 0 }
+  },
+  "external_drift": {
+    "qa_fixture_still_present": true,
+    "qa_fixture_id": "b11a4206-7bc3-4cc9-95d9-7d45e0378af4",
+    "qa_fixture_modified_this_sprint": false,
+    "other_concurrent_writes_found": false,
+    "transport_impact": "NONE — zero token overlap with any of the 12 insertable candidates, source_ministry=null, main_category=primaire. Confirmed again independently this sprint."
+  },
+  "snapshot": {
+    "discovered": 17,
+    "insertable": 12,
+    "deferred": 5,
+    "deferred_reason": "MISSING_SOURCE_URL",
+    "expected_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+    "stored_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+    "recomputed_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+    "valid": true
+  },
+  "matching": {
+    "already_live": 0,
+    "already_staging": 0,
+    "duplicate_review": 3,
+    "source_review": 12,
+    "identity_review": 2,
+    "cross_ministry_review": 0,
+    "conflict_review": 0
+  },
+  "trust": {
+    "officially_verified": 0,
+    "invented_official_ids": 0,
+    "publication_ready_unverified": 3,
+    "review_required": 14
+  },
+  "dry_run": {
+    "would_insert_staging": 12,
+    "would_insert_establishments": 0,
+    "would_insert_registry_identifiers": 0,
+    "would_update": 0,
+    "would_delete": 0
+  },
+  "import": {
+    "attempted": 0,
+    "inserted": 0,
+    "failed": 0,
+    "skipped": 0
+  },
+  "reconciliation": {
+    "expected_staging_delta": null,
+    "actual_staging_delta": 0,
+    "missing_candidates": null,
+    "unexpected_candidates": null,
+    "orphans": null,
+    "outcome": "NOT_APPLICABLE_NO_WRITE_PERFORMED"
+  },
+  "deferred": {
+    "count": 5,
+    "reasons": ["MISSING_SOURCE_URL"]
+  },
+  "idempotence": {
+    "second_dry_run_simulation_would_insert": 0,
+    "already_staging_simulated": 12,
+    "note": "Simulation only — no real first import happened this sprint to check a real second dry-run against."
+  },
+  "public_safety": {
+    "staging_leakage": 0,
+    "measured_on_real_staged_rows": false,
+    "note": "Static verification only this sprint (no staged rows exist yet to query live)."
+  },
+  "qa": {
+    "build": "PASS",
+    "typescript_app": "PASS (0 errors)",
+    "typescript_registry_scripts": "PASS (0 errors)",
+    "tests": "PASS (165/165, 0 fail — import guards, transport tier3 trust model/matching, matching engine, registryReview, Search V2 queryBuilder)"
+  },
+  "production": {
+    "establishments_inserted": 0,
+    "establishments_updated": 0,
+    "establishments_deleted": 0,
+    "registry_identifiers_inserted": 0,
+    "promotion": false
+  },
+  "decision": "D",
+  "decision_label": "WAITING_FOR_HUMAN_APPROVAL",
+  "transport_tier3_staging_import_closed": false,
+  "ready_for_registry_national_a": false,
+  "ready_for_transport_promotion": false,
+  "push": false,
+  "deploy": false,
+  "future_authorized_command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit --expected-count=12 --approval-checksum=3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4 --confirm=\"IMPORT_TRANSPORT_TIER3_TO_STAGING\" --operator=\"jean-merlain\" --approved-by=\"<REAL DISTINCT HUMAN NAME>\""
+}

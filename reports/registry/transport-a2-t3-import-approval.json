@@ -1,6 +1,6 @@
 {
   "sprint": "TRANSPORT-A.2-T3-IMPORT",
-  "generated_at": "2026-08-21T20:44:01.693Z",
+  "generated_at": "2026-08-22T03:02:25.472Z",
   "purpose": "Dedicated approval snapshot scoped STRICTLY to the actually-insertable batch (brief §8) — supersedes reuse of the 17-candidate population checksum as this batch's approval_checksum.",
   "candidate_count": 12,
   "expected_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",

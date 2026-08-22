@@ -1,0 +1,26 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-IMPORT-EXEC",
+  "generated_at": "2026-08-22T00:00:00.000Z",
+  "live_staged_candidate_check": {
+    "applicable": false,
+    "reason": "Brief §17 asks to take at least 3 newly staged Transport candidates and query Search V2 to confirm staging alone does not publish them. No candidates were staged this sprint (decision D, 0 writes) — there is no live staged row yet to query. This check must be re-run for real, with real staged rows, once an authorized import has actually happened.",
+    "staging_leakage_measured_on_real_rows": "NOT_YET_MEASURABLE"
+  },
+  "static_verification_performed_instead": {
+    "search_v2_route_reads_only_establishments": true,
+    "search_route_file": "src/app/api/recherche/route.ts",
+    "search_route_never_references_establishment_import_staging": true,
+    "staging_table_referenced_only_in_admin_or_review_context": true,
+    "files_under_src_referencing_establishment_import_staging": [
+      "src/app/dashboard/admin/registre/page.tsx",
+      "src/lib/cameroonMajorCities.ts",
+      "src/lib/cameroonRegions.ts",
+      "src/lib/registryReview.ts"
+    ],
+    "method": "git grep -l \"establishment_import_staging\" -- \"src/\" plus a direct read of src/app/api/recherche/route.ts, run fresh this sprint (read-only, no route files modified)."
+  },
+  "staging_leakage_to_public_routes": false,
+  "public_routes_modified_this_sprint": false,
+  "search_v2_altered_to_force_pass": false,
+  "conclusion": "By static analysis, the public search route (Search V2) is architecturally incapable of surfacing establishment_import_staging rows — it queries only the establishments table, and every src/ reference to the staging table is confined to admin/registry-review code. This is consistent with, but not a substitute for, the live 3-candidate query the brief specifies; that live check remains outstanding until a real staging import has occurred."
+}

@@ -1,0 +1,154 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-IMPORT-EXEC",
+  "date": "2026-08-22",
+  "operator": "jean-merlain",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "git": {
+    "branch": "main",
+    "head": "ecd76eab497c464f9c59455c7977dffe60c50104",
+    "working_tree_clean_at_start": true,
+    "noha_main_at_fetch": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+    "ahead_of_noha_main": 41,
+    "behind_noha_main": 0
+  },
+  "method": "This sprint independently re-ran the existing transport-a2-t3-import-preflight.ts script (read-only end to end; the only non-GET calls in its dependency graph are the 8 real guard-refusal CLI invocations of transport-a2-t3-import.ts, none of which ever pass a valid flag combination) fresh against live Supabase, then folded its fresh output plus a dedicated external-drift investigation into this exec report. No numbers were reused from ecd76ea's committed reports without independent recomputation.",
+  "database_baseline_now": {
+    "establishments": 2249,
+    "staging": 2366,
+    "registry_identifiers": 2242,
+    "mintransport_staging_rows": 0,
+    "mintransport_enum_present": true
+  },
+  "database_baseline_drift_vs_sprint_start_historical": {
+    "historical": { "establishments": 2248, "staging": 2366, "registry_identifiers": 2242, "mintransport_staging": 0 },
+    "drift": { "establishments": 1, "staging": 0, "registry_identifiers": 0, "mintransport_staging": 0 },
+    "drift_detected": true
+  },
+  "external_drift_investigation": {
+    "target": "Écoles237 QA — School A2",
+    "still_present": true,
+    "row": {
+      "id": "b11a4206-7bc3-4cc9-95d9-7d45e0378af4",
+      "name": "Écoles237 QA — School A2",
+      "city": "Yaounde",
+      "region": null,
+      "main_category": "primaire",
+      "source_ministry": null,
+      "owner_id": "305b22ee-9761-47ba-b156-259d6da518f4",
+      "is_verified": false,
+      "created_at": "2026-08-21T22:32:10.053271+00:00",
+      "updated_at": "2026-08-21T22:32:10.053271+00:00"
+    },
+    "row_modified_since_prior_sprint": false,
+    "row_deleted_or_altered_by_this_sprint": false,
+    "other_new_establishments_since_prior_preflight": {
+      "query": "establishments where created_at >= 2026-08-21T18:00:00Z",
+      "count_found": 1,
+      "note": "Only the already-known QA fixture row. No other establishment created since the prior sprint's preflight baseline."
+    },
+    "relation_to_transport_candidates": "NONE — zero token overlap between 'Écoles237 QA — School A2' and any of the 12 insertable candidate names (AUTO ECOLE ASTRALE, AUTO ECOLE FRANCAISE, AUTO ECOLE GERMANIA, AUTO ECOLE LEO, AUTO ECOLE TRECY, AUTO ECOLE TURBO, AUTO ECOLE TURBO NKOMKANA, METROPOLITAINE INTERNATIONALE SCES, EMIPAC, IT2MIP, Centre de formation professionnelle maritime Le Paquebot, École de Formation (EFO) - CCAA). source_ministry=null (not MINTRANSPORT). main_category=primaire (not in the Transport taxonomy). Confirmed again this sprint by direct query, not merely inherited from the prior sprint's finding.",
+    "new_live_establishment_could_match_a_candidate": false,
+    "identity_review_rerun_required": false,
+    "conclusion": "External drift is real (establishments +1 vs the 2248 sprint-start historical baseline), unchanged in nature and magnitude since the prior sprint's final-baseline-recheck, fully root-caused to a pre-existing unrelated QA fixture, and does not affect the Transport Tier-3 population, its matching, or its checksums. No revalidation trigger met."
+  },
+  "mintransport_enum_verified_live": true,
+  "population": {
+    "candidate_count": 17,
+    "expected": 17,
+    "population_checksum_expected": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+    "population_checksum_stored": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+    "population_checksum_recomputed": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+    "population_checksum_valid": true
+  },
+  "classification_tally": { "SOURCE_REVIEW": 12, "DUPLICATE_REVIEW": 3, "IDENTITY_REVIEW": 2 },
+  "clean_approvable_count": 0,
+  "already_live_count": 0,
+  "already_staging_count": 0,
+  "matching_tally": { "EXACT_IDENTIFIER": 0, "EXACT_IDENTITY": 0, "STRONG_MATCH": 0, "PROBABLE_MATCH": 4, "AMBIGUOUS": 1, "NO_MATCH": 12 },
+  "matching_decision_tally": {
+    "ALREADY_LIVE": 0,
+    "ALREADY_STAGING": 0,
+    "DUPLICATE_REVIEW": 3,
+    "SOURCE_REVIEW": 12,
+    "IDENTITY_REVIEW": 2,
+    "CROSS_MINISTRY_REVIEW": 0,
+    "CONFLICT_REVIEW": 0,
+    "note": "TC-12 (IT2MIP) carries cross_ministry_decision=AMBIGUOUS as metadata but is classified DUPLICATE_REVIEW (PROBABLE_MATCH signal dominates); no separate CROSS_MINISTRY_REVIEW bucket triggered this sprint."
+  },
+  "trust_model_tally": {
+    "presence_confidence": { "SINGLE_SOURCE": 14, "CORROBORATED": 2, "MULTI_SOURCE_WEAK": 1 },
+    "identity_confidence": { "RESOLVED": 12, "PROBABLE": 2, "UNRESOLVED": 1, "CONFLICTING": 2 },
+    "official_verification": { "UNVERIFIED": 17 }
+  },
+  "officially_verified_automatically": 0,
+  "publication_readiness_tally": { "PUBLISHABLE_UNVERIFIED": 3, "REVIEW_REQUIRED": 14 },
+  "classification_eligible_count": 17,
+  "insertable_count_recomputed_this_sprint": 12,
+  "insertable_count_historical_expectation": 12,
+  "population_drift_vs_historical_insertable_count": false,
+  "held_back_missing_source_url": ["TC-09", "TC-10", "TC-14", "TC-16", "TC-17"],
+  "cross_ministry_review": {
+    "TC-12_IT2MIP": {
+      "classification": "DUPLICATE_REVIEW",
+      "cross_ministry_decision": "AMBIGUOUS",
+      "auto_resolved": false,
+      "note": "REVIEW_REQUIRED maintained. Fabricated-by-AI-summary MINEFOP identifier rejected (confirmed absent from the real source page) and never copied into a MINTRANSPORT official_identifier — revalidated again this sprint, unchanged."
+    },
+    "TC-17_Fleet_Management_Academy": {
+      "classification": "IDENTITY_REVIEW",
+      "cross_ministry_decision": "NEW (MINEFOP-authority, transport-adjacent content)",
+      "auto_resolved": false,
+      "staged_this_sprint": false,
+      "note": "Not staged — missing source_url. Real MINEFOP identifier N°000471 kept as cross_ministry_evidence metadata only, never as a MINTRANSPORT official_identifier — revalidated again this sprint, unchanged."
+    }
+  },
+  "insertable_batch_checksum": {
+    "method": "computeInsertablePopulationChecksum() — dedicated to the exact 12-row insertable batch content, distinct from the 17-candidate population checksum.",
+    "historical_expected": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+    "recomputed_this_sprint_first_pass": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+    "recomputed_after_json_round_trip": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+    "recomputed_order_reversed_input": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+    "all_identical": true,
+    "checksum_drift": false
+  },
+  "idempotence_simulation": { "first_pass_would_insert": 12, "first_pass_already_staging": 0, "second_pass_would_insert": 0, "second_pass_is_zero": true },
+  "pii_persisted_count": 0,
+  "official_identifiers_invented": 0,
+  "registry_identifiers_to_insert": 0,
+  "dry_run": {
+    "method": "Real invocation of scripts/school-registry/transport-a2-t3-import.ts with no flags (implicit dry-run) against live Supabase.",
+    "staging_before": 2366,
+    "staging_after": 2366,
+    "unchanged": true,
+    "would_insert_staging": 12,
+    "would_insert_establishments": 0,
+    "would_insert_registry_identifiers": 0,
+    "would_update_establishments": 0,
+    "would_delete": 0,
+    "officially_verified": 0
+  },
+  "guard_refusal_scenarios": { "total": 8, "all_refused": true, "net_rows_written": 0 },
+  "qa": {
+    "tsc_noemit_root": "PASS (0 errors)",
+    "tsc_noemit_scripts_school_registry": "PASS (0 errors)",
+    "npm_run_build": "PASS — compiled successfully, 73/73 static pages generated",
+    "unit_tests": {
+      "files": [
+        "scripts/school-registry/lib/__tests__/transportA2ImportGuard.test.ts",
+        "scripts/school-registry/lib/__tests__/transportTier3TrustModel.test.ts",
+        "scripts/school-registry/lib/__tests__/transportA2StagingPayload.test.ts",
+        "scripts/school-registry/lib/__tests__/transportA2StagingWriter.test.ts",
+        "scripts/school-registry/lib/matching/__tests__/matching.test.ts",
+        "scripts/school-registry/lib/matching/__tests__/matching-transport-tier3.test.ts",
+        "src/lib/__tests__/registryReview.test.ts",
+        "src/lib/search/__tests__/queryBuilder.test.ts"
+      ],
+      "pass": 165,
+      "fail": 0
+    }
+  },
+  "write_performed_this_sprint": false,
+  "decision": "D",
+  "decision_label": "WAITING_FOR_HUMAN_APPROVAL",
+  "reason": "No named, distinct human authorization message was received this sprint — only the runbook brief itself, which brief §11/§13 explicitly excludes from counting as approval. All read-only verification (repository safety, external-drift investigation, fresh DB baseline, migration check, independent population rebuild, triple-verified checksum recomputation, fresh live+staging matching, trust-model/cross-ministry revalidation, real dry-run, guard-refusal matrix, QA) completed and passed. Zero live writes performed."
+}

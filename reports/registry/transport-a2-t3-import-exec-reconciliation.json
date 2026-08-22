@@ -1,0 +1,20 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-IMPORT-EXEC",
+  "generated_at": "2026-08-22T00:00:00.000Z",
+  "applicable": false,
+  "reason": "No write was performed this sprint (decision D — WAITING_FOR_HUMAN_APPROVAL). There is nothing to reconcile against a real INSERT yet. This report documents the pre-write state only, verified fresh, for the benefit of the future authorized run.",
+  "expected_staging_delta": null,
+  "actual_staging_delta": 0,
+  "missing_candidates": null,
+  "unexpected_candidates": null,
+  "orphans": null,
+  "staging_before_this_sprints_activity": 2366,
+  "staging_after_this_sprints_activity": 2366,
+  "unchanged": true,
+  "establishments_count": 2249,
+  "establishments_unchanged_across_this_sprint": true,
+  "registry_identifiers_count": 2242,
+  "registry_identifiers_unchanged_across_this_sprint": true,
+  "mintransport_staging_count": 0,
+  "outcome": "NOT_APPLICABLE_NO_WRITE_PERFORMED"
+}

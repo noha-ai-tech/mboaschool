@@ -1,14 +1,14 @@
 {
   "sprint": "TRANSPORT-A.2-T3-IMPORT",
-  "date": "2026-08-21",
+  "date": "2026-08-22",
   "operator": "jean-merlain",
   "project_ref": "umcwwynrftidytxgqkwi",
   "git": {
     "branch": "main",
-    "head": "8ee6d3b085befcfb7140c96767805100cb09b53f"
+    "head": "ecd76eab497c464f9c59455c7977dffe60c50104"
   },
   "database_baseline": {
-    "establishments": 2248,
+    "establishments": 2249,
     "staging": 2366,
     "registry_identifiers": 2242,
     "mintransport_staging_rows": 0,
@@ -16,12 +16,12 @@
   },
   "database_baseline_drift_vs_historical": {
     "drift": {
-      "establishments": 0,
+      "establishments": 1,
       "staging": 0,
       "registry_identifiers": 0,
       "mintransport_staging": 0
     },
-    "drift_detected": false,
+    "drift_detected": true,
     "historical": {
       "establishments": 2248,
       "staging": 2366,

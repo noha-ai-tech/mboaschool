@@ -1,6 +1,6 @@
 {
   "sprint": "TRANSPORT-A.2-T3-IMPORT",
-  "date": "2026-08-21",
+  "date": "2026-08-22",
   "method": "REAL CLI invocations of scripts/school-registry/transport-a2-t3-import.ts (not mocks) against LIVE Supabase, this sprint's fresh count/checksum (population enum now present, unlike the earlier TRANSPORT-A.2-T3 sprint's refusal tests) — establishment_import_staging row count read via live REST GET immediately before/after every attempt. Never a fully valid flag combination.",
   "fresh_expected_count_used": 12,
   "fresh_approval_checksum_used": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",

@@ -1,0 +1,18 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-IMPORT-EXEC",
+  "generated_at": "2026-08-22T00:00:00.000Z",
+  "applicable_note": "Brief §16 describes idempotence verification AFTER a successful first --commit (\"After successful first import: DO NOT execute another --commit. Run a second dry-run only.\"). No --commit was executed this sprint (decision D), so there is no real first import to check idempotence against yet. What follows is the PURE, in-memory idempotence SIMULATION (planStagingInsert() against fresh fingerprints read from live staging via GET) that this sprint's independent preflight ran in place of that check, plus the real dry-run against live staging that confirms the actual current would-insert count.",
+  "method_pure_simulation": "planStagingInsert() run twice in-memory: first pass against the 0 existing transport-tier3:v1:* fingerprints currently in live staging, second pass against those same fingerprints plus the 12 fingerprints the first pass would insert.",
+  "existing_transport_fingerprints_in_staging_before": 0,
+  "first_pass_would_insert": 12,
+  "first_pass_already_staging": 0,
+  "second_pass_would_insert": 0,
+  "second_pass_already_staging": 12,
+  "second_pass_is_zero": true,
+  "method_real_dry_run": "Real invocation of transport-a2-t3-import.ts (no --commit) against live Supabase, immediately before/after row-count comparison.",
+  "real_dry_run_staging_before": 2366,
+  "real_dry_run_staging_after": 2366,
+  "real_dry_run_unchanged": true,
+  "duplicate_inserts_possible": false,
+  "future_note": "After a real authorized --commit inserts the 12 rows, a genuine second dry-run must be executed and must report: Would insert staging = 0, Already staging = 12. If it reports anything else, that is IDEMPOTENCE_FAILURE (decision F) and must STOP before any further write."
+}

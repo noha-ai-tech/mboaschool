@@ -1,6 +1,6 @@
 {
   "sprint": "TRANSPORT-A.2-T3-IMPORT",
-  "generated_at": "2026-08-21T20:44:01.696Z",
+  "generated_at": "2026-08-22T03:02:25.476Z",
   "method": "Real invocation of scripts/school-registry/transport-a2-t3-import.ts with NO flags (implicit dry-run) against live Supabase.",
   "staging_before": 2366,
   "staging_after": 2366,
