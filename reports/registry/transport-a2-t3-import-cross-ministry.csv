@@ -1,0 +1,18 @@
+candidate_id,name,entity_family,cross_ministry_decision,cross_ministry_evidence,auto_resolved
+TC-01,AUTO ECOLE ASTRALE,DRIVING_SCHOOL,NEW,[],NO
+TC-02,AUTO ECOLE FRANCAISE,DRIVING_SCHOOL,NEW,[],NO
+TC-03,AUTO ECOLE GERMANIA,DRIVING_SCHOOL,NEW,[],NO
+TC-04,AUTO ECOLE LEO,DRIVING_SCHOOL,NEW,[],NO
+TC-05,AUTO ECOLE TRECY,DRIVING_SCHOOL,NEW,[],NO
+TC-06,AUTO ECOLE TURBO,DRIVING_SCHOOL,NEW,[],NO
+TC-07,AUTO ECOLE TURBO NKOMKANA,DRIVING_SCHOOL,NEW,[],NO
+TC-08,METROPOLITAINE INTERNATIONALE SCES,OTHER_TRANSPORT_EDUCATION,NEW,[],NO
+TC-09,AUTO ECOLE MONTHE,DRIVING_SCHOOL,NEW,[],NO
+TC-10,AUTO ECOLE APPRENDRE & AIMER LA CONDUITE,DRIVING_SCHOOL,NEW,[],NO
+TC-11,EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale),MARITIME_TRAINING,NEW,[],NO
+TC-12,IT2MIP (Institut des Technologies de la Marine Marchande et Industrie Portuaire),MARITIME_TRAINING,AMBIGUOUS,"[{""authority"":""MINEFOP (self-declared, non corroboré)"",""identifier_type"":""agrement_number (rejected)"",""identifier_value"":""N°352/MINEFOP/SG/DFOP/SDGSF/SACD, 14-12-2022 — REJETÉ, fabriqué par un résumé IA, absent de la page source réelle"",""identifier_authority"":""MINEFOP"",""note"":""IT2MIP — affiliation MINEFOP auto-déclarée, non corroborée par la page primaire (kamerpower.com S03) revérifiée au sprint TRANSPORT-A.2-T3-WRITE. Numéro d'agrément fabriqué par un résumé de recherche IA, confirmé absent de la page réelle. Conservé pour traçabilité de l'échec de méthode, jamais utilisé comme preuve. REVIEW_REQUIRED maintenu ce sprint, aucune résolution automatique.""}]",NO
+TC-13,Centre de formation professionnelle maritime « Le Paquebot »,MARITIME_TRAINING,NEW,[],NO
+TC-14,Centre d'Instruction Maritime et Portuaire,MARITIME_TRAINING,NEW,[],NO
+TC-15,École de Formation (EFO) - CCAA,AVIATION_TRAINING,NEW,[],NO
+TC-16,IRDSM Aviation,AVIATION_TRAINING,NEW,[],NO
+TC-17,Fleet Management Academy,TRANSPORT_LOGISTICS_TRAINING,NEW,"[{""authority"":""MINEFOP"",""identifier_type"":""agrement_number"",""identifier_value"":""N°000471 (19-09-2022)"",""identifier_authority"":""MINEFOP"",""note"":""Fleet Management Academy — identifiant MINEFOP réel et déjà confirmé (sprint TRANSPORT-A), conservé ici comme preuve de chevauchement inter-ministériel UNIQUEMENT. Ne devient jamais official_identifier ni preuve d'agrément MINTRANSPORT/MINT (brief §10, règle absolue). Non insérable ce sprint également (source_url manquante).""}]",NO

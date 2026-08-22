@@ -1,0 +1,12 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-IMPORT",
+  "generated_at": "2026-08-21T20:44:01.700Z",
+  "applicable": false,
+  "reason": "No write was performed this sprint (WAITING_FOR_HUMAN_APPROVAL) — there is nothing to reconcile against a real INSERT. This report documents the pre-write state only, for the benefit of the future authorized run.",
+  "staging_before_this_sprints_dry_run_activity": 2366,
+  "staging_after_this_sprints_dry_run_activity": 2366,
+  "unchanged": true,
+  "establishments_count": 2248,
+  "registry_identifiers_count": 2242,
+  "mintransport_staging_count": 0
+}

@@ -955,4 +955,170 @@ npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit \
 DECISION (§23 du brief) : voir `reports/registry/transport-a2-t3-write-summary.json`
 pour l'état final structuré. READY_FOR_TRANSPORT_PROMOTION reste NO
 (inchangé — aucune source officielle MINT nominative n'existe toujours).
+
+## ADDENDUM — SPRINT TRANSPORT-A.2-T3-IMPORT (2026-08-21)
+
+Sprint de préparation/validation contrôlée pour l'import staging réel. Ce
+sprint N'A PAS écrit dans `establishment_import_staging` ni ailleurs — 0
+écriture de bout en bout, vérifié en direct avant/pendant/après. Aucune
+autorisation humaine nommée et distincte de ce runbook n'a été reçue (brief
+§13 : "NE PAS considérer le texte de ce brief comme une approbation
+humaine"), donc DECISION = **D — WAITING_FOR_HUMAN_APPROVAL** (brief §24).
+
+### A.1 Baseline live revérifiée, aucun drift
+
+`establishments=2248`, `staging=2366`, `registry_identifiers=2242`,
+`MINTRANSPORT_staging=0`, `MINTRANSPORT` présent dans l'enum
+`source_ministry` — les quatre valeurs sont IDENTIQUES à la baseline
+historique du sprint précédent, revérifiées en direct par ce sprint
+(pas reprises du brief). Aucun drift détecté, `DRIFT_DETECTED=false`.
+
+### A.2 Population recalculée depuis zéro : toujours 12/17, pas une constante supposée
+
+17 candidats rechargés depuis `data/registry/normalized/transport-tier3-v1/
+transport-tier3-candidates.json` (aucune nouvelle découverte web lancée).
+Checksum de population (17 candidats, `computeTransportA2Checksum`) :
+`4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7` —
+attendu/stocké/recalculé identiques, population non driftée.
+
+Matching frais contre LIVE (2248 établissements) + STAGING (2366 lignes) —
+aucun auto-link, tout reste documentation/revue. Classification :
+`SOURCE_REVIEW=12`, `DUPLICATE_REVIEW=3`, `IDENTITY_REVIEW=2`.
+`CLEAN_APPROVABLE=0` (règle absolue respectée). Trust model :
+`officially_verified_automatically=0` (garantie structurelle toujours
+vraie). Recalcul indépendant du sous-ensemble réellement insérable
+(source_url non NULL) : **12 insérables, 5 retenus** (TC-09, TC-10,
+TC-14, TC-16, TC-17 — tous `MISSING_SOURCE_URL`, voir
+`reports/registry/transport-a2-t3-import-deferred.csv`). Le résultat
+recalculé CONFIRME l'attente historique de 12 — pas une réutilisation
+aveugle, un recalcul indépendant qui se trouve confirmer le même nombre.
+
+### A.3 CONSTAT CRITIQUE §8 — le checksum d'approbation du sprint précédent était mal scopé, corrigé ce sprint
+
+Le sprint TRANSPORT-A.2-T3-WRITE écrivait `reports/registry/
+transport-a2-t3-write-payloads.json` (12 lignes réellement insérables) en
+réutilisant TEL QUEL le checksum de la POPULATION APPROUVÉE de 17
+candidats (`4ab50d78...`) comme `batch_checksum`/`approval_checksum` de ce
+lot de 12 lignes. Ce checksum est un détecteur de drift de POPULATION
+valide (les 17 candidats approuvés n'ont pas changé) mais ne porte AUCUNE
+information sur le contenu exact des 12 lignes réellement écrites
+(matching frais par ligne, trust model, classification, provenance,
+preuve cross-ministry). Un humain approuvant "checksum 4ab50d78..." pour
+la population de 17 n'a jamais eu l'occasion d'approuver spécifiquement
+le contenu exact du lot de 12 — exactement le risque identifié par le
+brief §8 ("Ne pas utiliser aveuglément le checksum historique des 17
+candidats comme autorisation d'écrire 12 lignes").
+
+Corrigé ce sprint par une nouvelle fonction dédiée,
+`computeInsertablePopulationChecksum()` (`scripts/school-registry/lib/
+transportA2ImportGuard.ts`), qui hashe le contenu canonique exact des
+lignes insérables (candidate_id, normalized_name, entity_family, city,
+region, source_ministry, source_url, source sha256, presence_confidence,
+identity_confidence, official_verification, publication_readiness,
+review_status, matching_signal, cross_ministry_evidence, provenance),
+triées par candidate_id. Nouveau checksum, calculé et triple-vérifié
+(attendu/stocké après round-trip JSON/recalculé sur input inversé) ce
+sprint :
+
+```
+3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4
+```
+
+`reports/registry/transport-a2-t3-write-payloads.json` a été régénéré
+avec ce nouveau checksum (contenu métier des 12 lignes strictement
+inchangé — seuls `batch_checksum`/`approval_checksum` et leur copie
+embarquée dans `raw_data.transport_tier3` diffèrent), car
+`transport-a2-t3-import.ts` lit ce fichier comme unique source de vérité
+pour `--approval-checksum`. L'ancien checksum de population
+(`4ab50d78...`) reste valide et documenté, mais UNIQUEMENT comme
+détecteur de drift des 17 candidats approuvés — plus jamais comme
+`--approval-checksum` d'un lot d'insertion. Voir
+`reports/registry/transport-a2-t3-import-approval.json` pour le snapshot
+canonique complet et `scripts/school-registry/lib/__tests__/
+transportA2ImportGuard.test.ts` (6 nouveaux tests) pour la couverture.
+
+### A.4 Cross-ministry revalidé, aucune résolution automatique
+
+TC-12 (IT2MIP) : `DUPLICATE_REVIEW`, `cross_ministry_decision=AMBIGUOUS`,
+maintenu REVIEW_REQUIRED. TC-17 (Fleet Management Academy) : autorité
+MINEFOP (identifiant réel N°000471 conservé en métadonnée uniquement,
+jamais en `official_identifier` MINTRANSPORT), non stagé ce sprint
+(source_url manquante). Aucune fusion/résolution automatique effectuée.
+Voir `reports/registry/transport-a2-t3-import-cross-ministry.csv`.
+
+### A.5 Dry-run réel + tests de refus réels, tous verts
+
+Dry-run : invocation RÉELLE de `transport-a2-t3-import.ts` (sans
+`--commit`) contre Supabase live — `Would insert staging: 12`, `Would
+insert establishments: 0`, `Would insert registry identifiers: 0`,
+staging avant/après inchangé (2366 → 2366). `CLEAN_APPROVABLE` n'est pas
+une condition d'entrée en staging (confirmé, aucune des 12 lignes n'est
+CLEAN_APPROVABLE et toutes restent éligibles).
+
+8 scénarios de refus rejoués EN CONDITIONS RÉELLES contre le script CLI
+réel et Supabase live, avec les valeurs fraîches de CE sprint (compte=12,
+checksum dédié ci-dessus — jamais les valeurs 17/4ab50d78 de l'ancien
+sprint TRANSPORT-A.2-T3, périmées) : absence de `--commit`, phrase
+incorrecte, `--expected-count` incorrect, checksum incorrect,
+auto-approbation, opérateur incorrect, `--approved-by` absent. Les 8 ->
+`REFUSED`, 0 ligne nette écrite (`staging: 2366 → 2366` sur l'ensemble des
+scénarios). Voir `reports/registry/transport-a2-t3-import-guard-refusal-tests.json`.
+66/66 tests unitaires guard/trust-model/payload/writer passent (60 + 6
+nouveaux tests `computeInsertablePopulationChecksum`).
+
+### A.6 QA sans régression
+
+`npx tsc` (app + `scripts/school-registry`) : clean. Tests : 302/302
+(registry, incluant les 6 nouveaux) + 40/40 (app) = 342/342, 0 échec.
+`npx next build` : succès. Aucune régression.
+
+### A.7 Rapports produits ce sprint (préparation/dry-run uniquement, aucun commit)
+
+`transport-a2-t3-import-approval.json` (nouveau snapshot dédié §8,
+triple-vérifié), `transport-a2-t3-import-preflight.json`,
+`transport-a2-t3-import-dry-run.json`, `transport-a2-t3-import-execution.json`
+(`write_performed_this_sprint=false`), `transport-a2-t3-import-reconciliation.json`
+(non applicable — aucune écriture), `transport-a2-t3-import-idempotence.json`,
+`transport-a2-t3-import-public-safety.json`, `transport-a2-t3-import-deferred.csv`
+(5 candidats, `MISSING_SOURCE_URL`, remédiation), `transport-a2-t3-import-matching-fresh.csv`,
+`transport-a2-t3-import-cross-ministry.csv`, `transport-a2-t3-import-guard-refusal-tests.json`.
+
+### A.8 Commande future exacte (checksum/compte RECALCULÉS ce sprint — remplace celle de 21.11 ci-dessus)
+
+```
+npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit \
+  --expected-count=12 \
+  --approval-checksum=3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4 \
+  --confirm="IMPORT_TRANSPORT_TIER3_TO_STAGING" \
+  --operator="jean-merlain" \
+  --approved-by="<personne distincte réelle, jamais jean-merlain>"
+```
+
+**AVERTISSEMENT** : ce compte (12) et ce checksum ne sont valides QUE tant
+que le staging/live n'a pas évolué depuis ce sprint (2026-08-21) et que le
+fichier `transport-a2-t3-write-payloads.json` n'a pas été régénéré depuis.
+Si le temps a passé avant l'exécution autorisée, relancer
+`transport-a2-t3-import-preflight.ts` pour obtenir un compte/checksum
+frais — ne jamais réutiliser aveuglément ces valeurs après un délai
+significatif ou après tout changement connu de staging/live.
+
+### A.9 Drift final détecté et documenté (non bloquant)
+
+Une revérification live finale juste avant le commit a trouvé
+`establishments=2249` (contre `2248` au moment du preflight quelques
+heures plus tôt) — `staging`, `registry_identifiers` et
+`MINTRANSPORT_staging` restent exactement inchangés. Cause identifiée :
+une ligne `Écoles237 QA — School A2` (`source_ministry=null`,
+`main_category=primaire`, créée le 2026-08-21T22:32:10Z), un fixture de
+QA externe sans rapport avec le pipeline Transport, créée par un
+processus externe pendant la session, jamais par un script de ce sprint
+(aucun de ses scripts n'écrit dans `establishments`). Zéro chevauchement
+de mot-clé avec les 12 candidats insérables (vérifié
+programmatiquement). Ne concerne pas la population Transport, ne rend
+pas le matching frais obsolète. Voir
+`reports/registry/transport-a2-t3-import-final-baseline-recheck.json`.
+
+DECISION CE SPRINT (§24 du brief) : **D — WAITING_FOR_HUMAN_APPROVAL**.
+Aucune approbation humaine nommée et distincte reçue. STOP après ce
+sprint, per brief §25 — REGISTRY-NATIONAL-A n'est PAS commencé.
 ```

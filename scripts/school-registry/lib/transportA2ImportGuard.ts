@@ -145,3 +145,74 @@ export function computeTransportA2Checksum(
     .join("\n");
   return createHash("sha256").update(material).digest("hex");
 }
+
+/**
+ * SPRINT TRANSPORT-A.2-T3-IMPORT §8 — checksum DÉDIÉ à la population
+ * RÉELLEMENT INSÉRABLE (le sous-ensemble schema-buildable, ex. 12/17), à ne
+ * JAMAIS confondre avec `computeTransportA2Checksum()` ci-dessus, qui reste
+ * scopé à l'IDENTITÉ/CLASSIFICATION des 17 candidats APPROUVÉS (détection de
+ * drift de population).
+ *
+ * CONSTAT DE CE SPRINT : `transport-a2-t3-write-payloads.json` (sprint
+ * TRANSPORT-A.2-T3-WRITE) réutilisait tel quel le checksum des 17 candidats
+ * (`computeTransportA2Checksum(approval.rows)`) comme `batch_checksum` /
+ * `approval_checksum` du lot de 12 lignes réellement insérable. Cela
+ * fonctionne comme détecteur de drift de POPULATION (les 17 candidats
+ * approuvés n'ont pas changé), mais ne porte AUCUNE information spécifique
+ * sur le contenu exact des 12 lignes qui seraient réellement écrites
+ * (matching frais, trust model, classification, provenance par ligne) — un
+ * humain approuvant "checksum X" pour la population de 17 n'a jamais eu
+ * l'occasion d'approuver spécifiquement le contenu exact du lot de 12.
+ * Brief §8 : "Ne pas utiliser aveuglément le checksum historique des 17
+ * candidats comme autorisation d'écrire 12 lignes." Cette fonction corrige
+ * ce chevauchement en hashant le contenu exact du lot insérable lui-même.
+ *
+ * Trie par candidate_id (clé stable) avant hash — déterministe quel que
+ * soit l'ordre de lecture réseau/fichier.
+ */
+export interface InsertablePopulationChecksumRow {
+  candidate_id: string;
+  normalized_name: string;
+  entity_family: string;
+  city: string | null;
+  region: string | null;
+  source_ministry: string;
+  source_url: string;
+  source_sha256: string | null;
+  presence_confidence: string;
+  identity_confidence: string;
+  official_verification: string;
+  publication_readiness: string;
+  review_status: string;
+  matching_signal: string;
+  cross_ministry_evidence_json: string;
+  provenance_note: string;
+}
+
+export function computeInsertablePopulationChecksum(rows: InsertablePopulationChecksumRow[]): string {
+  const material = rows
+    .slice()
+    .sort((a, b) => a.candidate_id.localeCompare(b.candidate_id))
+    .map((r) =>
+      [
+        r.candidate_id,
+        r.normalized_name,
+        r.entity_family,
+        r.city ?? "",
+        r.region ?? "",
+        r.source_ministry,
+        r.source_url,
+        r.source_sha256 ?? "",
+        r.presence_confidence,
+        r.identity_confidence,
+        r.official_verification,
+        r.publication_readiness,
+        r.review_status,
+        r.matching_signal,
+        r.cross_ministry_evidence_json,
+        r.provenance_note,
+      ].join("|")
+    )
+    .join("\n");
+  return createHash("sha256").update(material).digest("hex");
+}

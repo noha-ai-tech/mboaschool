@@ -1,0 +1,16 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-IMPORT",
+  "generated_at": "2026-08-21T20:44:01.696Z",
+  "method": "Real invocation of scripts/school-registry/transport-a2-t3-import.ts with NO flags (implicit dry-run) against live Supabase.",
+  "staging_before": 2366,
+  "staging_after": 2366,
+  "unchanged": true,
+  "would_insert_staging": 12,
+  "would_insert_establishments": 0,
+  "would_insert_registry_identifiers": 0,
+  "would_update_establishments": 0,
+  "would_delete": 0,
+  "clean_approvable_required_for_staging": false,
+  "note": "CLEAN_APPROVABLE is NOT a condition for entering staging (brief §11) — staging exists precisely for records that need review. All 12 rows are SOURCE_REVIEW/DUPLICATE_REVIEW/IDENTITY_REVIEW, none CLEAN_APPROVABLE, and all remain eligible for staging.",
+  "raw_script_output": "=== TRANSPORT-A.2-T3-WRITE IMPORT — commit=false operator=(absent) approved-by=(absent) ===\nPre-write establishment_import_staging count: 2366\nPayloads snapshot rows: 12, would insert now (fresh idempotence check): 12, already staging: 0\nREFUSED: REFUSED — --commit absent. Dry-run par défaut, aucune écriture.\nPost-attempt establishment_import_staging count: 2366 (unchanged=true)\n"
+}

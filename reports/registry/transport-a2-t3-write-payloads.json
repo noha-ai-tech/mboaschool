@@ -1,8 +1,10 @@
 {
-  "sprint": "TRANSPORT-A.2-T3-WRITE",
-  "generated_at": "2026-08-21T20:21:49.756Z",
-  "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
-  "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+  "sprint": "TRANSPORT-A.2-T3-IMPORT",
+  "generated_at": "2026-08-21T20:43:35.427Z",
+  "batch_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+  "approval_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+  "checksum_method": "computeInsertablePopulationChecksum() — dedicated to the insertable batch content, NOT the 17-candidate population checksum (superseded_population_checksum below, kept for reference/audit only).",
+  "superseded_population_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
   "row_count": 12,
   "rows": [
     {
@@ -72,8 +74,8 @@
           "identity_confidence": "RESOLVED",
           "official_verification": "UNVERIFIED",
           "publication_readiness": "PUBLISHABLE_UNVERIFIED",
-          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
-          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "batch_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+          "approval_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
           "import_provenance": {
             "sprint": "TRANSPORT-A.2-T3-WRITE",
             "fingerprint": "transport-tier3:v1:TC-01"
@@ -148,8 +150,8 @@
           "identity_confidence": "PROBABLE",
           "official_verification": "UNVERIFIED",
           "publication_readiness": "REVIEW_REQUIRED",
-          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
-          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "batch_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+          "approval_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
           "import_provenance": {
             "sprint": "TRANSPORT-A.2-T3-WRITE",
             "fingerprint": "transport-tier3:v1:TC-02"
@@ -224,8 +226,8 @@
           "identity_confidence": "RESOLVED",
           "official_verification": "UNVERIFIED",
           "publication_readiness": "REVIEW_REQUIRED",
-          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
-          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "batch_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+          "approval_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
           "import_provenance": {
             "sprint": "TRANSPORT-A.2-T3-WRITE",
             "fingerprint": "transport-tier3:v1:TC-03"
@@ -300,8 +302,8 @@
           "identity_confidence": "RESOLVED",
           "official_verification": "UNVERIFIED",
           "publication_readiness": "REVIEW_REQUIRED",
-          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
-          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "batch_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+          "approval_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
           "import_provenance": {
             "sprint": "TRANSPORT-A.2-T3-WRITE",
             "fingerprint": "transport-tier3:v1:TC-04"
@@ -376,8 +378,8 @@
           "identity_confidence": "RESOLVED",
           "official_verification": "UNVERIFIED",
           "publication_readiness": "REVIEW_REQUIRED",
-          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
-          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "batch_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+          "approval_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
           "import_provenance": {
             "sprint": "TRANSPORT-A.2-T3-WRITE",
             "fingerprint": "transport-tier3:v1:TC-05"
@@ -453,8 +455,8 @@
           "identity_confidence": "RESOLVED",
           "official_verification": "UNVERIFIED",
           "publication_readiness": "REVIEW_REQUIRED",
-          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
-          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "batch_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+          "approval_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
           "import_provenance": {
             "sprint": "TRANSPORT-A.2-T3-WRITE",
             "fingerprint": "transport-tier3:v1:TC-06"
@@ -529,8 +531,8 @@
           "identity_confidence": "RESOLVED",
           "official_verification": "UNVERIFIED",
           "publication_readiness": "REVIEW_REQUIRED",
-          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
-          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "batch_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+          "approval_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
           "import_provenance": {
             "sprint": "TRANSPORT-A.2-T3-WRITE",
             "fingerprint": "transport-tier3:v1:TC-07"
@@ -605,8 +607,8 @@
           "identity_confidence": "UNRESOLVED",
           "official_verification": "UNVERIFIED",
           "publication_readiness": "REVIEW_REQUIRED",
-          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
-          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "batch_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+          "approval_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
           "import_provenance": {
             "sprint": "TRANSPORT-A.2-T3-WRITE",
             "fingerprint": "transport-tier3:v1:TC-08"
@@ -708,8 +710,8 @@
           "identity_confidence": "PROBABLE",
           "official_verification": "UNVERIFIED",
           "publication_readiness": "REVIEW_REQUIRED",
-          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
-          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "batch_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+          "approval_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
           "import_provenance": {
             "sprint": "TRANSPORT-A.2-T3-WRITE",
             "fingerprint": "transport-tier3:v1:TC-11"
@@ -774,7 +776,7 @@
               "identifier_type": "agrement_number (rejected)",
               "identifier_value": "N°352/MINEFOP/SG/DFOP/SDGSF/SACD, 14-12-2022 — REJETÉ, fabriqué par un résumé IA, absent de la page source réelle",
               "identifier_authority": "MINEFOP",
-              "note": "IT2MIP — affiliation MINEFOP auto-déclarée par le site de l'institution, non corroborée par la page primaire (kamerpower.com S03) revérifiée ce sprint. Le numéro d'agrément cité par un résumé de recherche IA est un FAUX confirmé (absent de la page réelle). Conservé pour traçabilité de l'échec de méthode, jamais utilisé comme preuve."
+              "note": "IT2MIP — affiliation MINEFOP auto-déclarée, non corroborée par la page primaire (kamerpower.com S03) revérifiée au sprint TRANSPORT-A.2-T3-WRITE. Numéro d'agrément fabriqué par un résumé de recherche IA, confirmé absent de la page réelle. Conservé pour traçabilité de l'échec de méthode, jamais utilisé comme preuve. REVIEW_REQUIRED maintenu ce sprint, aucune résolution automatique."
             }
           ],
           "activity_status": "ACTIVITY_UNKNOWN",
@@ -799,8 +801,8 @@
           "identity_confidence": "CONFLICTING",
           "official_verification": "UNVERIFIED",
           "publication_readiness": "REVIEW_REQUIRED",
-          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
-          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "batch_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+          "approval_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
           "import_provenance": {
             "sprint": "TRANSPORT-A.2-T3-WRITE",
             "fingerprint": "transport-tier3:v1:TC-12"
@@ -876,14 +878,14 @@
             "sha256_present": true,
             "sha256": "2f95168f6f6f82c8c96d020f8d3a1ee140ad5fcc0a4b5ad89c42bb3f7a92b630",
             "provenance_complete": true,
-            "provenance_note": "No persisted URL for source \"TRANSPORT-A\"/domain \"unspecified (reported, prior sprint)\"."
+            "provenance_note": "No persisted URL for source \"TRANSPORT-A\"/domain \"unspecified (reported, prior sprint)\". MISSING_SOURCE_URL."
           },
           "presence_confidence": "SINGLE_SOURCE",
           "identity_confidence": "RESOLVED",
           "official_verification": "UNVERIFIED",
           "publication_readiness": "PUBLISHABLE_UNVERIFIED",
-          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
-          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "batch_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+          "approval_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
           "import_provenance": {
             "sprint": "TRANSPORT-A.2-T3-WRITE",
             "fingerprint": "transport-tier3:v1:TC-13"
@@ -964,8 +966,8 @@
           "identity_confidence": "RESOLVED",
           "official_verification": "UNVERIFIED",
           "publication_readiness": "PUBLISHABLE_UNVERIFIED",
-          "batch_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
-          "approval_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+          "batch_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+          "approval_checksum": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
           "import_provenance": {
             "sprint": "TRANSPORT-A.2-T3-WRITE",
             "fingerprint": "transport-tier3:v1:TC-15"

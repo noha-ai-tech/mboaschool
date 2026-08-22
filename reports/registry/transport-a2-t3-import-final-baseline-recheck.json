@@ -1,0 +1,24 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-IMPORT",
+  "purpose": "Final live re-verification performed just before commit, after a long session (the preflight script's own baseline read is captured separately in transport-a2-t3-import-preflight.json). Documents a real drift found at this final check, and why it is not blocking.",
+  "generated_at": "2026-08-22T02:49:54.491Z",
+  "baseline_at_preflight_run": { "establishments": 2248, "staging": 2366, "registry_identifiers": 2242, "mintransport_staging": 0 },
+  "baseline_at_final_check": { "establishments": 2249, "staging": 2366, "registry_identifiers": 2242, "mintransport_staging": 0 },
+  "drift": { "establishments": 1, "staging": 0, "registry_identifiers": 0, "mintransport_staging": 0 },
+  "drift_detected": true,
+  "root_cause_identified": true,
+  "root_cause": {
+    "id": "b11a4206-7bc3-4cc9-95d9-7d45e0378af4",
+    "name": "Écoles237 QA — School A2",
+    "city": "Yaounde",
+    "region": null,
+    "main_category": "primaire",
+    "source_ministry": null,
+    "created_at": "2026-08-21T22:32:10.053271+00:00",
+    "note": "Name is a self-evident QA/test fixture ('Écoles237 QA — School A2'), unrelated to any Transport Tier-3 pipeline (source_ministry=null, not MINTRANSPORT; main_category=primaire, not one of the Transport taxonomy categories used by any of the 17 candidates). Created by an external process during this sprint's session, not by any script run in this sprint (this sprint's write-capable path was never invoked with a complete/valid flag set — verified by the guard-refusal tests, and this sprint's own scripts never write to `establishments` at all)."
+  },
+  "affects_transport_population": false,
+  "word_overlap_check": "Zero token overlap between 'Écoles237 QA — School A2' and any of the 12 insertable candidate names (AUTO ECOLE ASTRALE, AUTO ECOLE FRANCAISE, AUTO ECOLE GERMANIA, AUTO ECOLE LEO, AUTO ECOLE TRECY, AUTO ECOLE TURBO, AUTO ECOLE TURBO NKOMKANA, METROPOLITAINE INTERNATIONALE SCES, EMIPAC, IT2MIP, Centre de formation professionnelle maritime Le Paquebot, École de Formation (EFO) - CCAA). Checked programmatically this sprint.",
+  "conclusion": "Drift is real, documented, and root-caused. It does NOT concern the Transport Tier-3 population and does NOT invalidate this sprint's fresh matching (run against a 2248-row live snapshot moments before the new row was created) or its checksums (which are scoped to source data, never to a live establishment count). No revalidation required. staging=2366, registry_identifiers=2242, MINTRANSPORT_staging=0 remain exactly at the historical baseline throughout — the only counter that moved is establishments, by +1, from a source unrelated to this sprint's scope.",
+  "write_performed_by_this_sprint": false
+}

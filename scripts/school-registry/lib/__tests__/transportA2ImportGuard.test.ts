@@ -8,6 +8,8 @@ import {
   EXPECTED_OPERATOR,
   EXPECTED_CANDIDATE_COUNT,
   computeTransportA2Checksum,
+  computeInsertablePopulationChecksum,
+  type InsertablePopulationChecksumRow,
 } from "../transportA2ImportGuard";
 
 const SAMPLE_CHECKSUM = computeTransportA2Checksum([
@@ -128,5 +130,74 @@ describe("computeTransportA2Checksum", () => {
     const a = computeTransportA2Checksum([{ candidate_id: "TC-01", normalized_name: "auto ecole astrale", entity_family: "DRIVING_SCHOOL", staging_classification: "SOURCE_REVIEW" }]);
     const b = computeTransportA2Checksum([{ candidate_id: "TC-01", normalized_name: "auto ecole astrale", entity_family: "DRIVING_SCHOOL", staging_classification: "DUPLICATE_REVIEW" }]);
     assert.notEqual(a, b);
+  });
+});
+
+describe("computeInsertablePopulationChecksum — SPRINT TRANSPORT-A.2-T3-IMPORT §8, checksum dédié au sous-ensemble réellement insérable", () => {
+  function sampleRow(overrides: Partial<InsertablePopulationChecksumRow> = {}): InsertablePopulationChecksumRow {
+    return {
+      candidate_id: "TC-01",
+      normalized_name: "auto ecole astrale",
+      entity_family: "DRIVING_SCHOOL",
+      city: "Yaoundé",
+      region: "Centre",
+      source_ministry: "MINTRANSPORT",
+      source_url: "https://africannuaire.com/entreprise/auto-ecole-astrale-cameroun/",
+      source_sha256: "48d6092a49454f227a8a171ff469e59a2ca5b1d2fd647108901cfdea9f5c9d06",
+      presence_confidence: "SINGLE_SOURCE",
+      identity_confidence: "RESOLVED",
+      official_verification: "UNVERIFIED",
+      publication_readiness: "PUBLISHABLE_UNVERIFIED",
+      review_status: "SOURCE_REVIEW",
+      matching_signal: "NO_MATCH",
+      cross_ministry_evidence_json: "[]",
+      provenance_note: "Fully verified.",
+      ...overrides,
+    };
+  }
+
+  test("déterministe : même set, ordre différent -> même checksum", () => {
+    const rowA = sampleRow();
+    const rowB = sampleRow({ candidate_id: "TC-02", normalized_name: "auto ecole francaise" });
+    const a = computeInsertablePopulationChecksum([rowA, rowB]);
+    const b = computeInsertablePopulationChecksum([rowB, rowA]);
+    assert.equal(a, b);
+  });
+
+  test("distinct du checksum de population (17 candidats) même sur un candidat identique — jamais interchangeable", () => {
+    const populationChecksum = computeTransportA2Checksum([{ candidate_id: "TC-01", normalized_name: "auto ecole astrale", entity_family: "DRIVING_SCHOOL", staging_classification: "SOURCE_REVIEW" }]);
+    const insertableChecksum = computeInsertablePopulationChecksum([sampleRow()]);
+    assert.notEqual(populationChecksum, insertableChecksum);
+  });
+
+  test("un changement de trust model (presence/identity/official_verification/publication_readiness) change le checksum", () => {
+    const base = computeInsertablePopulationChecksum([sampleRow()]);
+    assert.notEqual(base, computeInsertablePopulationChecksum([sampleRow({ presence_confidence: "CORROBORATED" })]));
+    assert.notEqual(base, computeInsertablePopulationChecksum([sampleRow({ identity_confidence: "PROBABLE" })]));
+    assert.notEqual(base, computeInsertablePopulationChecksum([sampleRow({ official_verification: "OFFICIALLY_VERIFIED" })]));
+    assert.notEqual(base, computeInsertablePopulationChecksum([sampleRow({ publication_readiness: "REVIEW_REQUIRED" })]));
+  });
+
+  test("un changement de source_url ou de sha256 change le checksum (provenance liée à l'approbation)", () => {
+    const base = computeInsertablePopulationChecksum([sampleRow()]);
+    assert.notEqual(base, computeInsertablePopulationChecksum([sampleRow({ source_url: "https://example.com/other" })]));
+    assert.notEqual(base, computeInsertablePopulationChecksum([sampleRow({ source_sha256: "deadbeef" })]));
+  });
+
+  test("une preuve cross-ministry ajoutée/retirée change le checksum", () => {
+    const base = computeInsertablePopulationChecksum([sampleRow()]);
+    const withEvidence = computeInsertablePopulationChecksum([
+      sampleRow({ cross_ministry_evidence_json: JSON.stringify([{ authority: "MINEFOP", identifier_type: "agrement_number", identifier_value: "N°000471", identifier_authority: "MINEFOP", note: "test" }]) }),
+    ]);
+    assert.notEqual(base, withEvidence);
+  });
+
+  test("un sous-ensemble différent (12 vs 17) produit nécessairement un checksum différent de celui de la population complète", () => {
+    const twelveRowChecksum = computeInsertablePopulationChecksum([sampleRow(), sampleRow({ candidate_id: "TC-02" })]);
+    const seventeenRowPopulationChecksum = computeTransportA2Checksum([
+      { candidate_id: "TC-01", normalized_name: "auto ecole astrale", entity_family: "DRIVING_SCHOOL", staging_classification: "SOURCE_REVIEW" },
+      { candidate_id: "TC-02", normalized_name: "auto ecole astrale", entity_family: "DRIVING_SCHOOL", staging_classification: "SOURCE_REVIEW" },
+    ]);
+    assert.notEqual(twelveRowChecksum, seventeenRowPopulationChecksum);
   });
 });

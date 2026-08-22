@@ -1,0 +1,9 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-IMPORT",
+  "generated_at": "2026-08-21T20:44:01.698Z",
+  "status": "PREFLIGHT_DRY_RUN_ONLY_NO_COMMIT",
+  "write_performed_this_sprint": false,
+  "staging_writes_this_sprint": 0,
+  "production_writes_this_sprint": 0,
+  "reason": "Brief §13 — no named, distinct human approval message received this sprint (the brief text itself is explicitly excluded from counting as approval). DECISION = WAITING_FOR_HUMAN_APPROVAL (brief §24 option D). Sections 14+ (real write) are out of scope until a separate, distinct authorization message is received."
+}

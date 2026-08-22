@@ -1,0 +1,97 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-IMPORT",
+  "date": "2026-08-21",
+  "method": "REAL CLI invocations of scripts/school-registry/transport-a2-t3-import.ts (not mocks) against LIVE Supabase, this sprint's fresh count/checksum (population enum now present, unlike the earlier TRANSPORT-A.2-T3 sprint's refusal tests) — establishment_import_staging row count read via live REST GET immediately before/after every attempt. Never a fully valid flag combination.",
+  "fresh_expected_count_used": 12,
+  "fresh_approval_checksum_used": "3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4",
+  "staging_count_before_all_scenarios": 2366,
+  "staging_count_after_all_scenarios": 2366,
+  "net_rows_written_across_all_scenarios": 0,
+  "scenarios": [
+    {
+      "id": 1,
+      "description": "No --commit at all (default dry-run)",
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts",
+      "refused": true,
+      "staging_before": 2366,
+      "staging_after": 2366,
+      "unchanged": true,
+      "message": "REFUSED: REFUSED — --commit absent. Dry-run par défaut, aucune écriture."
+    },
+    {
+      "id": 2,
+      "description": "--commit present, all other flags missing",
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit",
+      "refused": true,
+      "staging_before": 2366,
+      "staging_after": 2366,
+      "unchanged": true,
+      "message": "REFUSED: REFUSED — phrase de confirmation manquante ou incorrecte. Exiger --confirm=\"IMPORT_TRANSPORT_TIER3_TO_STAGING\" (distincte de toute phrase de promotion existante)."
+    },
+    {
+      "id": 3,
+      "description": "Wrong confirmation phrase",
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit --expected-count=12 --approval-checksum=3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4 --confirm=\"WRONG_PHRASE\" --operator=\"jean-merlain\" --approved-by=\"Distinct-Reviewer\"",
+      "refused": true,
+      "staging_before": 2366,
+      "staging_after": 2366,
+      "unchanged": true,
+      "message": "REFUSED: REFUSED — phrase de confirmation manquante ou incorrecte. Exiger --confirm=\"IMPORT_TRANSPORT_TIER3_TO_STAGING\" (distincte de toute phrase de promotion existante)."
+    },
+    {
+      "id": 4,
+      "description": "Wrong --expected-count (99 instead of the fresh dry-run's value)",
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit --expected-count=99 --approval-checksum=3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4 --confirm=\"IMPORT_TRANSPORT_TIER3_TO_STAGING\" --operator=\"jean-merlain\" --approved-by=\"Distinct-Reviewer\"",
+      "refused": true,
+      "staging_before": 2366,
+      "staging_after": 2366,
+      "unchanged": true,
+      "message": "REFUSED: REFUSED — nombre de lignes à insérer inattendu (calculé maintenant=12, --expected-count=99). Le staging/live a probablement évolué depuis l'approbation — relancer une revalidation + dry-run, ne jamais forcer."
+    },
+    {
+      "id": 5,
+      "description": "Wrong --approval-checksum (garbage value)",
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit --expected-count=12 --approval-checksum=deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef --confirm=\"IMPORT_TRANSPORT_TIER3_TO_STAGING\" --operator=\"jean-merlain\" --approved-by=\"Distinct-Reviewer\"",
+      "refused": true,
+      "staging_before": 2366,
+      "staging_after": 2366,
+      "unchanged": true,
+      "message": "REFUSED: REFUSED — checksum d'approbation absent ou différent (--approval-checksum=deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef, calculé maintenant=3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4)."
+    },
+    {
+      "id": 6,
+      "description": "Self-approval: --approved-by identical to --operator",
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit --expected-count=12 --approval-checksum=3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4 --confirm=\"IMPORT_TRANSPORT_TIER3_TO_STAGING\" --operator=\"jean-merlain\" --approved-by=\"jean-merlain\"",
+      "refused": true,
+      "staging_before": 2366,
+      "staging_after": 2366,
+      "unchanged": true,
+      "message": "REFUSED: REFUSED — approved-by ne peut pas être la même personne que operator (auto-approbation interdite)."
+    },
+    {
+      "id": 7,
+      "description": "Wrong --operator",
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit --expected-count=12 --approval-checksum=3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4 --confirm=\"IMPORT_TRANSPORT_TIER3_TO_STAGING\" --operator=\"someone-else\" --approved-by=\"Distinct-Reviewer\"",
+      "refused": true,
+      "staging_before": 2366,
+      "staging_after": 2366,
+      "unchanged": true,
+      "message": "REFUSED: REFUSED — opérateur manquant ou inattendu. Exiger --operator=\"jean-merlain\"."
+    },
+    {
+      "id": 8,
+      "description": "--approved-by missing entirely",
+      "command": "npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit --expected-count=12 --approval-checksum=3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4 --confirm=\"IMPORT_TRANSPORT_TIER3_TO_STAGING\" --operator=\"jean-merlain\"",
+      "refused": true,
+      "staging_before": 2366,
+      "staging_after": 2366,
+      "unchanged": true,
+      "message": "REFUSED: REFUSED — --approved-by manquant. Jamais codé en dur, doit être fourni explicitement au moment de l'exécution."
+    }
+  ],
+  "unit_tests_reference": {
+    "pass": 66,
+    "fail": 0
+  },
+  "conclusion": "All 8 refusal scenarios verified in real CLI conditions against the live database this sprint. 0 net rows written. No scenario ever used a genuine --approved-by from an actual distinct human this sprint — \"Distinct-Reviewer\" is a placeholder string only, never a claim of real authorization."
+}

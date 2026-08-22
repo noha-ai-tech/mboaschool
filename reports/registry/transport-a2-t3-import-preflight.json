@@ -1,0 +1,105 @@
+{
+  "sprint": "TRANSPORT-A.2-T3-IMPORT",
+  "date": "2026-08-21",
+  "operator": "jean-merlain",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "git": {
+    "branch": "main",
+    "head": "8ee6d3b085befcfb7140c96767805100cb09b53f"
+  },
+  "database_baseline": {
+    "establishments": 2248,
+    "staging": 2366,
+    "registry_identifiers": 2242,
+    "mintransport_staging_rows": 0,
+    "mintransport_enum_present": true
+  },
+  "database_baseline_drift_vs_historical": {
+    "drift": {
+      "establishments": 0,
+      "staging": 0,
+      "registry_identifiers": 0,
+      "mintransport_staging": 0
+    },
+    "drift_detected": false,
+    "historical": {
+      "establishments": 2248,
+      "staging": 2366,
+      "registry_identifiers": 2242,
+      "mintransport_staging": 0
+    }
+  },
+  "population": {
+    "candidate_count": 17,
+    "expected": 17,
+    "expected_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+    "stored_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+    "recomputed_checksum": "4ab50d786abdb6107da2650b23c973b76f4bf60ea1784988a905903c00639ce7",
+    "checksum_valid": true
+  },
+  "classification_tally": {
+    "SOURCE_REVIEW": 12,
+    "DUPLICATE_REVIEW": 3,
+    "IDENTITY_REVIEW": 2
+  },
+  "clean_approvable_count": 0,
+  "already_live_count": 0,
+  "already_staging_count": 0,
+  "trust_model_tally": {
+    "presence_confidence": {
+      "SINGLE_SOURCE": 14,
+      "CORROBORATED": 2,
+      "MULTI_SOURCE_WEAK": 1
+    },
+    "identity_confidence": {
+      "RESOLVED": 12,
+      "PROBABLE": 2,
+      "UNRESOLVED": 1,
+      "CONFLICTING": 2
+    },
+    "official_verification": {
+      "UNVERIFIED": 17
+    }
+  },
+  "officially_verified_automatically": 0,
+  "publication_readiness_tally": {
+    "PUBLISHABLE_UNVERIFIED": 3,
+    "REVIEW_REQUIRED": 14
+  },
+  "classification_eligible_count": 17,
+  "insertable_count_recomputed_this_sprint": 12,
+  "insertable_count_historical_expectation": 12,
+  "population_drift_vs_historical_insertable_count": false,
+  "held_back_missing_source_url": [
+    "TC-09",
+    "TC-10",
+    "TC-14",
+    "TC-16",
+    "TC-17"
+  ],
+  "cross_ministry_review": {
+    "TC-12_IT2MIP": {
+      "classification": "DUPLICATE_REVIEW",
+      "cross_ministry_decision": "AMBIGUOUS",
+      "auto_resolved": false,
+      "note": "REVIEW_REQUIRED maintained. Fabricated-by-AI-summary identifier rejected (2nd confirmed instance on this Transport workstream)."
+    },
+    "TC-17_Fleet_Management_Academy": {
+      "classification": "IDENTITY_REVIEW",
+      "cross_ministry_decision": "NEW (MINEFOP-authority, transport-adjacent content)",
+      "auto_resolved": false,
+      "staged_this_sprint": false,
+      "note": "Not staged — missing source_url. Real MINEFOP identifier N°000471 kept as cross_ministry_evidence metadata only, never as a MINTRANSPORT official_identifier."
+    }
+  },
+  "idempotence": {
+    "first_pass_would_insert": 12,
+    "first_pass_already_staging": 0,
+    "second_pass_would_insert": 0,
+    "second_pass_is_zero": true
+  },
+  "pii_persisted_count": 0,
+  "official_identifiers_invented": 0,
+  "registry_identifiers_to_insert": 0,
+  "write_performed_this_sprint": false
+}
