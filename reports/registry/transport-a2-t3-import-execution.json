@@ -1,9 +1,26 @@
 {
-  "sprint": "TRANSPORT-A.2-T3-IMPORT",
-  "generated_at": "2026-08-22T03:02:25.478Z",
-  "status": "PREFLIGHT_DRY_RUN_ONLY_NO_COMMIT",
-  "write_performed_this_sprint": false,
-  "staging_writes_this_sprint": 0,
-  "production_writes_this_sprint": 0,
-  "reason": "Brief §13 — no named, distinct human approval message received this sprint (the brief text itself is explicitly excluded from counting as approval). DECISION = WAITING_FOR_HUMAN_APPROVAL (brief §24 option D). Sections 14+ (real write) are out of scope until a separate, distinct authorization message is received."
+  "sprint": "TRANSPORT-A.2-T3-WRITE",
+  "executed_at": "2026-08-22T03:15:19.881Z",
+  "operator": "jean-merlain",
+  "approved_by": "Eddy",
+  "data_source_id": "26a96fb8-3c68-4b4f-83f7-4581d1d43da2",
+  "rows_inserted": 12,
+  "fingerprints_inserted": [
+    "transport-tier3:v1:TC-01",
+    "transport-tier3:v1:TC-02",
+    "transport-tier3:v1:TC-03",
+    "transport-tier3:v1:TC-04",
+    "transport-tier3:v1:TC-05",
+    "transport-tier3:v1:TC-06",
+    "transport-tier3:v1:TC-07",
+    "transport-tier3:v1:TC-08",
+    "transport-tier3:v1:TC-11",
+    "transport-tier3:v1:TC-12",
+    "transport-tier3:v1:TC-13",
+    "transport-tier3:v1:TC-15"
+  ],
+  "staging_count_before": 2366,
+  "staging_count_after": 2378,
+  "establishments_touched": 0,
+  "registry_identifiers_touched": 0
 }

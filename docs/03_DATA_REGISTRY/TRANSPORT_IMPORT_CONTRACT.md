@@ -1122,3 +1122,51 @@ DECISION CE SPRINT (§24 du brief) : **D — WAITING_FOR_HUMAN_APPROVAL**.
 Aucune approbation humaine nommée et distincte reçue. STOP après ce
 sprint, per brief §25 — REGISTRY-NATIONAL-A n'est PAS commencé.
 ```
+
+## ADDENDUM — IMPORT RÉEL EXÉCUTÉ (2026-08-21)
+
+Autorisation nommée reçue : "Je, Jean Merlain, autorise explicitement
+l'import en staging des 12 candidats Transport Tier-3 correspondant au
+checksum `3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4`,
+approuvé par Eddy. Cette autorisation porte uniquement sur le staging.
+Aucune promotion dans l'annuaire public n'est autorisée."
+
+Commande exécutée avec les flags exacts autorisés :
+
+```
+npx tsx scripts/school-registry/transport-a2-t3-import.ts --commit \
+  --expected-count=12 \
+  --approval-checksum=3b0d681a71ceea8a7a5099209103f4e81ab4857facd649eb9b68086c14f804d4 \
+  --confirm="IMPORT_TRANSPORT_TIER3_TO_STAGING" \
+  --operator="jean-merlain" \
+  --approved-by="Eddy"
+```
+
+**Résultat : SUCCESS. 12/12 lignes insérées dans
+`establishment_import_staging`** (source_ministry=MINTRANSPORT) : les 7
+auto-écoles, EMIPAC, IT2MIP, Le Paquebot, EFO/CCAA, Métropolitaine
+Internationale SCES. Les 5 candidats sans `source_url` restent
+délibérément hors staging (`MISSING_SOURCE_URL`, corpus de découverte
+national préservé pour reprise future).
+
+Vérification post-écriture indépendante (lecture fraîche Supabase,
+`transport-a2-t3-import-final-postverify.json`) : `establishments` =
+2249 (inchangé), `registry_identifiers` = 2242 (inchangé), staging total
+2366→2378 (+12 exactement). Les 12 lignes ont toutes `source_url`
+renseignée, `promoted_establishment_id IS NULL`,
+`official_verification=UNVERIFIED` (jamais `OFFICIALLY_VERIFIED` — Tier
+3 seul ne peut structurellement pas produire cette valeur), 0 PII.
+
+Idempotence prouvée par un vrai second passage (dry-run, jamais un
+second `--commit`) : would-insert=0, already_staging=12.
+
+Sécurité publique vérifiée en direct (serveur dev local) :
+`/api/recherche?q=AUTO ECOLE ASTRALE` et `?q=EMIPAC` retournent 0
+résultat — aucune fuite du staging vers la recherche publique.
+
+`establishments`/`registry_identifiers` : 0 écriture. Aucune promotion.
+Aucune vérification officielle inventée. Push : NON. Deploy : NON.
+
+**READY_FOR_TRANSPORT_PROMOTION : NO** (staging uniquement — les 12
+lignes restent des candidats de revue, jamais CLEAN_APPROVABLE).
+REGISTRY-NATIONAL-A n'a pas été commencé.

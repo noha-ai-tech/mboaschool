@@ -1,0 +1,26 @@
+{
+  "generated_at": "2026-08-22T03:15:49.351Z",
+  "establishments": 2249,
+  "staging_total": 2378,
+  "registry_identifiers": 2242,
+  "mintransport_staging_rows": 12,
+  "inserted_count": 12,
+  "all_have_source_url": true,
+  "all_promoted_establishment_id_null": true,
+  "all_official_verification_unverified": true,
+  "pii_detected": 0,
+  "inserted_names": [
+    "AUTO ECOLE ASTRALE",
+    "AUTO ECOLE FRANCAISE",
+    "AUTO ECOLE GERMANIA",
+    "AUTO ECOLE LEO",
+    "AUTO ECOLE TRECY",
+    "AUTO ECOLE TURBO",
+    "AUTO ECOLE TURBO NKOMKANA",
+    "METROPOLITAINE INTERNATIONALE SCES",
+    "EMIPAC (École Maritime Industrielle et Portuaire de l'Afrique Centrale)",
+    "IT2MIP (Institut des Technologies de la Marine Marchande et Industrie Portuaire)",
+    "Centre de formation professionnelle maritime « Le Paquebot »",
+    "École de Formation (EFO) - CCAA"
+  ]
+}
