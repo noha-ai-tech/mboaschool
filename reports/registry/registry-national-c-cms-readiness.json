@@ -1,0 +1,12 @@
+{
+  "sprint": "REGISTRY-NATIONAL-C",
+  "generated_at": "2026-08-22T05:12:22.776Z",
+  "registry_protected_fields_still_protected": true,
+  "new_blocker_introduced_by_this_sprint": false,
+  "status": "PARTIAL",
+  "remaining_blockers": [
+    "Aucune colonne dédiée official_verification/platform_verification n'existe encore sur establishments — un CMS complet devra continuer de dériver ces champs à la volée ou introduire une migration (hors périmètre de ce sprint).",
+    "Le flux claim/verify générique n'a pas été retravaillé au-delà de A.1 — un CMS self-service pour le propriétaire devra confirmer, avant construction, qu'aucun champ de confiance protégé n'est exposé en écriture.",
+    "Ce sprint (REGISTRY-NATIONAL-C) n'a effectué AUCUNE écriture (decision B/C/D/E/F, jamais A) — aucun nouvel établissement réel n'existe encore à administrer via un CMS."
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "sprint": "REGISTRY-NATIONAL-C",
+  "generated_at": "2026-08-22T05:12:23.248Z",
+  "report": "idempotence",
+  "status": "NOT_EXECUTED",
+  "reason": "Non applicable avant une première exécution --commit réussie.",
+  "decision": "B"
+}

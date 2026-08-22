@@ -1,0 +1,18 @@
+{
+  "sprint": "REGISTRY-NATIONAL-C",
+  "generated_at": "2026-08-22T05:12:21.102Z",
+  "note": "DRY-RUN ARITHMÉTIQUE + STRUCTUREL UNIQUEMENT — 0 écriture DB effectuée par ce script (preflight/dry-run only, no commit).",
+  "establishments_before": 2249,
+  "snapshot_candidate_count": 3,
+  "fresh_eligible_count": 3,
+  "already_live": 97,
+  "conflicts": 0,
+  "would_insert_establishments": 3,
+  "would_update": 0,
+  "would_delete": 0,
+  "would_insert_registry_identifiers": 0,
+  "would_assign_owners": 0,
+  "would_set_verified_true": 0,
+  "expected_establishments_after": 2252,
+  "insert_only_invariant_holds": true
+}

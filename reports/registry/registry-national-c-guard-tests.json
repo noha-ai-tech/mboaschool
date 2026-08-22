@@ -1,0 +1,60 @@
+{
+  "sprint": "REGISTRY-NATIONAL-C",
+  "generated_at": "2026-08-22T05:12:22.772Z",
+  "fixture_test_file": "scripts/school-registry/lib/nationalRegistry/__tests__/registryNationalPublicationGuard.test.ts (réutilisé tel quel, même garde-fou §17 du brief C)",
+  "fixture_tests_pass": 20,
+  "fixture_tests_fail": 0,
+  "real_condition_scenarios_note": "Refus testés EN CONDITIONS RÉELLES (valeurs calculées fraîches ce sprint : projectRef live, operator='jean-merlain', checksum recalculé, actualCandidateCount frais, etc.) — pas seulement des fixtures génériques.",
+  "real_condition_scenarios": [
+    {
+      "letter": "A",
+      "label": "sans --commit (état réel de ce sprint — aucune approbation humaine distincte fournie)",
+      "refused": true,
+      "message": "REFUSED (A) — --commit absent. Dry-run par défaut, aucune écriture."
+    },
+    {
+      "letter": "B",
+      "label": "wrong project ref",
+      "refused": true,
+      "message": "REFUSED (B) — project ref inattendu (wrong-project-ref != umcwwynrftidytxgqkwi)."
+    },
+    {
+      "letter": "C",
+      "label": "wrong candidate count (dérive simulée)",
+      "refused": true,
+      "message": "REFUSED (C) — nombre de candidats inattendu (calculé maintenant=4, --expected-count=3). Le lot a probablement dérivé depuis l'approbation — relancer une revalidation fraîche + dry-run, ne jamais forcer."
+    },
+    {
+      "letter": "D",
+      "label": "wrong checksum",
+      "refused": true,
+      "message": "REFUSED (D) — checksum d'approbation absent ou différent (--approval-checksum=deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef, recalculé maintenant=c22e1b88e1cb1026f0115d7d118abcccc4a832bb3375e9fd62e7ed754f7849ce)."
+    },
+    {
+      "letter": "E",
+      "label": "wrong confirm phrase",
+      "refused": true,
+      "message": "REFUSED (E) — phrase de confirmation manquante ou incorrecte. Exiger --confirm=\"PUBLISH_NATIONAL_REGISTRY_TO_DIRECTORY\" (distincte de toute phrase de promotion/import staging existante)."
+    },
+    {
+      "letter": "F",
+      "label": "missing operator",
+      "refused": true,
+      "message": "REFUSED (F) — --operator manquant."
+    },
+    {
+      "letter": "G",
+      "label": "missing approved-by (état réel de ce sprint — aucune approbation nommée distincte reçue)",
+      "refused": true,
+      "message": "REFUSED (G) — --approved-by manquant. Jamais codé en dur, doit être fourni explicitement au moment de l'exécution."
+    },
+    {
+      "letter": "H",
+      "label": "self-approval (operator === approved-by)",
+      "refused": true,
+      "message": "REFUSED (H) — approved-by ne peut pas être la même personne que operator (auto-approbation interdite)."
+    }
+  ],
+  "all_real_condition_scenarios_refused": true,
+  "guard_invoked_with_fully_valid_flags_and_commit_this_sprint": false
+}

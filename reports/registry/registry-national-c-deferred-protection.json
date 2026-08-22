@@ -1,0 +1,26 @@
+{
+  "sprint": "REGISTRY-NATIONAL-C",
+  "generated_at": "2026-08-22T05:12:21.099Z",
+  "duplicate_review_excluded": 8,
+  "identity_review_excluded": 2,
+  "source_review_excluded": 6,
+  "category_review_excluded": 10,
+  "conflict_review_excluded": 0,
+  "deferred_excluded": 5,
+  "also_excluded_defensive": {
+    "blocked_required_field": 0,
+    "blocked_slug_collision": 0
+  },
+  "total_excluded_population": 31,
+  "historical_reference_only_b": {
+    "duplicate_review": 8,
+    "identity_review": 2,
+    "source_review": 6,
+    "category_review": 10,
+    "deferred": 5,
+    "note": "Référence historique B UNIQUEMENT — jamais supposée inchangée, comptée fraîche ci-dessus."
+  },
+  "leaked_into_fresh_final_lot": [],
+  "leaked_into_approved_snapshot": [],
+  "protection_verified": true
+}

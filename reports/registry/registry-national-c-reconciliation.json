@@ -1,0 +1,8 @@
+{
+  "sprint": "REGISTRY-NATIONAL-C",
+  "generated_at": "2026-08-22T05:12:23.246Z",
+  "report": "reconciliation",
+  "status": "NOT_EXECUTED",
+  "reason": "Rien à réconcilier — aucune écriture Supabase effectuée.",
+  "decision": "B"
+}

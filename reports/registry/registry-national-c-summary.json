@@ -1,0 +1,161 @@
+{
+  "sprint": "REGISTRY-NATIONAL-C",
+  "generated_at": "2026-08-22T05:12:23.253Z",
+  "team": {
+    "operator": "jean-merlain",
+    "approved_by": null,
+    "repository": "mboaschool",
+    "branch": "main",
+    "head": "c5ee2c88de9adf179c50e20566023efc0da3b5ed",
+    "remote": "noha (aucun push effectué)",
+    "project_ref": "umcwwynrftidytxgqkwi"
+  },
+  "database": {
+    "establishments_before": 2249,
+    "inserted": 0,
+    "establishments_after": 2249,
+    "staging_before": 2378,
+    "staging_after": 2378,
+    "registry_identifiers_before": 2242,
+    "registry_identifiers_after": 2242
+  },
+  "approval": {
+    "snapshot_candidates": 3,
+    "expected_checksum": "c22e1b88e1cb1026f0115d7d118abcccc4a832bb3375e9fd62e7ed754f7849ce",
+    "stored_checksum": "c22e1b88e1cb1026f0115d7d118abcccc4a832bb3375e9fd62e7ed754f7849ce",
+    "recomputed_checksum": "c22e1b88e1cb1026f0115d7d118abcccc4a832bb3375e9fd62e7ed754f7849ce",
+    "valid": true
+  },
+  "live_revalidation": {
+    "eligible": 3,
+    "already_live": 97,
+    "duplicate_signals": 0,
+    "identity_conflicts": 2,
+    "cross_ministry_conflicts": 0,
+    "category_blockers": 10,
+    "pii_blockers": 0,
+    "required_field_blockers": 0
+  },
+  "trust": {
+    "create_officially_verified": 0,
+    "create_publishable_unverified": 3,
+    "automatically_platform_verified": 0,
+    "automatically_officially_verified": 0,
+    "owner_assigned": 0,
+    "invented_official_ids": 0
+  },
+  "dry_run": {
+    "sprint": "REGISTRY-NATIONAL-C",
+    "generated_at": "2026-08-22T05:12:21.102Z",
+    "note": "DRY-RUN ARITHMÉTIQUE + STRUCTUREL UNIQUEMENT — 0 écriture DB effectuée par ce script (preflight/dry-run only, no commit).",
+    "establishments_before": 2249,
+    "snapshot_candidate_count": 3,
+    "fresh_eligible_count": 3,
+    "already_live": 97,
+    "conflicts": 0,
+    "would_insert_establishments": 3,
+    "would_update": 0,
+    "would_delete": 0,
+    "would_insert_registry_identifiers": 0,
+    "would_assign_owners": 0,
+    "would_set_verified_true": 0,
+    "expected_establishments_after": 2252,
+    "insert_only_invariant_holds": true
+  },
+  "publication": {
+    "attempted": 0,
+    "inserted": 0,
+    "failed": 0,
+    "skipped": 3,
+    "conflicts": 0
+  },
+  "staging": {
+    "linked": 0,
+    "promoted": 0,
+    "unexpected_promoted": 0,
+    "orphans": 0
+  },
+  "reconciliation": {
+    "created_ids": [],
+    "missing": [],
+    "wrong_links": [],
+    "wrong_values": [],
+    "outcome": "NOT_EXECUTED — aucun --commit ce sprint."
+  },
+  "idempotence": {
+    "second_dry_run_inserts": "N/A",
+    "already_live": "N/A"
+  },
+  "public_qa": {
+    "search": "NOT_EXECUTED",
+    "school_pages": "NOT_EXECUTED",
+    "claim_pages": "NOT_EXECUTED",
+    "trust_badges": "NOT_EXECUTED (simulation statique OK — voir trust ci-dessus)",
+    "search_v2_regression": "NOT_EXECUTED"
+  },
+  "deferred_protection": {
+    "sprint": "REGISTRY-NATIONAL-C",
+    "generated_at": "2026-08-22T05:12:21.099Z",
+    "duplicate_review_excluded": 8,
+    "identity_review_excluded": 2,
+    "source_review_excluded": 6,
+    "category_review_excluded": 10,
+    "conflict_review_excluded": 0,
+    "deferred_excluded": 5,
+    "also_excluded_defensive": {
+      "blocked_required_field": 0,
+      "blocked_slug_collision": 0
+    },
+    "total_excluded_population": 31,
+    "historical_reference_only_b": {
+      "duplicate_review": 8,
+      "identity_review": 2,
+      "source_review": 6,
+      "category_review": 10,
+      "deferred": 5,
+      "note": "Référence historique B UNIQUEMENT — jamais supposée inchangée, comptée fraîche ci-dessus."
+    },
+    "leaked_into_fresh_final_lot": [],
+    "leaked_into_approved_snapshot": [],
+    "protection_verified": true
+  },
+  "cms": {
+    "sprint": "REGISTRY-NATIONAL-C",
+    "generated_at": "2026-08-22T05:12:22.776Z",
+    "registry_protected_fields_still_protected": true,
+    "new_blocker_introduced_by_this_sprint": false,
+    "status": "PARTIAL",
+    "remaining_blockers": [
+      "Aucune colonne dédiée official_verification/platform_verification n'existe encore sur establishments — un CMS complet devra continuer de dériver ces champs à la volée ou introduire une migration (hors périmètre de ce sprint).",
+      "Le flux claim/verify générique n'a pas été retravaillé au-delà de A.1 — un CMS self-service pour le propriétaire devra confirmer, avant construction, qu'aucun champ de confiance protégé n'est exposé en écriture.",
+      "Ce sprint (REGISTRY-NATIONAL-C) n'a effectué AUCUNE écriture (decision B/C/D/E/F, jamais A) — aucun nouvel établissement réel n'existe encore à administrer via un CMS."
+    ]
+  },
+  "qa": {
+    "build": "voir registry-national-c-qa.json",
+    "typescript_app": "voir registry-national-c-qa.json",
+    "typescript_registry": "voir registry-national-c-qa.json",
+    "tests": {
+      "guard_fixture_pass": 20,
+      "guard_fixture_fail": 0,
+      "guard_real_condition_all_refused": true
+    }
+  },
+  "production_writes": {
+    "establishments_inserted": 0,
+    "existing_establishments_updated": 0,
+    "existing_establishments_deleted": 0,
+    "registry_identifiers_inserted": 0,
+    "owners_assigned": 0,
+    "verified_automatically": 0
+  },
+  "decision": "B",
+  "decision_reasons": [
+    "WAITING_FOR_HUMAN_APPROVAL — §18 du brief C : le brief lui-même n'est pas une approbation, et aucune approbation humaine explicite, nommée et distincte (référençant REGISTRY-NATIONAL-C, le compte exact, le checksum exact, l'opérateur et un approbateur distinct) n'a été reçue dans ce sprint. Toutes les autres conditions de sécurité (§6/§7/§8/§11/§12/§13/§14/§16/§17) sont satisfaites."
+  ],
+  "registry_national_publication_closed": "NO",
+  "ready_for_cms": "PARTIAL",
+  "push": "NO",
+  "deploy": "NO",
+  "next_step_exact_command": "npx tsx scripts/school-registry/registry-national-c-publish.ts --commit --expected-count=3 --approval-checksum=c22e1b88e1cb1026f0115d7d118abcccc4a832bb3375e9fd62e7ed754f7849ce --confirm=\"PUBLISH_NATIONAL_REGISTRY_TO_DIRECTORY\" --operator=\"jean-merlain\" --approved-by=\"<approbateur humain réel et distinct — jamais 'jean-merlain'>\""
+}

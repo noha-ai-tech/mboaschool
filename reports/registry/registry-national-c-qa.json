@@ -1,0 +1,35 @@
+{
+  "sprint": "REGISTRY-NATIONAL-C",
+  "generated_at": "2026-08-22T05:20:00.000Z",
+  "scope": "QA §31 du brief — exécuté en préparation (preflight/dry-run only, aucune écriture DB déclenchée par ces commandes).",
+  "commands": {
+    "npm_run_build": { "command": "npm run build", "exit_code": 0, "result": "PASS — 73/73 pages générées, compilation Next.js 15.1.6 réussie." },
+    "tsc_app": { "command": "npx tsc --noEmit", "exit_code": 0, "result": "PASS — 0 erreur." },
+    "tsc_registry_scripts": { "command": "npx tsc --noEmit -p scripts/school-registry/tsconfig.json", "exit_code": 0, "result": "PASS — 0 erreur (1 erreur de typage détectée et corrigée dans registry-national-c-preflight.ts avant ce run final : Set<unknown> -> Set<string>)." }
+  },
+  "tests": {
+    "command": "npx tsx --test scripts/school-registry/lib/**/__tests__/*.test.ts scripts/school-registry/lib/nationalRegistry/__tests__/*.test.ts",
+    "suites": 110,
+    "tests": 243,
+    "pass": 243,
+    "fail": 0,
+    "includes": [
+      "matching engine (lib/matching)",
+      "registryNationalPublicationGuard.ts — 20 scénarios fixtures A-L + invariants",
+      "resolveEstablishmentTrustState (via simulation directe dans registry-national-c-preflight.ts, pas un fichier de test dédié séparé)",
+      "piiRedaction / piiAudit",
+      "categoryAudit",
+      "slugDryRun",
+      "approvedPopulationFilter",
+      "minsanteGPromotionGuard / minesupPromotionGuard / minesupNationalPromotionGuard / transportA2ImportGuard (régression — non touchés ce sprint, toujours verts)"
+    ]
+  },
+  "guard_real_condition_refusal_tests": {
+    "script": "scripts/school-registry/registry-national-c-publish.ts",
+    "note": "8 invocations CLI réelles avec des flags invalides distincts (sans --commit, mauvais project ref, mauvais compte, mauvais checksum, mauvaise phrase, opérateur manquant, approved-by manquant, auto-approbation) — TOUTES refusées, TOUJOURS avant toute tentative d'écriture Supabase. Vérifié par recheck baseline établissements=2249 identique avant/après les 8 tentatives.",
+    "scenarios_tested": 8,
+    "scenarios_refused": 8,
+    "db_writes_during_tests": 0
+  },
+  "regression": "AUCUNE — 0 fichier applicatif (src/) modifié ce sprint. Seuls scripts/school-registry/registry-national-c-preflight.ts, scripts/school-registry/registry-national-c-publish.ts (nouveaux) et reports/registry/registry-national-c-*.{json,csv} (nouveaux) ont été ajoutés."
+}

@@ -1,0 +1,19 @@
+{
+  "sprint": "REGISTRY-NATIONAL-C",
+  "generated_at": "2026-08-22T05:11:34.821Z",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "snapshot_checksum_stored": "c22e1b88e1cb1026f0115d7d118abcccc4a832bb3375e9fd62e7ed754f7849ce",
+  "snapshot_checksum_recomputed": "c22e1b88e1cb1026f0115d7d118abcccc4a832bb3375e9fd62e7ed754f7849ce",
+  "eligible": 3,
+  "reval_tally": {
+    "already_live": 0,
+    "duplicate_signal": 0,
+    "missing_required_field": 0,
+    "pii_issue": 0,
+    "staging_issue": 0
+  },
+  "would_insert_establishments": 3,
+  "would_link_staging": 3,
+  "would_insert_registry_identifiers": 0,
+  "expected_establishments_after": 2252
+}

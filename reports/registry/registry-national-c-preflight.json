@@ -1,0 +1,141 @@
+{
+  "sprint": "REGISTRY-NATIONAL-C",
+  "generated_at": "2026-08-22T05:12:23.225Z",
+  "scope": "PREFLIGHT/DRY-RUN ONLY — NO COMMIT. Sections 4-17 du brief exécutées intégralement ; §18+ (approbation, exécution réelle) hors périmètre de ce script.",
+  "team": {
+    "operator": "jean-merlain",
+    "git_user_name_not_used_as_operator": "ndjm2020-pixel",
+    "repository": "mboaschool",
+    "branch": "main",
+    "head": "c5ee2c88de9adf179c50e20566023efc0da3b5ed",
+    "noha_main": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+    "project_ref": "umcwwynrftidytxgqkwi"
+  },
+  "database_baseline": {
+    "establishments": 2249,
+    "staging": 2378,
+    "registry_identifiers": 2242
+  },
+  "snapshot_triple_verification": {
+    "source": "reports/registry/registry-national-b-approval.json",
+    "expected_checksum": "c22e1b88e1cb1026f0115d7d118abcccc4a832bb3375e9fd62e7ed754f7849ce",
+    "stored_checksum": "c22e1b88e1cb1026f0115d7d118abcccc4a832bb3375e9fd62e7ed754f7849ce",
+    "recomputed_checksum": "c22e1b88e1cb1026f0115d7d118abcccc4a832bb3375e9fd62e7ed754f7849ce",
+    "candidate_count": 3,
+    "valid": true
+  },
+  "fresh_eligibility_rebuild": {
+    "fresh_total_universe": 131,
+    "fresh_eligible_count": 3,
+    "snapshot_count": 3,
+    "missing_from_fresh": [],
+    "new_since_snapshot": [],
+    "population_stable": true
+  },
+  "required_field_audit_live_schema": {
+    "openapi_required_fields": [
+      "id",
+      "name",
+      "slug",
+      "main_category",
+      "forfait",
+      "verification_status",
+      "hero_mode"
+    ],
+    "matches_expected": true,
+    "blocked_candidates": 0
+  },
+  "slug_audit": {
+    "candidates": 3,
+    "existing_collisions": 0,
+    "batch_collisions": 0,
+    "blocking": 0
+  },
+  "pii_audit": {
+    "blocked": 0
+  },
+  "cross_ministry": {
+    "rows": 0,
+    "blocking_for_final_lot": 0
+  },
+  "trust": {
+    "officially_verified": 0,
+    "publishable_unverified": 3,
+    "trust_simulation_all_safe": true,
+    "no_officially_verified_leak": true,
+    "official_verification_distribution": {
+      "OFFICIAL_SOURCE_FOUND": 3
+    }
+  },
+  "deferred_protection": {
+    "sprint": "REGISTRY-NATIONAL-C",
+    "generated_at": "2026-08-22T05:12:21.099Z",
+    "duplicate_review_excluded": 8,
+    "identity_review_excluded": 2,
+    "source_review_excluded": 6,
+    "category_review_excluded": 10,
+    "conflict_review_excluded": 0,
+    "deferred_excluded": 5,
+    "also_excluded_defensive": {
+      "blocked_required_field": 0,
+      "blocked_slug_collision": 0
+    },
+    "total_excluded_population": 31,
+    "historical_reference_only_b": {
+      "duplicate_review": 8,
+      "identity_review": 2,
+      "source_review": 6,
+      "category_review": 10,
+      "deferred": 5,
+      "note": "Référence historique B UNIQUEMENT — jamais supposée inchangée, comptée fraîche ci-dessus."
+    },
+    "leaked_into_fresh_final_lot": [],
+    "leaked_into_approved_snapshot": [],
+    "protection_verified": true
+  },
+  "dry_run": {
+    "sprint": "REGISTRY-NATIONAL-C",
+    "generated_at": "2026-08-22T05:12:21.102Z",
+    "note": "DRY-RUN ARITHMÉTIQUE + STRUCTUREL UNIQUEMENT — 0 écriture DB effectuée par ce script (preflight/dry-run only, no commit).",
+    "establishments_before": 2249,
+    "snapshot_candidate_count": 3,
+    "fresh_eligible_count": 3,
+    "already_live": 97,
+    "conflicts": 0,
+    "would_insert_establishments": 3,
+    "would_update": 0,
+    "would_delete": 0,
+    "would_insert_registry_identifiers": 0,
+    "would_assign_owners": 0,
+    "would_set_verified_true": 0,
+    "expected_establishments_after": 2252,
+    "insert_only_invariant_holds": true
+  },
+  "guard": {
+    "fixture_tests_pass": 20,
+    "fixture_tests_fail": 0,
+    "real_condition_scenarios_all_refused": true,
+    "confirm_phrase": "PUBLISH_NATIONAL_REGISTRY_TO_DIRECTORY",
+    "expected_project_ref": "umcwwynrftidytxgqkwi"
+  },
+  "approval_gate": {
+    "explicit_distinct_human_approval_received_this_sprint": false,
+    "brief_itself_counts_as_approval": false
+  },
+  "db_final_recheck": {
+    "establishments_after": 2249,
+    "staging_after": 2378,
+    "registry_identifiers_after": 2242,
+    "delta_establishments": 0,
+    "delta_staging": 0,
+    "delta_registry_identifiers": 0,
+    "db_unchanged": true
+  },
+  "decision": "B",
+  "decision_reasons": [
+    "WAITING_FOR_HUMAN_APPROVAL — §18 du brief C : le brief lui-même n'est pas une approbation, et aucune approbation humaine explicite, nommée et distincte (référençant REGISTRY-NATIONAL-C, le compte exact, le checksum exact, l'opérateur et un approbateur distinct) n'a été reçue dans ce sprint. Toutes les autres conditions de sécurité (§6/§7/§8/§11/§12/§13/§14/§16/§17) sont satisfaites."
+  ],
+  "ready_for_execution": false,
+  "push": "NO",
+  "deploy": "NO"
+}
