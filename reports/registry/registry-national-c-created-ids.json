@@ -1,8 +1,31 @@
 {
   "sprint": "REGISTRY-NATIONAL-C",
-  "generated_at": "2026-08-22T05:12:23.233Z",
-  "report": "created-ids",
-  "status": "NOT_EXECUTED",
-  "reason": "0 établissement créé — aucun --commit exécuté.",
-  "decision": "B"
+  "generated_at": "2026-08-22T05:20:17.513Z",
+  "count": 3,
+  "establishments": [
+    {
+      "establishment_id": "fef9e2a5-fe95-45f5-9416-e33aae3b6d46",
+      "staging_id": "b8ddca4c-475c-4320-86e4-d9392f36cb8b",
+      "name": "École de Formation (EFO) - CCAA",
+      "region": "Centre",
+      "city": "Yaoundé",
+      "main_category": "autres"
+    },
+    {
+      "establishment_id": "9e458451-dc1d-40c2-8ecc-ad883478ddab",
+      "staging_id": "c8491b99-30b0-449e-9689-97ca3521fd7a",
+      "name": "Centre de formation professionnelle maritime « Le Paquebot »",
+      "region": "Littoral",
+      "city": "Douala",
+      "main_category": "autres"
+    },
+    {
+      "establishment_id": "f6635829-0c3f-4e15-a144-2f1f7c99ab24",
+      "staging_id": "e32c3ca8-e53b-4ba6-b62f-c65139372373",
+      "name": "AUTO ECOLE ASTRALE",
+      "region": "Centre",
+      "city": "Yaoundé",
+      "main_category": "autres"
+    }
+  ]
 }

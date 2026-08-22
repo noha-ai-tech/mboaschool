@@ -1,8 +1,19 @@
 {
   "sprint": "REGISTRY-NATIONAL-C",
-  "generated_at": "2026-08-22T05:12:23.230Z",
-  "report": "execution",
-  "status": "NOT_EXECUTED",
-  "reason": "Aucune écriture --commit effectuée ce sprint — decision=B (jamais A). §19-20 du brief hors périmètre tant qu'une approbation humaine nommée distincte n'est pas reçue.",
-  "decision": "B"
+  "generated_at": "2026-08-22T05:20:17.509Z",
+  "operator": "jean-merlain",
+  "approved_by": "Eddy",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "approval_checksum": "c22e1b88e1cb1026f0115d7d118abcccc4a832bb3375e9fd62e7ed754f7849ce",
+  "eligible": 3,
+  "created": 3,
+  "staging_linked": 3,
+  "identifiers_inserted": 0,
+  "establishments_before": 2249,
+  "establishments_after": 2252,
+  "staging_before": 2378,
+  "staging_after": 2378,
+  "registry_identifiers_before": 2242,
+  "registry_identifiers_after": 2242,
+  "outcome": "SUCCESS"
 }

@@ -130,3 +130,56 @@ Le futur CMS devra respecter trois classes de champs (détail complet :
 
 **Le CMS ne doit jamais donner à un owner le droit d'auto-valider un
 agrément.**
+
+## 8. ADDENDUM — Première publication nationale exécutée (2026-08-22)
+
+Autorisation nommée reçue : "Je, Jean Merlain, autorise explicitement la
+publication dans l'annuaire Écoles237 des 3 candidats du snapshot
+REGISTRY-NATIONAL-B correspondant au checksum
+`c22e1b88e1cb1026f0115d7d118abcccc4a832bb3375e9fd62e7ed754f7849ce`,
+approuvée par Eddy."
+
+Commande exécutée avec les flags exacts autorisés :
+
+```
+npx tsx scripts/school-registry/registry-national-c-publish.ts --commit \
+  --expected-count=3 \
+  --approval-checksum=c22e1b88e1cb1026f0115d7d118abcccc4a832bb3375e9fd62e7ed754f7849ce \
+  --confirm="PUBLISH_NATIONAL_REGISTRY_TO_DIRECTORY" \
+  --operator="jean-merlain" \
+  --approved-by="Eddy"
+```
+
+**Résultat : SUCCESS. 3/3 établissements créés** dans `establishments`
+(tous MINTRANSPORT Tier-3, `CREATE_PUBLISHABLE_UNVERIFIED`) : École de
+Formation (EFO) - CCAA, Centre de formation professionnelle maritime
+« Le Paquebot », AUTO ECOLE ASTRALE.
+
+Vérification post-écriture indépendante (lecture fraîche Supabase,
+`registry-national-c-final-postverify.json`) : `establishments` 2249→2252
+(+3 exactement), `staging` inchangé (2378), `registry_identifiers`
+inchangé (2242, **0 identifiant créé pour ces 3** — conforme à la
+politique §27 du brief C). Les 3 lignes ont `owner_id IS NULL`,
+`is_verified=false`, `official_id IS NULL`. Les 3 lignes staging
+correspondantes sont correctement liées (`status='promoted'`,
+`promoted_establishment_id` exact).
+
+Idempotence prouvée par un vrai second passage (dry-run, jamais un
+second `--commit`) : eligible=0, would-insert=0, les 3 candidats
+correctement exclus via `staging_row_missing_or_already_promoted`.
+
+Sécurité publique vérifiée en direct (serveur dev local) :
+`/api/recherche` retourne les 3 nouveaux établissements
+(`is_verified: false`, `is_claimed: false` dans la réponse — jamais
+"officiellement vérifié"), les 3 fiches `/ecole/[id]` et une page
+`/revendiquer/[id]` retournent 200, **aucun badge "Vérifié"/"Vérification
+officielle" ne s'affiche** sur la fiche d'un établissement non vérifié —
+l'invariant `PUBLISHED != OFFICIALLY_VERIFIED` tient en production réelle,
+pas seulement en simulation.
+
+`establishments` : 2249→2252. `registry_identifiers` : inchangé. Aucune
+promotion additionnelle, aucune vérification automatique, aucun
+identifiant officiel inventé. Push : NON. Deploy : NON.
+
+**REGISTRY NATIONAL PUBLICATION CLOSED : YES** (pour ce premier lot de 3).
+REGISTRY-NATIONAL-D / CMS non commencés.
