@@ -403,3 +403,69 @@ supplémentaire.
 côté recherche publique — les identifiants de registre restent
 `platform_admin`-only (§10.2, RLS). Suite de tests existante (49 tests
 extraction+search) rejouée sans modification ce sprint, voir rapport final.
+
+## 11. ADDENDUM — SPRINT REGISTRY-NATIONAL-A (2026-08-22)
+
+Addendum uniquement — rien ci-dessus n'est réécrit. READ-ONLY vis-à-vis de
+la base (aucun INSERT/UPDATE/DELETE), voir
+`reports/registry/registry-national-a-summary.json` pour la synthèse
+complète et `reports/registry/registry-national-a-*.{json,csv}` pour tous
+les rapports détaillés.
+
+### 11.1 Correction de dérive documentaire — migrations 0018/0021
+
+Les en-têtes de `supabase/migrations/0018_registry_identity_fields.sql` et
+`0021_establishment_registry_identifiers.sql` affirment toujours
+« PRÉPARÉE MAIS NON EXÉCUTÉE ». **Vérifié en direct ce sprint (requêtes
+Supabase réelles, pas une supposition)** : les deux migrations SONT
+exécutées en production — `establishments.official_id/source_ministry/
+source_reference/source_url` existent et sont peuplés (2196/2249 lignes ont
+`source_ministry` non nul), et `establishment_registry_identifiers` existe
+et contient 2242 lignes. Les commentaires de ces deux fichiers sont
+obsolètes et ne doivent plus être considérés comme l'état courant — un futur
+sprint devrait les corriger formellement (hors périmètre ici, READ-ONLY).
+
+### 11.2 Modèle de confiance à 3 dimensions généralisé au national
+
+`scripts/school-registry/lib/nationalRegistry/publicationPolicy.ts` généralise
+`transportTier3TrustModel.ts` (conservé inchangé) à un classement national à
+10 catégories (§8 A-J du brief) via `evaluateNationalPublicationReadiness()`
+— fonction pure, aucune écriture. Invariant testé (28 tests,
+`lib/nationalRegistry/__tests__/publicationPolicy.test.ts`) : `PUBLISHED !=
+OFFICIALLY_VERIFIED`, et un candidat Tier-3-only ne peut structurellement
+jamais atteindre `CREATE_OFFICIALLY_VERIFIED`.
+
+### 11.3 Univers national consolidé (résultat de ce sprint)
+
+131 candidats nationaux consolidés (MINESUP + MINEFOP + MINSANTE +
+MINTRANSPORT) : 97 déjà live, 29 nouveaux candidats staging non promus, 5
+différés (Transport, `MISSING_SOURCE_URL`). 0 candidat MINEFOP (discovery
+uniquement, confirmé). 3 candidats `CREATE_PUBLISHABLE_UNVERIFIED` (tous
+Tier-3 Transport), 0 `CREATE_OFFICIALLY_VERIFIED`. Détail complet :
+`reports/registry/registry-national-a-publication-manifest.csv`.
+
+### 11.4 Blocage sémantique UI identifié (Decision B)
+
+Audit §24 : le badge public « Vérifié » (`SchoolHeroCarousel.tsx`,
+`SchoolCard.tsx`, page `/revendiquer/[id]`) est piloté uniquement par
+`establishments.is_verified`, un booléen générique totalement déconnecté du
+modèle à 3 dimensions — et l'action admin `POST
+/api/admin/ecoles/[id]/verifier` peut le mettre à `true` sur n'importe quel
+établissement sans référence à `official_id`/`source_ministry`. Aucune
+incohérence dans les DONNÉES actuelles (0/97 établissements ministériels
+live n'ont `is_verified=true`), mais rien dans le code n'empêche une future
+confusion une fois des candidats `CREATE_PUBLISHABLE_UNVERIFIED` publiés.
+**REGISTRY-NATIONAL-B ne doit pas démarrer avant un sprint
+REGISTRY-NATIONAL-A.1 dédié à cette clarification sémantique.** Détail :
+`reports/registry/registry-national-a-ui-semantics.json`.
+
+### 11.5 MINSANTE-I — écart de consolidation documenté, pas comblé
+
+L'extraction nationale MINSANTE-I (167 établissements, 8/10 filières SAFE)
+n'existe que sous forme d'agrégats statistiques versionnés — aucun fichier
+durable listant les 167 établissements nominativement n'a été retrouvé.
+Ce sprint ne les a donc PAS consolidés comme candidats individuels (aurait
+été une fabrication à partir d'agrégats). Un futur sprint devra d'abord
+persister la liste nominative avant toute consolidation nationale de ces
+167 établissements. Le blocage documentaire Imagerie Médicale
+(`QUARANTINED_NUMBERING_ABSENT`, MINSANTE-I.2) reste préservé tel quel.

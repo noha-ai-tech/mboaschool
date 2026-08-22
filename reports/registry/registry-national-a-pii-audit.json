@@ -1,0 +1,8 @@
+{
+  "sprint": "REGISTRY-NATIONAL-A",
+  "generated_at": "2026-08-22T03:59:48.628Z",
+  "PII_CANDIDATES": [],
+  "PII_FIELDS": [],
+  "BLOCKED_BY_PII": 0,
+  "note": "Scan conservateur (§18) sur name + region/city + raw_data sérialisé pour les candidats staging. Aucun champ PII n'est copié dans les rapports publiables — seuls les IDENTIFIANTS de candidat et les NOMS DE CHAMP détectés sont listés ici, jamais la valeur PII elle-même."
+}

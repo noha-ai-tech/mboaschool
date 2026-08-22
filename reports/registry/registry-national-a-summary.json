@@ -1,0 +1,123 @@
+{
+  "sprint": "REGISTRY-NATIONAL-A",
+  "generated_at": "2026-08-22T03:59:49.079Z",
+  "team": {
+    "operator": "jean-merlain/Eddy (contexte hérité)",
+    "repository": "mboaschool",
+    "branch": "main",
+    "head": "2e8313ec669cd12db5e510afa8baa04da8755504",
+    "remote": "noha (aucun push effectué)"
+  },
+  "database": {
+    "establishments_before": 2249,
+    "establishments_after": 2249,
+    "staging_before": 2378,
+    "staging_after": 2378,
+    "registry_identifiers_before": 2242,
+    "registry_identifiers_after": 2242,
+    "production_writes": 0,
+    "delta_establishments": 0,
+    "delta_staging": 0,
+    "delta_registry_identifiers": 0,
+    "safety_ok": true
+  },
+  "universe": {
+    "total_source_records": 228,
+    "national_unique_candidates": 131,
+    "already_live": 97,
+    "unpromoted_staging": 29,
+    "cross_ministry_candidates": 0
+  },
+  "ministries": {
+    "MINESUP": {
+      "live": 89,
+      "staging_unpromoted_new_candidates": 3,
+      "registry_identifiers": 146,
+      "officially_verified_preserved": 74,
+      "note": "Preuves officielles existantes (registry_identifiers MINESUP_IPES) préservées telles quelles — aucun candidat OFFICIALLY_VERIFIED dégradé en UNVERIFIED (§13)."
+    },
+    "MINEFOP": {
+      "live": 0,
+      "staging_unpromoted_new_candidates": 0,
+      "registry_identifiers": 0,
+      "national_candidates_in_universe": 0,
+      "note": "Confirmé §14 : MINEFOP reste au stade discovery, 0 candidat en staging, 0 candidat national construit. Fleet Management Academy reste un candidat MINTRANSPORT différé (source_ministries=['MINTRANSPORT']) — son agrément MINEFOP réel N°000471 n'apparaît qu'en cross_ministry_evidence documentaire, JAMAIS comme authority=MINTRANSPORT."
+    },
+    "MINSANTE": {
+      "live": 8,
+      "staging_unpromoted_new_candidates": 14,
+      "registry_identifiers": 0,
+      "imagerie_medicale_documentary_blocker": "QUARANTINED_NUMBERING_ABSENT",
+      "imagerie_medicale_note": "Statut documentaire préservé tel quel (MINSANTE-I/I.1/I.2) — jamais reconstruit comme SAFE ce sprint. Aucun des 22 candidats staging MINSANTE en périmètre n'appartient à la filière Imagerie Médicale (vérifié : 0/22 mentionnent 'Imagerie' dans programs_normalized).",
+      "minsante_i_national_extraction_gap": "MINSANTE-I a produit une extraction nationale agrégée (167 établissements uniques, 8/10 filières SAFE) mais SEULEMENT sous forme d'agrégats statistiques versionnés (reports/registry/minsante-i-*.json/csv) — AUCUN fichier durable listant les 167 établissements nominativement (noms/villes/régions par ligne) n'a été retrouvé dans le dépôt. Conformément à §4 ('ne jamais inventer une valeur manquante') et §6, ce sprint NE consolide PAS ces 167 établissements comme candidats nationaux individuels — les inventer à partir des seuls agrégats serait une fabrication. Recommandation : un futur sprint MINSANTE-J devrait d'abord PERSISTER la liste nominative complète (durable, réexaminable) avant qu'une consolidation nationale individuelle soit possible."
+    },
+    "MINTRANSPORT": {
+      "live": 0,
+      "staging_candidates": 12,
+      "staging_all_unverified": true,
+      "staging_all_unpromoted": true,
+      "deferred_candidates": 5,
+      "note": "Recalculé en direct (pas supposé) : 12 lignes staging MINTRANSPORT trouvées (référence historique du brief : 12). Toutes UNVERIFIED=true, toutes non promues=true. 5 candidats différés (MISSING_SOURCE_URL) retrouvés dans transport-a2-t3-import-exec-deferred.csv, y compris Fleet Management Academy (TC-17)."
+    }
+  },
+  "publication_manifest": {
+    "TOTAL_DISCOVERED_UNIVERSE": 131,
+    "ALREADY_LIVE": 97,
+    "CREATE_OFFICIALLY_VERIFIED": 0,
+    "CREATE_PUBLISHABLE_UNVERIFIED": 3,
+    "LINK_TO_EXISTING": 0,
+    "ADD_REGISTRY_IDENTIFIER": 0,
+    "DUPLICATE_REVIEW": 8,
+    "IDENTITY_REVIEW": 2,
+    "SOURCE_REVIEW": 6,
+    "CONFLICT_REVIEW": 0,
+    "CATEGORY_REVIEW": 10,
+    "PII_BLOCKED": 0,
+    "DEFERRED": 5
+  },
+  "trust": {
+    "officially_verified": 74,
+    "publishable_unverified": 3,
+    "unresolved": 6,
+    "conflicting": 2,
+    "invented_official_ids": 0
+  },
+  "cross_ministry": {
+    "same_institution": 0,
+    "probable_same": 0,
+    "ambiguous": 0,
+    "distinct": 0,
+    "conflicts": 0
+  },
+  "slugs": {
+    "would_create": 3,
+    "existing_collisions": 0,
+    "batch_collisions": 0,
+    "blocking": 0
+  },
+  "publication_simulation": {
+    "sprint": "REGISTRY-NATIONAL-A",
+    "generated_at": "2026-08-22T03:59:48.652Z",
+    "note": "DRY-RUN ARITHMÉTIQUE UNIQUEMENT — rien n'est écrit.",
+    "CURRENT_ESTABLISHMENTS": 2249,
+    "WOULD_CREATE_OFFICIALLY_VERIFIED": 0,
+    "WOULD_CREATE_PUBLISHABLE_UNVERIFIED": 3,
+    "WOULD_LINK_EXISTING": 0,
+    "WOULD_ADD_IDENTIFIERS": 0,
+    "WOULD_SKIP_OR_DEFER": 31,
+    "EXPECTED_ESTABLISHMENTS_AFTER": 2252
+  },
+  "public_ui": {
+    "published_vs_verified_distinction_safe": false,
+    "blocking_semantic_issue": true
+  },
+  "cms": {
+    "readiness": "CMS_BLOCKERS_REMAIN",
+    "remaining_blockers": 3
+  },
+  "decision": "B",
+  "ready_for_registry_national_b": false,
+  "ready_for_cms": false,
+  "push": "NO",
+  "deploy": "NO"
+}

@@ -1,0 +1,45 @@
+{
+  "sprint": "REGISTRY-NATIONAL-A",
+  "generated_at": "2026-08-22T03:59:48.656Z",
+  "stable_fields": [
+    "name",
+    "region",
+    "city",
+    "main_category",
+    "sub_category",
+    "source_ministry",
+    "official_id",
+    "source_reference",
+    "source_url"
+  ],
+  "should_be_editable_by_owner": [
+    "description",
+    "phone",
+    "whatsapp",
+    "email",
+    "website",
+    "address",
+    "neighborhood",
+    "logo_url",
+    "cover_image_url",
+    "couleur_primaire",
+    "couleur_secondaire"
+  ],
+  "should_be_protected_from_owner_edit": [
+    "official_id",
+    "source_ministry",
+    "source_reference",
+    "source_url",
+    "registry_import_batch",
+    "establishment_registry_identifiers.* (table entière, RLS server-only déjà en place, aucune policy insert/update pour un rôle applicatif)"
+  ],
+  "ministerial_evidence_must_stay_non_editable": true,
+  "claim_interaction_with_official_verification": "Une revendication (claim) approuvée doit UNIQUEMENT accorder owner_id/is_claimed — jamais modifier official_verification/official_id/source_ministry. Le flux actuel (/api/admin/claims/[id]/approve, non audité en détail ce sprint) doit être vérifié séparément pour confirmer cette séparation avant le CMS.",
+  "prevent_owner_self_declared_official_verification": "Aucun champ éditable par le propriétaire ne doit pouvoir écrire dans official_id/source_ministry/establishment_registry_identifiers ni dans un futur official_verification. Le badge de vérification officielle doit rester dérivé UNIQUEMENT de colonnes server-only alimentées par les pipelines ministériels contrôlés, jamais par un formulaire self-service.",
+  "decision": "CMS_BLOCKERS_REMAIN",
+  "remaining_blockers": [
+    "Distinction sémantique publique 'publié' vs 'officiellement vérifié' non résolue (§24) — un CMS construit avant cette clarification hériterait du même risque de confusion.",
+    "Aucun champ official_verification à 3 dimensions n'existe encore sur establishments (aujourd'hui seulement official_id/source_ministry, pas de statut explicite) — le CMS devra afficher/protéger un concept qui n'a pas encore de colonne dédiée.",
+    "Le flux de claim/verify générique existant (is_verified booléen unique) devra être réconcilié avec le nouveau modèle à 3 dimensions avant qu'un propriétaire puisse interagir en toute sécurité avec sa fiche."
+  ]
+}

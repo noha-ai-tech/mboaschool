@@ -1,0 +1,38 @@
+{
+  "sprint": "REGISTRY-NATIONAL-A",
+  "generated_at": "2026-08-22T03:59:48.659Z",
+  "note": "Consolidation UNIQUEMENT de ce qui a déjà été trouvé (§4) — aucune nouvelle découverte web nationale.",
+  "ministries": {
+    "MINESUP": {
+      "live": 89,
+      "staging_unpromoted_new_candidates": 3,
+      "registry_identifiers": 146,
+      "officially_verified_preserved": 74,
+      "note": "Preuves officielles existantes (registry_identifiers MINESUP_IPES) préservées telles quelles — aucun candidat OFFICIALLY_VERIFIED dégradé en UNVERIFIED (§13)."
+    },
+    "MINEFOP": {
+      "live": 0,
+      "staging_unpromoted_new_candidates": 0,
+      "registry_identifiers": 0,
+      "national_candidates_in_universe": 0,
+      "note": "Confirmé §14 : MINEFOP reste au stade discovery, 0 candidat en staging, 0 candidat national construit. Fleet Management Academy reste un candidat MINTRANSPORT différé (source_ministries=['MINTRANSPORT']) — son agrément MINEFOP réel N°000471 n'apparaît qu'en cross_ministry_evidence documentaire, JAMAIS comme authority=MINTRANSPORT."
+    },
+    "MINSANTE": {
+      "live": 8,
+      "staging_unpromoted_new_candidates": 14,
+      "registry_identifiers": 0,
+      "imagerie_medicale_documentary_blocker": "QUARANTINED_NUMBERING_ABSENT",
+      "imagerie_medicale_note": "Statut documentaire préservé tel quel (MINSANTE-I/I.1/I.2) — jamais reconstruit comme SAFE ce sprint. Aucun des 22 candidats staging MINSANTE en périmètre n'appartient à la filière Imagerie Médicale (vérifié : 0/22 mentionnent 'Imagerie' dans programs_normalized).",
+      "minsante_i_national_extraction_gap": "MINSANTE-I a produit une extraction nationale agrégée (167 établissements uniques, 8/10 filières SAFE) mais SEULEMENT sous forme d'agrégats statistiques versionnés (reports/registry/minsante-i-*.json/csv) — AUCUN fichier durable listant les 167 établissements nominativement (noms/villes/régions par ligne) n'a été retrouvé dans le dépôt. Conformément à §4 ('ne jamais inventer une valeur manquante') et §6, ce sprint NE consolide PAS ces 167 établissements comme candidats nationaux individuels — les inventer à partir des seuls agrégats serait une fabrication. Recommandation : un futur sprint MINSANTE-J devrait d'abord PERSISTER la liste nominative complète (durable, réexaminable) avant qu'une consolidation nationale individuelle soit possible."
+    },
+    "MINTRANSPORT": {
+      "live": 0,
+      "staging_candidates": 12,
+      "staging_all_unverified": true,
+      "staging_all_unpromoted": true,
+      "deferred_candidates": 5,
+      "note": "Recalculé en direct (pas supposé) : 12 lignes staging MINTRANSPORT trouvées (référence historique du brief : 12). Toutes UNVERIFIED=true, toutes non promues=true. 5 candidats différés (MISSING_SOURCE_URL) retrouvés dans transport-a2-t3-import-exec-deferred.csv, y compris Fleet Management Academy (TC-17)."
+    }
+  },
+  "total_candidates": 131
+}

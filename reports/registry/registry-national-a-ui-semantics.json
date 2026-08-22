@@ -1,0 +1,29 @@
+{
+  "sprint": "REGISTRY-NATIONAL-A",
+  "generated_at": "2026-08-22T03:59:48.654Z",
+  "CURRENT_BEHAVIOR": {
+    "badge": "src/components/school/SchoolHeroCarousel.tsx et src/components/schools/SchoolCard.tsx affichent un badge public '✓ Vérifié'/'Vérifiée' piloté UNIQUEMENT par establishments.is_verified (booléen générique).",
+    "claim_page": "src/app/revendiquer/[id]/page.tsx affiche le même badge 'Vérifiée' à partir de is_verified, sans référence à source_ministry/official_id.",
+    "search_page": "src/app/recherche/page.tsx et /api/recherche exposent is_verified/is_claimed au client, avec la même sémantique générique.",
+    "admin_action": "POST /api/admin/ecoles/[id]/verifier (src/app/api/admin/ecoles/[id]/verifier/route.ts) : n'importe quel platform_admin ayant la permission 'manage_schools' peut définir is_verified=true sur N'IMPORTE QUEL établissement, sans aucune vérification de official_id/source_ministry/registre officiel. Action générique, totalement déconnectée du modèle de confiance à 3 dimensions construit par les sprints MINESUP/MINSANTE/MINTRANSPORT.",
+    "current_data_state": "is_verified=true sur seulement 3/2249 lignes live aujourd'hui (aucune ne provient d'un ministère en périmètre) ; is_verified=false sur les 89 MINESUP et 8 MINSANTE déjà live (dont plusieurs sont réellement OFFICIALLY_VERIFIED côté registry_identifiers/official_id) — AUCUNE incohérence visible aujourd'hui, mais rien dans le schéma ni l'UI n'empêche qu'un admin clique 'Vérifier' sur un futur établissement UNVERIFIED (ex. Tier-3 Transport) une fois publié, faisant alors apparaître le même badge '✓ Vérifié' que pour un établissement réellement corroboré par un registre ministériel."
+  },
+  "RISKS": [
+    "Le badge public 'Vérifié' ne distingue à aucun endroit : (a) une fiche revendiquée par son propriétaire, (b) une fiche officiellement vérifiée par un ministère (official_id/registry_identifiers), (c) une fiche publiée mais officiellement UNVERIFIED.",
+    "L'action admin 'Vérifier' est un simple bouton texte sans contexte affiché sur official_verification — un admin pourrait de bonne foi vérifier une fiche Tier-3 UNVERIFIED en pensant confirmer sa simple existence, ce qui afficherait publiquement un badge trompeur.",
+    "Aucun texte, tooltip ou distinction visuelle n'indique la source ministérielle ni son niveau de preuve sur /ecole/[id] ou /recherche."
+  ],
+  "REQUIRED_BEFORE_PUBLICATION": [
+    "Distinguer visuellement/textuellement 'présent dans l'annuaire' de 'officiellement vérifié' avant toute publication de candidats CREATE_PUBLISHABLE_UNVERIFIED.",
+    "Faire dépendre le badge public d'un état dérivé de official_verification/source_ministry/registry_identifiers pour les fiches issues du registre national, pas uniquement du is_verified générique.",
+    "Contraindre ou avertir explicitement l'action admin 'Vérifier' pour qu'elle ne puisse pas silencieusement 'vérifier officiellement' une fiche UNVERIFIED issue d'une source Tier 3."
+  ],
+  "OPTIONAL_LATER": [
+    "Badge dédié par ministère source.",
+    "Page dédiée expliquant la méthodologie du registre national aux utilisateurs.",
+    "Filtrage recherche par niveau de vérification."
+  ],
+  "CENTRAL_QUESTION": "Est-ce que publier un établissement UNVERIFIED pourrait actuellement faire croire à l'utilisateur qu'il est officiellement vérifié ?",
+  "ANSWER": "OUI — démontré par le code actuel (badge 'Vérifié' générique + action admin non contrainte), même si aucune incohérence n'est visible dans les DONNÉES actuelles.",
+  "CONCLUSION": "BLOQUE REGISTRY-NATIONAL-B jusqu'à correction UI/sémantique (§24, §30 Decision B)."
+}

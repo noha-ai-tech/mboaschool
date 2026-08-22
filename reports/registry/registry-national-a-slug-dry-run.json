@@ -1,0 +1,31 @@
+{
+  "sprint": "REGISTRY-NATIONAL-A",
+  "generated_at": "2026-08-22T03:59:48.631Z",
+  "SLUG_VALID": 3,
+  "SLUG_EXISTING_COLLISIONS": 0,
+  "SLUG_BATCH_COLLISIONS": 0,
+  "note": "Aucune écriture. Une collision non résolue bloque UNIQUEMENT le candidat concerné, jamais tout le manifest (§20).",
+  "details": [
+    {
+      "candidateId": "NAT-STG-e32c3ca8-e53b-4ba6-b62f-c65139372373",
+      "proposedSlug": "auto-ecole-astrale",
+      "existingCollision": false,
+      "batchCollisionWith": [],
+      "valid": true
+    },
+    {
+      "candidateId": "NAT-STG-c8491b99-30b0-449e-9689-97ca3521fd7a",
+      "proposedSlug": "centre-de-formation-professionnelle-maritime-le-paquebot",
+      "existingCollision": false,
+      "batchCollisionWith": [],
+      "valid": true
+    },
+    {
+      "candidateId": "NAT-STG-b8ddca4c-475c-4320-86e4-d9392f36cb8b",
+      "proposedSlug": "ecole-de-formation-efo-ccaa",
+      "existingCollision": false,
+      "batchCollisionWith": [],
+      "valid": true
+    }
+  ]
+}

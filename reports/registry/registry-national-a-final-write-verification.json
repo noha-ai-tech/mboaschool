@@ -1,0 +1,23 @@
+{
+  "sprint": "REGISTRY-NATIONAL-A",
+  "generated_at": "2026-08-22T04:00:10.847Z",
+  "note": "Recompte INDÉPENDANT (§28) — script séparé de registry-national-a-build.ts, requêtes fraîches, aucune valeur réutilisée du run précédent sauf le baseline.totals déjà écrit en §3 comme référence de comparaison.",
+  "baseline_reference": {
+    "establishments": 2249,
+    "staging": 2378,
+    "registry_identifiers": 2242
+  },
+  "recount_now": {
+    "establishments": 2249,
+    "staging": 2378,
+    "registry_identifiers": 2242,
+    "mintransport_staging": 12
+  },
+  "deltas": {
+    "establishments": 0,
+    "staging": 0,
+    "registry_identifiers": 0
+  },
+  "safety_ok": true,
+  "decision_if_unsafe": "SAFETY_FAILURE"
+}

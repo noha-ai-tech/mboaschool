@@ -1,0 +1,92 @@
+{
+  "sprint": "REGISTRY-NATIONAL-A",
+  "generated_at": "2026-08-22T03:59:44.530Z",
+  "repository": {
+    "branch": "main",
+    "head": "2e8313ec669cd12db5e510afa8baa04da8755504",
+    "noha_main": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+    "working_tree_clean": false
+  },
+  "totals": {
+    "establishments": 2249,
+    "staging": 2378,
+    "registry_identifiers": 2242
+  },
+  "historical_reference_only_not_authoritative": {
+    "establishments": 2249,
+    "staging": 2378,
+    "registry_identifiers": 2242,
+    "mintransport_staging": 12
+  },
+  "per_ministry": {
+    "MINEDUB": {
+      "live_establishments": 0,
+      "staging_total": 0,
+      "staging_promoted": 0,
+      "staging_unpromoted": 0
+    },
+    "MINESEC": {
+      "live_establishments": 1938,
+      "staging_total": 1942,
+      "staging_promoted": 1265,
+      "staging_unpromoted": 677
+    },
+    "MINESUP": {
+      "live_establishments": 89,
+      "staging_total": 92,
+      "staging_promoted": 89,
+      "staging_unpromoted": 3
+    },
+    "MINEFOP": {
+      "live_establishments": 0,
+      "staging_total": 0,
+      "staging_promoted": 0,
+      "staging_unpromoted": 0
+    },
+    "MINSANTE": {
+      "live_establishments": 8,
+      "staging_total": 22,
+      "staging_promoted": 8,
+      "staging_unpromoted": 14
+    },
+    "MINADER": {
+      "live_establishments": 0,
+      "staging_total": 0,
+      "staging_promoted": 0,
+      "staging_unpromoted": 0
+    },
+    "MINEPIA": {
+      "live_establishments": 0,
+      "staging_total": 0,
+      "staging_promoted": 0,
+      "staging_unpromoted": 0
+    },
+    "MINFOF": {
+      "live_establishments": 0,
+      "staging_total": 0,
+      "staging_promoted": 0,
+      "staging_unpromoted": 0
+    },
+    "MINTRANSPORT": {
+      "live_establishments": 0,
+      "staging_total": 12,
+      "staging_promoted": 0,
+      "staging_unpromoted": 12
+    },
+    "OTHER": {
+      "live_establishments": 161,
+      "staging_total": 310,
+      "staging_promoted": 161,
+      "staging_unpromoted": 149
+    }
+  },
+  "registry_identifiers_by_authority": {
+    "MINESUP": 146,
+    "MINESEC": 2096
+  },
+  "establishments_with_multiple_registry_authorities": 0,
+  "documentation_drift_findings": [
+    "supabase/migrations/0018_registry_identity_fields.sql en-tête dit 'PRÉPARÉE MAIS NON EXÉCUTÉE' — vérifié en direct : establishments.official_id/source_ministry/source_reference/source_url EXISTENT et sont peuplés en production (2196/2249 lignes ont source_ministry non nul). Commentaire de fichier obsolète, contredit par l'état réel de la base.",
+    "supabase/migrations/0021_establishment_registry_identifiers.sql en-tête dit 'PRÉPARÉE MAIS NON EXÉCUTÉE' — vérifié en direct : la table establishment_registry_identifiers EXISTE et contient 2242 lignes en production. Commentaire de fichier obsolète. La mémoire projet ('migration 0021 still prepared-not-executed') est donc également obsolète et NE DOIT PLUS être considérée comme l'état courant."
+  ]
+}
