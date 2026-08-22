@@ -687,8 +687,8 @@ export default function HomePage() {
               <LandingStatCard
                 icon={CheckCircle2}
                 value={loading ? "—" : statVerified.toLocaleString("fr-FR")}
-                label="Établissements vérifiés"
-                description="Contrôlés par notre équipe."
+                label="Vérifiés par Écoles237"
+                description="Contrôlés par notre équipe — vérification interne, pas un agrément ministériel."
               />
               <LandingStatCard
                 icon={MapPin}

@@ -1,0 +1,86 @@
+{
+  "sprint": "REGISTRY-NATIONAL-A.1 — PUBLIC TRUST SEMANTICS HARDENING",
+  "team": { "operator": "Claude Code (agent SDK)", "repository": "mboaschool", "branch": "main", "commit_before": "8609db385fc0d55c55c03f753ef49180e4a48369" },
+  "database": {
+    "establishments": { "before": 2249, "after": 2249 },
+    "staging": { "before": 2378, "after": 2378 },
+    "registry_identifiers": { "before": 2242, "after": 2242 },
+    "writes": 0
+  },
+  "trust_model": {
+    "directory_presence": "LISTED — établissement présent dans establishments, aucune signification supplémentaire.",
+    "claim_status": "UNCLAIMED / CLAIM_PENDING / CLAIMED — dérivé de owner_id/is_claimed/verification_status, jamais une preuve ministérielle.",
+    "platform_verification": "PLATFORM_VERIFIED / NOT_PLATFORM_VERIFIED — dérivé de is_verified, vérification interne Écoles237 uniquement.",
+    "official_verification": "OFFICIALLY_VERIFIED / OFFICIAL_SOURCE_FOUND / UNVERIFIED / CONFLICTING — exige une preuve establishment_registry_identifiers.verification_status CORROBORATED/CONFIRMED. 0/2242 identifiants ont ce statut en production à ce jour."
+  },
+  "current_is_verified": {
+    "meaning_before": "Booléen générique piloté par un bouton admin 'Vérifier' et un toggle 'École vérifiée' — badge public affiché 'Vérifié' sans contexte, lisible comme une vérification ministérielle.",
+    "meaning_after": "PLATFORM_VERIFIED explicite — badge public 'Vérifié par Écoles237', bouton admin 'Marquer vérifié par Écoles237', toggle avec description explicite. Colonne DB inchangée (Option A, §5).",
+    "backward_compatibility": "Totale côté DB et API (aucun champ renommé/retiré) — seul le RENDU UI a changé."
+  },
+  "public_ui": {
+    "school_page": "SchoolHeroCarousel — remplace prop `verified: boolean` par `trustBadge: {label} | null`, calculé via resolveEstablishmentTrustState()/getPrimaryPublicBadge() sur /ecole/[id] (accès complet à official_id/source_ministry côté client, mais official_verification plafonné à OFFICIAL_SOURCE_FOUND faute d'accès registry_identifiers).",
+    "search_cards": "SchoolCard.tsx + recherche/page.tsx + categorie/[slug]/page.tsx (2 emplacements) — label 'Vérifié' -> 'Vérifié par Écoles237' via TRUST_BADGE_LABELS.PLATFORM_VERIFIED, aucun changement de source de données.",
+    "carousels": "SchoolCard (featured/homepage carousel) + homepage stat card — corrigés.",
+    "claim_page": "/revendiquer et /revendiquer/[id] — badge corrigé, aucun champ de confiance owner-editable exposé (déjà sûr avant ce sprint, confirmé par audit).",
+    "ambiguous_badges_remaining": "AUCUN badge public nu 'Vérifié'/'Vérifiée' identifié restant après correction (12 emplacements corrigés, voir registry-national-a1-public-ui-map.csv). Un seul nom hors-sujet non modifié : plan commercial 'Vérifiée' (dashboard/admin/abonnements) — collision de nomenclature signalée, hors périmètre (décision produit commerciale séparée, pas un badge établissement)."
+  },
+  "admin": {
+    "verify_action_before": "Bouton 'Vérifier' — question critique auditée : effectue UNIQUEMENT verification_status='verified', is_verified=true. Aucune vérification ministérielle.",
+    "verify_action_after": "Bouton 'Marquer vérifié par Écoles237' — même route API, même effet DB, libellé honnête. Toggle 'École vérifiée' renommé + description explicite.",
+    "can_admin_accidentally_imply_official_verification": "NON après ce sprint — tous les libellés admin liés à is_verified/verification_status précisent désormais 'Écoles237'/'plateforme'. official_verification reste une dimension distincte, non exposée dans une UI admin dédiée ce sprint (résolveur prêt, panneau visuel hors périmètre minimal §15)."
+  },
+  "claims": {
+    "owner_can_edit_official_verification": false,
+    "owner_can_edit_registry_identifiers": false,
+    "owner_can_edit_registry_provenance": false,
+    "note": "Confirmé par lecture directe de /api/claims (whitelist stricte de 6 champs texte) — aucune modification de code nécessaire, seule la documentation a été renforcée."
+  },
+  "api": {
+    "old_is_verified_exposed": true,
+    "new_trust_fields": "Aucun nouveau champ ajouté au wire format de /api/recherche (décision délibérée §12/§13 — éviter tout risque de régression Search V2 pour un bénéfice nul aujourd'hui, 0 établissement OFFICIALLY_VERIFIED en production). Contrat conceptuel documenté pour un futur endpoint dédié dans registry-national-a1-api-contract.json.",
+    "backward_compatibility": "Totale — 0 changement de wire format."
+  },
+  "migration": { "required": false, "prepared": false, "executed": false, "decision": "NO_MIGRATION_REQUIRED" },
+  "search_v2": { "regression": false, "staging_leakage": 0, "tests": "22/22 (queryBuilder) + full build succeeded" },
+  "cms": {
+    "registry_protected_fields": ["official_id", "source_ministry", "source_reference", "source_url", "source_updated_at", "registry_import_batch", "establishment_registry_identifiers.*", "establishment_import_staging.promoted_establishment_id/duplicate_of_establishment_id"],
+    "cms_readiness": "PARTIAL — résolveur et classification des champs prêts et documentés ; policy RLS UPDATE dédiée owner-facing avec exclusion explicite des champs registre reste à ajouter avant tout formulaire CMS réel (aucun CMS construit ce sprint)."
+  },
+  "qa": {
+    "build": "npm run build — succès, 73 pages générées",
+    "typescript_app": "npx tsc --noEmit — 0 erreur",
+    "typescript_registry": "npx tsc --noEmit -p scripts/school-registry/tsconfig.json — 0 erreur",
+    "tests": "95/95 (queryBuilder 22 + registryReview + resolveEstablishmentTrustState 27 + publicationPolicy) — 0 échec",
+    "dev_server_manual_check": "Serveur démarré localement (npm run dev, Ready in 3.6s), pages /, /recherche, /qui-sommes-nous, /ecole/[id], /revendiquer/[id], /preinscription toutes HTTP 200, /api/recherche retourne un JSON valide avec is_verified/is_claimed intacts. Serveur arrêté proprement après vérification (port 3000 libéré)."
+  },
+  "database_final_recheck": { "establishments_delta": 0, "staging_delta": 0, "registry_identifiers_delta": 0 },
+  "decision": "A",
+  "decision_label": "PUBLIC_TRUST_SEMANTICS_SAFE",
+  "ready_for_registry_national_b": "YES",
+  "ready_for_cms_after_registry_publication": "PARTIAL",
+  "push": "NO",
+  "deploy": "NO",
+  "files_changed": [
+    "src/lib/trust/resolveEstablishmentTrustState.ts (nouveau — résolveur central)",
+    "src/lib/trust/__tests__/resolveEstablishmentTrustState.test.ts (nouveau — 27 tests, matrice A-O + Cas 1-5)",
+    "src/components/school/SchoolHeroCarousel.tsx",
+    "src/components/schools/SchoolCard.tsx",
+    "src/app/ecole/[id]/page.tsx",
+    "src/app/recherche/page.tsx",
+    "src/app/categorie/[slug]/page.tsx",
+    "src/app/revendiquer/page.tsx",
+    "src/app/revendiquer/[id]/page.tsx",
+    "src/app/preinscription/page.tsx",
+    "src/app/dashboard/ecole/page.tsx",
+    "src/app/dashboard/admin/ecoles/page.tsx",
+    "src/app/dashboard/admin/ecoles/[id]/page.tsx",
+    "src/app/api/admin/ecoles/[id]/verifier/route.ts (commentaire uniquement, 0 changement fonctionnel)",
+    "src/app/api/admin/claims/[id]/approve/route.ts (commentaire uniquement, 0 changement fonctionnel)",
+    "src/app/page.tsx",
+    "src/app/qui-sommes-nous/page.tsx",
+    "docs/03_DATA_REGISTRY/NATIONAL_REGISTRY_ARCHITECTURE.md (addendum §12)",
+    "docs/03_DATA_REGISTRY/PUBLIC_TRUST_SEMANTICS.md (nouveau)",
+    "reports/registry/registry-national-a1-*.{json,csv} (8 rapports)"
+  ]
+}

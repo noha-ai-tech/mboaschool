@@ -20,15 +20,20 @@ import {
   CreditCard,
 } from "lucide-react";
 import { joinWithSeparator } from "@/lib/formatSchoolLocation";
+import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
 
 const CATEGORIES = ["garderie", "primaire", "secondaire", "superieur", "autres"];
 const PLANS = ["free", "standard", "premium", "business"];
 
+// SPRINT REGISTRY-NATIONAL-A.1 §9 — `establishment_verification_status` est
+// le pipeline de REVENDICATION/onboarding (migration 0008), jamais une
+// preuve ministérielle. Le libellé "verified" est explicité "(Écoles237)"
+// pour éviter toute lecture "vérifié par le ministère" dans ce panneau admin.
 const VERIFICATION_LABELS: Record<string, { label: string; cls: string }> = {
   referenced:      { label: "Référencée",   cls: "text-slate-600 bg-slate-100 border-slate-200" },
   claim_requested: { label: "Revendication", cls: "text-blue-700 bg-blue-50 border-blue-200" },
   under_review:    { label: "En analyse",   cls: "text-orange-700 bg-orange-50 border-orange-200" },
-  verified:        { label: "Vérifiée",     cls: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+  verified:        { label: "Vérifiée (Écoles237)", cls: "text-emerald-700 bg-emerald-50 border-emerald-200" },
   active:          { label: "Active",       cls: "text-emerald-700 bg-emerald-50 border-emerald-200" },
   suspended:       { label: "Suspendue",    cls: "text-red-700 bg-red-50 border-red-200" },
 };
@@ -233,7 +238,7 @@ export default function AdminSchoolPage() {
               </p>
               {school.is_verified && (
                 <span className="flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                  <CheckCircle2 size={9} /> Vérifié
+                  <CheckCircle2 size={9} /> {TRUST_BADGE_LABELS.PLATFORM_VERIFIED}
                 </span>
               )}
               {school.subscription_plan === "premium" && (
@@ -326,8 +331,8 @@ export default function AdminSchoolPage() {
 
               <div className="flex flex-col gap-3 mt-4">
                 <Toggle
-                  label="École vérifiée"
-                  description="Affiche le badge de vérification sur la fiche publique"
+                  label="Vérifiée par Écoles237 (plateforme)"
+                  description={`Affiche le badge « ${TRUST_BADGE_LABELS.PLATFORM_VERIFIED} » sur la fiche publique — vérification interne uniquement, jamais un agrément ministériel. Voir docs/03_DATA_REGISTRY/PUBLIC_TRUST_SEMANTICS.md.`}
                   checked={form.is_verified}
                   onChange={(v) => setForm({ ...form, is_verified: v })}
                 />
@@ -405,9 +410,19 @@ export default function AdminSchoolPage() {
             </div>
 
             {/* Statut de vérification + actions (Phase 4) */}
+            {/* SPRINT REGISTRY-NATIONAL-A.1 §9 — QUESTION CRITIQUE AUDITÉE :
+                le bouton "Vérifier" ci-dessous appelle
+                /api/admin/ecoles/[id]/verifier, qui écrit UNIQUEMENT
+                verification_status='verified' + is_verified=true. Il ne
+                vérifie AUCUNE preuve ministérielle/officielle — c'est une
+                action de vérification interne Écoles237 (PLATFORM_VERIFIED),
+                jamais une "vérification officielle". Renommé en conséquence
+                ci-dessous ("Marquer vérifié par Écoles237"), jamais
+                "Vérifier officiellement". Ne PAS lui donner de pouvoir de
+                vérification ministérielle sans preuve réelle (registre). */}
             <div className="bg-white border border-[#ebebeb] rounded-2xl p-5">
               <p className="text-[10px] font-semibold tracking-widest uppercase text-slate-400 mb-3">
-                Statut de vérification
+                Statut de revendication / vérification plateforme
               </p>
               {(() => {
                 const st = VERIFICATION_LABELS[school.verification_status ?? "referenced"];
@@ -425,7 +440,7 @@ export default function AdminSchoolPage() {
                     disabled={actionBusy !== null}
                     className="flex items-center justify-center gap-2 text-xs font-bold text-emerald-700 border border-emerald-200 bg-emerald-50 px-3 py-2 rounded-lg hover:bg-emerald-100 transition-colors disabled:opacity-50"
                   >
-                    {actionBusy === "verifier" ? <Loader2 size={13} className="animate-spin" /> : <ShieldCheck size={13} />} Vérifier
+                    {actionBusy === "verifier" ? <Loader2 size={13} className="animate-spin" /> : <ShieldCheck size={13} />} Marquer vérifié par Écoles237
                   </button>
                 )}
                 {school.verification_status === "suspended" ? (

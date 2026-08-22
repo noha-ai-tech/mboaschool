@@ -9,6 +9,7 @@ import { AuthHeader } from "@/components/layout/AuthHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ClaimBranding } from "@/components/claim/ClaimBranding";
 import { joinWithSeparator } from "@/lib/formatSchoolLocation";
+import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
 
 // Recherche nationale limitée à nom/ville : `establishments` n'a pas encore
 // de colonnes région/département/arrondissement normalisées (voir le GAP
@@ -154,7 +155,7 @@ export default function RevendiquerInscrirePage() {
                         <div className="flex items-center gap-1.5 mt-1">
                           {r.verified && (
                             <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-primary-light text-primary px-2 py-0.5 rounded-full">
-                              <CheckCircle2 size={9} /> Vérifié
+                              <CheckCircle2 size={9} /> {TRUST_BADGE_LABELS.PLATFORM_VERIFIED}
                             </span>
                           )}
                           <span className="text-[10px] font-semibold bg-muted text-text-secondary px-2 py-0.5 rounded-full">

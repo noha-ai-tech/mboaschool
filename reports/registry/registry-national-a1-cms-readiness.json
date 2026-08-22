@@ -1,0 +1,17 @@
+{
+  "sprint": "REGISTRY-NATIONAL-A.1",
+  "section": "§17 — CMS readiness re-evaluation",
+  "field_classes": {
+    "CONTENT_EDITABLE": ["description", "cover_image_url / school_images", "website", "social links (si ajoutés plus tard)", "présentation publique libre"],
+    "OWNER_EDITABLE_REVIEWABLE": ["phone/email/whatsapp/address (via dashboard/ecole, hors périmètre de ce sprint)", "fees/infrastructures (tables dédiées)", "establishment_claims.* (première soumission uniquement, jamais après acceptation)"],
+    "REGISTRY_PROTECTED": ["official_id", "source_ministry", "source_reference", "source_url", "source_updated_at", "registry_import_batch", "establishment_registry_identifiers.* (authority/registry/identifier/identifier_type/verification_status/is_primary)", "establishment_import_staging.promoted_establishment_id / duplicate_of_establishment_id / raw_data._review"]
+  },
+  "hard_rule": "Le futur CMS ne doit JAMAIS donner à un owner le droit d'auto-valider un agrément — official_verification ne peut être modifié que via une écriture service-role sur establishment_registry_identifiers.verification_status, avec preuve documentaire jointe, jamais depuis un formulaire owner-facing.",
+  "readiness_assessment": "READY_FOR_CMS_AFTER_REGISTRY_PUBLICATION = PARTIAL",
+  "why_partial_not_yes": [
+    "Le résolveur central (src/lib/trust/resolveEstablishmentTrustState.ts) et la politique de badges publics sont prêts et testés (27 tests unitaires, tous passants) — un futur CMS peut s'appuyer dessus sans réinventer de logique.",
+    "La classification REGISTRY_PROTECTED/OWNER_EDITABLE/PLATFORM_ONLY est documentée (voir registry-national-a1-claim-field-policy.json) mais N'EST PAS ENCORE appliquée par une policy RLS dédiée sur establishments elle-même pour les champs registre (official_id/source_ministry restent, comme avant ce sprint, en lecture publique via select('*') sur /ecole/[id] — pas d'écriture owner possible aujourd'hui car aucune UI/route CMS n'existe encore, mais la protection repose sur 'l'UI/route n'existe pas' plutôt que sur une contrainte RLS explicite au niveau colonne). Un futur CMS devra ajouter cette policy avant d'exposer un formulaire d'édition owner sur establishments.",
+    "Aucun CMS n'a été construit ce sprint (interdiction absolue §16/§24) — cette évaluation reste donc une READINESS, pas une implémentation."
+  ],
+  "recommendation_for_next_cms_sprint": "Avant tout formulaire CMS owner-facing sur `establishments`, ajouter une policy RLS UPDATE distincte pour le rôle authentifié owner qui exclut explicitement (via colonnes autorisées ou trigger BEFORE UPDATE) official_id/source_ministry/source_reference/source_url/source_updated_at/registry_import_batch/verification_status/is_verified/owner_id — aujourd'hui ces écritures passent exclusivement par des routes API service-role côté admin, ce qui est sûr tant qu'aucune route CMS owner-facing n'est ajoutée sans cette même discipline."
+}

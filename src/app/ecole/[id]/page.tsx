@@ -35,6 +35,7 @@ import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SchoolHeroCarousel, type SchoolHeroSlide } from "@/components/school/SchoolHeroCarousel";
 import { SchoolGallery } from "@/components/school/SchoolGallery";
+import { getPrimaryPublicBadge, resolveEstablishmentTrustState, trustInputFromEstablishmentRow } from "@/lib/trust/resolveEstablishmentTrustState";
 
 // Correspond aux colonnes réelles de la table infrastructures
 const INFRA_LABELS: Record<string, { label: string; icon: React.ElementType }> = {
@@ -149,6 +150,14 @@ export default function SchoolPage() {
 
   const infraItems = Object.keys(INFRA_LABELS).filter((k) => infra?.[k] === true);
   const isPremium = school.subscription_plan === "premium";
+  // SPRINT REGISTRY-NATIONAL-A.1 — résolveur central unique (src/lib/trust).
+  // Contexte public (client anon) : jamais d'accès à
+  // establishment_registry_identifiers (RLS platform_admin only), donc
+  // official_verification ne peut jamais dépasser OFFICIAL_SOURCE_FOUND ici
+  // — c'est un sous-ensemble sûr et conservateur du calcul complet, jamais
+  // un badge "officiellement vérifié" inventé côté client.
+  const trustState = resolveEstablishmentTrustState(trustInputFromEstablishmentRow(school));
+  const trustBadge = getPrimaryPublicBadge(trustState);
   const preinscriptionHref = `/preinscription?ecole=${school.id}`;
   const address = [school.address, school.neighborhood, school.city].filter(Boolean).join(", ");
   const hasLocation = !!(school.latitude && school.longitude);
@@ -181,7 +190,7 @@ export default function SchoolPage() {
         city={school.city}
         neighborhood={school.neighborhood}
         category={school.main_category}
-        verified={!!school.is_verified}
+        trustBadge={trustBadge}
         premium={isPremium}
         preinscriptionHref={preinscriptionHref}
         backHref="/"

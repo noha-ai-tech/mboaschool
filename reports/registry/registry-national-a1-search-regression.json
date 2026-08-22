@@ -1,0 +1,20 @@
+{
+  "sprint": "REGISTRY-NATIONAL-A.1",
+  "section": "§13 — Search V2 doit rester fonctionnel",
+  "wire_contract_changed": false,
+  "file_touched": "src/app/api/recherche/route.ts — AUCUNE modification (confirmé par git status : fichier absent du diff de ce sprint).",
+  "payload_impact": "NUL — aucun champ ajouté, retiré, ni renommé dans SchoolSearchResult/SchoolSearchResponse (src/lib/search/types.ts, également non modifié).",
+  "tests_run": {
+    "command": "npx tsx --test src/lib/search/__tests__/queryBuilder.test.ts",
+    "result": { "tests": 22, "pass": 22, "fail": 0 },
+    "coverage": ["pagination (implicite via range/offset, inchangé)", "recherche avec accents/formes de ville (cityForms)", "groupes OR mot-par-mot", "cohérence avec le matcher client normalizeSearchText"]
+  },
+  "full_typecheck": { "command": "npx tsc --noEmit", "result": "0 erreur" },
+  "production_build": { "command": "npm run build", "result": "succès — 73 pages générées, /api/recherche listé comme route dynamique (ƒ), taille inchangée par rapport à l'attendu (229 B, route serveur sans payload statique)." },
+  "staging_leakage": {
+    "checked": "PUBLIC_FIELDS de /api/recherche interroge exclusivement `establishments` (jamais `establishment_import_staging`) — confirmé par lecture du fichier, inchangé ce sprint.",
+    "result": 0
+  },
+  "full_table_fetch_regression_check": "buildFilteredQuery() utilise toujours .range(offset, offset+pageSize-1) et count:'exact' — comportement R.2-B préservé, non touché.",
+  "conclusion": "AUCUNE régression Search V2 introduite par ce sprint. Le sprint a délibérément choisi de NE PAS toucher ce fichier (§12 — Option A, aucun changement de wire format) précisément pour garantir ce résultat."
+}

@@ -12,13 +12,20 @@ export type SchoolHeroSlide = {
 
 // Carrousel Hero de la fiche établissement — propre à chaque école (photos
 // réelles uniquement : cover + galerie). Jamais de contenu générique.
+//
+// SPRINT REGISTRY-NATIONAL-A.1 — `verified: boolean` a été remplacé par
+// `trustBadge`, calculé par l'appelant via
+// resolveEstablishmentTrustState()/getPrimaryPublicBadge() (src/lib/trust).
+// Ce composant n'a plus le droit de décider lui-même ce que signifie
+// "vérifié" — il se contente d'afficher le libellé déjà résolu, jamais le
+// mot nu "Vérifié" (§7 du brief : toujours QUI a vérifié et sur quelle base).
 export function SchoolHeroCarousel({
   slides,
   name,
   city,
   neighborhood,
   category,
-  verified,
+  trustBadge,
   premium,
   preinscriptionHref,
   backHref,
@@ -29,7 +36,7 @@ export function SchoolHeroCarousel({
   city: string | null;
   neighborhood: string | null;
   category: string | null;
-  verified: boolean;
+  trustBadge: { label: string } | null;
   premium: boolean;
   preinscriptionHref: string;
   backHref: string;
@@ -99,9 +106,9 @@ export function SchoolHeroCarousel({
             {category && (
               <span className="text-[10px] font-bold tracking-widest uppercase text-primary-light">{category}</span>
             )}
-            {verified && (
+            {trustBadge && (
               <span className="flex items-center gap-1 text-[10px] font-semibold text-white bg-white/15 border border-white/20 px-2 py-0.5 rounded-full">
-                <CheckCircle2 size={9} /> Vérifié
+                <CheckCircle2 size={9} /> {trustBadge.label}
               </span>
             )}
             {premium && (

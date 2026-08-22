@@ -1,0 +1,49 @@
+{
+  "sprint": "REGISTRY-NATIONAL-A.1",
+  "section": "§10/§11 — sécurité du parcours de revendication + champs registre protégés",
+  "claim_submission_audit": {
+    "client_form": "src/app/revendiquer/[id]/page.tsx — champs collectés : first_name, last_name, role_title, phone, email, comments, files (justificatifs).",
+    "server_route": "POST /api/claims (src/app/api/claims/route.ts)",
+    "server_whitelist": ["establishment_id", "first_name", "last_name", "role_title", "phone", "email", "comments"],
+    "finding": "Le body destructuré côté serveur ne lit QUE ces 7 champs — tout champ supplémentaire envoyé par un client malveillant (ex. is_verified, official_id, source_ministry) est silencieusement ignoré, jamais transmis à establishment_claims.insert(). Confirmé par lecture du code, pas seulement supposé.",
+    "conclusion": "Un owner ne peut PAS, via ce endpoint, définir official_verification, fabriquer un registry identifier, définir source_ministry, ni écraser une provenance officielle protégée — le endpoint n'accepte tout simplement pas ces champs en entrée."
+  },
+  "claim_approval_audit": {
+    "route": "POST /api/admin/claims/[id]/approve",
+    "who_can_call": "platform_admin uniquement (vérifié via profiles.role côté serveur)",
+    "writes": ["establishments.owner_id", "establishments.verification_status='active'", "establishments.is_claimed=true", "establishments.is_verified=true", "establishment_claims.status='accepted'"],
+    "finding": "Seul un admin déclenche cette route — l'owner ne peut jamais l'appeler lui-même. L'effet is_verified=true qui en résulte reste PLATFORM_VERIFIED (jamais OFFICIALLY_VERIFIED) dans le résolveur central — documenté dans le code (voir commentaire ajouté ce sprint) et dans resolveEstablishmentTrustState() qui ne dérive jamais official_verification de claim_status."
+  },
+  "field_classification": {
+    "OWNER_EDITABLE": [
+      "establishment_claims.first_name/last_name/role_title/phone/email/comments (via /api/claims, à la création de SA PROPRE demande uniquement)",
+      "establishment_claim_documents (upload de justificatifs, chemin {claim_id}/... contraint par policy Storage)"
+    ],
+    "PLATFORM_ONLY": [
+      "establishments.is_verified (admin uniquement, via /verifier ou approbation de claim — jamais l'owner)",
+      "establishments.verification_status (admin uniquement — transitions via routes API dédiées ou trigger DB sur insert de claim)",
+      "establishments.is_claimed / owner_id (admin uniquement, via approbation de claim)",
+      "establishment_claims.status/admin_comment/reviewed_by/reviewed_at (admin uniquement, via /approve /reject /review)"
+    ],
+    "REGISTRY_PROTECTED": [
+      "establishments.official_id",
+      "establishments.source_ministry",
+      "establishments.source_reference",
+      "establishments.source_url",
+      "establishments.source_updated_at",
+      "establishments.registry_import_batch",
+      "establishment_registry_identifiers.* (authority, registry, identifier, identifier_type, verification_status, is_primary, source_url, source_reference)",
+      "establishment_import_staging.* (promoted_establishment_id / duplicate_of_establishment_id / raw_data._review — traçabilité de promotion)"
+    ],
+    "verification_confirmed": "Aucune route API accessible à un utilisateur non-admin n'écrit sur les colonnes REGISTRY_PROTECTED — confirmé par grep exhaustif de '.update(' et '.insert(' sur src/app/api/ et croisement avec les tables listées. establishment_registry_identifiers a en outre AUCUNE policy RLS insert/update/delete pour un rôle applicatif (migration 0021, écritures service-role uniquement)."
+  },
+  "answers_to_brief_questions_section_10": {
+    "owner_can_set_official_verification": false,
+    "owner_can_fabricate_registry_identifier": false,
+    "owner_can_set_source_ministry": false,
+    "owner_can_turn_platform_verification_into_official": false,
+    "owner_can_delete_official_provenance": false,
+    "owner_can_overwrite_protected_registry_data": false
+  },
+  "decision": "CLAIM_FLOW_SAFE — aucune modification de code nécessaire côté /api/claims ou /api/admin/claims/*. Seule une documentation renforcée (commentaires + ce rapport + PUBLIC_TRUST_SEMANTICS.md) était nécessaire."
+}

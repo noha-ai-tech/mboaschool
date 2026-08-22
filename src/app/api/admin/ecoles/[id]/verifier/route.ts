@@ -3,6 +3,16 @@
 // aucune policy RLS UPDATE platform_admin n'existe encore sur cette table
 // (préparée, migration 0007, non exécutée) — même contournement que
 // /api/admin/claims/[id]/approve (Mission 02).
+//
+// SPRINT REGISTRY-NATIONAL-A.1 §9 — SÉMANTIQUE AUDITÉE ET CLARIFIÉE : cette
+// route ne vérifie AUCUNE preuve ministérielle/officielle. Elle marque
+// uniquement une vérification interne PLATEFORME (PLATFORM_VERIFIED dans
+// src/lib/trust/resolveEstablishmentTrustState.ts) — jamais
+// OFFICIALLY_VERIFIED. Le bouton admin correspondant a été renommé
+// "Marquer vérifié par Écoles237" (jamais "Vérifier officiellement") pour
+// refléter exactement cet effet. Ne PAS étendre cette route pour qu'elle
+// affecte official_verification sans preuve documentaire réelle au niveau
+// establishment_registry_identifiers.
 
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";

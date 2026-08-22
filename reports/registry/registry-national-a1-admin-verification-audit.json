@@ -1,0 +1,32 @@
+{
+  "sprint": "REGISTRY-NATIONAL-A.1",
+  "section": "§9 — audit Admin Review Center et action Vérifier",
+  "review_center_scope_clarification": {
+    "page": "src/app/dashboard/admin/registre/page.tsx (Registry Review Center)",
+    "finding": "Cette page NE CONTIENT AUCUNE action 'Vérifier' ni aucun champ is_verified. Elle traite exclusivement establishment_import_staging (status + raw_data._review) — approbation/liaison/exclusion de candidats staging avant promotion. Elle n'écrit jamais sur establishments. Le brief §9 anticipait potentiellement une action 'Vérifier' à cet endroit ; l'audit confirme qu'elle n'existe pas ici — l'action concernée vit ailleurs (voir ci-dessous)."
+  },
+  "actual_verify_action_location": {
+    "ui": ["src/app/dashboard/admin/ecoles/[id]/page.tsx (bouton détaillé)", "src/app/dashboard/admin/ecoles/page.tsx (bouton icône liste)"],
+    "api_route": "POST /api/admin/ecoles/[id]/verifier",
+    "critical_question": "Que fait réellement le bouton 'Vérifier' ?",
+    "answer": "UPDATE establishments SET verification_status='verified', is_verified=true. Rien d'autre. Aucune lecture ni vérification de official_id/source_ministry/establishment_registry_identifiers. Aucun appel à un service ministériel externe. L'action est déclenchée par un simple clic admin, sans preuve documentaire requise dans l'UI ni côté serveur.",
+    "conclusion": "Confirmé : cette action ne peut JAMAIS être interprétée comme 'officiellement vérifié'. Avant ce sprint le libellé était 'Vérifier' (bouton) / 'Vérifié' (badge résultant) — ambigu. Ce sprint renomme le bouton en 'Marquer vérifié par Écoles237' (jamais 'Vérifier officiellement') et le badge résultant en 'Vérifié par Écoles237' partout où il est affiché. Aucun pouvoir de vérification ministérielle n'est ajouté."
+  },
+  "distinctions_now_visible_to_admin": {
+    "publication_readiness": "Visible dans Registry Review Center (onglet 'Nouveaux candidats'/'À revoir'), domaine staging uniquement — jamais mélangé avec is_verified d'un établissement déjà live.",
+    "source_confidence_and_identity_confidence": "Ces deux dimensions (presence_confidence/identity_confidence du modèle NationalCandidate, scripts/school-registry/lib/nationalRegistry/types.ts) restent scoping REGISTRY-NATIONAL-A — non répliquées dans l'UI establishments ce sprint (aucun champ DB establishments équivalent, hors périmètre Option A sans migration).",
+    "official_verification": "Nouveau, calculable côté admin uniquement (accès service-role à establishment_registry_identifiers) via resolveEstablishmentTrustState() avec registryIdentifierVerificationStatuses fourni — non branché dans une nouvelle UI ce sprint (§15 : éviter un redesign ; le résolveur est prêt, l'affichage d'un panneau officiel dédié est une extension future hors périmètre minimal).",
+    "platform_verification": "Visible et correctement nommé : badge 'Vérifiée (Écoles237)' + toggle 'Vérifiée par Écoles237 (plateforme)' avec description explicite.",
+    "claim_status": "Visible via VERIFICATION_LABELS (referenced/claim_requested/under_review/verified/active/suspended) — pipeline de revendication, jamais présenté comme preuve ministérielle après ce sprint (libellés clarifiés)."
+  },
+  "action_rename_applied": {
+    "before": "Vérifier",
+    "after": "Marquer vérifié par Écoles237",
+    "files_changed": [
+      "src/app/dashboard/admin/ecoles/[id]/page.tsx",
+      "src/app/dashboard/admin/ecoles/page.tsx (title tooltip du bouton icône)"
+    ],
+    "functional_change": "AUCUNE — même route API appelée (POST /api/admin/ecoles/[id]/verifier), même effet DB. Renommage de libellé uniquement, conformément à §15 (plus petite modification sûre)."
+  },
+  "future_recommendation_not_implemented_this_sprint": "Si un jour l'admin doit pouvoir déclencher une VRAIE vérification officielle, cela devra passer par une action DISTINCTE qui écrit sur establishment_registry_identifiers.verification_status (CORROBORATED/CONFIRMED) avec une preuve jointe — jamais en réutilisant ou en étendant l'action 'Marquer vérifié par Écoles237' existante."
+}

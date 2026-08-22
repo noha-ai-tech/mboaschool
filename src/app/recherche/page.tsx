@@ -31,6 +31,7 @@ import { MAJOR_CITIES } from "@/lib/cameroonMajorCities";
 import { CANONICAL_REGIONS } from "@/lib/cameroonRegions";
 import type { SchoolSearchResponse, SchoolSearchResult } from "@/lib/search/types";
 import { DEFAULT_PAGE_SIZE, MOBILE_PAGE_SIZE } from "@/lib/search/types";
+import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
 
 const LocalSchoolMap = dynamic(() => import("@/components/LocalSchoolMap"), {
   ssr: false,
@@ -209,7 +210,7 @@ function SchoolCard({
           </span>
           {school.verified && (
             <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full">
-              <CheckCircle2 size={9} /> Vérifiée
+              <CheckCircle2 size={9} /> {TRUST_BADGE_LABELS.PLATFORM_VERIFIED}
             </span>
           )}
           {!school.isClaimed && (

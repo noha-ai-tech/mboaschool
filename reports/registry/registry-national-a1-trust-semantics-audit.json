@@ -1,0 +1,83 @@
+{
+  "sprint": "REGISTRY-NATIONAL-A.1",
+  "section": "§3 — audit exhaustif de la sémantique de confiance actuelle",
+  "generated_at": "2026-08-22",
+  "method": "grep exhaustif de is_verified/verified/official_verification/source_ministry/owner_id/claim/promoted_establishment_id sur src/, scripts/, supabase/, docs/, croisé avec lecture directe des fichiers et vérification live du schéma Supabase (projet umcwwynrftidytxgqkwi) via l'API REST (service_role, lecture seule).",
+  "database_baseline_confirmed_live": {
+    "establishments": 2249,
+    "establishment_import_staging": 2378,
+    "establishment_registry_identifiers": 2242,
+    "note": "Les trois valeurs correspondent exactement à la référence historique du sprint REGISTRY-NATIONAL-A — aucun écart, confirmé par requêtes HEAD Content-Range en direct, jamais supposé depuis un fichier."
+  },
+  "known_migration_status_caveat": "Mémoire projet + audit REGISTRY-NATIONAL-A : les migrations 0018 (registry_identity_fields) et 0021 (establishment_registry_identifiers) sont RÉELLEMENT EXÉCUTÉES en production malgré leur en-tête de fichier disant 'PRÉPARÉE MAIS NON EXÉCUTÉE'. Reconfirmé ce sprint par lecture directe : establishments.official_id/source_ministry/registry_import_batch/source_reference/source_url existent et sont interrogeables, et establishment_registry_identifiers existe avec 2242 lignes.",
+  "is_verified": {
+    "column": "establishments.is_verified (boolean, migration antérieure non documentée dans ce sprint — colonne historique)",
+    "live_data_snapshot": {
+      "true_count": 3,
+      "sample_rows": [
+        { "name": "Groupe Scolaire La Réussite", "official_id": null, "source_ministry": null, "owner_id": null, "verification_status": "referenced" },
+        { "name": "Collège Bilingue International", "official_id": null, "source_ministry": null, "owner_id": null, "verification_status": "referenced" },
+        { "name": "Université Catholique d’Afrique", "official_id": null, "source_ministry": null, "owner_id": null, "verification_status": "referenced" }
+      ],
+      "interpretation": "Ces 3 établissements sont le cas de régression §14 Cas 5 réel et vivant en production : is_verified=true, aucune preuve registre, aucun owner. Avant ce sprint, ils affichaient un badge public nu 'Vérifié' — ambigu, risque latent identifié dans REGISTRY-NATIONAL-A jamais déclenché mais réel. Après ce sprint, le résolveur central les classe strictement PLATFORM_VERIFIED, badge 'Vérifié par Écoles237'."
+    },
+    "read_locations": [
+      "src/app/api/recherche/route.ts (PUBLIC_FIELDS, exposé publiquement via /api/recherche)",
+      "src/app/page.tsx (homepage — carte établissement + stat 'Établissements vérifiés')",
+      "src/app/recherche/page.tsx (cartes résultats)",
+      "src/app/categorie/[slug]/page.tsx (2 emplacements badge carte)",
+      "src/lib/useSchool.ts (dashboard propriétaire)",
+      "src/lib/useShowcasePhotos.ts (filtre photos vitrine, pas d'affichage badge)",
+      "src/app/revendiquer/page.tsx et /revendiquer/[id]/page.tsx (aperçu établissement avant/à revendiquer)",
+      "src/app/preinscription/page.tsx (résumé établissement sélectionné)",
+      "src/app/dashboard/ecole/page.tsx et /dashboard/ecole/layout.tsx (badge propriétaire)",
+      "src/app/dashboard/admin/ecoles/page.tsx et /dashboard/admin/ecoles/[id]/page.tsx (liste + fiche admin)",
+      "src/app/dashboard/admin/carte/page.tsx (KPI régional interne)",
+      "src/app/dashboard/admin/page.tsx (KPI dashboard interne)",
+      "src/app/ecole/[id]/page.tsx (fiche publique — SchoolHeroCarousel)"
+    ],
+    "write_locations": [
+      {
+        "route": "POST /api/admin/ecoles/[id]/verifier",
+        "effect": "UPDATE establishments SET verification_status='verified', is_verified=true",
+        "who_can_call": "platform_admin uniquement (requireAdmin('manage_schools'))",
+        "audited_finding": "§9 QUESTION CRITIQUE — cette route ne vérifie AUCUNE preuve ministérielle/officielle. Elle marque uniquement une vérification interne. Avant ce sprint le bouton s'appelait 'Vérifier' (ambigu) ; renommé 'Marquer vérifié par Écoles237'."
+      },
+      {
+        "route": "POST /api/admin/claims/[id]/approve",
+        "effect": "UPDATE establishments SET owner_id=<requester>, verification_status='active', is_claimed=true, is_verified=true",
+        "who_can_call": "platform_admin uniquement",
+        "audited_finding": "Effet de bord préexistant (Mission 02, INCHANGÉ ce sprint) : l'approbation d'une revendication positionne AUSSI is_verified=true. C'est une décision produit historique, jamais déclenchée par l'owner lui-même (seul l'admin appelle cette route). Documenté dans le code et dans ce rapport — reste PLATFORM_VERIFIED uniquement dans le résolveur, jamais OFFICIALLY_VERIFIED."
+      },
+      {
+        "route": "dashboard/admin/ecoles/[id]/page.tsx — formulaire 'save()'",
+        "effect": "UPDATE establishments SET ... is_verified=<toggle> (écriture directe generic form, pas de route API dédiée)",
+        "who_can_call": "platform_admin uniquement (page sous /dashboard/admin, garde de layout)",
+        "audited_finding": "Toggle 'École vérifiée' — renommé 'Vérifiée par Écoles237 (plateforme)' avec description explicite ce sprint. Reste un simple booléen manuel, jamais relié au registre."
+      }
+    ],
+    "can_owner_write_directly": false,
+    "can_owner_influence_indirectly": "OUI, indirectement et de façon documentée : soumettre une demande de revendication (POST /api/claims, champs whitelist first_name/last_name/role_title/phone/email/comments/establishment_id UNIQUEMENT — aucun champ de confiance) peut aboutir, si un admin l'approuve, à is_verified=true via /api/admin/claims/[id]/approve. L'owner ne contrôle ni le moment ni la décision — c'est un effet de bord de l'approbation admin, jamais un droit d'écriture direct de l'owner.",
+    "can_registry_promotion_modify_is_verified": "NON — vérifié par grep exhaustif de scripts/school-registry/*.ts (promote-*.ts, minesup-*-promote.ts, minsante-*-promote.ts, registry-national-a-build.ts...) : aucun script de promotion registre n'écrit jamais establishments.is_verified. La promotion registre reste strictement séparée de la vérification plateforme."
+  },
+  "official_verification_evidence_live_snapshot": {
+    "establishment_registry_identifiers_total": 2242,
+    "verification_status_values_observed": { "UNVERIFIED": 2242, "CORROBORATED_or_CONFIRMED": 0 },
+    "interpretation": "AUCUN identifiant de registre n'a aujourd'hui de verification_status CORROBORATED/CONFIRMED — confirmé par requête directe (count exact) sur la table entière. Conséquence : avec le résolveur central de ce sprint, AUCUN établissement en production ne peut aujourd'hui atteindre official_verification=OFFICIALLY_VERIFIED. C'est le comportement SÛR et attendu — l'invariant 'PUBLISHED != OFFICIALLY_VERIFIED' est donc vrai pour 100% des lignes vivantes actuelles, pas seulement en théorie."
+  },
+  "other_fields_audited": {
+    "source_ministry": {
+      "column": "establishments.source_ministry (migration 0018)",
+      "live_count_not_null": 2196,
+      "meaning": "Ministère source CITÉ lors de l'import registre — jamais une preuve authentifiée à ce niveau seul (voir commentaire de migration 0018). Public via select(*) sur /ecole/[id] mais non exploité avant ce sprint."
+    },
+    "owner_id / is_claimed": {
+      "live_count_is_claimed_true": 0,
+      "meaning": "Aucun établissement revendiqué en production à date de cet audit — le parcours de revendication existe mais n'a encore aucune ligne 'CLAIMED' réelle."
+    },
+    "promoted_establishment_id / duplicate_of_establishment_id": {
+      "location": "establishment_import_staging — jamais establishments",
+      "meaning": "Concerne exclusivement le pipeline de promotion staging->establishments (Review Center admin), domaine disjoint de la confiance publique d'un établissement déjà live. Aucune interaction avec is_verified."
+    }
+  }
+}

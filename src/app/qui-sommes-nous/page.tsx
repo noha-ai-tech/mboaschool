@@ -16,8 +16,8 @@ const POINTS = [
   },
   {
     icon: ShieldCheck,
-    title: "Des établissements vérifiés",
-    description: "Certaines fiches portent un badge « Vérifié » lorsque notre équipe a confirmé les informations directement auprès de l'établissement.",
+    title: "Des établissements vérifiés par Écoles237",
+    description: "Certaines fiches portent un badge « Vérifié par Écoles237 » lorsque notre équipe a confirmé certaines informations directement auprès de l'établissement — une vérification interne à la plateforme, distincte d'un agrément ministériel.",
   },
   {
     icon: ClipboardList,

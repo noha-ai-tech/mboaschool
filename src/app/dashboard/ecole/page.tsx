@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { useSchool } from "@/lib/useSchool";
 import { admissionStatusConfig } from "@/lib/admissions/status";
 import { joinWithSeparator } from "@/lib/formatSchoolLocation";
+import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
 import {
   ClipboardList,
   GraduationCap,
@@ -204,7 +205,7 @@ export default function DashboardEcoleHome() {
           <h1 className="text-2xl font-bold tracking-tight text-text-primary">{school.name}</h1>
           {school.is_verified && (
             <span className="flex items-center gap-1 text-[10px] font-semibold text-primary bg-primary-light border border-primary/20 px-2 py-0.5 rounded-full">
-              <CheckCircle size={9} /> Vérifié
+              <CheckCircle size={9} /> {TRUST_BADGE_LABELS.PLATFORM_VERIFIED}
             </span>
           )}
           {isPro && (

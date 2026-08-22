@@ -1,0 +1,32 @@
+{
+  "sprint": "REGISTRY-NATIONAL-A.1",
+  "section": "§12 — contrat API prudent",
+  "audited_public_endpoints": [
+    { "route": "GET /api/recherche", "exposes_is_verified": true, "exposes_is_claimed": true, "file": "src/app/api/recherche/route.ts (PUBLIC_FIELDS)" }
+  ],
+  "audited_direct_client_queries_bypassing_a_dedicated_route": [
+    "src/app/page.tsx (homepage) — select(...is_verified, is_claimed...)",
+    "src/app/categorie/[slug]/page.tsx — select(...is_verified...)",
+    "src/app/revendiquer/page.tsx, /revendiquer/[id]/page.tsx — select(...is_verified...)",
+    "src/app/preinscription/page.tsx — select(...is_verified...)",
+    "src/app/ecole/[id]/page.tsx — select(\"*\") (expose déjà tout, y compris official_id/source_ministry/owner_id/verification_status, via RLS anon existante — comportement PRÉEXISTANT, non introduit ce sprint)"
+  ],
+  "decision": "OPTION A RETENUE — AUCUN changement de wire format. `is_verified`/`is_claimed` restent exposés tels quels par /api/recherche et les requêtes client directes existantes.",
+  "rationale": [
+    "§13 impose explicitement de ne pas augmenter inutilement le payload de Search V2 et de ne jamais réintroduire un full-table-fetch — ajouter de nouveaux champs calculés (directory_status/platform_verified/official_verification/claim_status) à CHAQUE ligne de résultat de recherche aurait un coût réseau réel pour un bénéfice nul aujourd'hui : official_verification vaut UNVERIFIED pour 100% des lignes vivantes en production (voir registry-national-a1-trust-semantics-audit.json — 0/2242 identifiants de registre CORROBORATED/CONFIRMED).",
+    "L'ambiguïté identifiée par le sprint n'était PAS dans le NOM du champ API `is_verified` (un client bien informé peut toujours l'interpréter correctement), mais dans le LIBELLÉ AFFICHÉ côté UI ('Vérifié' nu). Ce sprint corrige donc le rendu (labels, résolveur central), pas le contrat réseau — c'est la plus petite modification sûre qui élimine le risque réel (§15).",
+    "Un renommage de champ API cassant (ex. retirer is_verified) romprait potentiellement des intégrations non auditées (aucun client tiers connu à ce jour, mais le risque n'est pas nul) sans bénéfice de sécurité supplémentaire, puisque le résolveur central s'applique déjà correctement côté serveur de rendu (Next.js pages)."
+  ],
+  "conceptual_contract_recommended_for_future_dedicated_endpoints": {
+    "description": "Si un futur endpoint public dédié à la confiance est construit (ex. GET /api/etablissements/[id]/trust, ou une extension explicite et versionnée de /api/recherche), il DOIT utiliser ce contrat conceptuel plutôt que d'exposer is_verified brut sans contexte :",
+    "shape_example": {
+      "directory_status": "LISTED",
+      "claim_status": "UNCLAIMED | CLAIM_PENDING | CLAIMED",
+      "platform_verified": "boolean — dérivé de is_verified, jamais renommé sans deprecation formelle du champ historique",
+      "official_verification": "OFFICIALLY_VERIFIED | OFFICIAL_SOURCE_FOUND | UNVERIFIED | CONFLICTING",
+      "is_verified": "boolean — CONSERVÉ pour rétrocompatibilité, DOCUMENTÉ comme équivalent à platform_verified, jamais une preuve ministérielle"
+    },
+    "source_of_truth": "src/lib/trust/resolveEstablishmentTrustState.ts — TOUT futur endpoint doit construire sa réponse via ce résolveur, jamais réinventer la logique localement."
+  },
+  "backward_compatibility": "Totale — aucun client existant (interne ou externe) n'est affecté par ce sprint. Le seul changement observable pour un consommateur de /api/recherche est qu'aucun champ n'a changé de nom ou de type ; le RENDU côté pages Next.js a changé (libellés), pas le JSON retourné par l'API."
+}

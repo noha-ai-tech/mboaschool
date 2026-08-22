@@ -10,6 +10,7 @@ import { ArrowLeft, ArrowRight, CheckCircle2, Copy, Check, MapPin } from "lucide
 import { AuthHeader } from "@/components/layout/AuthHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { joinWithSeparator } from "@/lib/formatSchoolLocation";
+import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
 
 type SchoolOption = {
   id: string;
@@ -283,7 +284,7 @@ function PreinscriptionForm() {
                   </div>
                   {selectedSchool.verified && (
                     <span className="shrink-0 inline-flex items-center gap-1 text-[10px] font-bold bg-primary-light text-primary px-2 py-1 rounded-full">
-                      <CheckCircle2 size={10} /> Vérifié
+                      <CheckCircle2 size={10} /> {TRUST_BADGE_LABELS.PLATFORM_VERIFIED}
                     </span>
                   )}
                 </div>

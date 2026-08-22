@@ -1,0 +1,20 @@
+location,current_label_before,current_source_field,new_safe_label,new_resolver_field
+Accueil (/) — stat card,Établissements vérifiés,is_verified (count),Vérifiés par Écoles237,platform_verification (via getPrimaryPublicBadge)
+Accueil (/) — carrousel à la une (SchoolCard),Vérifié,is_verified,Vérifié par Écoles237,TRUST_BADGE_LABELS.PLATFORM_VERIFIED
+/recherche — cartes résultats,Vérifiée,is_verified,Vérifié par Écoles237,TRUST_BADGE_LABELS.PLATFORM_VERIFIED
+/categorie/[slug] — carrousel mis en avant,Vérifié,is_verified,Vérifié par Écoles237,TRUST_BADGE_LABELS.PLATFORM_VERIFIED
+/categorie/[slug] — grille principale,Vérifié,is_verified,Vérifié par Écoles237,TRUST_BADGE_LABELS.PLATFORM_VERIFIED
+/ecole/[id] — SchoolHeroCarousel (fiche établissement),Vérifié,is_verified (booléen brut),Vérifié par Écoles237 OU Vérification officielle (selon preuve),getPrimaryPublicBadge(resolveEstablishmentTrustState(trustInputFromEstablishmentRow(school)))
+/preinscription — résumé établissement sélectionné,Vérifié,is_verified,Vérifié par Écoles237,TRUST_BADGE_LABELS.PLATFORM_VERIFIED
+/revendiquer — liste établissements non revendiqués,Vérifié,is_verified,Vérifié par Écoles237,TRUST_BADGE_LABELS.PLATFORM_VERIFIED
+/revendiquer/[id] — aperçu avant revendication,Vérifiée,is_verified,Vérifié par Écoles237,TRUST_BADGE_LABELS.PLATFORM_VERIFIED
+/dashboard/ecole (dashboard propriétaire),Vérifié,is_verified,Vérifié par Écoles237,TRUST_BADGE_LABELS.PLATFORM_VERIFIED
+/dashboard/ecole/layout.tsx — sidebar (icône seule, pas de texte),(icône CheckCircle2 sans texte),is_verified,inchangé — icône seule conservée (risque d'ambiguïté jugé faible),non applicable (icône seule)
+/dashboard/admin/ecoles — liste admin (icône),(icône CheckCircle2 sans texte),is_verified,icône + title="Vérifié par Écoles237",non applicable (tooltip texte seulement)
+/dashboard/admin/ecoles — bouton action rapide,title="Vérifier",POST /api/admin/ecoles/[id]/verifier,title="Marquer vérifié par Écoles237",non applicable (libellé bouton)
+/dashboard/admin/ecoles/[id] — badge fiche admin,Vérifié,is_verified,Vérifié par Écoles237,TRUST_BADGE_LABELS.PLATFORM_VERIFIED
+/dashboard/admin/ecoles/[id] — toggle formulaire,"École vérifiée / ""Affiche le badge de vérification sur la fiche publique""",is_verified (write direct),"Vérifiée par Écoles237 (plateforme) / description explicite ""vérification interne, jamais un agrément ministériel""",non applicable (libellé + description formulaire)
+/dashboard/admin/ecoles/[id] — bouton action,Vérifier,POST /api/admin/ecoles/[id]/verifier,Marquer vérifié par Écoles237,non applicable (libellé bouton)
+/dashboard/admin/ecoles/[id] et /dashboard/admin/ecoles — VERIFICATION_LABELS['verified'],Vérifiée,establishments.verification_status='verified' (pipeline revendication),Vérifiée (Écoles237),non applicable (libellé statut admin interne)
+/qui-sommes-nous — copie marketing,"""Vérifié"" (texte descriptif)",n/a (contenu statique),"""Vérifié par Écoles237"" + précision ""vérification interne, distincte d'un agrément ministériel""",non applicable (contenu statique)
+/dashboard/admin/abonnements — nom de plan commercial 'Vérifiée',Vérifiée (nom de tier payant, PAS un badge de confiance établissement),subscription_plan='verifiee' (hors périmètre is_verified),HORS PÉRIMÈTRE CE SPRINT — collision de nom avec le concept de confiance signalée mais non modifiée (changement de nomenclature commerciale = décision produit séparée),non applicable

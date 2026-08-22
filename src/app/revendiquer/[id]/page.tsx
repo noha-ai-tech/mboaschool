@@ -17,6 +17,7 @@ import { ClaimBranding } from "@/components/claim/ClaimBranding";
 import { AuthHeader } from "@/components/layout/AuthHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { joinWithSeparator } from "@/lib/formatSchoolLocation";
+import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
 
 const CLAIM_BRANDING_PROPS = {
   title: "Votre établissement est déjà sur Écoles237.",
@@ -406,7 +407,7 @@ export default function RevendiquerPage() {
                     </span>
                     {establishment.is_verified && (
                       <span className="text-[10px] font-semibold bg-primary-light text-primary px-2 py-0.5 rounded-full">
-                        Vérifiée
+                        {TRUST_BADGE_LABELS.PLATFORM_VERIFIED}
                       </span>
                     )}
                   </div>

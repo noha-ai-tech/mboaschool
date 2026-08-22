@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { CAT_META } from "./catMeta";
 import { includesInsensitive } from "@/lib/textSearch";
+import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
@@ -183,7 +184,7 @@ function CategoryPageInner() {
                         </span>
                         {s.is_verified && (
                           <span className="absolute top-3 right-3 flex items-center gap-1 text-[10px] font-semibold text-emerald-900 bg-emerald-300 px-2 py-0.5 rounded-full">
-                            <CheckCircle2 size={8} /> Vérifié
+                            <CheckCircle2 size={8} /> {TRUST_BADGE_LABELS.PLATFORM_VERIFIED}
                           </span>
                         )}
                       </div>
@@ -310,7 +311,7 @@ function CategoryPageInner() {
                         )}
                         {s.is_verified && (
                           <span className="text-[9px] font-semibold text-emerald-900 bg-emerald-300 px-2 py-0.5 rounded-full flex items-center gap-1">
-                            <CheckCircle2 size={8} /> Vérifié
+                            <CheckCircle2 size={8} /> {TRUST_BADGE_LABELS.PLATFORM_VERIFIED}
                           </span>
                         )}
                       </div>

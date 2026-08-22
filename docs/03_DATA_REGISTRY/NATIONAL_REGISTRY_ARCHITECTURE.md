@@ -469,3 +469,56 @@ Ce sprint ne les a donc PAS consolidés comme candidats individuels (aurait
 persister la liste nominative avant toute consolidation nationale de ces
 167 établissements. Le blocage documentaire Imagerie Médicale
 (`QUARANTINED_NUMBERING_ABSENT`, MINSANTE-I.2) reste préservé tel quel.
+
+---
+
+## 12. ADDENDUM — SPRINT REGISTRY-NATIONAL-A.1 (Public Trust Semantics Hardening)
+
+Corrige le blocage identifié en §11.4 ci-dessus. Détail complet de la
+sémantique canonique : `docs/03_DATA_REGISTRY/PUBLIC_TRUST_SEMANTICS.md`.
+
+### 12.1 Résumé du correctif
+
+- Résolveur central pur `resolveEstablishmentTrustState()` (nouveau module
+  `src/lib/trust/resolveEstablishmentTrustState.ts`), 27 tests unitaires,
+  couvrant la matrice A-O du brief §18 + les 5 fixtures de régression du
+  manifest national §14.
+- `establishments.is_verified` **reste inchangé côté DB** (Option A du brief
+  §5 — aucune migration). Réinterprété côté code/UI comme
+  `platform_verification` (`PLATFORM_VERIFIED`/`NOT_PLATFORM_VERIFIED`),
+  jamais comme une preuve ministérielle.
+- `official_verification` est calculé séparément — `OFFICIALLY_VERIFIED`
+  exige une preuve au niveau `establishment_registry_identifiers.
+  verification_status` (`CORROBORATED`/`CONFIRMED`), jamais déduite de
+  `is_verified`/`is_claimed`/`owner_id`. **Vérifié en direct sur la
+  production (2026-08-22) : 0/2242 identifiants de registre ont ce statut
+  aujourd'hui — donc `OFFICIALLY_VERIFIED` ne peut être atteint par AUCUN
+  établissement vivant à ce jour.** C'est le comportement sûr attendu.
+- Tous les badges publics affichant auparavant le simple mot « Vérifié » (12
+  emplacements UI, voir `reports/registry/registry-national-a1-public-ui-map.csv`)
+  affichent désormais « Vérifié par Écoles237 ».
+- L'action admin `POST /api/admin/ecoles/[id]/verifier` (bouton « Vérifier »)
+  a été auditée : elle ne fait que `is_verified=true`, aucune vérification
+  ministérielle. Renommée « Marquer vérifié par Écoles237 » partout dans
+  l'UI admin — la route API elle-même est inchangée (aucune régression
+  fonctionnelle, uniquement un renommage de libellé).
+- Parcours de revendication (`/api/claims`, `/api/admin/claims/[id]/approve`)
+  audité : un owner ne peut ni définir `official_verification`, ni fabriquer
+  un identifiant de registre, ni définir `source_ministry` — le endpoint de
+  soumission n'accepte tout simplement pas ces champs en entrée (whitelist
+  serveur stricte). Voir `reports/registry/registry-national-a1-claim-field-policy.json`.
+- **Aucun changement de wire format** sur `/api/recherche` (Search V2) — la
+  correction porte sur le RENDU (libellés), pas sur le contrat réseau, pour
+  respecter §13 (pas de payload supplémentaire inutile).
+- **`PRODUCTION WRITES = 0`** — établissements/staging/registry identifiers
+  confirmés inchangés avant/après (2249/2378/2242, delta 0/0/0).
+
+### 12.2 Ce qui N'A PAS changé (hors périmètre volontaire)
+
+- Aucune promotion des 3 candidats `CREATE_PUBLISHABLE_UNVERIFIED`.
+- Aucun CMS construit.
+- Aucune migration exécutée (aucune n'était nécessaire — `MIGRATION_DECISION
+  = NO_MIGRATION_REQUIRED`).
+- Le nom de plan commercial « Vérifiée » (`dashboard/admin/abonnements`) n'a
+  pas été renommé — collision de nomenclature avec le concept de confiance
+  signalée mais hors périmètre (décision produit commerciale distincte).

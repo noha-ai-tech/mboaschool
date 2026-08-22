@@ -68,6 +68,18 @@ export async function POST(
     );
   }
 
+  // SPRINT REGISTRY-NATIONAL-A.1 §10 — AUDIT DOCUMENTÉ (comportement
+  // préexistant, INCHANGÉ ce sprint) : l'approbation d'une revendication
+  // (identité/contact du demandeur revue par un admin) positionne aussi
+  // is_verified=true. C'est une décision produit antérieure (Mission 02),
+  // pas une action de l'owner — l'owner ne peut jamais déclencher cette
+  // écriture lui-même (seul un platform_admin appelle cette route). Ce
+  // is_verified=true reste PLATFORM_VERIFIED uniquement (vérification
+  // d'identité du demandeur), JAMAIS OFFICIALLY_VERIFIED — voir
+  // src/lib/trust/resolveEstablishmentTrustState.ts, qui ne dérive jamais
+  // official_verification depuis claim_status/is_verified. Le badge public
+  // affiché reste donc "Vérifié par Écoles237", jamais "Vérification
+  // officielle".
   const { error: linkError } = await admin
     .from("establishments")
     .update({

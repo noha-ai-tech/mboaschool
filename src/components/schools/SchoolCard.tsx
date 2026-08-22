@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { CheckCircle2, Heart } from "lucide-react";
 import { formatQuartierCity } from "@/lib/formatSchoolLocation";
+import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
 
 // Carte établissement "premium" — utilisée par le carrousel Établissements à
 // la une. Volontairement plus légère que la carte des résultats principaux
@@ -20,6 +21,10 @@ export type FeaturedSchool = {
   category: string;
   subcategory: string;
   image: string | null;
+  /** SPRINT REGISTRY-NATIONAL-A.1 — dérivé de `establishments.is_verified`
+   * (PLATFORM_VERIFIED uniquement, jamais une preuve ministérielle). Le
+   * libellé affiché vient de TRUST_BADGE_LABELS.PLATFORM_VERIFIED — ne
+   * jamais réafficher le mot nu "Vérifié" ici. */
   verified: boolean;
   isFeatured: boolean;
   isClaimed: boolean;
@@ -62,7 +67,7 @@ export function SchoolCard({ school, priority = false }: { school: FeaturedSchoo
           )}
           {school.verified && (
             <span className="inline-flex items-center gap-1 bg-white/90 backdrop-blur-sm text-primary text-[10px] font-bold px-2 py-1 rounded-full">
-              <CheckCircle2 size={10} /> Vérifié
+              <CheckCircle2 size={10} /> {TRUST_BADGE_LABELS.PLATFORM_VERIFIED}
             </span>
           )}
         </div>

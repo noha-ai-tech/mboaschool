@@ -16,11 +16,14 @@ import {
 } from "lucide-react";
 import { includesInsensitive, normalizeForSearch, dedupeInsensitive } from "@/lib/textSearch";
 
+// SPRINT REGISTRY-NATIONAL-A.1 §9 — voir dashboard/admin/ecoles/[id]/page.tsx :
+// ce statut décrit le pipeline de revendication/onboarding, jamais une
+// preuve ministérielle.
 const VERIFICATION_LABELS: Record<string, { label: string; cls: string }> = {
   referenced:      { label: "Référencée",   cls: "text-slate-600 bg-slate-100 border-slate-200" },
   claim_requested: { label: "Revendication", cls: "text-blue-700 bg-blue-50 border-blue-200" },
   under_review:    { label: "En analyse",   cls: "text-orange-700 bg-orange-50 border-orange-200" },
-  verified:        { label: "Vérifiée",     cls: "text-emerald-700 bg-emerald-50 border-emerald-200" },
+  verified:        { label: "Vérifiée (Écoles237)", cls: "text-emerald-700 bg-emerald-50 border-emerald-200" },
   active:          { label: "Active",       cls: "text-emerald-700 bg-emerald-50 border-emerald-200" },
   suspended:       { label: "Suspendue",    cls: "text-red-700 bg-red-50 border-red-200" },
 };
@@ -158,7 +161,11 @@ export default function AdminEcolesPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <p className="font-semibold text-sm text-[#0a0a0a] truncate">{school.name}</p>
-                      {school.is_verified && <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />}
+                      {school.is_verified && (
+                        <span title="Vérifié par Écoles237" className="shrink-0 inline-flex">
+                          <CheckCircle2 size={13} className="text-emerald-500" />
+                        </span>
+                      )}
                       {school.forfait === "pro" && (
                         <span className="flex items-center gap-1 text-[10px] font-bold text-yellow-700 bg-yellow-50 border border-yellow-200 px-1.5 py-0.5 rounded-full shrink-0">
                           <Crown size={8} /> Pro
@@ -178,7 +185,7 @@ export default function AdminEcolesPage() {
                         onClick={() => runAction(school.id, "verifier")}
                         disabled={busyId === school.id}
                         className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors disabled:opacity-50"
-                        title="Vérifier"
+                        title="Marquer vérifié par Écoles237"
                       >
                         {busyId === school.id ? <Loader2 size={14} className="animate-spin" /> : <ShieldCheck size={14} />}
                       </button>
