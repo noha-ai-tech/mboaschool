@@ -1,0 +1,19 @@
+zone,file,registry_touches,cms_touches,risk,detail
+CLAIMS,src/app/api/claims/route.ts,no,no,none,neither branch touches this file
+CLAIMS,src/app/api/admin/claims/**,no,no,none,neither branch touches this file
+SCHOOL EDITING,src/app/api/school-page/contact/route.ts,no,yes,none,CMS-only new file
+SCHOOL EDITING,src/app/api/school-page/presentation/route.ts,no,yes,none,CMS-only new file
+SCHOOL EDITING,src/app/api/school-page/sections/route.ts,no,yes,none,CMS-only new file
+SCHOOL EDITING,src/app/dashboard/ecole/etablissement/page.tsx,no,yes,MEDIUM,CMS-only file but calls SchoolHeroCarousel with the OLD prop signature (verified boolean) that the Registry track changed to trustBadge — must be updated during integration or it will fail typecheck
+TRUST,src/lib/trust/resolveEstablishmentTrustState.ts,yes,no,none,Registry-only file
+TRUST,src/components/school/SchoolHeroCarousel.tsx,yes,no,none,Registry-only file (prop signature changed: verified:boolean -> trustBadge:{label}|null)
+TRUST,src/app/ecole/[id]/page.tsx,yes,yes,HIGH,REAL OVERLAP. Registry adds trust-resolver wiring + trustBadge prop usage (small, surgical). CMS extracts GeneralTab/DocumentsTab/AnnouncementsTab/ParentTab/ContactRow into separate component files (large refactor). Both changes are compatible in intent (neither wants to keep the old code the other removed) but must be manually combined — trivial three-way merge will likely conflict on the same hunks.
+SEARCH,src/app/api/recherche/route.ts,no,no,none,neither branch touches this file
+SEARCH,src/lib/search/queryBuilder.ts,no,no,none,neither branch touches this file
+ADMIN/REVIEW,src/app/dashboard/admin/registre/page.tsx,no,no,none,neither branch touches this file
+DB/MIGRATIONS,supabase/migrations/0021_*,yes (establishment_registry_identifiers, LIVE),yes (school_page_sections, NOT executed),CRITICAL,FILENAME COLLISION. Registry's 0021 is already live in production. CMS's 0021 has never been executed. Must renumber CMS's file to avoid ever being confused with or overwriting the live one — pure numbering issue, no live-DB conflict since CMS's was never applied.
+DB/MIGRATIONS,supabase/migrations/0022_*,yes (transport_source_ministry_enum, LIVE),yes (storage_multi_school_hardening, NOT executed),CRITICAL,FILENAME COLLISION. Same situation as 0021 — must renumber CMS's file.
+DB/MIGRATIONS,supabase/migrations/0023_registry_column_protection.sql,yes (LIVE, verified this session),no,none,CMS branch does not touch or reference this file at all — no risk of it being reverted or bypassed by the CMS integration.
+TYPES,src/lib/supabase/database.types.ts (or equivalent),unknown,unknown,LOW,not explicitly diffed this pass — no compile errors surfaced in either branch's individual build history; will be caught by the full typecheck after integration if it exists
+PRO CONTEXT,src/lib/useSchool.ts,no,yes (pro-school-organization only),none,Registry track never touches this file
+PRO CONTEXT,src/app/pro/**,no,yes (pro-school-organization only),none,Registry track never touches this area at all

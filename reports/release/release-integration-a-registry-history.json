@@ -1,0 +1,26 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T06:02:00.000Z",
+  "method": "git log dd90d33f..HEAD (fork point to local main HEAD), filtered for registry milestone commits",
+  "local_only_commits_total": 53,
+  "key_milestones": {
+    "MINESUP": ["54a6abe0", "a3d06575", "4ec4e948", "410fdb1c", "5c5e7437", "fc4c7266", "55c99836", "2ccc8d6d", "e15b5716"],
+    "MINSANTE": ["4d91b4ad", "4077a0fd", "1f515f34", "a7fe8a72", "0498b433", "8f7e9bba", "f8c9cdaa", "74981a85", "93ea686d", "c708a761", "adda64d3", "6f46efc8", "c69984e6", "2909851d", "6a73bc6e"],
+    "TRANSPORT_TIER3": ["b2e257bb", "ce2493bc", "ce9e2f86", "1edbc04e", "8ee6d3b0", "9bbfd91f", "ecd76eab", "f86dcb05", "2e8313ec"],
+    "REGISTRY_NATIONAL_A": "8609db3",
+    "REGISTRY_NATIONAL_A_1": "b349aa19",
+    "REGISTRY_NATIONAL_B": "c5ee2c88",
+    "REGISTRY_NATIONAL_C": "95807d00 (preflight) + 1dfaa1d8 (execution, published 3 establishments)",
+    "REGISTRY_NATIONAL_D": "8cd5938e",
+    "REGISTRY_NATIONAL_D_1": "6a97b88b (preflight) + e4f68747 (log B) + f89ce358 (approval record) + 0a40f055 (fix executed, HEAD)"
+  },
+  "migrations_introduced": {
+    "0018_registry_identity_fields.sql": "official_id/source_ministry/etc. columns — confirmed live",
+    "0019_establishments_city_nullable.sql": "confirmed live (used throughout registry pipeline)",
+    "0020_search_v2_unaccent_rpc.sql": "confirmed live (Search V2 accent-insensitive matching)",
+    "0021_establishment_registry_identifiers.sql": "confirmed live this session (2242 rows read successfully)",
+    "0022_transport_source_ministry_enum.sql": "confirmed live (MINTRANSPORT enum value used by the 3 published establishments)",
+    "0023_registry_column_protection.sql": "executed 2026-08-23, independently verified live (REGISTRY-NATIONAL-D.1)"
+  },
+  "note_0017_missing": "supabase/migrations/ jumps from 0016 to 0018 — no 0017 file exists locally. Pre-existing gap, not introduced by any commit in this range, not investigated further (out of scope for this sprint)."
+}

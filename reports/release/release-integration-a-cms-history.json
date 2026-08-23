@@ -1,0 +1,56 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T06:03:00.000Z",
+  "method": "Inspected every branch on both remotes (identical branch sets/hashes on noha and origin), read commit diffs directly rather than inferring from names/branch labels.",
+  "authorship_discrepancy": "Brief claims CMS work is by 'Eddy/Guylaine'. No 'Guylaine' commits exist anywhere. Actual authors found: Eddy Nwaha, aurelie, ndjm2020-pixel.",
+  "identified_cms_work": [
+    {
+      "commit": "fdf2ccb531056e67be53c3708ff37a9079bc9b0f",
+      "author": "aurelie <abenjebassal@2027.ucac-icam>",
+      "branch": "feat/cms-school-page-v1",
+      "date": "2026-08-20",
+      "base": "dd90d33f (same fork point as local main)",
+      "subject": "feat: add CMS visual editor for school public page (presentation, contact, sections)",
+      "feature_area": "Owner-facing CMS for the public school page: presentation/description, contact fields, section ordering/visibility.",
+      "files_changed": 16,
+      "insertions": 1653,
+      "deletions": 323,
+      "key_new_files": [
+        "src/lib/cms/authorizeSchoolMutation.ts — server-side owner-authorization helper (re-derives establishment from session, never trusts a client-supplied id)",
+        "src/app/api/school-page/contact/route.ts — PATCH, strict allowlist {phone,email,website,address,city}",
+        "src/app/api/school-page/presentation/route.ts — PATCH, strict allowlist {description} only",
+        "src/app/api/school-page/sections/route.ts — PUT, strict allowlist of 8 known section_key values, atomic full-order upsert",
+        "src/components/cms/{Drawer,EditableSection,EditorToolbar}.tsx — editor UI shell",
+        "src/components/school/{GeneralTab,ContactRow,DocumentsTab,AnnouncementsTab,ParentTab}.tsx — extracted from src/app/ecole/[id]/page.tsx for shared PUBLIC/PREVIEW/EDITOR rendering",
+        "supabase/migrations/0021_school_page_sections.sql — NEW TABLE school_page_sections, prepared not executed, numbering COLLIDES with Registry's live 0021",
+        "supabase/migrations/0022_storage_multi_school_hardening.sql — fixes a real pre-existing bug in 0007's storage RLS (scalar subquery breaks for multi-school owners), prepared not executed, numbering COLLIDES with Registry's live 0022"
+      ],
+      "modified_shared_file": "src/app/ecole/[id]/page.tsx — refactors GeneralTab/DocumentsTab/AnnouncementsTab/ParentTab/ContactRow out into separate component files. Also touched by the Registry track (trust badge wiring) — see conflict-risk report.",
+      "write_security_assessment": "GOOD — all 3 write routes use explicit field allowlists (Set-based rejection of unknown keys), re-derive establishment ownership server-side from the session (never a client-supplied id), and use the session-bound Supabase client (RLS still applies as a second layer, not bypassed via service role). No .update(body)-style spread found anywhere in this branch's diff.",
+      "status": "PREPARED_NOT_MERGED — never merged to main, migrations never executed"
+    },
+    {
+      "commit": "e93bc28cb6285ba62589cd45c8bdaab0f9acc9fa",
+      "author": "Eddy Nwaha <enwaha22@gmail.com>",
+      "branch": "feat/pro-school-organization",
+      "date": "2026-08-18",
+      "base": "dd90d33f (same fork point)",
+      "subject": "feat(pro): add multi-school context foundation",
+      "feature_area": "Pro dashboard multi-school context/switcher — NOT the public-page CMS described in this sprint's brief, but genuinely real, unmerged work by Eddy.",
+      "files_changed": 22,
+      "overlap_with_cms_school_page_v1": "NONE (zero shared files)",
+      "overlap_with_registry_track": "NONE (zero shared files)",
+      "write_security_assessment": "Not deeply audited this sprint (out of scope — doesn't touch establishments' registry-protected columns or public trust rendering based on file list; primarily context/routing/layout changes).",
+      "status": "PREPARED_NOT_MERGED"
+    }
+  ],
+  "other_branches_reviewed_not_cms": [
+    "chore/upgrade-next-security — dependency upgrade only",
+    "chore/vercel-readiness — deploy config only",
+    "feat/design-freeze-v1 — landing page / design system, no establishment-write code",
+    "feat/release-candidate-rc1 — RC1 branding/missions, superseded by later main history",
+    "feature/homepage-blue-background — cosmetic",
+    "feature/homepage-hero-carousel-map — superseded, content already in main's history"
+  ],
+  "confidence": "HIGH — both candidate branches were read in full diff, not inferred from names. feat/cms-school-page-v1 is the CMS work this sprint's brief refers to (despite the wrong authorship attribution)."
+}

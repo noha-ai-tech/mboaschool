@@ -1,0 +1,25 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T06:00:00.000Z",
+  "repository": "mboaschool",
+  "branch": "main",
+  "local_head": "0a40f05566f3042a388e6b43cecc3d259abcfe9d",
+  "working_tree": "clean",
+  "remotes": {
+    "noha": { "url": "git@github.com:noha-ai-tech/mboaschool.git", "role": "authoritative (per prior session memory + repo convention)" },
+    "origin": { "url": "git@github.com:nbokeros1/mboaschool.git", "role": "secondary/personal fork — never push here per established convention" }
+  },
+  "remote_main_hashes": {
+    "noha/main": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+    "origin/main": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+    "identical": true
+  },
+  "merge_base_local_main_vs_noha_main": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+  "note": "merge-base == noha/main HEAD exactly — noha/main has NOT moved since local main branched from it. This means local main (53 commits ahead, 0 behind) can fast-forward push to noha/main with zero conflict, in isolation. The actual integration work needed is with the unmerged feature branches below, not with main itself.",
+  "rev_list_local_vs_noha_main": { "local_only_commits": 53, "noha_main_only_commits": 0 },
+  "all_branches_found": {
+    "noha": ["main", "chore/upgrade-next-security", "chore/vercel-readiness", "feat/cms-school-page-v1", "feat/design-freeze-v1", "feat/pro-school-organization", "feat/release-candidate-rc1", "feature/homepage-blue-background", "feature/homepage-hero-carousel-map"],
+    "origin": "identical set to noha (same commit hashes for every branch checked)"
+  },
+  "important_discrepancy": "The RELEASE-INTEGRATION-A brief states the CMS was developed by 'Eddy/Guylaine'. Across every commit on every branch on both remotes, the only three authors found are 'Eddy Nwaha', 'aurelie', and 'ndjm2020-pixel' (this session's user). There is NO 'Guylaine' author anywhere in this repository's history. The actual school-page CMS work (feat/cms-school-page-v1) is authored entirely by 'aurelie' <abenjebassal@2027.ucac-icam>, not Eddy. This is flagged per the brief's own §5 instruction ('Do not infer from names alone') rather than silently accepted or silently corrected."
+}

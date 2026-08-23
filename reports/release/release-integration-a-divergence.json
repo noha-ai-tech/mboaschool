@@ -1,0 +1,17 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T06:04:00.000Z",
+  "common_ancestor_all_branches": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+  "branches": {
+    "local main (HEAD)": { "commits_since_ancestor": 53, "content": "Registry V1 (MINESUP/MINSANTE/MINTRANSPORT pipelines through REGISTRY-NATIONAL-D.1)" },
+    "noha/main": { "commits_since_ancestor": 0, "content": "identical to ancestor — has not moved" },
+    "noha/feat/cms-school-page-v1": { "commits_since_ancestor": 1, "content": "aurelie's school-page CMS editor" },
+    "noha/feat/pro-school-organization": { "commits_since_ancestor": 1, "content": "Eddy's multi-school Pro context" }
+  },
+  "file_level_overlap": {
+    "registry_vs_cms_school_page_v1": ["src/app/ecole/[id]/page.tsx"],
+    "registry_vs_pro_school_organization": [],
+    "cms_school_page_v1_vs_pro_school_organization": []
+  },
+  "conclusion": "Three branches diverge from one common point with no complex multi-way history to reconcile (no merge commits, no rebases). Exactly one file has real overlapping changes (src/app/ecole/[id]/page.tsx, registry vs CMS), requiring understanding both intents before resolution. All other files are either exclusive to one branch or untouched. noha/main itself has not moved — no remote-divergence risk for the base push."
+}
