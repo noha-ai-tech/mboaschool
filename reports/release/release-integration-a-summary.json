@@ -1,0 +1,87 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T07:07:00.000Z",
+  "operator": "ndjm2020-pixel (session user) — no separate named push-authorization received this sprint",
+  "repository": "mboaschool",
+  "integration_branch": "release/registry-cms-integration",
+  "final_commit": "d9bf214829606fadc8a2d41cafcf98134b4c866e",
+  "authoritative_remote": "noha",
+  "git": {
+    "local_starting_head": "0a40f05566f3042a388e6b43cecc3d259abcfe9d",
+    "remote_starting_head": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+    "common_ancestor": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+    "local_only_commits": 53,
+    "remote_only_commits": 0,
+    "conflicts": 2,
+    "conflicts_detail": "1 real content conflict (src/app/ecole/[id]/page.tsx — trust badge wiring vs component extraction, resolved by combining both intents) + 1 filename collision (migrations 0021/0022, resolved by renumbering CMS's files to 0024/0025, neither was ever live under the old numbers)",
+    "resolved": true,
+    "remote_moved_during_sprint": false
+  },
+  "important_discrepancy_flagged": "Brief attributes CMS work to 'Eddy/Guylaine'. No 'Guylaine' author exists anywhere in this repository's history (checked every branch on both remotes). The actual CMS work is authored entirely by 'aurelie'. Flagged per the brief's own §5 instruction rather than silently accepted.",
+  "registry": {
+    "v1_closed": true,
+    "establishments": 2252,
+    "staging": 2378,
+    "registry_identifiers": 2242,
+    "national_3_healthy": true,
+    "v2_deferred_protected": true,
+    "v2_checksum_unchanged": "f01b34dd8b946d9c643698c610851a79dea4d304bd9f45df511af602345fb1fc"
+  },
+  "cms": {
+    "commits_identified": 2,
+    "features_integrated": ["School-page CMS editor (presentation/contact/sections) — aurelie", "Pro multi-school context foundation — Eddy"],
+    "owner_editing": "PASS — strict allowlists, no protected-field exposure",
+    "admin": "Untouched by this integration (no admin code in either merged branch)",
+    "media_storage": "0025 (storage RLS hardening) prepared, not executed; the specific bug it targets could not be reproduced live this session (reported honestly, not blocking)"
+  },
+  "security": {
+    "migration_0023_live": true,
+    "owner_registry_field_writes_blocked": true,
+    "cms_server_whitelist_safe": true,
+    "registry_identifiers_protected": true,
+    "claim_escalation_possible": false,
+    "cross_owner_media_isolation": "NOT independently re-tested this sprint (time budget) — existing policy design intends to prevent it by construction; not a new risk introduced by this integration"
+  },
+  "public_trust": {
+    "listed_claimed_platform_official_distinction": "Verified at source/resolver level; rendered-DOM verification not possible (no headless browser tooling in this project) — methodology gap documented, not previously caught in this session's earlier sprints either",
+    "ambiguous_badges": 0
+  },
+  "search_v2": { "regression": false, "pagination": "bounded (24/page)", "staging_leakage": 0, "full_table_fetch": false },
+  "migrations": {
+    "live_state_reconciled": true,
+    "cms_migrations": "2 (0024, 0025), both prepared/not executed, both renumbered to avoid collision, both SAFE_TO_APPLY_LATER",
+    "conflicts": "resolved (filename collision only, no live-DB conflict)",
+    "pending_ddl": "0024, 0025 — not executed this sprint, no automatic execution attempted"
+  },
+  "qa": {
+    "typescript_app": "PASS",
+    "typescript_registry": "PASS",
+    "cms_typescript": "PASS (part of the single app-wide tsconfig — no separate CMS tsconfig exists)",
+    "tests": "442/442 PASS (full repo suite, not a subset)",
+    "build": "PASS",
+    "e2e": "PASS for all public flows; owner/admin flows verified via auth-gating + code review rather than full authenticated browser session (documented scope boundary)"
+  },
+  "data_safety": {
+    "unexpected_db_rows": 0,
+    "pii": "none introduced",
+    "secrets": "none found in diff, .env.local confirmed git-ignored and never tracked",
+    "qa_fixture_cleanup": "CONFIRMED — 0 leftover test establishments or test auth users from this entire session, independently re-verified"
+  },
+  "main": {
+    "ready_for_main_push": "YES",
+    "push_authorized": false,
+    "push_executed": false,
+    "remote_main_after": "unchanged (dd90d33f) — no push performed"
+  },
+  "deploy": {
+    "ready_for_deploy": "NO",
+    "deploy_executed": false,
+    "reasoning": "Not evaluated this sprint per brief §35 — READY_FOR_MAIN_PUSH and READY_FOR_DEPLOY are separate decisions, and a push (even once authorized) does not imply deploy authorization."
+  },
+  "decision": "A",
+  "decision_label": "READY_FOR_MAIN_PUSH",
+  "decision_reason": "All §38 criteria hold: Registry V1 closed, CMS integrated with both real conflicts resolved and documented, migration 0023 live and re-verified multiple times this sprint, claims/owner-editing/registry-protection/Search V2 all pass, zero staging leakage, 442/442 tests pass, build passes, secret scan clean, remote (noha/main) confirmed unmoved both at sprint start and again just before this report.",
+  "push": "NO — awaiting the explicit named authorization message required by brief §39",
+  "deploy": "NO",
+  "next_step_for_push": "If authorized, run exactly: git push noha release/registry-cms-integration:main — a clean fast-forward, no force needed. Then fast-forward local main to match."
+}

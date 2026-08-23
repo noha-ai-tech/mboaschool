@@ -1,0 +1,11 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T07:09:00.000Z",
+  "before_sprint": { "establishments": 2252, "staging": 2378, "registry_identifiers": 2242 },
+  "after_sprint": { "establishments": 2252, "staging": 2378, "registry_identifiers": 2242 },
+  "delta": { "establishments": 0, "staging": 0, "registry_identifiers": 0 },
+  "schema_objects_changed_this_sprint": "NONE — no DDL executed (0024/0025 remain prepared, not applied)",
+  "leftover_qa_fixtures": 0,
+  "unexplained_writes": "NONE",
+  "outcome": "PASS — zero data drift across the entire RELEASE-INTEGRATION-A sprint, despite multiple fixture-based security re-verifications, two branch merges, and a full build/test cycle."
+}

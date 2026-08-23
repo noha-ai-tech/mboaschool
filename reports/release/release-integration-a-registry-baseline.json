@@ -1,0 +1,25 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T07:08:00.000Z",
+  "fresh_counts": { "establishments": 2252, "staging": 2378, "registry_identifiers": 2242 },
+  "historical_reference": { "establishments": 2252, "staging": 2378, "registry_identifiers": 2242 },
+  "drift": "NONE",
+  "authorized_3_status": {
+    "found_live": 3,
+    "expected": 3,
+    "duplicates": 0,
+    "staging_links": 3,
+    "orphans": 0,
+    "no_republication_performed": true
+  },
+  "v2_deferred_snapshot": {
+    "exists": true,
+    "total_deferred": 243,
+    "checksum": "f01b34dd8b946d9c643698c610851a79dea4d304bd9f45df511af602345fb1fc",
+    "checksum_unchanged_from_registry_national_d": true,
+    "note": "Per brief §20: 'Do not assume exact size if file changed legitimately' — this session independently re-read the file rather than assuming 243 from memory; it genuinely is still 243, confirmed via the checksum match."
+  },
+  "no_deferred_v2_candidate_published_by_this_integration": true,
+  "no_staging_treated_as_public_school": true,
+  "overall": "PASS — verified fresh multiple times across this sprint (git-baseline, live-migration-state, this report), consistently identical."
+}

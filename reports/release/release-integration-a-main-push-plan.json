@@ -1,0 +1,15 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T07:05:00.000Z",
+  "authoritative_remote": "noha (git@github.com:noha-ai-tech/mboaschool.git) — per established convention (never origin/nbokeros1); reconfirmed this sprint, unchanged.",
+  "current_local_integration_branch": "release/registry-cms-integration",
+  "current_local_integration_commit": "d9bf214829606fadc8a2d41cafcf98134b4c866e",
+  "remote_main_hash_at_sprint_start": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+  "remote_main_hash_rechecked_end_of_sprint": "dd90d33f230816fdbb71b9c3616ab8f7af027874",
+  "remote_moved_during_sprint": false,
+  "commits_to_push": "55 total (53 original Registry-track commits already on local main, + 2 integration merge commits + 1 verification commit) — dd90d33f..d9bf214",
+  "fast_forward_possible": true,
+  "reasoning": "noha/main (dd90d33f) is the exact common ancestor of local main and both feature branches — it has not advanced. The integration branch's HEAD strictly contains noha/main's history plus all Registry-track commits plus the two feature-branch merges. A push of release/registry-cms-integration to noha/main would be a clean fast-forward, not a force push, not a rewrite.",
+  "exact_safe_push_command_once_authorized": "git push noha release/registry-cms-integration:main",
+  "note_on_local_main": "local `main` itself was intentionally left untouched throughout this sprint (per §7/§8 safety) — it still points to 0a40f05 (REGISTRY-NATIONAL-D.1's final commit), one commit BEHIND the integration branch. If the push above is authorized and executed, local `main` should subsequently be fast-forwarded to match (git switch main && git merge --ff-only release/registry-cms-integration) so local state stays consistent with the newly-pushed remote main — this is a local bookkeeping step, not a remote-affecting action, and can be done immediately after a successful push without additional authorization."
+}
