@@ -1,0 +1,19 @@
+{
+  "generated_at": "2026-08-23T04:58:58.330Z",
+  "marker": "D1-0014-CHECK-0674c415",
+  "attempted_field": "is_verified",
+  "attempted_value": true,
+  "write_succeeded": false,
+  "error": {
+    "code": "42501",
+    "message": "Ce champ est gere par l equipe Ecoles237."
+  },
+  "final_state_service_role_read": {
+    "is_verified": false
+  },
+  "conclusion": "0014_rc1_security_fixes.sql's trigger IS live and correctly blocked the owner's attempt to self-verify.",
+  "cleanup": {
+    "establishment_deleted": true,
+    "user_deleted": true
+  }
+}

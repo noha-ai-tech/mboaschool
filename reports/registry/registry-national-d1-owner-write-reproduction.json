@@ -1,0 +1,22 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D.1",
+  "generated_at": "2026-08-23T05:00:00.000Z",
+  "method": "Transaction-safe controlled fixture (REGISTRY-NATIONAL-D.1 §3 option C): a throwaway auth user + a throwaway, clearly-marked establishment row were created via the service-role client, then a REAL RLS-subject session (anon key + signInWithPassword, not service role) was used to attempt writes exactly as a genuine authenticated owner would via a direct Supabase REST call. Both the test establishment and the test user were deleted immediately after each run, in a finally block that runs regardless of outcome. No real user's data was touched at any point.",
+  "runs": [
+    "registry-national-d1-owner-write-reproduction-before.json (registry-protected fields: source_ministry, official_id, registry_import_batch, source_reference, source_url)",
+    "registry-national-d1-0014-live-check.json (pre-existing platform-trust field: is_verified, to establish whether the 0014 trigger is actually live)"
+  ],
+  "CURRENT_OWNER_WRITE_SURFACE": {
+    "legitimate_content_field_update": "ALLOWED (description, tested) — as intended.",
+    "0014_covered_field_is_verified": "BLOCKED — 0014_rc1_security_fixes.sql's trigger IS confirmed live in production (error 42501, exact message match: 'Ce champ est gere par l equipe Ecoles237.')."
+  },
+  "PROTECTED_BEFORE_0023": ["is_verified (via live 0014 trigger)"],
+  "UNPROTECTED_BEFORE_0023": {
+    "source_ministry": "write SUCCEEDED — owner set it to an arbitrary value (MINESUP) on their own row",
+    "official_id": "write SUCCEEDED — owner set it to an arbitrary fabricated value",
+    "registry_import_batch": "write SUCCEEDED — owner set it to an arbitrary fabricated value",
+    "source_reference": "write SUCCEEDED — owner set it to an arbitrary fabricated value",
+    "source_url": "write SUCCEEDED — owner set it to an arbitrary fabricated value"
+  },
+  "conclusion": "The REGISTRY-NATIONAL-D finding is CONFIRMED LIVE, not merely theoretical: an authenticated establishment owner, using nothing but their own normal session (no admin/service-role access), can currently overwrite all 5 registry-provenance columns on their own establishment row. The pre-existing 0014 protection is confirmed live and working correctly for its own 5 columns — it simply never covered the columns 0018 added later. Full raw evidence in registry-national-d1-owner-write-reproduction-before.json and registry-national-d1-0014-live-check.json."
+}

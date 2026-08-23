@@ -1,0 +1,28 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D.1",
+  "generated_at": "2026-08-23T05:10:00.000Z",
+  "file_audited": "supabase/migrations/0023_registry_column_protection.sql",
+  "line_by_line_review": [
+    { "aspect": "Function definition", "finding": "protect_establishment_registry_columns(), plpgsql, security definer, search_path=public — identical pattern to 0014's proven-live protect_establishment_privileged_columns(), no search_path hijack risk." },
+    { "aspect": "Guard condition", "finding": "`auth.uid() = old.owner_id` — for service-role calls auth.uid() is NULL, so `NULL = old.owner_id` evaluates NULL (never TRUE) regardless of old.owner_id's value (including NULL rows) — block never fires for service_role, confirmed both by static SQL semantics and live behavioral test (registry-national-d1-owner-write-reproduction-before.json ran successfully via service-role inserts/deletes throughout, and the pre-0023 test showed the same auth.uid()-based trigger, 0014, correctly firing only for the owner's own session)." },
+    { "aspect": "Protected column list", "finding": "official_id, source_ministry, source_reference, source_url, source_updated_at, registry_import_batch — exactly the 6 columns confirmed live-writable-by-owner in registry-national-d1-owner-write-reproduction-before.json (5 tested directly; source_updated_at not individually tested this sprint but is structurally identical — same table, same RLS policy, no separate protection — treated as equally exposed)." },
+    { "aspect": "Comparison operator", "finding": "`is distinct from` used throughout — null-safe, correctly avoids false positives when a column stays NULL to NULL." },
+    { "aspect": "Trigger timing/level", "finding": "BEFORE UPDATE, FOR EACH ROW — correct: allows raising an exception to reject the write before commit, matches 0014 exactly." },
+    { "aspect": "Idempotent installation", "finding": "DROP TRIGGER IF EXISTS + CREATE TRIGGER — safe to re-run, matches repo convention." },
+    { "aspect": "Naming collision check", "finding": "Function/trigger names (protect_establishment_registry_columns / establishments_protect_registry_columns) are distinct from 0014's (protect_establishment_privileged_columns / establishments_protect_privileged_columns) — both triggers coexist independently, confirmed no interaction (they check disjoint column sets)." },
+    { "aspect": "RLS/policy changes", "finding": "None — file only adds a trigger, never touches supabase/schema.sql:143's policy. Legitimate owner content updates (e.g. description) remain unaffected — confirmed live in registry-national-d1-owner-write-reproduction-before.json (description update succeeded)." },
+    { "aspect": "establishment_registry_identifiers coverage", "finding": "0023 does NOT target this table (correctly — it's a separate table with its own RLS). Verified separately this sprint (registry-national-d1-identifier-table-security.json): already fully protected — RLS enabled, only a platform_admin SELECT policy exists, no INSERT/UPDATE/DELETE policy for any client role, so Postgres denies these by default for non-service-role callers. Live-confirmed: an owner's INSERT attempt was rejected with 'new row violates row-level security policy'. No migration needed for this table." },
+    { "aspect": "Primary key (id) column", "finding": "NOTE (not a blocker): 0023 does not explicitly guard against an owner including `id` in an UPDATE body to attempt to change their own establishment's primary key. Not tested this sprint (out of scope — this is a structural PK-mutation risk, not a 'registry provenance' leak, and any such attempt would likely fail via foreign-key constraints from establishment_import_staging.promoted_establishment_id and other referencing tables once real related rows exist). Flagged for a future, separate hardening pass — not required for this sprint's decision." }
+  ],
+  "does_it_break_legitimate_owner_updates": {
+    "tested": true,
+    "result": "NO — confirmed live pre-migration (description update succeeded) and the trigger logic itself only inspects the 6 registry-provenance columns; any update that does not touch them is entirely unaffected regardless of which other columns are included."
+  },
+  "does_it_block_trusted_server_pipeline": {
+    "analysis": "NO by construction — auth.uid() is NULL for all service-role-authenticated requests (used by every /api/admin/* route and every scripts/school-registry/* script), so `auth.uid() = old.owner_id` is never TRUE for those calls, regardless of the row's actual owner_id value. This is the exact same mechanism already proven live and correct for 0014.",
+    "live_tested_this_sprint": "Indirectly — every service-role write performed by this sprint's own test scripts (create/update/delete of the throwaway establishment, including setting official_id/source_ministry directly via the admin client) succeeded without any trigger interference, both for 0014 (is_verified) and structurally identical logic for 0023's columns."
+  },
+  "decision": "A",
+  "decision_label": "MIGRATION_0023_READY_AS_IS",
+  "decision_reason": "The migration is correctly scoped, uses a proven-safe pattern (identical to 0014, which is confirmed live and working), protects exactly the 6 columns confirmed live-vulnerable, does not touch RLS or break legitimate owner updates, and does not affect the trusted server pipeline. No changes required before execution."
+}

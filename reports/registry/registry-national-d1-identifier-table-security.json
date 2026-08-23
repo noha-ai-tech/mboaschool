@@ -1,0 +1,41 @@
+{
+  "generated_at": "2026-08-23T05:00:39.934Z",
+  "marker": "D1-IDTABLE-CHECK-6cf9341b",
+  "table_exists_live": true,
+  "total_row_count": 2242,
+  "sample_columns": [
+    "id",
+    "establishment_id",
+    "authority",
+    "registry",
+    "identifier",
+    "identifier_type",
+    "source_url",
+    "source_reference",
+    "verification_status",
+    "is_primary",
+    "first_seen_at",
+    "last_verified_at",
+    "created_at",
+    "metadata"
+  ],
+  "owner_insert_attempt": {
+    "succeeded": false,
+    "error": {
+      "code": "42501",
+      "message": "new row violates row-level security policy for table \"establishment_registry_identifiers\""
+    }
+  },
+  "owner_select_attempt": {
+    "rows_returned": 0,
+    "error": null,
+    "note": "0 rows expected even if no error — RLS silently filters, doesn't necessarily throw"
+  },
+  "owner_update_attempt": "N/A — insert did not succeed, no row to attempt update on",
+  "owner_delete_attempt": "N/A — insert did not succeed, no row to attempt delete on",
+  "conclusion": "SAFE: establishment_registry_identifiers correctly rejects owner-level INSERT — RLS has no permissive policy for authenticated/anon roles, only service_role (which bypasses RLS) can write.",
+  "cleanup": {
+    "establishment_deleted": true,
+    "user_deleted": true
+  }
+}

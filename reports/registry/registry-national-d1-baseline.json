@@ -1,0 +1,38 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D.1",
+  "generated_at": "2026-08-23T05:45:00.000Z",
+  "repository_safety": {
+    "repository": "mboaschool",
+    "branch": "main",
+    "head": "8cd5938e34d33fb1d47fe545d7af81ef127db3d6",
+    "matches_d_report": true,
+    "working_tree": "clean",
+    "commits_ahead_of_noha_main": 49,
+    "commits_behind_noha_main": 0
+  },
+  "database": {
+    "establishments": 2252,
+    "staging_total": 2378,
+    "staging_promoted": 1526,
+    "staging_unpromoted": 852,
+    "registry_identifiers": 2242,
+    "ministry_breakdown": {
+      "MINESUP": { "staging": 92, "live": 89 },
+      "MINEFOP": { "staging": 0, "live": 0 },
+      "MINSANTE": { "staging": 22, "live": 8 },
+      "MINTRANSPORT": { "staging": 12, "live": 3 }
+    },
+    "matches_registry_national_d_final_baseline": true,
+    "drift_since_d": 0
+  },
+  "rls_and_ddl_execution_capability": {
+    "available_credentials_in_env_local": ["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_ANON_KEY", "SUPABASE_SERVICE_ROLE_KEY"],
+    "not_available": [
+      "No direct Postgres connection string (DATABASE_URL / POSTGRES_URL / DIRECT_URL)",
+      "No SUPABASE_ACCESS_TOKEN (Supabase CLI management auth) — `npx supabase projects list` returns LegacyPlatformAuthRequiredError",
+      "No linked Supabase CLI project (`supabase/config.toml` absent — only migrations/, schema.sql, seed files exist)",
+      "No `exec_sql`/`exec_sql_readonly` or equivalent RPC function exists in the project's PostgREST schema (confirmed REGISTRY-NATIONAL-D, re-confirmed unchanged)"
+    ],
+    "conclusion": "This session has NO mechanism to directly query pg_catalog/information_schema (so live trigger/policy existence still cannot be confirmed by direct introspection — must rely on static migration-file analysis + behavioral inference), and NO mechanism to execute arbitrary DDL (CREATE TRIGGER, CREATE FUNCTION, etc.) against the live database. The service-role key only grants PostgREST table/RPC access, not raw SQL execution. Per REGISTRY-NATIONAL-D.1 §13's own contingency: 'Si l'environnement manque de capacité DDL directe : STOP et instruire l'exécution manuelle via Supabase SQL Editor. Ne jamais simuler l'exécution.' This applies regardless of the approval-gate outcome — see registry-national-d1-preflight.json."
+  }
+}

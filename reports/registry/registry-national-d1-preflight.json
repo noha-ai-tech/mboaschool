@@ -1,0 +1,31 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D.1",
+  "generated_at": "2026-08-23T05:20:00.000Z",
+  "repository_safety": "PASS (see registry-national-d1-baseline.json)",
+  "fresh_baseline": "PASS — zero drift since REGISTRY-NATIONAL-D (2252/2378/2242)",
+  "bug_reproduction": "CONFIRMED LIVE via transaction-safe controlled fixture (registry-national-d1-owner-write-reproduction.json) — all 5 tested registry-protected columns writable by an authenticated owner; legitimate content update unaffected; 0014 trigger confirmed live and correctly blocking is_verified.",
+  "migration_audit": "PASS — decision A, MIGRATION_0023_READY_AS_IS (registry-national-d1-migration-audit.json). No changes needed.",
+  "trigger_design_check": "PASS — auth.uid()=NULL for service-role calls means the trigger never blocks the trusted server pipeline, by the same proven mechanism as live 0014.",
+  "protected_field_set": "Documented (registry-national-d1-owner-field-policy.json) — REGISTRY_PROTECTED (6 columns) / PLATFORM_ADMIN_ONLY (5 columns, already protected) / OWNER_EDITABLE_NOW (10 columns) / OWNER_EDITABLE_LATER_CMS (9 columns) / PRODUCT_DECISION_REQUIRED (5 columns).",
+  "owner_editable_fields": "Documented, unchanged from REGISTRY-NATIONAL-D.",
+  "claim_route_audit": "PASS — app layer unchanged and safe (registry-national-d1-claim-security-before.json); RLS layer confirmed vulnerable (fix pending).",
+  "identifier_table_security": "PASS — establishment_registry_identifiers already fully secure, live-confirmed, no fix needed (registry-national-d1-identifier-table-security.json).",
+  "pre_migration_qa": {
+    "build": "PASS",
+    "typescript_app": "PASS",
+    "typescript_registry": "PASS",
+    "tests": "185/185 PASS (trust resolver, publication policy, registry national guard, registry national B, matching, registryReview, Search V2 queryBuilder, registryBackfill/identifiers)"
+  },
+  "ddl_execution_capability": {
+    "available": false,
+    "reason": "This session has no direct Postgres connection string, no authenticated Supabase CLI (no SUPABASE_ACCESS_TOKEN, no linked project), and no exec_sql/equivalent RPC exists in the project's PostgREST schema. The service-role key only grants PostgREST table/RPC access — it cannot execute arbitrary DDL (CREATE TRIGGER/FUNCTION). Confirmed unchanged from REGISTRY-NATIONAL-D.",
+    "consequence": "Even with explicit human approval, this session CANNOT execute 0023 directly. Per REGISTRY-NATIONAL-D.1 §13's own contingency, manual execution via the Supabase SQL Editor is required regardless of the approval-gate outcome."
+  },
+  "human_approval_gate": {
+    "explicit_named_approval_present_in_conversation": false,
+    "note": "The REGISTRY-NATIONAL-D.1 brief itself only shows an EXAMPLE of what approval text would look like ('Je, Jean Merlain, autorise l'exécution de la migration 0023...') — it does not itself constitute that approval being granted. No such statement, from Jean Merlain, Eddy, or any other named human, appears anywhere in this conversation. Per the brief's own explicit instruction, approval must never be fabricated or inferred."
+  },
+  "decision": "B",
+  "decision_label": "WAITING_FOR_HUMAN_MIGRATION_APPROVAL",
+  "next_step": "Ask the user directly for named, explicit approval, and clarify execution mechanism (this session cannot run the DDL itself — see ddl_execution_capability)."
+}

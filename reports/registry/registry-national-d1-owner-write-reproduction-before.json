@@ -1,0 +1,88 @@
+{
+  "phase": "before",
+  "marker": "D1-SECURITY-TEST-45d3abc8",
+  "generated_at": "2026-08-23T04:58:26.208Z",
+  "test_user_id": "a5a68162-5beb-47e1-830a-0ecea233253b",
+  "test_establishment_id": "2841415c-87e5-4ad5-ae34-d907210fe7d2",
+  "test_establishment_initial_state": {
+    "id": "2841415c-87e5-4ad5-ae34-d907210fe7d2",
+    "name": "ZZZ_D1-SECURITY-TEST-45d3abc8_DO_NOT_USE_DELETE_ME",
+    "official_id": null,
+    "source_ministry": null,
+    "registry_import_batch": null
+  },
+  "signed_in_as_test_user": true,
+  "legitimate_content_update": {
+    "attempted_field": "description",
+    "succeeded": true,
+    "error": null
+  },
+  "protected_field_write_attempts": {
+    "source_ministry": {
+      "attempted_value": "MINESUP",
+      "write_succeeded": true,
+      "error": null,
+      "row_after_attempt": {
+        "source_ministry": "MINESUP"
+      }
+    },
+    "official_id": {
+      "attempted_value": "FAKE-D1-SECURITY-TEST-45d3abc8",
+      "write_succeeded": true,
+      "error": null,
+      "row_after_attempt": {
+        "official_id": "FAKE-D1-SECURITY-TEST-45d3abc8"
+      }
+    },
+    "registry_import_batch": {
+      "attempted_value": "fake-batch-D1-SECURITY-TEST-45d3abc8",
+      "write_succeeded": true,
+      "error": null,
+      "row_after_attempt": {
+        "registry_import_batch": "fake-batch-D1-SECURITY-TEST-45d3abc8"
+      }
+    },
+    "source_reference": {
+      "attempted_value": "fake-ref-D1-SECURITY-TEST-45d3abc8",
+      "write_succeeded": true,
+      "error": null,
+      "row_after_attempt": {
+        "source_reference": "fake-ref-D1-SECURITY-TEST-45d3abc8"
+      }
+    },
+    "source_url": {
+      "attempted_value": "https://fake.example/D1-SECURITY-TEST-45d3abc8",
+      "write_succeeded": true,
+      "error": null,
+      "row_after_attempt": {
+        "source_url": "https://fake.example/D1-SECURITY-TEST-45d3abc8"
+      }
+    }
+  },
+  "final_state_service_role_read": {
+    "id": "2841415c-87e5-4ad5-ae34-d907210fe7d2",
+    "description": "legit update by owner — D1-SECURITY-TEST-45d3abc8",
+    "official_id": "FAKE-D1-SECURITY-TEST-45d3abc8",
+    "source_ministry": "MINESUP",
+    "registry_import_batch": "fake-batch-D1-SECURITY-TEST-45d3abc8",
+    "source_reference": "fake-ref-D1-SECURITY-TEST-45d3abc8",
+    "source_url": "https://fake.example/D1-SECURITY-TEST-45d3abc8"
+  },
+  "summary": {
+    "legitimate_update_allowed": true,
+    "any_protected_field_write_succeeded": true,
+    "protected_fields_blocked": {
+      "source_ministry": false,
+      "official_id": false,
+      "registry_import_batch": false,
+      "source_reference": false,
+      "source_url": false
+    }
+  },
+  "cleanup": {
+    "establishment_deleted": true,
+    "establishment_delete_error": null,
+    "user_deleted": true,
+    "user_delete_error": null
+  }
+}

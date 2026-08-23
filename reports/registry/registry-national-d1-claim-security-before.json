@@ -1,0 +1,20 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D.1",
+  "generated_at": "2026-08-23T05:14:00.000Z",
+  "state": "BEFORE 0023 execution",
+  "app_layer": {
+    "unchanged_since_registry_national_d": true,
+    "summary": "All /api/admin/* establishment writes use fixed hardcoded payloads via service-role client (never forward request-body fields). /api/claims only creates establishment_claims rows, never writes establishments directly. owner_id is only ever set by /api/admin/claims/[id]/approve. No app-layer escalation path found (same conclusion as REGISTRY-NATIONAL-D, files unchanged this sprint).",
+    "reference": "reports/registry/registry-national-d-claim-security.json"
+  },
+  "rls_layer": {
+    "status": "VULNERABLE — live-confirmed",
+    "evidence": "reports/registry/registry-national-d1-owner-write-reproduction.json — a real authenticated owner session wrote to all 5 tested registry-protected columns on their own row, bypassing the app entirely via direct Supabase REST.",
+    "owner_can_edit_official_verification": "Indirectly YES — official_verification in resolveEstablishmentTrustState() reads official_id/source_ministry (for OFFICIAL_SOURCE_FOUND) which the owner can currently fabricate; OFFICIALLY_VERIFIED itself still requires a establishment_registry_identifiers row with CORROBORATED/CONFIRMED status, which remains correctly unreachable by the owner (identifier table confirmed secure, registry-national-d1-identifier-table-security.json). So an owner CANNOT reach OFFICIALLY_VERIFIED, but CAN currently fabricate OFFICIAL_SOURCE_FOUND by writing source_ministry themselves.",
+    "owner_can_edit_official_id": "YES (live-confirmed)",
+    "owner_can_edit_source_ministry": "YES (live-confirmed)",
+    "owner_can_edit_registry_provenance": "YES (live-confirmed: source_reference, source_url, registry_import_batch)",
+    "owner_can_edit_registry_identifiers_table": "NO (live-confirmed secure, separate table, RLS blocks all non-service-role writes)"
+  },
+  "overall": "Real escalation path confirmed live at the RLS layer for establishments' 6 registry-provenance columns. Fix: execute 0023 (audited this sprint, decision A — ready as-is)."
+}

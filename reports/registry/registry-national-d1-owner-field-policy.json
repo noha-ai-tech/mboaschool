@@ -1,0 +1,32 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D.1",
+  "generated_at": "2026-08-23T05:12:00.000Z",
+  "method": "Cross-reference of live establishments schema (48 columns, registry-national-d-cms-schema-audit.json), the existing owner settings page (src/app/dashboard/ecole/parametres/page.tsx), and this sprint's live behavioral tests.",
+  "REGISTRY_PROTECTED": {
+    "columns": ["official_id", "source_ministry", "source_reference", "source_url", "source_updated_at", "registry_import_batch"],
+    "protection_before_0023": "NONE (live-confirmed vulnerable)",
+    "protection_after_0023": "protect_establishment_registry_columns() trigger, pending execution",
+    "also": "establishment_registry_identifiers.* (separate table, already fully protected — RLS, platform_admin-select-only, no write policy for any client role)"
+  },
+  "PLATFORM_ADMIN_ONLY": {
+    "columns": ["is_verified", "is_featured", "subscription_plan", "forfait", "verification_status"],
+    "protection": "protect_establishment_privileged_columns() trigger (0014) — live-confirmed active this sprint (owner is_verified self-write attempt correctly blocked, error 42501)"
+  },
+  "SERVER_MANAGED_IMPLICIT": {
+    "columns": ["id", "owner_id", "created_at"],
+    "protection": "id/owner_id: no explicit trigger, but Postgres reuses the RLS USING expression (auth.uid() = owner_id) as the implicit WITH CHECK when none is specified — an owner cannot reassign owner_id away from themselves (would fail WITH CHECK). Not independently behaviorally re-tested this sprint (already established via static RLS-semantics analysis in REGISTRY-NATIONAL-D). created_at is not enforced anywhere; low-risk (no security implication from a timestamp an owner could technically backdate), not remediated this sprint."
+  },
+  "OWNER_EDITABLE_NOW": {
+    "columns": ["name", "city", "neighborhood", "phone", "email", "whatsapp", "website", "description", "main_category", "address"],
+    "note": "Already exposed via src/app/dashboard/ecole/parametres/page.tsx's own form. Confirmed unaffected by 0023 (trigger only inspects the 6 registry columns)."
+  },
+  "OWNER_EDITABLE_LATER_CMS": {
+    "columns": ["quartier", "region", "latitude", "longitude", "emoji_logo", "couleur_primaire", "couleur_secondaire", "cover_image_url", "hero_mode"],
+    "note": "Live columns, currently owner-writable (no trigger blocks them, not yet exposed in the settings UI), no known blocker. Reasonable CMS-A candidates."
+  },
+  "PRODUCT_DECISION_REQUIRED": {
+    "columns": ["slug", "main_category", "sub_category", "education_family", "organization_id"],
+    "note": "slug/category changes have knock-on effects (routing, search taxonomy) independent of registry concerns. organization_id's semantics were not investigated this sprint (out of scope) — flagged rather than assumed safe."
+  },
+  "unchanged_from_registry_national_d": true
+}
