@@ -1,0 +1,16 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D.1",
+  "generated_at": "2026-08-23T06:00:00.000Z",
+  "approval_statement": "Je, Jean Merlain, autorise explicitement l’exécution de la migration 0023_registry_column_protection.sql sur la production Écoles237 dans le cadre de REGISTRY-NATIONAL-D.1, approuvée par Eddy.",
+  "operator": "Jean Merlain",
+  "approved_by": "Eddy",
+  "migration": "supabase/migrations/0023_registry_column_protection.sql",
+  "scope": "REGISTRY-NATIONAL-D.1 — add protect_establishment_registry_columns() function + establishments_protect_registry_columns trigger only. No RLS policy change, no data row write, no other migration covered by this approval.",
+  "prerequisite_audit": {
+    "status": "COMPLETE",
+    "result": "MIGRATION_0023_READY_AS_IS",
+    "reference": "reports/registry/registry-national-d1-migration-audit.json"
+  },
+  "execution_mechanism": "This session has no direct DDL execution capability (no Postgres connection string, no authenticated Supabase CLI, no exec_sql RPC — see reports/registry/registry-national-d1-baseline.json). Execution must be performed manually by the operator via the Supabase SQL Editor. This session will independently verify the live result once execution is confirmed.",
+  "executed_yet": "UNKNOWN — awaiting operator confirmation this turn."
+}
