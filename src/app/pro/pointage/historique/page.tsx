@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 import { AlertTriangle } from "lucide-react";
 
 export default async function HistoriquePage({
@@ -16,11 +17,7 @@ export default async function HistoriquePage({
     return <p className="p-6 text-sm text-gray-500">Non authentifié.</p>;
   }
 
-  const { data: etablissement } = await supabase
-    .from("establishments")
-    .select("id")
-    .eq("owner_id", user.id)
-    .single();
+  const etablissement = await getActiveEstablishment(supabase, user.id);
 
   if (!etablissement?.id) {
     return <p className="p-6 text-sm text-gray-500">Aucun établissement rattaché à ce compte.</p>;

@@ -1,5 +1,9 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { Logo } from "@/components/branding/Logo";
+import { createClient } from "@/lib/supabase/server";
+import { ACTIVE_SCHOOL_COOKIE } from "@/lib/supabase/activeEstablishment";
+import { ProSchoolSwitcher } from "@/components/pro/ProSchoolSwitcher";
 
 const NAV = [
   { href: "/pro/configurer-etablissement",     label: "Configurer mon établissement" },
@@ -17,7 +21,29 @@ const NAV = [
   { href: "/pro/messagerie",                   label: "Messagerie" },
 ];
 
-export default function ProLayout({ children }: { children: React.ReactNode }) {
+export default async function ProLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let schools: { id: string; name: string }[] = [];
+  let activeSchoolId: string | null = null;
+
+  if (user) {
+    const { data } = await supabase
+      .from("establishments")
+      .select("id, name")
+      .eq("owner_id", user.id)
+      .order("created_at", { ascending: true });
+    schools = data ?? [];
+
+    const cookieStore = await cookies();
+    const requestedId = cookieStore.get(ACTIVE_SCHOOL_COOKIE)?.value;
+    const match = requestedId ? schools.find((s) => s.id === requestedId) : undefined;
+    activeSchoolId = (match ?? schools[0])?.id ?? null;
+  }
+
   return (
     <div className="min-h-screen bg-[#f9f7f2]">
       <header className="bg-accent text-white">
@@ -29,6 +55,9 @@ export default function ProLayout({ children }: { children: React.ReactNode }) {
               <span className="text-emerald-400 font-bold">Pro</span>
             </span>
           </Link>
+          {schools.length > 1 && (
+            <ProSchoolSwitcher schools={schools} activeSchoolId={activeSchoolId} />
+          )}
           <div className="ml-auto">
             <Link
               href="/dashboard/ecole"

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 import { GrilleEmploiDuTemps } from "@/components/timetable/GrilleEmploiDuTemps";
 import { BoutonGenerer } from "@/components/timetable/BoutonGenerer";
 import { BoutonPublier } from "@/components/timetable/BoutonPublier";
@@ -51,11 +52,7 @@ export default async function EmploisDuTempsPage({
     return <p className="p-6 text-sm text-gray-500">Non authentifié.</p>;
   }
 
-  const { data: etablissement } = await supabase
-    .from("establishments")
-    .select("id")
-    .eq("owner_id", user.id)
-    .single();
+  const etablissement = await getActiveEstablishment(supabase, user.id);
 
   if (!etablissement?.id) {
     return (

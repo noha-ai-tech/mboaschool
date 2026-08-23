@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSchool } from "@/lib/useSchool";
+import { SchoolProvider, useSchools } from "@/lib/school/SchoolContext";
 import { NotificationBell } from "@/components/dashboard/NotificationBell";
 import { Logo } from "@/components/branding/Logo";
 import {
@@ -79,8 +79,16 @@ const navGroups = (isPro: boolean) => [
 ];
 
 export default function EcoleDashboardLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <SchoolProvider>
+      <EcoleDashboardShell>{children}</EcoleDashboardShell>
+    </SchoolProvider>
+  );
+}
+
+function EcoleDashboardShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { school, user, loading, signOut } = useSchool();
+  const { schools, activeSchool: school, setActiveSchoolId, user, loading, signOut } = useSchools();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { collapsed, toggle, hydrated } = useSidebarState();
 
@@ -128,6 +136,20 @@ export default function EcoleDashboardLayout({ children }: { children: React.Rea
                     <CheckCircle2 size={14} className="text-emerald-400 mt-0.5 shrink-0" />
                   )}
                 </div>
+                {schools.length > 1 && (
+                  <select
+                    value={school.id}
+                    onChange={(e) => setActiveSchoolId(e.target.value)}
+                    aria-label="Changer d'établissement actif"
+                    className="mt-2 w-full rounded-md bg-white/5 border border-white/10 px-2 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  >
+                    {schools.map((s) => (
+                      <option key={s.id} value={s.id} className="bg-[#0a0a0a]">
+                        {s.name}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
             ) : (
               <div>

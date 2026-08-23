@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 import { GestionMatieres } from "@/components/pro/GestionMatieres";
 
 export default async function MatieresPage() {
@@ -7,11 +8,7 @@ export default async function MatieresPage() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/connexion");
 
-  const { data: etablissement } = await supabase
-    .from("establishments")
-    .select("id")
-    .eq("owner_id", user.id)
-    .single();
+  const etablissement = await getActiveEstablishment(supabase, user.id);
   if (!etablissement) redirect("/dashboard/ecole");
 
   const etablissementId = etablissement.id;
