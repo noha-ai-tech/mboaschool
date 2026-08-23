@@ -1,0 +1,14 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T06:41:00.000Z",
+  "method": "Live dev server on the integration branch, curl against /api/recherche (server-rendered API, not affected by the client-rendering caveat above)",
+  "checks": {
+    "authorized_3_findable": { "CCAA": 1 },
+    "staging_not_leaked": { "query": "IT2MIP", "total_count": 0 },
+    "pagination_bounded": { "results": 24, "page_size": 24, "total_count": 2252 },
+    "no_full_table_fetch_regression": true
+  },
+  "cms_pro_merges_affect_search": false,
+  "reason": "Neither the CMS nor the Pro-organization merge touched src/app/api/recherche/route.ts or src/lib/search/** — confirmed via git diff --stat, zero overlap.",
+  "overall": "PASS — identical results to pre-integration Search V2 checks."
+}

@@ -1,0 +1,29 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T06:21:00.000Z",
+  "migrations": [
+    {
+      "filename": "0024_school_page_sections.sql (renamed from 0021_school_page_sections.sql)",
+      "author": "aurelie, feat/cms-school-page-v1",
+      "expected_schema_change": "CREATE TABLE school_page_sections (establishment_id, section_key, position, is_visible) + RLS (public read, owner write via establishments.owner_id join) + updated_at trigger",
+      "destructive": false,
+      "applied_live": false,
+      "prepared_only": true,
+      "dependency_on_registry_migrations": "References public.establishments(id) via FK — depends on that table existing, no direct dependency on 0018-0023.",
+      "conflict_with_registry_protected_fields": "NONE — separate table entirely, does not touch establishments' columns at all.",
+      "classification": "SAFE_TO_APPLY_LATER"
+    },
+    {
+      "filename": "0025_storage_multi_school_hardening.sql (renamed from 0022_storage_multi_school_hardening.sql)",
+      "author": "aurelie, feat/cms-school-page-v1",
+      "expected_schema_change": "Replaces 2 existing storage.objects RLS policies (school_images_owner_write, school_documents_owner_write), scalar subquery -> EXISTS, to fix a real bug affecting owners with 2+ schools.",
+      "destructive": false,
+      "applied_live": false,
+      "prepared_only": true,
+      "dependency_on_registry_migrations": "None — depends on 0007 (which created the original policies), unrelated to Registry track.",
+      "conflict_with_registry_protected_fields": "NONE — storage bucket policies only, does not touch establishments columns.",
+      "classification": "SAFE_TO_APPLY_LATER"
+    }
+  ],
+  "no_ddl_executed_this_sprint": true
+}

@@ -1,0 +1,17 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T06:20:00.000Z",
+  "method": "Live behavioral verification, no new DDL executed",
+  "checks": {
+    "migration_0021_establishment_registry_identifiers": { "present_live": true, "evidence": "establishment_registry_identifiers table readable, 2242 rows, RLS confirmed secure (REGISTRY-NATIONAL-D.1)" },
+    "migration_0022_transport_source_ministry_enum": { "present_live": true, "evidence": "MINTRANSPORT enum value in active use by the 3 published establishments" },
+    "migration_0023_registry_column_protection": { "present_live": true, "evidence": "Re-verified this sprint via live fixture test — all 6 registry-provenance columns still correctly blocked for owner writes, service-role pipeline unaffected, mixed-update atomicity holds (reports/release output embedded below)." },
+    "registry_identifier_table_present": true,
+    "mintransport_enum_present": true,
+    "owner_column_protection_active": true,
+    "rls_active_on_establishments": true
+  },
+  "no_new_migration_executed_this_section": true,
+  "cms_migrations_0024_0025_status": "PREPARED_NOT_EXECUTED — confirmed by their own file headers and by the fact they were never merged to main before this sprint; not executed by this sprint either.",
+  "overall": "PASS — all Registry-track live migration effects intact after CMS/Pro integration merges."
+}

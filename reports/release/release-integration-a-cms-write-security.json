@@ -1,0 +1,45 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T06:23:00.000Z",
+  "method": "Full manual read of every CMS write endpoint's source (not just pattern matching), plus a targeted grep across the merged code for unsafe spread/passthrough patterns.",
+  "unsafe_pattern_scan": {
+    "patterns_searched": [".update(body)", ".update(data)", ".update(payload)", ".update(req.body)", "...body", "...requestBody", "...payload"],
+    "matches_found": 0,
+    "result": "CLEAN — no endpoint spreads arbitrary request-body JSON into establishments.update()"
+  },
+  "endpoints": [
+    {
+      "route": "PATCH /api/school-page/contact",
+      "who_calls_it": "Authenticated establishment owner (via the CMS editor UI)",
+      "authentication": "Session-derived via authorizeSchoolMutation() -> supabase.auth.getUser()",
+      "authorization": "Establishment re-derived server-side from owner_id = session user id — a client-supplied establishment id is never trusted",
+      "row_ownership_check": "Both at the app layer (.eq('owner_id', context.userId)) AND enforced again by RLS on the session-bound client (not service role)",
+      "field_whitelist": "Explicit Set: phone, email, website, address, city — any other key in the request body causes a 400 rejection before any DB call",
+      "service_role_usage": "NONE — uses the session-bound client throughout",
+      "registry_field_exposure": "NONE — official_id/source_ministry/etc. are not in the whitelist and could not reach establishments.update() even if included in the payload"
+    },
+    {
+      "route": "PATCH /api/school-page/presentation",
+      "who_calls_it": "Authenticated establishment owner",
+      "authentication": "Same as above",
+      "authorization": "Same as above",
+      "row_ownership_check": "Same as above",
+      "field_whitelist": "Explicit Set: description only, length-capped at 4000 chars",
+      "service_role_usage": "NONE",
+      "registry_field_exposure": "NONE"
+    },
+    {
+      "route": "PUT /api/school-page/sections",
+      "who_calls_it": "Authenticated establishment owner",
+      "authentication": "Same as above",
+      "authorization": "Same as above",
+      "row_ownership_check": "establishment_id is set server-side from context.establishmentId, never from the request body",
+      "field_whitelist": "Fixed set of 8 known section_key values; rejects unknown keys, duplicates, and incomplete sets; writes only to school_page_sections (not establishments at all)",
+      "service_role_usage": "NONE",
+      "registry_field_exposure": "N/A — different table entirely, no establishments columns touched"
+    }
+  ],
+  "double_defense_note": "Even in the hypothetical case where a future code change accidentally widened one of these allowlists to include a registry-protected field, the write would STILL be blocked at the database layer by migration 0023's trigger (re-verified live this sprint, unaffected by this integration) — this is genuine defense-in-depth, not a single point of failure.",
+  "if_service_role_endpoint_blindly_trusted_owner_payload": "Not found. No CMS endpoint uses the service-role client at all in this branch.",
+  "overall": "PASS — no CMS endpoint reopens the Registry vulnerability, at either the app layer or the DB layer."
+}

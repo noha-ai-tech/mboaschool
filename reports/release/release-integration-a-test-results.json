@@ -1,0 +1,15 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T06:30:00.000Z",
+  "scope": "FULL SUITE — every *.test.ts file found under src/ and scripts/ (26 files), not a hand-picked subset",
+  "runner": "node --test (via npx tsx --test), no vitest/jest installed",
+  "cms_tests": "None exist in the repository — the CMS branch introduced no *.test.ts files. Confirmed by enumeration, not assumed.",
+  "total_tests": 442,
+  "total_suites": 170,
+  "passed": 442,
+  "failed": 0,
+  "cancelled": 0,
+  "skipped": 0,
+  "duration_ms": 2149.9956,
+  "overall": "PASS"
+}

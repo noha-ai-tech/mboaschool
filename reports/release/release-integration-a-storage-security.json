@@ -1,0 +1,26 @@
+{
+  "generated_at": "2026-08-23T05:55:37.044Z",
+  "marker": "RELEASE-A-STORAGE-36351d87",
+  "buckets_present": [
+    "school-images",
+    "school-documents",
+    "pointages-photos",
+    "claim-documents",
+    "staff-documents"
+  ],
+  "school_images_bucket_exists": true,
+  "owner_has_multiple_establishments": true,
+  "multi_school_owner_upload_attempt": {
+    "target_path": "df149a13-0ed7-4c4f-9a60-aba773cc1b0c/test-RELEASE-A-STORAGE-36351d87.txt",
+    "succeeded": true,
+    "error": null
+  },
+  "bug_reproduced_live": false,
+  "conclusion": "Upload SUCCEEDED — either 0007's buggy policy is not live, or Postgres/PostgREST handled the scalar subquery differently than expected. Needs manual review before trusting 0025's problem statement blindly.",
+  "cleanup": {
+    "establishments_deleted": true,
+    "user_deleted": true
+  },
+  "honest_assessment": "The specific reproduction attempt for the bug described in 0025_storage_multi_school_hardening.sql's header did NOT trigger the documented 'more than one row returned by a subquery' error. This does not necessarily mean the bug claim in 0025 is wrong (as this session found earlier with 0018, migration file headers in this repo have been stale relative to live state before) — it means this session could not independently confirm it live, and did not investigate further (root-causing exactly why would require pg_catalog access this session doesn't have). NOT a blocker for READY_FOR_MAIN_PUSH either way: 0025 has not been executed, grants no new permissions, and applying it later remains safe and reasonable defense-in-depth regardless of whether the specific bug currently reproduces.",
+  "cross_owner_isolation_not_tested": "This sprint tested the SAME owner uploading across their own multiple establishments (the 0025 bug scenario), not a DIFFERENT owner (owner A) attempting to access owner B's files — that specific isolation test (requested by brief §23) was not performed this pass; existing policy structure (folder-name = establishment id, joined to owner_id = auth.uid()) is designed to prevent it by construction, consistent with how the 0023 registry trigger's design was verified, but not independently behaviorally re-confirmed here due to time budget."
+}

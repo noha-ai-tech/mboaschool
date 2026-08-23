@@ -1,0 +1,28 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T07:00:00.000Z",
+  "final_migration_sequence": [
+    "0001_timetable_schema.sql", "0002_presence.sql", "0003_comptes_enseignants.sql", "0004_messagerie.sql",
+    "0005_forfait_multi_etab.sql", "0006_national_registry_staging.sql", "0007_production_security_reconciliation.sql",
+    "0008_school_onboarding.sql", "0009_pro_hr_foundation.sql", "0010_timetable_engine.sql", "0011_payroll_engine.sql",
+    "0012_admissions_v1.sql", "0013_platform_operating_center.sql", "0014_rc1_security_fixes.sql",
+    "0015_school_setup_intelligence.sql", "0016_geographic_hierarchy.sql",
+    "0018_registry_identity_fields.sql", "0019_establishments_city_nullable.sql", "0020_search_v2_unaccent_rpc.sql",
+    "0021_establishment_registry_identifiers.sql", "0022_transport_source_ministry_enum.sql",
+    "0023_registry_column_protection.sql",
+    "0024_school_page_sections.sql", "0025_storage_multi_school_hardening.sql"
+  ],
+  "duplicate_version_numbers": 0,
+  "gap_found": { "missing_number": "0017", "assessment": "Pre-existing gap, present before this sprint, not investigated (out of scope) — not a duplicate, does not block anything." },
+  "dependencies_verified": {
+    "0024_school_page_sections.sql": "FK references public.establishments(id) — table exists (created before 0001-era base schema, confirmed live). No dependency on any Registry-numbered migration.",
+    "0025_storage_multi_school_hardening.sql": "Assumes 0007 already created the two policies it replaces — 0007 is present and ordered before it."
+  },
+  "live_vs_prepared_status": {
+    "confirmed_live_this_session": ["0014", "0018 (columns)", "0021 (table)", "0022 (enum)", "0023"],
+    "prepared_not_executed": ["0024", "0025"],
+    "note": "0014/0018/0021/0022's file headers still say 'PRÉPARÉE MAIS NON EXÉCUTÉE' in some cases — this is documentation drift from earlier sprints, not corrected in this pass (out of scope, doesn't affect ordering/dependency validity)."
+  },
+  "no_ddl_executed_this_sprint": true,
+  "overall": "PASS — no duplicate numbers, dependencies satisfied by ordering, no automatic DDL execution."
+}

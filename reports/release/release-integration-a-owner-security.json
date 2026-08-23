@@ -1,0 +1,23 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T06:24:00.000Z",
+  "method": "Live DB-level fixture re-test (real auth user + session, service role used only for setup/cleanup/reads) after CMS+Pro merges, plus source review of every new CMS write path.",
+  "db_level_reverification": {
+    "legitimate_content_update": "ALLOWED",
+    "source_ministry": "BLOCKED",
+    "official_id": "BLOCKED",
+    "registry_import_batch": "BLOCKED",
+    "source_reference": "BLOCKED",
+    "source_url": "BLOCKED",
+    "source_updated_at": "BLOCKED",
+    "mixed_update_atomicity": "CONFIRMED — protected field in the same statement as a legitimate field causes the whole update to be rejected",
+    "service_role_pipeline": "UNAFFECTED",
+    "evidence": "Re-ran scripts/school-registry/registry-national-d1-post-migration-full-check.ts against the integration branch's live database state — same database, same migration 0023, unaffected by any application code merge (DB triggers don't care which branch is checked out)."
+  },
+  "app_level_reverification": {
+    "cms_endpoints_can_write_registry_fields": false,
+    "reasoning": "All 3 new CMS write endpoints use explicit field allowlists that never include official_id/source_ministry/source_reference/source_url/source_updated_at/registry_import_batch/is_verified/owner_id/etc. — see release-integration-a-cms-write-security.json for the full endpoint-by-endpoint audit."
+  },
+  "critical_blocker_check": "NOT FOUND — no CMS endpoint uses service_role while blindly trusting an owner-supplied payload.",
+  "overall": "PASS"
+}

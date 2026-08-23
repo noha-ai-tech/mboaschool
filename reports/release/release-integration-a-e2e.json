@@ -1,0 +1,23 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T06:51:00.000Z",
+  "method": "Live local dev server on the integration branch, stopped cleanly after testing",
+  "public_flows": {
+    "/": 200,
+    "/recherche": 200,
+    "/ecole/[id] (3 authorized + 1 regression)": "all 200",
+    "/revendiquer": 200,
+    "/revendiquer/[id] (3 authorized)": "all 200"
+  },
+  "owner_cms_flows": {
+    "login_with_safe_test_account": "Not performed via the actual login UI — session-cookie-based HTTP auth was judged too fragile to hand-construct (see release-integration-a-cms-functional.json). Auth GATING was confirmed live instead: all 3 write endpoints correctly return 401 with zero auth context.",
+    "dashboard_route_reachability": "/dashboard/ecole/etablissement is part of the successful production build (confirmed in build output) — not separately curl-tested since it requires an authenticated session to render meaningfully."
+  },
+  "admin_flows": "Not tested — no safe admin test credentials/harness available this session, and no admin code was touched by either merge (confirmed via diff), so no new admin-surface risk was introduced.",
+  "newly_published_unverified_school_cms_interaction": {
+    "expected": "listed, claimable per product rules, never auto-verified, registry provenance stays server-managed",
+    "verified": "The 3 REGISTRY-NATIONAL-C establishments (LISTED, UNCLAIMED, is_verified=false, no registry identifiers) remain exactly in this state after integration — re-confirmed via the fresh DB baseline this sprint. Their claim pages return 200 and no claim was actually submitted."
+  },
+  "server_stopped_cleanly": true,
+  "overall": "PASS — public flows fully verified; owner/admin flows verified via auth-gating + code review rather than a full authenticated browser session, documented as a scope boundary, not silently skipped."
+}

@@ -1,0 +1,19 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T06:40:00.000Z",
+  "methodology_correction": {
+    "finding": "src/app/ecole/[id]/page.tsx is a \"use client\" component that fetches all school data (including the fields the trust badge depends on) via useEffect, entirely client-side. curl (and every equivalent grep-the-HTML check performed in prior sprints of this session — REGISTRY-NATIONAL-C-EXEC, -D, -D.1) only ever sees the pre-hydration server HTML, which contains a loading skeleton, never the populated badge markup. The school NAME appearing in earlier curl output came from a SEPARATE server-side source: src/app/ecole/[id]/layout.tsx's generateMetadata(), which fetches the establishment only to populate the <title>/OG tags — it has no connection to the trust badge rendering path at all.",
+    "consequence": "Every previous 'grep for Vérification officielle / no badge text found' result in this session's prior sprints was NOT actually evidence of anything — it would have returned the same 'no matches' result whether or not a badge was correctly rendering, because the check could never see client-rendered content either way. This report corrects that rather than repeating the claim.",
+    "no_headless_browser_available": "Confirmed — no Playwright/Puppeteer in node_modules or package.json this session. A true rendered-DOM check was not possible with the tools available."
+  },
+  "substitute_verification_performed": {
+    "1_resolver_correctness": "src/lib/trust/resolveEstablishmentTrustState.ts is exhaustively unit-tested (36 dedicated test cases across §14/§18 of its own test file, part of the 442/442 passing suite this sprint) covering every trust-dimension edge case, including 'no badge labeled ambiguously Vérifié'.",
+    "2_live_data_correctness": "REGISTRY-NATIONAL-D's trust audit (reports/registry/registry-national-d-trust-audit.json) directly imported and called the resolver with the 3 authorized establishments' REAL live field values (not mocked) — confirmed official_verification=OFFICIAL_SOURCE_FOUND, never OFFICIALLY_VERIFIED, platform_verification=NOT_PLATFORM_VERIFIED, all invariant checks passed. This is independent of rendering and remains valid — no establishments data changed since.",
+    "3_component_wiring_correctness": "Manually re-read the full source of both src/app/ecole/[id]/page.tsx (public) and src/app/dashboard/ecole/etablissement/page.tsx (owner preview, fixed this sprint) — both correctly call resolveEstablishmentTrustState()/getPrimaryPublicBadge() and pass the result as the `trustBadge` prop to SchoolHeroCarousel, which renders `{trustBadge && <span>...{trustBadge.label}</span>}` — never a raw is_verified boolean, never the bare word 'Vérifié'.",
+    "4_api_level_confirmation": "/api/recherche (server-side, not client-rendered) returns is_verified/is_claimed as raw booleans for the frontend to interpret — confirmed unchanged, correctly reflects false for the 3 authorized establishments."
+  },
+  "listed_claimed_platform_official_distinction": "Verified at the code/resolver level (item 1-3 above) — genuinely enforced, just not re-observed as rendered pixels this session.",
+  "ambiguous_badges": 0,
+  "blocker": false,
+  "overall": "PASS, with an honest methodology caveat — verified via source/resolver/live-data correctness rather than rendered-DOM inspection, since no headless browser tooling exists in this project."
+}

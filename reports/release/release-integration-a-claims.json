@@ -1,0 +1,17 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T06:50:00.000Z",
+  "claim_flow_files_touched_by_integration": "NONE — confirmed via git diff --stat across both merges",
+  "admin_files_touched_by_integration": "NONE",
+  "checks": {
+    "unclaimed_school_can_start_claim": "Unchanged from REGISTRY-NATIONAL-D/-D.1 verification (/revendiquer/[id] returns 200 for the 3 authorized establishments, confirmed again this sprint)",
+    "approved_claim_assigns_owner_correctly": "Code unchanged (/api/admin/claims/[id]/approve) — not re-executed live this sprint (would create a real claim/ownership change), relying on it being untouched by any diff this sprint",
+    "claim_does_not_change_source_ministry": "Confirmed structurally — the approve route's payload only sets owner_id (read in REGISTRY-NATIONAL-D), and now additionally confirmed at the DB layer: even if it tried, only service-role writes bypass the 0023 trigger, and the approve route already never included registry fields in its payload",
+    "claim_does_not_alter_registry_identifiers": "Confirmed — establishment_registry_identifiers RLS blocks all non-service-role writes (REGISTRY-NATIONAL-D.1), and no claim-flow code uses service-role to touch that table",
+    "claim_does_not_imply_official_verification": "Confirmed via resolver test — claim_status is a fully independent dimension from official_verification in resolveEstablishmentTrustState() (see the '§18-B claimed != officially verified' test, part of the 442 passing tests)",
+    "owner_cannot_self_verify": "Confirmed live this sprint (0014 trigger, re-tested)",
+    "owner_cannot_bypass_registry_protection_through_cms": "Confirmed — see release-integration-a-cms-write-security.json and release-integration-a-owner-security.json"
+  },
+  "fixture_note": "No new fixture created for this section — reused conclusions from live tests already performed elsewhere this sprint (0023 re-verification, resolver unit tests) rather than re-running an equivalent claim-approval fixture, since claim-approval code itself was not touched by any change this sprint.",
+  "overall": "PASS — no regression, no escalation path."
+}

@@ -1,0 +1,30 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T06:25:00.000Z",
+  "reconciled_against": "docs/03_DATA_REGISTRY/REGISTRY_CMS_BOUNDARY.md",
+  "cms_editable_fields": {
+    "phone": "OWNER_EDITABLE (matches boundary doc)",
+    "email": "OWNER_EDITABLE (matches boundary doc)",
+    "website": "OWNER_EDITABLE (matches boundary doc)",
+    "address": "OWNER_EDITABLE (matches boundary doc)",
+    "city": "OWNER_EDITABLE (matches boundary doc)",
+    "description": "OWNER_EDITABLE (matches boundary doc)",
+    "school_page_sections.*": "OWNER_EDITABLE — new table (0024, not yet executed), owner-scoped via establishment_id join, not a REGISTRY_PROTECTED concern (separate table, no provenance data)"
+  },
+  "protected_field_exposure_check": {
+    "official_id": "NOT exposed by any CMS endpoint",
+    "source_ministry": "NOT exposed",
+    "source_reference": "NOT exposed",
+    "source_url": "NOT exposed",
+    "source_updated_at": "NOT exposed",
+    "registry_import_batch": "NOT exposed",
+    "is_verified": "NOT exposed (read-only display in dashboard preview and public page, never written by CMS)",
+    "owner_id": "NOT exposed (server-derived only)",
+    "verification_status": "NOT exposed",
+    "subscription_plan": "NOT exposed (read-only display: isPremium = school.subscription_plan === 'premium')",
+    "is_featured": "NOT exposed",
+    "forfait": "NOT exposed"
+  },
+  "blocker": false,
+  "overall": "PASS — CMS exposes no protected field; every editable field the CMS actually touches is already classified OWNER_EDITABLE in the boundary doc."
+}

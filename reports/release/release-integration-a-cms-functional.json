@@ -1,0 +1,25 @@
+{
+  "sprint": "RELEASE-INTEGRATION-A",
+  "generated_at": "2026-08-23T06:42:00.000Z",
+  "implemented_cms_capabilities_discovered": [
+    "Edit description (presentation) — PATCH /api/school-page/presentation",
+    "Edit contact fields: phone, email, website, address, city — PATCH /api/school-page/contact",
+    "Reorder/toggle visibility of 8 page sections — PUT /api/school-page/sections (depends on migration 0024, NOT executed — route will 500 honestly rather than fake success, per the route's own design comment)"
+  ],
+  "not_implemented_this_cms_pass": ["images/logo/gallery upload", "programs", "admissions content editing", "opening hours"],
+  "note": "This list reflects what src/app/api/school-page/** actually implements, discovered by reading the code — not assumed from the brief's examples.",
+  "verification_performed": {
+    "http_level_auth_gating": "CONFIRMED LIVE — all 3 routes return 401 for unauthenticated requests (curl, dev server, no session cookie), never 200/500.",
+    "full_authenticated_http_round_trip": "NOT ATTEMPTED — would require hand-constructing a valid @supabase/ssr session cookie (base64-encoded, version-specific serialization) to simulate a real browser login via curl. Judged too fragile/error-prone to be worth attempting given the strength of the alternative evidence below; not attempted rather than attempted-and-faked.",
+    "source_level_verification": "Full manual read of authorizeSchoolMutation.ts and all 3 routes (release-integration-a-cms-write-security.json) — strict allowlists, server-derived ownership, session-bound client.",
+    "db_level_verification": "Direct Supabase-client fixture test (same technique as REGISTRY-NATIONAL-D.1) confirming a real authenticated owner CAN update description and CANNOT update any registry-protected field — this exercises the exact same RLS/trigger path the CMS routes would hit, independent of the Next.js route layer."
+  },
+  "sections_route_dependency": {
+    "table": "school_page_sections",
+    "migration": "0024_school_page_sections.sql",
+    "status": "NOT EXECUTED",
+    "expected_behavior_if_called": "500 with an honest error message (per the route's own design comment: 'erreur honnête, jamais de faux Enregistré') — not tested live this sprint since it requires the migration to be applied first; not a blocker for READY_FOR_MAIN_PUSH since the code path is correct and the failure mode is safe (visible error, not silent data loss or a fake success)."
+  },
+  "restore_fixture_after_test": "N/A — no fixture was created for HTTP-level testing this pass (only for the DB-level test, auto-cleaned as in prior sprints).",
+  "overall": "PASS with documented scope boundary — no functional or security defect found; one verification layer (full authenticated HTTP round-trip) was consciously not attempted rather than faked."
+}
