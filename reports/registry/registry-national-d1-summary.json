@@ -1,0 +1,73 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D.1",
+  "generated_at": "2026-08-23T05:40:00.000Z",
+  "repository": "mboaschool",
+  "branch": "main",
+  "commit": "6a97b88",
+  "database": {
+    "establishments_before": 2252,
+    "establishments_after": 2252,
+    "staging_before": 2378,
+    "staging_after": 2378,
+    "registry_identifiers_before": 2242,
+    "registry_identifiers_after": 2242,
+    "row_writes_this_sprint": 0,
+    "note": "This sprint's own test scripts created and deleted throwaway auth users + establishment rows (transaction-safe fixtures, always cleaned up in a finally block) — net effect on the database is zero, confirmed by identical before/after counts."
+  },
+  "security_bug": {
+    "reproduced_before_fix": true,
+    "affected_fields": ["source_ministry", "official_id", "registry_import_batch", "source_reference", "source_url", "source_updated_at"],
+    "attack_path": "Authenticated establishment owner, direct Supabase REST call with their own session JWT, bypassing the app's settings page entirely.",
+    "evidence": "reports/registry/registry-national-d1-owner-write-reproduction.json (live, behavioral proof via throwaway fixture)"
+  },
+  "migration": {
+    "file": "supabase/migrations/0023_registry_column_protection.sql",
+    "audited": true,
+    "audit_result": "MIGRATION_0023_READY_AS_IS (reports/registry/registry-national-d1-migration-audit.json)",
+    "executed": false,
+    "execution_capability_in_this_session": "NONE — no direct Postgres connection string, no authenticated Supabase CLI, no exec_sql RPC. Manual execution via Supabase SQL Editor required regardless of approval.",
+    "human_approval_status": "User confirmed intent to authorize and self-execute in the prior turn, but has not yet run the migration — explicitly logged this sprint's final decision as B (not executed)."
+  },
+  "owner_write_security": {
+    "allowed_content_field_update": "YES (unaffected, confirmed before fix)",
+    "source_ministry_blocked": "NOT YET — migration not executed",
+    "official_id_blocked": "NOT YET — migration not executed",
+    "registry_import_batch_blocked": "NOT YET — migration not executed",
+    "source_reference_blocked": "NOT YET — migration not executed",
+    "source_url_blocked": "NOT YET — migration not executed"
+  },
+  "registry_identifiers_table_security": {
+    "owner_insert": "BLOCKED (already secure, live-confirmed, no fix needed)",
+    "owner_update": "N/A (insert already blocked)",
+    "owner_delete": "N/A (insert already blocked)",
+    "server_pipeline": "Unaffected (service_role bypasses RLS as designed)"
+  },
+  "claims": {
+    "claim_approval_regression": "N/A — no migration executed, no code changed",
+    "owner_trust_escalation_possible": "YES — still open (source_ministry write still succeeds pre-fix, which can fabricate an OFFICIAL_SOURCE_FOUND badge; OFFICIALLY_VERIFIED remains unreachable since establishment_registry_identifiers stays secure)",
+    "registry_provenance_editable": "YES — still open, unfixed"
+  },
+  "public_trust": { "regression": "N/A — nothing changed", "ambiguous_badges": "0 (unchanged from REGISTRY-NATIONAL-D)" },
+  "search_v2": { "regression": "N/A — nothing changed", "staging_leakage": false },
+  "registry_v1": {
+    "published_registry_healthy": true,
+    "v2_snapshot_preserved": true,
+    "critical_registry_blockers": "1 — the owner RLS/column-protection gap remains open (fix prepared and audited, not yet executed)"
+  },
+  "cms": {
+    "registry_protected_fields": "Documented (registry-national-d1-owner-field-policy.json)",
+    "owner_editable_boundary": "Documented, unchanged",
+    "remaining_blockers": "Execute and verify migration 0023 before any new owner-editable establishments field ships",
+    "ready_for_cms_a": "NO"
+  },
+  "qa": { "build": "PASS", "typescript_app": "PASS", "typescript_registry": "PASS", "tests": "185/185 PASS" },
+  "database_final_recheck": { "establishments_delta": 0, "staging_delta": 0, "registry_identifiers_delta": 0 },
+  "decision": "B",
+  "decision_label": "WAITING_FOR_HUMAN_MIGRATION_APPROVAL",
+  "decision_reason": "User confirmed intent to authorize and self-execute migration 0023 via the Supabase SQL Editor, but explicitly logged this sprint's closing decision as B — the migration has not been run. No further action taken; nothing to verify post-migration since nothing was executed.",
+  "registry_v1_closed": "NO",
+  "ready_for_cms_a": "NO",
+  "push": "NO",
+  "deploy": "NO",
+  "next_step": "Whenever the migration is actually run, tell me and I will independently re-run the live fixture reproduction test, the admin/server-pipeline regression check, claim security / public trust / Search V2 re-verification, and the final DB recheck — then update the CMS docs and close out this sprint."
+}
