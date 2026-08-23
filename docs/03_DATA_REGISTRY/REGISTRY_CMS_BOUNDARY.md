@@ -1,0 +1,122 @@
+# Registry / CMS Boundary
+
+SPRINT REGISTRY-NATIONAL-D §26. Defines which `establishments` data belongs
+to the national registry pipeline (never owner-editable) versus ordinary CMS
+content (safe for CMS-A to expose to establishment owners).
+
+Source data for this document: live schema read (`registry-national-d-cms-schema-audit.json`),
+live RLS/trigger read (`registry-national-d-cms-rls-audit.json`), and the app-layer
+audit (`registry-national-d-claim-security.json`).
+
+## REGISTRY_PROTECTED
+
+These fields must never be exposed as ordinary owner-editable CMS fields.
+
+**`establishments` columns:**
+- `id`
+- `official_id`
+- `source_ministry`
+- `source_reference`
+- `source_url`
+- `source_updated_at`
+- `registry_import_batch`
+
+**`establishment_registry_identifiers.*`** (separate table — RLS restricts read to `platform_admin` only, per migration 0021)
+
+Also protected, though not strictly "registry" fields — pre-existing platform-trust
+fields already identified as sensitive by `0014_rc1_security_fixes.sql`:
+- `is_verified`, `is_featured`, `subscription_plan`, `forfait`, `verification_status`, `owner_id`
+
+**Registry provenance and government-source evidence**, wherever it is
+derived from the fields above (e.g. `resolveEstablishmentTrustState()`'s
+`official_verification` output) — CMS-A must render this read-only, sourced
+only from `establishment_registry_identifiers` + the columns above, never
+from a freeform owner-editable field.
+
+**`official_verification`** is computed exclusively by
+`src/lib/trust/resolveEstablishmentTrustState.ts` from
+`establishment_registry_identifiers.verification_status` (`CORROBORATED`/`CONFIRMED`)
+— never from `is_verified`, `is_claimed`, `owner_id`, or the mere presence of
+`official_id`/`source_ministry` (which yield `OFFICIAL_SOURCE_FOUND` at most).
+CMS-A must call this resolver, never reimplement the logic.
+
+**`promoted_establishment_id`** (on `establishment_import_staging`) and
+**duplicate/matching/audit relationships** produced by the registry matching
+engine (`scripts/school-registry/lib/matching/`) — provenance metadata, not
+CMS content.
+
+## ⚠️ CURRENT GAP (see registry-national-d-claim-security.json)
+
+As of this sprint, the REGISTRY_PROTECTED `establishments` columns above are
+**not actually enforced** against direct owner writes. The base RLS policy
+(`supabase/schema.sql:143`, `"Owners can update own establishments"`) is
+row-level only — it has no column restriction. The `0014_rc1_security_fixes.sql`
+trigger protects the platform-trust fields listed above, but was authored
+before migration `0018` added the registry-provenance columns, so it never
+covered them. An owner can currently set `source_ministry`, `official_id`,
+`registry_import_batch`, etc. on their own row via a direct Supabase REST
+call, bypassing the Next.js settings page entirely.
+
+A follow-up migration, `supabase/migrations/0023_registry_column_protection.sql`,
+has been prepared (not executed) this sprint to close this gap, following the
+exact pattern of `0014`. **CMS-A must not launch any additional owner-editable
+surface until this migration (or an equivalent fix) is reviewed and applied.**
+
+## Owner-editable candidate fields
+
+Confirmed via live schema + the existing owner settings page
+(`src/app/dashboard/ecole/parametres/page.tsx`), which already restricts its
+own form to exactly these fields:
+
+- `name`, `city`, `neighborhood`, `phone`, `email`, `whatsapp`, `website`,
+  `description`, `main_category`, `address`
+
+Additional columns present live and reasonably CMS-content (not yet exposed
+in the settings form, no known blocker found this sprint):
+`quartier`, `region`, `latitude`, `longitude`, `emoji_logo`,
+`couleur_primaire`, `couleur_secondaire`, `cover_image_url`, `hero_mode`.
+
+`slug`, `created_at`, `main_category`/`sub_category`/`education_family` are
+`EXISTS_BUT_NEEDS_POLICY` — technically present, but changing them has
+knock-on effects (routing, search taxonomy, registry unique-index on
+`(source_ministry, official_id)` is independent of slug, so no direct
+registry conflict, but a product decision is still needed on whether an
+owner should be allowed to rename their own slug).
+
+## Schema gaps (MISSING_SCHEMA — needs a new migration + product decision)
+
+No `establishments` column or obviously-named table was found this sprint for:
+- `opening_hours`
+- `social_links`
+- `admission_info`
+
+Separate tables exist and likely already back these content areas, but were
+not audited in depth this sprint — CMS-A needs a product decision on which
+table is authoritative before building UI:
+- **gallery** → `establishment_images` (present)
+- **programs** / **courses** → `school_programs` / `school_courses` (present)
+- **tuition_info** → `school_fees` (present)
+- **facilities** → `school_infrastructures` (present)
+
+Full detail: `reports/registry/registry-national-d-cms-schema-audit.json`.
+
+## RLS summary
+
+- Row-level: owners can only touch rows where `auth.uid() = owner_id`
+  (`supabase/schema.sql:143`). No `WITH CHECK` is specified, so Postgres
+  reuses the `USING` expression — this means an owner **cannot** reassign
+  `owner_id` to another user or null it out (implicitly protected), but
+  **can** write any other column's value, including registry-protected ones
+  (see gap above).
+- Column-level: only enforced via the `protect_establishment_privileged_columns`
+  trigger from `0014` (platform-trust fields) — its live status could not be
+  confirmed this sprint (no `exec_sql`/`information_schema` RPC and no direct
+  Postgres connection string available to this session; verify via Supabase
+  SQL Editor: `select tgname from pg_trigger where tgrelid = 'public.establishments'::regclass`).
+  Registry-provenance columns have no trigger at all until `0023` (prepared,
+  not executed) is applied.
+- `service_role` (used by all `/api/admin/*` routes and all
+  `scripts/school-registry/*` scripts) bypasses RLS entirely — `auth.uid()`
+  is always `NULL` for these calls, so neither trigger ever blocks them.
+
+Full detail: `reports/registry/registry-national-d-cms-rls-audit.json`.

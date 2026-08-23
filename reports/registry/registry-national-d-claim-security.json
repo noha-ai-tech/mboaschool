@@ -1,0 +1,44 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D",
+  "generated_at": "2026-08-23T04:45:00.000Z",
+  "scope": "Audit of claim routes and owner-facing establishment update paths for ability to modify registry-protected fields.",
+  "app_layer_findings": {
+    "admin_routes": {
+      "note": "Every server-side .update() on `establishments` found under src/app/api/admin/** uses a fixed, hardcoded payload (e.g. { verification_status: 'suspended' }, { forfait: 'pro' }) via a service-role client — never forwards arbitrary request-body fields. No admin route is an escalation path.",
+      "files_checked": [
+        "src/app/api/admin/ecoles/[id]/reactiver/route.ts",
+        "src/app/api/admin/ecoles/[id]/verifier/route.ts",
+        "src/app/api/admin/ecoles/[id]/plan/route.ts",
+        "src/app/api/admin/ecoles/[id]/suspendre/route.ts",
+        "src/app/api/admin/claims/[id]/approve/route.ts",
+        "src/app/api/admin/claims/[id]/reject/route.ts",
+        "src/app/api/admin/claims/[id]/review/route.ts"
+      ]
+    },
+    "claim_flow": {
+      "file": "src/app/api/claims/route.ts",
+      "note": "Only reads `id, name, owner_id` and creates a row in establishment_claims for admin review; does not write to establishments directly. owner_id on establishments is only ever set by the admin approve route with a fixed payload. Claim flow itself cannot escalate registry trust or set owner_id without admin approval."
+    },
+    "owner_settings_page": {
+      "file": "src/app/dashboard/ecole/parametres/page.tsx",
+      "finding": "REAL_ESCALATION_PATH",
+      "detail": "This page calls the browser Supabase client (user's own JWT, not service role) directly: supabase.from('establishments').update(form).eq('id', school.id). The React form's own `form` state is restricted to 10 safe fields (name, city, neighborhood, phone, email, whatsapp, website, description, main_category, address), so THIS PAGE'S UI cannot be used to submit other columns. However, this is a client-side call protected only by Postgres RLS — nothing in the app layer prevents an authenticated establishment owner from bypassing this page entirely and issuing their own PATCH https://<project>.supabase.co/rest/v1/establishments?id=eq.<their-own-id> with their own JWT and an arbitrary JSON body, since the browser Supabase client uses the same publishable anon key + user session for any REST call regardless of which page constructed it."
+    }
+  },
+  "database_layer_findings": {
+    "rls_policy": "supabase/schema.sql:143 — \"Owners can update own establishments\" for update using (auth.uid() = owner_id). Row-level only. No WITH CHECK clause, no column-level restriction.",
+    "column_trigger_0014": {
+      "file": "supabase/migrations/0014_rc1_security_fixes.sql",
+      "status": "header says PREPAREE MAIS NON EXECUTEE; live status could not be confirmed this session (see registry-national-d-cms-rls-audit.json — no exec_sql RPC, no direct Postgres connection string available)",
+      "covers_if_live": ["is_verified", "is_featured", "subscription_plan", "forfait", "verification_status"],
+      "does_not_cover": ["official_id", "source_ministry", "source_reference", "source_url", "source_updated_at", "registry_import_batch"]
+    }
+  },
+  "conclusion": {
+    "real_escalation_path_exists": true,
+    "description": "An establishment owner (auth.uid() = establishments.owner_id) can, by calling the Supabase REST API directly with their own session JWT (bypassing the Next.js app and its 10-field settings form entirely), set official_id, source_ministry, source_reference, source_url, source_updated_at, and registry_import_batch on their OWN establishment row to arbitrary values. No RLS column restriction and no trigger currently protects these registry-provenance columns — 0014's trigger (whether or not it is actually live) predates their existence (0018) and never covered them. This is a genuine, currently-existing gap on all 2252 live establishments with an owner_id set, not a hypothetical CMS-A-only future risk.",
+    "sprint_rule_applied": "Per REGISTRY-NATIONAL-D brief §28: 'Si un chemin d'escalade réel existe : DECISION cannot be A.'",
+    "decision_impact": "Final decision gate for this sprint cannot be A (REGISTRY_V1_CLOSED_READY_FOR_CMS). See registry-national-d-summary.json.",
+    "not_fixed_this_sprint_because": "Modifying RLS policies or adding DB triggers is a schema/security change to a live production database, outside the explicit authorization scope of both REGISTRY-NATIONAL-D (which only authorizes verification/documentation of the pre-existing 3-candidate batch) and this session's mandate. Following the repository's own established convention (0014, 0018, and other migrations are authored and committed as 'PRÉPARÉE MAIS NON EXÉCUTÉE' pending explicit human/architect approval), a candidate follow-up migration has been prepared but NOT executed — see supabase/migrations/0023_registry_column_protection.sql."
+  }
+}

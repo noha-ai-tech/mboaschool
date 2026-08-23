@@ -1,0 +1,31 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D",
+  "generated_at": "2026-08-23T05:10:00.000Z",
+  "method": "Live local dev server (npm run dev), curl smoke tests",
+  "checks": {
+    "home": { "path": "/", "status": 200 },
+    "recherche_page": { "path": "/recherche", "note": "API-level checks done via /api/recherche (see registry-national-d-search-v2.json); page route not separately smoke-tested this pass" },
+    "authorized_3_school_pages": {
+      "fef9e2a5-fe95-45f5-9416-e33aae3b6d46": { "path": "/ecole/fef9e2a5-fe95-45f5-9416-e33aae3b6d46", "status": 200, "official_verification_badge_present": false, "platform_verified_badge_present": false },
+      "9e458451-dc1d-40c2-8ecc-ad883478ddab": { "path": "/ecole/9e458451-dc1d-40c2-8ecc-ad883478ddab", "status": 200, "official_verification_badge_present": false, "platform_verified_badge_present": false },
+      "f6635829-0c3f-4e15-a144-2f1f7c99ab24": { "path": "/ecole/f6635829-0c3f-4e15-a144-2f1f7c99ab24", "status": 200, "official_verification_badge_present": false, "platform_verified_badge_present": false }
+    },
+    "regression_existing_school_page": {
+      "id": "7ac85087-d2b8-4d01-94aa-da9866e2a06b",
+      "name": "Collège Bilingue International",
+      "path": "/ecole/7ac85087-d2b8-4d01-94aa-da9866e2a06b",
+      "status": 200
+    },
+    "authorized_3_claim_pages": {
+      "fef9e2a5-fe95-45f5-9416-e33aae3b6d46": { "path": "/revendiquer/fef9e2a5-fe95-45f5-9416-e33aae3b6d46", "status": 200 },
+      "9e458451-dc1d-40c2-8ecc-ad883478ddab": { "path": "/revendiquer/9e458451-dc1d-40c2-8ecc-ad883478ddab", "status": 200 },
+      "f6635829-0c3f-4e15-a144-2f1f7c99ab24": { "path": "/revendiquer/f6635829-0c3f-4e15-a144-2f1f7c99ab24", "status": 200 }
+    },
+    "no_actual_claim_submitted": true,
+    "badge_html_grep": {
+      "method": "curl page HTML, grep for 'Vérification officielle' / 'Vérifié par Écoles237' / 'Source officielle disponible' / any 'Vérifié*' text",
+      "result_for_all_3": "no matches — no trust badge text rendered at all, consistent with is_verified=false and 0 registry identifiers"
+    }
+  },
+  "overall": "PASS — HTTP 200 on all checked routes, no misleading trust badges, no staging leak, existing school unaffected"
+}

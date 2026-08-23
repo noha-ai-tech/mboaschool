@@ -1,0 +1,10 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D",
+  "generated_at": "2026-08-23T04:43:24.724Z",
+  "total_deferred": 243,
+  "checksum_algorithm": "sha256",
+  "checksum_input": "sorted array of {candidate_id, name, reason_code}",
+  "checksum": "f01b34dd8b946d9c643698c610851a79dea4d304bd9f45df511af602345fb1fc",
+  "source_file": "reports/registry/registry-v2-deferred-snapshot.json",
+  "note": "This checksum is the official REGISTRY V2 restart point per REGISTRY-NATIONAL-D §19."
+}

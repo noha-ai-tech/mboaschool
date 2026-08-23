@@ -1,0 +1,10 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D",
+  "generated_at": "2026-08-23T05:30:00.000Z",
+  "before_sprint": { "establishments": 2252, "staging": 2378, "registry_identifiers": 2242 },
+  "after_sprint": { "establishments": 2252, "staging": 2378, "registry_identifiers": 2242 },
+  "delta": { "establishments": 0, "staging": 0, "registry_identifiers": 0 },
+  "writes_this_sprint": "NONE — this sprint performed zero INSERT/UPDATE/DELETE against establishments, establishment_import_staging, or establishment_registry_identifiers. All work was read-only verification, report/doc generation, and one NOT-executed migration file.",
+  "unexplained_writes": "NONE",
+  "outcome": "PASS — zero drift, delta fully explained (0, matches expectation since the authorized 3 were already live before this sprint started)."
+}

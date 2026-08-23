@@ -1,0 +1,17 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D",
+  "generated_at": "2026-08-23T04:10:55.761Z",
+  "method": "npx tsx scripts/school-registry/registry-national-c-publish.ts (no flags, dry-run only, no --commit ever issued this sprint)",
+  "result": {
+    "eligible": 0,
+    "already_live": 0,
+    "staging_row_missing_or_already_promoted": 3,
+    "would_insert_establishments": 0,
+    "would_link_staging": 0,
+    "would_insert_registry_identifiers": 0,
+    "expected_establishments_after": 2252
+  },
+  "second_commit_executed": false,
+  "idempotence_confirmed": true,
+  "outcome": "IDEMPOTENT — re-running the publish script proposes zero inserts; the 3 staging rows are already promoted and the 3 establishments already live."
+}

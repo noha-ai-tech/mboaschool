@@ -1,0 +1,115 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D",
+  "generated_at": "2026-08-23T05:35:00.000Z",
+  "operator": "jean-merlain",
+  "approved_by": "Eddy",
+  "repository": "mboaschool",
+  "branch": "main",
+  "closure_criteria": {
+    "1_authorized_3_state_known": true,
+    "2_no_duplicate_publication_unresolved": true,
+    "3_publication_executed_reconciled": true,
+    "4_all_unresolved_have_final_v1_classification": true,
+    "5_every_certain_decision_traceable": "N/A — no candidate was resolved to CERTAIN this sprint, by design (no new nationwide research attempted)",
+    "6_uncertain_cases_frozen_into_v2": true,
+    "7_no_pii_leak": true,
+    "8_no_tier3_false_official_verification": true,
+    "9_public_trust_semantics_safe": true,
+    "10_search_v2_safe": true,
+    "11_claim_flow_cannot_escalate_registry_trust": false,
+    "12_cms_boundary_documented": true,
+    "13_no_critical_registry_integrity_blocker": "PARTIAL — no DATA integrity blocker, but a real SECURITY escalation path exists (see below)"
+  },
+  "critical_finding": {
+    "id": "OWNER_RLS_REGISTRY_COLUMN_ESCALATION",
+    "description": "An establishment owner can, via a direct Supabase REST call with their own session JWT (bypassing the app's settings page entirely), overwrite registry-provenance columns (official_id, source_ministry, source_reference, source_url, source_updated_at, registry_import_batch) on their own establishment row. Confirmed real: base RLS policy is row-level only (no column restriction), and the only existing column-protection trigger (0014_rc1_security_fixes.sql) predates and does not cover these columns.",
+    "reports": [
+      "reports/registry/registry-national-d-claim-security.json",
+      "reports/registry/registry-national-d-cms-rls-audit.json"
+    ],
+    "mitigation_prepared_not_executed": "supabase/migrations/0023_registry_column_protection.sql",
+    "sprint_rule_invoked": "REGISTRY-NATIONAL-D §28 — 'Si un chemin d'escalade réel existe : DECISION cannot be A.'"
+  },
+  "database": {
+    "establishments_before": 2252,
+    "establishments_after": 2252,
+    "staging_before": 2378,
+    "staging_after": 2378,
+    "registry_identifiers_before": 2242,
+    "registry_identifiers_after": 2242,
+    "writes_this_sprint": 0
+  },
+  "authorized_3_publication": {
+    "historical_expected": 3,
+    "found_live_before_sprint": 3,
+    "inserted_this_sprint": 0,
+    "duplicates": 0,
+    "staging_linked": 3,
+    "orphans": 0,
+    "registry_identifiers_inserted": 0,
+    "idempotence": "CONFIRMED (second dry-run: would-insert=0)"
+  },
+  "final_resolution": {
+    "previously_doubtful": 243,
+    "resolved_certain_official": 0,
+    "resolved_certain_identity": 0,
+    "resolved_certain_publishable_unverified": 0,
+    "still_probable": 0,
+    "still_unresolved_or_conflicting": 243,
+    "invalid": 11,
+    "note": "No new nationwide research was attempted this sprint (explicitly out of scope per brief). All 243 non-invalid deferred candidates were reviewed against EXISTING durable evidence only and frozen into REGISTRY V2 with their existing reason codes — none fabricated, none upgraded to CERTAIN without new traceable proof."
+  },
+  "next_publishable_batch": { "candidates": 0, "checksum": null, "requires_new_human_authorization": "YES (moot — empty batch)" },
+  "registry_v2": {
+    "deferred_total": 243,
+    "by_ministry": { "MINESUP": 221, "MINSANTE": 16, "MINTRANSPORT": 6, "MINEFOP": 0 },
+    "by_reason_code": {
+      "DEFERRED_V2_DUPLICATE": 197,
+      "DEFERRED_V2_SOURCE": 20,
+      "DEFERRED_V2_CATEGORY": 7,
+      "DEFERRED_V2_DOCUMENTARY": 2,
+      "DEFERRED_V2_MISSING_PROVENANCE": 5,
+      "DEFERRED_V2_CROSS_MINISTRY": 1
+    },
+    "snapshot_checksum": "f01b34dd8b946d9c643698c610851a79dea4d304bd9f45df511af602345fb1fc",
+    "blocks_cms": false
+  },
+  "ministries": {
+    "MINESUP": "221 deferred (190 duplicate-review, 20 source-review), 11 invalid rejected. No destructive rewrite, no new nationwide collection.",
+    "MINEFOP": "0 candidates exist anywhere — confirmed discovery-blocked (source portal unreachable, per MINEFOP_IMPORT_CONTRACT.md). Documented honestly, not invented.",
+    "MINSANTE": "14 pilot candidates deferred (category/duplicate review) + 2 quarantined programs preserved exactly (Imagerie Médicale: absent numbering + merged Bafang/Bafoussam row, NOT marked safe; Sciences Pharmaceutiques: structure ambiguous).",
+    "MINTRANSPORT": "3 live (unchanged), 5 deferred (missing source URL, includes Fleet Management Academy — MINEFOP N°000471 preserved as metadata only, never converted to MINTRANSPORT authority), 9 remaining Tier-3 candidates left in their prior review state (not reconciled this sprint — flagged as an open documentation gap)."
+  },
+  "public_trust": {
+    "listed_semantics": "OK — directory_status always LISTED by construction",
+    "platform_verification_semantics": "OK — derived only from is_verified, labeled 'Vérifié par Écoles237', never conflated with official",
+    "official_verification_semantics": "OK — OFFICIALLY_VERIFIED only from CORROBORATED/CONFIRMED registry identifier; authorized 3 correctly resolve to OFFICIAL_SOURCE_FOUND, never OFFICIALLY_VERIFIED",
+    "tier3_false_official_verification": 0,
+    "ambiguous_badges": 0
+  },
+  "search_v2": { "regression": "PASS", "staging_leakage": false, "authorized_publications_visible": true },
+  "cms_boundary": {
+    "registry_protected_fields_documented": true,
+    "owner_editable_fields_documented": true,
+    "schema_gaps_documented": true,
+    "rls_gaps_documented": true,
+    "claim_security_documented": true,
+    "boundary_currently_safe": false
+  },
+  "cms_handoff": {
+    "produced": true,
+    "critical_blockers": ["OWNER_RLS_REGISTRY_COLUMN_ESCALATION — apply/verify 0023 (or equivalent) before any new owner-editable establishments field ships"],
+    "non_blocking_v2_work": "243 deferred candidates, MINEFOP source access, MINSANTE documentary quarantines — none block CMS-A"
+  },
+  "qa": { "build": "PASS", "typescript_app": "PASS", "typescript_registry": "PASS", "tests": "304/304 PASS", "public_qa": "PASS" },
+  "database_final_recheck": { "establishments_delta": 0, "staging_delta": 0, "registry_identifiers_delta": 0 },
+  "decision": "D",
+  "decision_label": "CLAIM_SECURITY_BLOCKER",
+  "decision_reason": "A real, currently-existing escalation path was found (owner can overwrite registry-provenance columns on their own establishment row via direct REST call — RLS is row-level only, no column protection covers these fields). Per the sprint's own §28 rule this means DECISION cannot be A, regardless of how clean the rest of the registry state is. A fix has been prepared (0023, not executed) but not applied — applying and verifying it is a prerequisite for true closure.",
+  "registry_v1_closed": "NO",
+  "registry_v2_snapshot": "YES",
+  "ready_for_cms": "PARTIAL",
+  "ready_for_cms_detail": "Registry V1 data state is clean, reconciled, and fully documented (CMS boundary + handoff docs produced). CMS-A can safely begin schema/product planning using this handoff. It should NOT ship any NEW owner-editable establishments field, or any UI surface reading official_verification incorrectly, until the RLS/column-protection gap (0023 or equivalent) is reviewed and applied by Eddy/the architect.",
+  "push": "NO",
+  "deploy": "NO"
+}

@@ -1,0 +1,32 @@
+{
+  "generated_at": "2026-08-23T04:50:09.154Z",
+  "sprint": "REGISTRY-NATIONAL-D",
+  "establishments": 2252,
+  "staging_total": 2378,
+  "staging_promoted": 1526,
+  "staging_unpromoted": 852,
+  "registry_identifiers": 2242,
+  "ministry_breakdown": {
+    "MINESUP": {
+      "staging": 92,
+      "live": 89
+    },
+    "MINEFOP": {
+      "staging": 0,
+      "live": 0
+    },
+    "MINSANTE": {
+      "staging": 22,
+      "live": 8
+    },
+    "MINTRANSPORT": {
+      "staging": 12,
+      "live": 3
+    }
+  },
+  "historical_reference": {
+    "establishments": 2252,
+    "staging": 2378,
+    "registry_identifiers": 2242
+  }
+}

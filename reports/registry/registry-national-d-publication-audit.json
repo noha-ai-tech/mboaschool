@@ -1,0 +1,81 @@
+{
+  "generated_at": "2026-08-23T04:50:09.157Z",
+  "sprint": "REGISTRY-NATIONAL-D",
+  "publication_state": "ALL_3_ALREADY_LIVE",
+  "authorized_ids": [
+    "fef9e2a5-fe95-45f5-9416-e33aae3b6d46",
+    "9e458451-dc1d-40c2-8ecc-ad883478ddab",
+    "f6635829-0c3f-4e15-a144-2f1f7c99ab24"
+  ],
+  "authorized_names": [
+    "École de Formation (EFO) - CCAA",
+    "Centre de formation professionnelle maritime « Le Paquebot »",
+    "AUTO ECOLE ASTRALE"
+  ],
+  "found_live": [
+    {
+      "id": "9e458451-dc1d-40c2-8ecc-ad883478ddab",
+      "name": "Centre de formation professionnelle maritime « Le Paquebot »",
+      "slug": "centre-de-formation-professionnelle-maritime-le-paquebot",
+      "source_ministry": "MINTRANSPORT",
+      "is_verified": false,
+      "owner_id": null,
+      "official_id": null,
+      "registry_import_batch": "registry-national-c-publish",
+      "created_at": "2026-08-22T05:20:17.273154+00:00"
+    },
+    {
+      "id": "f6635829-0c3f-4e15-a144-2f1f7c99ab24",
+      "name": "AUTO ECOLE ASTRALE",
+      "slug": "auto-ecole-astrale",
+      "source_ministry": "MINTRANSPORT",
+      "is_verified": false,
+      "owner_id": null,
+      "official_id": null,
+      "registry_import_batch": "registry-national-c-publish",
+      "created_at": "2026-08-22T05:20:17.543847+00:00"
+    },
+    {
+      "id": "fef9e2a5-fe95-45f5-9416-e33aae3b6d46",
+      "name": "École de Formation (EFO) - CCAA",
+      "slug": "ecole-de-formation-efo-ccaa",
+      "source_ministry": "MINTRANSPORT",
+      "is_verified": false,
+      "owner_id": null,
+      "official_id": null,
+      "registry_import_batch": "registry-national-c-publish",
+      "created_at": "2026-08-22T05:20:16.987874+00:00"
+    }
+  ],
+  "found_live_count": 3,
+  "staging_links": [
+    {
+      "id": "b8ddca4c-475c-4320-86e4-d9392f36cb8b",
+      "status": "promoted",
+      "promoted_establishment_id": "fef9e2a5-fe95-45f5-9416-e33aae3b6d46",
+      "source_ministry": "MINTRANSPORT"
+    },
+    {
+      "id": "c8491b99-30b0-449e-9689-97ca3521fd7a",
+      "status": "promoted",
+      "promoted_establishment_id": "9e458451-dc1d-40c2-8ecc-ad883478ddab",
+      "source_ministry": "MINTRANSPORT"
+    },
+    {
+      "id": "e32c3ca8-e53b-4ba6-b62f-c65139372373",
+      "status": "promoted",
+      "promoted_establishment_id": "f6635829-0c3f-4e15-a144-2f1f7c99ab24",
+      "source_ministry": "MINTRANSPORT"
+    }
+  ],
+  "staging_links_count": 3,
+  "registry_identifiers_for_authorized": [],
+  "registry_identifiers_for_authorized_count": 0,
+  "checks": {
+    "all_is_verified_false": true,
+    "all_owner_null": true,
+    "all_official_id_null": true,
+    "staging_links_count_matches": true,
+    "zero_registry_identifiers": true
+  }
+}

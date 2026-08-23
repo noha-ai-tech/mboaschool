@@ -1,0 +1,155 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D",
+  "generated_at": "2026-08-23T04:44:25.712Z",
+  "method": "Direct import + call of the pure resolveEstablishmentTrustState() function (no DB, no HTTP — deterministic by construction) with real field values for the 3 authorized establishments (confirmed live this sprint), plus 3 illustrative samples covering the 'no provenance', 'platform-verified only', and 'officially verified' cases.",
+  "results": [
+    {
+      "id": "fef9e2a5-fe95-45f5-9416-e33aae3b6d46",
+      "name": "École de Formation (EFO) - CCAA",
+      "input": {
+        "is_verified": false,
+        "owner_id": null,
+        "official_id": null,
+        "source_ministry": "MINTRANSPORT"
+      },
+      "state": {
+        "directory_status": "LISTED",
+        "claim_status": "UNCLAIMED",
+        "platform_verification": "NOT_PLATFORM_VERIFIED",
+        "official_verification": "OFFICIAL_SOURCE_FOUND",
+        "public_badges": [
+          {
+            "id": "OFFICIAL_SOURCE_FOUND",
+            "label": "Source officielle disponible"
+          }
+        ]
+      },
+      "primary_badge": null
+    },
+    {
+      "id": "9e458451-dc1d-40c2-8ecc-ad883478ddab",
+      "name": "Centre de formation professionnelle maritime « Le Paquebot »",
+      "input": {
+        "is_verified": false,
+        "owner_id": null,
+        "official_id": null,
+        "source_ministry": "MINTRANSPORT"
+      },
+      "state": {
+        "directory_status": "LISTED",
+        "claim_status": "UNCLAIMED",
+        "platform_verification": "NOT_PLATFORM_VERIFIED",
+        "official_verification": "OFFICIAL_SOURCE_FOUND",
+        "public_badges": [
+          {
+            "id": "OFFICIAL_SOURCE_FOUND",
+            "label": "Source officielle disponible"
+          }
+        ]
+      },
+      "primary_badge": null
+    },
+    {
+      "id": "f6635829-0c3f-4e15-a144-2f1f7c99ab24",
+      "name": "AUTO ECOLE ASTRALE",
+      "input": {
+        "is_verified": false,
+        "owner_id": null,
+        "official_id": null,
+        "source_ministry": "MINTRANSPORT"
+      },
+      "state": {
+        "directory_status": "LISTED",
+        "claim_status": "UNCLAIMED",
+        "platform_verification": "NOT_PLATFORM_VERIFIED",
+        "official_verification": "OFFICIAL_SOURCE_FOUND",
+        "public_badges": [
+          {
+            "id": "OFFICIAL_SOURCE_FOUND",
+            "label": "Source officielle disponible"
+          }
+        ]
+      },
+      "primary_badge": null
+    },
+    {
+      "id": "sample-none",
+      "name": "(sample) no registry provenance, not verified",
+      "input": {
+        "is_verified": false,
+        "owner_id": null,
+        "official_id": null,
+        "source_ministry": null
+      },
+      "state": {
+        "directory_status": "LISTED",
+        "claim_status": "UNCLAIMED",
+        "platform_verification": "NOT_PLATFORM_VERIFIED",
+        "official_verification": "UNVERIFIED",
+        "public_badges": []
+      },
+      "primary_badge": null
+    },
+    {
+      "id": "sample-platform",
+      "name": "(sample) platform-verified only",
+      "input": {
+        "is_verified": true,
+        "owner_id": "some-owner",
+        "official_id": null,
+        "source_ministry": null
+      },
+      "state": {
+        "directory_status": "LISTED",
+        "claim_status": "CLAIMED",
+        "platform_verification": "PLATFORM_VERIFIED",
+        "official_verification": "UNVERIFIED",
+        "public_badges": [
+          {
+            "id": "PLATFORM_VERIFIED",
+            "label": "Vérifié par Écoles237"
+          }
+        ]
+      },
+      "primary_badge": {
+        "id": "PLATFORM_VERIFIED",
+        "label": "Vérifié par Écoles237"
+      }
+    },
+    {
+      "id": "sample-official",
+      "name": "(sample) registry identifier CORROBORATED",
+      "input": {
+        "is_verified": false,
+        "owner_id": null,
+        "official_id": "X-123",
+        "source_ministry": "MINESUP"
+      },
+      "state": {
+        "directory_status": "LISTED",
+        "claim_status": "UNCLAIMED",
+        "platform_verification": "NOT_PLATFORM_VERIFIED",
+        "official_verification": "OFFICIALLY_VERIFIED",
+        "public_badges": [
+          {
+            "id": "OFFICIALLY_VERIFIED",
+            "label": "Vérification officielle"
+          }
+        ]
+      },
+      "primary_badge": {
+        "id": "OFFICIALLY_VERIFIED",
+        "label": "Vérification officielle"
+      }
+    }
+  ],
+  "invariant_checks": {
+    "authorized_3_never_officially_verified": true,
+    "authorized_3_directory_status_listed": true,
+    "authorized_3_not_claimed": true,
+    "authorized_3_not_platform_verified": true,
+    "platform_verified_alone_never_yields_official_badge": true,
+    "officially_verified_requires_corroborated_registry_identifier": true
+  },
+  "note": "Per brief §8/§18/§24: official_verification for the 3 authorized establishments resolves to OFFICIAL_SOURCE_FOUND (source_ministry='MINTRANSPORT' is cited), which is expected and permitted — it is a distinct, clearly-labeled badge ('Source officielle disponible') from OFFICIALLY_VERIFIED ('Vérification officielle'), which never triggers without a CORROBORATED/CONFIRMED registry_identifier row (none exist for these 3 — confirmed 0 via live query this sprint)."
+}

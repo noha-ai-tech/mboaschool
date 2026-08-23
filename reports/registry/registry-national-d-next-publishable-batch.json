@@ -1,0 +1,13 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D",
+  "generated_at": "2026-08-23T05:00:00.000Z",
+  "candidate_count": 0,
+  "candidate_ids": [],
+  "names": [],
+  "publication_class": null,
+  "trust_state": null,
+  "provenance": null,
+  "checksum": null,
+  "requires_new_human_authorization": "YES",
+  "note": "This sprint's brief explicitly forbids new nationwide crawling and requires that no candidate ever transition to CERTAIN by convention, timeline pressure, or AI-summary assertion — only by traceable proof. No candidate was resolved to CERTAIN_OFFICIAL or CERTAIN_PUBLISHABLE_UNVERIFIED this sprint: the entire unresolved population (243 entries across MINESUP/MINSANTE/MINTRANSPORT, see registry-v2-deferred-snapshot.json) was reviewed against EXISTING durable evidence only, and none of it met the bar for a fresh certainty upgrade without new targeted verification work that was out of scope this sprint. This is an honest empty result, not an omission — see registry-national-d-resolution-evidence.csv, where every entry's final_certainty is UNRESOLVED, CONFLICTING, or INVALID, none CERTAIN_*."
+}

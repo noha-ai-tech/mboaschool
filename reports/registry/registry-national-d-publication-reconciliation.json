@@ -1,0 +1,35 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D",
+  "generated_at": "2026-08-23T04:33:12.160Z",
+  "publication_state": "ALL_3_ALREADY_LIVE",
+  "executed_in_sprint": "REGISTRY-NATIONAL-C-EXEC",
+  "executed_commit": "1dfaa1d8877c5002bb47e1d7789587c4a096a251",
+  "writes_this_sprint": {
+    "establishments_inserted": 0,
+    "establishments_updated": 0,
+    "establishments_deleted": 0,
+    "registry_identifiers_inserted": 0,
+    "owners_assigned": 0,
+    "staging_rows_linked": 0
+  },
+  "reconciliation": {
+    "expected_live_count": 3,
+    "found_live_count": 3,
+    "identity_match": "exact (all 3 authorized ids found by primary key)",
+    "correct_slug": true,
+    "correct_source_ministry": true,
+    "is_verified_false": true,
+    "owner_id_null": true,
+    "official_id_null": true,
+    "no_fabricated_registry_identifier": true,
+    "staging_linkage": {
+      "expected_linked": 3,
+      "found_linked": 3,
+      "orphans": 0,
+      "duplicate_promotion": false
+    },
+    "registry_identifiers_delta_from_this_batch": 0
+  },
+  "outcome": "NO_ACTION_REQUIRED_ALREADY_RECONCILED",
+  "note": "This sprint performed zero writes to establishments/staging/registry_identifiers. The authorized batch of 3 (REGISTRY-NATIONAL-B snapshot, checksum c22e1b88e1cb1026f0115d7d118abcccc4a832bb3375e9fd62e7ed754f7849ce) was already published and reconciled in commit 1dfaa1d on 2026-08-22. This sprint independently re-verified that state fresh against the live database and confirms it still holds unchanged."
+}

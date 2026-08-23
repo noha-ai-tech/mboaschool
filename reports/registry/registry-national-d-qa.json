@@ -1,0 +1,34 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D",
+  "generated_at": "2026-08-23T05:20:00.000Z",
+  "build": { "command": "npm run build", "result": "PASS — compiled successfully, 73/73 static pages generated, 0 errors" },
+  "typescript_app": { "command": "npx tsc --noEmit", "result": "PASS — 0 errors" },
+  "typescript_registry_scripts": { "command": "npx tsc --noEmit -p scripts/school-registry/tsconfig.json", "result": "PASS — 0 errors" },
+  "tests": {
+    "runner": "node --test (via npx tsx --test), no vitest/jest installed in this repo",
+    "suites_run": [
+      "src/lib/trust/__tests__/resolveEstablishmentTrustState.test.ts (trust resolver)",
+      "scripts/school-registry/lib/nationalRegistry/__tests__/publicationPolicy.test.ts (publication policy)",
+      "scripts/school-registry/lib/nationalRegistry/__tests__/registryNationalPublicationGuard.test.ts (registry national guard)",
+      "scripts/school-registry/lib/nationalRegistry/__tests__/registryNationalB.test.ts (registry national)",
+      "scripts/school-registry/lib/matching/__tests__/matching.test.ts (matching)",
+      "src/lib/__tests__/registryReview.test.ts (registryReview)",
+      "src/lib/search/__tests__/queryBuilder.test.ts (Search V2)",
+      "scripts/school-registry/lib/__tests__/transportTier3TrustModel.test.ts (Transport Tier-3)",
+      "scripts/school-registry/lib/__tests__/transportA2StagingPayload.test.ts (Transport Tier-3)",
+      "scripts/school-registry/lib/__tests__/transportA2StagingWriter.test.ts (Transport Tier-3)",
+      "scripts/school-registry/lib/__tests__/transportA2ImportGuard.test.ts (Transport Tier-3)",
+      "scripts/school-registry/lib/matching/__tests__/matching-transport-tier3.test.ts (Transport Tier-3)",
+      "scripts/school-registry/lib/__tests__/minsanteApprovedPopulation.test.ts (MINSANTE regression)",
+      "scripts/school-registry/lib/__tests__/minsanteGPromotionGuard.test.ts (MINSANTE regression)",
+      "scripts/school-registry/lib/matching/__tests__/matching-minsante-g1.test.ts (MINSANTE regression)",
+      "scripts/school-registry/lib/matching/__tests__/matching-minsante-g2.test.ts (MINSANTE regression)"
+    ],
+    "total_tests": 304,
+    "passed": 304,
+    "failed": 0,
+    "claims_note": "No dedicated 'claims' test suite file exists in the repo; claim-flow behavior was instead verified this sprint via the live app-layer/RLS audit (registry-national-d-claim-security.json) and live public QA (registry-national-d-public-qa.json, /revendiquer/[id] for the 3 authorized establishments).",
+    "new_registry_national_d_tests": "None added. This sprint's own work (verification/reconciliation/audit scripts, the V2 snapshot builder, one prepared-but-not-executed migration) is read-only tooling and documentation, not new production logic requiring unit-test coverage — consistent with how prior sprints' own verification/dry-run scripts were validated (by their own JSON output), not by dedicated *.test.ts files."
+  },
+  "overall": "PASS"
+}

@@ -1,0 +1,39 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D",
+  "generated_at": "2026-08-23T05:10:00.000Z",
+  "method": "Live local dev server (npm run dev), curl against /api/recherche",
+  "checks": {
+    "authorized_3_findable": {
+      "EFO-CCAA": { "query": "CCAA", "found": true, "total_count": 1, "is_verified": false, "is_claimed": false },
+      "Le_Paquebot": { "query": "Paquebot", "found": true, "total_count": 1, "is_verified": false, "is_claimed": false },
+      "AUTO_ECOLE_ASTRALE": { "query": "Astrale", "found": true, "total_count": 1, "is_verified": false, "is_claimed": false }
+    },
+    "regression_existing_school": {
+      "name": "Collège Bilingue International",
+      "query": "Bilingue",
+      "found": true,
+      "note": "Pre-existing, unrelated to registry pipeline — confirms search still works for non-registry data"
+    },
+    "staging_not_leaked": {
+      "query": "IT2MIP",
+      "note": "IT2MIP is a MINTRANSPORT Tier-3 staging-only candidate (never published, cross-ministry AMBIGUOUS), used as a canary term.",
+      "total_count": 0,
+      "result": "PASS — confirms establishment_import_staging rows are not exposed via /api/recherche"
+    },
+    "pagination_bounded": {
+      "query": "(empty)",
+      "results_returned": 24,
+      "page_size": 24,
+      "total_count": 2252,
+      "result": "PASS — no full-table fetch; results length matches page_size, total_count matches live establishments count"
+    },
+    "registry_v2_snapshot_zero_effect_on_search": {
+      "note": "registry-v2-deferred-snapshot.json is a static report artifact, never read by any /api/recherche code path (confirmed: no reference to reports/registry/ in src/app/api/recherche/route.ts). Zero effect by construction.",
+      "result": "PASS"
+    }
+  },
+  "minor_observation_not_a_regression": {
+    "note": "A free-text search for the generic three-letter token 'EFO' alone did not surface 'École de Formation (EFO) - CCAA' on the first page (24 results), while the more specific token 'CCAA' found it immediately (total_count=1). This is short/generic-token ranking behavior of the existing search algorithm, unrelated to anything written or changed this sprint, and not investigated further as out of scope."
+  },
+  "overall": "PASS — no regression found"
+}

@@ -1,0 +1,63 @@
+{
+  "generated_at": "2026-08-23T04:35:45.382Z",
+  "sprint": "REGISTRY-NATIONAL-D",
+  "method": "rpc_unavailable_fallback_to_static_migration_read",
+  "trigger_query_error": {
+    "code": "PGRST202",
+    "details": "Searched for the function public.exec_sql_readonly with parameter query or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache.",
+    "hint": null,
+    "message": "Could not find the function public.exec_sql_readonly(query) in the schema cache"
+  },
+  "triggers_found_on_establishments": [],
+  "trigger_live_status": "UNVERIFIABLE_WITH_AVAILABLE_TOOLS",
+  "trigger_verification_note": "No exec_sql/information_schema RPC exists in this project's PostgREST schema, and .env.local has no direct Postgres connection string (only Supabase URL + service role REST credentials). It is therefore NOT POSSIBLE from this session to directly confirm whether the 0014_rc1_security_fixes.sql trigger (protect_establishment_privileged_columns) is actually applied to the live database, despite the file being tracked in supabase/migrations/. The service-role key cannot be used to test the trigger behaviorally either: the trigger only fires its block when auth.uid() = old.owner_id, and service-role requests always have auth.uid() = NULL, so a service-role UPDATE would succeed whether or not the trigger exists. RECOMMENDATION: verify directly via Supabase SQL Editor (select tgname from pg_trigger where tgrelid = 'public.establishments'::regclass) or `supabase db diff` against a linked project before treating either 0014 or 0018 as applied/not-applied. This audit's registry-protected-column gap finding below holds regardless of 0014's live status, since 0014 (even if live) never covered the columns 0018 added.",
+  "live_columns_sample_count": 48,
+  "registry_protected_candidate_columns_present_live": [
+    "official_id",
+    "source_ministry",
+    "source_reference",
+    "source_url",
+    "source_updated_at",
+    "registry_import_batch"
+  ],
+  "owner_column_level_protection_already_migrated_columns": [
+    "is_verified",
+    "is_featured",
+    "subscription_plan",
+    "forfait",
+    "verification_status"
+  ],
+  "findings": {
+    "base_rls_policy": {
+      "source": "supabase/schema.sql:143",
+      "text": "create policy \"Owners can update own establishments\" on public.establishments for update using (auth.uid() = owner_id);",
+      "note": "Row-level only — no WITH CHECK, no column restriction. Grants UPDATE on ALL columns of a row the user owns."
+    },
+    "migration_0014_rc1_security_fixes": {
+      "file": "supabase/migrations/0014_rc1_security_fixes.sql",
+      "header_states": "PREPAREE MAIS NON EXECUTEE",
+      "adds_trigger": "protect_establishment_privileged_columns",
+      "protects_columns": [
+        "is_verified",
+        "is_featured",
+        "subscription_plan",
+        "forfait",
+        "verification_status"
+      ],
+      "does_NOT_protect": [
+        "official_id",
+        "source_ministry",
+        "source_reference",
+        "source_url",
+        "source_updated_at",
+        "registry_import_batch"
+      ],
+      "reason_gap": "0014 was authored before 0018 introduced the registry-provenance columns (official_id, source_ministry, source_reference, source_url, source_updated_at, registry_import_batch). Even if 0014 is fully executed live, it has no coverage for registry-protected fields."
+    },
+    "migration_0018_registry_identity_fields": {
+      "file": "supabase/migrations/0018_registry_identity_fields.sql",
+      "header_states": "PREPAREE MAIS NON EXECUTEE (stale — columns ARE present live per this session's earlier verify query, which read official_id/source_ministry/registry_import_batch successfully on live rows)",
+      "adds_no_rls_or_trigger_protection": true
+    }
+  }
+}

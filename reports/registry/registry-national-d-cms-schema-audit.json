@@ -1,0 +1,380 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D",
+  "generated_at": "2026-08-23T04:48:49.074Z",
+  "method": "Live query of establishments (1 row, all columns) + head-count probes of related tables. Schema not assumed.",
+  "live_column_count": 48,
+  "live_columns": [
+    "id",
+    "owner_id",
+    "name",
+    "slug",
+    "main_category",
+    "sub_category",
+    "ownership_type",
+    "description",
+    "region",
+    "department",
+    "city",
+    "arrondissement",
+    "neighborhood",
+    "address",
+    "latitude",
+    "longitude",
+    "phone",
+    "whatsapp",
+    "email",
+    "website",
+    "logo_url",
+    "cover_image_url",
+    "is_verified",
+    "is_featured",
+    "accepts_online_payment",
+    "subscription_plan",
+    "created_at",
+    "updated_at",
+    "image_url",
+    "owner_email",
+    "is_claimed",
+    "quartier",
+    "couleur_primaire",
+    "couleur_secondaire",
+    "emoji_logo",
+    "forfait",
+    "verification_status",
+    "region_id",
+    "department_id",
+    "arrondissement_id",
+    "official_id",
+    "source_ministry",
+    "source_reference",
+    "source_url",
+    "source_updated_at",
+    "registry_import_batch",
+    "organization_id",
+    "hero_mode"
+  ],
+  "column_classification": [
+    {
+      "column": "id",
+      "classification": "REGISTRY_PROTECTED"
+    },
+    {
+      "column": "owner_id",
+      "classification": "ADMIN_ONLY"
+    },
+    {
+      "column": "name",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "slug",
+      "classification": "EXISTS_BUT_NEEDS_POLICY"
+    },
+    {
+      "column": "main_category",
+      "classification": "EXISTS_BUT_NEEDS_POLICY"
+    },
+    {
+      "column": "sub_category",
+      "classification": "EXISTS_BUT_NEEDS_POLICY"
+    },
+    {
+      "column": "ownership_type",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "description",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "region",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "department",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "city",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "arrondissement",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "neighborhood",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "address",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "latitude",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "longitude",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "phone",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "whatsapp",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "email",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "website",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "logo_url",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "cover_image_url",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "is_verified",
+      "classification": "ADMIN_ONLY"
+    },
+    {
+      "column": "is_featured",
+      "classification": "ADMIN_ONLY"
+    },
+    {
+      "column": "accepts_online_payment",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "subscription_plan",
+      "classification": "ADMIN_ONLY"
+    },
+    {
+      "column": "created_at",
+      "classification": "EXISTS_BUT_NEEDS_POLICY"
+    },
+    {
+      "column": "updated_at",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "image_url",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "owner_email",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "is_claimed",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "quartier",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "couleur_primaire",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "couleur_secondaire",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "emoji_logo",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "forfait",
+      "classification": "ADMIN_ONLY"
+    },
+    {
+      "column": "verification_status",
+      "classification": "ADMIN_ONLY"
+    },
+    {
+      "column": "region_id",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "department_id",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "arrondissement_id",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "official_id",
+      "classification": "REGISTRY_PROTECTED"
+    },
+    {
+      "column": "source_ministry",
+      "classification": "REGISTRY_PROTECTED"
+    },
+    {
+      "column": "source_reference",
+      "classification": "REGISTRY_PROTECTED"
+    },
+    {
+      "column": "source_url",
+      "classification": "REGISTRY_PROTECTED"
+    },
+    {
+      "column": "source_updated_at",
+      "classification": "REGISTRY_PROTECTED"
+    },
+    {
+      "column": "registry_import_batch",
+      "classification": "REGISTRY_PROTECTED"
+    },
+    {
+      "column": "organization_id",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "column": "hero_mode",
+      "classification": "EXISTS_AND_OWNER_EDITABLE"
+    }
+  ],
+  "related_tables_present": {
+    "establishment_images": true,
+    "school_fees": true,
+    "school_infrastructures": true,
+    "school_programs": true,
+    "school_courses": true
+  },
+  "content_area_audit": [
+    {
+      "content_area": "description",
+      "backing_columns_found": [
+        "description"
+      ],
+      "backing_columns_missing": [],
+      "status": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "content_area": "public_phone",
+      "backing_columns_found": [
+        "phone",
+        "whatsapp"
+      ],
+      "backing_columns_missing": [],
+      "status": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "content_area": "public_email",
+      "backing_columns_found": [
+        "email"
+      ],
+      "backing_columns_missing": [],
+      "status": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "content_area": "website",
+      "backing_columns_found": [
+        "website"
+      ],
+      "backing_columns_missing": [],
+      "status": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "content_area": "address_display",
+      "backing_columns_found": [
+        "address",
+        "city",
+        "neighborhood",
+        "quartier",
+        "region",
+        "latitude",
+        "longitude"
+      ],
+      "backing_columns_missing": [],
+      "status": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "content_area": "opening_hours",
+      "backing_columns_found": [],
+      "backing_columns_missing": [],
+      "status": "MISSING_SCHEMA",
+      "note": "No column and no obviously-named related table found this sprint — genuinely MISSING_SCHEMA, would need a new migration. NEEDS_PRODUCT_DECISION on scope."
+    },
+    {
+      "content_area": "social_links",
+      "backing_columns_found": [],
+      "backing_columns_missing": [],
+      "status": "MISSING_SCHEMA",
+      "note": "No column and no obviously-named related table found this sprint — genuinely MISSING_SCHEMA, would need a new migration. NEEDS_PRODUCT_DECISION on scope."
+    },
+    {
+      "content_area": "logo",
+      "backing_columns_found": [
+        "emoji_logo",
+        "couleur_primaire",
+        "couleur_secondaire"
+      ],
+      "backing_columns_missing": [],
+      "status": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "content_area": "cover_image",
+      "backing_columns_found": [
+        "cover_image_url"
+      ],
+      "backing_columns_missing": [],
+      "status": "EXISTS_AND_OWNER_EDITABLE"
+    },
+    {
+      "content_area": "gallery",
+      "backing_columns_found": [],
+      "backing_columns_missing": [],
+      "status": "MISSING_SCHEMA",
+      "note": "MISSING_SCHEMA on establishments itself, but establishment_images table exists (present=true) — likely backs gallery separately, NEEDS_PRODUCT_DECISION on which table CMS-A should target."
+    },
+    {
+      "content_area": "programs",
+      "backing_columns_found": [],
+      "backing_columns_missing": [],
+      "status": "MISSING_SCHEMA",
+      "note": "MISSING_SCHEMA — school_programs/school_courses table presence: programs=true, courses=true. NEEDS_PRODUCT_DECISION."
+    },
+    {
+      "content_area": "courses",
+      "backing_columns_found": [],
+      "backing_columns_missing": [],
+      "status": "MISSING_SCHEMA",
+      "note": "MISSING_SCHEMA — school_programs/school_courses table presence: programs=true, courses=true. NEEDS_PRODUCT_DECISION."
+    },
+    {
+      "content_area": "admission_info",
+      "backing_columns_found": [],
+      "backing_columns_missing": [],
+      "status": "MISSING_SCHEMA",
+      "note": "No column and no obviously-named related table found this sprint — genuinely MISSING_SCHEMA, would need a new migration. NEEDS_PRODUCT_DECISION on scope."
+    },
+    {
+      "content_area": "tuition_info",
+      "backing_columns_found": [],
+      "backing_columns_missing": [],
+      "status": "MISSING_SCHEMA",
+      "note": "MISSING_SCHEMA on establishments — school_fees table presence=true. NEEDS_PRODUCT_DECISION."
+    },
+    {
+      "content_area": "facilities",
+      "backing_columns_found": [],
+      "backing_columns_missing": [],
+      "status": "MISSING_SCHEMA",
+      "note": "MISSING_SCHEMA on establishments — school_infrastructures table presence=true. NEEDS_PRODUCT_DECISION."
+    }
+  ]
+}
