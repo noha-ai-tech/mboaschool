@@ -1,0 +1,12 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D.1",
+  "generated_at": "2026-08-23T05:31:00.000Z",
+  "before_sprint": { "establishments": 2252, "staging": 2378, "registry_identifiers": 2242 },
+  "after_sprint": { "establishments": 2252, "staging": 2378, "registry_identifiers": 2242 },
+  "delta": { "establishments": 0, "staging": 0, "registry_identifiers": 0 },
+  "authorized_3_still_healthy": true,
+  "v2_deferred_snapshot_untouched": { "checksum_before": "f01b34dd8b946d9c643698c610851a79dea4d304bd9f45df511af602345fb1fc", "checksum_after": "f01b34dd8b946d9c643698c610851a79dea4d304bd9f45df511af602345fb1fc", "match": true },
+  "schema_change_this_sprint": "1 function (protect_establishment_registry_columns) + 1 trigger (establishments_protect_registry_columns) on public.establishments — no table, no column, no data row created/modified/deleted.",
+  "unexplained_writes": "NONE",
+  "outcome": "PASS"
+}

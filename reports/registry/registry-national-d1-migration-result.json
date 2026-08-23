@@ -1,0 +1,31 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D.1",
+  "generated_at": "2026-08-23T05:25:00.000Z",
+  "executed_by": "Jean Merlain (operator), approved by Eddy — see registry-national-d1-migration-approval.json",
+  "execution_method": "Manual, via Supabase SQL Editor on Écoles237 production (this session has no direct DDL capability — confirmed unchanged from preflight)",
+  "verification_method": "Independent live behavioral testing via transaction-safe throwaway fixtures (real auth user + session, service-role client used only for setup/cleanup/final-state reads) — never trusted the operator's report alone.",
+  "schema_verification": {
+    "trigger_exists_live": true,
+    "function_exists_live": true,
+    "method": "Inferred from behavior, not direct pg_catalog query (still unavailable this session — no exec_sql RPC, no direct Postgres connection). The exact error message 'Ce champ de provenance registre est gere par l equipe Ecoles237.' matches the trigger's raise exception text verbatim (registry-national-d1-post-migration-full-check.json), which is conclusive: this exact string only exists in protect_establishment_registry_columns(), so its appearance proves both the function and the trigger invoking it are live.",
+    "correct_table_targeted": true,
+    "rls_still_enabled": true,
+    "policies_unchanged": "Confirmed — legitimate owner content updates (single-field and multi-field) succeed exactly as before, meaning the base RLS policy (schema.sql:143) was not altered by this migration, as intended (0023 only adds a trigger, never touches policies)."
+  },
+  "all_6_protected_columns_verified_live": {
+    "official_id": "BLOCKED",
+    "source_ministry": "BLOCKED",
+    "registry_import_batch": "BLOCKED",
+    "source_reference": "BLOCKED",
+    "source_url": "BLOCKED",
+    "source_updated_at": "BLOCKED"
+  },
+  "coexistence_with_0014": "CONFIRMED — is_verified remains independently blocked by the pre-existing 0014 trigger, both triggers fire correctly on the same row without interference.",
+  "atomicity": "CONFIRMED — an UPDATE mixing one legitimate field and one protected field is rejected as a whole (no partial write): the legitimate field's new value was NOT silently applied.",
+  "trusted_pipeline_unaffected": "CONFIRMED — service-role client successfully wrote official_id and source_ministry on the same test row immediately after the owner's attempt was blocked.",
+  "raw_evidence": [
+    "reports/registry/registry-national-d1-owner-write-reproduction-after.json",
+    "reports/registry/registry-national-d1-post-migration-full-check.json"
+  ],
+  "result": "SUCCESS — migration 0023 is live, correctly enforced, does not break any legitimate or trusted-pipeline write path."
+}

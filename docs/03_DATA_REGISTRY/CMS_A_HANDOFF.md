@@ -1,8 +1,17 @@
 # CMS-A Handoff
 
-SPRINT REGISTRY-NATIONAL-D §30. Handoff package from REGISTRY V1 closure to
-the CMS-A team. All figures below are live-verified as of 2026-08-23 unless
-stated otherwise — see the cited reports for raw data.
+SPRINT REGISTRY-NATIONAL-D §30, updated by REGISTRY-NATIONAL-D.1. Handoff
+package from REGISTRY V1 closure to the CMS-A team. All figures below are
+live-verified as of 2026-08-23 unless stated otherwise — see the cited
+reports for raw data.
+
+**Update (REGISTRY-NATIONAL-D.1, 2026-08-23): the blocking RLS gap described
+below is FIXED.** Migration `0023_registry_column_protection.sql` was
+executed on production (operator: Jean Merlain, approved by: Eddy) and
+independently live-verified. **READY_FOR_CMS_A = YES.** Section 6/10/11 below
+are kept for historical context but no longer describe an open blocker —
+see `reports/registry/registry-national-d1-summary.json` for the closing
+decision.
 
 ## 1. Final REGISTRY V1 baseline
 
@@ -42,10 +51,11 @@ publication-policy/matching guards (see QA below).
 
 ## 4. Registry-protected fields
 
-See `docs/03_DATA_REGISTRY/REGISTRY_CMS_BOUNDARY.md` for the full list and
-the current enforcement gap (registry-provenance columns are not yet
-column-protected against direct owner writes — a migration is prepared,
-`supabase/migrations/0023_registry_column_protection.sql`, not executed).
+See `docs/03_DATA_REGISTRY/REGISTRY_CMS_BOUNDARY.md` for the full list.
+Column-level protection is now live and independently verified
+(`supabase/migrations/0023_registry_column_protection.sql`, executed
+2026-08-23) — registry-provenance columns are enforced the same way the
+pre-existing platform-trust columns already were via `0014`.
 
 ## 5. Owner-editable candidate fields
 
@@ -56,15 +66,16 @@ via `src/app/dashboard/ecole/parametres/page.tsx`. Additional live columns
 `couleur_primaire`, `couleur_secondaire`, `cover_image_url`, `hero_mode`) are
 plausible CMS-A candidates, not yet exposed, no blocker found.
 
-## 6. RLS gaps
+## 6. RLS gaps — RESOLVED
 
-Row-level RLS (`auth.uid() = owner_id`) has no column-level restriction
-beyond what the `0014` trigger covers (platform-trust fields only, live
-status unconfirmed this sprint — verify directly in Supabase SQL Editor
-before relying on it). **Do not add new owner-facing UPDATE surface to
-`establishments` until this is resolved** — any new owner-editable field
-added to the settings page today would rely on the same unprotected RLS
-policy as the registry-provenance gap.
+Row-level RLS (`auth.uid() = owner_id`) now has column-level restriction for
+both the platform-trust fields (`0014`) and the registry-provenance fields
+(`0023`, executed 2026-08-23) — both confirmed live via independent
+behavioral testing. CMS-A may add new owner-facing UPDATE surface to
+`establishments` freely; any NEW column CMS-A introduces would still need
+its own protection decision if it's sensitive, but the 11 columns already
+identified (6 registry + 5 platform-trust) are covered regardless of what
+else is added.
 
 ## 7. Claim flow behavior
 
@@ -91,29 +102,36 @@ upload UI). `cover_image_url` is a plain establishments column.
 
 ## 10. Migrations potentially required
 
-- `0023_registry_column_protection.sql` — prepared, not executed. Recommended
-  before any new owner-editable surface ships.
-- Confirm live status of `0014_rc1_security_fixes.sql` and `0018_registry_identity_fields.sql`
-  directly in Supabase SQL Editor (this session could not query
-  `pg_trigger`/`information_schema` — no RPC, no direct Postgres connection
-  string available).
-- New schema needed (no existing column/table found this sprint) for:
+- ~~`0023_registry_column_protection.sql`~~ — **executed 2026-08-23, verified live.**
+- `0014_rc1_security_fixes.sql` and `0018_registry_identity_fields.sql` — both
+  confirmed live this sprint via behavioral testing (their header comments
+  claiming "prepared but not executed" are stale documentation; the actual
+  database state is what matters and has now been independently proven, not
+  just read from file headers).
+- New schema still needed (no existing column/table found) for:
   `opening_hours`, `social_links`, `admission_info` — product decision needed
-  on scope before authoring a migration.
+  on scope before authoring a migration. Not a security blocker.
 
 ## 11. Mandatory CMS security tests
 
-Before CMS-A ships any new owner-editable field:
+Before CMS-A ships any new owner-editable field, re-run the same
+transaction-safe throwaway-fixture methodology used this sprint
+(`scripts/school-registry/registry-national-d1-owner-write-repro.ts` as a
+template — create a disposable auth user + establishment, sign in as them
+with the anon key, attempt writes, always clean up in a `finally` block):
 1. Attempt a direct PATCH to `/rest/v1/establishments` with an owner JWT,
-   setting a registry-protected column — must be rejected (currently is
-   NOT, until item 6/10 is resolved).
-2. Attempt the same for `is_verified`/`owner_id`/etc. — should already be
-   rejected if `0014`'s trigger is live (unconfirmed — verify first).
+   setting a registry-protected column — now correctly rejected (verified
+   2026-08-23, `reports/registry/registry-national-d1-owner-write-after.json`).
+2. Attempt the same for `is_verified`/etc. — correctly rejected (`0014`,
+   verified live 2026-08-23).
 3. Confirm `resolveEstablishmentTrustState()` output is unaffected by any
    new owner-editable field (it only reads the fields documented in
    `EstablishmentTrustInput` — adding unrelated columns should not change
    its behavior, but re-run `src/lib/trust/__tests__/resolveEstablishmentTrustState.test.ts`
    after any establishments schema change).
+4. Re-run this same fixture test after adding ANY new sensitive column to
+   `establishments` — `0023`'s trigger only covers the 6 columns it names
+   explicitly; a new sensitive column needs its own explicit protection.
 
 ## 12. Deferred REGISTRY V2 work
 
@@ -131,7 +149,8 @@ this is documented, not an omission.
 ## 13. V2 backlog does not block CMS-A
 
 None of the above 243 deferred candidates, nor MINEFOP's empty state, block
-CMS-A. **What does block treating REGISTRY V1 as fully closed is item 6/10
-(the RLS/column-protection gap)** — per this sprint's own rule (§28: "si un
-chemin d'escalade réel existe, DECISION cannot be A"), see
-`reports/registry/registry-national-d-summary.json` for the final decision.
+CMS-A. The RLS/column-protection gap that previously blocked full closure
+(REGISTRY-NATIONAL-D, `reports/registry/registry-national-d-summary.json`)
+has been fixed and independently verified
+(REGISTRY-NATIONAL-D.1, `reports/registry/registry-national-d1-summary.json`).
+**REGISTRY V1 is closed. READY_FOR_CMS_A = YES.**

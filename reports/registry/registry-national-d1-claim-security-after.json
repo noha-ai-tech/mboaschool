@@ -1,0 +1,22 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D.1",
+  "generated_at": "2026-08-23T05:27:00.000Z",
+  "state": "AFTER 0023 execution",
+  "owner_can_edit_official_verification": "NO — official_id and source_ministry (the two inputs that could fabricate an OFFICIAL_SOURCE_FOUND badge) are now both blocked. OFFICIALLY_VERIFIED was already unreachable (requires establishment_registry_identifiers, independently secure).",
+  "owner_can_edit_official_id": "NO (live-confirmed blocked)",
+  "owner_can_edit_source_ministry": "NO (live-confirmed blocked)",
+  "owner_can_edit_registry_provenance": "NO — source_reference, source_url, source_updated_at, registry_import_batch all live-confirmed blocked",
+  "owner_can_edit_registry_identifiers": "NO — separate table, RLS denies all non-service-role writes (unaffected by this migration, already secure before)",
+  "owner_can_modify_allowed_content": "YES — description, phone, city (multi-field), and single-field updates all confirmed still working",
+  "atomicity_of_mixed_updates": "CONFIRMED — an update touching both a legitimate and a protected field is rejected as a whole; no partial/silent application of the legitimate part",
+  "app_layer": "Unchanged, still safe (no code modified this sprint — fix was entirely at the database layer)",
+  "final_state_required_by_brief_section_17": {
+    "owner_can_edit_official_verification": "NO ✅",
+    "owner_can_edit_official_id": "NO ✅",
+    "owner_can_edit_source_ministry": "NO ✅",
+    "owner_can_edit_registry_provenance": "NO ✅",
+    "owner_can_edit_registry_identifiers": "NO ✅",
+    "owner_can_modify_allowed_content": "YES ✅"
+  },
+  "overall": "PASS — matches the required final state exactly."
+}

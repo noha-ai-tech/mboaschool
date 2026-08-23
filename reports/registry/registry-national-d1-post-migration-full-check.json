@@ -1,0 +1,42 @@
+{
+  "generated_at": "2026-08-23T05:24:23.078Z",
+  "marker": "D1-FULLCHECK-72bfec86",
+  "source_updated_at_blocked": true,
+  "source_updated_at_error": {
+    "code": "42501",
+    "message": "Ce champ de provenance registre est gere par l equipe Ecoles237."
+  },
+  "is_verified_still_blocked_by_0014": true,
+  "is_verified_error": {
+    "code": "42501",
+    "message": "Ce champ est gere par l equipe Ecoles237."
+  },
+  "legitimate_multi_field_update": {
+    "succeeded": true,
+    "result": {
+      "description": "multi-field legit update D1-FULLCHECK-72bfec86",
+      "phone": "+237600000000",
+      "city": "Yaoundé"
+    },
+    "error": null
+  },
+  "mixed_update_atomicity": {
+    "update_call_errored": true,
+    "description_after": "multi-field legit update D1-FULLCHECK-72bfec86",
+    "official_id_after": null,
+    "correct_atomic_rejection": true
+  },
+  "service_role_pipeline_unaffected": {
+    "update_call_errored": false,
+    "result": {
+      "official_id": "SERVICE-ROLE-OK",
+      "source_ministry": "MINTRANSPORT"
+    },
+    "correct": true
+  },
+  "overall_conclusion": "ALL POST-MIGRATION CHECKS PASS",
+  "cleanup": {
+    "establishment_deleted": true,
+    "user_deleted": true
+  }
+}

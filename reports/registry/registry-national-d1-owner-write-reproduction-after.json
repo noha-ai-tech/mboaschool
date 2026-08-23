@@ -1,0 +1,93 @@
+{
+  "phase": "after",
+  "marker": "D1-SECURITY-TEST-f7496950",
+  "generated_at": "2026-08-23T05:23:46.254Z",
+  "test_user_id": "83bad11d-228f-4379-94b9-37c9e3ee7360",
+  "test_establishment_id": "eea04b83-d4e6-4b0c-b9d4-7479c92ffb7b",
+  "test_establishment_initial_state": {
+    "id": "eea04b83-d4e6-4b0c-b9d4-7479c92ffb7b",
+    "name": "ZZZ_D1-SECURITY-TEST-f7496950_DO_NOT_USE_DELETE_ME",
+    "official_id": null,
+    "source_ministry": null,
+    "registry_import_batch": null
+  },
+  "signed_in_as_test_user": true,
+  "legitimate_content_update": {
+    "attempted_field": "description",
+    "succeeded": true,
+    "error": null
+  },
+  "protected_field_write_attempts": {
+    "source_ministry": {
+      "attempted_value": "MINESUP",
+      "write_succeeded": false,
+      "error": {
+        "code": "42501",
+        "message": "Ce champ de provenance registre est gere par l equipe Ecoles237."
+      },
+      "row_after_attempt": null
+    },
+    "official_id": {
+      "attempted_value": "FAKE-D1-SECURITY-TEST-f7496950",
+      "write_succeeded": false,
+      "error": {
+        "code": "42501",
+        "message": "Ce champ de provenance registre est gere par l equipe Ecoles237."
+      },
+      "row_after_attempt": null
+    },
+    "registry_import_batch": {
+      "attempted_value": "fake-batch-D1-SECURITY-TEST-f7496950",
+      "write_succeeded": false,
+      "error": {
+        "code": "42501",
+        "message": "Ce champ de provenance registre est gere par l equipe Ecoles237."
+      },
+      "row_after_attempt": null
+    },
+    "source_reference": {
+      "attempted_value": "fake-ref-D1-SECURITY-TEST-f7496950",
+      "write_succeeded": false,
+      "error": {
+        "code": "42501",
+        "message": "Ce champ de provenance registre est gere par l equipe Ecoles237."
+      },
+      "row_after_attempt": null
+    },
+    "source_url": {
+      "attempted_value": "https://fake.example/D1-SECURITY-TEST-f7496950",
+      "write_succeeded": false,
+      "error": {
+        "code": "42501",
+        "message": "Ce champ de provenance registre est gere par l equipe Ecoles237."
+      },
+      "row_after_attempt": null
+    }
+  },
+  "final_state_service_role_read": {
+    "id": "eea04b83-d4e6-4b0c-b9d4-7479c92ffb7b",
+    "description": "legit update by owner — D1-SECURITY-TEST-f7496950",
+    "official_id": null,
+    "source_ministry": null,
+    "registry_import_batch": null,
+    "source_reference": null,
+    "source_url": null
+  },
+  "summary": {
+    "legitimate_update_allowed": true,
+    "any_protected_field_write_succeeded": false,
+    "protected_fields_blocked": {
+      "source_ministry": true,
+      "official_id": true,
+      "registry_import_batch": true,
+      "source_reference": true,
+      "source_url": true
+    }
+  },
+  "cleanup": {
+    "establishment_deleted": true,
+    "establishment_delete_error": null,
+    "user_deleted": true,
+    "user_delete_error": null
+  }
+}

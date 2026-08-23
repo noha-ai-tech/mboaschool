@@ -1,0 +1,16 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D.1",
+  "generated_at": "2026-08-23T05:30:00.000Z",
+  "state": "AFTER 0023 execution",
+  "method": "Live local dev server, curl against /api/recherche",
+  "checks": {
+    "api_recherche_works": true,
+    "authorized_3_findable": { "CCAA": 1, "Paquebot": 1, "Astrale": 1 },
+    "regression_existing_school": { "query": "Bilingue", "total_count": 469, "note": "Common word, many legitimately matching schools — not a regression signal by itself; confirms search engine still functions" },
+    "staging_not_leaked": { "query": "IT2MIP", "total_count": 0 },
+    "pagination_bounded": { "results_returned": 24, "page_size": 24, "total_count": 2252 }
+  },
+  "migration_0023_affects_search": false,
+  "reason": "0023 only adds a BEFORE UPDATE trigger; /api/recherche performs SELECT queries exclusively, never UPDATE — a trigger on UPDATE cannot affect SELECT behavior in any way.",
+  "overall": "PASS — no regression, identical results to pre-migration Search V2 checks."
+}

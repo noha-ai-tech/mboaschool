@@ -1,0 +1,24 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D.1",
+  "generated_at": "2026-08-23T05:26:00.000Z",
+  "method": "No unnecessary production writes against real establishments/routes. Verified the underlying mechanism (service-role client behavior, which every /api/admin/* route and every scripts/school-registry/* script relies on) directly against the same live test row used for the owner-blocking tests — this is the exact same code path those routes use (createClient with SUPABASE_SERVICE_ROLE_KEY).",
+  "service_role_write_test": {
+    "result": "PASS",
+    "evidence": "registry-national-d1-post-migration-full-check.json — admin client successfully set official_id and source_ministry on the test row immediately after the owner's identical attempt was blocked on the same row.",
+    "conclusion": "auth.uid() is NULL for service-role-authenticated PostgREST calls, so the trigger's `auth.uid() = old.owner_id` guard is never TRUE for them, regardless of the row's owner_id — exactly as designed and as proven for 0014 previously."
+  },
+  "code_paths_relying_on_this_mechanism_unchanged": [
+    "src/app/api/admin/claims/[id]/approve/route.ts (sets owner_id via service-role client)",
+    "src/app/api/admin/ecoles/[id]/verifier/route.ts, reactiver/route.ts, suspendre/route.ts, plan/route.ts (all service-role, fixed payloads)",
+    "scripts/school-registry/*.ts (all registry import/promotion scripts use the same service-role client pattern)"
+  ],
+  "registry_identifiers_pipeline": {
+    "affected_by_0023": false,
+    "note": "0023 only targets establishments; establishment_registry_identifiers was untouched by this migration. Already independently confirmed secure and unaffected (registry-national-d1-identifier-table-security.json, REGISTRY-NATIONAL-D.1 pre-migration) — not re-tested this pass since nothing relevant changed."
+  },
+  "platform_verification_action": {
+    "affected_by_0023": false,
+    "note": "is_verified is governed exclusively by the pre-existing 0014 trigger, confirmed still independently live and working this sprint (registry-national-d1-post-migration-full-check.json: is_verified_still_blocked_by_0014=true). /api/admin/ecoles/[id]/verifier uses the service-role client, unaffected by either trigger."
+  },
+  "overall": "PASS — no trusted pipeline broken."
+}

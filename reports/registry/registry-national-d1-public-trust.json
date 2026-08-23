@@ -1,0 +1,18 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D.1",
+  "generated_at": "2026-08-23T05:30:00.000Z",
+  "state": "AFTER 0023 execution",
+  "method": "Live local dev server, curl smoke tests on the 3 authorized establishments + 1 regression school",
+  "semantics_check": "LISTED != CLAIMED != PLATFORM_VERIFIED != OFFICIALLY_VERIFIED — unaffected by this migration (resolveEstablishmentTrustState.ts was not touched; 158 of its own tests still pass, see QA section).",
+  "school_pages": {
+    "fef9e2a5-fe95-45f5-9416-e33aae3b6d46": { "status": 200, "badge_text_found": "none" },
+    "9e458451-dc1d-40c2-8ecc-ad883478ddab": { "status": 200, "badge_text_found": "none" },
+    "f6635829-0c3f-4e15-a144-2f1f7c99ab24": { "status": 200, "badge_text_found": "none" },
+    "7ac85087-d2b8-4d01-94aa-da9866e2a06b (regression, Collège Bilingue International)": { "status": 200 }
+  },
+  "search_cards": { "is_verified": false, "is_claimed": false, "matches_expectation": true },
+  "claim_pages": { "all_3": 200, "no_actual_claim_submitted": true },
+  "admin_labels": "Not separately re-tested this pass — no admin UI code was touched by this migration (database-only change); REGISTRY-NATIONAL-D's own admin-label checks are unaffected.",
+  "ambiguous_verifie_regression": false,
+  "overall": "PASS — no regression."
+}

@@ -1,0 +1,19 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D.1",
+  "generated_at": "2026-08-23T05:32:00.000Z",
+  "requirements": {
+    "owner_cannot_alter_registry_protected_fields": true,
+    "claim_flow_safe": true,
+    "trust_semantics_safe": true,
+    "search_safe": true,
+    "registry_v1_publication_coherent": true,
+    "v2_deferred_work_does_not_block_product": true
+  },
+  "all_true": true,
+  "ready_for_cms_a": "YES",
+  "remaining_non_blocking_notes": [
+    "MISSING_SCHEMA content areas (opening_hours, social_links, admission_info) still need a product decision + migration before CMS-A can expose them — documented, not a blocker for starting CMS-A planning/build.",
+    "gallery/programs/courses/tuition_info/facilities likely already back onto existing tables (establishment_images, school_programs, school_courses, school_fees, school_infrastructures) — needs a light ownership/RLS audit of those specific tables before CMS-A exposes owner-editable UI for them (not yet done, out of scope for this sprint which was scoped to establishments' registry-provenance columns only).",
+    "The minor PK-mutation note from the migration audit (owner including `id` in an UPDATE body) remains an open, low-priority, unverified theoretical edge case — flagged for a future hardening pass, not required for this decision."
+  ]
+}

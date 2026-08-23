@@ -1,0 +1,21 @@
+{
+  "sprint": "REGISTRY-NATIONAL-D.1",
+  "generated_at": "2026-08-23T05:25:00.000Z",
+  "state": "AFTER 0023 execution",
+  "method": "Same transaction-safe throwaway fixture methodology as the BEFORE test (registry-national-d1-owner-write-reproduction.json) — a fresh, independent auth user + establishment row, real RLS-subject session, auto-cleanup.",
+  "legitimate_content_field_update": { "field": "description", "result": "ALLOWED" },
+  "protected_field_attempts": {
+    "source_ministry": "BLOCKED",
+    "official_id": "BLOCKED",
+    "registry_import_batch": "BLOCKED",
+    "source_reference": "BLOCKED",
+    "source_url": "BLOCKED"
+  },
+  "sixth_field_source_updated_at": "BLOCKED (tested separately, registry-national-d1-post-migration-full-check.json)",
+  "any_protected_field_write_succeeded": false,
+  "comparison_to_before": {
+    "before": { "legitimate_update": "ALLOWED", "all_5_protected_fields": "SUCCEEDED (vulnerable)" },
+    "after": { "legitimate_update": "ALLOWED", "all_5_protected_fields": "BLOCKED (fixed)" }
+  },
+  "result": "PASS — exactly the expected outcome. FAIL condition (any protected field write succeeding) did NOT occur."
+}

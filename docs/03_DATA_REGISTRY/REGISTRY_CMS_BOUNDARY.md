@@ -45,22 +45,43 @@ CMS-A must call this resolver, never reimplement the logic.
 engine (`scripts/school-registry/lib/matching/`) — provenance metadata, not
 CMS content.
 
-## ⚠️ CURRENT GAP (see registry-national-d-claim-security.json)
+## ✅ RESOLVED (2026-08-23, REGISTRY-NATIONAL-D.1)
 
-As of this sprint, the REGISTRY_PROTECTED `establishments` columns above are
-**not actually enforced** against direct owner writes. The base RLS policy
-(`supabase/schema.sql:143`, `"Owners can update own establishments"`) is
-row-level only — it has no column restriction. The `0014_rc1_security_fixes.sql`
+The gap described below (REGISTRY-NATIONAL-D) has been fixed. Migration
+`supabase/migrations/0023_registry_column_protection.sql` was executed on
+Écoles237 production 2026-08-23 (operator: Jean Merlain, approved by: Eddy —
+`reports/registry/registry-national-d1-migration-approval.json`) and
+independently live-verified this same sprint via a transaction-safe
+throwaway fixture (real authenticated owner session, not service role):
+all 6 registry-provenance columns are now blocked for owner writes,
+legitimate content updates (single- and multi-field) remain fully
+functional, mixed updates are rejected atomically (no partial write), and
+the trusted service-role pipeline is completely unaffected. Full evidence:
+`reports/registry/registry-national-d1-migration-result.json`,
+`registry-national-d1-owner-write-after.json`,
+`registry-national-d1-post-migration-full-check.json`.
+
+<details>
+<summary>Historical gap description (REGISTRY-NATIONAL-D, now fixed)</summary>
+
+As of REGISTRY-NATIONAL-D, the REGISTRY_PROTECTED `establishments` columns
+above were **not actually enforced** against direct owner writes. The base
+RLS policy (`supabase/schema.sql:143`, `"Owners can update own establishments"`)
+is row-level only — it has no column restriction. The `0014_rc1_security_fixes.sql`
 trigger protects the platform-trust fields listed above, but was authored
 before migration `0018` added the registry-provenance columns, so it never
-covered them. An owner can currently set `source_ministry`, `official_id`,
+covered them. An owner could set `source_ministry`, `official_id`,
 `registry_import_batch`, etc. on their own row via a direct Supabase REST
-call, bypassing the Next.js settings page entirely.
+call, bypassing the Next.js settings page entirely. This was live-reproduced
+with a throwaway fixture in REGISTRY-NATIONAL-D.1 before the fix
+(`reports/registry/registry-national-d1-owner-write-reproduction.json`) to
+confirm it was a real, exploitable bug and not merely theoretical.
 
-A follow-up migration, `supabase/migrations/0023_registry_column_protection.sql`,
-has been prepared (not executed) this sprint to close this gap, following the
-exact pattern of `0014`. **CMS-A must not launch any additional owner-editable
-surface until this migration (or an equivalent fix) is reviewed and applied.**
+</details>
+
+CMS-A may now launch additional owner-editable surface on `establishments`
+without reopening this specific gap — the trigger protects the 6 registry
+columns regardless of what else CMS-A adds.
 
 ## Owner-editable candidate fields
 
@@ -108,13 +129,16 @@ Full detail: `reports/registry/registry-national-d-cms-schema-audit.json`.
   `owner_id` to another user or null it out (implicitly protected), but
   **can** write any other column's value, including registry-protected ones
   (see gap above).
-- Column-level: only enforced via the `protect_establishment_privileged_columns`
-  trigger from `0014` (platform-trust fields) — its live status could not be
-  confirmed this sprint (no `exec_sql`/`information_schema` RPC and no direct
-  Postgres connection string available to this session; verify via Supabase
-  SQL Editor: `select tgname from pg_trigger where tgrelid = 'public.establishments'::regclass`).
-  Registry-provenance columns have no trigger at all until `0023` (prepared,
-  not executed) is applied.
+- Column-level: enforced via two independent, coexisting triggers, both
+  **confirmed live** as of 2026-08-23 (REGISTRY-NATIONAL-D.1, behavioral
+  verification — this session still has no direct `pg_catalog` query access,
+  so liveness was proven by observing each trigger's exact error message
+  fire on a real owner write attempt, not by static file reading):
+  - `protect_establishment_privileged_columns` (`0014`) — platform-trust fields
+    (`is_verified`, `is_featured`, `subscription_plan`, `forfait`, `verification_status`).
+  - `protect_establishment_registry_columns` (`0023`) — registry-provenance
+    fields (`official_id`, `source_ministry`, `source_reference`, `source_url`,
+    `source_updated_at`, `registry_import_batch`).
 - `service_role` (used by all `/api/admin/*` routes and all
   `scripts/school-registry/*` scripts) bypasses RLS entirely — `auth.uid()`
   is always `NULL` for these calls, so neither trigger ever blocks them.
