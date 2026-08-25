@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SchoolProvider, useSchools } from "@/lib/school/SchoolContext";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 import { NotificationBell } from "@/components/dashboard/NotificationBell";
 import { Logo } from "@/components/branding/Logo";
 import {
@@ -33,7 +34,7 @@ import {
   Lock,
   CreditCard,
 } from "lucide-react";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 // Navigation du School Operating Center (Mission 03, Phase 2 ; sidebar
 // réductible Sprint M). Chaque groupe correspond à un pôle d'activité du
@@ -80,9 +81,11 @@ const navGroups = (isPro: boolean) => [
 
 export default function EcoleDashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <SchoolProvider>
-      <EcoleDashboardShell>{children}</EcoleDashboardShell>
-    </SchoolProvider>
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
+      <SchoolProvider>
+        <EcoleDashboardShell>{children}</EcoleDashboardShell>
+      </SchoolProvider>
+    </Suspense>
   );
 }
 
@@ -179,7 +182,7 @@ function EcoleDashboardShell({ children }: { children: React.ReactNode }) {
                   return (
                     <SidebarNavItem
                       key={item.label}
-                      href={item.href}
+                      href={withEstablishmentQuery(item.href, school?.id ?? null)}
                       label={item.label}
                       icon={item.icon}
                       active={active}
