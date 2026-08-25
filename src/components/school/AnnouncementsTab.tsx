@@ -12,7 +12,14 @@ type SchoolAnnouncement = {
   created_at: string;
 };
 
-export function AnnouncementsTab({ schoolId }: { schoolId: string }) {
+export function AnnouncementsTab({
+  schoolId,
+  onCountChange,
+}: {
+  schoolId: string;
+  /** CMS-C §13 — permet au parent de masquer la section "actualités" si vide, sans dupliquer ce fetch. */
+  onCountChange?: (count: number) => void;
+}) {
   const [announcements, setAnnouncements] = useState<SchoolAnnouncement[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -24,8 +31,10 @@ export function AnnouncementsTab({ schoolId }: { schoolId: string }) {
       .order("created_at", { ascending: false })
       .then(({ data }) => {
         if (data) setAnnouncements(data);
+        onCountChange?.(data?.length ?? 0);
         setLoading(false);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [schoolId]);
 
   if (loading) {
