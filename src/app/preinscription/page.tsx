@@ -61,6 +61,9 @@ function PreinscriptionForm() {
     supabase
       .from("establishments")
       .select("id, name, city, main_category, is_verified, cover_image_url, school_images(url)")
+      // CMS-F.6 — défense en profondeur avec la policy RLS publique
+      // (migration 0029, PRÉPARÉE NON EXÉCUTÉE).
+      .eq("school_images.status", "live")
       .order("name", { ascending: true })
       .then(({ data }) => {
         if (!data) return;
@@ -214,7 +217,17 @@ function PreinscriptionForm() {
             <div className="flex flex-col gap-2.5">
               {trackingCode && (
                 <Link
-                  href={`/suivi-admission?code=${trackingCode}`}
+                  href="/suivi-admission"
+                  onClick={() => {
+                    try {
+                      window.sessionStorage.setItem(
+                        "ecoles237.admission-tracking-code:v1",
+                        trackingCode
+                      );
+                    } catch {
+                      // The code remains visible and copyable for manual entry.
+                    }
+                  }}
                   className="w-full h-[48px] flex items-center justify-center rounded-card bg-gradient-to-r from-primary to-primary-dark text-white text-sm font-bold hover:shadow-elevation-1 transition-all duration-base"
                 >
                   Suivre ma demande
