@@ -9,7 +9,14 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "../supabase";
+import {
+  ACTIVE_SCHOOL_COOKIE,
+  SCHOOL_QUERY_PARAM,
+  resolveEstablishmentContext,
+  withEstablishmentQuery,
+} from "./establishmentContext";
 
 export type SchoolData = {
   id: string;
@@ -26,6 +33,7 @@ export type SchoolData = {
   is_verified: boolean;
   subscription_plan: string;
   forfait: "gratuit" | "gere" | "pro";
+  accessSources?: ("owner" | "staff" | "responsibility" | "platform_admin")[];
 };
 
 export type AuthUser = {
@@ -33,12 +41,7 @@ export type AuthUser = {
   email: string;
 };
 
-// Nom de cookie partagé avec le helper serveur src/lib/supabase/activeEstablishment.ts —
-// une seule source de vérité pour la persistance de l'établissement actif.
-export const ACTIVE_SCHOOL_COOKIE = "ecoles237_active_school";
-
-const SCHOOL_COLUMNS =
-  "id, name, city, neighborhood, phone, email, whatsapp, website, description, address, main_category, is_verified, subscription_plan, forfait";
+export { ACTIVE_SCHOOL_COOKIE };
 
 function readCookie(name: string): string | null {
   const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
@@ -46,9 +49,6 @@ function readCookie(name: string): string | null {
 }
 
 function writeCookie(name: string, value: string) {
-  // Pas de flag httpOnly : c'est une préférence d'affichage (quel établissement
-  // afficher), jamais une autorisation. Chaque lecture serveur revérifie
-  // l'appartenance réelle (voir getActiveEstablishment côté serveur).
   document.cookie = `${name}=${encodeURIComponent(value)}; Path=/; Max-Age=31536000; SameSite=Lax`;
 }
 
@@ -64,59 +64,68 @@ type SchoolContextValue = {
 
 const SchoolContext = createContext<SchoolContextValue | null>(null);
 
-// Fournit UNE fois (au montage du layout dashboard/ecole) la liste des
-// établissements du promoteur + l'utilisateur, au lieu que chacune des pages
-// enfants (auparavant 15 appels indépendants à useSchool()) ne refasse le
-// même fetch. useSchool() ci-dessous devient un simple consommateur de ce
-// contexte, sans requête propre.
 export function SchoolProvider({ children }: { children: ReactNode }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [schools, setSchools] = useState<SchoolData[]>([]);
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeSchoolId, setActiveSchoolIdState] = useState<string | null>(null);
 
   useEffect(() => {
-    async function load() {
-      const {
-        data: { user: authUser },
-      } = await supabase.auth.getUser();
+    let cancelled = false;
 
-      if (!authUser) {
-        setLoading(false);
+    async function load() {
+      const response = await fetch("/api/establishments/accessible", {
+        credentials: "same-origin",
+        cache: "no-store",
+      });
+      if (!response.ok) {
+        if (!cancelled) setLoading(false);
         return;
       }
 
-      setUser({ id: authUser.id, email: authUser.email! });
-
-      const { data } = await supabase
-        .from("establishments")
-        .select(SCHOOL_COLUMNS)
-        .eq("owner_id", authUser.id)
-        .order("created_at", { ascending: true });
-
-      const owned = (data ?? []) as unknown as SchoolData[];
-      setSchools(owned);
-
-      const requested = readCookie(ACTIVE_SCHOOL_COOKIE);
-      const initial = (requested && owned.find((s) => s.id === requested)) ?? owned[0] ?? null;
-      setActiveSchoolIdState(initial?.id ?? null);
+      const payload = (await response.json()) as {
+        establishments?: SchoolData[];
+        user?: AuthUser;
+      };
+      if (cancelled) return;
+      setSchools(payload.establishments ?? []);
+      setUser(payload.user ?? null);
       setLoading(false);
     }
 
     load();
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  useEffect(() => {
+    if (loading) return;
+    const resolution = resolveEstablishmentContext({
+      explicitId: searchParams.get(SCHOOL_QUERY_PARAM),
+      cookieId: readCookie(ACTIVE_SCHOOL_COOKIE),
+      accessibleIds: schools.map((school) => school.id),
+    });
+    setActiveSchoolIdState(resolution.establishmentId);
+  }, [loading, schools, searchParams]);
 
   const setActiveSchoolId = useCallback(
     (id: string) => {
-      if (!schools.some((s) => s.id === id)) return;
+      if (!schools.some((school) => school.id === id)) return;
       writeCookie(ACTIVE_SCHOOL_COOKIE, id);
       setActiveSchoolIdState(id);
+      const query = searchParams.toString();
+      const current = query ? `${pathname}?${query}` : pathname;
+      router.push(withEstablishmentQuery(current, id));
     },
-    [schools]
+    [pathname, router, schools, searchParams]
   );
 
   const activeSchool = useMemo(
-    () => schools.find((s) => s.id === activeSchoolId) ?? schools[0] ?? null,
+    () => schools.find((school) => school.id === activeSchoolId) ?? null,
     [schools, activeSchoolId]
   );
 
@@ -125,23 +134,27 @@ export function SchoolProvider({ children }: { children: ReactNode }) {
     window.location.href = "/";
   }, []);
 
-  const value: SchoolContextValue = {
-    schools,
-    activeSchool,
-    activeSchoolId: activeSchool?.id ?? null,
-    setActiveSchoolId,
-    user,
-    loading,
-    signOut,
-  };
-
-  return <SchoolContext.Provider value={value}>{children}</SchoolContext.Provider>;
+  return (
+    <SchoolContext.Provider
+      value={{
+        schools,
+        activeSchool,
+        activeSchoolId,
+        setActiveSchoolId,
+        user,
+        loading,
+        signOut,
+      }}
+    >
+      {children}
+    </SchoolContext.Provider>
+  );
 }
 
 export function useSchools() {
-  const ctx = useContext(SchoolContext);
-  if (!ctx) {
+  const context = useContext(SchoolContext);
+  if (!context) {
     throw new Error("useSchools() doit être utilisé à l'intérieur de <SchoolProvider>.");
   }
-  return ctx;
+  return context;
 }
