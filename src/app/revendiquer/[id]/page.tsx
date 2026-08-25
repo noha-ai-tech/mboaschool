@@ -105,6 +105,9 @@ export default function RevendiquerPage() {
     supabase
       .from("establishments")
       .select("id, name, city, owner_id, main_category, is_verified, cover_image_url, school_images(url)")
+      // CMS-F.6 — défense en profondeur avec la policy RLS publique
+      // (migration 0029, PRÉPARÉE NON EXÉCUTÉE).
+      .eq("school_images.status", "live")
       .eq("id", params.id)
       .single()
       .then(({ data }) => {

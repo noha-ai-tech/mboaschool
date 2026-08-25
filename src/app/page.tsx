@@ -228,6 +228,11 @@ export default function HomePage() {
           infrastructures(library, laboratory, computer_room, sports_field, canteen, transport, wifi, boarding, security, infirmary),
           school_images(url)
         `)
+        // CMS-F.6 — ne remonter que les photos publiées (défense en
+        // profondeur avec la policy RLS, migration 0029 PRÉPARÉE NON
+        // EXÉCUTÉE) ; un embed standard filtre les lignes imbriquées sans
+        // exclure l'établissement parent.
+        .eq("school_images.status", "live")
         .order("is_featured", { ascending: false });
       if (data) setSchools(data.map(transformSchool));
       setLoading(false);

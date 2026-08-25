@@ -42,6 +42,9 @@ export default function RevendiquerInscrirePage() {
     const { data } = await supabase
       .from("establishments")
       .select("id, name, city, main_category, is_verified, owner_id, cover_image_url, school_images(url)")
+      // CMS-F.6 — défense en profondeur avec la policy RLS publique
+      // (migration 0029, PRÉPARÉE NON EXÉCUTÉE).
+      .eq("school_images.status", "live")
       .or(`name.ilike.%${query}%,city.ilike.%${query}%`)
       .limit(20);
 

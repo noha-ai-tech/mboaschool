@@ -1,13 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import {
-  MapPin,
   Phone,
-  Mail,
   Globe,
   MessageCircle,
   ClipboardList,
@@ -18,13 +16,18 @@ import {
 } from "lucide-react";
 import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { SchoolHeroCarousel, type SchoolHeroSlide } from "@/components/school/SchoolHeroCarousel";
-import { SchoolGallery } from "@/components/school/SchoolGallery";
-import { GeneralTab } from "@/components/school/GeneralTab";
-import { DocumentsTab } from "@/components/school/DocumentsTab";
-import { AnnouncementsTab } from "@/components/school/AnnouncementsTab";
-import { ParentTab } from "@/components/school/ParentTab";
-import { ContactRow } from "@/components/school/ContactRow";
+import { SchoolHeroCarousel } from "@/components/school/SchoolHeroCarousel";
+import type { AdmissionsConfig } from "@/components/school/ParentTab";
+import { resolveSectionConfig } from "@/lib/schoolPage/sections";
+import { buildSchoolPageSections, type SchoolPageViewModel } from "@/components/school/SchoolPageSections";
+
+// CMS-F.4 — la logique de rendu des sections (ordre, règles "section
+// vide", contenu de chaque bloc) vit désormais dans
+// src/components/school/SchoolPageSections.tsx, PARTAGÉE avec l'Aperçu du
+// brouillon (src/app/dashboard/ecole/etablissement/preview/page.tsx) —
+// cette page ne fait plus que fournir les données LIVE et le viewmodel.
+// CMS-C §10 : l'ordre par défaut (quand school_page_sections est vide/
+// partielle) reste celui de src/lib/schoolPage/sections.ts, inchangé.
 
 export default function SchoolPage() {
   const params = useParams();
@@ -35,6 +38,9 @@ export default function SchoolPage() {
   const [infra, setInfra]       = useState<any | null>(null);
   const [images, setImages]     = useState<any[]>([]);
   const [docsList, setDocsList] = useState<any[]>([]);
+  const [sectionRows, setSectionRows] = useState<{ section_key: string; position: number; is_visible: boolean }[]>([]);
+  const [admissionsConfig, setAdmissionsConfig] = useState<AdmissionsConfig | null>(null);
+  const [newsCount, setNewsCount] = useState<number | null>(null); // null = pas encore chargé, jamais masqué avant de savoir
   const [loading, setLoading]   = useState(true);
 
   useEffect(() => {
@@ -45,12 +51,25 @@ export default function SchoolPage() {
         { data: infraData },
         { data: imagesData },
         { data: docsData },
+        { data: sectionsData },
+        { data: admissionsData },
       ] = await Promise.all([
         supabase.from("establishments").select("*").eq("id", id).single(),
         supabase.from("fees").select("*").eq("establishment_id", id).maybeSingle(),
         supabase.from("infrastructures").select("*").eq("establishment_id", id).maybeSingle(),
-        supabase.from("school_images").select("*").eq("establishment_id", id).order("created_at", { ascending: false }),
+        // CMS-F.6 — filtre status='live' explicite côté application, en
+        // défense en profondeur AVEC la policy RLS publique (migration
+        // 0029, PRÉPARÉE NON EXÉCUTÉE) : tant que 0029 n'est pas exécutée,
+        // ce filtre applicatif reste la SEULE protection empêchant une
+        // photo draft_pending_add d'apparaître publiquement.
+        supabase.from("school_images").select("*").eq("establishment_id", id).eq("status", "live").order("created_at", { ascending: false }),
         supabase.from("school_documents").select("*").eq("establishment_id", id).order("created_at", { ascending: false }),
+        supabase.from("school_page_sections").select("section_key, position, is_visible").eq("establishment_id", id),
+        // admissions_config (migration 0025, préparée mais NON exécutée) —
+        // 0 ligne = comportement actuel inchangé (mission CMS-D.1 §6), pas
+        // de traitement spécial requis : data reste null, ParentTab garde
+        // son comportement par défaut.
+        supabase.from("admissions_config").select("is_open, levels, conditions, required_documents, period_start, period_end, additional_info").eq("establishment_id", id).maybeSingle(),
       ]);
 
       if (schoolData) setSchool(schoolData);
@@ -58,16 +77,12 @@ export default function SchoolPage() {
       if (infraData)  setInfra(infraData);
       if (imagesData) setImages(imagesData);
       if (docsData)   setDocsList(docsData);
+      if (sectionsData) setSectionRows(sectionsData);
+      if (admissionsData) setAdmissionsConfig(admissionsData as AdmissionsConfig);
       setLoading(false);
     }
     load();
   }, [id]);
-
-  const heroSlides = useMemo<SchoolHeroSlide[]>(() => {
-    if (images.length > 0) return images.map((img: any) => ({ id: img.id, image: img.url as string }));
-    if (school?.cover_image_url) return [{ id: "cover", image: school.cover_image_url as string }];
-    return [];
-  }, [images, school?.cover_image_url]);
 
   if (loading) {
     return (
@@ -105,22 +120,48 @@ export default function SchoolPage() {
 
   const isPremium = school.subscription_plan === "premium";
   const preinscriptionHref = `/preinscription?ecole=${school.id}`;
-  const address = [school.address, school.neighborhood, school.city].filter(Boolean).join(", ");
   const hasLocation = !!(school.latitude && school.longitude);
   const mapsHref = hasLocation ? `https://www.google.com/maps?q=${school.latitude},${school.longitude}` : null;
 
-  // Ancres — uniquement les sections qui affichent réellement du contenu
-  // (pas d'ancre "Avis"/"FAQ"/"Résultats" : aucune donnée réelle derrière).
-  const sectionNav = [
-    { id: "presentation",    label: "Présentation" },
-    { id: "admissions",      label: "Admissions" },
-    { id: "tarifs",          label: "Tarifs" },
-    { id: "infrastructures", label: "Infrastructures" },
-    { id: "galerie",         label: "Galerie" },
-    { id: "actualites",      label: "Actualités" },
-    ...(docsList.length > 0 ? [{ id: "documents", label: "Documents" }] : []),
-    { id: "contact",         label: "Contact" },
-  ];
+  // CMS-C §10/§11/§12 — configuration réelle (school_page_sections), avec
+  // repli sur l'ordre canonique par défaut quand l'école n'a encore rien
+  // personnalisé (aucune ligne en base). is_visible=false ne supprime
+  // jamais les données sous-jacentes, seulement leur rendu ici (§11).
+  const sectionConfig = resolveSectionConfig(sectionRows);
+
+  // CMS-F.4 — viewmodel LIVE (toutes les valeurs viennent directement de
+  // `school`, jamais du brouillon : la fiche publique ne lit jamais
+  // school_page_drafts, voir l'audit du rapport).
+  const viewModel: SchoolPageViewModel = {
+    id: school.id,
+    name: school.name,
+    main_category: school.main_category,
+    city: school.city,
+    neighborhood: school.neighborhood,
+    is_verified: !!school.is_verified,
+    subscription_plan: school.subscription_plan,
+    cover_image_url: school.cover_image_url,
+    hero_mode: school.hero_mode ?? null,
+    description: school.description,
+    phone: school.phone,
+    email: school.email,
+    website: school.website,
+    address: school.address,
+    latitude: school.latitude,
+    longitude: school.longitude,
+  };
+
+  const { visibleSections, sectionNav, heroSlides } = buildSchoolPageSections({
+    school: viewModel,
+    fees,
+    infra,
+    images,
+    docsList,
+    admissionsConfig,
+    sectionConfig,
+    newsCount,
+    onNewsCountChange: setNewsCount,
+  });
 
   function scrollToId(anchor: string) {
     document.getElementById(anchor)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -174,58 +215,9 @@ export default function SchoolPage() {
       <div className="max-w-[1520px] mx-auto px-[18px] py-8 grid lg:grid-cols-[1fr_300px] gap-8 items-start">
 
         <div className="space-y-5 pb-16 lg:pb-0">
-          <GeneralTab school={school} fees={fees} infra={infra} />
-
-          <div id="galerie" className="scroll-mt-20">
-            <h2 className="font-bold text-sm mb-3 px-1">Galerie{images.length > 0 ? ` (${images.length})` : ""}</h2>
-            <SchoolGallery images={images.map((img: any) => ({ id: img.id, url: img.url, caption: img.caption }))} />
-          </div>
-
-          {docsList.length > 0 && (
-            <div id="documents" className="scroll-mt-20">
-              <h2 className="font-bold text-sm mb-3 px-1">Documents ({docsList.length})</h2>
-              <DocumentsTab docs={docsList} />
-            </div>
-          )}
-
-          <div id="actualites" className="scroll-mt-20">
-            <h2 className="font-bold text-sm mb-3 px-1">Actualités</h2>
-            <AnnouncementsTab schoolId={id} />
-          </div>
-
-          <div id="contact" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
-            <h2 className="font-bold text-sm mb-4">Contact</h2>
-            {!school.phone && !school.email && !address ? (
-              <p className="text-sm text-text-secondary">Coordonnées non renseignées par l&apos;établissement.</p>
-            ) : (
-              <div className="grid sm:grid-cols-2 gap-4">
-                {school.phone && (
-                  <ContactRow icon={Phone} label="Téléphone" value={school.phone} href={`tel:${school.phone}`} />
-                )}
-                {school.email && (
-                  <ContactRow icon={Mail} label="Email" value={school.email} href={`mailto:${school.email}`} />
-                )}
-                {address && (
-                  <ContactRow icon={MapPin} label="Adresse" value={address} href={mapsHref ?? undefined} />
-                )}
-                {school.website && (
-                  <ContactRow icon={Globe} label="Site web" value={school.website} href={school.website} />
-                )}
-              </div>
-            )}
-            {mapsHref && (
-              <a
-                href={mapsHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 mt-4 text-sm font-semibold text-primary hover:opacity-80 transition-opacity duration-base"
-              >
-                <MapPin size={14} /> Voir sur la carte
-              </a>
-            )}
-          </div>
-
-          <ParentTab schoolId={id} />
+          {visibleSections.map((c) => (
+            <div key={c.key}>{c.node}</div>
+          ))}
         </div>
 
         {/* Sidebar */}
