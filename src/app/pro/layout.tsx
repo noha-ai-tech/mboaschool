@@ -1,11 +1,15 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
+import { Suspense } from "react";
 import { Logo } from "@/components/branding/Logo";
 import { createClient } from "@/lib/supabase/server";
 import { ACTIVE_SCHOOL_COOKIE } from "@/lib/supabase/activeEstablishment";
 import { ProSchoolSwitcher } from "@/components/pro/ProSchoolSwitcher";
+import { ProContextLink, ProNavigation } from "@/components/pro/ProNavigation";
+import { isValidEstablishmentId } from "@/lib/school/establishmentContext";
 
 const NAV = [
+  { href: "/pro/organisation",                 label: "Organisation" },
   { href: "/pro/configurer-etablissement",     label: "Configurer mon établissement" },
   { href: "/pro/personnel",                    label: "Personnel" },
   { href: "/pro/emplois-du-temps",             label: "Emplois du temps" },
@@ -35,13 +39,16 @@ export default async function ProLayout({ children }: { children: React.ReactNod
       .from("establishments")
       .select("id, name")
       .eq("owner_id", user.id)
+      .eq("forfait", "pro")
       .order("created_at", { ascending: true });
     schools = data ?? [];
 
     const cookieStore = await cookies();
     const requestedId = cookieStore.get(ACTIVE_SCHOOL_COOKIE)?.value;
-    const match = requestedId ? schools.find((s) => s.id === requestedId) : undefined;
-    activeSchoolId = (match ?? schools[0])?.id ?? null;
+    const match = isValidEstablishmentId(requestedId)
+      ? schools.find((school) => school.id === requestedId)
+      : undefined;
+    activeSchoolId = match?.id ?? (schools.length === 1 ? schools[0].id : null);
   }
 
   return (
@@ -55,31 +62,33 @@ export default async function ProLayout({ children }: { children: React.ReactNod
               <span className="text-emerald-400 font-bold">Pro</span>
             </span>
           </Link>
-          {schools.length > 1 && (
-            <ProSchoolSwitcher schools={schools} activeSchoolId={activeSchoolId} />
+          {schools.length > 0 && (
+            <Suspense fallback={<div className="h-8 w-40 rounded-md bg-white/10" />}>
+              <ProSchoolSwitcher schools={schools} fallbackSchoolId={activeSchoolId} />
+            </Suspense>
           )}
           <div className="ml-auto">
-            <Link
-              href="/dashboard/ecole"
-              className="text-sm text-slate-400 hover:text-white transition-colors"
-            >
-              ← Tableau de bord
-            </Link>
+            <Suspense fallback={<span className="text-sm text-slate-400">Tableau de bord</span>}>
+              <ProContextLink
+                href="/dashboard/ecole"
+                accessibleSchoolIds={schools.map((school) => school.id)}
+                fallbackSchoolId={activeSchoolId}
+                className="text-sm text-slate-400 hover:text-white transition-colors"
+              >
+                ← Tableau de bord
+              </ProContextLink>
+            </Suspense>
           </div>
         </div>
 
         {/* Ligne 2 : navigation */}
-        <nav className="px-6 flex gap-1 overflow-x-auto">
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="shrink-0 px-4 py-2.5 text-sm font-medium text-slate-400 hover:text-white transition-colors border-b-2 border-transparent hover:border-emerald-500"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <Suspense fallback={<div className="h-10 border-t border-white/5" />}>
+          <ProNavigation
+            items={NAV}
+            accessibleSchoolIds={schools.map((school) => school.id)}
+            fallbackSchoolId={activeSchoolId}
+          />
+        </Suspense>
       </header>
 
       <main>{children}</main>

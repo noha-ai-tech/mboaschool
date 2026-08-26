@@ -1,103 +1,87 @@
-// Page de liaison compte enseignant.
-// L'enseignant arrive ici après avoir accepté son invitation et que le callback
-// a établi sa session. On lie enseignants.user_id = auth.uid() via le client
-// admin (service role) pour contourner le RLS sur la ligne non encore liée.
-
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Logo } from "@/components/branding/Logo";
+import { isValidEstablishmentId } from "@/lib/school/establishmentContext";
+import { createClient } from "@/lib/supabase/server";
 
-export default async function EnseignantBienvenueePage() {
+export default async function EnseignantBienvenuePage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    invitation_status?: string;
+    resource_type?: string;
+    resource_id?: string;
+    school?: string;
+  }>;
+}) {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  if (!user) redirect("/auth/connexion");
 
-  if (!user) {
-    redirect("/auth/connexion");
-  }
+  const params = await searchParams;
+  let success = false;
+  let target: "teacher" | "staff" = "staff";
 
-  // Liaison user_id sur TOUTES les lignes enseignants correspondant à cet email
-  // (un enseignant peut enseigner dans plusieurs établissements — toutes les
-  // lignes avec user_id null et cet email sont liées en une seule passe).
-  const admin = createAdminClient();
-  const { data: enseignants } = await admin
-    .from("enseignants")
-    .select("id, nom, prenom, user_id")
-    .eq("email", user.email!)
-    .is("user_id", null);
-
-  let nom = "";
-  let prenom = "";
-  let deja_lie = false;
-
-  if (enseignants && enseignants.length > 0) {
-    // Première connexion : liaison de toutes les lignes en une requête
-    const ids = enseignants.map((e) => e.id);
-    await admin
-      .from("enseignants")
-      .update({ user_id: user.id })
-      .in("id", ids);
-
-    // Synchronise staff_members.user_id (Mission 04 — fondation RH) pour les
-    // fiches liées à ces enseignants, si elles existent déjà (migration
-    // 0009_pro_hr_foundation.sql, non exécutée). N'affecte en rien le flux
-    // enseignant existant ci-dessus si la table n'existe pas encore.
-    await admin.from("staff_members").update({ user_id: user.id }).in("enseignant_id", ids);
-
-    nom = enseignants[0].nom;
-    prenom = enseignants[0].prenom;
-  } else {
-    // Peut-être déjà lié (rechargement de page)
-    const { data: enseignantLie } = await admin
-      .from("enseignants")
-      .select("id, nom, prenom")
-      .eq("user_id", user.id)
-      .maybeSingle();
-
-    if (enseignantLie) {
-      nom = enseignantLie.nom;
-      prenom = enseignantLie.prenom;
-      deja_lie = true;
+  if (
+    params.invitation_status === "success" &&
+    (params.resource_type === "teacher" || params.resource_type === "staff_member") &&
+    isValidEstablishmentId(params.resource_id) &&
+    isValidEstablishmentId(params.school)
+  ) {
+    if (params.resource_type === "teacher") {
+      const { data: teacher } = await supabase
+        .from("enseignants")
+        .select("id")
+        .eq("id", params.resource_id)
+        .eq("etablissement_id", params.school)
+        .eq("user_id", user.id)
+        .maybeSingle();
+      success = Boolean(teacher);
+      target = "teacher";
     } else {
-      // Compte non reconnu comme enseignant — redirection connexion standard
-      redirect("/dashboard/ecole");
+      const { data: staff } = await supabase
+        .from("staff_members")
+        .select("id, enseignant_id")
+        .eq("id", params.resource_id)
+        .eq("etablissement_id", params.school)
+        .eq("user_id", user.id)
+        .maybeSingle();
+      success = Boolean(staff);
+      target = staff?.enseignant_id ? "teacher" : "staff";
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f3ef] flex flex-col items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
-        {/* Logo */}
-        <div className="flex justify-center mb-6">
+    <InvitationState
+      error={success ? undefined : "Invitation invalide, expirée, déjà utilisée ou non encore activée."}
+      target={target}
+    />
+  );
+}
+
+function InvitationState({ error, target }: { error?: string; target: "teacher" | "staff" }) {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#f5f3ef] px-4">
+      <div className="w-full max-w-md rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm">
+        <div className="mb-6 flex justify-center">
           <Logo size="md" />
         </div>
-
-        <div className="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-5">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5" strokeLinecap="round">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
+        <div className={`mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full ${error ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700"}`}>
+          <span className="text-2xl font-black">{error ? "!" : "✓"}</span>
         </div>
-
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          {deja_lie ? `Bienvenue, ${prenom} !` : `Compte activé, ${prenom} !`}
+        <h1 className="mb-3 text-2xl font-bold text-gray-900">
+          {error ? "Invitation non finalisée" : "Compte activé"}
         </h1>
-        <p className="text-gray-500 text-sm mb-2">
-          {prenom} {nom}
+        <p className="mb-8 text-sm text-gray-500">
+          {error ?? "Votre compte est maintenant lié à la ressource et à l’établissement prévus par l’invitation."}
         </p>
-        <p className="text-gray-500 text-sm mb-8">
-          {deja_lie
-            ? "Votre espace personnel est prêt."
-            : "Votre compte enseignant a bien été lié. Vous pouvez maintenant accéder à votre espace personnel."}
-        </p>
-
         <Link
-          href="/enseignant/mon-espace"
-          className="block w-full py-3 px-6 rounded-xl bg-[#007A3D] text-white font-semibold text-sm hover:bg-[#006030] transition-colors"
+          href={error || target === "staff" ? "/dashboard/ecole" : "/enseignant/mon-espace"}
+          className="block w-full rounded-xl bg-[#007A3D] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#006030]"
         >
-          Accéder à mon espace →
+          {error ? "Retour au tableau de bord" : "Accéder à mon espace"}
         </Link>
       </div>
     </div>

@@ -2,18 +2,19 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { UserCheck, Clock, UserX, Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 import { BoutonInviter } from "@/components/pro/BoutonInviter";
 
-export default async function EnseignantsPage() {
+export default async function EnseignantsPage({ searchParams }: { searchParams: Promise<{ school?: string }> }) {
+  const { school } = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/auth/connexion");
 
-  const etablissement = await getActiveEstablishment(supabase, user.id);
-  if (!etablissement) redirect("/dashboard/ecole");
+  const etablissement = await requireActiveEstablishment(supabase, user.id, school, "/pro/enseignants");
 
   const { data: enseignants } = await supabase
     .from("enseignants")
@@ -62,7 +63,7 @@ export default async function EnseignantsPage() {
           </p>
         </div>
         <Link
-          href="/pro/enseignants/nouveau"
+          href={withEstablishmentQuery("/pro/enseignants/nouveau", etablissement.id)}
           className="flex items-center gap-2 bg-[#0a0a0a] text-white px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors shrink-0"
         >
           <Plus size={15} />
@@ -113,7 +114,7 @@ export default async function EnseignantsPage() {
                   <td className="p-3">{statutBadge(e)}</td>
                   <td className="p-3 text-right">
                     {!e.user_id && e.email ? (
-                      <BoutonInviter enseignantId={e.id} />
+                      <BoutonInviter enseignantId={e.id} establishmentId={etablissement.id} />
                     ) : !e.email ? (
                       <span className="text-xs text-gray-300">Pas d&apos;email</span>
                     ) : null}

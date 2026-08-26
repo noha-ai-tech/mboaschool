@@ -2,7 +2,8 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Plus, UserCheck, Clock, UserX } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 
 const CATEGORY_LABELS: Record<string, string> = {
   teacher: "Enseignants",
@@ -25,13 +26,13 @@ const ROLE_LABELS: Record<string, string> = {
   assistant: "Assistant",
 };
 
-export default async function PersonnelPage() {
+export default async function PersonnelPage({ searchParams }: { searchParams: Promise<{ school?: string }> }) {
+  const { school } = await searchParams;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/connexion");
 
-  const etablissement = await getActiveEstablishment(supabase, user.id);
-  if (!etablissement) redirect("/dashboard/ecole");
+  const etablissement = await requireActiveEstablishment(supabase, user.id, school, "/pro/personnel");
 
   const { data: staff } = await supabase
     .from("staff_members")
@@ -57,7 +58,7 @@ export default async function PersonnelPage() {
           </p>
         </div>
         <Link
-          href="/pro/personnel/nouveau"
+          href={withEstablishmentQuery("/pro/personnel/nouveau", etablissement.id)}
           className="flex items-center gap-2 bg-[#0a0a0a] text-white px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors shrink-0"
         >
           <Plus size={15} />
@@ -82,7 +83,7 @@ export default async function PersonnelPage() {
                     {group.members.map((m) => (
                       <tr key={m.id} className="border-b border-gray-100 last:border-0 hover:bg-gray-50">
                         <td className="p-3">
-                          <Link href={`/pro/personnel/${m.id}`} className="font-semibold text-gray-900 hover:text-emerald-700">
+                          <Link href={withEstablishmentQuery(`/pro/personnel/${m.id}`, etablissement.id)} className="font-semibold text-gray-900 hover:text-emerald-700">
                             {m.first_name} {m.last_name}
                           </Link>
                           <span className="block text-xs text-gray-400">{ROLE_LABELS[m.role] ?? m.role}</span>

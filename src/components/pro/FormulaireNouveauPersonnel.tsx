@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Save, Loader2 } from "lucide-react";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 
 const CATEGORIES = [
   { value: "direction", label: "Direction" },
@@ -33,7 +34,7 @@ const EMPLOYMENT_TYPES = [
   { value: "vacataire", label: "Vacataire" },
 ];
 
-export function FormulaireNouveauPersonnel() {
+export function FormulaireNouveauPersonnel({ establishmentId }: { establishmentId: string }) {
   const router = useRouter();
   const [form, setForm] = useState({
     first_name: "", last_name: "", email: "", phone: "",
@@ -60,7 +61,7 @@ export function FormulaireNouveauPersonnel() {
     const res = await fetch("/api/personnel/creer", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify({ ...form, requestedEstablishmentId: establishmentId }),
     });
     const body = await res.json().catch(() => ({}));
     setSaving(false);
@@ -69,7 +70,7 @@ export function FormulaireNouveauPersonnel() {
       setError(body.error ?? "Échec de la création");
       return;
     }
-    router.push(`/pro/personnel/${body.staffMemberId}`);
+    router.push(withEstablishmentQuery(`/pro/personnel/${body.staffMemberId}`, establishmentId));
   }
 
   return (

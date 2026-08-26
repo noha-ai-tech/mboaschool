@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function BoutonPublier({ anneeScolaire, hasBrouillon }: { anneeScolaire: string; hasBrouillon: boolean }) {
+export function BoutonPublier({ anneeScolaire, hasBrouillon, establishmentId }: { anneeScolaire: string; hasBrouillon: boolean; establishmentId: string }) {
   const router = useRouter();
   const [enCours, setEnCours] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
@@ -15,7 +15,7 @@ export function BoutonPublier({ anneeScolaire, hasBrouillon }: { anneeScolaire: 
       const res = await fetch("/api/timetable/publish", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ anneeScolaire }),
+        body: JSON.stringify({ anneeScolaire, requestedEstablishmentId: establishmentId }),
       });
       const data = await res.json();
       if (!res.ok) {

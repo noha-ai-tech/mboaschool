@@ -2,17 +2,18 @@ import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Download } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 import { PaieValidation } from "@/components/pro/PaieValidation";
 
-export default async function BulletinDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function BulletinDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ school?: string }> }) {
   const { id } = await params;
+  const { school } = await searchParams;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/connexion");
 
-  const etablissement = await getActiveEstablishment(supabase, user.id);
-  if (!etablissement) redirect("/dashboard/ecole");
+  const etablissement = await requireActiveEstablishment(supabase, user.id, school, `/pro/paie/${id}`);
 
   const { data: bulletin } = await supabase
     .from("bulletins_paie")
@@ -37,7 +38,7 @@ export default async function BulletinDetailPage({ params }: { params: Promise<{
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      <Link href="/pro/paie" className="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors mb-6">
+      <Link href={withEstablishmentQuery("/pro/paie", etablissement.id)} className="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors mb-6">
         <ArrowLeft size={15} /> Paie
       </Link>
 
@@ -80,7 +81,7 @@ export default async function BulletinDetailPage({ params }: { params: Promise<{
 
       <div className="bg-white border border-[#ebebeb] rounded-2xl p-6 mb-5">
         <p className="text-xs font-bold tracking-widest uppercase text-gray-400 mb-4">Validation</p>
-        <PaieValidation bulletinId={id} statut={bulletin.statut} />
+        <PaieValidation bulletinId={id} statut={bulletin.statut} establishmentId={etablissement.id} />
       </div>
 
       <div className="bg-white border border-[#ebebeb] rounded-2xl p-6">

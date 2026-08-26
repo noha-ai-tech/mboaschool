@@ -2,16 +2,17 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 import { FormulaireConfigurationPaie } from "@/components/pro/FormulaireConfigurationPaie";
 
-export default async function ConfigurationPaiePage() {
+export default async function ConfigurationPaiePage({ searchParams }: { searchParams: Promise<{ school?: string }> }) {
+  const { school } = await searchParams;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/connexion");
 
-  const etablissement = await getActiveEstablishment(supabase, user.id);
-  if (!etablissement) redirect("/dashboard/ecole");
+  const etablissement = await requireActiveEstablishment(supabase, user.id, school, "/pro/paie/configuration");
 
   const { data: config } = await supabase
     .from("payroll_config")
@@ -21,7 +22,7 @@ export default async function ConfigurationPaiePage() {
 
   return (
     <div className="max-w-xl mx-auto px-4 py-8">
-      <Link href="/pro/paie" className="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors mb-6">
+      <Link href={withEstablishmentQuery("/pro/paie", etablissement.id)} className="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors mb-6">
         <ArrowLeft size={15} /> Paie
       </Link>
       <div className="mb-6">

@@ -8,7 +8,7 @@
 import { redirect } from "next/navigation";
 import { UserX } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 
 const STATUT_LABELS: Record<string, string> = {
   absence_declaree: "Absence déclarée",
@@ -18,13 +18,13 @@ const STATUT_LABELS: Record<string, string> = {
   annule: "Annulé",
 };
 
-export default async function RemplacementsPage() {
+export default async function RemplacementsPage({ searchParams }: { searchParams: Promise<{ school?: string }> }) {
+  const { school } = await searchParams;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/connexion");
 
-  const etablissement = await getActiveEstablishment(supabase, user.id);
-  if (!etablissement) redirect("/dashboard/ecole");
+  const etablissement = await requireActiveEstablishment(supabase, user.id, school, "/pro/remplacements");
 
   const { data: remplacements } = await supabase
     .from("remplacements")

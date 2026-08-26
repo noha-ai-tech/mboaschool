@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Loader2 } from "lucide-react";
 
-export function PaieValidation({ bulletinId, statut }: { bulletinId: string; statut: string }) {
+export function PaieValidation({ bulletinId, statut, establishmentId }: { bulletinId: string; statut: string; establishmentId: string }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -12,7 +12,11 @@ export function PaieValidation({ bulletinId, statut }: { bulletinId: string; sta
   async function valider(etape: "valider-rh" | "valider-direction") {
     setBusy(true);
     setError("");
-    const res = await fetch(`/api/payroll/${bulletinId}/${etape}`, { method: "POST" });
+    const res = await fetch(`/api/payroll/${bulletinId}/${etape}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ requestedEstablishmentId: establishmentId }),
+    });
     const body = await res.json().catch(() => ({}));
     setBusy(false);
     if (!res.ok) { setError(body.error ?? "Echec"); return; }

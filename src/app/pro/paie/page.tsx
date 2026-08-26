@@ -2,7 +2,8 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Settings } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 import { FormulaireCalculPaie } from "@/components/pro/FormulaireCalculPaie";
 
 const STATUT_LABELS: Record<string, string> = {
@@ -18,13 +19,13 @@ const STATUT_COLORS: Record<string, string> = {
   paie_validee: "bg-emerald-50 text-emerald-700",
 };
 
-export default async function PaiePage() {
+export default async function PaiePage({ searchParams }: { searchParams: Promise<{ school?: string }> }) {
+  const { school } = await searchParams;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/connexion");
 
-  const etablissement = await getActiveEstablishment(supabase, user.id);
-  if (!etablissement) redirect("/dashboard/ecole");
+  const etablissement = await requireActiveEstablishment(supabase, user.id, school, "/pro/paie");
 
   const { data: contratsActifs } = await supabase
     .from("staff_contracts")
@@ -54,13 +55,13 @@ export default async function PaiePage() {
             Calcul, validation et historique des bulletins de paie de l&apos;établissement.
           </p>
         </div>
-        <Link href="/pro/paie/configuration" className="flex items-center gap-2 border border-gray-200 text-gray-600 px-3 py-2 rounded-xl text-sm font-semibold hover:border-gray-400 transition-colors shrink-0">
+        <Link href={withEstablishmentQuery("/pro/paie/configuration", etablissement.id)} className="flex items-center gap-2 border border-gray-200 text-gray-600 px-3 py-2 rounded-xl text-sm font-semibold hover:border-gray-400 transition-colors shrink-0">
           <Settings size={14} /> Configuration
         </Link>
       </div>
 
       <div className="mb-8">
-        <FormulaireCalculPaie staffMembers={staffMembersOptions} />
+        <FormulaireCalculPaie staffMembers={staffMembersOptions} establishmentId={etablissement.id} />
       </div>
 
       {!bulletins?.length ? (
@@ -70,7 +71,7 @@ export default async function PaiePage() {
       ) : (
         <div className="rounded-xl border border-gray-200 bg-white overflow-hidden divide-y divide-gray-100">
           {bulletins.map((b: any) => (
-            <Link key={b.id} href={`/pro/paie/${b.id}`} className="flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 transition-colors">
+            <Link key={b.id} href={withEstablishmentQuery(`/pro/paie/${b.id}`, etablissement.id)} className="flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 transition-colors">
               <div>
                 <p className="font-semibold text-gray-900">
                   {b.staff_members?.first_name} {b.staff_members?.last_name}
