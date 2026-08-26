@@ -19,6 +19,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useSchool } from "@/lib/useSchool";
 import { SchoolHeroCarousel } from "@/components/school/SchoolHeroCarousel";
+import { getPrimaryPublicBadge, resolveEstablishmentTrustState, trustInputFromEstablishmentRow } from "@/lib/trust/resolveEstablishmentTrustState";
 import type { AdmissionsConfig } from "@/components/school/ParentTab";
 import { resolveSectionConfig } from "@/lib/schoolPage/sections";
 import { buildSchoolPageSections, type SchoolPageViewModel } from "@/components/school/SchoolPageSections";
@@ -32,6 +33,11 @@ type PreviewData = {
     city: string | null;
     neighborhood: string | null;
     is_verified: boolean;
+    owner_id: string | null;
+    is_claimed: boolean;
+    verification_status: string | null;
+    official_id: string | null;
+    source_ministry: string | null;
     subscription_plan: string | null;
     cover_image_url: string | null;
     latitude: number | null;
@@ -166,6 +172,12 @@ export default function PreviewDraftPage() {
     longitude: establishment.longitude,
   };
 
+  // SYNC-03 — même résolveur central que la fiche publique
+  // (src/app/ecole/[id]/page.tsx, REGISTRY-NATIONAL-A.1) : jamais un
+  // booléen "verified" brut recalculé localement.
+  const trustState = resolveEstablishmentTrustState(trustInputFromEstablishmentRow(establishment));
+  const trustBadge = getPrimaryPublicBadge(trustState);
+
   const sectionConfig = resolveSectionConfig(draft.sections);
 
   const { visibleSections, sectionNav, heroSlides } = buildSchoolPageSections({
@@ -205,7 +217,7 @@ export default function PreviewDraftPage() {
         city={viewModel.city}
         neighborhood={viewModel.neighborhood}
         category={viewModel.main_category}
-        verified={!!viewModel.is_verified}
+        trustBadge={trustBadge}
         premium={viewModel.subscription_plan === "premium"}
         preinscriptionHref="#"
         backHref="/dashboard/ecole/etablissement"

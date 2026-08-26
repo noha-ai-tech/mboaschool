@@ -35,7 +35,7 @@ export async function GET() {
   const [establishmentRes, imagesRes, docsRes, admissionsRes, draftRes] = await Promise.all([
     context.supabase
       .from("establishments")
-      .select("id, name, main_category, city, neighborhood, is_verified, subscription_plan, cover_image_url, latitude, longitude")
+      .select("id, name, main_category, city, neighborhood, is_verified, owner_id, is_claimed, verification_status, official_id, source_ministry, subscription_plan, cover_image_url, latitude, longitude")
       .eq("id", context.establishmentId)
       .single(),
     // CMS-F.6 — les DEUX statuts sont intentionnellement récupérés ici
