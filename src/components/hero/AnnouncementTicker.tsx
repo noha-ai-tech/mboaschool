@@ -24,8 +24,8 @@ export function AnnouncementTicker({ items }: { items: TickerItem[] }) {
   if (items.length === 0) return null;
 
   return (
-    <div className="flex items-center gap-3 bg-[#0A0A0A] min-h-[64px] px-5 py-3 overflow-hidden">
-      <span className="shrink-0 inline-flex items-center gap-1.5 text-xs font-bold text-white pr-4 border-r border-white/20">
+    <div className="flex items-center gap-3 bg-[#08251B] min-h-[64px] px-5 py-3 overflow-hidden border-y border-white/10">
+      <span className="shrink-0 inline-flex items-center gap-1.5 text-xs font-bold text-[#F2AE1F] pr-4 border-r border-white/15">
         <Megaphone size={14} aria-hidden="true" />
         À la une
       </span>
