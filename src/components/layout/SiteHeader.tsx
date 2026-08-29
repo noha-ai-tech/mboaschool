@@ -8,8 +8,9 @@ import { Logo } from "@/components/branding/Logo";
 import { categories } from "@/lib/categories";
 
 // Header public — même grammaire visuelle exacte que le Header de la
-// Landing (barre noire pleine largeur, icône favicon + logo, nav
-// simplifiée à 3 entrées, menu déroulant catégories, Connexion/Inscrire mon
+// Landing (barre noire pleine largeur, logo épingle + texte seul — plus de
+// favicon carré redondant à côté, cf. src/app/page.tsx —, nav simplifiée à
+// 3 entrées, menu déroulant catégories, Connexion/Inscrire mon
 // école). Instance autonome (pas d'état partagé avec la Landing) pour ne
 // jamais risquer de régresser le comportement de la page d'accueil
 // elle-même : la recherche ici navigue vers /recherche plutôt que de
@@ -81,13 +82,6 @@ export function SiteHeader() {
           }`}
         >
           <Link href="/" className="shrink-0 flex items-center gap-3">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/branding/favicon.png"
-              alt=""
-              className="rounded-xl shrink-0"
-              style={headerScrolled ? { height: 48, width: 48 } : { height: 64, width: 64 }}
-            />
             <Logo variant="dark" size={headerScrolled ? "md" : "xl"} priority />
           </Link>
 
