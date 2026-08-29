@@ -42,6 +42,45 @@
 -- `e.owner_id = (select auth.uid())`, established by PRO-04/Lot 01 —
 -- is_own_establishment() no longer exists in production, never referenced
 -- here).
+--
+-- ============================================================================
+-- PUBLIC-SITE-02B — SECURITY REVISION (audit found the first draft of this
+-- migration insecure; see docs/pro/PUBLIC-SITE-02B_PREFLIGHT_REPORT.md for
+-- the full audit). Three findings, all fixed below:
+--
+-- 1. school_exam_results and school_official_ranking originally granted
+--    the owner blanket `for all using (owner check)` — this let a school
+--    owner call PostgREST directly to insert a row with status='live',
+--    promote draft_pending_add -> live, edit a live row in place, or
+--    delete a live row, entirely bypassing Draft -> Preview -> Publish ->
+--    Discard. (Auditing existing school_images turned up the SAME
+--    unrestricted "for all" shape, unchanged since auth-setup.sql with no
+--    later hardening migration — there is no "stronger existing pattern"
+--    to copy; a new one had to be designed.)
+--
+-- 2. The 7 new establishments columns would have inherited the
+--    PRE-EXISTING gap on "Owners can update own establishments" (schema.sql
+--    row-level only, no column restriction beyond the 0014/0023 triggers)
+--    — already true today for description/phone/email/website/address/
+--    city/hero_mode. Rather than add 7 more unprotected columns to that
+--    same surface, this revision closes the gap for the WHOLE school-page
+--    published-column set (old 8 + new 7) in one trigger, consistent with
+--    the 0014 pattern.
+--
+-- FIX MECHANISM. publish_school_page() is SECURITY INVOKER (intentionally
+-- — it enforces its own explicit ownership check and still needs fees/
+-- infrastructures/admissions_config/school_page_sections' existing owner-
+-- write RLS to succeed for those tables). Because it runs AS the owner,
+-- a simple "auth.uid() = owner_id -> block" trigger would block the RPC's
+-- own writes too. The fix: a transaction-local trusted-context flag,
+-- `app.school_page_publish`, set via `set_config(..., true)` (true =
+-- LOCAL, auto-reverts at transaction end, commit or rollback) at the top
+-- of the write block, AFTER the RPC's own ownership check has already
+-- passed. Nothing exposed to PostgREST can set this flag — clients can
+-- only call whitelisted RPCs and the REST data API, never raw SET/
+-- set_config. A direct owner PostgREST call therefore always runs with
+-- the flag unset and is blocked; the RPC's own writes, gated behind its
+-- ownership check, proceed normally.
 -- ============================================================================
 
 
@@ -106,12 +145,79 @@ comment on column public.establishments.teacher_count is
 
 
 -- ============================================================================
--- 2. school_official_ranking — 1 row per establishment, mirrors fees/
--- infrastructures/admissions_config exactly (same RLS shape as 0028
--- admissions_config: public read, owner write via the current inline
--- ownership convention). year/rank/scope/source are required TOGETHER
--- (mission §6 — never label a ranking "official" without provenance);
--- source_url is optional.
+-- 1b. PUBLIC-SITE-02B SECURITY FIX — protect the school-page PUBLISHED
+-- columns from direct owner writes, exact same mechanism as 0014's
+-- protect_profile_privileged_columns()/protect_establishment_privileged_
+-- columns() triggers: fires only when the CALLER is the row's own owner
+-- (auth.uid() = old.owner_id) — a service-role write (auth.uid() is null)
+-- is never blocked, matching 0014's own documented behavior.
+--
+-- Covers BOTH the 7 new columns AND the 7 PRE-EXISTING scalar columns
+-- already governed by the Draft/Publish lifecycle (description/phone/
+-- email/website/address/city/hero_mode) — those had exactly the same gap
+-- since CMS-F.2, just never audited until now (PUBLIC-SITE-02B). One
+-- consistent trigger for the whole "school-page published fields" set,
+-- rather than protecting only the newest 7 and leaving the original 8
+-- exposed for no principled reason.
+--
+-- The trusted-context flag (`app.school_page_publish`, set only inside
+-- publish_school_page() after its own ownership check) lets that RPC's
+-- own UPDATE through even though it runs as the owner (SECURITY INVOKER).
+-- Any OTHER field on establishments (name, city columns unrelated to the
+-- school page, registry fields, platform-trust fields, etc.) is untouched
+-- — this does not make the row immutable, only these 15 columns.
+-- ============================================================================
+create or replace function public.protect_school_page_published_columns()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  if auth.uid() = old.owner_id
+     and coalesce(current_setting('app.school_page_publish', true), '') is distinct from 'on'
+     and (
+       new.description   is distinct from old.description or
+       new.motto         is distinct from old.motto or
+       new.history       is distinct from old.history or
+       new.mission       is distinct from old.mission or
+       new.vision        is distinct from old.vision or
+       new.phone         is distinct from old.phone or
+       new.email         is distinct from old.email or
+       new.website       is distinct from old.website or
+       new.address       is distinct from old.address or
+       new.city          is distinct from old.city or
+       new.hero_mode     is distinct from old.hero_mode or
+       new.founding_year is distinct from old.founding_year or
+       new.student_count is distinct from old.student_count or
+       new.teacher_count is distinct from old.teacher_count
+     ) then
+    raise exception 'Ces champs sont gérés par le cycle Brouillon → Publication (CMS école) — utilisez Publier, pas une écriture directe.' using errcode = '42501';
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists establishments_protect_school_page_published_columns on public.establishments;
+create trigger establishments_protect_school_page_published_columns
+  before update on public.establishments
+  for each row execute procedure public.protect_school_page_published_columns();
+
+
+-- ============================================================================
+-- 2. school_official_ranking — 1 row per establishment. §7 provenance:
+-- year/rank/scope/source required TOGETHER (never label a ranking
+-- "official" without provenance); source_url optional, validated http(s).
+-- rank is free text (allows "12e", "Top 3 ex-aequo"...) but a bare integer
+-- must be > 0 (§7 — "do not allow rank <= 0").
+--
+-- PUBLIC-SITE-02B — SECURITY FIX. There is deliberately NO owner-write
+-- policy at all on this table. Draft ranking lives ONLY in
+-- school_page_drafts.payload.ranking (JSON, never a row here) until
+-- Publish (§4 mission preference: "draft ranking remains in the draft
+-- payload; published ranking is changed only by publish_school_page()").
+-- The only writer is publish_school_page(), gated by the trusted-context
+-- flag (see header) — a direct owner PostgREST call is unconditionally
+-- denied by RLS, never reaching a USING/CHECK expression to evaluate.
 -- ============================================================================
 create table if not exists public.school_official_ranking (
   id             uuid primary key default gen_random_uuid(),
@@ -123,11 +229,16 @@ create table if not exists public.school_official_ranking (
   source_url     text,
   created_at     timestamptz not null default now(),
   updated_at     timestamptz not null default now(),
-  constraint school_official_ranking_year_check check (year between 1990 and extract(year from now())::int + 1)
+  constraint school_official_ranking_year_check check (year between 1990 and extract(year from now())::int + 1),
+  constraint school_official_ranking_rank_check check (rank !~ '^[0-9]+$' or rank::int > 0),
+  constraint school_official_ranking_rank_not_blank check (btrim(rank) <> ''),
+  constraint school_official_ranking_scope_not_blank check (btrim(scope) <> ''),
+  constraint school_official_ranking_source_not_blank check (btrim(source) <> ''),
+  constraint school_official_ranking_source_url_check check (source_url is null or source_url ~* '^https?://')
 );
 
 comment on table public.school_official_ranking is
-  'PUBLIC-SITE-02 §6 — single official ranking per establishment. year/rank/scope/source required together (never displayed as "official" without provenance); source_url optional. CMS-editable via payload.ranking, published atomically by publish_school_page().';
+  'PUBLIC-SITE-02 §6 — single official ranking per establishment. year/rank/scope/source required together (never displayed as "official" without provenance); source_url optional. CMS-editable via payload.ranking (draft lives only in JSON, never a row here), published atomically by publish_school_page() only — no owner-write RLS policy exists on this table by design (PUBLIC-SITE-02B).';
 
 create or replace function public.touch_school_official_ranking_updated_at()
 returns trigger
@@ -151,18 +262,26 @@ create policy "school_official_ranking_public_read" on public.school_official_ra
   for select
   using (true);
 
+-- PUBLIC-SITE-02B — the ONLY write path: publish_school_page(), running as
+-- the owner (SECURITY INVOKER) with the trusted-context flag set. Ownership
+-- is still re-checked here in depth (never trust the flag alone) — a
+-- direct owner call always has the flag unset and is denied before this
+-- check is even reached.
 drop policy if exists "school_official_ranking_owner_write" on public.school_official_ranking;
-create policy "school_official_ranking_owner_write" on public.school_official_ranking
+drop policy if exists "school_official_ranking_publish_rpc_only" on public.school_official_ranking;
+create policy "school_official_ranking_publish_rpc_only" on public.school_official_ranking
   for all
   using (
-    exists (
+    coalesce(current_setting('app.school_page_publish', true), '') = 'on'
+    and exists (
       select 1 from public.establishments e
       where e.id = school_official_ranking.establishment_id
         and e.owner_id = (select auth.uid())
     )
   )
   with check (
-    exists (
+    coalesce(current_setting('app.school_page_publish', true), '') = 'on'
+    and exists (
       select 1 from public.establishments e
       where e.id = school_official_ranking.establishment_id
         and e.owner_id = (select auth.uid())
@@ -203,6 +322,17 @@ create table if not exists public.school_exam_results (
   ),
   constraint school_exam_results_success_rate_check check (
     success_rate_percent is null or (success_rate_percent >= 0 and success_rate_percent <= 100)
+  ),
+  -- §6 — success_rate_percent is director-entered (not derived: a school
+  -- may only know the official published rate without raw counts), but
+  -- when BOTH candidates_count and admitted_count are also present, the
+  -- three values must not contradict each other (mission's own example:
+  -- 150 candidates / 144 admitted / "82%" must be rejected — the true
+  -- rate is 96%). +-1 point tolerance absorbs official rounding.
+  constraint school_exam_results_success_rate_consistency_check check (
+    candidates_count is null or admitted_count is null or success_rate_percent is null
+    or candidates_count = 0
+    or abs(success_rate_percent - (admitted_count::numeric / candidates_count * 100)) <= 1.0
   )
 );
 
@@ -213,23 +343,95 @@ create index if not exists idx_school_exam_results_establishment on public.schoo
 
 alter table public.school_exam_results enable row level security;
 
+-- PUBLIC-SITE-02B — SECURITY FIX. Split from a single "for all" into 4
+-- precise per-command policies (Postgres RLS requires separate policies to
+-- express different rules per command) — a bare "for all using(owner)"
+-- would let an owner INSERT status='live' directly, flip
+-- draft_pending_add -> live themselves, edit a live row's contents, or
+-- delete a live row, none of which may happen outside Publish.
+
+-- SELECT: public sees live only; the owner ALSO sees their own rows
+-- regardless of status (needed for the CMS to list pending additions) —
+-- multiple permissive policies for the same command are OR'd together.
 drop policy if exists "school_exam_results_public_read" on public.school_exam_results;
 create policy "school_exam_results_public_read" on public.school_exam_results
   for select
   using (status = 'live');
 
 drop policy if exists "school_exam_results_owner_all" on public.school_exam_results;
-create policy "school_exam_results_owner_all" on public.school_exam_results
-  for all
+drop policy if exists "school_exam_results_owner_read" on public.school_exam_results;
+create policy "school_exam_results_owner_read" on public.school_exam_results
+  for select
   using (
     exists (
       select 1 from public.establishments e
       where e.id = school_exam_results.establishment_id
         and e.owner_id = (select auth.uid())
     )
+  );
+
+-- INSERT: owner only, and ONLY ever as 'live' -> false / draft_pending_add
+-- -> true. A direct attempt to insert status='live' is rejected by this
+-- WITH CHECK before the row is ever written.
+drop policy if exists "school_exam_results_owner_insert_draft" on public.school_exam_results;
+create policy "school_exam_results_owner_insert_draft" on public.school_exam_results
+  for insert
+  with check (
+    status = 'draft_pending_add'
+    and exists (
+      select 1 from public.establishments e
+      where e.id = school_exam_results.establishment_id
+        and e.owner_id = (select auth.uid())
+    )
+  );
+
+-- UPDATE: no owner-direct path AT ALL (never an in-place edit, by design
+-- — see table comment). The only writer is publish_school_page(),
+-- promoting draft_pending_add -> live under the trusted-context flag (see
+-- migration header). A direct owner UPDATE (flag unset) matches zero rows.
+drop policy if exists "school_exam_results_publish_rpc_update" on public.school_exam_results;
+create policy "school_exam_results_publish_rpc_update" on public.school_exam_results
+  for update
+  using (
+    coalesce(current_setting('app.school_page_publish', true), '') = 'on'
+    and exists (
+      select 1 from public.establishments e
+      where e.id = school_exam_results.establishment_id
+        and e.owner_id = (select auth.uid())
+    )
   )
   with check (
-    exists (
+    coalesce(current_setting('app.school_page_publish', true), '') = 'on'
+    and exists (
+      select 1 from public.establishments e
+      where e.id = school_exam_results.establishment_id
+        and e.owner_id = (select auth.uid())
+    )
+  );
+
+-- DELETE: owner may cancel their OWN still-pending draft_pending_add row
+-- directly (nothing published to preserve — same UX as the gallery
+-- DELETE route). Deleting a LIVE row only happens through Publish
+-- processing payload.results.remove_ids, gated by the same trusted flag.
+drop policy if exists "school_exam_results_owner_delete_pending" on public.school_exam_results;
+create policy "school_exam_results_owner_delete_pending" on public.school_exam_results
+  for delete
+  using (
+    status = 'draft_pending_add'
+    and exists (
+      select 1 from public.establishments e
+      where e.id = school_exam_results.establishment_id
+        and e.owner_id = (select auth.uid())
+    )
+  );
+
+drop policy if exists "school_exam_results_publish_rpc_delete_live" on public.school_exam_results;
+create policy "school_exam_results_publish_rpc_delete_live" on public.school_exam_results
+  for delete
+  using (
+    status = 'live'
+    and coalesce(current_setting('app.school_page_publish', true), '') = 'on'
+    and exists (
       select 1 from public.establishments e
       where e.id = school_exam_results.establishment_id
         and e.owner_id = (select auth.uid())
@@ -440,6 +642,17 @@ begin
 
   -- 7. Apply — single transaction, unchanged locking/exception discipline.
   begin
+    -- PUBLIC-SITE-02B — trusted-context flag, set only after ownership
+    -- (step 1) already passed. `true` = SET LOCAL semantics: reverts
+    -- automatically at the end of this transaction (commit OR rollback),
+    -- never leaks to another request on a pooled connection. Nothing
+    -- exposed to PostgREST can set this — it exists only inside this
+    -- function body. Lets the establishments/school_official_ranking/
+    -- school_exam_results writes below through their respective
+    -- publish-only RLS policies, even though this function runs as the
+    -- owner (SECURITY INVOKER).
+    perform set_config('app.school_page_publish', 'on', true);
+
     update public.establishments
     set
       description = v_payload->'presentation'->>'description',
@@ -725,9 +938,17 @@ revoke all on function public.discard_school_page_draft(uuid, timestamptz, jsonb
 grant execute on function public.discard_school_page_draft(uuid, timestamptz, jsonb) to authenticated;
 
 -- ============================================================================
--- FIN — 7 nouvelles colonnes additives (establishments), 2 nouvelles tables
--- additives (school_official_ranking, school_exam_results), CREATE OR
--- REPLACE complet des 2 RPC existantes. Aucune donnée existante modifiée,
--- aucune policy publique retirée. school_documents/school_announcements
--- restent hors de ce mécanisme, inchangées.
+-- FIN — 7 nouvelles colonnes additives (establishments) + 1 nouveau trigger
+-- de protection (couvrant ces 7 colonnes ET les 8 déjà existantes du même
+-- domaine), 2 nouvelles tables additives (school_official_ranking,
+-- school_exam_results) avec RLS stricte (aucune policy d'écriture directe
+-- propriétaire — seul publish_school_page() écrit, via le flag de
+-- confiance transactionnel), CREATE OR REPLACE complet des 2 RPC
+-- existantes. Aucune donnée existante modifiée, aucune policy publique
+-- SELECT retirée. school_documents/school_announcements restent hors de ce
+-- mécanisme, inchangées.
+--
+-- PUBLIC-SITE-02B — voir docs/pro/PUBLIC-SITE-02B_PREFLIGHT_REPORT.md pour
+-- l'audit complet et docs/pro/PUBLIC-SITE-02_0035_ROLLBACK.sql pour le
+-- rollback (préparé, non exécuté).
 -- ============================================================================
