@@ -18,8 +18,31 @@ import { authorizeSchoolMutation } from "@/lib/cms/authorizeSchoolMutation";
 const MAX_TITLE_LENGTH = 200;
 const MAX_CONTENT_LENGTH = 4000;
 const ANNOUNCEMENT_TYPES = new Set(["announcement", "homework", "event", "reminder"]);
-const CREATE_FIELDS = new Set(["title", "content", "is_important", "type"]);
-const UPDATE_FIELDS = new Set(["id", "title", "content", "is_important", "type"]);
+// PUBLIC-SITE-04 — event_date/event_start_time (migration 0036): optional,
+// null for an ordinary announcement, populated for a real calendar event.
+// Same immediate-live path as every other field on this table — never
+// routed through school_page_drafts (school_announcements' lifecycle is
+// unchanged, see PUBLIC-SITE-03/04).
+const CREATE_FIELDS = new Set(["title", "content", "is_important", "type", "event_date", "event_start_time"]);
+const UPDATE_FIELDS = new Set(["id", "title", "content", "is_important", "type", "event_date", "event_start_time"]);
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+const ISO_TIME = /^\d{2}:\d{2}(:\d{2})?$/;
+
+function cleanEventDate(raw: unknown): { ok: true; value: string | null } | { ok: false; error: string } {
+  if (raw === null || raw === undefined || raw === "") return { ok: true, value: null };
+  if (typeof raw !== "string" || !ISO_DATE.test(raw) || Number.isNaN(new Date(raw).getTime())) {
+    return { ok: false, error: "event_date invalide (AAAA-MM-JJ attendu, ou null)" };
+  }
+  return { ok: true, value: raw };
+}
+
+function cleanEventTime(raw: unknown): { ok: true; value: string | null } | { ok: false; error: string } {
+  if (raw === null || raw === undefined || raw === "") return { ok: true, value: null };
+  if (typeof raw !== "string" || !ISO_TIME.test(raw)) {
+    return { ok: false, error: "event_start_time invalide (HH:MM attendu, ou null)" };
+  }
+  return { ok: true, value: raw };
+}
 
 function cleanRequiredText(raw: unknown, label: string, maxLength: number): { ok: true; value: string } | { ok: false; error: string } {
   if (typeof raw !== "string") return { ok: false, error: `${label} requis` };
@@ -60,11 +83,27 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "type invalide" }, { status: 400 });
   }
 
+  const eventDate = cleanEventDate(input.event_date);
+  if ("error" in eventDate) return NextResponse.json({ error: eventDate.error }, { status: 400 });
+  const eventStartTime = cleanEventTime(input.event_start_time);
+  if ("error" in eventStartTime) return NextResponse.json({ error: eventStartTime.error }, { status: 400 });
+  if (eventStartTime.value && !eventDate.value) {
+    return NextResponse.json({ error: "event_start_time nécessite event_date" }, { status: 400 });
+  }
+
   const { context } = auth;
   const { data, error } = await context.supabase
     .from("school_announcements")
-    .insert({ establishment_id: context.establishmentId, title: title.value, content: content.value, is_important, type })
-    .select("id, title, content, is_important, type, created_at")
+    .insert({
+      establishment_id: context.establishmentId,
+      title: title.value,
+      content: content.value,
+      is_important,
+      type,
+      event_date: eventDate.value,
+      event_start_time: eventStartTime.value,
+    })
+    .select("id, title, content, is_important, type, event_date, event_start_time, created_at")
     .single();
 
   if (error) {
@@ -130,6 +169,16 @@ export async function PATCH(req: NextRequest) {
     }
     update.type = input.type;
   }
+  if ("event_date" in input) {
+    const eventDate = cleanEventDate(input.event_date);
+    if ("error" in eventDate) return NextResponse.json({ error: eventDate.error }, { status: 400 });
+    update.event_date = eventDate.value;
+  }
+  if ("event_start_time" in input) {
+    const eventStartTime = cleanEventTime(input.event_start_time);
+    if ("error" in eventStartTime) return NextResponse.json({ error: eventStartTime.error }, { status: 400 });
+    update.event_start_time = eventStartTime.value;
+  }
   if (Object.keys(update).length === 0) {
     return NextResponse.json({ error: "Aucun champ à mettre à jour" }, { status: 400 });
   }
@@ -138,7 +187,7 @@ export async function PATCH(req: NextRequest) {
     .from("school_announcements")
     .update(update)
     .eq("id", existing.id)
-    .select("id, title, content, is_important, type, created_at")
+    .select("id, title, content, is_important, type, event_date, event_start_time, created_at")
     .single();
 
   if (error) {

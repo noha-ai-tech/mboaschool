@@ -32,10 +32,10 @@ export async function GET() {
   }
   const { context } = auth;
 
-  const [establishmentRes, imagesRes, docsRes, admissionsRes, draftRes] = await Promise.all([
+  const [establishmentRes, imagesRes, docsRes, admissionsRes, draftRes, resultsRes] = await Promise.all([
     context.supabase
       .from("establishments")
-      .select("id, name, main_category, city, neighborhood, is_verified, owner_id, is_claimed, verification_status, official_id, source_ministry, subscription_plan, cover_image_url, latitude, longitude")
+      .select("id, name, main_category, city, neighborhood, is_verified, owner_id, is_claimed, verification_status, official_id, source_ministry, subscription_plan, cover_image_url, latitude, longitude, logo_url, phone, whatsapp, address, motto, founding_year, student_count, teacher_count")
       .eq("id", context.establishmentId)
       .single(),
     // CMS-F.6 — les DEUX statuts sont intentionnellement récupérés ici
@@ -62,6 +62,15 @@ export async function GET() {
       .select("payload")
       .eq("establishment_id", context.establishmentId)
       .maybeSingle(),
+    // PUBLIC-SITE-02 — même discipline que school_images : les deux
+    // statuts sont récupérés ici, la formule "effective" ci-dessous décide.
+    // 500 (relation does not exist) tant que la migration 0035 n'est pas
+    // exécutée — comportement attendu, jamais masqué.
+    context.supabase
+      .from("school_exam_results")
+      .select("id, exam, academic_year, candidates_count, admitted_count, success_rate_percent, status")
+      .eq("establishment_id", context.establishmentId)
+      .order("academic_year", { ascending: false }),
   ]);
 
   if (establishmentRes.error) {
@@ -89,12 +98,22 @@ export async function GET() {
     .filter((img) => (img.status === "live" ? !removeIds.has(img.id) : img.status === "draft_pending_add"))
     .map(({ id, url, caption }) => ({ id, url, caption }));
 
+  // PUBLIC-SITE-02 — Résultats effectifs, EXACT même formule que la
+  // Galerie : live MOINS results.remove_ids PLUS draft_pending_add.
+  const resultRemoveIds = new Set(payload.results?.remove_ids ?? []);
+  const effectiveResults = (resultsRes.data ?? [])
+    .filter((r) => (r.status === "live" ? !resultRemoveIds.has(r.id) : r.status === "draft_pending_add"))
+    .map(({ id, exam, academic_year, candidates_count, admitted_count, success_rate_percent }) => ({
+      id, exam, academic_year, candidates_count, admitted_count, success_rate_percent,
+    }));
+
   return NextResponse.json({
     ok: true,
     establishment: establishmentRes.data,
     images: effectiveImages,
     documents: docsRes.data ?? [],
     admissionsIsOpen: admissionsRes.data?.is_open ?? true,
+    results: effectiveResults,
     draft: payload,
   });
 }

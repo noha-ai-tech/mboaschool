@@ -95,7 +95,11 @@ type SectionKey =
   | "presentation" | "admissions" | "tarifs" | "infrastructures"
   | "galerie" | "actualites" | "documents" | "contact";
 
-type DrawerKey = SectionKey | "hero";
+// PUBLIC-SITE-02 §5 — "cles" (Chiffres clés) et "classement" (Classement
+// officiel) sont des tiroirs supplémentaires, hors de la liste réordonnable
+// des 8 sections (comme "hero") : ils n'ont pas de ligne school_page_sections,
+// juste des domaines de brouillon (key_numbers, ranking).
+type DrawerKey = SectionKey | "hero" | "cles" | "classement";
 
 // Clés attendues par school_page_sections / le payload draft (CMS-F.2) —
 // différentes des clés internes de l'éditeur pour "tarifs"/
@@ -146,6 +150,10 @@ type SaveState = "idle" | "saving" | "saved" | "error";
 
 type FormDraft = {
   description: string;
+  motto: string;
+  history: string;
+  mission: string;
+  vision: string;
   phone: string;
   email: string;
   website: string;
@@ -160,6 +168,14 @@ type FormDraft = {
   admissionsPeriodStart: string;
   admissionsPeriodEnd: string;
   admissionsAdditionalInfo: string;
+  foundingYear: string;
+  studentCount: string;
+  teacherCount: string;
+  rankingYear: string;
+  rankingRank: string;
+  rankingScope: string;
+  rankingSource: string;
+  rankingSourceUrl: string;
 };
 
 // Résultat d'un appel saveDraft() — distingue explicitement un conflit de
@@ -222,7 +238,10 @@ export default function ModifierMaPagePage() {
   // Actualités CMS-E — mutation réelle immédiate (Mode A), même famille que
   // Galerie/Documents. newsForm sert à la fois à créer (newsEditingId=null)
   // et à éditer (newsEditingId=id de l'annonce en cours d'édition).
-  const [newsForm, setNewsForm] = useState({ title: "", content: "", is_important: false });
+  // PUBLIC-SITE-04 — event_date/event_start_time are optional: null for an
+  // ordinary announcement, populated for a real calendar event. Empty
+  // string in the form maps to null on submit, never an empty-string date.
+  const [newsForm, setNewsForm] = useState({ title: "", content: "", is_important: false, event_date: "", event_start_time: "" });
   const [newsEditingId, setNewsEditingId] = useState<string | null>(null);
   const [newsSaving, setNewsSaving] = useState(false);
   const [newsDeletingId, setNewsDeletingId] = useState<string | null>(null);
@@ -235,6 +254,17 @@ export default function ModifierMaPagePage() {
   const [docDeletingId, setDocDeletingId] = useState<string | null>(null);
   const [docError, setDocError] = useState<string | null>(null);
   const docInputRef = useRef<HTMLInputElement>(null);
+
+  // PUBLIC-SITE-02 §5 — Résultats d'examens : même pattern que Galerie
+  // (ajout immédiat draft_pending_add via POST, suppression conditionnée
+  // au statut — draft_pending_add supprimé immédiatement, live marqué dans
+  // results.remove_ids via saveDraft).
+  const [examResults, setExamResults] = useState<any[]>([]);
+  const [resultForm, setResultForm] = useState({ exam: "", academicYear: "", candidates: "", admitted: "", rate: "" });
+  const [resultSaving, setResultSaving] = useState(false);
+  const [resultDeletingId, setResultDeletingId] = useState<string | null>(null);
+  const [resultError, setResultError] = useState<string | null>(null);
+
   const [activeDrawer, setActiveDrawer] = useState<DrawerKey | null>(null);
   const [formDraft, setFormDraft] = useState<FormDraft | null>(null);
 
@@ -287,6 +317,7 @@ export default function ModifierMaPagePage() {
         { data: docsData },
         { data: admissionsData },
         { data: newsData },
+        { data: resultsData },
         draftResult,
       ] = await Promise.all([
         supabase.from("fees").select("*").eq("establishment_id", schoolData.id).maybeSingle(),
@@ -299,6 +330,11 @@ export default function ModifierMaPagePage() {
         // CMS-E — liste de gestion (création/édition/suppression) distincte
         // de l'aperçu public (AnnouncementsTab, laissé inchangé, auto-fetch).
         supabase.from("school_announcements").select("*").eq("establishment_id", schoolData.id).order("created_at", { ascending: false }),
+        // PUBLIC-SITE-02 — migration 0035, pas encore exécutée : la requête
+        // renvoie {data: null, error} (relation inexistante) tant qu'elle
+        // ne l'est pas — resultsData reste simplement null, aucun résultat
+        // affiché, le reste de l'éditeur continue de fonctionner.
+        supabase.from("school_exam_results").select("*").eq("establishment_id", schoolData.id).order("academic_year", { ascending: false }),
         // CMS-F.2/F.3 — GET du brouillon en parallèle des chargements live
         // existants. Enveloppé pour ne jamais faire échouer tout le
         // Promise.all (donc bloquer les domaines immediate-live) si le
@@ -321,6 +357,7 @@ export default function ModifierMaPagePage() {
       if (docsData) setDocsList(docsData);
       if (admissionsData) setAdmissionsConfig(admissionsData as AdmissionsConfig);
       if (newsData) setNewsList(newsData);
+      if (resultsData) setExamResults(resultsData);
 
       if ("error" in draftResult) {
         setDraftError(draftResult.error);
@@ -355,6 +392,17 @@ export default function ModifierMaPagePage() {
   const pendingRemoveImages = useMemo(
     () => images.filter((img: any) => img.status === "live" && galleryRemoveIds.has(img.id)),
     [images, galleryRemoveIds]
+  );
+
+  // PUBLIC-SITE-02 — même formule que la Galerie effective.
+  const resultRemoveIds = useMemo(() => new Set(draftPayload?.results.remove_ids ?? []), [draftPayload]);
+  const effectiveResults = useMemo(
+    () => examResults.filter((r: any) => (r.status === "live" ? !resultRemoveIds.has(r.id) : r.status === "draft_pending_add")),
+    [examResults, resultRemoveIds]
+  );
+  const pendingRemoveResults = useMemo(
+    () => examResults.filter((r: any) => r.status === "live" && resultRemoveIds.has(r.id)),
+    [examResults, resultRemoveIds]
   );
 
   // CMS-C.1 — résolution partagée avec le rendu public (src/lib/school/heroMode.ts).
@@ -749,6 +797,10 @@ export default function ModifierMaPagePage() {
     if (!draftSchool || !draftPayload) return; // brouillon pas encore chargé — rien à éditer
     setFormDraft({
       description: draftPayload.presentation.description,
+      motto: draftPayload.presentation.motto ?? "",
+      history: draftPayload.presentation.history ?? "",
+      mission: draftPayload.presentation.mission ?? "",
+      vision: draftPayload.presentation.vision ?? "",
       phone: draftPayload.contact.phone ?? "",
       email: draftPayload.contact.email ?? "",
       website: draftPayload.contact.website ?? "",
@@ -763,6 +815,14 @@ export default function ModifierMaPagePage() {
       admissionsPeriodStart: draftPayload.admissions.period_start ?? "",
       admissionsPeriodEnd: draftPayload.admissions.period_end ?? "",
       admissionsAdditionalInfo: draftPayload.admissions.additional_info ?? "",
+      foundingYear: draftPayload.key_numbers.founding_year != null ? String(draftPayload.key_numbers.founding_year) : "",
+      studentCount: draftPayload.key_numbers.student_count != null ? String(draftPayload.key_numbers.student_count) : "",
+      teacherCount: draftPayload.key_numbers.teacher_count != null ? String(draftPayload.key_numbers.teacher_count) : "",
+      rankingYear: draftPayload.ranking?.year != null ? String(draftPayload.ranking.year) : "",
+      rankingRank: draftPayload.ranking?.rank ?? "",
+      rankingScope: draftPayload.ranking?.scope ?? "",
+      rankingSource: draftPayload.ranking?.source ?? "",
+      rankingSourceUrl: draftPayload.ranking?.source_url ?? "",
     });
     setActiveDrawer(key);
   }
@@ -788,7 +848,15 @@ export default function ModifierMaPagePage() {
       let result: SaveDraftResult | null = null;
 
       if (activeDrawer === "presentation") {
-        result = await saveDraft({ presentation: { description: formDraft.description } });
+        result = await saveDraft({
+          presentation: {
+            description: formDraft.description,
+            motto: formDraft.motto.trim() || null,
+            history: formDraft.history.trim() || null,
+            mission: formDraft.mission.trim() || null,
+            vision: formDraft.vision.trim() || null,
+          },
+        });
       } else if (activeDrawer === "contact") {
         result = await saveDraft({
           contact: {
@@ -821,6 +889,31 @@ export default function ModifierMaPagePage() {
             period_end: formDraft.admissionsPeriodEnd || null,
             additional_info: formDraft.admissionsAdditionalInfo.trim() || null,
           },
+        });
+      } else if (activeDrawer === "cles") {
+        result = await saveDraft({
+          key_numbers: {
+            founding_year: formDraft.foundingYear.trim() ? Number(formDraft.foundingYear) : null,
+            student_count: formDraft.studentCount.trim() ? Number(formDraft.studentCount) : null,
+            teacher_count: formDraft.teacherCount.trim() ? Number(formDraft.teacherCount) : null,
+          },
+        });
+      } else if (activeDrawer === "classement") {
+        // §6 — year/rank/scope/source requis ENSEMBLE ; si l'un des 4 est
+        // vide, on efface le classement entier (null) plutôt que d'envoyer
+        // un objet à moitié rempli que le serveur rejetterait de toute
+        // façon (jamais un classement "officiel" sans provenance complète).
+        const hasAllRequired = formDraft.rankingYear.trim() && formDraft.rankingRank.trim() && formDraft.rankingScope.trim() && formDraft.rankingSource.trim();
+        result = await saveDraft({
+          ranking: hasAllRequired
+            ? {
+                year: Number(formDraft.rankingYear),
+                rank: formDraft.rankingRank.trim(),
+                scope: formDraft.rankingScope.trim(),
+                source: formDraft.rankingSource.trim(),
+                source_url: formDraft.rankingSourceUrl.trim() || null,
+              }
+            : null,
         });
       }
 
@@ -930,16 +1023,104 @@ export default function ModifierMaPagePage() {
     }
   }
 
+  // PUBLIC-SITE-02 §5/§7 — Résultats d'examens, exact même pattern que la
+  // Galerie : ajout immédiat draft_pending_add via POST (jamais 'live'
+  // directement), suppression conditionnée au statut.
+  async function addExamResult() {
+    setResultError(null);
+    if (!resultForm.exam.trim() || !resultForm.academicYear.trim()) {
+      setResultError("Examen et année requis");
+      return;
+    }
+    setResultSaving(true);
+    try {
+      const res = await fetch("/api/school-page/results", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          exam: resultForm.exam.trim(),
+          academic_year: Number(resultForm.academicYear),
+          candidates_count: resultForm.candidates.trim() ? Number(resultForm.candidates) : null,
+          admitted_count: resultForm.admitted.trim() ? Number(resultForm.admitted) : null,
+          success_rate_percent: resultForm.rate.trim() ? Number(resultForm.rate) : null,
+        }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error ?? `Erreur ${res.status}`);
+      setExamResults((prev: any[]) => [json.result, ...prev]);
+      setResultForm({ exam: "", academicYear: "", candidates: "", admitted: "", rate: "" });
+    } catch (e) {
+      setResultError(e instanceof Error ? e.message : "Échec de l'enregistrement");
+    } finally {
+      setResultSaving(false);
+    }
+  }
+
+  async function deleteExamResult(result: { id: string; status?: string }) {
+    setResultError(null);
+    setResultDeletingId(result.id);
+    try {
+      if (result.status === "draft_pending_add") {
+        const res = await fetch("/api/school-page/results", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: result.id }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error ?? `Erreur ${res.status}`);
+        setExamResults((prev: any[]) => prev.filter((r) => r.id !== result.id));
+        return;
+      }
+      // live — marquage brouillon uniquement, jamais de suppression immédiate.
+      const currentRemoveIds = draftPayload?.results.remove_ids ?? [];
+      if (currentRemoveIds.includes(result.id)) return;
+      const saveResult = await saveDraft({ results: { remove_ids: [...currentRemoveIds, result.id] } });
+      if ("error" in saveResult) {
+        setResultError(saveResult.error);
+      } else if (!("draft" in saveResult)) {
+        setResultError("Ce brouillon a été modifié ailleurs. Rechargez les dernières modifications.");
+      }
+    } catch (e) {
+      setResultError(e instanceof Error ? e.message : "Échec de la suppression");
+    } finally {
+      setResultDeletingId(null);
+    }
+  }
+
+  async function undoRemoveExamResult(resultId: string) {
+    setResultError(null);
+    setResultDeletingId(resultId);
+    try {
+      const currentRemoveIds = draftPayload?.results.remove_ids ?? [];
+      const saveResult = await saveDraft({ results: { remove_ids: currentRemoveIds.filter((id) => id !== resultId) } });
+      if ("error" in saveResult) {
+        setResultError(saveResult.error);
+      } else if (!("draft" in saveResult)) {
+        setResultError("Ce brouillon a été modifié ailleurs. Rechargez les dernières modifications.");
+      }
+    } catch (e) {
+      setResultError(e instanceof Error ? e.message : "Échec de l'annulation");
+    } finally {
+      setResultDeletingId(null);
+    }
+  }
+
   // Actualités CMS-E — create (newsEditingId=null) ou update (id présent),
   // jamais establishment_id envoyé : résolu côté serveur.
   function startNewsEdit(item: any) {
     setNewsEditingId(item.id);
-    setNewsForm({ title: item.title ?? "", content: item.content ?? "", is_important: !!item.is_important });
+    setNewsForm({
+      title: item.title ?? "",
+      content: item.content ?? "",
+      is_important: !!item.is_important,
+      event_date: item.event_date ?? "",
+      event_start_time: item.event_start_time ? item.event_start_time.slice(0, 5) : "",
+    });
     setNewsError(null);
   }
   function cancelNewsEdit() {
     setNewsEditingId(null);
-    setNewsForm({ title: "", content: "", is_important: false });
+    setNewsForm({ title: "", content: "", is_important: false, event_date: "", event_start_time: "" });
     setNewsError(null);
   }
 
@@ -947,7 +1128,13 @@ export default function ModifierMaPagePage() {
     setNewsError(null);
     setNewsSaving(true);
     try {
-      const payload: any = { title: newsForm.title, content: newsForm.content, is_important: newsForm.is_important };
+      const payload: any = {
+        title: newsForm.title,
+        content: newsForm.content,
+        is_important: newsForm.is_important,
+        event_date: newsForm.event_date || null,
+        event_start_time: newsForm.event_date && newsForm.event_start_time ? newsForm.event_start_time : null,
+      };
       if (newsEditingId) payload.id = newsEditingId;
       const res = await fetch("/api/school-page/news", {
         method: newsEditingId ? "PATCH" : "POST",
@@ -1135,6 +1322,8 @@ export default function ModifierMaPagePage() {
 
   function drawerTitle(): string {
     if (activeDrawer === "hero") return "Modifier le Hero";
+    if (activeDrawer === "cles") return "Modifier — Chiffres clés";
+    if (activeDrawer === "classement") return "Modifier — Classement officiel";
     if (activeDrawer) return `Modifier — ${SECTION_LABELS[activeDrawer]}`;
     return "";
   }
@@ -1190,15 +1379,144 @@ export default function ModifierMaPagePage() {
 
     if (activeDrawer === "presentation") {
       return (
-        <div>
-          <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Description</label>
-          <textarea
-            value={formDraft.description}
-            onChange={(e) => setFormDraft((p) => p ? { ...p, description: e.target.value } : p)}
-            rows={10}
-            className="w-full bg-surface border border-border rounded-[10px] p-3 text-sm outline-none focus:border-primary resize-none"
-            placeholder="Décrivez votre établissement..."
-          />
+        <div className="space-y-4">
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Devise</label>
+            <Input
+              value={formDraft.motto}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, motto: e.target.value } : p)}
+              placeholder="Ex : Excellence, discipline, réussite"
+              maxLength={200}
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Présentation</label>
+            <textarea
+              value={formDraft.description}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, description: e.target.value } : p)}
+              rows={8}
+              className="w-full bg-surface border border-border rounded-[10px] p-3 text-sm outline-none focus:border-primary resize-none"
+              placeholder="Décrivez votre établissement..."
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Historique</label>
+            <textarea
+              value={formDraft.history}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, history: e.target.value } : p)}
+              rows={5}
+              className="w-full bg-surface border border-border rounded-[10px] p-3 text-sm outline-none focus:border-primary resize-none"
+              placeholder="L'histoire de votre établissement (optionnel)..."
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Mission</label>
+            <textarea
+              value={formDraft.mission}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, mission: e.target.value } : p)}
+              rows={4}
+              className="w-full bg-surface border border-border rounded-[10px] p-3 text-sm outline-none focus:border-primary resize-none"
+              placeholder="La mission de votre établissement (optionnel)..."
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Vision</label>
+            <textarea
+              value={formDraft.vision}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, vision: e.target.value } : p)}
+              rows={4}
+              className="w-full bg-surface border border-border rounded-[10px] p-3 text-sm outline-none focus:border-primary resize-none"
+              placeholder="La vision de votre établissement (optionnel)..."
+            />
+          </div>
+        </div>
+      );
+    }
+
+    if (activeDrawer === "cles") {
+      return (
+        <div className="space-y-4">
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Année de création</label>
+            <Input
+              type="number"
+              value={formDraft.foundingYear}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, foundingYear: e.target.value } : p)}
+              placeholder="Ex : 1998"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Nombre d&apos;élèves</label>
+            <Input
+              type="number"
+              value={formDraft.studentCount}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, studentCount: e.target.value } : p)}
+              placeholder="Laisser vide si inconnu"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Nombre d&apos;enseignants</label>
+            <Input
+              type="number"
+              value={formDraft.teacherCount}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, teacherCount: e.target.value } : p)}
+              placeholder="Laisser vide si inconnu"
+            />
+          </div>
+          <p className="text-xs text-text-secondary bg-muted rounded-lg p-3">
+            Un chiffre laissé vide n&apos;apparaît jamais sur la fiche publique — jamais une valeur inventée.
+          </p>
+        </div>
+      );
+    }
+
+    if (activeDrawer === "classement") {
+      return (
+        <div className="space-y-4">
+          <p className="text-xs text-text-secondary bg-muted rounded-lg p-3">
+            Un classement affiché comme « officiel » doit toujours indiquer sa source et son année — remplissez les 4 champs ensemble, ou laissez-les tous vides pour ne rien afficher.
+          </p>
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Année</label>
+            <Input
+              type="number"
+              value={formDraft.rankingYear}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, rankingYear: e.target.value } : p)}
+              placeholder="Ex : 2025"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Rang</label>
+            <Input
+              value={formDraft.rankingRank}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, rankingRank: e.target.value } : p)}
+              placeholder="Ex : 12e établissement"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Périmètre</label>
+            <Input
+              value={formDraft.rankingScope}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, rankingScope: e.target.value } : p)}
+              placeholder="Ex : Région du Littoral"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Source</label>
+            <Input
+              value={formDraft.rankingSource}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, rankingSource: e.target.value } : p)}
+              placeholder="Ex : MINESEC"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Lien source (optionnel)</label>
+            <Input
+              value={formDraft.rankingSourceUrl}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, rankingSourceUrl: e.target.value } : p)}
+              placeholder="https://..."
+            />
+          </div>
         </div>
       );
     }
@@ -1476,6 +1794,30 @@ export default function ModifierMaPagePage() {
               />
               Marquer comme important
             </label>
+
+            {/* PUBLIC-SITE-04 — optionnel : laisser vide pour une simple
+                annonce, renseigner pour un véritable événement daté. */}
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              <div>
+                <label className="block text-xs text-text-secondary mb-1">Date de l&apos;événement (optionnel)</label>
+                <input
+                  type="date"
+                  value={newsForm.event_date}
+                  onChange={(e) => setNewsForm((p) => ({ ...p, event_date: e.target.value }))}
+                  className="w-full bg-surface border border-border rounded-[10px] px-3 py-2 text-sm outline-none focus:border-primary"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-text-secondary mb-1">Heure (optionnel)</label>
+                <input
+                  type="time"
+                  value={newsForm.event_start_time}
+                  onChange={(e) => setNewsForm((p) => ({ ...p, event_start_time: e.target.value }))}
+                  disabled={!newsForm.event_date}
+                  className="w-full bg-surface border border-border rounded-[10px] px-3 py-2 text-sm outline-none focus:border-primary disabled:opacity-50"
+                />
+              </div>
+            </div>
           </div>
 
           {newsError && <p className="text-sm text-red-600 mb-3">{newsError}</p>}
@@ -1610,7 +1952,9 @@ export default function ModifierMaPagePage() {
   // (CMS-D a fermé le dernier écart : tarifs/infrastructures sont
   // maintenant sauvegardés comme présentation/contact) — toute section
   // formulaire passe par applyDrawer() avec des états honnêtes (§14).
-  const isFormDrawer = activeDrawer !== null && EDITABLE_FORM_SECTIONS.has(activeDrawer as SectionKey);
+  const isFormDrawer =
+    activeDrawer !== null &&
+    (EDITABLE_FORM_SECTIONS.has(activeDrawer as SectionKey) || activeDrawer === "cles" || activeDrawer === "classement");
 
   function drawerFooter() {
     if (!isFormDrawer) {
@@ -1706,6 +2050,79 @@ export default function ModifierMaPagePage() {
             {renderSectionContent(key)}
           </EditableSection>
         ))}
+
+        {/* PUBLIC-SITE-02 §5 — Chiffres clés / Classement officiel : hors
+            de la liste réordonnable (pas de ligne school_page_sections),
+            même style de carte que les sections ci-dessus. */}
+        <div className="bg-white border border-border rounded-card p-5">
+          <div className="flex items-center justify-between mb-3">
+            <p className="font-bold text-sm">Chiffres clés</p>
+            <Button variant="secondary" size="sm" onClick={() => openDrawer("cles")}>Modifier</Button>
+          </div>
+          {draftPayload && (draftPayload.key_numbers.founding_year != null || draftPayload.key_numbers.student_count != null || draftPayload.key_numbers.teacher_count != null) ? (
+            <div className="flex flex-wrap gap-4 text-sm text-text-secondary">
+              {draftPayload.key_numbers.founding_year != null && <span>Fondé en <strong className="text-text-primary">{draftPayload.key_numbers.founding_year}</strong></span>}
+              {draftPayload.key_numbers.student_count != null && <span><strong className="text-text-primary">{draftPayload.key_numbers.student_count}</strong> élèves</span>}
+              {draftPayload.key_numbers.teacher_count != null && <span><strong className="text-text-primary">{draftPayload.key_numbers.teacher_count}</strong> enseignants</span>}
+            </div>
+          ) : (
+            <p className="text-sm text-text-secondary">Aucun chiffre renseigné — rien n&apos;est affiché publiquement.</p>
+          )}
+        </div>
+
+        <div className="bg-white border border-border rounded-card p-5">
+          <div className="flex items-center justify-between mb-3">
+            <p className="font-bold text-sm">Classement officiel</p>
+            <Button variant="secondary" size="sm" onClick={() => openDrawer("classement")}>Modifier</Button>
+          </div>
+          {draftPayload?.ranking ? (
+            <p className="text-sm text-text-secondary">
+              <strong className="text-text-primary">{draftPayload.ranking.rank}</strong> — {draftPayload.ranking.scope}
+              <br />
+              Source : {draftPayload.ranking.source} · {draftPayload.ranking.year}
+            </p>
+          ) : (
+            <p className="text-sm text-text-secondary">Aucun classement configuré — rien n&apos;est affiché publiquement.</p>
+          )}
+        </div>
+
+        {/* Résultats d'examens — gestion en liste (ajout/suppression), même
+            famille que Galerie/Documents (pas un formulaire saveDraft simple). */}
+        <div className="bg-white border border-border rounded-card p-5">
+          <p className="font-bold text-sm mb-3">Résultats d&apos;examens</p>
+          {resultError && <p className="text-xs text-danger bg-danger/10 rounded-lg p-3 mb-3">{resultError}</p>}
+
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 mb-3">
+            <Input placeholder="Examen (ex: BEPC)" value={resultForm.exam} onChange={(e) => setResultForm((p) => ({ ...p, exam: e.target.value }))} />
+            <Input type="number" placeholder="Année" value={resultForm.academicYear} onChange={(e) => setResultForm((p) => ({ ...p, academicYear: e.target.value }))} />
+            <Input type="number" placeholder="Candidats" value={resultForm.candidates} onChange={(e) => setResultForm((p) => ({ ...p, candidates: e.target.value }))} />
+            <Input type="number" placeholder="Admis" value={resultForm.admitted} onChange={(e) => setResultForm((p) => ({ ...p, admitted: e.target.value }))} />
+            <Input type="number" placeholder="Taux %" value={resultForm.rate} onChange={(e) => setResultForm((p) => ({ ...p, rate: e.target.value }))} />
+          </div>
+          <Button variant="secondary" size="sm" onClick={addExamResult} loading={resultSaving}>+ Ajouter un résultat</Button>
+
+          <div className="mt-4 space-y-2">
+            {effectiveResults.map((r: any) => (
+              <div key={r.id} className="flex items-center justify-between bg-muted rounded-lg px-3 py-2">
+                <span className="text-sm text-text-primary">
+                  <strong>{r.exam}</strong> {r.academic_year} — {r.success_rate_percent != null ? `${r.success_rate_percent}%` : "—"}
+                  {r.candidates_count != null && r.admitted_count != null ? ` (${r.admitted_count}/${r.candidates_count})` : ""}
+                  {r.status === "draft_pending_add" && <span className="ml-2 text-[10px] font-bold text-primary uppercase">Brouillon</span>}
+                </span>
+                <Button variant="secondary" size="sm" onClick={() => deleteExamResult(r)} loading={resultDeletingId === r.id}>Supprimer</Button>
+              </div>
+            ))}
+            {pendingRemoveResults.map((r: any) => (
+              <div key={r.id} className="flex items-center justify-between bg-danger/5 border border-danger/20 rounded-lg px-3 py-2">
+                <span className="text-sm text-text-secondary line-through">{r.exam} {r.academic_year}</span>
+                <Button variant="secondary" size="sm" onClick={() => undoRemoveExamResult(r.id)} loading={resultDeletingId === r.id}>Annuler la suppression</Button>
+              </div>
+            ))}
+            {effectiveResults.length === 0 && pendingRemoveResults.length === 0 && (
+              <p className="text-sm text-text-secondary">Aucun résultat publié.</p>
+            )}
+          </div>
+        </div>
       </div>
 
       <Drawer

@@ -1,31 +1,37 @@
 "use client";
 
 // CMS-F.4 — Aperçu privé et authentifié du brouillon (school_page_drafts).
-// Réutilise la MÊME logique de rendu que la fiche publique
-// (buildSchoolPageSections, src/components/school/SchoolPageSections.tsx)
-// — aucun second renderer indépendant, seule la SOURCE des données change
-// (mission §1/§16). L'établissement prévisualisé est toujours celui résolu
-// côté serveur par /api/school-page/preview (authorizeSchoolMutation() →
-// getActiveEstablishment(), même moteur que le reste du CMS) : cette page
-// n'envoie et ne lit aucun id d'établissement depuis l'URL — impossible de
-// prévisualiser une autre école via un paramètre.
 //
-// Garde de génération de requête (loadRequestIdRef), même discipline que
-// CMS-F.3 : une réponse tardive après un changement d'école active est
-// ignorée plutôt que d'écraser l'aperçu déjà affiché.
+// PUBLIC-SITE-02 §7 — PREVIEW PARITY, CRITICAL. Renders through the exact
+// same <MiniSiteRenderer> as the public route (src/app/ecole/[id]/page.tsx)
+// — one visual language, one implementation. Only the SOURCE of the data
+// changes: draft domains (presentation/contact/hero_mode/pricing/
+// infrastructure/admissions-config/sections/key_numbers/ranking) come from
+// school_page_drafts.payload; News/Documents/admissions.is_open stay
+// IMMEDIATE LIVE (never part of the draft, by design — CMS-F.0/F.1); the
+// Gallery/Results lists are the EFFECTIVE lists already computed
+// server-side by /api/school-page/preview (live minus remove_ids plus
+// draft_pending_add).
+//
+// The establishment previewed is always the one resolved server-side by
+// /api/school-page/preview (authorizeSchoolMutation() → getActiveEstablishment())
+// — this page sends and reads no establishment id from the URL.
+//
+// loadRequestIdRef guards against a late response after the active school
+// changes (same discipline as CMS-F.3): a stale response is ignored rather
+// than overwriting the already-displayed preview.
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useSchool } from "@/lib/useSchool";
-import { SchoolHeroCarousel } from "@/components/school/SchoolHeroCarousel";
-import { getPrimaryPublicBadge, resolveEstablishmentTrustState, trustInputFromEstablishmentRow } from "@/lib/trust/resolveEstablishmentTrustState";
+import { MiniSiteRenderer, type MiniSiteRendererData } from "@/components/school/MiniSiteRenderer";
 import type { AdmissionsConfig } from "@/components/school/ParentTab";
+import type { ExamResult, OfficialRanking } from "@/components/school/MiniSiteResultsPreview";
 import { resolveSectionConfig } from "@/lib/schoolPage/sections";
-import { buildSchoolPageSections, type SchoolPageViewModel } from "@/components/school/SchoolPageSections";
 import type { SchoolPageDraftPayload } from "@/lib/schoolPage/draftPayload";
 
-type PreviewData = {
+type PreviewApiData = {
   establishment: {
     id: string;
     name: string;
@@ -42,19 +48,27 @@ type PreviewData = {
     cover_image_url: string | null;
     latitude: number | null;
     longitude: number | null;
+    logo_url: string | null;
+    phone: string | null;
+    whatsapp: string | null;
+    address: string | null;
+    motto: string | null;
+    founding_year: number | null;
+    student_count: number | null;
+    teacher_count: number | null;
   };
   images: { id: string; url: string; caption: string | null }[];
   documents: any[];
   admissionsIsOpen: boolean;
+  results: { id: string; exam: string; academic_year: number; candidates_count: number | null; admitted_count: number | null; success_rate_percent: number | null }[];
   draft: SchoolPageDraftPayload;
 };
 
 export default function PreviewDraftPage() {
   const { school: activeSchool, user, loading: schoolLoading } = useSchool();
-  const [data, setData] = useState<PreviewData | null>(null);
+  const [data, setData] = useState<MiniSiteRendererData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [newsCount, setNewsCount] = useState<number | null>(null);
   const loadRequestIdRef = useRef(0);
 
   useEffect(() => {
@@ -70,14 +84,85 @@ export default function PreviewDraftPage() {
       setLoading(true);
       setError(null);
       setData(null);
-      setNewsCount(null);
 
       try {
         const res = await fetch("/api/school-page/preview");
         const json = await res.json().catch(() => ({}));
         if (loadRequestIdRef.current !== requestId) return; // école déjà changée depuis
         if (!res.ok) throw new Error(json.error ?? `Erreur ${res.status}`);
-        setData(json as PreviewData);
+
+        const api = json as PreviewApiData;
+        const { establishment, images, documents, admissionsIsOpen, results, draft } = api;
+
+        // CMS-F.4 §11 — is_open vient LIVE, tout le reste du modèle
+        // Admissions vient du brouillon.
+        const admissionsConfig: AdmissionsConfig = {
+          is_open: admissionsIsOpen,
+          levels: draft.admissions.levels,
+          conditions: draft.admissions.conditions,
+          required_documents: draft.admissions.required_documents,
+          period_start: draft.admissions.period_start,
+          period_end: draft.admissions.period_end,
+          additional_info: draft.admissions.additional_info,
+        };
+
+        const sectionConfig = resolveSectionConfig(draft.sections);
+
+        const ranking: OfficialRanking | null = draft.ranking
+          ? { source: draft.ranking.source, year: draft.ranking.year, rank: draft.ranking.rank, scope: draft.ranking.scope }
+          : null;
+        const examResults: ExamResult[] = results.map((r) => ({
+          examLabel: r.exam,
+          year: r.academic_year,
+          successRatePercent: r.success_rate_percent ?? 0,
+          admittedCount: r.admitted_count ?? undefined,
+          totalCount: r.candidates_count ?? undefined,
+        }));
+
+        setData({
+          establishment: {
+            id: establishment.id,
+            name: establishment.name,
+            description: draft.presentation.description,
+            main_category: establishment.main_category,
+            city: draft.contact.city,
+            neighborhood: establishment.neighborhood,
+            address: draft.contact.address,
+            latitude: establishment.latitude,
+            longitude: establishment.longitude,
+            phone: draft.contact.phone,
+            whatsapp: establishment.whatsapp,
+            email: draft.contact.email,
+            website: draft.contact.website,
+            logo_url: establishment.logo_url,
+            cover_image_url: establishment.cover_image_url,
+            subscription_plan: establishment.subscription_plan,
+            hero_mode: draft.hero_mode,
+            motto: draft.presentation.motto,
+            history: draft.presentation.history,
+            mission: draft.presentation.mission,
+            vision: draft.presentation.vision,
+            founding_year: draft.key_numbers.founding_year,
+            student_count: draft.key_numbers.student_count,
+            teacher_count: draft.key_numbers.teacher_count,
+            is_verified: establishment.is_verified,
+            owner_id: establishment.owner_id,
+            is_claimed: establishment.is_claimed,
+            verification_status: establishment.verification_status,
+            official_id: establishment.official_id,
+            source_ministry: establishment.source_ministry,
+          },
+          fees: { ...draft.pricing, currency: "FCFA" },
+          infra: draft.infrastructure,
+          images,
+          docsList: documents,
+          sectionConfig,
+          admissionsConfig,
+          ranking,
+          results: examResults,
+          preinscriptionHref: "#",
+          mode: "preview",
+        });
       } catch (e) {
         if (loadRequestIdRef.current !== requestId) return;
         setError(e instanceof Error ? e.message : "Échec du chargement de l'aperçu");
@@ -132,71 +217,11 @@ export default function PreviewDraftPage() {
     );
   }
 
-  const { establishment, images, documents, admissionsIsOpen, draft } = data;
-
-  // CMS-F.4 §11 — is_open vient LIVE, tout le reste du modèle Admissions
-  // vient du brouillon. is_open n'est jamais lu depuis draft.admissions
-  // (qui ne le contient d'ailleurs jamais — validé côté serveur).
-  const admissionsConfig: AdmissionsConfig = {
-    is_open: admissionsIsOpen,
-    levels: draft.admissions.levels,
-    conditions: draft.admissions.conditions,
-    required_documents: draft.admissions.required_documents,
-    period_start: draft.admissions.period_start,
-    period_end: draft.admissions.period_end,
-    additional_info: draft.admissions.additional_info,
-  };
-
-  // CMS-F.6 — `images` est désormais la Galerie EFFECTIVE déjà calculée
-  // côté serveur par /api/school-page/preview (live moins gallery.
-  // remove_ids, plus draft_pending_add) : cette page ne fait que
-  // transmettre la liste reçue, aucun calcul dupliqué ici. Le Hero dérive
-  // de la même liste via SchoolPageSections — aucun traitement séparé
-  // nécessaire.
-  const viewModel: SchoolPageViewModel = {
-    id: establishment.id,
-    name: establishment.name,
-    main_category: establishment.main_category,
-    city: draft.contact.city,
-    neighborhood: establishment.neighborhood,
-    is_verified: establishment.is_verified,
-    subscription_plan: establishment.subscription_plan,
-    cover_image_url: establishment.cover_image_url,
-    hero_mode: draft.hero_mode,
-    description: draft.presentation.description,
-    phone: draft.contact.phone,
-    email: draft.contact.email,
-    website: draft.contact.website,
-    address: draft.contact.address,
-    latitude: establishment.latitude,
-    longitude: establishment.longitude,
-  };
-
-  // SYNC-03 — même résolveur central que la fiche publique
-  // (src/app/ecole/[id]/page.tsx, REGISTRY-NATIONAL-A.1) : jamais un
-  // booléen "verified" brut recalculé localement.
-  const trustState = resolveEstablishmentTrustState(trustInputFromEstablishmentRow(establishment));
-  const trustBadge = getPrimaryPublicBadge(trustState);
-
-  const sectionConfig = resolveSectionConfig(draft.sections);
-
-  const { visibleSections, sectionNav, heroSlides } = buildSchoolPageSections({
-    school: viewModel,
-    fees: { ...draft.pricing, currency: "FCFA" },
-    infra: draft.infrastructure,
-    images,
-    docsList: documents,
-    admissionsConfig,
-    sectionConfig,
-    newsCount,
-    onNewsCountChange: setNewsCount,
-  });
-
   return (
-    <div className="-m-6 lg:-m-8 min-h-screen bg-[#ECECEA]">
-      {/* Bandeau privé — §18 : jamais confondre avec la page publique réelle */}
-      <div className="sticky top-0 z-40 bg-[#0A0A0A] text-white">
-        <div className="max-w-[1520px] mx-auto px-[18px] h-14 flex items-center justify-between gap-3">
+    <div className="-m-6 lg:-m-8 min-h-screen bg-[#F4F4F2]">
+      {/* Bandeau privé — jamais confondre avec la page publique réelle */}
+      <div className="sticky top-0 z-50 bg-[#0A0A0A] text-white">
+        <div className="max-w-[1280px] mx-auto px-4 lg:px-6 h-11 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <span className="text-xs font-bold tracking-widest uppercase text-primary-light">Aperçu du brouillon</span>
             <span className="text-white/50 text-xs hidden sm:inline truncate">Cette version n&apos;est pas encore publique.</span>
@@ -211,45 +236,7 @@ export default function PreviewDraftPage() {
         </div>
       </div>
 
-      <SchoolHeroCarousel
-        slides={heroSlides}
-        name={viewModel.name}
-        city={viewModel.city}
-        neighborhood={viewModel.neighborhood}
-        category={viewModel.main_category}
-        trustBadge={trustBadge}
-        premium={viewModel.subscription_plan === "premium"}
-        preinscriptionHref="#"
-        backHref="/dashboard/ecole/etablissement"
-        backLabel="Retour à l'éditeur"
-      />
-
-      {sectionNav.length > 0 && (
-        <div className="border-b border-border bg-white sticky top-14 z-30 overflow-x-auto">
-          <div className="max-w-[1520px] mx-auto px-[18px]">
-            <div className="flex gap-0 whitespace-nowrap">
-              {sectionNav.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth", block: "start" })}
-                  className="px-5 py-3.5 text-sm font-semibold border-b-2 border-transparent text-text-secondary hover:text-text-primary hover:border-border transition-colors duration-fast shrink-0"
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="max-w-[1520px] mx-auto px-[18px] py-8 pb-16 space-y-5">
-        {visibleSections.map((c) => (
-          <div key={c.key}>{c.node}</div>
-        ))}
-        {visibleSections.length === 0 && (
-          <p className="text-center text-sm text-text-secondary py-16">Toutes les sections sont masquées dans le brouillon.</p>
-        )}
-      </div>
+      <MiniSiteRenderer data={data} />
     </div>
   );
 }
