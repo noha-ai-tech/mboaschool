@@ -1,17 +1,18 @@
 import Image from "next/image";
-import { MapPin, Building2 } from "lucide-react";
+import { MapPin, Building2, CalendarDays, Users } from "lucide-react";
 
-// PUBLIC-SITE-01 §4C — homepage "about" teaser. Uses only existing
-// establishments columns (description, main_category, city, neighborhood) —
-// no motto/history/mission fields exist yet (audited, none in schema.sql),
-// so highlights are built from what is genuinely available rather than
-// left as placeholders.
+// PUBLIC-SITE-01 §4C / PUBLIC-SITE-02 §3 — homepage "about" teaser. All
+// highlights come from real establishments data — category/location
+// (existing), founding year / student count (new PUBLIC-SITE-02 CMS
+// fields) — never a placeholder.
 export function MiniSiteAboutPreview({
   description,
   categoryLabel,
   city,
   neighborhood,
   imageUrl,
+  foundingYear,
+  studentCount,
   onReadMore,
 }: {
   description: string | null;
@@ -19,11 +20,15 @@ export function MiniSiteAboutPreview({
   city: string | null;
   neighborhood: string | null;
   imageUrl: string | null;
+  foundingYear?: number | null;
+  studentCount?: number | null;
   onReadMore: () => void;
 }) {
   const highlights = [
     categoryLabel ? { icon: Building2, text: categoryLabel } : null,
     city ? { icon: MapPin, text: neighborhood ? `${neighborhood}, ${city}` : city } : null,
+    foundingYear != null ? { icon: CalendarDays, text: `Fondé en ${foundingYear}` } : null,
+    studentCount != null ? { icon: Users, text: `${studentCount.toLocaleString("fr-FR")} élèves` } : null,
   ].filter(Boolean) as { icon: typeof Building2; text: string }[];
 
   return (

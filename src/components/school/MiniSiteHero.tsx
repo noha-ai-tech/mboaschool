@@ -11,11 +11,16 @@ import type { SchoolHeroSlide } from "@/components/school/SchoolHeroCarousel";
 // draft Preview, out of scope for this mission — §10/§16). Reuses the same
 // resolved slide list, just a different overlay layout (headline + quick
 // contact card instead of the directory-style back-link/category chips).
-const FALLBACK_HEADLINE = "Former aujourd'hui les leaders de demain";
-
+//
+// PUBLIC-SITE-02 §9 — no fabricated marketing copy. Only real,
+// school-provided data is ever shown: `name` (always present), `motto`
+// (CMS-editable `devise`, PUBLIC-SITE-02), `description` (CMS-editable
+// presentation). When motto and description are both absent, the hero
+// simply shows the name alone — a neutral layout, never invented text.
 export function MiniSiteHero({
   slides,
   name,
+  motto,
   description,
   admissionsOpen,
   admissionYearLabel,
@@ -30,6 +35,7 @@ export function MiniSiteHero({
 }: {
   slides: SchoolHeroSlide[];
   name: string;
+  motto?: string | null;
   description: string | null;
   admissionsOpen: boolean;
   admissionYearLabel: string | null;
@@ -88,14 +94,16 @@ export function MiniSiteHero({
                 )}
               </div>
             )}
-            <h1 className="text-2xl md:text-4xl font-black tracking-tight leading-tight mb-3 max-w-[560px]">
-              {name || FALLBACK_HEADLINE}
+            <h1 className="text-2xl md:text-4xl font-black tracking-tight leading-tight mb-2 max-w-[560px]">
+              {name}
             </h1>
-            {description ? (
-              <p className="text-sm md:text-base text-white/75 max-w-[520px] leading-relaxed mb-5 line-clamp-2">{description}</p>
-            ) : (
-              <p className="text-sm md:text-base text-white/75 max-w-[520px] leading-relaxed mb-5">{FALLBACK_HEADLINE}</p>
+            {motto && (
+              <p className="text-sm md:text-base text-white/85 italic max-w-[520px] leading-snug mb-2">{motto}</p>
             )}
+            {description && (
+              <p className="text-sm md:text-base text-white/75 max-w-[520px] leading-relaxed mb-5 line-clamp-2">{description}</p>
+            )}
+            {!motto && !description && <div className="mb-5" />}
             <div className="flex flex-wrap items-center gap-3">
               <button
                 onClick={onDiscoverClick}

@@ -167,16 +167,121 @@ function cleanContactField(input: unknown): FieldResult<string | null> {
   return { ok: true, value: trimmed };
 }
 
+// PUBLIC-SITE-02 — motto/history/mission/vision are optional editorial
+// text (nullable), unlike description (required, can be empty string but
+// not absent) — same MAX_TEXT_LENGTH ceiling as admissions.conditions.
+const MAX_MOTTO_LENGTH = 200;
+const PRESENTATION_FIELDS = ["description", "motto", "history", "mission", "vision"] as const;
+
 function validatePresentation(input: unknown): FieldResult<SchoolPageDraftPayload["presentation"]> {
   if (typeof input !== "object" || input === null) return { ok: false, error: "presentation doit être un objet" };
   const obj = input as Record<string, unknown>;
-  const unknown = Object.keys(obj).filter((k) => k !== "description");
+  const unknown = Object.keys(obj).filter((k) => !(PRESENTATION_FIELDS as readonly string[]).includes(k));
   if (unknown.length > 0) return { ok: false, error: `presentation : champ(s) inconnu(s) ${unknown.join(", ")}` };
   const { description } = obj;
   if (typeof description !== "string" || description.length > MAX_DESCRIPTION_LENGTH) {
     return { ok: false, error: `presentation.description invalide (texte, max ${MAX_DESCRIPTION_LENGTH} caractères)` };
   }
-  return { ok: true, value: { description } };
+  const motto = cleanText(obj.motto, MAX_MOTTO_LENGTH);
+  if ("error" in motto) return { ok: false, error: `presentation.motto : ${motto.error}` };
+  const history = cleanText(obj.history, MAX_TEXT_LENGTH);
+  if ("error" in history) return { ok: false, error: `presentation.history : ${history.error}` };
+  const mission = cleanText(obj.mission, MAX_TEXT_LENGTH);
+  if ("error" in mission) return { ok: false, error: `presentation.mission : ${mission.error}` };
+  const vision = cleanText(obj.vision, MAX_TEXT_LENGTH);
+  if ("error" in vision) return { ok: false, error: `presentation.vision : ${vision.error}` };
+  return { ok: true, value: { description, motto: motto.value, history: history.value, mission: mission.value, vision: vision.value } };
+}
+
+const CURRENT_YEAR = new Date().getFullYear();
+
+function validateYearField(input: unknown, label: string, min: number, max: number): FieldResult<number | null> {
+  if (input === null || input === undefined) return { ok: true, value: null };
+  const n = typeof input === "number" ? input : Number(input);
+  if (typeof input !== "number" || !Number.isInteger(n) || n < min || n > max) {
+    return { ok: false, error: `${label} invalide (entier entre ${min} et ${max}, ou null)` };
+  }
+  return { ok: true, value: n };
+}
+
+function validateCountField(input: unknown, label: string): FieldResult<number | null> {
+  if (input === null || input === undefined) return { ok: true, value: null };
+  const n = typeof input === "number" ? input : Number(input);
+  if (typeof input !== "number" || !Number.isInteger(n) || n < 0) {
+    return { ok: false, error: `${label} invalide (entier positif ou null)` };
+  }
+  return { ok: true, value: n };
+}
+
+function validateKeyNumbers(input: unknown): FieldResult<SchoolPageDraftPayload["key_numbers"]> {
+  if (typeof input !== "object" || input === null) return { ok: false, error: "key_numbers doit être un objet" };
+  const obj = input as Record<string, unknown>;
+  const fields = ["founding_year", "student_count", "teacher_count"] as const;
+  const unknown = Object.keys(obj).filter((k) => !(fields as readonly string[]).includes(k));
+  if (unknown.length > 0) return { ok: false, error: `key_numbers : champ(s) inconnu(s) ${unknown.join(", ")}` };
+  for (const field of fields) {
+    if (!(field in obj)) return { ok: false, error: `key_numbers.${field} requis (nombre ou null)` };
+  }
+  const foundingYear = validateYearField(obj.founding_year, "key_numbers.founding_year", 1800, CURRENT_YEAR);
+  if ("error" in foundingYear) return { ok: false, error: foundingYear.error };
+  const studentCount = validateCountField(obj.student_count, "key_numbers.student_count");
+  if ("error" in studentCount) return { ok: false, error: studentCount.error };
+  const teacherCount = validateCountField(obj.teacher_count, "key_numbers.teacher_count");
+  if ("error" in teacherCount) return { ok: false, error: teacherCount.error };
+  return { ok: true, value: { founding_year: foundingYear.value, student_count: studentCount.value, teacher_count: teacherCount.value } };
+}
+
+const MAX_RANK_LENGTH = 60;
+const MAX_SCOPE_LENGTH = 120;
+const MAX_SOURCE_LENGTH = 120;
+const MAX_URL_LENGTH = 500;
+
+function validateRanking(input: unknown): FieldResult<SchoolPageDraftPayload["ranking"]> {
+  if (input === null) return { ok: true, value: null };
+  if (typeof input !== "object") return { ok: false, error: "ranking doit être un objet ou null" };
+  const obj = input as Record<string, unknown>;
+  const fields = ["year", "rank", "scope", "source", "source_url"] as const;
+  const unknown = Object.keys(obj).filter((k) => !(fields as readonly string[]).includes(k));
+  if (unknown.length > 0) return { ok: false, error: `ranking : champ(s) inconnu(s) ${unknown.join(", ")}` };
+
+  // §6 — year/rank/scope/source are required TOGETHER: a ranking is never
+  // half-configured. source_url alone is optional.
+  const year = validateYearField(obj.year, "ranking.year", 1990, CURRENT_YEAR + 1);
+  if ("error" in year || year.value === null) return { ok: false, error: "ranking.year requis (année)" };
+  const rank = cleanText(obj.rank, MAX_RANK_LENGTH);
+  if ("error" in rank || !rank.value) return { ok: false, error: "ranking.rank requis" };
+  const scope = cleanText(obj.scope, MAX_SCOPE_LENGTH);
+  if ("error" in scope || !scope.value) return { ok: false, error: "ranking.scope requis" };
+  const source = cleanText(obj.source, MAX_SOURCE_LENGTH);
+  if ("error" in source || !source.value) return { ok: false, error: "ranking.source requis" };
+  const sourceUrl = cleanText(obj.source_url, MAX_URL_LENGTH);
+  if ("error" in sourceUrl) return { ok: false, error: `ranking.source_url : ${sourceUrl.error}` };
+  if (sourceUrl.value && !/^https?:\/\//i.test(sourceUrl.value)) {
+    return { ok: false, error: "ranking.source_url doit commencer par http:// ou https://" };
+  }
+
+  return { ok: true, value: { year: year.value, rank: rank.value, scope: scope.value, source: source.value, source_url: sourceUrl.value } };
+}
+
+function validateResultsShape(input: unknown): FieldResult<string[]> {
+  if (typeof input !== "object" || input === null) return { ok: false, error: "results doit être un objet" };
+  const obj = input as Record<string, unknown>;
+  const unknown = Object.keys(obj).filter((k) => k !== "remove_ids");
+  if (unknown.length > 0) return { ok: false, error: `results : champ(s) inconnu(s) ${unknown.join(", ")}` };
+  if (!("remove_ids" in obj)) return { ok: false, error: "results.remove_ids requis (liste)" };
+  if (!Array.isArray(obj.remove_ids)) return { ok: false, error: "results.remove_ids doit être une liste" };
+  const seen = new Set<string>();
+  for (const raw of obj.remove_ids) {
+    if (typeof raw !== "string" || !UUID.test(raw)) {
+      return { ok: false, error: "results.remove_ids : identifiant invalide (uuid attendu)" };
+    }
+    seen.add(raw);
+  }
+  const deduped = Array.from(seen);
+  if (deduped.length > MAX_REMOVE_IDS) {
+    return { ok: false, error: `results.remove_ids : trop d'éléments (max ${MAX_REMOVE_IDS})` };
+  }
+  return { ok: true, value: deduped };
 }
 
 function validateContact(input: unknown): FieldResult<SchoolPageDraftPayload["contact"]> {
@@ -331,7 +436,7 @@ function validateGalleryShape(input: unknown): FieldResult<string[]> {
   return { ok: true, value: deduped };
 }
 
-const PAYLOAD_KEYS = ["presentation", "contact", "hero_mode", "pricing", "infrastructure", "admissions", "sections", "gallery"] as const;
+const PAYLOAD_KEYS = ["presentation", "contact", "hero_mode", "pricing", "infrastructure", "admissions", "sections", "gallery", "key_numbers", "ranking", "results"] as const;
 
 export async function PATCH(req: NextRequest) {
   const auth = await authorizeSchoolMutation();
@@ -371,6 +476,34 @@ export async function PATCH(req: NextRequest) {
   if ("error" in sections) return NextResponse.json({ error: sections.error }, { status: 400 });
   const removeIds = validateGalleryShape(input.gallery);
   if ("error" in removeIds) return NextResponse.json({ error: removeIds.error }, { status: 400 });
+  const keyNumbers = validateKeyNumbers(input.key_numbers);
+  if ("error" in keyNumbers) return NextResponse.json({ error: keyNumbers.error }, { status: 400 });
+  const ranking = validateRanking(input.ranking);
+  if ("error" in ranking) return NextResponse.json({ error: ranking.error }, { status: 400 });
+  const resultRemoveIds = validateResultsShape(input.results);
+  if ("error" in resultRemoveIds) return NextResponse.json({ error: resultRemoveIds.error }, { status: 400 });
+
+  // results.remove_ids : même garde anti-forgery que gallery.remove_ids —
+  // un id étranger ne doit jamais pouvoir être mis en attente de
+  // suppression via cette route.
+  if (resultRemoveIds.value.length > 0) {
+    const { data: owned, error: ownedError } = await context.supabase
+      .from("school_exam_results")
+      .select("id")
+      .eq("establishment_id", context.establishmentId)
+      .in("id", resultRemoveIds.value);
+    if (ownedError) {
+      return NextResponse.json({ error: `Échec de vérification de results.remove_ids : ${ownedError.message}` }, { status: 500 });
+    }
+    const ownedSet = new Set((owned ?? []).map((r) => r.id as string));
+    const foreign = resultRemoveIds.value.filter((id) => !ownedSet.has(id));
+    if (foreign.length > 0) {
+      return NextResponse.json(
+        { error: `results.remove_ids contient des identifiants qui n'appartiennent pas à cet établissement : ${foreign.join(", ")}` },
+        { status: 404 }
+      );
+    }
+  }
 
   // gallery.remove_ids : vérifier que chaque id appartient réellement à
   // l'établissement actif — un id étranger ne doit jamais pouvoir être mis
@@ -405,6 +538,9 @@ export async function PATCH(req: NextRequest) {
     admissions: admissions.value,
     sections: sections.value,
     gallery: { remove_ids: removeIds.value },
+    key_numbers: keyNumbers.value,
+    ranking: ranking.value,
+    results: { remove_ids: resultRemoveIds.value },
   };
 
   const expectedUpdatedAt = typeof input.expected_updated_at === "string" ? input.expected_updated_at : undefined;

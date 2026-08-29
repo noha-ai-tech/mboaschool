@@ -6,8 +6,19 @@ import type { SchoolPageSectionKey } from "@/lib/schoolPage/sections";
 // les deux ne puissent jamais diverger silencieusement sur la forme du
 // payload. Doit rester en phase avec le commentaire de la colonne
 // school_page_drafts.payload (migration 0026).
+// PUBLIC-SITE-02 — extends presentation with 4 new identity/editorial text
+// fields (motto/history/mission/vision), and adds 2 new domains
+// (key_numbers, results) + 1 new nullable domain (ranking). Every new
+// field follows the exact same Draft/Preview/Publish/Discard lifecycle as
+// the 8 domains already here — never a second mechanism.
 export type SchoolPageDraftPayload = {
-  presentation: { description: string };
+  presentation: {
+    description: string;
+    motto: string | null;
+    history: string | null;
+    mission: string | null;
+    vision: string | null;
+  };
   contact: {
     phone: string | null;
     email: string | null;
@@ -28,6 +39,20 @@ export type SchoolPageDraftPayload = {
   };
   sections: { section_key: SchoolPageSectionKey; position: number; is_visible: boolean }[];
   gallery: { remove_ids: string[] };
+  key_numbers: {
+    founding_year: number | null;
+    student_count: number | null;
+    teacher_count: number | null;
+  };
+  /** null = no ranking configured (never a row of empty fields — see 0035). */
+  ranking: {
+    year: number;
+    rank: string;
+    scope: string;
+    source: string;
+    source_url: string | null;
+  } | null;
+  results: { remove_ids: string[] };
 };
 
 export type SchoolPageDraftRow = {

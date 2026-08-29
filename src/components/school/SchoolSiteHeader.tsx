@@ -25,6 +25,7 @@ export function SchoolSiteHeader({
   activeTab,
   onTabChange,
   phone,
+  sticky = true,
 }: {
   logoUrl: string | null;
   name: string;
@@ -32,6 +33,10 @@ export function SchoolSiteHeader({
   activeTab: MiniSiteTabKey;
   onTabChange: (tab: MiniSiteTabKey) => void;
   phone: string | null;
+  /** PUBLIC-SITE-02 §7 — the CMS Preview stacks its own sticky "draft" banner
+   * above this header; a second `sticky top-0` here would overlap it
+   * instead of stacking. Preview passes `sticky={false}`. */
+  sticky?: boolean;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -41,7 +46,7 @@ export function SchoolSiteHeader({
   }
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-border">
+    <header className={`${sticky ? "sticky top-0" : ""} z-40 bg-white border-b border-border`}>
       <div className="max-w-[1280px] mx-auto px-4 lg:px-6 h-16 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 min-w-0">
           {logoUrl ? (

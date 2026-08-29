@@ -26,10 +26,10 @@ export async function buildLiveSnapshot(
   supabase: SupabaseClient,
   establishmentId: string
 ): Promise<SchoolPageDraftPayload> {
-  const [establishmentRes, feesRes, infraRes, admissionsRes, sectionsRes] = await Promise.all([
+  const [establishmentRes, feesRes, infraRes, admissionsRes, sectionsRes, rankingRes] = await Promise.all([
     supabase
       .from("establishments")
-      .select("description, phone, email, website, address, city, hero_mode")
+      .select("description, motto, history, mission, vision, phone, email, website, address, city, hero_mode, founding_year, student_count, teacher_count")
       .eq("id", establishmentId)
       .single(),
     supabase.from("fees").select(FEE_KEYS.join(", ")).eq("establishment_id", establishmentId).maybeSingle(),
@@ -40,6 +40,15 @@ export async function buildLiveSnapshot(
       .eq("establishment_id", establishmentId)
       .maybeSingle(),
     supabase.from("school_page_sections").select("section_key, position, is_visible").eq("establishment_id", establishmentId),
+    // PUBLIC-SITE-02 — migration 0035, not yet executed: this select will
+    // 500 (relation does not exist) until it is. Same discipline as every
+    // other domain here — no silent fallback that would hide a genuinely
+    // missing migration.
+    supabase
+      .from("school_official_ranking")
+      .select("year, rank, scope, source, source_url")
+      .eq("establishment_id", establishmentId)
+      .maybeSingle(),
   ]);
 
   if (establishmentRes.error) {
@@ -48,13 +57,27 @@ export async function buildLiveSnapshot(
 
   const establishment = establishmentRes.data as {
     description: string | null;
+    motto: string | null;
+    history: string | null;
+    mission: string | null;
+    vision: string | null;
     phone: string | null;
     email: string | null;
     website: string | null;
     address: string | null;
     city: string | null;
     hero_mode: string | null;
+    founding_year: number | null;
+    student_count: number | null;
+    teacher_count: number | null;
   };
+  const ranking = (rankingRes.data ?? null) as {
+    year: number;
+    rank: string;
+    scope: string;
+    source: string;
+    source_url: string | null;
+  } | null;
   const fees = (feesRes.data ?? null) as unknown as Record<string, number | null> | null;
   const infra = (infraRes.data ?? null) as unknown as Record<string, boolean> | null;
   const admissions = (admissionsRes.data ?? null) as {
@@ -80,7 +103,13 @@ export async function buildLiveSnapshot(
   });
 
   return {
-    presentation: { description: establishment.description ?? "" },
+    presentation: {
+      description: establishment.description ?? "",
+      motto: establishment.motto ?? null,
+      history: establishment.history ?? null,
+      mission: establishment.mission ?? null,
+      vision: establishment.vision ?? null,
+    },
     contact: {
       phone: establishment.phone ?? null,
       email: establishment.email ?? null,
@@ -101,5 +130,14 @@ export async function buildLiveSnapshot(
     },
     sections,
     gallery: { remove_ids: [] },
+    key_numbers: {
+      founding_year: establishment.founding_year ?? null,
+      student_count: establishment.student_count ?? null,
+      teacher_count: establishment.teacher_count ?? null,
+    },
+    ranking: ranking
+      ? { year: ranking.year, rank: ranking.rank, scope: ranking.scope, source: ranking.source, source_url: ranking.source_url ?? null }
+      : null,
+    results: { remove_ids: [] },
   };
 }
