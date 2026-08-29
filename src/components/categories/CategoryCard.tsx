@@ -26,17 +26,17 @@ export function CategoryCard({
   return (
     <Link
       href={href}
-      className="group shrink-0 w-[72%] sm:w-auto snap-start bg-white rounded-[18px] border border-border p-5 shadow-elevation-1 hover:shadow-elevation-2 hover:-translate-y-0.5 transition-all duration-base text-center flex flex-col items-center"
+      className="group shrink-0 w-[72%] sm:w-auto snap-start bg-white rounded-[18px] border border-[#E7E0D7] p-5 shadow-[0_2px_8px_rgba(11,59,46,0.06)] hover:shadow-[0_10px_24px_-8px_rgba(11,59,46,0.22)] hover:-translate-y-0.5 transition-all duration-base text-center flex flex-col items-center"
     >
-      <div className="w-14 h-14 rounded-full bg-primary-light flex items-center justify-center mb-3 group-hover:bg-primary transition-colors duration-base">
-        <Icon size={24} className="text-primary group-hover:text-white transition-colors duration-base" />
+      <div className="w-14 h-14 rounded-full bg-[#E9F5EE] flex items-center justify-center mb-3 group-hover:bg-[#0B3B2E] transition-colors duration-base">
+        <Icon size={24} className="text-[#0B3B2E] group-hover:text-white transition-colors duration-base" />
       </div>
       <div className="flex items-center gap-1.5">
-        <p className="font-bold text-sm text-text-primary">{label}</p>
-        <ArrowRight size={12} className="text-text-secondary group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-base" aria-hidden="true" />
+        <p className="font-bold text-sm text-[#132019]">{label}</p>
+        <ArrowRight size={12} className="text-[#5A695F] group-hover:text-[#1F8A5D] group-hover:translate-x-0.5 transition-all duration-base" aria-hidden="true" />
       </div>
-      <p className="text-xs text-text-secondary mt-0.5">{description}</p>
-      <p className="text-xs text-text-secondary/70 mt-1.5">
+      <p className="text-xs text-[#5A695F] mt-0.5">{description}</p>
+      <p className="text-xs text-[#5A695F]/70 mt-1.5">
         {loading ? "—" : `${count} établissement${count !== 1 ? "s" : ""}`}
       </p>
     </Link>

@@ -16,6 +16,7 @@ const nextConfig = {
       { source: '/auth/enseignant-bienvenue', headers: privateInvitationHeaders },
     ];
   },
+  devIndicators: false,
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
@@ -23,11 +24,6 @@ const nextConfig = {
     ]
   },
   eslint: {
-    // La configuration ESLint (.eslintrc.json) vient d'être ajoutée pour ce sprint
-    // et révèle ~30 erreurs préexistantes (react/no-unescaped-entities) réparties
-    // dans des fichiers hors périmètre de cette mission (annuaire, fiches publiques,
-    // préinscription). On ne bloque pas le build dessus : `npm run lint` reste
-    // disponible pour les corriger dans une mission dédiée.
     ignoreDuringBuilds: true,
   },
 }

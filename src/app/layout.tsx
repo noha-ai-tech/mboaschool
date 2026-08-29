@@ -11,7 +11,7 @@ const manrope = Manrope({
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 
 export const viewport: Viewport = {
-  themeColor: "#059669",
+  themeColor: "#0B3B2E",
 };
 
 export const metadata: Metadata = {
@@ -26,11 +26,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
-  icons: {
-    icon: "/branding/favicon.png",
-    shortcut: "/branding/favicon.png",
-    apple: "/branding/favicon.png",
-  },
+  // Icône d'onglet/app : gérée par convention de fichiers Next.js
+  // (src/app/icon.svg pour le favicon, src/app/apple-icon.png pour iOS) —
+  // pas besoin de la déclarer ici, Next.js génère les balises <link> voulues.
   openGraph: {
     type: "website",
     locale: "fr_CM",
