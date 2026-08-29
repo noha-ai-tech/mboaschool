@@ -238,7 +238,10 @@ export default function ModifierMaPagePage() {
   // Actualités CMS-E — mutation réelle immédiate (Mode A), même famille que
   // Galerie/Documents. newsForm sert à la fois à créer (newsEditingId=null)
   // et à éditer (newsEditingId=id de l'annonce en cours d'édition).
-  const [newsForm, setNewsForm] = useState({ title: "", content: "", is_important: false });
+  // PUBLIC-SITE-04 — event_date/event_start_time are optional: null for an
+  // ordinary announcement, populated for a real calendar event. Empty
+  // string in the form maps to null on submit, never an empty-string date.
+  const [newsForm, setNewsForm] = useState({ title: "", content: "", is_important: false, event_date: "", event_start_time: "" });
   const [newsEditingId, setNewsEditingId] = useState<string | null>(null);
   const [newsSaving, setNewsSaving] = useState(false);
   const [newsDeletingId, setNewsDeletingId] = useState<string | null>(null);
@@ -1106,12 +1109,18 @@ export default function ModifierMaPagePage() {
   // jamais establishment_id envoyé : résolu côté serveur.
   function startNewsEdit(item: any) {
     setNewsEditingId(item.id);
-    setNewsForm({ title: item.title ?? "", content: item.content ?? "", is_important: !!item.is_important });
+    setNewsForm({
+      title: item.title ?? "",
+      content: item.content ?? "",
+      is_important: !!item.is_important,
+      event_date: item.event_date ?? "",
+      event_start_time: item.event_start_time ? item.event_start_time.slice(0, 5) : "",
+    });
     setNewsError(null);
   }
   function cancelNewsEdit() {
     setNewsEditingId(null);
-    setNewsForm({ title: "", content: "", is_important: false });
+    setNewsForm({ title: "", content: "", is_important: false, event_date: "", event_start_time: "" });
     setNewsError(null);
   }
 
@@ -1119,7 +1128,13 @@ export default function ModifierMaPagePage() {
     setNewsError(null);
     setNewsSaving(true);
     try {
-      const payload: any = { title: newsForm.title, content: newsForm.content, is_important: newsForm.is_important };
+      const payload: any = {
+        title: newsForm.title,
+        content: newsForm.content,
+        is_important: newsForm.is_important,
+        event_date: newsForm.event_date || null,
+        event_start_time: newsForm.event_date && newsForm.event_start_time ? newsForm.event_start_time : null,
+      };
       if (newsEditingId) payload.id = newsEditingId;
       const res = await fetch("/api/school-page/news", {
         method: newsEditingId ? "PATCH" : "POST",
@@ -1779,6 +1794,30 @@ export default function ModifierMaPagePage() {
               />
               Marquer comme important
             </label>
+
+            {/* PUBLIC-SITE-04 — optionnel : laisser vide pour une simple
+                annonce, renseigner pour un véritable événement daté. */}
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              <div>
+                <label className="block text-xs text-text-secondary mb-1">Date de l&apos;événement (optionnel)</label>
+                <input
+                  type="date"
+                  value={newsForm.event_date}
+                  onChange={(e) => setNewsForm((p) => ({ ...p, event_date: e.target.value }))}
+                  className="w-full bg-surface border border-border rounded-[10px] px-3 py-2 text-sm outline-none focus:border-primary"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-text-secondary mb-1">Heure (optionnel)</label>
+                <input
+                  type="time"
+                  value={newsForm.event_start_time}
+                  onChange={(e) => setNewsForm((p) => ({ ...p, event_start_time: e.target.value }))}
+                  disabled={!newsForm.event_date}
+                  className="w-full bg-surface border border-border rounded-[10px] px-3 py-2 text-sm outline-none focus:border-primary disabled:opacity-50"
+                />
+              </div>
+            </div>
           </div>
 
           {newsError && <p className="text-sm text-red-600 mb-3">{newsError}</p>}

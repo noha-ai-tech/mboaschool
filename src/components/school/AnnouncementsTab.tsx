@@ -10,7 +10,25 @@ type SchoolAnnouncement = {
   content: string;
   is_important: boolean | null;
   created_at: string;
+  event_date: string | null;
+  event_start_time: string | null;
 };
+
+// PUBLIC-SITE-04 — `event_date` is a Postgres `date` ("YYYY-MM-DD"), never
+// a timestamp. `new Date("2026-09-12")` parses as UTC midnight, which
+// `.getDate()`/`.toLocaleDateString()` can then render as the PREVIOUS day
+// in any timezone behind UTC — parsing the components manually into a
+// local-time Date avoids that off-by-one.
+function parseDateOnly(iso: string): Date {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+
+// The real event date when one was entered (a genuine EVENT); otherwise
+// created_at, unchanged fallback behavior for an ordinary ANNOUNCEMENT.
+function displayDate(a: SchoolAnnouncement): Date {
+  return a.event_date ? parseDateOnly(a.event_date) : new Date(a.created_at);
+}
 
 export function AnnouncementsTab({
   schoolId,
@@ -62,7 +80,7 @@ export function AnnouncementsTab({
     return (
       <div className="flex gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {visible.map((a) => {
-          const date = new Date(a.created_at);
+          const date = displayDate(a);
           return (
             <div key={a.id} className="w-52 shrink-0 bg-white border border-border rounded-card p-4">
               <div className="inline-flex flex-col items-center justify-center w-11 h-11 rounded-lg bg-primary-light text-primary mb-3">
@@ -95,7 +113,8 @@ export function AnnouncementsTab({
                 </span>
               )}
               <span className="text-[10px] text-text-secondary font-medium">
-                {new Date(a.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
+                {displayDate(a).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
+                {a.event_date && a.event_start_time ? ` à ${a.event_start_time.slice(0, 5)}` : ""}
               </span>
             </div>
             <h3 className="font-bold text-text-primary mb-1">{a.title}</h3>
