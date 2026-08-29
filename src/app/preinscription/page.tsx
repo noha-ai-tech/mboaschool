@@ -7,8 +7,10 @@ import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { dispatchAdmissionNotification } from "@/lib/notifications/admissionNotifications";
 import { ArrowLeft, ArrowRight, CheckCircle2, Copy, Check, MapPin } from "lucide-react";
-import { AuthHeader } from "@/components/layout/AuthHeader";
+import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
+import { AnnouncementTicker } from "@/components/hero/AnnouncementTicker";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { useSiteTickerItems } from "@/lib/useSiteTickerItems";
 import { joinWithSeparator } from "@/lib/formatSchoolLocation";
 import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
 
@@ -43,6 +45,7 @@ const EMPTY_FORM = {
 };
 
 function PreinscriptionForm() {
+  const tickerItems = useSiteTickerItems();
   const searchParams = useSearchParams();
   const preselectedId = searchParams.get("ecole") ?? "";
 
@@ -179,7 +182,9 @@ function PreinscriptionForm() {
   if (success) {
     return (
       <div className="min-h-screen bg-[#ECECEA] flex flex-col">
-        <AuthHeader />
+        <SiteHeader />
+        <SiteHeaderSpacer />
+        <AnnouncementTicker items={tickerItems} />
         <div className="flex-1 flex items-center justify-center px-6 py-12">
           <div className="max-w-md w-full text-center bg-white rounded-[24px] shadow-elevation-2 p-8">
             <div className="w-14 h-14 bg-primary-light rounded-full flex items-center justify-center mx-auto mb-5">
@@ -249,7 +254,9 @@ function PreinscriptionForm() {
 
   return (
     <div className="min-h-screen bg-[#ECECEA] flex flex-col">
-      <AuthHeader />
+      <SiteHeader />
+      <SiteHeaderSpacer />
+      <AnnouncementTicker items={tickerItems} />
 
       <div className="flex-1 px-6 py-10">
         <div className="max-w-[720px] mx-auto">

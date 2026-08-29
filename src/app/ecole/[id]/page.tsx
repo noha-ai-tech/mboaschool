@@ -15,7 +15,9 @@ import {
   Navigation as NavigationIcon,
 } from "lucide-react";
 import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
+import { AnnouncementTicker } from "@/components/hero/AnnouncementTicker";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { useSiteTickerItems } from "@/lib/useSiteTickerItems";
 import { SchoolHeroCarousel } from "@/components/school/SchoolHeroCarousel";
 import { getPrimaryPublicBadge, resolveEstablishmentTrustState, trustInputFromEstablishmentRow } from "@/lib/trust/resolveEstablishmentTrustState";
 import type { AdmissionsConfig } from "@/components/school/ParentTab";
@@ -44,6 +46,7 @@ import { buildSchoolPageSections, type SchoolPageViewModel } from "@/components/
 export default function SchoolPage() {
   const params = useParams();
   const id = params.id as string;
+  const tickerItems = useSiteTickerItems();
 
   const [school, setSchool]     = useState<any>(null);
   const [fees, setFees]         = useState<any | null>(null);
@@ -101,6 +104,7 @@ export default function SchoolPage() {
       <div className="min-h-screen bg-[#ECECEA]">
         <SiteHeader />
         <SiteHeaderSpacer />
+        <AnnouncementTicker items={tickerItems} />
         <div className="h-[500px] bg-accent animate-pulse" />
         <div className="max-w-[1520px] mx-auto px-[18px] py-10 grid lg:grid-cols-[1fr_300px] gap-8">
           <div className="space-y-4">
@@ -118,6 +122,7 @@ export default function SchoolPage() {
       <div className="min-h-screen bg-[#ECECEA] flex flex-col">
         <SiteHeader />
         <SiteHeaderSpacer />
+        <AnnouncementTicker items={tickerItems} />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <School size={40} className="mx-auto text-text-secondary/30 mb-4" />
@@ -190,6 +195,8 @@ export default function SchoolPage() {
   return (
     <div className="min-h-screen bg-[#ECECEA]">
       <SiteHeader />
+      <SiteHeaderSpacer />
+      <AnnouncementTicker items={tickerItems} />
 
       <SchoolHeroCarousel
         slides={heroSlides}

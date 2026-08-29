@@ -1,0 +1,6 @@
+<svg width="64" height="64" viewBox="-8 -6 96 130" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="École237">
+  <path d="M40 0 C16 0 -4 19 -4 44 C-4 78 40 116 40 116 C40 116 84 78 84 44 C84 19 64 0 40 0 Z" fill="#1F8A5D"/>
+  <circle cx="40" cy="44" r="28" fill="#ffffff"/>
+  <path d="M27 47 L53 47 Q53 37 40 37 Q28 37 28 49 Q28 61 41 61 Q49 61 53 55" fill="none" stroke="#1F8A5D" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M34 28 L46 28" stroke="#F2AE1F" stroke-width="6" stroke-linecap="round"/>
+</svg>

@@ -34,7 +34,7 @@ export type FeaturedSchool = {
 // qualité inégale), ni un aplat gris générique. Palette qui tourne par
 // position dans le carrousel, uniquement décorative (ne prétend rien sur
 // l'établissement) — mêmes teintes que la maquette de référence.
-const THUMBNAIL_TONES: [string, string][] = [
+export const THUMBNAIL_TONES: [string, string][] = [
   ["#2E7A5A", "#0B3B2E"],
   ["#3C6E8F", "#0B3B2E"],
   ["#8C6A2E", "#0B3B2E"],

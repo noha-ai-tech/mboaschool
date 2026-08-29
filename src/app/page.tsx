@@ -26,6 +26,7 @@ import { supabase } from "@/lib/supabase";
 import { Logo } from "@/components/branding/Logo";
 import { HeroSearch } from "@/components/hero/HeroSearch";
 import { HeroPhotoCard, type HeroPhoto } from "@/components/hero/HeroPhotoCard";
+import { HERO_PHOTOS } from "@/lib/heroPhotos";
 import { AnnouncementTicker, type TickerItem } from "@/components/hero/AnnouncementTicker";
 import { CategoryCard } from "@/components/categories/CategoryCard";
 import { FeaturedSchoolsCarousel } from "@/components/schools/FeaturedSchoolsCarousel";
@@ -53,13 +54,6 @@ const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
   display: "swap",
 });
-
-// Photos réelles fournies pour le panneau Hero (déposées dans public/hero/).
-const HERO_PHOTOS: HeroPhoto[] = [
-  { id: "hero-1", url: "/hero/ecole%20vu%20de%20haut.png" },
-  { id: "hero-2", url: "/hero/cours%20ecole.png" },
-  { id: "hero-3", url: "/hero/lab.png" },
-];
 
 // Photo réelle pour la section "Pour les parents" — jamais une illustration
 // (voir references/anti-ai-tells.md du skill de design : un pictogramme
