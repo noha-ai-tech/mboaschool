@@ -4,42 +4,37 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import {
-  Phone,
-  Globe,
-  MessageCircle,
-  ClipboardList,
-  School,
-  UserCheck,
-  Share2,
-  Navigation as NavigationIcon,
-} from "lucide-react";
-import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
-import { SiteFooter } from "@/components/layout/SiteFooter";
-import { SchoolHeroCarousel } from "@/components/school/SchoolHeroCarousel";
+import { School, ClipboardList, Phone, Mail, MapPin, Globe } from "lucide-react";
+import { SchoolSiteHeader, type MiniSiteTabKey } from "@/components/school/SchoolSiteHeader";
+import { SchoolSiteFooter } from "@/components/school/SchoolSiteFooter";
+import { MiniSiteHero } from "@/components/school/MiniSiteHero";
+import { MiniSiteKeyNumbers } from "@/components/school/MiniSiteKeyNumbers";
+import { MiniSiteAboutPreview } from "@/components/school/MiniSiteAboutPreview";
+import { MiniSiteResultsPreview } from "@/components/school/MiniSiteResultsPreview";
+import { MiniSiteOfficialLinks } from "@/components/school/MiniSiteOfficialLinks";
+import { MiniSiteGalleryPreview } from "@/components/school/MiniSiteGalleryPreview";
+import { GeneralTab, FEE_COLS, INFRA_LABELS } from "@/components/school/GeneralTab";
+import { SchoolGallery } from "@/components/school/SchoolGallery";
+import { DocumentsTab } from "@/components/school/DocumentsTab";
+import { AnnouncementsTab } from "@/components/school/AnnouncementsTab";
+import { ParentTab, type AdmissionsConfig } from "@/components/school/ParentTab";
+import { ContactRow } from "@/components/school/ContactRow";
 import { getPrimaryPublicBadge, resolveEstablishmentTrustState, trustInputFromEstablishmentRow } from "@/lib/trust/resolveEstablishmentTrustState";
-import type { AdmissionsConfig } from "@/components/school/ParentTab";
+import { computeAllHeroSlides, resolveHeroSlides } from "@/lib/school/heroMode";
 import { resolveSectionConfig } from "@/lib/schoolPage/sections";
-import { buildSchoolPageSections, type SchoolPageViewModel } from "@/components/school/SchoolPageSections";
+import { categories } from "@/lib/categories";
 
-// SYNC-03 — conflict between origin/main (REGISTRY-NATIONAL-A.1's central
-// trust-badge resolver, kills the ambiguous raw "Vérifié" boolean) and this
-// branch's CMS-F.4 shared-renderer extraction. Combined both, same
-// reasoning as origin/main's own earlier equivalent reconciliation
-// (reports/release/release-integration-a-conflict-resolution.csv): neither
-// intent required removing the other's work. trustBadge/resolveEstablishment
-// TrustState stay exactly as Registry wrote them; the individual
-// GeneralTab/DocumentsTab/AnnouncementsTab/ParentTab/ContactRow/SchoolGallery
-// imports from main's older version are dropped as genuinely unused now —
-// buildSchoolPageSections (CMS-F.4) already renders all of them internally.
-//
-// CMS-F.4 — la logique de rendu des sections (ordre, règles "section
-// vide", contenu de chaque bloc) vit désormais dans
-// src/components/school/SchoolPageSections.tsx, PARTAGÉE avec l'Aperçu du
-// brouillon (src/app/dashboard/ecole/etablissement/preview/page.tsx) —
-// cette page ne fait plus que fournir les données LIVE et le viewmodel.
-// CMS-C §10 : l'ordre par défaut (quand school_page_sections est vide/
-// partielle) reste celui de src/lib/schoolPage/sections.ts, inchangé.
+// PUBLIC-SITE-01 — the public school page becomes a school-specific
+// mini-site (§2): the Écoles237 SiteHeader/SiteFooter/directory chrome are
+// gone from this route, replaced by SchoolSiteHeader/SchoolSiteFooter, and
+// content is organized into 5 tabs (§3) instead of one long scroll. This is
+// an EXTENSION of the existing rendering, not a CMS rewrite (§10) — the
+// underlying data fetch (live tables only, never school_page_drafts) and
+// the section-visibility rules from school_page_sections are unchanged;
+// only the shell and information architecture are new. The Draft/Preview/
+// Publish/Discard editor and src/app/dashboard/ecole/etablissement/preview
+// still use the previous single-page SchoolPageSections renderer,
+// deliberately untouched (§10/§16 — do not rebuild the CMS).
 
 export default function SchoolPage() {
   const params = useParams();
@@ -52,8 +47,9 @@ export default function SchoolPage() {
   const [docsList, setDocsList] = useState<any[]>([]);
   const [sectionRows, setSectionRows] = useState<{ section_key: string; position: number; is_visible: boolean }[]>([]);
   const [admissionsConfig, setAdmissionsConfig] = useState<AdmissionsConfig | null>(null);
-  const [newsCount, setNewsCount] = useState<number | null>(null); // null = pas encore chargé, jamais masqué avant de savoir
+  const [newsCount, setNewsCount] = useState<number | null>(null);
   const [loading, setLoading]   = useState(true);
+  const [activeTab, setActiveTab] = useState<MiniSiteTabKey>("accueil");
 
   useEffect(() => {
     async function load() {
@@ -69,18 +65,12 @@ export default function SchoolPage() {
         supabase.from("establishments").select("*").eq("id", id).single(),
         supabase.from("fees").select("*").eq("establishment_id", id).maybeSingle(),
         supabase.from("infrastructures").select("*").eq("establishment_id", id).maybeSingle(),
-        // CMS-F.6 — filtre status='live' explicite côté application, en
-        // défense en profondeur AVEC la policy RLS publique (migration
-        // 0029, PRÉPARÉE NON EXÉCUTÉE) : tant que 0029 n'est pas exécutée,
-        // ce filtre applicatif reste la SEULE protection empêchant une
-        // photo draft_pending_add d'apparaître publiquement.
+        // CMS-F.6 — filtre status='live' explicite, en défense en profondeur
+        // avec la policy RLS publique (migration 0032) : jamais une photo
+        // draft_pending_add exposée publiquement (PUBLIC-SITE-01 §14).
         supabase.from("school_images").select("*").eq("establishment_id", id).eq("status", "live").order("created_at", { ascending: false }),
         supabase.from("school_documents").select("*").eq("establishment_id", id).order("created_at", { ascending: false }),
         supabase.from("school_page_sections").select("section_key, position, is_visible").eq("establishment_id", id),
-        // admissions_config (migration 0025, préparée mais NON exécutée) —
-        // 0 ligne = comportement actuel inchangé (mission CMS-D.1 §6), pas
-        // de traitement spécial requis : data reste null, ParentTab garde
-        // son comportement par défaut.
         supabase.from("admissions_config").select("is_open, levels, conditions, required_documents, period_start, period_end, additional_info").eq("establishment_id", id).maybeSingle(),
       ]);
 
@@ -98,15 +88,11 @@ export default function SchoolPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#ECECEA]">
-        <SiteHeader />
-        <SiteHeaderSpacer />
-        <div className="h-[500px] bg-accent animate-pulse" />
-        <div className="max-w-[1520px] mx-auto px-[18px] py-10 grid lg:grid-cols-[1fr_300px] gap-8">
-          <div className="space-y-4">
-            <div className="h-10 w-48 bg-white rounded" />
-            <div className="h-64 bg-white border border-border rounded-card" />
-          </div>
+      <div className="min-h-screen bg-[#F4F4F2]">
+        <div className="h-16 bg-white border-b border-border" />
+        <div className="h-[440px] bg-accent animate-pulse" />
+        <div className="max-w-[1280px] mx-auto px-4 py-10 space-y-4">
+          <div className="h-10 w-48 bg-white rounded" />
           <div className="h-40 bg-white border border-border rounded-card" />
         </div>
       </div>
@@ -115,191 +101,257 @@ export default function SchoolPage() {
 
   if (!school) {
     return (
-      <div className="min-h-screen bg-[#ECECEA] flex flex-col">
-        <SiteHeader />
-        <SiteHeaderSpacer />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <School size={40} className="mx-auto text-text-secondary/30 mb-4" />
-            <p className="text-text-secondary font-semibold">Établissement introuvable.</p>
-            <Link href="/" className="text-sm text-primary font-semibold mt-3 block">← Retour à l&apos;annuaire</Link>
-          </div>
+      <div className="min-h-screen bg-[#F4F4F2] flex items-center justify-center">
+        <div className="text-center">
+          <School size={40} className="mx-auto text-text-secondary/30 mb-4" />
+          <p className="text-text-secondary font-semibold">Établissement introuvable.</p>
+          <Link href="/" className="text-sm text-primary font-semibold mt-3 block">← Retour à l&apos;annuaire</Link>
         </div>
-        <SiteFooter />
       </div>
     );
   }
 
-  const isPremium = school.subscription_plan === "premium";
-  // SPRINT REGISTRY-NATIONAL-A.1 — résolveur central unique (src/lib/trust).
-  // Contexte public (client anon) : jamais d'accès à
-  // establishment_registry_identifiers (RLS platform_admin only), donc
-  // official_verification ne peut jamais dépasser OFFICIAL_SOURCE_FOUND ici
-  // — c'est un sous-ensemble sûr et conservateur du calcul complet, jamais
-  // un badge "officiellement vérifié" inventé côté client.
-  const trustState = resolveEstablishmentTrustState(trustInputFromEstablishmentRow(school));
-  const trustBadge = getPrimaryPublicBadge(trustState);
+  const sectionConfig = resolveSectionConfig(sectionRows);
+  const isVisible = (key: string) => sectionConfig.find((c) => c.key === key)?.is_visible ?? true;
+
   const preinscriptionHref = `/preinscription?ecole=${school.id}`;
   const hasLocation = !!(school.latitude && school.longitude);
   const mapsHref = hasLocation ? `https://www.google.com/maps?q=${school.latitude},${school.longitude}` : null;
+  const address = [school.address, school.neighborhood, school.city].filter(Boolean).join(", ");
+  const categoryLabel = categories.find((c) => c.key === school.main_category)?.label ?? null;
+  const isPremium = school.subscription_plan === "premium";
+  // SPRINT REGISTRY-NATIONAL-A.1 — même résolveur central que l'ancienne
+  // fiche (src/lib/trust) ; PUBLIC-SITE-01 ne retire jamais un signal de
+  // confiance déjà affiché, seulement le contexte visuel autour.
+  const trustState = resolveEstablishmentTrustState(trustInputFromEstablishmentRow(school));
+  const trustBadge = getPrimaryPublicBadge(trustState);
 
-  // CMS-C §10/§11/§12 — configuration réelle (school_page_sections), avec
-  // repli sur l'ordre canonique par défaut quand l'école n'a encore rien
-  // personnalisé (aucune ligne en base). is_visible=false ne supprime
-  // jamais les données sous-jacentes, seulement leur rendu ici (§11).
-  const sectionConfig = resolveSectionConfig(sectionRows);
+  const allHeroSlides = computeAllHeroSlides(images.map((img) => ({ id: img.id, url: img.url })), school.cover_image_url);
+  const heroSlides = resolveHeroSlides(allHeroSlides, school.hero_mode ?? "carousel");
 
-  // CMS-F.4 — viewmodel LIVE (toutes les valeurs viennent directement de
-  // `school`, jamais du brouillon : la fiche publique ne lit jamais
-  // school_page_drafts, voir l'audit du rapport).
-  const viewModel: SchoolPageViewModel = {
-    id: school.id,
-    name: school.name,
-    main_category: school.main_category,
-    city: school.city,
-    neighborhood: school.neighborhood,
-    is_verified: !!school.is_verified,
-    subscription_plan: school.subscription_plan,
-    cover_image_url: school.cover_image_url,
-    hero_mode: school.hero_mode ?? null,
-    description: school.description,
-    phone: school.phone,
-    email: school.email,
-    website: school.website,
-    address: school.address,
-    latitude: school.latitude,
-    longitude: school.longitude,
-  };
+  const admissionsOpen = admissionsConfig?.is_open ?? true;
+  const admissionYearLabel = admissionYearLabelFrom(admissionsConfig?.period_start, admissionsConfig?.period_end);
 
-  const { visibleSections, sectionNav, heroSlides } = buildSchoolPageSections({
-    school: viewModel,
-    fees,
-    infra,
-    images,
-    docsList,
-    admissionsConfig,
-    sectionConfig,
-    newsCount,
-    onNewsCountChange: setNewsCount,
-  });
+  const feeRows = fees ? FEE_COLS.filter((f) => fees[f.key] && Number(fees[f.key]) > 0) : [];
+  const infraItems = infra ? Object.keys(INFRA_LABELS).filter((k) => infra?.[k] === true) : [];
 
-  function scrollToId(anchor: string) {
-    document.getElementById(anchor)?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
+  const showPresentation = isVisible("presentation");
+  const showInfrastructure = isVisible("infrastructure") && infraItems.length > 0;
+  const showContact = isVisible("contact");
+  const showPricing = isVisible("pricing") && feeRows.length > 0;
+  const showDocuments = isVisible("documents") && docsList.length > 0;
+  const showGallery = isVisible("gallery") && images.length > 0;
+  const showNews = isVisible("news") && (newsCount === null || newsCount > 0);
+  const showAdmissions = isVisible("admissions");
 
   return (
-    <div className="min-h-screen bg-[#ECECEA]">
-      <SiteHeader />
-
-      <SchoolHeroCarousel
-        slides={heroSlides}
+    <div className="min-h-screen bg-[#F4F4F2]">
+      <SchoolSiteHeader
+        logoUrl={school.logo_url}
         name={school.name}
-        city={school.city}
-        neighborhood={school.neighborhood}
-        category={school.main_category}
-        trustBadge={trustBadge}
-        premium={isPremium}
-        preinscriptionHref={preinscriptionHref}
-        backHref="/"
-        backLabel="Annuaire"
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        phone={school.phone}
       />
 
-      {/* Actions rapides — uniquement celles réellement disponibles */}
-      <div className="bg-white border-b border-border">
-        <div className="max-w-[1520px] mx-auto px-[18px] py-3 flex items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <QuickAction href={preinscriptionHref} icon={ClipboardList} label="Préinscription" primary />
-          {school.phone && <QuickAction href={`tel:${school.phone}`} icon={Phone} label="Téléphone" />}
-          {school.website && <QuickAction href={school.website} icon={Globe} label="Site web" external />}
-          {mapsHref && <QuickAction href={mapsHref} icon={NavigationIcon} label="Itinéraire" external />}
-          <ShareAction schoolName={school.name} />
-        </div>
-      </div>
+      {activeTab === "accueil" && (
+        <>
+          <MiniSiteHero
+            slides={heroSlides}
+            name={school.name}
+            description={school.description}
+            admissionsOpen={showAdmissions && admissionsOpen}
+            admissionYearLabel={admissionYearLabel}
+            preinscriptionHref={preinscriptionHref}
+            phone={school.phone}
+            whatsapp={school.whatsapp}
+            mapsHref={mapsHref}
+            website={school.website}
+            onDiscoverClick={() => setActiveTab("etablissement")}
+            trustBadge={trustBadge}
+            premium={isPremium}
+          />
 
-      {/* Navigation sticky — ancres, tout reste sur la même page */}
-      <div className="border-b border-border bg-white sticky top-0 z-30 overflow-x-auto">
-        <div className="max-w-[1520px] mx-auto px-[18px]">
-          <div className="flex gap-0 whitespace-nowrap">
-            {sectionNav.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToId(item.id)}
-                className="px-5 py-3.5 text-sm font-semibold border-b-2 border-transparent text-text-secondary hover:text-text-primary hover:border-border transition-colors duration-fast shrink-0"
-              >
-                {item.label}
-              </button>
-            ))}
+          <div className="max-w-[1280px] mx-auto px-4 lg:px-6 py-8 space-y-6">
+            <MiniSiteKeyNumbers />
+
+            <MiniSiteAboutPreview
+              description={school.description}
+              categoryLabel={categoryLabel}
+              city={school.city}
+              neighborhood={school.neighborhood}
+              imageUrl={school.cover_image_url}
+              onReadMore={() => setActiveTab("etablissement")}
+            />
+
+            {showAdmissions && (
+              <MiniSiteResultsPreview category={school.main_category} results={[]} ranking={null} />
+            )}
+
+            {showNews && (
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="font-bold text-sm">Événements à venir</h2>
+                  <button onClick={() => setActiveTab("vie")} className="text-xs font-bold text-primary hover:opacity-80 transition-opacity duration-base">
+                    Tout voir →
+                  </button>
+                </div>
+                <AnnouncementsTab schoolId={school.id} variant="compact" limit={3} onCountChange={setNewsCount} />
+              </div>
+            )}
+
+            <MiniSiteOfficialLinks category={school.main_category} website={school.website} />
+
+            {showGallery && (
+              <MiniSiteGalleryPreview
+                images={images.map((img) => ({ id: img.id, url: img.url, caption: img.caption }))}
+                onSeeAllClick={() => setActiveTab("galerie")}
+              />
+            )}
           </div>
-        </div>
-      </div>
+        </>
+      )}
 
-      <div className="max-w-[1520px] mx-auto px-[18px] py-8 grid lg:grid-cols-[1fr_300px] gap-8 items-start">
-
-        <div className="space-y-5 pb-16 lg:pb-0">
-          {visibleSections.map((c) => (
-            <div key={c.key}>{c.node}</div>
-          ))}
-        </div>
-
-        {/* Sidebar */}
-        <aside className="space-y-4 lg:sticky lg:top-[73px]">
-          <div className="bg-white border border-border rounded-card p-5">
-            <p className="text-xs font-bold tracking-widest uppercase text-text-secondary mb-4">Intéressé ?</p>
-            <Link
-              href={preinscriptionHref}
-              className="block w-full text-center bg-gradient-to-r from-primary to-primary-dark text-white py-3 rounded-card text-sm font-bold hover:shadow-elevation-1 transition-all duration-base"
-            >
-              Préinscrire mon enfant
-            </Link>
-            <p className="text-[11px] text-text-secondary text-center mt-2">Gratuit · Sans engagement</p>
+      {activeTab === "etablissement" && (
+        <TabShell>
+          <ContextMenu
+            items={[
+              showPresentation ? { id: "presentation", label: "Présentation" } : null,
+              showInfrastructure ? { id: "infrastructures", label: "Infrastructures" } : null,
+              showContact ? { id: "contact", label: "Contact" } : null,
+            ]}
+          />
+          <div className="flex-1 space-y-5 min-w-0">
+            {(showPresentation || showInfrastructure) && (
+              <GeneralTab
+                school={school}
+                fees={fees}
+                infra={infra}
+                sections={{ presentation: showPresentation, tarifs: false, infrastructures: showInfrastructure }}
+              />
+            )}
+            {showContact && (
+              <div id="contact" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
+                <h2 className="font-bold text-sm mb-4">Contact</h2>
+                {!school.phone && !school.email && !address ? (
+                  <p className="text-sm text-text-secondary">Coordonnées non renseignées par l&apos;établissement.</p>
+                ) : (
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {school.phone && <ContactRow icon={Phone} label="Téléphone" value={school.phone} href={`tel:${school.phone}`} />}
+                    {school.email && <ContactRow icon={Mail} label="Email" value={school.email} href={`mailto:${school.email}`} />}
+                    {address && <ContactRow icon={MapPin} label="Adresse" value={address} href={mapsHref ?? undefined} />}
+                    {school.website && <ContactRow icon={Globe} label="Site web" value={school.website} href={school.website} />}
+                  </div>
+                )}
+                {!school.owner_id && (
+                  <p className="text-xs text-text-secondary/70 mt-4 pt-4 border-t border-border">
+                    Vous représentez cet établissement ?{" "}
+                    <Link href={`/revendiquer/${school.id}`} className="font-semibold text-text-secondary hover:text-primary underline">
+                      Revendiquez cette fiche
+                    </Link>
+                  </p>
+                )}
+              </div>
+            )}
+            {!showPresentation && !showInfrastructure && !showContact && <EmptyTabNote />}
           </div>
+        </TabShell>
+      )}
 
-          {school.phone && (
-            <div className="bg-white border border-border rounded-card p-5">
-              <p className="text-xs font-bold tracking-widest uppercase text-text-secondary mb-4">Contact rapide</p>
-              <p className="text-sm font-semibold text-text-primary mb-3 flex items-center gap-2">
-                <Phone size={13} className="text-text-secondary" />
-                {school.phone}
-              </p>
-              <a
-                href={`https://wa.me/${school.phone?.replace(/\D/g, "")}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full border border-text-primary text-text-primary py-2.5 rounded-card text-sm font-bold hover:bg-text-primary hover:text-white transition-colors duration-base"
-              >
-                <MessageCircle size={14} />
-                WhatsApp
-              </a>
+      {activeTab === "admissions" && (
+        <TabShell>
+          <ContextMenu
+            items={[
+              showAdmissions ? { id: "admissions", label: "Admissions" } : null,
+              showPricing ? { id: "tarifs", label: "Tarifs" } : null,
+              showDocuments ? { id: "documents-admissions", label: "Documents" } : null,
+            ]}
+          />
+          <div className="flex-1 space-y-5 min-w-0">
+            {showAdmissions && <ParentTab schoolId={school.id} admissionsConfig={admissionsConfig} />}
+            {showPricing && (
+              <GeneralTab school={school} fees={fees} infra={infra} sections={{ presentation: false, tarifs: true, infrastructures: false }} />
+            )}
+            {showDocuments && (
+              <div id="documents-admissions" className="scroll-mt-20">
+                <h2 className="font-bold text-sm mb-3 px-1">Documents ({docsList.length})</h2>
+                <DocumentsTab docs={docsList} />
+              </div>
+            )}
+            {!showAdmissions && !showPricing && !showDocuments && <EmptyTabNote />}
+          </div>
+        </TabShell>
+      )}
+
+      {activeTab === "vie" && (
+        <TabShell>
+          <div className="flex-1 space-y-5 min-w-0">
+            <MiniSiteResultsPreview category={school.main_category} results={[]} ranking={null} />
+            {showNews ? (
+              <div>
+                <h2 className="font-bold text-sm mb-3 px-1">Actualités & événements</h2>
+                <AnnouncementsTab schoolId={school.id} onCountChange={setNewsCount} />
+              </div>
+            ) : (
+              <EmptyTabNote />
+            )}
+          </div>
+        </TabShell>
+      )}
+
+      {activeTab === "galerie" && (
+        <TabShell>
+          <ContextMenu
+            items={[
+              showGallery ? { id: "galerie", label: "Galerie" } : null,
+              showNews ? { id: "actualites", label: "Actualités" } : null,
+              showDocuments ? { id: "documents", label: "Documents" } : null,
+              { id: "ressources", label: "Ressources utiles" },
+            ]}
+          />
+          <div className="flex-1 space-y-5 min-w-0">
+            {showGallery && (
+              <div id="galerie" className="scroll-mt-20">
+                <h2 className="font-bold text-sm mb-3 px-1">Galerie ({images.length})</h2>
+                <SchoolGallery images={images.map((img) => ({ id: img.id, url: img.url, caption: img.caption }))} />
+              </div>
+            )}
+            {showNews && (
+              <div id="actualites" className="scroll-mt-20">
+                <h2 className="font-bold text-sm mb-3 px-1">Actualités</h2>
+                <AnnouncementsTab schoolId={school.id} onCountChange={setNewsCount} />
+              </div>
+            )}
+            {showDocuments && (
+              <div id="documents" className="scroll-mt-20">
+                <h2 className="font-bold text-sm mb-3 px-1">Documents ({docsList.length})</h2>
+                <DocumentsTab docs={docsList} />
+              </div>
+            )}
+            <div id="ressources" className="scroll-mt-20">
+              <MiniSiteOfficialLinks category={school.main_category} website={school.website} />
             </div>
-          )}
+          </div>
+        </TabShell>
+      )}
 
-          {!school.owner_id && (
-            <div className="bg-white border border-border rounded-card p-5">
-              <p className="text-xs font-bold tracking-widest uppercase text-text-secondary mb-3 flex items-center gap-2">
-                <UserCheck size={12} /> Vous représentez cet établissement ?
-              </p>
-              <p className="text-xs text-text-secondary mb-3 leading-relaxed">
-                Revendiquez cette page pour la gérer vous-même : modifier les informations, publier des photos,
-                traiter les préinscriptions.
-              </p>
-              <Link
-                href={`/revendiquer/${school.id}`}
-                className="block w-full text-center border border-text-primary text-text-primary py-2.5 rounded-card text-sm font-bold hover:bg-text-primary hover:text-white transition-colors duration-base"
-              >
-                C&apos;est mon établissement
-              </Link>
-            </div>
-          )}
-        </aside>
-      </div>
+      <SchoolSiteFooter
+        name={school.name}
+        description={school.description}
+        address={address || null}
+        phone={school.phone}
+        whatsapp={school.whatsapp}
+        email={school.email}
+        website={school.website}
+      />
 
-      <SiteFooter />
-
-      {/* CTA sticky mobile */}
+      {/* CTA sticky mobile — équivalent du bandeau existant, conservé (§4A CTA toujours atteignable) */}
       <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-border p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
         <Link
           href={preinscriptionHref}
           className="block w-full text-center bg-gradient-to-r from-primary to-primary-dark text-white py-3 rounded-card text-sm font-bold"
         >
+          <ClipboardList size={15} className="inline mr-2 -mt-0.5" />
           Préinscrire mon enfant
         </Link>
       </div>
@@ -308,50 +360,68 @@ export default function SchoolPage() {
   );
 }
 
-function QuickAction({
-  href, icon: Icon, label, primary = false, external = false,
-}: {
-  href: string; icon: React.ElementType; label: string; primary?: boolean; external?: boolean;
-}) {
+function TabShell({ children }: { children: React.ReactNode }) {
   return (
-    <a
-      href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noopener noreferrer" : undefined}
-      className={`shrink-0 inline-flex items-center gap-1.5 h-9 px-3.5 rounded-card text-xs font-semibold transition-colors duration-base ${
-        primary
-          ? "bg-gradient-to-r from-primary to-primary-dark text-white"
-          : "border border-border text-text-secondary hover:text-text-primary hover:border-text-secondary"
-      }`}
-    >
-      <Icon size={13} />
-      {label}
-    </a>
+    <div className="max-w-[1280px] mx-auto px-4 lg:px-6 py-8 flex flex-col lg:flex-row gap-8 items-start">
+      {children}
+    </div>
   );
 }
 
-function ShareAction({ schoolName }: { schoolName: string }) {
-  const [shared, setShared] = useState(false);
+function ContextMenu({ items }: { items: ({ id: string; label: string } | null)[] }) {
+  const visible = items.filter(Boolean) as { id: string; label: string }[];
+  if (visible.length === 0) return null;
 
-  async function share() {
-    const url = typeof window !== "undefined" ? window.location.href : "";
-    if (navigator.share) {
-      try { await navigator.share({ title: schoolName, url }); } catch { /* annulé par l'utilisateur */ }
-      return;
-    }
-    await navigator.clipboard.writeText(url);
-    setShared(true);
-    setTimeout(() => setShared(false), 2000);
+  function scrollToId(anchor: string) {
+    document.getElementById(anchor)?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   return (
-    <button
-      onClick={share}
-      className="shrink-0 inline-flex items-center gap-1.5 h-9 px-3.5 rounded-card text-xs font-semibold border border-border text-text-secondary hover:text-text-primary hover:border-text-secondary transition-colors duration-base"
-    >
-      <Share2 size={13} />
-      {shared ? "Lien copié" : "Partager"}
-    </button>
+    <>
+      {/* Desktop — mini-menu contextuel à gauche (§5) */}
+      <nav className="hidden lg:block w-[200px] shrink-0 sticky top-[88px] space-y-1">
+        {visible.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => scrollToId(item.id)}
+            className="block w-full text-left px-3 py-2 rounded-lg text-sm font-semibold text-text-secondary hover:text-text-primary hover:bg-white transition-colors duration-base"
+          >
+            {item.label}
+          </button>
+        ))}
+      </nav>
+      {/* Mobile — puces horizontales (§5) */}
+      <nav className="lg:hidden -mt-2 mb-1 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden w-full">
+        {visible.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => scrollToId(item.id)}
+            className="shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white border border-border text-text-secondary"
+          >
+            {item.label}
+          </button>
+        ))}
+      </nav>
+    </>
   );
 }
 
+function EmptyTabNote() {
+  return (
+    <div className="bg-white border border-border rounded-card py-14 text-center">
+      <p className="text-sm text-text-secondary">Aucune information publiée dans cette section pour le moment.</p>
+    </div>
+  );
+}
+
+// PUBLIC-SITE-01 §4A — jamais d'année académique fabriquée : dérivée
+// uniquement de admissions_config.period_start/period_end quand
+// configurés ; sinon le CTA hero reste sans année ("Admissions ouvertes").
+function admissionYearLabelFrom(periodStart: string | null | undefined, periodEnd: string | null | undefined): string | null {
+  const startYear = periodStart ? new Date(periodStart).getFullYear() : null;
+  const endYear = periodEnd ? new Date(periodEnd).getFullYear() : null;
+  if (startYear && endYear && startYear !== endYear) return `${startYear}–${endYear}`;
+  if (startYear) return String(startYear);
+  if (endYear) return String(endYear);
+  return null;
+}
