@@ -197,10 +197,10 @@ Méthode de constat : comparaison entre (1) `supabase/schema.sql`, (2) `supabase
 | | |
 |---|---|
 | Schéma attendu par le code | `is_important` (bool, utilisé dans `dashboard/ecole/annonces` et la fiche publique), `class_id` et `type` (`announcement`/`homework`/`event`/`reminder`, utilisés dans `dashboard/ecole/classes/[id]/page.tsx`) |
-| Schéma visible dans les migrations | Colonnes déclarées dans `auth-setup.sql` : `id`, `establishment_id`, `title`, `content`, `published_at`, `created_at` |
+| Schéma visible dans les migrations | Colonnes déclarées dans `auth-setup.sql` : `id`, `establishment_id`, `title`, `content`, `published_at`, `created_at` — **[CORRECTION CMS-E, 2026-08-22] `published_at` n'existe pas en production réelle**, malgré cette déclaration ; `content` y est en revanche `NOT NULL`, non déclaré comme tel ici. Confirmé par sonde live, détail dans `docs/04_SUPABASE_PROD_READINESS/01_SCHEMA_DRIFT.md`. Le texte de `auth-setup.sql` lui-même n'est pas modifié — un historique reste un historique. |
 | Types TypeScript | Aucun — `any` généralisé |
 | Conséquence | Le lien `class_id → classes` n'est tracé nulle part dans les migrations, alors qu'il est structurant pour les publications de classe |
-| Méthode recommandée de réconciliation | Idem — export du schéma réel puis migration de rattrapage |
+| Méthode recommandée de réconciliation | Idem — export du schéma réel puis migration de rattrapage (déjà fait pour `is_important`/`class_id`/`type` par 0007 ; `published_at`/`content NOT NULL` documentés ici comme état réel définitif, aucune migration de rattrapage nécessaire) |
 
 ### Constat transversal
 

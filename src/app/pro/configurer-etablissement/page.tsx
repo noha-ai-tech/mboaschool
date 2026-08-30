@@ -11,7 +11,11 @@
 // technologie derrière.
 
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { FileSpreadsheet, FileText, Settings2, ArrowRight, Clock } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
+import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 
 const MODES = [
   {
@@ -40,7 +44,17 @@ const MODES = [
   },
 ] as const;
 
-export default function ConfigurerEtablissementPage() {
+export default async function ConfigurerEtablissementPage({ searchParams }: { searchParams: Promise<{ school?: string }> }) {
+  const { school } = await searchParams;
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/auth/connexion");
+  const establishment = await requireActiveEstablishment(
+    supabase,
+    user.id,
+    school,
+    "/pro/configurer-etablissement"
+  );
   return (
     <div className="max-w-4xl mx-auto px-6 py-12">
       <p className="text-xs font-semibold tracking-widest uppercase text-emerald-700 mb-2">
@@ -88,7 +102,7 @@ export default function ConfigurerEtablissementPage() {
           return (
             <Link
               key={mode.key}
-              href={mode.href}
+              href={withEstablishmentQuery(mode.href, establishment.id)}
               className="bg-white border border-[#ebebeb] rounded-2xl p-6 hover:border-emerald-300 hover:shadow-sm transition-all"
             >
               {content}

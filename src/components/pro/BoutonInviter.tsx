@@ -5,7 +5,7 @@ import { Mail, Check, Loader2 } from "lucide-react";
 
 type State = "idle" | "loading" | "success" | "error";
 
-export function BoutonInviter({ enseignantId }: { enseignantId: string }) {
+export function BoutonInviter({ enseignantId, establishmentId }: { enseignantId: string; establishmentId: string }) {
   const [state, setState] = useState<State>("idle");
   const [message, setMessage] = useState("");
 
@@ -14,6 +14,8 @@ export function BoutonInviter({ enseignantId }: { enseignantId: string }) {
     try {
       const res = await fetch(`/api/enseignants/${enseignantId}/inviter`, {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ requestedEstablishmentId: establishmentId }),
       });
       const data = await res.json();
       if (!res.ok) {

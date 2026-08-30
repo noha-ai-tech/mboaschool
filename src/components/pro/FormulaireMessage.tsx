@@ -3,8 +3,9 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Send, Loader2 } from "lucide-react";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 
-export function FormulaireMessage({ departements }: { departements: string[] }) {
+export function FormulaireMessage({ departements, establishmentId }: { departements: string[]; establishmentId: string }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -27,6 +28,7 @@ export function FormulaireMessage({ departements }: { departements: string[] }) 
           contenu,
           canal,
           departement_disciplinaire: canal === "departement" ? departement : undefined,
+          requestedEstablishmentId: establishmentId,
         }),
       });
 
@@ -39,7 +41,7 @@ export function FormulaireMessage({ departements }: { departements: string[] }) 
       // Réinitialisation + rechargement de la liste
       setTitre("");
       setContenu("");
-      router.push("/pro/messagerie?sent=1");
+      router.push(withEstablishmentQuery("/pro/messagerie?sent=1", establishmentId));
       router.refresh();
     });
   }

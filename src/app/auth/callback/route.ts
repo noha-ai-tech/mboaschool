@@ -1,6 +1,11 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import {
+  clearTargetedInvitationCookie,
+  secureInvitationResponse,
+  TARGETED_INVITATION_COOKIE,
+} from "@/lib/invitations/targetedInvitation";
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
@@ -27,7 +32,12 @@ export async function GET(request: Request) {
       }
     );
 
-    await supabase.auth.exchangeCodeForSession(code);
+    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+    if (exchangeError) {
+      return clearTargetedInvitationCookie(secureInvitationResponse(
+        NextResponse.redirect(new URL("/auth/connexion", origin))
+      ));
+    }
 
     // Récupérer le rôle pour rediriger vers le bon dashboard
     const {
@@ -41,15 +51,28 @@ export async function GET(request: Request) {
         .eq("id", user.id)
         .single();
 
+      if (cookieStore.has(TARGETED_INVITATION_COOKIE)) {
+        const consumeUrl = new URL("/auth/consommer-invitation", origin);
+        return secureInvitationResponse(NextResponse.redirect(consumeUrl));
+      }
+
       if (profile?.role === "platform_admin") {
-        return NextResponse.redirect(`${origin}/dashboard/admin`);
+        return secureInvitationResponse(
+          NextResponse.redirect(new URL("/dashboard/admin", origin))
+        );
       }
       if (profile?.role === "teacher") {
-        return NextResponse.redirect(`${origin}/auth/enseignant-bienvenue`);
+        return secureInvitationResponse(
+          NextResponse.redirect(new URL("/enseignant/mon-espace", origin))
+        );
       }
-      return NextResponse.redirect(`${origin}/dashboard/ecole`);
+      return secureInvitationResponse(
+        NextResponse.redirect(new URL("/dashboard/ecole", origin))
+      );
     }
   }
 
-  return NextResponse.redirect(`${origin}/auth/connexion`);
+  return clearTargetedInvitationCookie(secureInvitationResponse(
+    NextResponse.redirect(new URL("/auth/connexion", origin))
+  ));
 }

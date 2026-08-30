@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:pro03": "node --test tests/pro03-application.test.mjs tests/pro03-invitations.test.mjs tests/pro03-issuer-design.test.mjs tests/pro03-issuer-application.test.mjs tests/pro03-issuer-staging-security.test.mjs tests/pro03-supavisor-boundary.test.mjs",
+    "test:pro03:issuer": "node --test tests/pro03-issuer-application.test.mjs",
+    "test:pro03:staging": "node --test tests/pro03-issuer-staging-security.test.mjs",
+    "test:pro03:supavisor": "node --test tests/pro03-supavisor-boundary.test.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.3",
@@ -15,16 +19,19 @@
     "leaflet": "^1.9.4",
     "lucide-react": "^0.468.0",
     "next": "^15.5.23",
+    "pg": "8.23.0",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
   "devDependencies": {
     "@types/node": "latest",
+    "@types/pg": "8.23.1",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.1.6",
+    "playwright": "^1.62.1",
     "postcss": "^8.5.26",
     "tailwindcss": "^3.4.17",
     "typescript": "latest"

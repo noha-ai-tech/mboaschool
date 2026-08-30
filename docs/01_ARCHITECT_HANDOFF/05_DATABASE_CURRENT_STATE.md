@@ -48,9 +48,10 @@
 - Cohérente avec le code (`dashboard/ecole/classes`)
 
 ### `school_announcements`
-- Colonnes déclarées : `id`, `establishment_id`, `title`, `content`, `published_at`, `created_at`
-- **[DÉRIVE] colonnes utilisées par le code sans migration trouvée** : `is_important` (boolean, utilisé dans `dashboard/ecole/annonces` et la fiche publique), `class_id` et `type` (utilisés dans `dashboard/ecole/classes/[id]/page.tsx` pour des publications de classe : `announcement`/`homework`/`event`/`reminder`)
-- RLS : lecture publique ; gestion complète par le propriétaire
+- **Colonnes réelles de production, confirmées par sonde live (CMS-E, 2026-08-22)** : `id`, `establishment_id`, `title`, `content` (**NOT NULL**), `is_important`, `created_at`, `class_id`, `type`.
+- **[CORRECTION]** `published_at` est **absente en production**, malgré sa déclaration dans `auth-setup.sql` (ligne 118). Cette page listait auparavant `published_at` comme colonne déclarée existante — c'était faux, corrigé ici. Ne jamais sélectionner cette colonne côté application (voir `src/app/api/school-page/news/route.ts`, déjà conforme). Détail complet : `docs/04_SUPABASE_PROD_READINESS/01_SCHEMA_DRIFT.md`.
+- `is_important`, `class_id`, `type` : comblés par `0007_production_security_reconciliation.sql` (`is_important` boolean, `class_id` FK vers `classes` avec `on delete cascade`, `type` avec contrainte `check` sur `announcement`/`homework`/`event`/`reminder`) — utilisés dans `dashboard/ecole/annonces`, `dashboard/ecole/classes/[id]/page.tsx`, et `src/app/api/school-page/news/route.ts` (CMS-E).
+- RLS : lecture publique ; gestion complète par le propriétaire.
 
 ### `school_images` / `school_documents`
 - `id`, `establishment_id`, `url`, `storage_path`, `caption`/`name`+`type`, `created_at`

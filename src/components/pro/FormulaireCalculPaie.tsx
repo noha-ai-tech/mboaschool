@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Calculator, Loader2 } from "lucide-react";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 
-export function FormulaireCalculPaie({ staffMembers }: { staffMembers: { id: string; nom: string }[] }) {
+export function FormulaireCalculPaie({ staffMembers, establishmentId }: { staffMembers: { id: string; nom: string }[]; establishmentId: string }) {
   const router = useRouter();
   const [staffMemberId, setStaffMemberId] = useState(staffMembers[0]?.id ?? "");
   const today = new Date();
@@ -24,12 +25,12 @@ export function FormulaireCalculPaie({ staffMembers }: { staffMembers: { id: str
     const res = await fetch("/api/payroll/calculer", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ staffMemberId, periodeDebut, periodeFin }),
+      body: JSON.stringify({ staffMemberId, periodeDebut, periodeFin, requestedEstablishmentId: establishmentId }),
     });
     const body = await res.json().catch(() => ({}));
     setSaving(false);
     if (!res.ok) { setError(body.error ?? "Echec du calcul"); return; }
-    router.push(`/pro/paie/${body.bulletinId}`);
+    router.push(withEstablishmentQuery(`/pro/paie/${body.bulletinId}`, establishmentId));
   }
 
   if (staffMembers.length === 0) {

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
 import { Plus, Loader2, Copy, Check, ArrowLeft } from "lucide-react";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 
 type Matiere = { id: string; nom: string; departement_disciplinaire: string; couleur: string };
 
@@ -11,7 +11,7 @@ type Step =
   | { kind: "form" }
   | { kind: "success"; enseignantId: string; nom: string; prenom: string; code: string };
 
-export function FormulaireNouvelEnseignant({ matieres }: { matieres: Matiere[] }) {
+export function FormulaireNouvelEnseignant({ matieres, establishmentId }: { matieres: Matiere[]; establishmentId: string }) {
   const router = useRouter();
   const [step, setStep] = useState<Step>({ kind: "form" });
 
@@ -44,6 +44,7 @@ export function FormulaireNouvelEnseignant({ matieres }: { matieres: Matiere[] }
           email: form.email || undefined,
           taux_horaire: form.taux_horaire ? Number(form.taux_horaire) : undefined,
           type_contrat: form.type_contrat || undefined,
+          requestedEstablishmentId: establishmentId,
         }),
       });
       const data = await res.json();
@@ -63,17 +64,29 @@ export function FormulaireNouvelEnseignant({ matieres }: { matieres: Matiere[] }
   }
 
   async function saveMatieres(enseignantId: string) {
+    setError(null);
     setSavingMatieres(true);
-    if (selectedMatieres.size > 0) {
-      const rows = Array.from(selectedMatieres).map((mid) => ({
-        enseignant_id: enseignantId,
-        matiere_id: mid,
-      }));
-      await supabase.from("enseignant_matieres").insert(rows);
+    try {
+      const response = await fetch(`/api/enseignants/${enseignantId}/matieres`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          requestedEstablishmentId: establishmentId,
+          matiereIds: Array.from(selectedMatieres),
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        setError(result.error ?? "Impossible d'enregistrer les matières.");
+        return;
+      }
+      setMatieresSaved(true);
+      setTimeout(() => router.push(withEstablishmentQuery("/pro/enseignants", establishmentId)), 1200);
+    } catch {
+      setError("Erreur réseau — réessaie.");
+    } finally {
+      setSavingMatieres(false);
     }
-    setSavingMatieres(false);
-    setMatieresSaved(true);
-    setTimeout(() => router.push("/pro/enseignants"), 1200);
   }
 
   function copyCode(code: string) {
@@ -141,7 +154,7 @@ export function FormulaireNouvelEnseignant({ matieres }: { matieres: Matiere[] }
           {matieres.length === 0 ? (
             <p className="text-sm text-slate-400 italic">
               Aucune matière définie — ajoutez-en d&apos;abord depuis{" "}
-              <a href="/pro/matieres" className="text-emerald-700 underline">
+              <a href={withEstablishmentQuery("/pro/matieres", establishmentId)} className="text-emerald-700 underline">
                 /pro/matieres
               </a>
             </p>
@@ -198,12 +211,17 @@ export function FormulaireNouvelEnseignant({ matieres }: { matieres: Matiere[] }
               {matieresSaved ? "Enregistré — redirection…" : "Enregistrer et terminer"}
             </button>
             <button
-              onClick={() => router.push("/pro/enseignants")}
+              onClick={() => router.push(withEstablishmentQuery("/pro/enseignants", establishmentId))}
               className="text-sm text-slate-400 hover:text-slate-700 transition-colors"
             >
               Passer cette étape →
             </button>
           </div>
+          {error && (
+            <p className="mt-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-2.5">
+              {error}
+            </p>
+          )}
         </div>
       </div>
     );
@@ -293,7 +311,7 @@ export function FormulaireNouvelEnseignant({ matieres }: { matieres: Matiere[] }
             {saving ? "Création…" : "Créer l'enseignant"}
           </button>
           <a
-            href="/pro/enseignants"
+            href={withEstablishmentQuery("/pro/enseignants", establishmentId)}
             className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-700 transition-colors"
           >
             <ArrowLeft size={14} />

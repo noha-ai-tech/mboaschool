@@ -1,0 +1,783 @@
+{
+  "snapshot_version": 1,
+  "captured_at": "2026-08-22T20:24:57.69018+00:00",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "read_only": true,
+  "pro03": {
+    "policy_counts": {
+      "B": 12,
+      "C": 11,
+      "D": 14
+    },
+    "policies": [
+      {
+        "wave": "B",
+        "schemaname": "public",
+        "tablename": "absences",
+        "policyname": "absences_directeur",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM (staff_members sm\n     JOIN establishments e ON ((e.id = sm.etablissement_id)))\n  WHERE ((sm.id = absences.staff_member_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (staff_members sm\n     JOIN establishments e ON ((e.id = sm.etablissement_id)))\n  WHERE ((sm.id = absences.staff_member_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "B",
+        "schemaname": "public",
+        "tablename": "conges_vacances",
+        "policyname": "conges_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = conges_vacances.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = conges_vacances.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "B",
+        "schemaname": "public",
+        "tablename": "enseignant_disponibilites",
+        "policyname": "ed_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM (enseignants teacher\n     JOIN establishments e ON ((e.id = teacher.etablissement_id)))\n  WHERE ((teacher.id = enseignant_disponibilites.enseignant_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (enseignants teacher\n     JOIN establishments e ON ((e.id = teacher.etablissement_id)))\n  WHERE ((teacher.id = enseignant_disponibilites.enseignant_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "B",
+        "schemaname": "public",
+        "tablename": "enseignant_matieres",
+        "policyname": "em_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM ((enseignants teacher\n     JOIN matieres subject ON (((subject.id = enseignant_matieres.matiere_id) AND (subject.etablissement_id = teacher.etablissement_id))))\n     JOIN establishments e ON ((e.id = teacher.etablissement_id)))\n  WHERE ((teacher.id = enseignant_matieres.enseignant_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM ((enseignants teacher\n     JOIN matieres subject ON (((subject.id = enseignant_matieres.matiere_id) AND (subject.etablissement_id = teacher.etablissement_id))))\n     JOIN establishments e ON ((e.id = teacher.etablissement_id)))\n  WHERE ((teacher.id = enseignant_matieres.enseignant_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "B",
+        "schemaname": "public",
+        "tablename": "enseignants",
+        "policyname": "enseignants_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = enseignants.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = enseignants.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "B",
+        "schemaname": "public",
+        "tablename": "matieres",
+        "policyname": "matieres_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = matieres.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = matieres.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "B",
+        "schemaname": "public",
+        "tablename": "matieres_volume_horaire",
+        "policyname": "mvh_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM (matieres subject\n     JOIN establishments e ON ((e.id = subject.etablissement_id)))\n  WHERE ((subject.id = matieres_volume_horaire.matiere_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (matieres subject\n     JOIN establishments e ON ((e.id = subject.etablissement_id)))\n  WHERE ((subject.id = matieres_volume_horaire.matiere_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "B",
+        "schemaname": "public",
+        "tablename": "sections",
+        "policyname": "sections_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = sections.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND ((sections.responsable_staff_member_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM staff_members responsible\n          WHERE ((responsible.id = sections.responsable_staff_member_id) AND (responsible.etablissement_id = sections.etablissement_id))))))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = sections.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND ((sections.responsable_staff_member_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM staff_members responsible\n          WHERE ((responsible.id = sections.responsable_staff_member_id) AND (responsible.etablissement_id = sections.etablissement_id))))))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "B",
+        "schemaname": "public",
+        "tablename": "staff_contracts",
+        "policyname": "staff_contracts_director",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM (staff_members sm\n     JOIN establishments e ON ((e.id = sm.etablissement_id)))\n  WHERE ((sm.id = staff_contracts.staff_member_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (staff_members sm\n     JOIN establishments e ON ((e.id = sm.etablissement_id)))\n  WHERE ((sm.id = staff_contracts.staff_member_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "B",
+        "schemaname": "public",
+        "tablename": "staff_documents",
+        "policyname": "staff_documents_director",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM (staff_members sm\n     JOIN establishments e ON ((e.id = sm.etablissement_id)))\n  WHERE ((sm.id = staff_documents.staff_member_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (staff_members sm\n     JOIN establishments e ON ((e.id = sm.etablissement_id)))\n  WHERE ((sm.id = staff_documents.staff_member_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "B",
+        "schemaname": "public",
+        "tablename": "staff_members",
+        "policyname": "staff_members_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = staff_members.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = staff_members.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "B",
+        "schemaname": "storage",
+        "tablename": "objects",
+        "policyname": "staff_documents_director_access",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "((bucket_id = 'staff-documents'::text) AND (EXISTS ( SELECT 1\n   FROM (staff_members sm\n     JOIN establishments e ON ((e.id = sm.etablissement_id)))\n  WHERE (((sm.id)::text = (storage.foldername(objects.name))[1]) AND (e.owner_id = ( SELECT auth.uid() AS uid))))))",
+        "with_check": "((bucket_id = 'staff-documents'::text) AND (EXISTS ( SELECT 1\n   FROM (staff_members sm\n     JOIN establishments e ON ((e.id = sm.etablissement_id)))\n  WHERE (((sm.id)::text = (storage.foldername(objects.name))[1]) AND (e.owner_id = ( SELECT auth.uid() AS uid))))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "C",
+        "schemaname": "public",
+        "tablename": "annees_scolaires",
+        "policyname": "annees_scolaires_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = annees_scolaires.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = annees_scolaires.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "C",
+        "schemaname": "public",
+        "tablename": "contraintes_etablissement",
+        "policyname": "contraintes_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = contraintes_etablissement.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = contraintes_etablissement.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "C",
+        "schemaname": "public",
+        "tablename": "creneaux_horaires",
+        "policyname": "creneaux_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = creneaux_horaires.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = creneaux_horaires.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "C",
+        "schemaname": "public",
+        "tablename": "emplois_du_temps",
+        "policyname": "edt_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = emplois_du_temps.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND (EXISTS ( SELECT 1\n           FROM classes classroom\n          WHERE ((classroom.id = emplois_du_temps.classe_id) AND (classroom.establishment_id = emplois_du_temps.etablissement_id)))) AND (EXISTS ( SELECT 1\n           FROM matieres subject\n          WHERE ((subject.id = emplois_du_temps.matiere_id) AND (subject.etablissement_id = emplois_du_temps.etablissement_id)))) AND (EXISTS ( SELECT 1\n           FROM enseignants teacher\n          WHERE ((teacher.id = emplois_du_temps.enseignant_id) AND (teacher.etablissement_id = emplois_du_temps.etablissement_id)))) AND (EXISTS ( SELECT 1\n           FROM creneaux_horaires slot\n          WHERE ((slot.id = emplois_du_temps.creneau_id) AND (slot.etablissement_id = emplois_du_temps.etablissement_id)))) AND ((emplois_du_temps.annee_scolaire_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM annees_scolaires school_year\n          WHERE ((school_year.id = emplois_du_temps.annee_scolaire_id) AND (school_year.etablissement_id = emplois_du_temps.etablissement_id))))) AND ((emplois_du_temps.salle_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM salles room\n          WHERE ((room.id = emplois_du_temps.salle_id) AND (room.etablissement_id = emplois_du_temps.etablissement_id))))))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = emplois_du_temps.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND (EXISTS ( SELECT 1\n           FROM classes classroom\n          WHERE ((classroom.id = emplois_du_temps.classe_id) AND (classroom.establishment_id = emplois_du_temps.etablissement_id)))) AND (EXISTS ( SELECT 1\n           FROM matieres subject\n          WHERE ((subject.id = emplois_du_temps.matiere_id) AND (subject.etablissement_id = emplois_du_temps.etablissement_id)))) AND (EXISTS ( SELECT 1\n           FROM enseignants teacher\n          WHERE ((teacher.id = emplois_du_temps.enseignant_id) AND (teacher.etablissement_id = emplois_du_temps.etablissement_id)))) AND (EXISTS ( SELECT 1\n           FROM creneaux_horaires slot\n          WHERE ((slot.id = emplois_du_temps.creneau_id) AND (slot.etablissement_id = emplois_du_temps.etablissement_id)))) AND ((emplois_du_temps.annee_scolaire_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM annees_scolaires school_year\n          WHERE ((school_year.id = emplois_du_temps.annee_scolaire_id) AND (school_year.etablissement_id = emplois_du_temps.etablissement_id))))) AND ((emplois_du_temps.salle_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM salles room\n          WHERE ((room.id = emplois_du_temps.salle_id) AND (room.etablissement_id = emplois_du_temps.etablissement_id))))))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "C",
+        "schemaname": "public",
+        "tablename": "enseignant_indisponibilites",
+        "policyname": "ens_indispo_directeur",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM (enseignants teacher\n     JOIN establishments e ON ((e.id = teacher.etablissement_id)))\n  WHERE ((teacher.id = enseignant_indisponibilites.enseignant_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (enseignants teacher\n     JOIN establishments e ON ((e.id = teacher.etablissement_id)))\n  WHERE ((teacher.id = enseignant_indisponibilites.enseignant_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "C",
+        "schemaname": "public",
+        "tablename": "pointages",
+        "policyname": "pointages_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM (enseignants teacher\n     JOIN establishments e ON ((e.id = teacher.etablissement_id)))\n  WHERE ((teacher.id = pointages.enseignant_id) AND (teacher.etablissement_id = pointages.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND ((pointages.creneau_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM creneaux_horaires slot\n          WHERE ((slot.id = pointages.creneau_id) AND (slot.etablissement_id = pointages.etablissement_id))))))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (enseignants teacher\n     JOIN establishments e ON ((e.id = teacher.etablissement_id)))\n  WHERE ((teacher.id = pointages.enseignant_id) AND (teacher.etablissement_id = pointages.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND ((pointages.creneau_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM creneaux_horaires slot\n          WHERE ((slot.id = pointages.creneau_id) AND (slot.etablissement_id = pointages.etablissement_id))))))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "C",
+        "schemaname": "public",
+        "tablename": "remplacements",
+        "policyname": "remplacements_directeur",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = remplacements.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND (EXISTS ( SELECT 1\n           FROM emplois_du_temps schedule\n          WHERE ((schedule.id = remplacements.emploi_du_temps_id) AND (schedule.etablissement_id = remplacements.etablissement_id)))) AND (EXISTS ( SELECT 1\n           FROM enseignants absent_teacher\n          WHERE ((absent_teacher.id = remplacements.enseignant_absent_id) AND (absent_teacher.etablissement_id = remplacements.etablissement_id)))) AND ((remplacements.enseignant_remplacant_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM enseignants replacement_teacher\n          WHERE ((replacement_teacher.id = remplacements.enseignant_remplacant_id) AND (replacement_teacher.etablissement_id = remplacements.etablissement_id))))))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = remplacements.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND (EXISTS ( SELECT 1\n           FROM emplois_du_temps schedule\n          WHERE ((schedule.id = remplacements.emploi_du_temps_id) AND (schedule.etablissement_id = remplacements.etablissement_id)))) AND (EXISTS ( SELECT 1\n           FROM enseignants absent_teacher\n          WHERE ((absent_teacher.id = remplacements.enseignant_absent_id) AND (absent_teacher.etablissement_id = remplacements.etablissement_id)))) AND ((remplacements.enseignant_remplacant_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM enseignants replacement_teacher\n          WHERE ((replacement_teacher.id = remplacements.enseignant_remplacant_id) AND (replacement_teacher.etablissement_id = remplacements.etablissement_id))))))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "C",
+        "schemaname": "public",
+        "tablename": "salle_indisponibilites",
+        "policyname": "salle_indispo_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM (salles room\n     JOIN establishments e ON ((e.id = room.etablissement_id)))\n  WHERE ((room.id = salle_indisponibilites.salle_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (salles room\n     JOIN establishments e ON ((e.id = room.etablissement_id)))\n  WHERE ((room.id = salle_indisponibilites.salle_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "C",
+        "schemaname": "public",
+        "tablename": "salles",
+        "policyname": "salles_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = salles.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = salles.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "C",
+        "schemaname": "public",
+        "tablename": "trimestres",
+        "policyname": "trimestres_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM (annees_scolaires school_year\n     JOIN establishments e ON ((e.id = school_year.etablissement_id)))\n  WHERE ((school_year.id = trimestres.annee_scolaire_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (annees_scolaires school_year\n     JOIN establishments e ON ((e.id = school_year.etablissement_id)))\n  WHERE ((school_year.id = trimestres.annee_scolaire_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "C",
+        "schemaname": "storage",
+        "tablename": "objects",
+        "policyname": "pointages_owner_access",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "((bucket_id = 'pointages-photos'::text) AND (EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE (((e.id)::text = (storage.foldername(objects.name))[1]) AND (e.owner_id = ( SELECT auth.uid() AS uid))))))",
+        "with_check": "((bucket_id = 'pointages-photos'::text) AND (EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE (((e.id)::text = (storage.foldername(objects.name))[1]) AND (e.owner_id = ( SELECT auth.uid() AS uid))))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "D",
+        "schemaname": "public",
+        "tablename": "ai_usage",
+        "policyname": "Systeme peut enregistrer le cout IA",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "INSERT",
+        "qual": null,
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = ai_usage.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND ((ai_usage.import_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM school_setup_imports batch\n          WHERE ((batch.id = ai_usage.import_id) AND (batch.etablissement_id = ai_usage.etablissement_id))))))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "D",
+        "schemaname": "public",
+        "tablename": "bulletin_paie_historique",
+        "policyname": "bulletin_historique_directeur",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM (bulletins_paie payroll\n     JOIN establishments e ON ((e.id = payroll.etablissement_id)))\n  WHERE ((payroll.id = bulletin_paie_historique.bulletin_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (bulletins_paie payroll\n     JOIN establishments e ON ((e.id = payroll.etablissement_id)))\n  WHERE ((payroll.id = bulletin_paie_historique.bulletin_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "D",
+        "schemaname": "public",
+        "tablename": "bulletin_paie_lignes",
+        "policyname": "bulletin_lignes_directeur",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM (bulletins_paie payroll\n     JOIN establishments e ON ((e.id = payroll.etablissement_id)))\n  WHERE ((payroll.id = bulletin_paie_lignes.bulletin_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (bulletins_paie payroll\n     JOIN establishments e ON ((e.id = payroll.etablissement_id)))\n  WHERE ((payroll.id = bulletin_paie_lignes.bulletin_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "D",
+        "schemaname": "public",
+        "tablename": "bulletins_paie",
+        "policyname": "bulletins_directeur",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = bulletins_paie.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (staff_members sm\n     JOIN establishments e ON ((e.id = sm.etablissement_id)))\n  WHERE ((sm.id = bulletins_paie.staff_member_id) AND (sm.etablissement_id = bulletins_paie.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "D",
+        "schemaname": "public",
+        "tablename": "messages",
+        "policyname": "messages_directeur",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = messages.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = messages.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "D",
+        "schemaname": "public",
+        "tablename": "payroll_config",
+        "policyname": "payroll_config_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = payroll_config.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = payroll_config.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "D",
+        "schemaname": "public",
+        "tablename": "primes",
+        "policyname": "primes_directeur",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM (staff_members sm\n     JOIN establishments e ON ((e.id = sm.etablissement_id)))\n  WHERE ((sm.id = primes.staff_member_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND ((primes.type_prime_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM types_primes kind\n          WHERE ((kind.id = primes.type_prime_id) AND (kind.etablissement_id = sm.etablissement_id))))))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (staff_members sm\n     JOIN establishments e ON ((e.id = sm.etablissement_id)))\n  WHERE ((sm.id = primes.staff_member_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND ((primes.type_prime_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM types_primes kind\n          WHERE ((kind.id = primes.type_prime_id) AND (kind.etablissement_id = sm.etablissement_id))))))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "D",
+        "schemaname": "public",
+        "tablename": "retenues",
+        "policyname": "retenues_directeur",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM (staff_members sm\n     JOIN establishments e ON ((e.id = sm.etablissement_id)))\n  WHERE ((sm.id = retenues.staff_member_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND ((retenues.type_retenue_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM types_retenues kind\n          WHERE ((kind.id = retenues.type_retenue_id) AND (kind.etablissement_id = sm.etablissement_id))))))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (staff_members sm\n     JOIN establishments e ON ((e.id = sm.etablissement_id)))\n  WHERE ((sm.id = retenues.staff_member_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND ((retenues.type_retenue_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM types_retenues kind\n          WHERE ((kind.id = retenues.type_retenue_id) AND (kind.etablissement_id = sm.etablissement_id))))))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "D",
+        "schemaname": "public",
+        "tablename": "school_setup_drafts",
+        "policyname": "Directeur gere ses brouillons d'import",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM (school_setup_imports batch\n     JOIN establishments e ON ((e.id = batch.etablissement_id)))\n  WHERE ((batch.id = school_setup_drafts.import_id) AND (batch.etablissement_id = school_setup_drafts.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND ((school_setup_drafts.source_file_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM school_setup_files source_file\n          WHERE ((source_file.id = school_setup_drafts.source_file_id) AND (source_file.import_id = school_setup_drafts.import_id) AND (source_file.etablissement_id = school_setup_drafts.etablissement_id))))))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (school_setup_imports batch\n     JOIN establishments e ON ((e.id = batch.etablissement_id)))\n  WHERE ((batch.id = school_setup_drafts.import_id) AND (batch.etablissement_id = school_setup_drafts.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND ((school_setup_drafts.source_file_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM school_setup_files source_file\n          WHERE ((source_file.id = school_setup_drafts.source_file_id) AND (source_file.import_id = school_setup_drafts.import_id) AND (source_file.etablissement_id = school_setup_drafts.etablissement_id))))))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "D",
+        "schemaname": "public",
+        "tablename": "school_setup_files",
+        "policyname": "Directeur gere ses fichiers d'import",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM (school_setup_imports batch\n     JOIN establishments e ON ((e.id = batch.etablissement_id)))\n  WHERE ((batch.id = school_setup_files.import_id) AND (batch.etablissement_id = school_setup_files.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (school_setup_imports batch\n     JOIN establishments e ON ((e.id = batch.etablissement_id)))\n  WHERE ((batch.id = school_setup_files.import_id) AND (batch.etablissement_id = school_setup_files.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "D",
+        "schemaname": "public",
+        "tablename": "school_setup_imports",
+        "policyname": "Directeur gere ses imports",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = school_setup_imports.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND ((school_setup_imports.target_annee_scolaire_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM annees_scolaires school_year\n          WHERE ((school_year.id = school_setup_imports.target_annee_scolaire_id) AND (school_year.etablissement_id = school_setup_imports.etablissement_id))))))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = school_setup_imports.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND ((school_setup_imports.target_annee_scolaire_id IS NULL) OR (EXISTS ( SELECT 1\n           FROM annees_scolaires school_year\n          WHERE ((school_year.id = school_setup_imports.target_annee_scolaire_id) AND (school_year.etablissement_id = school_setup_imports.etablissement_id))))))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "D",
+        "schemaname": "public",
+        "tablename": "school_setup_issues",
+        "policyname": "Directeur gere les issues de ses imports",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM (school_setup_imports batch\n     JOIN establishments e ON ((e.id = batch.etablissement_id)))\n  WHERE ((batch.id = school_setup_issues.import_id) AND (batch.etablissement_id = school_setup_issues.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND (NOT (EXISTS ( SELECT 1\n           FROM unnest(school_setup_issues.related_draft_ids) related_draft_id(related_draft_id)\n          WHERE (NOT (EXISTS ( SELECT 1\n                   FROM school_setup_drafts related_draft\n                  WHERE ((related_draft.id = related_draft_id.related_draft_id) AND (related_draft.import_id = school_setup_issues.import_id) AND (related_draft.etablissement_id = school_setup_issues.etablissement_id)))))))))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM (school_setup_imports batch\n     JOIN establishments e ON ((e.id = batch.etablissement_id)))\n  WHERE ((batch.id = school_setup_issues.import_id) AND (batch.etablissement_id = school_setup_issues.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)) AND (NOT (EXISTS ( SELECT 1\n           FROM unnest(school_setup_issues.related_draft_ids) related_draft_id(related_draft_id)\n          WHERE (NOT (EXISTS ( SELECT 1\n                   FROM school_setup_drafts related_draft\n                  WHERE ((related_draft.id = related_draft_id.related_draft_id) AND (related_draft.import_id = school_setup_issues.import_id) AND (related_draft.etablissement_id = school_setup_issues.etablissement_id)))))))))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "D",
+        "schemaname": "public",
+        "tablename": "types_primes",
+        "policyname": "types_primes_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = types_primes.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = types_primes.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      },
+      {
+        "wave": "D",
+        "schemaname": "public",
+        "tablename": "types_retenues",
+        "policyname": "types_retenues_scope",
+        "exists": true,
+        "permissive": "PERMISSIVE",
+        "roles": [
+          "authenticated"
+        ],
+        "cmd": "ALL",
+        "qual": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = types_retenues.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "with_check": "(EXISTS ( SELECT 1\n   FROM establishments e\n  WHERE ((e.id = types_retenues.etablissement_id) AND (e.owner_id = ( SELECT auth.uid() AS uid)))))",
+        "relrowsecurity": true
+      }
+    ],
+    "hours_function": {
+      "schema_name": "public",
+      "proname": "calculer_heures_enseignant",
+      "identity_args": "p_enseignant_id uuid, p_date_debut date, p_date_fin date, p_etablissement_id uuid",
+      "owner": "postgres",
+      "prosecdef": false,
+      "volatility": "STABLE",
+      "proconfig": [
+        "search_path=\"\""
+      ],
+      "default_count": 0,
+      "proacl": [
+        "postgres=X/postgres",
+        "authenticated=X/postgres"
+      ],
+      "public_execute": false,
+      "anon_execute": false,
+      "authenticated_execute": true,
+      "service_role_execute": false,
+      "definition": "CREATE OR REPLACE FUNCTION public.calculer_heures_enseignant(p_enseignant_id uuid, p_date_debut date, p_date_fin date, p_etablissement_id uuid)\n RETURNS numeric\n LANGUAGE sql\n STABLE\n SET search_path TO ''\nAS $function$\n  select coalesce(\n    sum(extract(epoch from (departure.horodatage - arrival.horodatage)) / 3600.0),\n    0\n  )\n  from public.pointages arrival\n  inner join lateral (\n    select departure_candidate.horodatage\n    from public.pointages departure_candidate\n    where departure_candidate.enseignant_id = arrival.enseignant_id\n      and departure_candidate.etablissement_id = arrival.etablissement_id\n      and departure_candidate.type = 'depart'\n      and departure_candidate.horodatage::date = arrival.horodatage::date\n      and departure_candidate.horodatage > arrival.horodatage\n    order by departure_candidate.horodatage\n    limit 1\n  ) departure on true\n  where arrival.enseignant_id = p_enseignant_id\n    and arrival.etablissement_id = p_etablissement_id\n    and arrival.type = 'arrivee'\n    and arrival.horodatage::date between p_date_debut and p_date_fin;\n$function$\n"
+    },
+    "current_establishment_id_absent": true,
+    "consolidation_history": []
+  },
+  "school_page_drafts": {
+    "catalog": {
+      "table": {
+        "schema_name": "public",
+        "table_name": "school_page_drafts",
+        "owner": "postgres",
+        "relrowsecurity": true,
+        "relforcerowsecurity": false,
+        "relacl": [
+          "postgres=arwdDxtm/postgres",
+          "service_role=arwdDxtm/postgres",
+          "authenticated=arwd/postgres"
+        ],
+        "table_comment": "CMS-F — document de staging interne par établissement (jamais lu par la fiche publique). Un seul document JSONB représentant l'état brouillon des domaines GLOBAL DRAFT : presentation, contact, hero_mode, pricing, infrastructure, admissions (config descriptive uniquement — is_open n'y figure JAMAIS, reste immediate-live sur admissions_config), sections (visibility/order), et gallery.remove_ids (liste des school_images.id dont la suppression est prévue au prochain Publish, jamais un statut sur la ligne live elle-même). News (school_announcements) et Documents (school_documents) ne participent PAS à ce mécanisme : ils restent immediate-live, aucune référence à eux dans ce payload.",
+        "estimated_rows": 0,
+        "total_bytes": 24576
+      },
+      "columns": [
+        {
+          "attnum": 1,
+          "attname": "id",
+          "data_type": "uuid",
+          "attnotnull": true,
+          "default_expr": "gen_random_uuid()",
+          "column_comment": null
+        },
+        {
+          "attnum": 2,
+          "attname": "establishment_id",
+          "data_type": "uuid",
+          "attnotnull": true,
+          "default_expr": null,
+          "column_comment": null
+        },
+        {
+          "attnum": 3,
+          "attname": "payload",
+          "data_type": "jsonb",
+          "attnotnull": true,
+          "default_expr": "'{}'::jsonb",
+          "column_comment": null
+        },
+        {
+          "attnum": 4,
+          "attname": "is_dirty",
+          "data_type": "boolean",
+          "attnotnull": true,
+          "default_expr": "false",
+          "column_comment": null
+        },
+        {
+          "attnum": 5,
+          "attname": "created_at",
+          "data_type": "timestamp with time zone",
+          "attnotnull": true,
+          "default_expr": "now()",
+          "column_comment": null
+        },
+        {
+          "attnum": 6,
+          "attname": "updated_at",
+          "data_type": "timestamp with time zone",
+          "attnotnull": true,
+          "default_expr": "now()",
+          "column_comment": null
+        }
+      ],
+      "constraints": [
+        {
+          "conname": "school_page_drafts_establishment_id_fkey",
+          "constraint_type": "FOREIGN KEY",
+          "definition": "FOREIGN KEY (establishment_id) REFERENCES establishments(id) ON DELETE CASCADE",
+          "delete_action": "CASCADE"
+        },
+        {
+          "conname": "school_page_drafts_establishment_id_key",
+          "constraint_type": "UNIQUE",
+          "definition": "UNIQUE (establishment_id)",
+          "delete_action": null
+        },
+        {
+          "conname": "school_page_drafts_payload_object_check",
+          "constraint_type": "CHECK",
+          "definition": "CHECK (jsonb_typeof(payload) = 'object'::text)",
+          "delete_action": null
+        },
+        {
+          "conname": "school_page_drafts_pkey",
+          "constraint_type": "PRIMARY KEY",
+          "definition": "PRIMARY KEY (id)",
+          "delete_action": null
+        }
+      ],
+      "indexes": [
+        {
+          "index_name": "school_page_drafts_establishment_id_key",
+          "definition": "CREATE UNIQUE INDEX school_page_drafts_establishment_id_key ON public.school_page_drafts USING btree (establishment_id)",
+          "indisprimary": false,
+          "indisunique": true,
+          "indisvalid": true
+        },
+        {
+          "index_name": "school_page_drafts_pkey",
+          "definition": "CREATE UNIQUE INDEX school_page_drafts_pkey ON public.school_page_drafts USING btree (id)",
+          "indisprimary": true,
+          "indisunique": true,
+          "indisvalid": true
+        }
+      ],
+      "policies": [
+        {
+          "policyname": "school_page_drafts_owner_only",
+          "permissive": "PERMISSIVE",
+          "roles": [
+            "public"
+          ],
+          "cmd": "ALL",
+          "qual": "is_own_establishment(establishment_id)",
+          "with_check": "is_own_establishment(establishment_id)"
+        }
+      ],
+      "grants": [
+        {
+          "grantee": "authenticated",
+          "privileges": "DELETE,INSERT,SELECT,UPDATE"
+        },
+        {
+          "grantee": "postgres",
+          "privileges": "DELETE,INSERT,REFERENCES,SELECT,TRIGGER,TRUNCATE,UPDATE"
+        },
+        {
+          "grantee": "service_role",
+          "privileges": "DELETE,INSERT,REFERENCES,SELECT,TRIGGER,TRUNCATE,UPDATE"
+        }
+      ],
+      "triggers": [
+        {
+          "tgname": "school_page_drafts_touch_updated_at",
+          "tgenabled": "O",
+          "definition": "CREATE TRIGGER school_page_drafts_touch_updated_at BEFORE UPDATE ON school_page_drafts FOR EACH ROW EXECUTE FUNCTION touch_school_page_drafts_updated_at()",
+          "function_schema": "public",
+          "function_name": "touch_school_page_drafts_updated_at",
+          "function_args": ""
+        }
+      ],
+      "function": {
+        "schema_name": "public",
+        "proname": "touch_school_page_drafts_updated_at",
+        "identity_args": "",
+        "owner": "postgres",
+        "prosecdef": false,
+        "volatility": "VOLATILE",
+        "proconfig": null,
+        "proacl": [
+          "=X/postgres",
+          "postgres=X/postgres",
+          "anon=X/postgres",
+          "authenticated=X/postgres",
+          "service_role=X/postgres"
+        ],
+        "public_execute": true,
+        "anon_execute": true,
+        "authenticated_execute": true,
+        "service_role_execute": true,
+        "definition": "CREATE OR REPLACE FUNCTION public.touch_school_page_drafts_updated_at()\n RETURNS trigger\n LANGUAGE plpgsql\nAS $function$\nbegin\n  new.updated_at = now();\n  return new;\nend;\n$function$\n"
+      },
+      "school_images_status": {
+        "attname": "status",
+        "data_type": "text",
+        "attnotnull": true,
+        "default_expr": "'live'::text",
+        "column_comment": "CMS-F — 'live' (défaut, comportement actuel inchangé) ou 'draft_pending_add' (réservé à CMS-F.6, aucun code n'écrit encore cette valeur en F.1). Aucune valeur 'pending_delete' : une suppression prévue est trackée dans school_page_drafts.payload.gallery.remove_ids, jamais ici — une photo live reste visible publiquement jusqu'au Publish même si sa suppression est planifiée."
+      },
+      "school_images_constraint": {
+        "conname": "school_images_status_check",
+        "definition": "CHECK (status = ANY (ARRAY['live'::text, 'draft_pending_add'::text]))"
+      }
+    },
+    "recorded_migration": {
+      "version": "20260822154940",
+      "name": "school_page_drafts",
+      "statement_count": 1,
+      "statement_bytes": 3058,
+      "statement_sha256": "fcc99d793476157c29c91199d71dde2cae94436b33dc73f13ab5c98df643bd21",
+      "rollback_recorded": false,
+      "postgres_log_timestamp_utc": "2026-08-22T15:49:40.997000Z",
+      "provenance": "Supabase migration application wrapper observed in PostgreSQL logs"
+    }
+  }
+}
+

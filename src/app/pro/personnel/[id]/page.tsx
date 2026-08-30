@@ -2,7 +2,8 @@ import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 import { PersonnelAcces } from "@/components/pro/PersonnelAcces";
 import { PersonnelContrat } from "@/components/pro/PersonnelContrat";
 import { PersonnelDocuments } from "@/components/pro/PersonnelDocuments";
@@ -19,14 +20,14 @@ const EMPLOYMENT_LABELS: Record<string, string> = {
   temps_plein: "Temps plein", temps_partiel: "Temps partiel", vacataire: "Vacataire",
 };
 
-export default async function PersonnelDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function PersonnelDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ school?: string }> }) {
   const { id } = await params;
+  const { school } = await searchParams;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/connexion");
 
-  const etablissement = await getActiveEstablishment(supabase, user.id);
-  if (!etablissement) redirect("/dashboard/ecole");
+  const etablissement = await requireActiveEstablishment(supabase, user.id, school, `/pro/personnel/${id}`);
 
   const { data: member } = await supabase
     .from("staff_members")
@@ -69,7 +70,7 @@ export default async function PersonnelDetailPage({ params }: { params: Promise<
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <Link href="/pro/personnel" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-[#0a0a0a] transition-colors mb-6">
+      <Link href={withEstablishmentQuery("/pro/personnel", etablissement.id)} className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-[#0a0a0a] transition-colors mb-6">
         <ArrowLeft size={15} /> Personnel
       </Link>
 
@@ -118,7 +119,7 @@ export default async function PersonnelDetailPage({ params }: { params: Promise<
         {member.enseignant_id && (
           <p className="text-xs text-slate-400 mt-4 pt-4 border-t border-slate-100">
             Fiche enseignant liée — gestion des matières et de l&apos;emploi du temps via{" "}
-            <Link href="/pro/enseignants" className="text-emerald-700 font-semibold">Enseignants</Link>.
+            <Link href={withEstablishmentQuery("/pro/enseignants", etablissement.id)} className="text-emerald-700 font-semibold">Enseignants</Link>.
           </p>
         )}
       </div>
@@ -127,6 +128,7 @@ export default async function PersonnelDetailPage({ params }: { params: Promise<
         <p className="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4">Accès</p>
         <PersonnelAcces
           staffMemberId={member.id}
+          establishmentId={etablissement.id}
           hasAccount={!!member.user_id}
           hasEmail={!!member.email}
           existingCode={member.access_code}

@@ -12,32 +12,30 @@ export default function ParametresPage() {
   const { school, loading: schoolLoading } = useSchool();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  // PUBLIC-SITE-03 — phone/email/website/address/city/description removed
+  // from this form. They are now governed exclusively by the school-page
+  // Draft/Publish CMS (school_page_drafts -> publish_school_page(),
+  // payload.contact + payload.presentation) and protected by a DB trigger
+  // (0035) against direct writes — this page's old single-statement
+  // UPDATE bundling every field together would now fail entirely (trigger
+  // raises 42501) the moment any one of those 6 fields is included, taking
+  // name/neighborhood/whatsapp/main_category down with it. Editing those 6
+  // fields now happens in the CMS editor (/dashboard/ecole/etablissement),
+  // linked below.
   const [form, setForm] = useState({
     name: "",
-    city: "",
     neighborhood: "",
-    phone: "",
-    email: "",
     whatsapp: "",
-    website: "",
-    description: "",
     main_category: "",
-    address: "",
   });
 
   useEffect(() => {
     if (!school) return;
     setForm({
       name:          school.name ?? "",
-      city:          school.city ?? "",
       neighborhood:  school.neighborhood ?? "",
-      phone:         school.phone ?? "",
-      email:         school.email ?? "",
       whatsapp:      school.whatsapp ?? "",
-      website:       school.website ?? "",
-      description:   school.description ?? "",
       main_category: school.main_category ?? "",
-      address:       school.address ?? "",
     });
   }, [school]);
 
@@ -108,14 +106,6 @@ export default function ParametresPage() {
                 </select>
               </Field>
 
-              <Field label="Ville">
-                <input
-                  value={form.city}
-                  onChange={(e) => field("city", e.target.value)}
-                  placeholder="Yaoundé, Douala…"
-                />
-              </Field>
-
               <Field label="Quartier">
                 <input
                   value={form.neighborhood}
@@ -123,24 +113,7 @@ export default function ParametresPage() {
                   placeholder="Bastos, Bonamoussadi…"
                 />
               </Field>
-
-              <Field label="Adresse">
-                <input
-                  value={form.address}
-                  onChange={(e) => field("address", e.target.value)}
-                  placeholder="Rue, numéro…"
-                />
-              </Field>
             </div>
-
-            <Field label="Description">
-              <textarea
-                value={form.description}
-                onChange={(e) => field("description", e.target.value)}
-                rows={4}
-                placeholder="Présentation de l'établissement, valeurs, pédagogie…"
-              />
-            </Field>
           </div>
         </div>
 
@@ -148,14 +121,6 @@ export default function ParametresPage() {
         <div className="bg-white border border-[#ebebeb] rounded-2xl p-6">
           <h2 className="font-bold text-sm mb-5">Contact</h2>
           <div className="grid sm:grid-cols-2 gap-4">
-            <Field label="Téléphone principal">
-              <input
-                value={form.phone}
-                onChange={(e) => field("phone", e.target.value)}
-                placeholder="+237 6XX XXX XXX"
-              />
-            </Field>
-
             <Field label="WhatsApp">
               <input
                 value={form.whatsapp}
@@ -163,24 +128,14 @@ export default function ParametresPage() {
                 placeholder="+237 6XX XXX XXX"
               />
             </Field>
-
-            <Field label="Email">
-              <input
-                type="email"
-                value={form.email}
-                onChange={(e) => field("email", e.target.value)}
-                placeholder="contact@monecole.cm"
-              />
-            </Field>
-
-            <Field label="Site web">
-              <input
-                value={form.website}
-                onChange={(e) => field("website", e.target.value)}
-                placeholder="https://monecole.cm"
-              />
-            </Field>
           </div>
+          <p className="text-xs text-slate-400 mt-4">
+            Téléphone, email, site web, adresse, ville et description se gèrent désormais depuis{" "}
+            <Link href="/dashboard/ecole/etablissement" className="font-semibold text-slate-600 underline">
+              l&apos;éditeur de la page école
+            </Link>{" "}
+            (brouillon → aperçu → publication).
+          </p>
         </div>
 
         {/* Submit */}

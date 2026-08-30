@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Suspense, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { admissionStatusConfig } from "@/lib/admissions/status";
 import { ArrowLeft, Search, MessageSquare } from "lucide-react";
@@ -18,18 +17,45 @@ type Result = {
   parent_message: string | null;
 };
 
+const STAGED_TRACKING_CODE_KEY = "ecoles237.admission-tracking-code:v1";
+const TRACKING_CODE_PATTERN = /^E237-[A-HJ-NP-Z2-9]{6}$/;
+
 function SuiviForm() {
-  const searchParams = useSearchParams();
-  const [code, setCode] = useState(searchParams.get("code") ?? "");
+  const [code, setCode] = useState("");
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [notFound, setNotFound] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
   const [errors, setErrors] = useState<{ code?: string; phone?: string }>({});
 
+  useEffect(() => {
+    let stagedCode: string | null = null;
+    try {
+      stagedCode = window.sessionStorage.getItem(STAGED_TRACKING_CODE_KEY);
+    } catch {
+      // Manual entry remains available when browser storage is disabled.
+    }
+    try {
+      window.sessionStorage.removeItem(STAGED_TRACKING_CODE_KEY);
+    } catch {
+      // sessionStorage is tab-scoped; never block the public form on cleanup.
+    }
+    if (stagedCode && TRACKING_CODE_PATTERN.test(stagedCode)) {
+      setCode(stagedCode);
+    }
+  }, []);
+
   async function handleSubmit(e: { preventDefault(): void }) {
     e.preventDefault();
+    const normalizedCode = code.trim().toUpperCase();
+    const normalizedPhone = phone.trim();
     const next: typeof errors = {};
+    if (!TRACKING_CODE_PATTERN.test(normalizedCode)) {
+      next.code = "Indiquez un code de suivi valide.";
+    }
+    if (new TextEncoder().encode(normalizedPhone).length > 64) {
+      next.phone = "Le numéro de téléphone saisi est trop long.";
+    }
     if (!code.trim()) next.code = "Indiquez votre code de suivi.";
     if (!phone.trim()) next.phone = "Indiquez le numéro de téléphone utilisé lors de la demande.";
     setErrors(next);
@@ -40,8 +66,8 @@ function SuiviForm() {
     setResult(null);
 
     const { data, error } = await supabase.rpc("get_admission_by_tracking", {
-      p_tracking_code: code.trim(),
-      p_phone: phone.trim(),
+      p_tracking_code: normalizedCode,
+      p_phone: normalizedPhone,
     });
 
     setLoading(false);
@@ -83,6 +109,8 @@ function SuiviForm() {
                   value={code}
                   onChange={(e) => { setCode(e.target.value.toUpperCase()); setErrors((er) => ({ ...er, code: undefined })); }}
                   placeholder="E237-XXXXXX"
+                  maxLength={11}
+                  autoComplete="one-time-code"
                   aria-invalid={!!errors.code}
                   className={`w-full h-[52px] border rounded-card px-4 text-sm bg-white outline-none focus:shadow-elevation-1 transition-all duration-base font-mono tracking-wider ${
                     errors.code ? "border-danger focus:border-danger" : "border-border focus:border-primary"
@@ -99,6 +127,9 @@ function SuiviForm() {
                   value={phone}
                   onChange={(e) => { setPhone(e.target.value); setErrors((er) => ({ ...er, phone: undefined })); }}
                   placeholder="+237 6XX XXX XXX"
+                  maxLength={64}
+                  inputMode="tel"
+                  autoComplete="tel"
                   aria-invalid={!!errors.phone}
                   className={`w-full h-[52px] border rounded-card px-4 text-sm bg-white outline-none focus:shadow-elevation-1 transition-all duration-base ${
                     errors.phone ? "border-danger focus:border-danger" : "border-border focus:border-primary"
@@ -180,9 +211,5 @@ function Row({ label, value }: { label: string; value: string }) {
 }
 
 export default function SuiviAdmissionPage() {
-  return (
-    <Suspense>
-      <SuiviForm />
-    </Suspense>
-  );
+  return <SuiviForm />;
 }
