@@ -208,7 +208,7 @@ export function MiniSiteRenderer({ data }: { data: MiniSiteRendererData }) {
               showContact ? { id: "contact", label: "Contact" } : null,
             ]}
           />
-          <div className="flex-1 space-y-5 min-w-0">
+          <div className="flex-1 w-full space-y-5 min-w-0">
             {(showPresentation || showInfrastructure) && (
               <GeneralTab
                 school={school}
@@ -278,7 +278,7 @@ export function MiniSiteRenderer({ data }: { data: MiniSiteRendererData }) {
               showDocuments ? { id: "documents-admissions", label: "Documents" } : null,
             ]}
           />
-          <div className="flex-1 space-y-5 min-w-0">
+          <div className="flex-1 w-full space-y-5 min-w-0">
             {showAdmissions && (
               <div id="formations" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
                 <h2 className="font-bold text-sm mb-3">Formations</h2>
@@ -307,7 +307,7 @@ export function MiniSiteRenderer({ data }: { data: MiniSiteRendererData }) {
 
       {activeTab === "vie" && (
         <TabShell>
-          <div className="flex-1 space-y-5 min-w-0">
+          <div className="flex-1 w-full space-y-5 min-w-0">
             <MiniSiteResultsPreview category={school.main_category} results={results} ranking={ranking} />
             {showNews ? (
               <div>
@@ -331,7 +331,7 @@ export function MiniSiteRenderer({ data }: { data: MiniSiteRendererData }) {
               { id: "ressources", label: "Ressources utiles" },
             ]}
           />
-          <div className="flex-1 space-y-5 min-w-0">
+          <div className="flex-1 w-full space-y-5 min-w-0">
             {showGallery && (
               <div id="galerie" className="scroll-mt-20">
                 <h2 className="font-bold text-sm mb-3 px-1">Galerie ({images.length})</h2>
