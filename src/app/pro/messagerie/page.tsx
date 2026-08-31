@@ -1,13 +1,13 @@
 import { redirect } from "next/navigation";
 import { Globe, BookOpen, CheckCircle2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 import { FormulaireMessage } from "@/components/pro/FormulaireMessage";
 
 export default async function MessageriePage({
   searchParams,
 }: {
-  searchParams: Promise<{ sent?: string }>;
+  searchParams: Promise<{ sent?: string; school?: string }>;
 }) {
   const supabase = await createClient();
   const params = await searchParams;
@@ -17,8 +17,7 @@ export default async function MessageriePage({
   } = await supabase.auth.getUser();
   if (!user) redirect("/auth/connexion");
 
-  const etablissement = await getActiveEstablishment(supabase, user.id);
-  if (!etablissement) redirect("/dashboard/ecole");
+  const etablissement = await requireActiveEstablishment(supabase, user.id, params.school, "/pro/messagerie");
 
   // Départements disponibles dans l'établissement
   const { data: departements } = await supabase
@@ -62,7 +61,7 @@ export default async function MessageriePage({
       )}
 
       {/* Formulaire d'envoi */}
-      <FormulaireMessage departements={departementsUniques} />
+      <FormulaireMessage departements={departementsUniques} establishmentId={etablissement.id} />
 
       {/* Liste des messages envoyés */}
       <div className="mt-10">

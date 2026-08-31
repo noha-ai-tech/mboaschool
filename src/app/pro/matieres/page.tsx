@@ -1,15 +1,15 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 import { GestionMatieres } from "@/components/pro/GestionMatieres";
 
-export default async function MatieresPage() {
+export default async function MatieresPage({ searchParams }: { searchParams: Promise<{ school?: string }> }) {
+  const { school } = await searchParams;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/connexion");
 
-  const etablissement = await getActiveEstablishment(supabase, user.id);
-  if (!etablissement) redirect("/dashboard/ecole");
+  const etablissement = await requireActiveEstablishment(supabase, user.id, school, "/pro/matieres");
 
   const etablissementId = etablissement.id;
 

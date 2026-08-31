@@ -7,8 +7,10 @@ import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { dispatchAdmissionNotification } from "@/lib/notifications/admissionNotifications";
 import { ArrowLeft, ArrowRight, CheckCircle2, Copy, Check, MapPin } from "lucide-react";
-import { AuthHeader } from "@/components/layout/AuthHeader";
+import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
+import { AnnouncementTicker } from "@/components/hero/AnnouncementTicker";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { useSiteTickerItems } from "@/lib/useSiteTickerItems";
 import { joinWithSeparator } from "@/lib/formatSchoolLocation";
 import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
 
@@ -43,6 +45,7 @@ const EMPTY_FORM = {
 };
 
 function PreinscriptionForm() {
+  const tickerItems = useSiteTickerItems();
   const searchParams = useSearchParams();
   const preselectedId = searchParams.get("ecole") ?? "";
 
@@ -61,6 +64,9 @@ function PreinscriptionForm() {
     supabase
       .from("establishments")
       .select("id, name, city, main_category, is_verified, cover_image_url, school_images(url)")
+      // CMS-F.6 — défense en profondeur avec la policy RLS publique
+      // (migration 0029, PRÉPARÉE NON EXÉCUTÉE).
+      .eq("school_images.status", "live")
       .order("name", { ascending: true })
       .then(({ data }) => {
         if (!data) return;
@@ -176,7 +182,9 @@ function PreinscriptionForm() {
   if (success) {
     return (
       <div className="min-h-screen bg-[#ECECEA] flex flex-col">
-        <AuthHeader />
+        <SiteHeader />
+        <SiteHeaderSpacer />
+        <AnnouncementTicker items={tickerItems} />
         <div className="flex-1 flex items-center justify-center px-6 py-12">
           <div className="max-w-md w-full text-center bg-white rounded-[24px] shadow-elevation-2 p-8">
             <div className="w-14 h-14 bg-primary-light rounded-full flex items-center justify-center mx-auto mb-5">
@@ -214,7 +222,17 @@ function PreinscriptionForm() {
             <div className="flex flex-col gap-2.5">
               {trackingCode && (
                 <Link
-                  href={`/suivi-admission?code=${trackingCode}`}
+                  href="/suivi-admission"
+                  onClick={() => {
+                    try {
+                      window.sessionStorage.setItem(
+                        "ecoles237.admission-tracking-code:v1",
+                        trackingCode
+                      );
+                    } catch {
+                      // The code remains visible and copyable for manual entry.
+                    }
+                  }}
                   className="w-full h-[48px] flex items-center justify-center rounded-card bg-gradient-to-r from-primary to-primary-dark text-white text-sm font-bold hover:shadow-elevation-1 transition-all duration-base"
                 >
                   Suivre ma demande
@@ -236,7 +254,9 @@ function PreinscriptionForm() {
 
   return (
     <div className="min-h-screen bg-[#ECECEA] flex flex-col">
-      <AuthHeader />
+      <SiteHeader />
+      <SiteHeaderSpacer />
+      <AnnouncementTicker items={tickerItems} />
 
       <div className="flex-1 px-6 py-10">
         <div className="max-w-[720px] mx-auto">

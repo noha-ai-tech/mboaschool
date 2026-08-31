@@ -1,72 +1,127 @@
-// POST /api/personnel/[id]/inviter
-// Invitation par email (Phase 4, mode "email") — généralise
-// /api/enseignants/[id]/inviter à tout membre du personnel, pas seulement
-// aux enseignants. Si le membre est un enseignant (staff_members.enseignant_id
-// non nul), le rôle "teacher" est affecté comme avant ; sinon, la personne
-// obtient un compte "parent" au sens système (aucun rôle organisationnel
-// dédié dans `user_role` — voir docs/pro/03_ROLES.md sur ce choix).
-
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { authorizeEstablishmentRoute } from "@/lib/school/establishmentRoute";
+import {
+  isInvitationUuid,
+  normalizeStoredInvitationEmail,
+  parseInvitationIssuerRequest,
+  requireIssuerIdempotencyKey,
+} from "@/lib/invitations/issuerContracts";
+import { issueAndDeliverInvitation } from "@/lib/invitations/issuerFlow";
+import {
+  getPreparedInvitationIssuerDependencies,
+  isInvitationIssuerActivationReady,
+  isInvitationIssuerExplicitlyEnabled,
+} from "@/lib/invitations/issuerServerWiring";
+import {
+  invitationIssuerLockedResponse,
+  invitationRequestErrorResponse,
+  secureInvitationIssuerJson,
+  secureInvitationIssuerResponse,
+} from "@/lib/invitations/issuerHttp";
+import { InvitationIssuerUnavailableError } from "@/lib/invitations/internalIssuer";
+
+export const runtime = "nodejs";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const { id: staffMemberId } = await params;
+  if (!isInvitationUuid(staffMemberId)) {
+    return secureInvitationIssuerJson(
+      { error: "Membre introuvable", code: "RESOURCE_NOT_FOUND" },
+      404,
+    );
+  }
+
+  const body = await req.json().catch(() => null);
+  let request;
+  try {
+    request = parseInvitationIssuerRequest(body);
+  } catch (error) {
+    return invitationRequestErrorResponse(error);
+  }
+
   const supabase = await createClient();
+  const access = await authorizeEstablishmentRoute({
+    supabase,
+    requestedEstablishmentId: request.requestedEstablishmentId,
+    capability: "personnel:manage",
+  });
+  if (!access.ok) return secureInvitationIssuerResponse(access.response);
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
-
-  const { data: etablissement } = await supabase
-    .from("establishments")
-    .select("id")
-    .eq("owner_id", user.id)
-    .single();
-  if (!etablissement) return NextResponse.json({ error: "Accès refusé" }, { status: 403 });
-
-  const { data: member } = await supabase
+  const { data: member, error: resourceError } = await supabase
     .from("staff_members")
-    .select("id, first_name, last_name, email, user_id, enseignant_id")
+    .select("id, email, user_id")
     .eq("id", staffMemberId)
-    .eq("etablissement_id", etablissement.id)
-    .single();
+    .eq("etablissement_id", access.establishment.id)
+    .maybeSingle();
 
-  if (!member) return NextResponse.json({ error: "Membre introuvable" }, { status: 404 });
-  if (!member.email) {
-    return NextResponse.json({ error: "Aucun email renseigné pour cette personne" }, { status: 400 });
+  if (resourceError) {
+    return secureInvitationIssuerJson(
+      { error: "Impossible de vérifier la ressource", code: "RESOURCE_LOOKUP_FAILED" },
+      500,
+    );
+  }
+  if (!member) {
+    return secureInvitationIssuerJson(
+      { error: "Membre introuvable", code: "RESOURCE_NOT_FOUND" },
+      404,
+    );
   }
   if (member.user_id) {
-    return NextResponse.json({ error: "Cette personne a déjà un compte actif" }, { status: 409 });
+    return secureInvitationIssuerJson(
+      { error: "Compte déjà actif", code: "RESOURCE_ALREADY_LINKED" },
+      409,
+    );
+  }
+  const recipientEmail = normalizeStoredInvitationEmail(member.email);
+  if (!recipientEmail) {
+    return secureInvitationIssuerJson(
+      { error: "Aucun e-mail valide enregistré", code: "RESOURCE_EMAIL_REQUIRED" },
+      400,
+    );
   }
 
-  const origin = req.headers.get("origin") ?? process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const admin = createAdminClient();
+  // Source-controlled lock: no environment value can implicitly enable this.
+  if (
+    !isInvitationIssuerExplicitlyEnabled() ||
+    !isInvitationIssuerActivationReady()
+  ) return invitationIssuerLockedResponse();
 
-  const { error: inviteError } = await admin.auth.admin.inviteUserByEmail(member.email, {
-    data: { role: member.enseignant_id ? "teacher" : undefined },
-    redirectTo: `${origin}/auth/callback`,
-  });
+  try {
+    const idempotencyKey = requireIssuerIdempotencyKey(request);
+    const result = await issueAndDeliverInvitation(
+      {
+        actorId: access.user.id,
+        establishmentId: access.establishment.id,
+        resourceType: "staff_member",
+        resourceId: member.id,
+        recipientEmail,
+        idempotencyKey,
+        retryOf: request.retryOf,
+      },
+      getPreparedInvitationIssuerDependencies(),
+    );
 
-  if (inviteError) {
-    if (inviteError.message?.includes("already been registered")) {
-      return NextResponse.json(
-        { error: "Un compte existe déjà avec cet email" },
-        { status: 409 }
+    if (result.outcome === "failed") {
+      return secureInvitationIssuerJson(
+        { error: "Livraison refusée", code: "INVITATION_DELIVERY_FAILED" },
+        502,
       );
     }
-    return NextResponse.json({ error: `Échec de l'invitation : ${inviteError.message}` }, { status: 500 });
+    return secureInvitationIssuerJson(
+      { message: "Demande d'invitation traitée", status: result.outcome },
+      202,
+    );
+  } catch (error) {
+    if (error instanceof InvitationIssuerUnavailableError) {
+      return invitationIssuerLockedResponse();
+    }
+    return secureInvitationIssuerJson(
+      { error: "Émission indisponible", code: "INVITATION_ISSUER_UNAVAILABLE" },
+      503,
+    );
   }
-
-  await supabase
-    .from("staff_members")
-    .update({ invite_envoyee_le: new Date().toISOString(), access_mode: "email" })
-    .eq("id", staffMemberId);
-
-  return NextResponse.json({
-    ok: true,
-    message: `Invitation envoyée à ${member.first_name} ${member.last_name} (${member.email})`,
-  });
 }

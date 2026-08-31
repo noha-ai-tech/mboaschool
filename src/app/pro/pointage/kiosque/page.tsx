@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { Suspense, useState, useRef, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { CheckCircle2, XCircle } from "lucide-react";
 
 type TypePointage = "arrivee" | "depart";
@@ -9,6 +10,16 @@ type Status = "idle" | "loading" | "success" | "error";
 const DIGITS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "DEL"] as const;
 
 export default function KioskuePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#07111f]" />}>
+      <KiosqueContent />
+    </Suspense>
+  );
+}
+
+function KiosqueContent() {
+  const searchParams = useSearchParams();
+  const requestedEstablishmentId = searchParams.get("school");
   const [pin, setPin] = useState("");
   const [type, setType] = useState<TypePointage>("arrivee");
   const [status, setStatus] = useState<Status>("idle");
@@ -72,7 +83,7 @@ export default function KioskuePage() {
       const res = await fetch("/api/pointage/enregistrer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code_pointage: pin, type, photo }),
+        body: JSON.stringify({ code_pointage: pin, type, photo, requestedEstablishmentId }),
       });
       const data = await res.json();
       if (!res.ok) {

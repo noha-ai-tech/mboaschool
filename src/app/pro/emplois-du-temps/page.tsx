@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 import { GrilleEmploiDuTemps } from "@/components/timetable/GrilleEmploiDuTemps";
 import { BoutonGenerer } from "@/components/timetable/BoutonGenerer";
 import { BoutonPublier } from "@/components/timetable/BoutonPublier";
@@ -37,6 +38,7 @@ export default async function EmploisDuTempsPage({
     departement?: string;
     matiere?: string;
     salle?: string;
+    school?: string;
   }>;
 }) {
   const supabase = await createClient();
@@ -52,16 +54,9 @@ export default async function EmploisDuTempsPage({
     return <p className="p-6 text-sm text-gray-500">Non authentifié.</p>;
   }
 
-  const etablissement = await getActiveEstablishment(supabase, user.id);
-
-  if (!etablissement?.id) {
-    return (
-      <p className="p-6 text-sm text-gray-500">
-        Aucun établissement rattaché à ce compte.
-      </p>
-    );
-  }
+  const etablissement = await requireActiveEstablishment(supabase, user.id, params.school, "/pro/emplois-du-temps");
   const etablissementId = etablissement.id;
+  const schoolHref = (href: string) => withEstablishmentQuery(href, etablissementId);
 
   const { data: creneaux } = await supabase
     .from("creneaux_horaires")
@@ -122,7 +117,7 @@ export default async function EmploisDuTempsPage({
         {classes.map((c) => (
           <Link
             key={c.id}
-            href={`/pro/emplois-du-temps?vue=classe&classe=${c.id}`}
+            href={schoolHref(`/pro/emplois-du-temps?vue=classe&classe=${c.id}`)}
             className={`rounded-full px-3 py-1 text-sm border ${
               c.id === classeSelectionnee.id
                 ? "bg-[#007A3D] text-white border-[#007A3D]"
@@ -177,7 +172,7 @@ export default async function EmploisDuTempsPage({
         {enseignants.map((e) => (
           <Link
             key={e.id}
-            href={`/pro/emplois-du-temps?vue=individuelle&enseignant=${e.id}`}
+            href={schoolHref(`/pro/emplois-du-temps?vue=individuelle&enseignant=${e.id}`)}
             className={`rounded-full px-3 py-1 text-sm border ${
               e.id === enseignantSelectionne.id
                 ? "bg-[#007A3D] text-white border-[#007A3D]"
@@ -245,7 +240,7 @@ export default async function EmploisDuTempsPage({
         {departements.map((d) => (
           <Link
             key={d}
-            href={`/pro/emplois-du-temps?vue=departement&departement=${encodeURIComponent(d)}`}
+            href={schoolHref(`/pro/emplois-du-temps?vue=departement&departement=${encodeURIComponent(d)}`)}
             className={`rounded-full px-3 py-1 text-sm border ${
               d === departementSelectionne
                 ? "bg-[#007A3D] text-white border-[#007A3D]"
@@ -299,7 +294,7 @@ export default async function EmploisDuTempsPage({
         {matieres.map((m) => (
           <Link
             key={m.id}
-            href={`/pro/emplois-du-temps?vue=matiere&matiere=${m.id}`}
+            href={schoolHref(`/pro/emplois-du-temps?vue=matiere&matiere=${m.id}`)}
             className={`rounded-full px-3 py-1 text-sm border ${
               m.id === matiereSelectionnee.id
                 ? "bg-[#007A3D] text-white border-[#007A3D]"
@@ -325,7 +320,7 @@ export default async function EmploisDuTempsPage({
         <div className="p-6">
           <p className="text-sm text-gray-500">
             Aucune salle enregistrée. La gestion des salles est nouvelle (Mission 05) — ajoutez-en depuis{" "}
-            <Link href="/pro/salles" className="text-[#007A3D] font-medium">Salles</Link>.
+            <Link href={schoolHref("/pro/salles")} className="text-[#007A3D] font-medium">Salles</Link>.
           </p>
         </div>
       );
@@ -356,7 +351,7 @@ export default async function EmploisDuTempsPage({
         {salles.map((s) => (
           <Link
             key={s.id}
-            href={`/pro/emplois-du-temps?vue=salle&salle=${s.id}`}
+            href={schoolHref(`/pro/emplois-du-temps?vue=salle&salle=${s.id}`)}
             className={`rounded-full px-3 py-1 text-sm border ${
               s.id === salleSelectionnee.id
                 ? "bg-[#007A3D] text-white border-[#007A3D]"
@@ -403,8 +398,8 @@ export default async function EmploisDuTempsPage({
           <p className="text-sm text-gray-500">Année scolaire {ANNEE_SCOLAIRE_COURANTE}</p>
         </div>
         <div className="flex items-center gap-3">
-          <BoutonGenerer anneeScolaire={ANNEE_SCOLAIRE_COURANTE} />
-          <BoutonPublier anneeScolaire={ANNEE_SCOLAIRE_COURANTE} hasBrouillon={(brouillonCount ?? 0) > 0} />
+          <BoutonGenerer anneeScolaire={ANNEE_SCOLAIRE_COURANTE} establishmentId={etablissementId} />
+          <BoutonPublier anneeScolaire={ANNEE_SCOLAIRE_COURANTE} hasBrouillon={(brouillonCount ?? 0) > 0} establishmentId={etablissementId} />
         </div>
       </div>
 
@@ -413,7 +408,7 @@ export default async function EmploisDuTempsPage({
           {TABS.map((tab) => (
             <Link
               key={tab.vue}
-              href={`/pro/emplois-du-temps?vue=${tab.vue}`}
+              href={schoolHref(`/pro/emplois-du-temps?vue=${tab.vue}`)}
               className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px ${
                 vue === tab.vue
                   ? "border-[#007A3D] text-[#007A3D]"

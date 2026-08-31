@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function BoutonGenerer({ anneeScolaire }: { anneeScolaire: string }) {
+export function BoutonGenerer({ anneeScolaire, establishmentId }: { anneeScolaire: string; establishmentId: string }) {
   const router = useRouter();
   const [enCours, setEnCours] = useState(false);
   const [erreur, setErreur] = useState<string | null>(null);
@@ -15,7 +15,7 @@ export function BoutonGenerer({ anneeScolaire }: { anneeScolaire: string }) {
       const res = await fetch("/api/timetable/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ anneeScolaire }),
+        body: JSON.stringify({ anneeScolaire, requestedEstablishmentId: establishmentId }),
       });
       const data = await res.json();
       if (!res.ok) {

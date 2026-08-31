@@ -1,19 +1,19 @@
 import { redirect } from "next/navigation";
 import { CalendarOff } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 import { FormulaireAbsence } from "@/components/pro/FormulaireAbsence";
 
 const TYPE_LABELS: Record<string, string> = { absence: "Absence", conge: "Congé", mission: "Mission" };
 const STATUT_LABELS: Record<string, string> = { declaree: "Déclarée", justifiee: "Justifiée", refusee: "Refusée" };
 
-export default async function AbsencesPage() {
+export default async function AbsencesPage({ searchParams }: { searchParams: Promise<{ school?: string }> }) {
+  const { school } = await searchParams;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/connexion");
 
-  const etablissement = await getActiveEstablishment(supabase, user.id);
-  if (!etablissement) redirect("/dashboard/ecole");
+  const etablissement = await requireActiveEstablishment(supabase, user.id, school, "/pro/absences");
 
   const { data: staffMembers } = await supabase
     .from("staff_members")

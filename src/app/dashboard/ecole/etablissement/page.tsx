@@ -3,37 +3,93 @@
 // "Modifier ma page" — éditeur visuel de la fiche publique (CMS-B.0 + B.1 +
 // B.2). Route reprise telle quelle depuis le hub existant (recommandation
 // CMS-A : éviter de multiplier les routes). Sécurité : aucune donnée n'est
-// dérivée de l'URL — l'école éditée est déterminée uniquement par la
-// session authentifiée (owner_id = auth.uid()), jamais par un id passé en
-// paramètre.
+// dérivée de l'URL — l'école éditée est l'établissement ACTIF résolu par
+// useSchool()/SchoolContext (session + préférence active_school revalidée
+// côté serveur, PRO-00B/PRO-03 — mêmes garanties, un seul moteur de
+// résolution), jamais un id passé en paramètre. Reconciliation
+// multi-écoles : cette page faisait auparavant sa propre résolution
+// mono-établissement (.maybeSingle() sur owner_id), qui échouait
+// silencieusement pour un propriétaire possédant 2+ écoles.
 //
 // CMS-B.2 : Présentation, Contact et l'ordre/visibilité des sections sont
 // désormais sauvegardés pour de vrai, via /api/school-page/* (whitelist
 // stricte, autorisation recalculée côté serveur — voir
-// src/lib/cms/authorizeSchoolMutation.ts). Tarifs / Infrastructures / Hero
-// restent un brouillon 100% local (hors périmètre de ce sprint) — perdu au
-// rechargement, ce n'est pas un modèle de données. Publier reste désactivé
-// tant que la vérification de sécurité (fuite applications, migrations
-// 0007/0014) n'est pas confirmée par Eddy + l'architecte — voir le rapport
-// CMS-B.2 pour le détail de ce qui reste à débloquer.
+// src/lib/cms/authorizeSchoolMutation.ts). Publier reste désactivé tant que
+// la vérification de sécurité (fuite applications, migrations 0007/0014)
+// n'est pas confirmée par Eddy + l'architecte — voir le rapport CMS-B.2
+// pour le détail de ce qui reste à débloquer.
+//
+// CMS-D : Tarifs et Infrastructures sont désormais sauvegardés pour de
+// vrai (/api/school-page/pricing, /api/school-page/infrastructure), même
+// table `fees`/`infrastructures` que les pages dashboard/ecole/frais et
+// dashboard/ecole/infrastructure existantes (non dupliquées, non
+// modifiées). Une valeur de tarif vide est enregistrée NULL, jamais 0 (0
+// peut être un vrai prix).
+//
+// CMS-D.1 : Admissions branchée sur admissions_config (configuration
+// PUBLIQUE, distincte du pipeline de candidatures privé de
+// /dashboard/ecole/admissions — jamais lu ni exposé ici).
+//
+// CMS-E : Actualités et Documents branchés en écriture réelle
+// (/api/school-page/news, /api/school-page/documents), même table que les
+// pages dashboard/ecole/annonces et dashboard/ecole/documents existantes
+// (non dupliquées). newsList est une liste de gestion propre à l'éditeur
+// (création/édition/suppression) ; l'aperçu (renderSectionContent) continue
+// d'utiliser AnnouncementsTab tel quel, jamais un second renderer.
+//
+// CMS-C : Galerie branchée en écriture réelle (/api/school-page/gallery,
+// même autorisation que Présentation/Contact). Il n'existe aucun asset
+// "cover" séparé à uploader dans le modèle actuel — cover_image_url est un
+// champ hérité, jamais écrit par l'application, utilisé uniquement en
+// repli quand school_images est vide (voir src/lib/school/heroMode.ts).
+//
+// CMS-C.1 : le mode d'affichage du hero (carrousel/image unique/aucun) —
+// voir CMS-F.3 ci-dessous, ce mode est désormais un champ DRAFT.
+//
+// CMS-F.3 — CUTOVER BROUILLON. Presentation, Contact, Hero mode, Tarifs,
+// Infrastructures, Admissions (champs descriptifs) et Sections
+// (ordre/visibilité) ne sauvegardent PLUS directement dans les tables live
+// — ils lisent et écrivent désormais school_page_drafts via
+// /api/school-page/draft (CMS-F.2). Les anciennes routes /presentation,
+// /contact, /hero, /pricing, /infrastructure, /sections restent en place
+// (non supprimées, CMS-F.3 §24) mais ne sont plus appelées par cet
+// éditeur. admissions_config.is_open, Actualités et Documents restent
+// IMMEDIATE LIVE — voir toggleAdmissionsOpen(). CMS-F.6 : la Galerie a
+// rejoint le modèle brouillon (voir uploadGalleryImage/deleteGalleryImage/
+// undoRemoveGalleryImage plus bas) — seul le mode d'affichage du hero
+// était déjà draft-aware avant F.6 ; les diapositives elles-mêmes suivent
+// maintenant la Galerie effective (live moins remove_ids, plus
+// draft_pending_add), plus un hybride figé sur le live. La fiche publique
+// (src/app/ecole/[id]/page.tsx) continue de lire uniquement les tables
+// live : aucun changement de comportement public tant qu'un futur Publish
+// n'existe pas (CMS-F.4+).
+//
+// Garde de génération de requête (loadRequestIdRef) : protège contre une
+// réponse réseau tardive (école déjà changée entre-temps) qui écraserait
+// l'état local de la NOUVELLE école active avec les données de l'ANCIENNE
+// (CMS-F.3 §5/§22).
 
 import { useMemo, useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { ExternalLink, Phone, Mail, MapPin, Globe, ImageIcon, FileText, ClipboardList, Image as ImageIconAlt, Video } from "lucide-react";
-import { SchoolHeroCarousel, type SchoolHeroSlide } from "@/components/school/SchoolHeroCarousel";
+import { useSchool } from "@/lib/useSchool";
+import { ExternalLink, Phone, Mail, MapPin, Globe, ImageIcon, FileText, ClipboardList, Image as ImageIconAlt, Video, Upload, Trash2 } from "lucide-react";
+import { SchoolHeroCarousel } from "@/components/school/SchoolHeroCarousel";
+import { computeAllHeroSlides, resolveHeroSlides, type HeroMode } from "@/lib/school/heroMode";
 import { SchoolGallery } from "@/components/school/SchoolGallery";
 import { GeneralTab, FEE_COLS, INFRA_LABELS } from "@/components/school/GeneralTab";
 import { getPrimaryPublicBadge, resolveEstablishmentTrustState, trustInputFromEstablishmentRow } from "@/lib/trust/resolveEstablishmentTrustState";
 import { DocumentsTab } from "@/components/school/DocumentsTab";
 import { AnnouncementsTab } from "@/components/school/AnnouncementsTab";
-import { ParentTab } from "@/components/school/ParentTab";
+import { ParentTab, type AdmissionsConfig } from "@/components/school/ParentTab";
 import { ContactRow } from "@/components/school/ContactRow";
 import { EditableSection } from "@/components/cms/EditableSection";
-import { EditorToolbar } from "@/components/cms/EditorToolbar";
+import { EditorToolbar, type DraftStatus } from "@/components/cms/EditorToolbar";
 import { Drawer } from "@/components/cms/Drawer";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { CANONICAL_SECTION_KEYS, type SchoolPageSectionKey } from "@/lib/schoolPage/sections";
+import type { SchoolPageDraftPayload, SchoolPageDraftRow } from "@/lib/schoolPage/draftPayload";
 
 type SectionKey =
   | "presentation" | "admissions" | "tarifs" | "infrastructures"
@@ -41,11 +97,29 @@ type SectionKey =
 
 type DrawerKey = SectionKey | "hero";
 
-type HeroMode = "carousel" | "image" | "none";
+// Clés attendues par school_page_sections / le payload draft (CMS-F.2) —
+// différentes des clés internes de l'éditeur pour "tarifs"/
+// "infrastructures"/"galerie"/"actualites" (alignées sur le vocabulaire du
+// brief CMS-B.2 §4).
+const SECTION_TO_DB_KEY: Record<SectionKey, SchoolPageSectionKey> = {
+  presentation: "presentation",
+  admissions: "admissions",
+  tarifs: "pricing",
+  infrastructures: "infrastructure",
+  galerie: "gallery",
+  actualites: "news",
+  documents: "documents",
+  contact: "contact",
+};
+const DB_KEY_TO_SECTION = Object.fromEntries(
+  (Object.entries(SECTION_TO_DB_KEY) as [SectionKey, SchoolPageSectionKey][]).map(([ui, db]) => [db, ui])
+) as Record<SchoolPageSectionKey, SectionKey>;
 
-const DEFAULT_ORDER: SectionKey[] = [
-  "presentation", "admissions", "tarifs", "infrastructures", "galerie", "actualites", "documents", "contact",
-];
+// CMS-F.3 — dérivé de la source unique (src/lib/schoolPage/sections.ts) au
+// lieu d'un second tableau codé en dur ; produit exactement les mêmes 8
+// valeurs, dans le même ordre, qu'avant (chaque clé DB canonique se
+// traduit 1:1 vers la clé interne de l'éditeur ci-dessus).
+const DEFAULT_ORDER: SectionKey[] = CANONICAL_SECTION_KEYS.map((k) => DB_KEY_TO_SECTION[k]);
 
 const SECTION_LABELS: Record<SectionKey, string> = {
   presentation: "Présentation",
@@ -58,42 +132,17 @@ const SECTION_LABELS: Record<SectionKey, string> = {
   contact: "Contact",
 };
 
-// Sections où "Modifier" ouvre un formulaire local (Annuler / Appliquer).
-// Les autres ("admissions", "galerie", "actualites", "documents") ouvrent
-// un panneau lecture seule — aucun modèle d'ajout/suppression en CMS-B.1/B.2.
-const EDITABLE_FORM_SECTIONS = new Set<SectionKey>(["presentation", "tarifs", "infrastructures", "contact"]);
-
-// Sections dont la sauvegarde est réellement branchée en CMS-B.2 — les
-// autres (hero, tarifs, infrastructures) restent un brouillon local géré
-// par applyDrawer() sans appel réseau.
-const SERVER_SAVED_SECTIONS = new Set<SectionKey>(["presentation", "contact"]);
-
-// Clés attendues par school_page_sections (migration 0021) — différentes
-// des clés internes de l'éditeur pour "tarifs"/"infrastructures"/
-// "galerie"/"actualites" (alignées sur le vocabulaire du brief CMS-B.2 §4).
-const SECTION_TO_DB_KEY: Record<SectionKey, string> = {
-  presentation: "presentation",
-  admissions: "admissions",
-  tarifs: "pricing",
-  infrastructures: "infrastructure",
-  galerie: "gallery",
-  actualites: "news",
-  documents: "documents",
-  contact: "contact",
-};
+// Sections où "Modifier" ouvre un formulaire réellement sauvegardé
+// (Annuler / Enregistrer, applyDrawer()) — CMS-B.2 (presentation, contact)
+// + CMS-D (tarifs, infrastructures) + CMS-D.1 (admissions, config publique
+// distincte du pipeline privé applications). Les autres ("galerie",
+// "actualites", "documents") ouvrent un panneau lecture seule ou leur
+// propre flux (galerie : upload/suppression immédiats, voir plus bas).
+// Hero (CMS-C.1) n'en fait pas partie : sauvegarde immédiate hors
+// applyDrawer(), voir updateHeroMode().
+const EDITABLE_FORM_SECTIONS = new Set<SectionKey>(["presentation", "tarifs", "infrastructures", "contact", "admissions"]);
 
 type SaveState = "idle" | "saving" | "saved" | "error";
-
-type FieldEdits = {
-  description?: string;
-  phone?: string;
-  email?: string;
-  website?: string;
-  address?: string;
-  city?: string;
-  fees?: Record<string, number>;
-  infra?: Record<string, boolean>;
-};
 
 type FormDraft = {
   description: string;
@@ -104,121 +153,570 @@ type FormDraft = {
   city: string;
   fees: Record<string, string>;
   infra: Record<string, boolean>;
-  heroMode: HeroMode;
+  admissionsOpen: boolean;
+  admissionsLevels: string;
+  admissionsConditions: string;
+  admissionsDocuments: string;
+  admissionsPeriodStart: string;
+  admissionsPeriodEnd: string;
+  admissionsAdditionalInfo: string;
 };
 
+// Résultat d'un appel saveDraft() — distingue explicitement un conflit de
+// version (409, expected_updated_at périmé) d'une autre erreur, pour que
+// chaque appelant puisse afficher le bon message (CMS-F.3 §16 : jamais de
+// ré-écrasement silencieux).
+type SaveDraftResult =
+  | { ok: true; draft: SchoolPageDraftRow }
+  | { ok: false; conflict: true }
+  | { ok: false; conflict: false; error: string };
+
 export default function ModifierMaPagePage() {
-  const [authChecked, setAuthChecked] = useState(false);
-  const [authed, setAuthed] = useState(false);
+  const { school: activeSchool, user, loading: schoolLoading } = useSchool();
   const [school, setSchool] = useState<any>(null);
   const [fees, setFees] = useState<any | null>(null);
   const [infra, setInfra] = useState<any | null>(null);
   const [images, setImages] = useState<any[]>([]);
   const [docsList, setDocsList] = useState<any[]>([]);
+  const [newsList, setNewsList] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // CMS-F.2/F.3 — état du brouillon (source de vérité pour les 8 domaines
+  // GLOBAL DRAFT). draftUpdatedAt sert de jeton de concurrence optimiste
+  // (expected_updated_at) sur chaque PATCH.
+  const [draftPayload, setDraftPayload] = useState<SchoolPageDraftPayload | null>(null);
+  const [draftUpdatedAt, setDraftUpdatedAt] = useState<string | null>(null);
+  const [draftIsDirty, setDraftIsDirty] = useState(false);
+  const [draftLoading, setDraftLoading] = useState(true);
+  const [draftError, setDraftError] = useState<string | null>(null);
+  const [draftStatus, setDraftStatus] = useState<DraftStatus>("loading");
+  const loadRequestIdRef = useRef(0);
 
   const [order, setOrder] = useState<SectionKey[]>(DEFAULT_ORDER);
   const [visibility, setVisibility] = useState<Record<SectionKey, boolean>>(
     () => Object.fromEntries(DEFAULT_ORDER.map((k) => [k, true])) as Record<SectionKey, boolean>
   );
-  const [previewMode, setPreviewMode] = useState(false);
 
-  const [fieldEdits, setFieldEdits] = useState<FieldEdits>({});
-  const [heroMode, setHeroMode] = useState<HeroMode | null>(null); // null = pas de préférence locale, utilise le défaut calculé
+  const [admissionsConfig, setAdmissionsConfig] = useState<AdmissionsConfig | null>(null);
+  // Admissions ouvertes/fermées (is_open) — IMMEDIATE LIVE, jamais dans le
+  // brouillon (CMS-F.3 §11). État de sauvegarde séparé de drawerSaveState
+  // car ce toggle n'attend pas le bouton "Enregistrer" du tiroir.
+  const [admissionsOpenSaving, setAdmissionsOpenSaving] = useState(false);
+  const [admissionsOpenError, setAdmissionsOpenError] = useState<string | null>(null);
+
+  // Hero — mutation réelle immédiate sur le BROUILLON (CMS-F.3 §8 : la
+  // galerie elle-même reste live, seul le mode d'affichage devient draft —
+  // hybride temporaire intentionnel, documenté ci-dessous).
+  const [heroSaveState, setHeroSaveState] = useState<SaveState>("idle");
+  const [heroError, setHeroError] = useState<string | null>(null);
+
+  // Galerie CMS-C — mutation réelle immédiate (Mode A, pas de brouillon :
+  // CMS-F.3 §13, la mise en scène de la galerie est différée à CMS-F.6).
+  // galleryDeletingId distinct de galleryUploading pour ne jamais
+  // désactiver tout le panneau pendant une suppression ciblée.
+  const [galleryUploading, setGalleryUploading] = useState(false);
+  const [galleryDeletingId, setGalleryDeletingId] = useState<string | null>(null);
+  const [galleryError, setGalleryError] = useState<string | null>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
+
+  // Actualités CMS-E — mutation réelle immédiate (Mode A), même famille que
+  // Galerie/Documents. newsForm sert à la fois à créer (newsEditingId=null)
+  // et à éditer (newsEditingId=id de l'annonce en cours d'édition).
+  const [newsForm, setNewsForm] = useState({ title: "", content: "", is_important: false });
+  const [newsEditingId, setNewsEditingId] = useState<string | null>(null);
+  const [newsSaving, setNewsSaving] = useState(false);
+  const [newsDeletingId, setNewsDeletingId] = useState<string | null>(null);
+  const [newsError, setNewsError] = useState<string | null>(null);
+
+  // Documents CMS-E — même pattern que Galerie (upload/suppression immédiats).
+  const [docName, setDocName] = useState("");
+  const [docType, setDocType] = useState("fiche");
+  const [docUploading, setDocUploading] = useState(false);
+  const [docDeletingId, setDocDeletingId] = useState<string | null>(null);
+  const [docError, setDocError] = useState<string | null>(null);
+  const docInputRef = useRef<HTMLInputElement>(null);
   const [activeDrawer, setActiveDrawer] = useState<DrawerKey | null>(null);
   const [formDraft, setFormDraft] = useState<FormDraft | null>(null);
 
   const [drawerSaveState, setDrawerSaveState] = useState<SaveState>("idle");
   const [drawerError, setDrawerError] = useState<string | null>(null);
   const [sectionsSaveState, setSectionsSaveState] = useState<SaveState>("idle");
-  const sectionsTouched = useRef(false); // ne sauvegarde jamais l'ordre par défaut au premier rendu
+  const sectionsSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     async function load() {
-      const { data: { user: authUser } } = await supabase.auth.getUser();
-      if (!authUser) {
-        setAuthChecked(true);
+      const requestId = ++loadRequestIdRef.current;
+
+      if (schoolLoading) return;
+      if (!user || !activeSchool) {
         setLoading(false);
+        setDraftLoading(false);
         return;
       }
-      setAuthed(true);
 
-      // Le serveur (RLS) recalcule l'établissement autorisé à partir de la
-      // session — aucun id d'établissement n'est jamais lu depuis l'URL.
-      const { data: schoolData } = await supabase
+      // CMS-F.3 §5 — changement d'école active : jamais montrer/éditer le
+      // brouillon de l'école précédente pendant le chargement de la
+      // nouvelle. Réinitialisation immédiate + squelette de page
+      // (loading=true couvre déjà tout l'éditeur, y compris les sections
+      // draft) avant tout appel réseau.
+      setLoading(true);
+      setDraftPayload(null);
+      setDraftUpdatedAt(null);
+      setDraftIsDirty(false);
+      setDraftError(null);
+      setDraftStatus("loading");
+      setDraftLoading(true);
+
+      // Champs CMS-only absents de SchoolData (partagé par tout /dashboard/ecole) —
+      // complément scopé par l'établissement ACTIF déjà résolu, pas une
+      // deuxième résolution d'établissement.
+      const { data: extra } = await supabase
         .from("establishments")
-        .select("*")
-        .eq("owner_id", authUser.id)
+        .select("cover_image_url, latitude, longitude, hero_mode")
+        .eq("id", activeSchool.id)
         .maybeSingle();
 
-      setAuthChecked(true);
-      if (!schoolData) { setLoading(false); return; }
-      setSchool(schoolData);
+      if (loadRequestIdRef.current !== requestId) return; // école déjà changée depuis
+
+      const schoolData = { ...activeSchool, ...extra };
 
       const [
         { data: feesData },
         { data: infraData },
         { data: imagesData },
         { data: docsData },
+        { data: admissionsData },
+        { data: newsData },
+        draftResult,
       ] = await Promise.all([
         supabase.from("fees").select("*").eq("establishment_id", schoolData.id).maybeSingle(),
         supabase.from("infrastructures").select("*").eq("establishment_id", schoolData.id).maybeSingle(),
         supabase.from("school_images").select("*").eq("establishment_id", schoolData.id).order("created_at", { ascending: false }),
         supabase.from("school_documents").select("*").eq("establishment_id", schoolData.id).order("created_at", { ascending: false }),
+        // admissions_config (migration 0025) — 0 ligne = comportement par
+        // défaut, pas d'erreur. is_open reste immediate-live (CMS-F.3 §11).
+        supabase.from("admissions_config").select("is_open, levels, conditions, required_documents, period_start, period_end, additional_info").eq("establishment_id", schoolData.id).maybeSingle(),
+        // CMS-E — liste de gestion (création/édition/suppression) distincte
+        // de l'aperçu public (AnnouncementsTab, laissé inchangé, auto-fetch).
+        supabase.from("school_announcements").select("*").eq("establishment_id", schoolData.id).order("created_at", { ascending: false }),
+        // CMS-F.2/F.3 — GET du brouillon en parallèle des chargements live
+        // existants. Enveloppé pour ne jamais faire échouer tout le
+        // Promise.all (donc bloquer les domaines immediate-live) si le
+        // brouillon échoue à charger.
+        fetch("/api/school-page/draft")
+          .then(async (res) => {
+            const json = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(json.error ?? `Erreur ${res.status}`);
+            return { ok: true as const, draft: json.draft as SchoolPageDraftRow };
+          })
+          .catch((e) => ({ ok: false as const, error: e instanceof Error ? e.message : "Échec du chargement du brouillon" })),
       ]);
 
+      if (loadRequestIdRef.current !== requestId) return; // école déjà changée depuis (réponse tardive ignorée)
+
+      setSchool(schoolData);
       if (feesData) setFees(feesData);
       if (infraData) setInfra(infraData);
       if (imagesData) setImages(imagesData);
       if (docsData) setDocsList(docsData);
+      if (admissionsData) setAdmissionsConfig(admissionsData as AdmissionsConfig);
+      if (newsData) setNewsList(newsData);
+
+      if ("error" in draftResult) {
+        setDraftError(draftResult.error);
+        setDraftStatus("error");
+      } else {
+        const draft = draftResult.draft;
+        setDraftPayload(draft.payload);
+        setDraftUpdatedAt(draft.updated_at);
+        setDraftIsDirty(draft.is_dirty);
+        setDraftStatus(draft.is_dirty ? "dirty" : "loaded");
+        const nextOrder = [...draft.payload.sections].sort((a, b) => a.position - b.position).map((s) => DB_KEY_TO_SECTION[s.section_key]);
+        const byKey = Object.fromEntries(draft.payload.sections.map((s) => [DB_KEY_TO_SECTION[s.section_key], s]));
+        setOrder(nextOrder);
+        setVisibility(Object.fromEntries(DEFAULT_ORDER.map((k) => [k, byKey[k]?.is_visible ?? true])) as Record<SectionKey, boolean>);
+      }
+      setDraftLoading(false);
       setLoading(false);
     }
     load();
-  }, []);
+  }, [activeSchool, user, schoolLoading]);
 
-  const allHeroSlides = useMemo<SchoolHeroSlide[]>(() => {
-    if (images.length > 0) return images.map((img: any) => ({ id: img.id, image: img.url as string }));
-    if (school?.cover_image_url) return [{ id: "cover", image: school.cover_image_url as string }];
-    return [];
-  }, [images, school?.cover_image_url]);
+  // CMS-F.6 — Galerie effective de l'éditeur : mêmes formules que
+  // /api/school-page/preview (mission §9) — live MOINS gallery.remove_ids,
+  // PLUS draft_pending_add. `images` reste la requête brute (les DEUX
+  // statuts, jamais un helper "public" qui filtrerait déjà) ; ces deux
+  // listes dérivées sont ce que l'éditeur affiche réellement.
+  const galleryRemoveIds = useMemo(() => new Set(draftPayload?.gallery.remove_ids ?? []), [draftPayload]);
+  const effectiveImages = useMemo(
+    () => images.filter((img: any) => (img.status === "live" ? !galleryRemoveIds.has(img.id) : img.status === "draft_pending_add")),
+    [images, galleryRemoveIds]
+  );
+  const pendingRemoveImages = useMemo(
+    () => images.filter((img: any) => img.status === "live" && galleryRemoveIds.has(img.id)),
+    [images, galleryRemoveIds]
+  );
 
-  const defaultHeroMode: HeroMode = allHeroSlides.length > 1 ? "carousel" : allHeroSlides.length === 1 ? "image" : "none";
-  const effectiveHeroMode = heroMode ?? defaultHeroMode;
+  // CMS-C.1 — résolution partagée avec le rendu public (src/lib/school/heroMode.ts).
+  // CMS-F.3 §8 : le MODE vient du brouillon. CMS-F.6 : les diapositives
+  // viennent désormais de la Galerie EFFECTIVE (plus un hybride live figé)
+  // — l'éditeur montre ce qui sera réellement publié après Publish, tout
+  // comme l'Aperçu.
+  const heroMode: HeroMode = draftPayload?.hero_mode ?? (school?.hero_mode as HeroMode | undefined) ?? "carousel";
+  const allHeroSlides = useMemo(
+    () => computeAllHeroSlides(effectiveImages.map((img: any) => ({ id: img.id, url: img.url })), school?.cover_image_url),
+    [effectiveImages, school?.cover_image_url]
+  );
+  const heroSlides = useMemo(() => resolveHeroSlides(allHeroSlides, heroMode), [allHeroSlides, heroMode]);
 
-  const heroSlides = useMemo<SchoolHeroSlide[]>(() => {
-    if (effectiveHeroMode === "none") return [];
-    if (effectiveHeroMode === "image") return allHeroSlides.slice(0, 1);
-    return allHeroSlides;
-  }, [allHeroSlides, effectiveHeroMode]);
+  // Fusionne le payload courant du brouillon avec les changements d'UN
+  // domaine, puis PATCH le payload COMPLET (CMS-F.3 §15 : jamais de
+  // payload partiel construit depuis zéro — préserve automatiquement tous
+  // les autres domaines, y compris gallery.remove_ids, §13).
+  async function saveDraft(domainOverride: Partial<SchoolPageDraftPayload>): Promise<SaveDraftResult> {
+    if (!draftPayload) {
+      return { ok: false, conflict: false, error: "Brouillon non chargé" };
+    }
+    const nextPayload: SchoolPageDraftPayload = { ...draftPayload, ...domainOverride };
+    setDraftStatus("saving");
+    try {
+      const res = await fetch("/api/school-page/draft", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...nextPayload, expected_updated_at: draftUpdatedAt }),
+      });
+      const json = await res.json().catch(() => ({}));
 
-  // Rendu toujours dérivé de "brouillon" (données réelles + éventuelles
-  // surcharges locales) — Editor et Aperçu utilisent exactement les mêmes
-  // valeurs, seule la présence des contrôles d'édition change.
+      if (res.status === 409) {
+        setDraftStatus("conflict");
+        return { ok: false, conflict: true };
+      }
+      if (!res.ok) {
+        setDraftStatus(draftIsDirty ? "dirty" : "loaded");
+        return { ok: false, conflict: false, error: json.error ?? `Erreur ${res.status}` };
+      }
+
+      const draft = json.draft as SchoolPageDraftRow;
+      setDraftPayload(draft.payload);
+      setDraftUpdatedAt(draft.updated_at);
+      setDraftIsDirty(draft.is_dirty); // CMS-F.3 §18 : ne redevient jamais false ici
+      setDraftStatus("saved");
+      setTimeout(() => setDraftStatus((s) => (s === "saved" ? "dirty" : s)), 1500);
+      return { ok: true, draft };
+    } catch (e) {
+      setDraftStatus(draftIsDirty ? "dirty" : "loaded");
+      return { ok: false, conflict: false, error: e instanceof Error ? e.message : "Erreur réseau" };
+    }
+  }
+
+  // Publier (CMS-F.5C) — POST /api/school-page/publish, qui n'accepte que
+  // expected_updated_at (jamais establishment_id, jamais le payload : voir
+  // la route). Le serveur appelle public.publish_school_page(), déjà testé
+  // en conditions réelles (CMS-F.5B/F.5B.1) pour l'atomicité, le rollback
+  // complet en cas d'échec, les gardes Gallery, la préservation de
+  // is_open, et l'isolation multi-écoles.
+  async function publishDraft() {
+    if (!draftPayload || !draftUpdatedAt) return;
+    if (!draftIsDirty) return; // le bouton est déjà désactivé dans ce cas — garde défensive
+    if (draftStatus === "publishing") return; // anti double-clic
+
+    setDraftStatus("publishing");
+    setDraftError(null);
+    try {
+      const res = await fetch("/api/school-page/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ expected_updated_at: draftUpdatedAt }),
+      });
+      const json = await res.json().catch(() => ({}));
+
+      if (res.status === 409) {
+        // CMS-F.5C §7 — jamais de ré-essai automatique ni d'écrasement :
+        // seul le mécanisme "Recharger" existant (CMS-F.3 §16) doit resynchroniser.
+        setDraftStatus("conflict");
+        return;
+      }
+
+      if (!res.ok) {
+        const code = json.error_code as string | undefined;
+        if (code === "GALLERY_INVALID") {
+          // CMS-F.6 — le brouillon référence une image de galerie
+          // invalide (étrangère, déjà supprimée, ou plus en statut live).
+          // Recharger corrige quasi toujours ce cas (état Galerie périmé).
+          setDraftError(
+            "La galerie de votre brouillon contient une référence invalide (photo déjà supprimée ou modifiée ailleurs) — rechargez le brouillon avant de réessayer."
+          );
+        } else if (code === "NO_CHANGES") {
+          setDraftError("Aucune modification à publier — le brouillon est déjà identique à la version publiée.");
+        } else if (code === "INVALID_DRAFT") {
+          setDraftError(`Le brouillon contient une erreur qui empêche la publication : ${json.error ?? "brouillon invalide"}.`);
+        } else {
+          setDraftError(json.error ?? "La publication a échoué. Aucune modification n'a été appliquée.");
+        }
+        setDraftStatus(draftIsDirty ? "dirty" : "loaded");
+        return;
+      }
+
+      // Succès — ne jamais faire semblant localement que le brouillon est
+      // propre : recharger la version faisant autorité depuis le serveur
+      // (CMS-F.5C §6), exactement comme reloadDraft().
+      const draftRes = await fetch("/api/school-page/draft");
+      const draftJson = await draftRes.json().catch(() => ({}));
+      if (draftRes.ok && draftJson.draft) {
+        const draft = draftJson.draft as SchoolPageDraftRow;
+        setDraftPayload(draft.payload);
+        setDraftUpdatedAt(draft.updated_at);
+        setDraftIsDirty(draft.is_dirty);
+        const nextOrder = [...draft.payload.sections].sort((a, b) => a.position - b.position).map((s) => DB_KEY_TO_SECTION[s.section_key]);
+        const byKey = Object.fromEntries(draft.payload.sections.map((s) => [DB_KEY_TO_SECTION[s.section_key], s]));
+        setOrder(nextOrder);
+        setVisibility(Object.fromEntries(DEFAULT_ORDER.map((k) => [k, byKey[k]?.is_visible ?? true])) as Record<SectionKey, boolean>);
+        setDraftStatus("published");
+        setTimeout(() => setDraftStatus((s) => (s === "published" ? (draft.is_dirty ? "dirty" : "loaded") : s)), 2000);
+      } else {
+        // Publication réussie mais le rechargement a échoué : ne jamais
+        // prétendre localement que le brouillon est propre sans preuve
+        // serveur — afficher "Publié" transitoirement puis un état honnête.
+        setDraftStatus("published");
+        setTimeout(() => setDraftStatus("error"), 2000);
+        setDraftError("Publication réussie, mais le rechargement du brouillon a échoué — rechargez la page.");
+      }
+    } catch (e) {
+      setDraftError(e instanceof Error ? e.message : "Erreur réseau lors de la publication");
+      setDraftStatus(draftIsDirty ? "dirty" : "loaded");
+    }
+  }
+
+  // Abandonner les modifications (CMS-F.7) — POST
+  // /api/school-page/draft/discard, qui n'accepte que expected_updated_at
+  // (jamais establishment_id, jamais un id d'image : voir la route).
+  // Remet le brouillon à l'identique de LIVE et abandonne toute photo
+  // draft_pending_add — jamais une image live touchée. Même discipline que
+  // publishDraft() : succès confirmé uniquement par un rechargement
+  // serveur, jamais une mise à jour locale optimiste.
+  async function discardDraft() {
+    if (!draftPayload || !draftUpdatedAt) return;
+    // canDiscard inclut déjà draftStatus !== "discarding" — anti double-clic
+    // garanti par cette seule garde, jamais une deuxième vérification
+    // redondante du même état.
+    if (!canDiscard) return; // le bouton est déjà désactivé dans ce cas — garde défensive
+
+    setDraftStatus("discarding");
+    setDraftError(null);
+    try {
+      const res = await fetch("/api/school-page/draft/discard", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ expected_updated_at: draftUpdatedAt }),
+      });
+      const json = await res.json().catch(() => ({}));
+
+      if (res.status === 409) {
+        // CMS-F.7 §14 — jamais de ré-essai automatique ni d'écrasement :
+        // seul le mécanisme "Recharger" existant doit resynchroniser.
+        setDraftStatus("conflict");
+        return;
+      }
+
+      if (!res.ok) {
+        const code = json.error_code as string | undefined;
+        if (code === "NO_CHANGES") {
+          setDraftError("Aucune modification à abandonner — le brouillon est déjà identique à la version publiée.");
+        } else {
+          setDraftError(json.error ?? "L'abandon des modifications a échoué. Aucune modification n'a été appliquée.");
+        }
+        setDraftStatus(draftIsDirty ? "dirty" : "loaded");
+        return;
+      }
+
+      // Succès — recharge la version faisant autorité depuis le serveur
+      // (jamais une mise à jour locale optimiste), ainsi que la Galerie :
+      // le Discard supprime les lignes draft_pending_add côté serveur, le
+      // tiroir Galerie de l'éditeur doit donc refléter la même vérité,
+      // jamais un état local périmé.
+      const [draftRes, imagesRes] = await Promise.all([
+        fetch("/api/school-page/draft"),
+        school ? supabase.from("school_images").select("*").eq("establishment_id", school.id).order("created_at", { ascending: false }) : Promise.resolve(null),
+      ]);
+      const draftJson = await draftRes.json().catch(() => ({}));
+      if (imagesRes && "data" in imagesRes && imagesRes.data) setImages(imagesRes.data);
+
+      if (draftRes.ok && draftJson.draft) {
+        const draft = draftJson.draft as SchoolPageDraftRow;
+        setDraftPayload(draft.payload);
+        setDraftUpdatedAt(draft.updated_at);
+        setDraftIsDirty(draft.is_dirty);
+        const nextOrder = [...draft.payload.sections].sort((a, b) => a.position - b.position).map((s) => DB_KEY_TO_SECTION[s.section_key]);
+        const byKey = Object.fromEntries(draft.payload.sections.map((s) => [DB_KEY_TO_SECTION[s.section_key], s]));
+        setOrder(nextOrder);
+        setVisibility(Object.fromEntries(DEFAULT_ORDER.map((k) => [k, byKey[k]?.is_visible ?? true])) as Record<SectionKey, boolean>);
+        setDraftStatus("discarded");
+        setTimeout(() => setDraftStatus((s) => (s === "discarded" ? (draft.is_dirty ? "dirty" : "loaded") : s)), 2000);
+      } else {
+        setDraftStatus("discarded");
+        setTimeout(() => setDraftStatus("error"), 2000);
+        setDraftError("Modifications abandonnées, mais le rechargement du brouillon a échoué — rechargez la page.");
+      }
+    } catch (e) {
+      setDraftError(e instanceof Error ? e.message : "Erreur réseau lors de l'abandon des modifications");
+      setDraftStatus(draftIsDirty ? "dirty" : "loaded");
+    }
+  }
+
+  // "Recharger" (bandeau de conflit, CMS-F.3 §16) — jamais de ré-essai
+  // automatique qui écraserait la version distante, seulement un rechargement
+  // explicite déclenché par l'utilisateur.
+  async function reloadDraft() {
+    setDraftLoading(true);
+    setDraftError(null);
+    try {
+      const res = await fetch("/api/school-page/draft");
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error ?? `Erreur ${res.status}`);
+      const draft = json.draft as SchoolPageDraftRow;
+      setDraftPayload(draft.payload);
+      setDraftUpdatedAt(draft.updated_at);
+      setDraftIsDirty(draft.is_dirty);
+      setDraftStatus(draft.is_dirty ? "dirty" : "loaded");
+      const nextOrder = [...draft.payload.sections].sort((a, b) => a.position - b.position).map((s) => DB_KEY_TO_SECTION[s.section_key]);
+      const byKey = Object.fromEntries(draft.payload.sections.map((s) => [DB_KEY_TO_SECTION[s.section_key], s]));
+      setOrder(nextOrder);
+      setVisibility(Object.fromEntries(DEFAULT_ORDER.map((k) => [k, byKey[k]?.is_visible ?? true])) as Record<SectionKey, boolean>);
+    } catch (e) {
+      setDraftError(e instanceof Error ? e.message : "Échec du rechargement");
+    } finally {
+      setDraftLoading(false);
+    }
+  }
+
+  async function updateHeroMode(mode: HeroMode) {
+    setHeroError(null);
+    setHeroSaveState("saving");
+    const result = await saveDraft({ hero_mode: mode });
+    if ("draft" in result) {
+      setHeroSaveState("saved");
+      setTimeout(() => setHeroSaveState((s) => (s === "saved" ? "idle" : s)), 1500);
+    } else {
+      setHeroSaveState("error");
+      setHeroError("error" in result ? result.error : "Ce brouillon a été modifié ailleurs. Rechargez les dernières modifications.");
+    }
+  }
+
+  // Admissions ouvertes/fermées — IMMEDIATE LIVE (CMS-F.3 §11). Envoie
+  // UNIQUEMENT is_open à la route live existante ; celle-ci ne construit son
+  // payload qu'à partir des clés présentes dans le corps de la requête
+  // (audité, non modifié — voir rapport), donc les champs descriptifs live
+  // (déjà obsolètes depuis le cutover, jamais relus) ne sont jamais
+  // écrasés par ce toggle.
+  async function toggleAdmissionsOpen(value: boolean) {
+    setAdmissionsOpenError(null);
+    setAdmissionsOpenSaving(true);
+    try {
+      const res = await fetch("/api/school-page/admissions", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_open: value }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error ?? `Erreur ${res.status}`);
+      setAdmissionsConfig((prev) => ({ ...(prev ?? ({} as AdmissionsConfig)), is_open: value }));
+      setFormDraft((p) => (p ? { ...p, admissionsOpen: value } : p));
+    } catch (e) {
+      setAdmissionsOpenError(e instanceof Error ? e.message : "Échec de l'enregistrement");
+    } finally {
+      setAdmissionsOpenSaving(false);
+    }
+  }
+
+  // Rendu toujours dérivé du BROUILLON pour les domaines GLOBAL DRAFT
+  // (CMS-F.3 §4 : l'éditeur ne doit plus lire directement school/fees/infra
+  // pour ces champs), avec repli sur la valeur live tant que le brouillon
+  // n'est pas encore chargé. Les champs live-only (name, is_verified,
+  // subscription_plan, neighborhood, main_category, latitude/longitude,
+  // cover_image_url) viennent toujours de `school`, jamais du brouillon.
   const draftSchool = useMemo(() => school ? {
     ...school,
-    description: fieldEdits.description ?? school.description,
-    phone: fieldEdits.phone ?? school.phone,
-    email: fieldEdits.email ?? school.email,
-    website: fieldEdits.website ?? school.website,
-    address: fieldEdits.address ?? school.address,
-    city: fieldEdits.city ?? school.city,
-  } : null, [school, fieldEdits]);
+    description: draftPayload?.presentation.description ?? school.description,
+    phone: draftPayload?.contact.phone ?? school.phone,
+    email: draftPayload?.contact.email ?? school.email,
+    website: draftPayload?.contact.website ?? school.website,
+    address: draftPayload?.contact.address ?? school.address,
+    city: draftPayload?.contact.city ?? school.city,
+  } : null, [school, draftPayload]);
 
-  const draftFees = useMemo(() => {
-    if (!fees && !fieldEdits.fees) return fees;
-    return { ...fees, ...fieldEdits.fees };
-  }, [fees, fieldEdits.fees]);
+  const draftFeesView = useMemo(() => draftPayload ? { ...draftPayload.pricing, currency: fees?.currency ?? "FCFA" } : fees, [draftPayload, fees]);
+  const draftInfraView = useMemo(() => draftPayload?.infrastructure ?? infra, [draftPayload, infra]);
 
-  const draftInfra = useMemo(() => {
-    if (!infra && !fieldEdits.infra) return infra;
-    return { ...infra, ...fieldEdits.infra };
-  }, [infra, fieldEdits.infra]);
+  // Admissions — is_open reste live, les champs descriptifs viennent du
+  // brouillon (aperçu de l'éditeur cohérent avec ce qui sera réellement
+  // publié après un futur Publish).
+  const mergedAdmissionsConfig: AdmissionsConfig | null = useMemo(() => {
+    if (!draftPayload) return admissionsConfig;
+    return {
+      is_open: admissionsConfig?.is_open ?? true,
+      levels: draftPayload.admissions.levels,
+      conditions: draftPayload.admissions.conditions,
+      required_documents: draftPayload.admissions.required_documents,
+      period_start: draftPayload.admissions.period_start,
+      period_end: draftPayload.admissions.period_end,
+      additional_info: draftPayload.admissions.additional_info,
+    };
+  }, [draftPayload, admissionsConfig]);
 
   const hasUnsavedChanges =
-    Object.keys(fieldEdits).length > 0 ||
-    heroMode !== null ||
+    draftIsDirty ||
     order.some((k, i) => k !== DEFAULT_ORDER[i]) ||
     Object.values(visibility).some((v) => v === false);
+
+  // CMS-F.5C §4 — l'éligibilité au Publish vient exclusivement du brouillon
+  // chargé côté serveur (is_dirty), jamais d'un état d'édition local non
+  // enregistré (un tiroir ouvert avec des modifications non sauvegardées
+  // n'affecte pas ce calcul — ces modifications ne sont pas dans le
+  // brouillon tant qu'"Enregistrer" n'a pas été cliqué).
+  const canPublish =
+    !!draftPayload &&
+    !draftLoading &&
+    draftIsDirty &&
+    draftStatus !== "publishing" &&
+    draftStatus !== "conflict" &&
+    draftStatus !== "error";
+
+  // CMS-F.7 §11 — même discipline que canPublish : jamais inféré d'un champ
+  // local non enregistré. draftIsDirty seul ne suffit pas ici : un upload
+  // Galerie écrit directement school_images en draft_pending_add sans
+  // jamais toucher is_dirty (CMS-F.6) — il y a donc quelque chose à
+  // abandonner dès qu'UNE des deux conditions est vraie.
+  const hasPendingAddImages = images.some((img: any) => img.status === "draft_pending_add");
+  const canDiscard =
+    !!draftPayload &&
+    !draftLoading &&
+    (draftIsDirty || hasPendingAddImages) &&
+    draftStatus !== "publishing" &&
+    draftStatus !== "discarding" &&
+    draftStatus !== "conflict" &&
+    draftStatus !== "error";
+
+  // Planifie une sauvegarde débouncée de l'ordre/visibilité vers le
+  // brouillon (jamais vers /api/school-page/sections après le cutover,
+  // CMS-F.3 §12). Appelé explicitement par les mutateurs ci-dessous —
+  // jamais par un effet générique sur [order, visibility], pour ne jamais
+  // déclencher une sauvegarde quand order/visibility sont simplement
+  // synchronisés depuis un brouillon qui vient de charger.
+  function scheduleSectionsSave(nextOrder: SectionKey[], nextVisibility: Record<SectionKey, boolean>) {
+    if (!draftPayload) return; // brouillon pas encore chargé — rien à fusionner
+    setSectionsSaveState("saving");
+    if (sectionsSaveTimer.current) clearTimeout(sectionsSaveTimer.current);
+    sectionsSaveTimer.current = setTimeout(async () => {
+      const result = await saveDraft({
+        sections: nextOrder.map((key, i) => ({
+          section_key: SECTION_TO_DB_KEY[key],
+          position: i,
+          is_visible: nextVisibility[key],
+        })),
+      });
+      setSectionsSaveState(result.ok ? "saved" : "error");
+    }, 600);
+  }
 
   function moveSection(key: SectionKey, dir: -1 | 1) {
     setOrder((prev) => {
@@ -227,33 +725,44 @@ export default function ModifierMaPagePage() {
       if (j < 0 || j >= prev.length) return prev;
       const next = [...prev];
       [next[i], next[j]] = [next[j], next[i]];
+      scheduleSectionsSave(next, visibility);
       return next;
     });
   }
 
   function toggleVisibility(key: SectionKey) {
-    setVisibility((prev) => ({ ...prev, [key]: !prev[key] }));
+    setVisibility((prev) => {
+      const next = { ...prev, [key]: !prev[key] };
+      scheduleSectionsSave(order, next);
+      return next;
+    });
   }
 
   function resetDraft() {
-    setFieldEdits({});
-    setHeroMode(null);
     setOrder(DEFAULT_ORDER);
-    setVisibility(Object.fromEntries(DEFAULT_ORDER.map((k) => [k, true])) as Record<SectionKey, boolean>);
+    const resetVisibility = Object.fromEntries(DEFAULT_ORDER.map((k) => [k, true])) as Record<SectionKey, boolean>;
+    setVisibility(resetVisibility);
+    scheduleSectionsSave(DEFAULT_ORDER, resetVisibility);
   }
 
   function openDrawer(key: DrawerKey) {
-    if (!draftSchool) return;
+    if (!draftSchool || !draftPayload) return; // brouillon pas encore chargé — rien à éditer
     setFormDraft({
-      description: draftSchool.description ?? "",
-      phone: draftSchool.phone ?? "",
-      email: draftSchool.email ?? "",
-      website: draftSchool.website ?? "",
-      address: draftSchool.address ?? "",
-      city: draftSchool.city ?? "",
-      fees: Object.fromEntries(FEE_COLS.map((f) => [f.key, draftFees?.[f.key] != null && draftFees[f.key] !== 0 ? String(draftFees[f.key]) : ""])),
-      infra: Object.fromEntries(Object.keys(INFRA_LABELS).map((k) => [k, !!draftInfra?.[k]])),
-      heroMode: effectiveHeroMode,
+      description: draftPayload.presentation.description,
+      phone: draftPayload.contact.phone ?? "",
+      email: draftPayload.contact.email ?? "",
+      website: draftPayload.contact.website ?? "",
+      address: draftPayload.contact.address ?? "",
+      city: draftPayload.contact.city ?? "",
+      fees: Object.fromEntries(FEE_COLS.map((f) => [f.key, draftPayload.pricing[f.key] != null ? String(draftPayload.pricing[f.key]) : ""])),
+      infra: Object.fromEntries(Object.keys(INFRA_LABELS).map((k) => [k, !!draftPayload.infrastructure[k]])),
+      admissionsOpen: admissionsConfig?.is_open ?? true, // reste live (immediate)
+      admissionsLevels: (draftPayload.admissions.levels ?? []).join("\n"),
+      admissionsConditions: draftPayload.admissions.conditions ?? "",
+      admissionsDocuments: (draftPayload.admissions.required_documents ?? []).join("\n"),
+      admissionsPeriodStart: draftPayload.admissions.period_start ?? "",
+      admissionsPeriodEnd: draftPayload.admissions.period_end ?? "",
+      admissionsAdditionalInfo: draftPayload.admissions.additional_info ?? "",
     });
     setActiveDrawer(key);
   }
@@ -265,104 +774,265 @@ export default function ModifierMaPagePage() {
     setDrawerError(null);
   }
 
+  // CMS-F.3 — chaque branche sauvegarde désormais vers le BROUILLON via
+  // saveDraft() (jamais vers les anciennes routes live /presentation,
+  // /contact, /pricing, /infrastructure) sauf Hero (déjà géré séparément
+  // par updateHeroMode(), hors applyDrawer()) et is_open dans Admissions
+  // (toggleAdmissionsOpen(), immediate-live, hors applyDrawer() aussi).
   async function applyDrawer() {
-    if (!formDraft || !activeDrawer) return;
+    if (!formDraft || !activeDrawer || !draftPayload) return;
 
-    // Hero / Tarifs / Infrastructures — hors périmètre CMS-B.2, brouillon local uniquement.
-    if (activeDrawer === "hero") {
-      setHeroMode(formDraft.heroMode);
-      closeDrawer();
-      return;
-    }
-    if (activeDrawer === "tarifs") {
-      const parsed = Object.fromEntries(
-        Object.entries(formDraft.fees).map(([k, v]) => [k, v.trim() === "" ? 0 : Number(v)])
-      );
-      setFieldEdits((prev) => ({ ...prev, fees: parsed }));
-      closeDrawer();
-      return;
-    }
-    if (activeDrawer === "infrastructures") {
-      setFieldEdits((prev) => ({ ...prev, infra: formDraft.infra }));
-      closeDrawer();
-      return;
-    }
-
-    // Présentation / Contact — sauvegarde réelle (CMS-B.2 §7/§8).
     setDrawerSaveState("saving");
     setDrawerError(null);
     try {
+      let result: SaveDraftResult | null = null;
+
       if (activeDrawer === "presentation") {
-        const res = await fetch("/api/school-page/presentation", {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ description: formDraft.description }),
-        });
-        const json = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(json.error ?? `Erreur ${res.status}`);
-        setSchool((prev: any) => (prev ? { ...prev, description: formDraft.description } : prev));
-        setFieldEdits((prev) => { const { description: _omit, ...rest } = prev; return rest; });
+        result = await saveDraft({ presentation: { description: formDraft.description } });
       } else if (activeDrawer === "contact") {
-        const payload = {
-          phone: formDraft.phone,
-          email: formDraft.email,
-          website: formDraft.website,
-          address: formDraft.address,
-          city: formDraft.city,
-        };
-        const res = await fetch("/api/school-page/contact", {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+        result = await saveDraft({
+          contact: {
+            phone: formDraft.phone,
+            email: formDraft.email,
+            website: formDraft.website,
+            address: formDraft.address,
+            city: formDraft.city,
+          },
         });
-        const json = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(json.error ?? `Erreur ${res.status}`);
-        setSchool((prev: any) => (prev ? { ...prev, ...payload } : prev));
-        setFieldEdits((prev) => { const { phone: _p, email: _e, website: _w, address: _a, city: _c, ...rest } = prev; return rest; });
+      } else if (activeDrawer === "tarifs") {
+        // Champ vide → NULL (jamais 0 pour "non renseigné", CMS-D §9).
+        const pricing = Object.fromEntries(
+          FEE_COLS.map((f) => [f.key, formDraft.fees[f.key]?.trim() ? Number(formDraft.fees[f.key]) : null])
+        );
+        result = await saveDraft({ pricing });
+      } else if (activeDrawer === "infrastructures") {
+        result = await saveDraft({ infrastructure: formDraft.infra });
+      } else if (activeDrawer === "admissions") {
+        // Configuration PUBLIQUE descriptive UNIQUEMENT — is_open n'est
+        // JAMAIS envoyé ici (CMS-F.3 §11, déjà sauvegardé immédiatement par
+        // toggleAdmissionsOpen()). Une ligne par item de texte, lignes
+        // vides ignorées ; le serveur revalide/tronque de toute façon.
+        result = await saveDraft({
+          admissions: {
+            levels: formDraft.admissionsLevels.split("\n").map((s) => s.trim()).filter(Boolean),
+            conditions: formDraft.admissionsConditions.trim() || null,
+            required_documents: formDraft.admissionsDocuments.split("\n").map((s) => s.trim()).filter(Boolean),
+            period_start: formDraft.admissionsPeriodStart || null,
+            period_end: formDraft.admissionsPeriodEnd || null,
+            additional_info: formDraft.admissionsAdditionalInfo.trim() || null,
+          },
+        });
       }
-      setDrawerSaveState("saved");
-      setTimeout(() => closeDrawer(), 700);
+
+      if (!result) {
+        setDrawerSaveState("idle");
+        return;
+      }
+      if ("draft" in result) {
+        setDrawerSaveState("saved");
+        setTimeout(() => closeDrawer(), 700);
+      } else if ("error" in result) {
+        setDrawerSaveState("error");
+        setDrawerError(result.error);
+      } else {
+        setDrawerSaveState("error");
+        setDrawerError("Ce brouillon a été modifié ailleurs. Rechargez les dernières modifications.");
+      }
     } catch (e) {
       setDrawerSaveState("error");
       setDrawerError(e instanceof Error ? e.message : "Erreur d'enregistrement");
     }
   }
 
-  // Sections (ordre + visibilité) — sauvegarde groupée débouncée (CMS-B.2
-  // §11/§12/§20) : un seul PUT avec les 8 clés, jamais une requête par clic.
-  useEffect(() => {
-    if (!sectionsTouched.current) { sectionsTouched.current = true; return; }
-    if (!draftSchool) return;
+  // Galerie CMS-C §6 / CMS-F.6 Gallery Draft Lifecycle — upload via
+  // /api/school-page/gallery (multipart, autorisation + validation
+  // MIME/taille recalculées côté serveur — jamais de confiance dans le
+  // navigateur, voir la route). CMS-F.6 : la photo est insérée
+  // status='draft_pending_add' côté serveur — elle apparaît ici et dans
+  // l'Aperçu, jamais sur la fiche publique tant que le brouillon n'est pas
+  // publié.
+  async function uploadGalleryImage(file: File) {
+    setGalleryError(null);
+    setGalleryUploading(true);
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch("/api/school-page/gallery", { method: "POST", body: form });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error ?? `Erreur ${res.status}`);
+      setImages((prev: any[]) => [json.image, ...prev]);
+    } catch (e) {
+      setGalleryError(e instanceof Error ? e.message : "Échec de l'envoi");
+    } finally {
+      setGalleryUploading(false);
+      if (galleryInputRef.current) galleryInputRef.current.value = "";
+    }
+  }
 
-    setSectionsSaveState("saving");
-    const timer = setTimeout(async () => {
-      try {
-        const payload = {
-          sections: order.map((key, i) => ({
-            section_key: SECTION_TO_DB_KEY[key],
-            position: i,
-            is_visible: visibility[key],
-          })),
-        };
-        const res = await fetch("/api/school-page/sections", {
-          method: "PUT",
+  // CMS-F.6 §6/§8 — la suppression se comporte différemment selon le
+  // statut de la photo, jamais un chemin unique :
+  //   - draft_pending_add : jamais publiée, suppression réelle immédiate
+  //     via /api/school-page/gallery (Storage + DB, la route gère l'ordre).
+  //   - live : reste publiée jusqu'au Publish — l'intention de suppression
+  //     est enregistrée dans gallery.remove_ids via le chemin normal de
+  //     sauvegarde du brouillon (saveDraft, payload complet), jamais une
+  //     suppression Storage/DB immédiate.
+  async function deleteGalleryImage(image: { id: string; status?: string }) {
+    setGalleryError(null);
+    setGalleryDeletingId(image.id);
+    try {
+      if (image.status === "draft_pending_add") {
+        const res = await fetch("/api/school-page/gallery", {
+          method: "DELETE",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+          body: JSON.stringify({ id: image.id }),
         });
         const json = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(json.error ?? `Erreur ${res.status}`);
-        setSectionsSaveState("saved");
-      } catch {
-        setSectionsSaveState("error");
+        setImages((prev: any[]) => prev.filter((img) => img.id !== image.id));
+        return;
       }
-    }, 600);
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order, visibility]);
+
+      // live — marquage brouillon uniquement, jamais de suppression immédiate.
+      const currentRemoveIds = draftPayload?.gallery.remove_ids ?? [];
+      if (currentRemoveIds.includes(image.id)) return; // déjà marquée
+      const result = await saveDraft({ gallery: { remove_ids: [...currentRemoveIds, image.id] } });
+      if ("error" in result) {
+        setGalleryError(result.error);
+      } else if (!("draft" in result)) {
+        setGalleryError("Ce brouillon a été modifié ailleurs. Rechargez les dernières modifications.");
+      }
+    } catch (e) {
+      setGalleryError(e instanceof Error ? e.message : "Échec de la suppression");
+    } finally {
+      setGalleryDeletingId(null);
+    }
+  }
+
+  // CMS-F.6 §7 — annule une suppression planifiée : retire uniquement cet
+  // id de gallery.remove_ids, ne touche jamais la ligne school_images ni
+  // Storage. La fiche publique reste inchangée tout du long.
+  async function undoRemoveGalleryImage(imageId: string) {
+    setGalleryError(null);
+    setGalleryDeletingId(imageId);
+    try {
+      const currentRemoveIds = draftPayload?.gallery.remove_ids ?? [];
+      const result = await saveDraft({ gallery: { remove_ids: currentRemoveIds.filter((id) => id !== imageId) } });
+      if ("error" in result) {
+        setGalleryError(result.error);
+      } else if (!("draft" in result)) {
+        setGalleryError("Ce brouillon a été modifié ailleurs. Rechargez les dernières modifications.");
+      }
+    } catch (e) {
+      setGalleryError(e instanceof Error ? e.message : "Échec de l'annulation");
+    } finally {
+      setGalleryDeletingId(null);
+    }
+  }
+
+  // Actualités CMS-E — create (newsEditingId=null) ou update (id présent),
+  // jamais establishment_id envoyé : résolu côté serveur.
+  function startNewsEdit(item: any) {
+    setNewsEditingId(item.id);
+    setNewsForm({ title: item.title ?? "", content: item.content ?? "", is_important: !!item.is_important });
+    setNewsError(null);
+  }
+  function cancelNewsEdit() {
+    setNewsEditingId(null);
+    setNewsForm({ title: "", content: "", is_important: false });
+    setNewsError(null);
+  }
+
+  async function submitNews() {
+    setNewsError(null);
+    setNewsSaving(true);
+    try {
+      const payload: any = { title: newsForm.title, content: newsForm.content, is_important: newsForm.is_important };
+      if (newsEditingId) payload.id = newsEditingId;
+      const res = await fetch("/api/school-page/news", {
+        method: newsEditingId ? "PATCH" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error ?? `Erreur ${res.status}`);
+      if (newsEditingId) {
+        setNewsList((prev: any[]) => prev.map((n) => (n.id === newsEditingId ? json.announcement : n)));
+      } else {
+        setNewsList((prev: any[]) => [json.announcement, ...prev]);
+      }
+      cancelNewsEdit();
+    } catch (e) {
+      setNewsError(e instanceof Error ? e.message : "Échec de l'enregistrement");
+    } finally {
+      setNewsSaving(false);
+    }
+  }
+
+  async function deleteNews(id: string) {
+    setNewsError(null);
+    setNewsDeletingId(id);
+    try {
+      const res = await fetch("/api/school-page/news", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error ?? `Erreur ${res.status}`);
+      setNewsList((prev: any[]) => prev.filter((n) => n.id !== id));
+      if (newsEditingId === id) cancelNewsEdit();
+    } catch (e) {
+      setNewsError(e instanceof Error ? e.message : "Échec de la suppression");
+    } finally {
+      setNewsDeletingId(null);
+    }
+  }
+
+  // Documents CMS-E — même pattern que Galerie.
+  async function uploadDocument(file: File) {
+    setDocError(null);
+    setDocUploading(true);
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      if (docName.trim()) form.append("name", docName.trim());
+      form.append("type", docType);
+      const res = await fetch("/api/school-page/documents", { method: "POST", body: form });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error ?? `Erreur ${res.status}`);
+      setDocsList((prev: any[]) => [json.document, ...prev]);
+      setDocName("");
+    } catch (e) {
+      setDocError(e instanceof Error ? e.message : "Échec de l'envoi");
+    } finally {
+      setDocUploading(false);
+      if (docInputRef.current) docInputRef.current.value = "";
+    }
+  }
+
+  async function deleteDocument(id: string) {
+    setDocError(null);
+    setDocDeletingId(id);
+    try {
+      const res = await fetch("/api/school-page/documents", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error ?? `Erreur ${res.status}`);
+      setDocsList((prev: any[]) => prev.filter((d) => d.id !== id));
+    } catch (e) {
+      setDocError(e instanceof Error ? e.message : "Échec de la suppression");
+    } finally {
+      setDocDeletingId(null);
+    }
+  }
 
   // --- États non-nominal (chargement / non authentifié / pas de fiche) ---
 
-  if (!authChecked || loading) {
+  if (schoolLoading || loading) {
     return (
       <div className="max-w-3xl space-y-4 animate-pulse">
         <div className="h-8 bg-white rounded-xl w-1/3" />
@@ -371,7 +1041,7 @@ export default function ModifierMaPagePage() {
     );
   }
 
-  if (!authed) {
+  if (!user) {
     return (
       <div className="max-w-md">
         <p className="font-bold text-lg mb-2">Connexion requise</p>
@@ -406,24 +1076,24 @@ export default function ModifierMaPagePage() {
     ? `https://www.google.com/maps?q=${school.latitude},${school.longitude}`
     : null;
 
-  const visibleOrder = order.filter((k) => visibility[k]);
-  const renderedOrder = previewMode ? visibleOrder : order;
-
   function renderSectionContent(key: SectionKey) {
     switch (key) {
       case "presentation":
-        return <GeneralTab school={draftSchool} fees={draftFees} infra={draftInfra} sections={{ tarifs: false, infrastructures: false }} />;
+        return <GeneralTab school={draftSchool} fees={draftFeesView} infra={draftInfraView} sections={{ tarifs: false, infrastructures: false }} />;
       case "tarifs":
-        return <GeneralTab school={draftSchool} fees={draftFees} infra={draftInfra} sections={{ presentation: false, infrastructures: false }} />;
+        return <GeneralTab school={draftSchool} fees={draftFeesView} infra={draftInfraView} sections={{ presentation: false, infrastructures: false }} />;
       case "infrastructures":
-        return <GeneralTab school={draftSchool} fees={draftFees} infra={draftInfra} sections={{ presentation: false, tarifs: false }} />;
+        return <GeneralTab school={draftSchool} fees={draftFeesView} infra={draftInfraView} sections={{ presentation: false, tarifs: false }} />;
       case "admissions":
-        return <ParentTab schoolId={draftSchool.id} />;
+        return <ParentTab schoolId={draftSchool.id} admissionsConfig={mergedAdmissionsConfig} />;
       case "galerie":
+        // CMS-F.6 — aperçu de section dérivé de la Galerie EFFECTIVE
+        // (live moins remove_ids, plus draft_pending_add), cohérent avec
+        // l'Aperçu et ce que Publish produira.
         return (
           <div className="bg-white border border-border rounded-card p-6">
-            <h2 className="font-bold text-sm mb-4 flex items-center gap-2"><ImageIcon size={14} /> Galerie{images.length > 0 ? ` (${images.length})` : ""}</h2>
-            <SchoolGallery images={images.map((img: any) => ({ id: img.id, url: img.url, caption: img.caption }))} />
+            <h2 className="font-bold text-sm mb-4 flex items-center gap-2"><ImageIcon size={14} /> Galerie{effectiveImages.length > 0 ? ` (${effectiveImages.length})` : ""}</h2>
+            <SchoolGallery images={effectiveImages.map((img: any) => ({ id: img.id, url: img.url, caption: img.caption }))} />
           </div>
         );
       case "actualites":
@@ -475,22 +1145,26 @@ export default function ModifierMaPagePage() {
     if (activeDrawer === "hero") {
       const options: { key: HeroMode; label: string; desc: string; icon: typeof ImageIconAlt }[] = [
         { key: "carousel", label: "Carrousel", desc: "Fait défiler toutes les photos de la galerie.", icon: Video },
-        { key: "image", label: "Image unique", desc: "Affiche uniquement la première photo.", icon: ImageIconAlt },
+        { key: "image", label: "Image unique", desc: "Utilise actuellement l'image principale de votre galerie.", icon: ImageIconAlt },
         { key: "none", label: "Aucun média principal", desc: "Fond dégradé, sans photo en haut de page.", icon: ImageIcon },
       ];
       return (
         <div className="space-y-2">
           {options.map((opt) => {
             const Icon = opt.icon;
-            const active = formDraft.heroMode === opt.key;
+            const active = heroMode === opt.key;
+            const saving = heroSaveState === "saving";
             return (
               <button
                 key={opt.key}
                 type="button"
-                onClick={() => setFormDraft((p) => p ? { ...p, heroMode: opt.key } : p)}
-                className={`w-full text-left flex items-start gap-3 p-3.5 rounded-card border transition-colors duration-fast ${active ? "border-primary bg-primary-light" : "border-border hover:border-text-secondary/40"}`}
+                disabled={saving}
+                onClick={() => updateHeroMode(opt.key)}
+                className={`w-full text-left flex items-start gap-3 p-3.5 rounded-card border transition-colors duration-fast disabled:opacity-60 ${active ? "border-primary bg-primary-light" : "border-border hover:border-text-secondary/40"}`}
               >
-                <Icon size={16} className={active ? "text-primary mt-0.5" : "text-text-secondary mt-0.5"} />
+                {active && saving
+                  ? <span className="w-4 h-4 mt-0.5 shrink-0 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+                  : <Icon size={16} className={active ? "text-primary mt-0.5" : "text-text-secondary mt-0.5"} />}
                 <span>
                   <span className="block text-sm font-bold text-text-primary">{opt.label}</span>
                   <span className="block text-xs text-text-secondary mt-0.5">{opt.desc}</span>
@@ -500,6 +1174,15 @@ export default function ModifierMaPagePage() {
           })}
           {allHeroSlides.length === 0 && (
             <p className="text-xs text-text-secondary mt-3">Aucune photo disponible pour le moment — ajoutez des photos depuis la galerie pour activer l&apos;image ou le carrousel.</p>
+          )}
+          <p className="text-xs text-text-secondary bg-muted rounded-lg p-3 mt-3">
+            Ce mode d&apos;affichage est enregistré dans votre brouillon. La galerie de photos, elle, reste publiée immédiatement — voir le panneau Galerie.
+          </p>
+          {heroSaveState === "saved" && (
+            <p className="text-xs text-primary mt-3">Enregistré dans le brouillon.</p>
+          )}
+          {heroSaveState === "error" && (
+            <p className="text-xs text-red-600 mt-3">{heroError}</p>
           )}
         </div>
       );
@@ -561,10 +1244,13 @@ export default function ModifierMaPagePage() {
                 min={0}
                 value={formDraft.fees[f.key] ?? ""}
                 onChange={(e) => setFormDraft((p) => p ? { ...p, fees: { ...p.fees, [f.key]: e.target.value } } : p)}
-                placeholder="0"
+                placeholder="Non renseigné"
               />
             </div>
           ))}
+          <p className="text-xs text-text-secondary bg-muted rounded-lg p-3">
+            Laissez un champ vide pour un tarif non applicable — il n&apos;apparaîtra pas sur votre fiche publique.
+          </p>
         </div>
       );
     }
@@ -591,35 +1277,173 @@ export default function ModifierMaPagePage() {
       );
     }
 
-    // Sections en lecture seule (aucun upload/delete/create en CMS-B.1)
+    // Galerie CMS-F.6 Gallery Draft Lifecycle — upload et suppression sont
+    // désormais conscients du brouillon (plus le Mode A "toujours immédiat"
+    // hérité de CMS-C) : une nouvelle photo n'apparaît publiquement qu'au
+    // prochain Publish (status='draft_pending_add'), et supprimer une
+    // photo déjà publiée ne fait que planifier sa suppression
+    // (gallery.remove_ids) — elle reste visible publiquement jusqu'au
+    // Publish, avec une action "Annuler la suppression" tant qu'il n'a pas
+    // eu lieu.
     if (activeDrawer === "galerie") {
       return (
         <div>
-          <p className="text-xs text-text-secondary mb-4">Gestion complète (ajout, suppression, réorganisation) disponible dans une prochaine version.</p>
-          {images.length === 0 ? (
-            <p className="text-sm text-text-secondary">Aucune photo publiée.</p>
+          <p className="text-xs text-text-secondary bg-muted rounded-lg p-3 mb-4">
+            Les nouvelles photos et les suppressions ne seront visibles publiquement qu&apos;après la publication de votre brouillon.
+          </p>
+          <input
+            ref={galleryInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            className="hidden"
+            onChange={(e) => {
+              const picked = e.target.files?.[0];
+              if (picked) uploadGalleryImage(picked);
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => galleryInputRef.current?.click()}
+            disabled={galleryUploading}
+            className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-border rounded-card p-4 text-sm font-semibold text-text-secondary hover:border-primary hover:text-primary transition-colors disabled:opacity-50 mb-4"
+          >
+            {galleryUploading
+              ? <span className="w-4 h-4 border-2 border-text-secondary/30 border-t-text-secondary rounded-full animate-spin" />
+              : <Upload size={15} />}
+            {galleryUploading ? "Envoi en cours…" : "Ajouter une photo"}
+          </button>
+          <p className="text-[11px] text-text-secondary mb-4">JPG, PNG, WEBP ou GIF — max 5 Mo. La première photo devient l&apos;image principale de la fiche.</p>
+
+          {galleryError && <p className="text-sm text-red-600 mb-3">{galleryError}</p>}
+
+          {effectiveImages.length === 0 ? (
+            <p className="text-sm text-text-secondary">Aucune photo dans le brouillon.</p>
           ) : (
             <div className="grid grid-cols-3 gap-2">
-              {images.map((img: any) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img key={img.id} src={img.url} alt="" className="w-full aspect-square object-cover rounded-lg" />
+              {effectiveImages.map((img: any) => (
+                <div key={img.id} className="relative group">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={img.url} alt={img.caption ?? ""} className="w-full aspect-square object-cover rounded-lg" />
+                  {img.status === "draft_pending_add" && (
+                    <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded-full bg-primary text-white text-[9px] font-bold uppercase tracking-wide">
+                      Nouveau
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => deleteGalleryImage(img)}
+                    disabled={galleryDeletingId === img.id}
+                    aria-label="Supprimer la photo"
+                    className="absolute top-1 right-1 p-1.5 rounded-full bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-100"
+                  >
+                    {galleryDeletingId === img.id
+                      ? <span className="block w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                      : <Trash2 size={12} />}
+                  </button>
+                </div>
               ))}
+            </div>
+          )}
+
+          {pendingRemoveImages.length > 0 && (
+            <div className="mt-5 pt-4 border-t border-border">
+              <p className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-3">
+                En attente de suppression ({pendingRemoveImages.length})
+              </p>
+              <div className="grid grid-cols-3 gap-2">
+                {pendingRemoveImages.map((img: any) => (
+                  <div key={img.id} className="relative group opacity-60">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={img.url} alt={img.caption ?? ""} className="w-full aspect-square object-cover rounded-lg grayscale" />
+                    <button
+                      type="button"
+                      onClick={() => undoRemoveGalleryImage(img.id)}
+                      disabled={galleryDeletingId === img.id}
+                      className="absolute inset-x-1 bottom-1 flex items-center justify-center gap-1 py-1 rounded-lg bg-white/90 text-text-primary text-[10px] font-bold disabled:opacity-60"
+                    >
+                      {galleryDeletingId === img.id
+                        ? <span className="block w-3 h-3 border-2 border-text-secondary/30 border-t-text-secondary rounded-full animate-spin" />
+                        : "Annuler"}
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <p className="text-[11px] text-text-secondary mt-2">Ces photos restent visibles publiquement jusqu&apos;à la prochaine publication.</p>
             </div>
           )}
         </div>
       );
     }
     if (activeDrawer === "documents") {
+      const DOC_TYPE_OPTIONS = [
+        { value: "fiche", label: "Fiche de renseignements" },
+        { value: "inscription", label: "Fiche d'inscription" },
+        { value: "fournitures", label: "Liste des fournitures" },
+        { value: "reglement", label: "Règlement intérieur" },
+        { value: "calendrier", label: "Calendrier scolaire" },
+        { value: "autre", label: "Autre document" },
+      ];
       return (
         <div>
-          <p className="text-xs text-text-secondary mb-4">Ajout et suppression de documents disponibles dans une prochaine version.</p>
+          <input
+            ref={docInputRef}
+            type="file"
+            accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+            className="hidden"
+            onChange={(e) => {
+              const picked = e.target.files?.[0];
+              if (picked) uploadDocument(picked);
+            }}
+          />
+          <div className="space-y-2 mb-3">
+            <input
+              value={docName}
+              onChange={(e) => setDocName(e.target.value)}
+              placeholder="Nom affiché (optionnel)"
+              className="w-full bg-surface border border-border rounded-[10px] px-3 py-2 text-sm outline-none focus:border-primary"
+            />
+            <select
+              value={docType}
+              onChange={(e) => setDocType(e.target.value)}
+              className="w-full bg-surface border border-border rounded-[10px] px-3 py-2 text-sm outline-none focus:border-primary"
+            >
+              {DOC_TYPE_OPTIONS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
+            </select>
+          </div>
+          <button
+            type="button"
+            onClick={() => docInputRef.current?.click()}
+            disabled={docUploading}
+            className="w-full flex items-center justify-center gap-2 border-2 border-dashed border-border rounded-card p-4 text-sm font-semibold text-text-secondary hover:border-primary hover:text-primary transition-colors disabled:opacity-50 mb-4"
+          >
+            {docUploading
+              ? <span className="w-4 h-4 border-2 border-text-secondary/30 border-t-text-secondary rounded-full animate-spin" />
+              : <Upload size={15} />}
+            {docUploading ? "Envoi en cours…" : "Ajouter un document"}
+          </button>
+          <p className="text-[11px] text-text-secondary mb-4">PDF, Word, Excel ou PowerPoint — max 10 Mo.</p>
+
+          {docError && <p className="text-sm text-red-600 mb-3">{docError}</p>}
+
           {docsList.length === 0 ? (
             <p className="text-sm text-text-secondary">Aucun document publié.</p>
           ) : (
             <ul className="space-y-2">
               {docsList.map((d: any) => (
                 <li key={d.id} className="flex items-center gap-2 text-sm text-text-primary bg-muted rounded-lg p-2.5">
-                  <FileText size={14} className="text-text-secondary shrink-0" /> {d.name}
+                  <FileText size={14} className="text-text-secondary shrink-0" />
+                  <span className="flex-1 truncate">{d.name}</span>
+                  <button
+                    type="button"
+                    onClick={() => deleteDocument(d.id)}
+                    disabled={docDeletingId === d.id}
+                    aria-label="Supprimer le document"
+                    className="shrink-0 text-text-secondary hover:text-red-600 transition-colors disabled:opacity-50"
+                  >
+                    {docDeletingId === d.id
+                      ? <span className="block w-3.5 h-3.5 border-2 border-text-secondary/30 border-t-text-secondary rounded-full animate-spin" />
+                      : <Trash2 size={14} />}
+                  </button>
                 </li>
               ))}
             </ul>
@@ -630,44 +1454,173 @@ export default function ModifierMaPagePage() {
     if (activeDrawer === "actualites") {
       return (
         <div>
-          <p className="text-xs text-text-secondary mb-4">Publication de nouvelles actualités disponible dans une prochaine version.</p>
-          <AnnouncementsTab schoolId={draftSchool.id} />
+          <div className="space-y-2 mb-3">
+            <input
+              value={newsForm.title}
+              onChange={(e) => setNewsForm((p) => ({ ...p, title: e.target.value }))}
+              placeholder="Titre de l'annonce"
+              className="w-full bg-surface border border-border rounded-[10px] px-3 py-2 text-sm outline-none focus:border-primary"
+            />
+            <textarea
+              value={newsForm.content}
+              onChange={(e) => setNewsForm((p) => ({ ...p, content: e.target.value }))}
+              rows={3}
+              placeholder="Contenu de l'annonce… (requis)"
+              className="w-full bg-surface border border-border rounded-[10px] p-3 text-sm outline-none focus:border-primary resize-none"
+            />
+            <label className="flex items-center gap-2 cursor-pointer text-sm text-text-secondary">
+              <input
+                type="checkbox"
+                checked={newsForm.is_important}
+                onChange={(e) => setNewsForm((p) => ({ ...p, is_important: e.target.checked }))}
+              />
+              Marquer comme important
+            </label>
+          </div>
+
+          {newsError && <p className="text-sm text-red-600 mb-3">{newsError}</p>}
+
+          <div className="flex gap-2 mb-4">
+            <Button variant="primary" size="sm" onClick={submitNews} loading={newsSaving} disabled={!newsForm.title.trim() || !newsForm.content.trim()}>
+              {newsEditingId ? "Enregistrer les modifications" : "Publier"}
+            </Button>
+            {newsEditingId && (
+              <Button variant="secondary" size="sm" onClick={cancelNewsEdit} disabled={newsSaving}>Annuler l&apos;édition</Button>
+            )}
+          </div>
+
+          {newsList.length === 0 ? (
+            <p className="text-sm text-text-secondary">Aucune actualité publiée.</p>
+          ) : (
+            <ul className="space-y-2">
+              {newsList.map((n: any) => (
+                <li key={n.id} className={`rounded-lg p-3 ${newsEditingId === n.id ? "bg-primary-light border border-primary/30" : "bg-muted"}`}>
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-text-primary truncate">{n.title}</p>
+                      {n.content && <p className="text-xs text-text-secondary line-clamp-2 mt-0.5">{n.content}</p>}
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button type="button" onClick={() => startNewsEdit(n)} className="text-xs font-semibold text-primary hover:opacity-70">Éditer</button>
+                      <button
+                        type="button"
+                        onClick={() => deleteNews(n.id)}
+                        disabled={newsDeletingId === n.id}
+                        aria-label="Supprimer l'annonce"
+                        className="text-text-secondary hover:text-red-600 transition-colors disabled:opacity-50"
+                      >
+                        {newsDeletingId === n.id
+                          ? <span className="block w-3.5 h-3.5 border-2 border-text-secondary/30 border-t-text-secondary rounded-full animate-spin" />
+                          : <Trash2 size={13} />}
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       );
     }
     if (activeDrawer === "admissions") {
       return (
-        <div className="flex items-start gap-2 bg-muted rounded-lg p-3">
-          <ClipboardList size={14} className="text-text-secondary shrink-0 mt-0.5" />
-          <p className="text-xs text-text-secondary">Cette section présente un contenu fixe (aucun champ éditable enregistré pour le moment). Vous pouvez seulement l&apos;afficher, la masquer ou la déplacer.</p>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Admissions ouvertes</label>
+            <div className="flex gap-2">
+              {[{ v: true, l: "Oui" }, { v: false, l: "Non" }].map((opt) => (
+                <button
+                  key={String(opt.v)}
+                  type="button"
+                  disabled={admissionsOpenSaving}
+                  onClick={() => toggleAdmissionsOpen(opt.v)}
+                  className={`px-4 py-2 rounded-card text-sm font-bold border transition-colors duration-fast disabled:opacity-60 ${formDraft.admissionsOpen === opt.v ? "border-primary bg-primary-light text-primary" : "border-border text-text-secondary hover:border-text-secondary/40"}`}
+                >
+                  {opt.l}
+                </button>
+              ))}
+            </div>
+            <p className="text-xs text-text-secondary mt-2">Ce changement est appliqué immédiatement.</p>
+            {admissionsOpenError && <p className="text-xs text-red-600 mt-2">{admissionsOpenError}</p>}
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Niveaux proposés (un par ligne)</label>
+            <textarea
+              value={formDraft.admissionsLevels}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, admissionsLevels: e.target.value } : p)}
+              rows={3}
+              placeholder={"CP\nCE1\n6ème"}
+              className="w-full bg-surface border border-border rounded-[10px] p-3 text-sm outline-none focus:border-primary resize-none"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Conditions d&apos;admission</label>
+            <textarea
+              value={formDraft.admissionsConditions}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, admissionsConditions: e.target.value } : p)}
+              rows={3}
+              className="w-full bg-surface border border-border rounded-[10px] p-3 text-sm outline-none focus:border-primary resize-none"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Documents requis (un par ligne)</label>
+            <textarea
+              value={formDraft.admissionsDocuments}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, admissionsDocuments: e.target.value } : p)}
+              rows={3}
+              placeholder={"Acte de naissance\nBulletins précédents\nPhotos d'identité"}
+              className="w-full bg-surface border border-border rounded-[10px] p-3 text-sm outline-none focus:border-primary resize-none"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Période — début</label>
+              <Input type="date" value={formDraft.admissionsPeriodStart} onChange={(e) => setFormDraft((p) => p ? { ...p, admissionsPeriodStart: e.target.value } : p)} />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Période — fin</label>
+              <Input type="date" value={formDraft.admissionsPeriodEnd} onChange={(e) => setFormDraft((p) => p ? { ...p, admissionsPeriodEnd: e.target.value } : p)} />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Informations complémentaires</label>
+            <textarea
+              value={formDraft.admissionsAdditionalInfo}
+              onChange={(e) => setFormDraft((p) => p ? { ...p, admissionsAdditionalInfo: e.target.value } : p)}
+              rows={3}
+              className="w-full bg-surface border border-border rounded-[10px] p-3 text-sm outline-none focus:border-primary resize-none"
+            />
+          </div>
+
+          <p className="text-xs text-text-secondary bg-muted rounded-lg p-3">
+            &laquo;&nbsp;Enregistrer&nbsp;&raquo; ci-dessous n&apos;enregistre que la configuration descriptive (niveaux, conditions, documents, période, informations) dans votre brouillon. Le bouton &laquo;&nbsp;Préinscrire mon enfant&nbsp;&raquo; reste actif si les admissions sont ouvertes ; un message &laquo;&nbsp;Admissions actuellement fermées&nbsp;&raquo; le remplace sinon. Les dossiers de candidature (noms, contacts, notes) restent gérés séparément dans Admissions du tableau de bord — jamais visibles ici.
+          </p>
         </div>
       );
     }
     return null;
   }
 
-  const isFormDrawer = activeDrawer !== null && (activeDrawer === "hero" || EDITABLE_FORM_SECTIONS.has(activeDrawer));
-  const isServerSavedDrawer = activeDrawer !== null && SERVER_SAVED_SECTIONS.has(activeDrawer as SectionKey);
+  // EDITABLE_FORM_SECTIONS et SERVER_SAVED_SECTIONS coïncident désormais
+  // (CMS-D a fermé le dernier écart : tarifs/infrastructures sont
+  // maintenant sauvegardés comme présentation/contact) — toute section
+  // formulaire passe par applyDrawer() avec des états honnêtes (§14).
+  const isFormDrawer = activeDrawer !== null && EDITABLE_FORM_SECTIONS.has(activeDrawer as SectionKey);
 
   function drawerFooter() {
     if (!isFormDrawer) {
       return <Button variant="secondary" size="sm" onClick={closeDrawer}>Fermer</Button>;
     }
-    if (!isServerSavedDrawer) {
-      // Hero / Tarifs / Infrastructures — brouillon local, hors périmètre CMS-B.2.
-      return (
-        <>
-          <Button variant="secondary" size="sm" onClick={closeDrawer}>Annuler</Button>
-          <Button variant="primary" size="sm" onClick={applyDrawer}>Appliquer à l&apos;aperçu</Button>
-        </>
-      );
-    }
-    // Présentation / Contact — sauvegarde réelle, états honnêtes (§14).
     return (
       <>
         <Button variant="secondary" size="sm" onClick={closeDrawer} disabled={drawerSaveState === "saving"}>Annuler</Button>
         <Button variant="primary" size="sm" onClick={applyDrawer} loading={drawerSaveState === "saving"}>
-          {drawerSaveState === "saved" ? "Enregistré" : drawerSaveState === "error" ? "Réessayer" : "Enregistrer"}
+          {drawerSaveState === "saved" ? "Enregistré" : drawerSaveState === "error" ? "Réessayer" : "Enregistrer le brouillon"}
         </Button>
       </>
     );
@@ -677,10 +1630,14 @@ export default function ModifierMaPagePage() {
     <div className="-m-6 lg:-m-8 min-h-screen bg-[#ECECEA]">
       <EditorToolbar
         schoolName={draftSchool.name}
-        previewMode={previewMode}
-        onTogglePreview={() => setPreviewMode((v) => !v)}
         hasUnsavedChanges={hasUnsavedChanges}
         onReset={resetDraft}
+        draftStatus={draftStatus}
+        onReloadDraft={reloadDraft}
+        canPublish={canPublish}
+        onPublish={publishDraft}
+        canDiscard={canDiscard}
+        onDiscard={discardDraft}
       />
 
       {/* Hero — zone spéciale, non réordonnable (§7) */}
@@ -697,15 +1654,13 @@ export default function ModifierMaPagePage() {
           backHref="/dashboard/ecole"
           backLabel="Tableau de bord"
         />
-        {!previewMode && (
-          <button
-            type="button"
-            onClick={() => openDrawer("hero")}
-            className="absolute top-24 right-[18px] z-10 h-9 px-3.5 rounded-card text-xs font-semibold bg-white/10 text-white border border-white/20 backdrop-blur-sm hover:bg-white/20 transition-colors duration-fast focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
-          >
-            Modifier le Hero
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={() => openDrawer("hero")}
+          className="absolute top-24 right-[18px] z-10 h-9 px-3.5 rounded-card text-xs font-semibold bg-white/10 text-white border border-white/20 backdrop-blur-sm hover:bg-white/20 transition-colors duration-fast focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+        >
+          Modifier le Hero
+        </button>
       </div>
 
       <div className="max-w-[1520px] mx-auto px-[18px] py-8 flex justify-end">
@@ -719,39 +1674,38 @@ export default function ModifierMaPagePage() {
         </Link>
       </div>
 
-      {!previewMode && sectionsSaveState !== "idle" && (
+      {draftError && (
+        <div className="max-w-[1520px] mx-auto px-[18px] -mt-4 mb-4">
+          <p className="text-xs font-semibold text-danger">Brouillon : {draftError}</p>
+        </div>
+      )}
+
+      {sectionsSaveState !== "idle" && (
         <div className="max-w-[1520px] mx-auto px-[18px] -mt-4 mb-4">
           <p className={`text-xs font-semibold ${sectionsSaveState === "error" ? "text-danger" : "text-text-secondary"}`}>
             {sectionsSaveState === "saving" && "Enregistrement de l'ordre et de la visibilité…"}
-            {sectionsSaveState === "saved" && "Ordre et visibilité enregistrés."}
+            {sectionsSaveState === "saved" && "Ordre et visibilité enregistrés dans le brouillon."}
             {sectionsSaveState === "error" && "Erreur d'enregistrement de l'ordre/visibilité — nouvelle tentative au prochain changement."}
           </p>
         </div>
       )}
 
       <div className="max-w-[1520px] mx-auto px-[18px] pb-16 space-y-5">
-        {renderedOrder.map((key, i) => (
-          previewMode ? (
-            <div key={key}>{renderSectionContent(key)}</div>
-          ) : (
-            <EditableSection
-              key={key}
-              label={SECTION_LABELS[key]}
-              visible={visibility[key]}
-              isFirst={i === 0}
-              isLast={i === order.length - 1}
-              onEdit={() => openDrawer(key)}
-              onToggleVisibility={() => toggleVisibility(key)}
-              onMoveUp={() => moveSection(key, -1)}
-              onMoveDown={() => moveSection(key, 1)}
-            >
-              {renderSectionContent(key)}
-            </EditableSection>
-          )
+        {order.map((key, i) => (
+          <EditableSection
+            key={key}
+            label={SECTION_LABELS[key]}
+            visible={visibility[key]}
+            isFirst={i === 0}
+            isLast={i === order.length - 1}
+            onEdit={() => openDrawer(key)}
+            onToggleVisibility={() => toggleVisibility(key)}
+            onMoveUp={() => moveSection(key, -1)}
+            onMoveDown={() => moveSection(key, 1)}
+          >
+            {renderSectionContent(key)}
+          </EditableSection>
         ))}
-        {previewMode && visibleOrder.length === 0 && (
-          <p className="text-center text-sm text-text-secondary py-16">Toutes les sections sont masquées.</p>
-        )}
       </div>
 
       <Drawer
@@ -760,7 +1714,7 @@ export default function ModifierMaPagePage() {
         title={drawerTitle()}
         footer={drawerFooter()}
       >
-        {isServerSavedDrawer && drawerSaveState === "error" && drawerError && (
+        {isFormDrawer && drawerSaveState === "error" && drawerError && (
           <p className="text-xs text-danger bg-danger/10 rounded-lg p-3 mb-4">{drawerError}</p>
         )}
         {renderDrawerBody()}

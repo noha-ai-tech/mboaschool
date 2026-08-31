@@ -8,6 +8,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { authorizeEstablishmentRoute } from "@/lib/school/establishmentRoute";
 
 export async function POST(
   req: NextRequest,
@@ -16,15 +17,15 @@ export async function POST(
   const { id: bulletinId } = await params;
   const supabase = await createClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Non authentifie" }, { status: 401 });
-
-  const { data: etablissement } = await supabase
-    .from("establishments")
-    .select("id")
-    .eq("owner_id", user.id)
-    .single();
-  if (!etablissement) return NextResponse.json({ error: "Acces refuse" }, { status: 403 });
+  const body = await req.json().catch(() => null);
+  if (!body) return NextResponse.json({ error: "Corps invalide" }, { status: 400 });
+  const access = await authorizeEstablishmentRoute({
+    supabase,
+    requestedEstablishmentId: body.requestedEstablishmentId,
+    capability: "payroll:manage",
+  });
+  if (!access.ok) return access.response;
+  const { establishment: etablissement, user } = access;
 
   const { data: bulletin } = await supabase
     .from("bulletins_paie")
@@ -46,7 +47,8 @@ export async function POST(
       valide_direction_par: user.id,
       updated_at: now,
     })
-    .eq("id", bulletinId);
+    .eq("id", bulletinId)
+    .eq("etablissement_id", etablissement.id);
   if (error) return NextResponse.json({ error: `Echec : ${error.message}` }, { status: 500 });
 
   await supabase.from("bulletin_paie_historique").insert([

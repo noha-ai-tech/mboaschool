@@ -1,11 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
-import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 import { AlertTriangle } from "lucide-react";
 
 export default async function HistoriquePage({
   searchParams,
 }: {
-  searchParams: Promise<{ enseignant?: string; debut?: string; fin?: string }>;
+  searchParams: Promise<{ enseignant?: string; debut?: string; fin?: string; school?: string }>;
 }) {
   const supabase = await createClient();
   const params = await searchParams;
@@ -17,11 +17,7 @@ export default async function HistoriquePage({
     return <p className="p-6 text-sm text-gray-500">Non authentifié.</p>;
   }
 
-  const etablissement = await getActiveEstablishment(supabase, user.id);
-
-  if (!etablissement?.id) {
-    return <p className="p-6 text-sm text-gray-500">Aucun établissement rattaché à ce compte.</p>;
-  }
+  const etablissement = await requireActiveEstablishment(supabase, user.id, params.school, "/pro/pointage/historique");
   const etablissementId = etablissement.id;
 
   // Plage de dates par défaut : 1er du mois courant → aujourd'hui
@@ -67,6 +63,7 @@ export default async function HistoriquePage({
     p_enseignant_id: enseignantSelectionne.id,
     p_date_debut: debut,
     p_date_fin: fin,
+    p_etablissement_id: etablissementId,
   });
 
   // URLs signées pour les miniatures (valables 1h)
@@ -112,6 +109,7 @@ export default async function HistoriquePage({
 
       {/* ── Filtres ── */}
       <form method="GET" action="/pro/pointage/historique" className="flex flex-wrap gap-3 mb-6">
+        <input type="hidden" name="school" value={etablissementId} />
         <select
           name="enseignant"
           defaultValue={enseignantSelectionne.id}

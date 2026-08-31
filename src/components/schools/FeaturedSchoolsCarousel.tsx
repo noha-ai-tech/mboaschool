@@ -8,7 +8,13 @@ import { SchoolCard, type FeaturedSchool } from "./SchoolCard";
 // mobile natif, clavier via focus + flèches, boutons discrets, pagination en
 // points synchronisée sur la position de scroll réelle. Masqué s'il n'y a
 // aucun établissement réellement "à la une".
-export function FeaturedSchoolsCarousel({ schools }: { schools: FeaturedSchool[] }) {
+export function FeaturedSchoolsCarousel({
+  schools,
+  showBadges = true,
+}: {
+  schools: FeaturedSchool[];
+  showBadges?: boolean;
+}) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [active, setActive] = useState(0);
 
@@ -48,14 +54,14 @@ export function FeaturedSchoolsCarousel({ schools }: { schools: FeaturedSchool[]
         <button
           onClick={() => scrollBy(-320)}
           aria-label="Défiler vers la gauche"
-          className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-white transition-colors duration-base"
+          className="w-8 h-8 rounded-full border border-[#E7E0D7] flex items-center justify-center text-[#5A695F] hover:text-[#132019] hover:bg-white transition-colors duration-base"
         >
           <ChevronLeft size={15} />
         </button>
         <button
           onClick={() => scrollBy(320)}
           aria-label="Défiler vers la droite"
-          className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-white transition-colors duration-base"
+          className="w-8 h-8 rounded-full border border-[#E7E0D7] flex items-center justify-center text-[#5A695F] hover:text-[#132019] hover:bg-white transition-colors duration-base"
         >
           <ChevronRight size={15} />
         </button>
@@ -72,7 +78,7 @@ export function FeaturedSchoolsCarousel({ schools }: { schools: FeaturedSchool[]
       >
         {schools.map((school, i) => (
           <div key={school.id} className="shrink-0 w-[85%] sm:w-[46%] md:w-[31%] lg:w-[23%] xl:w-[19%] snap-start">
-            <SchoolCard school={school} priority={i === 0} />
+            <SchoolCard school={school} toneIndex={i} showBadges={showBadges} />
           </div>
         ))}
       </div>
@@ -84,7 +90,7 @@ export function FeaturedSchoolsCarousel({ schools }: { schools: FeaturedSchool[]
               key={school.id}
               onClick={() => scrollToIndex(i)}
               aria-label={`Voir l'établissement ${i + 1}`}
-              className={`h-1.5 rounded-full transition-all duration-base ${i === active ? "w-5 bg-primary" : "w-1.5 bg-border hover:bg-text-secondary/40"}`}
+              className={`h-1.5 rounded-full transition-all duration-base ${i === active ? "w-5 bg-[#1F8A5D]" : "w-1.5 bg-[#E7E0D7] hover:bg-[#5A695F]/40"}`}
             />
           ))}
         </div>

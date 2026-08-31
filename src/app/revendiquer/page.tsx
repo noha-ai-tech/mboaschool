@@ -5,8 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import { Search, CheckCircle2, ArrowRight, Building2, FilePlus2 } from "lucide-react";
-import { AuthHeader } from "@/components/layout/AuthHeader";
+import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
+import { AnnouncementTicker } from "@/components/hero/AnnouncementTicker";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { useSiteTickerItems } from "@/lib/useSiteTickerItems";
 import { ClaimBranding } from "@/components/claim/ClaimBranding";
 import { joinWithSeparator } from "@/lib/formatSchoolLocation";
 import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
@@ -28,6 +30,7 @@ type SearchResult = {
 type Mode = "choice" | "search" | "confirm" | "new";
 
 export default function RevendiquerInscrirePage() {
+  const tickerItems = useSiteTickerItems();
   const [mode, setMode] = useState<Mode>("choice");
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -43,6 +46,9 @@ export default function RevendiquerInscrirePage() {
     const { data } = await supabase
       .from("establishments")
       .select("id, name, city, main_category, is_verified, owner_id, cover_image_url, school_images(url)")
+      // CMS-F.6 — défense en profondeur avec la policy RLS publique
+      // (migration 0029, PRÉPARÉE NON EXÉCUTÉE).
+      .eq("school_images.status", "live")
       .or(`name.ilike.%${query}%,city.ilike.%${query}%`)
       .limit(20);
 
@@ -62,7 +68,9 @@ export default function RevendiquerInscrirePage() {
 
   return (
     <div className="min-h-screen bg-[#ECECEA] flex flex-col">
-      <AuthHeader />
+      <SiteHeader />
+      <SiteHeaderSpacer />
+      <AnnouncementTicker items={tickerItems} />
 
       <div className="flex-1 flex flex-col lg:flex-row">
         <ClaimBranding />

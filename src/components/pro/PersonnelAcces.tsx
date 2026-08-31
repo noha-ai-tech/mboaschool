@@ -4,9 +4,9 @@ import { useState } from "react";
 import { Mail, KeyRound, Loader2, Check } from "lucide-react";
 
 export function PersonnelAcces({
-  staffMemberId, hasAccount, hasEmail, existingCode,
+  staffMemberId, establishmentId, hasAccount, hasEmail, existingCode,
 }: {
-  staffMemberId: string; hasAccount: boolean; hasEmail: boolean; existingCode: string | null;
+  staffMemberId: string; establishmentId: string; hasAccount: boolean; hasEmail: boolean; existingCode: string | null;
 }) {
   const [busy, setBusy] = useState<"email" | "code" | null>(null);
   const [message, setMessage] = useState("");
@@ -15,7 +15,11 @@ export function PersonnelAcces({
 
   async function inviteByEmail() {
     setBusy("email"); setError(""); setMessage("");
-    const res = await fetch(`/api/personnel/${staffMemberId}/inviter`, { method: "POST" });
+    const res = await fetch(`/api/personnel/${staffMemberId}/inviter`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ requestedEstablishmentId: establishmentId }),
+    });
     const body = await res.json().catch(() => ({}));
     setBusy(null);
     if (!res.ok) setError(body.error ?? "Échec"); else setMessage(body.message ?? "Invitation envoyée");
@@ -23,7 +27,11 @@ export function PersonnelAcces({
 
   async function generateCode() {
     setBusy("code"); setError(""); setMessage("");
-    const res = await fetch(`/api/personnel/${staffMemberId}/code-acces`, { method: "POST" });
+    const res = await fetch(`/api/personnel/${staffMemberId}/code-acces`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ requestedEstablishmentId: establishmentId }),
+    });
     const body = await res.json().catch(() => ({}));
     setBusy(null);
     if (!res.ok) { setError(body.error ?? "Échec"); return; }

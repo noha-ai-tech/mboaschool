@@ -1,0 +1,71 @@
+{
+  "algorithm": "SHA-256",
+  "generated_at": "2026-08-22",
+  "rules": {
+    "file_sha256": "Exact on-disk bytes.",
+    "canonical_body_lf_sha256": "UTF-8 text, CRLF normalized to LF, four PRO-04 consolidation banner lines removed.",
+    "production_snapshot_sha256": "Exact on-disk bytes of the sanitized read-only catalog snapshot.",
+    "recorded_statement_sha256": "Digest of the exact UTF-8 statement stored in supabase_migrations.schema_migrations.statements[1]."
+  },
+  "migrations": [
+    {
+      "migration": "B",
+      "version": "20260822155238",
+      "path": "supabase/migrations/20260822155238_pro_03_wave_b_rls_consolidation.sql",
+      "file_sha256": "37271b9bc4f462962c33c3ac8796bc35ca767d7ed64db7414c002e59abaf8fd3",
+      "canonical_body_lf_sha256": "5fdbe2d67125d1b20c335d3b9420b63fbbfdbd304e84a295f2d228abdbe784f8",
+      "source": "docs/pro/PRO-03_WAVE_B_PROPOSED.sql",
+      "body_equals_source": true,
+      "business_dml_statements": 0
+    },
+    {
+      "migration": "C",
+      "version": "20260822194239",
+      "path": "supabase/migrations/20260822194239_pro_03_wave_c_rls_and_hours_consolidation.sql",
+      "file_sha256": "869c7602ba5ead6fd44875715f3963ad3a8d58de551cf320afd98938e6e986ed",
+      "canonical_body_lf_sha256": "27a16343c562bc21bea8950859efa07346c7a450308d5b08351ebeb94535545a",
+      "source": "docs/pro/PRO-03_WAVE_C_PROPOSED.sql",
+      "body_equals_source": true,
+      "business_dml_statements": 0
+    },
+    {
+      "migration": "D",
+      "version": "20260822194251",
+      "path": "supabase/migrations/20260822194251_pro_03_wave_d_rls_consolidation.sql",
+      "file_sha256": "1cce86ceec60d5b4ddd729fdc3a43fecdd9b874ab92078c780432b07e8d5546d",
+      "canonical_body_lf_sha256": "b029817be866f7bfcb164525ebe8d45c350d40a7ce9f7e36d3fe9c3f2ba71441",
+      "source": "docs/pro/PRO-03_WAVE_D_PROPOSED.sql",
+      "body_equals_source": true,
+      "business_dml_statements": 0
+    },
+    {
+      "migration": "GATE",
+      "version": "20260822194302",
+      "path": "supabase/migrations/20260822194302_pro_03_final_deprecation_gate_consolidation.sql",
+      "file_sha256": "8f167c7e0289fd1c954ffb4755299515d769248a336b273eb02b8e34e32dfb70",
+      "canonical_body_lf_sha256": "83d478461082573d54bd2a97ff900cfe5dd0633437d20704f2be7654fd9e58dd",
+      "source": "docs/pro/PRO-03_FINAL_DEPRECATION_PROPOSED.sql",
+      "body_equals_source": true,
+      "business_dml_statements": 0
+    }
+  ],
+  "production_snapshot": {
+    "path": "docs/pro/PRO-04_1_PRODUCTION_OBJECT_SNAPSHOT.json",
+    "file_sha256": "bacbe8f9704fcc398eab0ef60ea1d5587b20d011e6f930d46ca4f2bed3658caa"
+  },
+  "business_row_baseline": {
+    "path": "docs/pro/PRO-04_1_BUSINESS_ROW_BASELINE.json",
+    "file_sha256": "29da1b659af11ea64b86e1a94817675324c3a82117646abe7e8f4738a03bf281",
+    "object_count": 37
+  },
+  "school_page_drafts": {
+    "local_path": "supabase/migrations/0026_school_page_drafts.sql",
+    "local_file_sha256": "183b142a86d502c463e55ebe395930fb2b052fc36e7e3288f8e7c2cbf7154845",
+    "local_bytes": 8338,
+    "local_business_dml_statements": 0,
+    "remote_version": "20260822154940",
+    "remote_recorded_statement_sha256": "fcc99d793476157c29c91199d71dde2cae94436b33dc73f13ab5c98df643bd21",
+    "remote_recorded_statement_bytes": 3058,
+    "exact_file_parity": false
+  }
+}
