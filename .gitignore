@@ -12,6 +12,10 @@ build/
 .env.local
 .env.*.local
 
+# GUYSKULL-04A — local-only rollback evidence (may contain establishment
+# baseline field values); never committed, generated fresh by each run.
+docs/guyskull/scripts/*.local.json
+
 # TypeScript
 tsconfig.tsbuildinfo
 next-env.d.ts

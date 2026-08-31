@@ -46,6 +46,16 @@ export function StructuredPricing({ pricing, mode = "public" }: { pricing: Schoo
         </div>
       )}
 
+      {pricing.schedules.some((schedule) => schedule.notes) && (
+        <div className="mt-3 space-y-1">
+          {pricing.schedules.filter((schedule) => schedule.notes).map((schedule) => (
+            <p key={`schedule-note-${schedule.academic_year}-${schedule.position}`} className="text-xs text-text-secondary italic">
+              {schedule.notes}
+            </p>
+          ))}
+        </div>
+      )}
+
       <div className="space-y-2 mt-4">
         {pricing.schedules.filter((schedule) => schedule.installments.length > 0).map((schedule) => (
           <details key={`installments-${schedule.academic_year}-${schedule.position}`} className="border border-border rounded-xl p-3 group">
