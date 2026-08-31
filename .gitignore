@@ -33,3 +33,4 @@ scripts/school-registry/tmp/
 
 # Supabase CLI local state (SPRINT REGISTRY-MULTI-B) — version cache only, not a project artifact.
 supabase/.temp/
+.driver-shots/

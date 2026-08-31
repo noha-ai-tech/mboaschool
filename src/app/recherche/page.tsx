@@ -22,19 +22,19 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "rea
 import { useRouter, useSearchParams } from "next/navigation";
 import { Fraunces } from "next/font/google";
 import {
-  Search, MapPin, Phone, CheckCircle2, ArrowRight, Scale, Heart, X, List, Map as MapIcon,
+  Search, MapPin, Phone, ArrowRight, Scale, Heart, X, List, Map as MapIcon,
   ChevronLeft, ChevronRight, AlertTriangle,
 } from "lucide-react";
 import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
 import { AnnouncementTicker } from "@/components/hero/AnnouncementTicker";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { useSiteTickerItems } from "@/lib/useSiteTickerItems";
+import { useNearMeFilter, haversineKm } from "@/lib/useNearMeFilter";
 import { categories } from "@/lib/categories";
-import { MAJOR_CITIES } from "@/lib/cameroonMajorCities";
-import { CANONICAL_REGIONS } from "@/lib/cameroonRegions";
+import { citiesForRegionFilter } from "@/lib/cameroonMajorCities";
+import { REGION_FILTER_OPTIONS } from "@/lib/cameroonRegions";
 import type { SchoolSearchResponse, SchoolSearchResult } from "@/lib/search/types";
 import { DEFAULT_PAGE_SIZE, MOBILE_PAGE_SIZE } from "@/lib/search/types";
-import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
 
 const LocalSchoolMap = dynamic(() => import("@/components/LocalSchoolMap"), {
   ssr: false,
@@ -56,13 +56,6 @@ const fraunces = Fraunces({
 });
 
 const DEFAULT_CENTER = { lat: 4.0511, lng: 9.7679 }; // Douala
-const REGION_OPTIONS = [
-  { value: "all", label: "Toutes les régions" },
-  { value: "grand-nord", label: "Grand Nord (Adamaoua, Nord, Extrême-Nord)" },
-  { value: "zone-anglophone", label: "Zone anglophone (Nord-Ouest, Sud-Ouest)" },
-  ...CANONICAL_REGIONS.map((r) => ({ value: r, label: r })),
-];
-const CITY_OPTIONS = ["all", ...MAJOR_CITIES.map((c) => c.name)];
 
 // ─── Data & Types ──────────────────────────────────────────────────────────
 
@@ -136,18 +129,6 @@ function transformSchool(raw: SchoolSearchResult): School {
   };
 }
 
-function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number) {
-  const R = 6371;
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
 function Money({ value }: { value: number }) {
   return <>{value.toLocaleString("fr-FR")} FCFA</>;
 }
@@ -169,6 +150,7 @@ function SchoolCard({
     ? haversineKm(userLocation.lat, userLocation.lng, school.lat, school.lng)
     : null;
   const inCompare = compare.includes(school.id);
+  const [liked, setLiked] = useState(false);
 
   return (
     <div className="group bg-white rounded-[16px] overflow-hidden border border-[#E7E0D7] shadow-[0_8px_24px_-14px_rgba(11,59,46,0.2)] hover:shadow-[0_16px_34px_-14px_rgba(11,59,46,0.26)] hover:-translate-y-0.5 transition-all duration-base">
@@ -191,29 +173,21 @@ function SchoolCard({
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
 
-        {school.emojiLogo && !school.isFeatured && (
+        {school.emojiLogo && (
           <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-base leading-none px-2 py-1 rounded-xl">
             {school.emojiLogo}
           </span>
         )}
 
-        {school.isFeatured && (
-          <span className="absolute top-3 left-3 bg-[#F2AE1F] text-[#0B3B2E] text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md">
-            Sponsorisé
-          </span>
-        )}
-
-        <div className="absolute top-3 right-3 flex gap-1.5">
-          <button
-            onClick={(e) => { e.preventDefault(); toggleCompare(school.id); }}
-            className={`backdrop-blur-sm rounded-full p-1.5 transition-colors duration-base ${inCompare ? "bg-[#1F8A5D] text-white" : "bg-white/90 text-[#5A695F] hover:text-[#12543F]"}`}
-          >
-            <Scale size={13} />
-          </button>
-          <button className="bg-white/90 backdrop-blur-sm rounded-full p-1.5 text-[#5A695F] hover:text-red-500 transition-colors duration-base">
-            <Heart size={13} />
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={(e) => { e.preventDefault(); setLiked((v) => !v); }}
+          aria-label={liked ? "Retirer des favoris" : "Ajouter aux favoris"}
+          aria-pressed={liked}
+          className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-white/85 backdrop-blur-sm text-[#5A695F] hover:text-red-500 transition-colors duration-base"
+        >
+          <Heart size={14} className={liked ? "fill-red-500 text-red-500" : ""} />
+        </button>
       </div>
 
       <div className="p-4">
@@ -221,16 +195,6 @@ function SchoolCard({
           <span className="text-[10px] font-semibold bg-[#EEF6F1] text-[#12543F] px-2 py-0.5 rounded-full capitalize">
             {school.category}{school.subcategory ? ` · ${school.subcategory}` : ""}
           </span>
-          {school.verified && (
-            <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-[#E9F5EE] text-[#0B3B2E] px-2 py-0.5 rounded-full">
-              <CheckCircle2 size={9} /> {TRUST_BADGE_LABELS.PLATFORM_VERIFIED}
-            </span>
-          )}
-          {!school.isClaimed && (
-            <span className="text-[10px] font-semibold bg-[#F6F1E8] text-[#5A695F] px-2 py-0.5 rounded-full">
-              Non revendiquée
-            </span>
-          )}
         </div>
 
         <h3 className="font-bold text-[15px] leading-snug text-[#132019] mb-1.5 line-clamp-2">
@@ -279,23 +243,28 @@ function SchoolCard({
           </div>
         )}
 
-        {school.isClaimed ? (
+        <div className="flex items-center gap-2">
           <Link
             href={`/ecole/${school.id}`}
-            className="flex items-center gap-1.5 text-sm font-semibold text-[#12543F] hover:text-[#0B3B2E] transition-colors duration-base group/link"
+            className="group/voir inline-flex items-center justify-center gap-1.5 h-8 px-3.5 rounded-[9px] bg-[#F2AE1F] text-[#0B3B2E] text-[13px] font-bold shadow-[0_6px_16px_-8px_rgba(11,59,46,0.45)] hover:bg-[#D6941A] hover:shadow-[0_10px_22px_-8px_rgba(11,59,46,0.5)] hover:-translate-y-0.5 active:translate-y-0 active:shadow-[0_4px_10px_-6px_rgba(11,59,46,0.4)] transition-all duration-base"
           >
-            Voir la fiche
-            <ArrowRight size={14} className="group-hover/link:translate-x-0.5 transition-transform duration-base" />
+            Voir
+            <ArrowRight size={12} strokeWidth={2.5} className="transition-transform duration-base group-hover/voir:translate-x-0.5" />
           </Link>
-        ) : (
-          <Link
-            href={`/auth/inscription?ecole=${school.id}`}
-            className="flex items-center gap-1.5 text-sm font-semibold text-[#D6941A] hover:text-[#0B3B2E] transition-colors duration-base group/link"
+          <button
+            type="button"
+            onClick={(e) => { e.preventDefault(); toggleCompare(school.id); }}
+            aria-pressed={inCompare}
+            className={`inline-flex items-center justify-center gap-1.5 h-8 px-3.5 rounded-[9px] border text-[13px] font-semibold transition-all duration-base ${
+              inCompare
+                ? "bg-[#1F8A5D] text-white border-[#1F8A5D] shadow-[0_6px_16px_-8px_rgba(31,138,93,0.4)]"
+                : "bg-white text-[#132019] border-[#E7E0D7] hover:border-[#1F8A5D] hover:text-[#12543F] hover:-translate-y-0.5"
+            }`}
           >
-            Revendiquer cette page
-            <ArrowRight size={14} className="group-hover/link:translate-x-0.5 transition-transform duration-base" />
-          </Link>
-        )}
+            <Scale size={12} />
+            Comparer
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -362,11 +331,11 @@ function RecherchePageInner() {
 
   const [compare, setCompare] = useState<string[]>([]);
   const [view, setView] = useState<"liste" | "carte">("liste");
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [useLocation, setUseLocation] = useState(false);
-  const [radius, setRadius] = useState("5");
-  const [locating, setLocating] = useState(false);
-  const [locationError, setLocationError] = useState<string | null>(null);
+  const near = useNearMeFilter(() => setView("carte"));
+
+  // Ville dépend de la Région choisie (§ demande "filtres cohérents") — même
+  // correspondance macro-zone -> régions réelles que /api/recherche.
+  const cityOptions = useMemo(() => ["all", ...citiesForRegionFilter(urlRegion).map((c) => c.name)], [urlRegion]);
 
   function updateParams(next: Record<string, string | null>) {
     const params = new URLSearchParams(searchParams.toString());
@@ -422,27 +391,6 @@ function RecherchePageInner() {
     fetchResults();
   }, [fetchResults]);
 
-  function handleLocationToggle() {
-    setLocationError(null);
-    if (!navigator.geolocation) {
-      setLocationError("La géolocalisation n'est pas disponible sur cet appareil. Vous pouvez rechercher par ville.");
-      return;
-    }
-    setLocating(true);
-    navigator.geolocation.getCurrentPosition(
-      (p) => {
-        setUserLocation({ lat: p.coords.latitude, lng: p.coords.longitude });
-        setUseLocation(true);
-        setLocating(false);
-        setView("carte");
-      },
-      () => {
-        setLocating(false);
-        setLocationError("Position indisponible. Vous pouvez rechercher par ville ou consulter la carte manuellement.");
-      }
-    );
-  }
-
   function toggleCompare(id: string) {
     setCompare((prev) => {
       if (prev.includes(id)) return prev.filter((x) => x !== id);
@@ -455,17 +403,17 @@ function RecherchePageInner() {
   const totalCount = response?.total_count ?? 0;
   const totalPages = response?.total_pages ?? 0;
 
-  const mapCenter = userLocation ?? DEFAULT_CENTER;
+  const mapCenter = near.userLocation ?? DEFAULT_CENTER;
 
   // "Près de moi" filtre la PAGE courante uniquement (§ note d'en-tête) — pas
   // une recherche par rayon server-side, hors du contrat §4 de ce sprint.
   const displayedSchools = useMemo(() => {
-    if (!useLocation || !userLocation) return schools;
+    if (!near.useLocation || !near.userLocation) return schools;
     return schools.filter((s) => {
       if (!s.lat || !s.lng) return false;
-      return haversineKm(userLocation.lat, userLocation.lng, s.lat, s.lng) <= Number(radius);
+      return haversineKm(near.userLocation!.lat, near.userLocation!.lng, s.lat, s.lng) <= Number(near.radius);
     });
-  }, [schools, useLocation, userLocation, radius]);
+  }, [schools, near.useLocation, near.userLocation, near.radius]);
 
   const compareSchools = schools.filter((s) => compare.includes(s.id)).slice(0, 3);
 
@@ -526,11 +474,15 @@ function RecherchePageInner() {
 
           <select
             value={urlRegion}
-            onChange={(e) => updateParams({ region: e.target.value })}
+            onChange={(e) => {
+              const nextRegion = e.target.value;
+              const stillValid = urlCity === "all" || citiesForRegionFilter(nextRegion).some((c) => c.name === urlCity);
+              updateParams(stillValid ? { region: nextRegion } : { region: nextRegion, ville: null });
+            }}
             aria-label="Filtrer par région"
             className="border border-[#E7E0D7] rounded-[10px] px-3 h-10 text-sm font-medium bg-[#FCFAF7] text-[#132019]"
           >
-            {REGION_OPTIONS.map((r) => (
+            {REGION_FILTER_OPTIONS.map((r) => (
               <option key={r.value} value={r.value}>{r.label}</option>
             ))}
           </select>
@@ -541,24 +493,24 @@ function RecherchePageInner() {
             aria-label="Filtrer par ville"
             className="border border-[#E7E0D7] rounded-[10px] px-3 h-10 text-sm font-medium bg-[#FCFAF7] text-[#132019]"
           >
-            {CITY_OPTIONS.map((c) => (
+            {cityOptions.map((c) => (
               <option key={c} value={c}>{c === "all" ? "Toutes les villes" : c}</option>
             ))}
           </select>
 
           <button
-            onClick={handleLocationToggle}
-            disabled={locating}
+            onClick={near.handleLocationToggle}
+            disabled={near.locating}
             className="flex items-center gap-1.5 border border-[#DCEEE3] bg-[#EEF6F1] text-[#12543F] rounded-[10px] px-3.5 h-10 text-sm font-semibold hover:bg-[#E3F1E9] transition-colors duration-base disabled:opacity-50 whitespace-nowrap"
           >
             <MapPin size={14} />
-            {locating ? "Localisation…" : "Près de moi"}
+            {near.locating ? "Localisation…" : "Près de moi"}
           </button>
 
-          {useLocation && (
+          {near.useLocation && (
             <span className="flex items-center gap-2 px-3 py-2 bg-[#E9F5EE] text-[#0B3B2E] rounded-lg text-sm font-semibold border border-[#DCEEE3]">
-              À moins de {radius} km (sur cette page)
-              <button onClick={() => { setUseLocation(false); setUserLocation(null); }} aria-label="Retirer le filtre de proximité"><X size={13} /></button>
+              À moins de {near.radius} km (sur cette page)
+              <button onClick={near.clearLocation} aria-label="Retirer le filtre de proximité"><X size={13} /></button>
             </span>
           )}
 
@@ -587,10 +539,10 @@ function RecherchePageInner() {
           </button>
         </div>
 
-        {locationError && (
+        {near.locationError && (
           <div className="flex items-center justify-between gap-3 mb-6 px-4 py-3 bg-[#F4F3EF] border border-[#E7E0D7] rounded-[10px] text-sm text-[#5A695F]">
-            <span>{locationError}</span>
-            <button onClick={() => setLocationError(null)} aria-label="Fermer" className="text-[#5A695F] hover:text-[#132019] shrink-0">
+            <span>{near.locationError}</span>
+            <button onClick={() => near.setLocationError(null)} aria-label="Fermer" className="text-[#5A695F] hover:text-[#132019] shrink-0">
               <X size={14} />
             </button>
           </div>
@@ -634,7 +586,7 @@ function RecherchePageInner() {
             {!loading && displayedSchools.length > 0 && (
               <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
                 {displayedSchools.map((school) => (
-                  <SchoolCard key={school.id} school={school} userLocation={userLocation} compare={compare} toggleCompare={toggleCompare} />
+                  <SchoolCard key={school.id} school={school} userLocation={near.userLocation} compare={compare} toggleCompare={toggleCompare} />
                 ))}
               </div>
             )}
@@ -667,7 +619,7 @@ function RecherchePageInner() {
                   <div className="text-center py-6">
                     <Scale size={28} className="mx-auto text-[#E7E0D7] mb-3" />
                     <p className="text-xs text-[#5A695F] leading-relaxed">
-                      Cliquez sur <Scale size={11} className="inline" /> sur une carte pour comparer jusqu&apos;à 3 écoles.
+                      Cliquez sur <strong className="text-[#132019]">Comparer</strong> sur une carte pour comparer jusqu&apos;à 3 écoles.
                     </p>
                   </div>
                 ) : (
@@ -747,13 +699,13 @@ function RecherchePageInner() {
               </div>
             )}
             {!loading && displayedSchools.map((school) => (
-              <SchoolCard key={school.id} school={school} userLocation={userLocation} compare={compare} toggleCompare={toggleCompare} />
+              <SchoolCard key={school.id} school={school} userLocation={near.userLocation} compare={compare} toggleCompare={toggleCompare} />
             ))}
             {!loading && <Pagination page={urlPage} totalPages={totalPages} onChange={goToPage} />}
           </div>
 
           <div className="relative sticky top-[94px] h-[65vh] lg:h-[calc(100vh-144px)] rounded-[16px] overflow-hidden border border-[#E7E0D7]">
-            <LocalSchoolMap center={mapCenter} userLocation={userLocation} radiusKm={Number(radius)} schools={mapSchools} />
+            <LocalSchoolMap center={mapCenter} userLocation={near.userLocation} radiusKm={Number(near.radius)} schools={mapSchools} />
             {!loading && mapSchools.length === 0 && (
               <div className="absolute inset-0 flex items-center justify-center bg-white/85 pointer-events-none px-6 text-center">
                 <p className="text-sm text-[#5A695F]">Aucun établissement géolocalisé pour ces filtres.</p>

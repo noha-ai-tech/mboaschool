@@ -8,7 +8,13 @@ import { SchoolCard, type FeaturedSchool } from "./SchoolCard";
 // mobile natif, clavier via focus + flèches, boutons discrets, pagination en
 // points synchronisée sur la position de scroll réelle. Masqué s'il n'y a
 // aucun établissement réellement "à la une".
-export function FeaturedSchoolsCarousel({ schools }: { schools: FeaturedSchool[] }) {
+export function FeaturedSchoolsCarousel({
+  schools,
+  showBadges = true,
+}: {
+  schools: FeaturedSchool[];
+  showBadges?: boolean;
+}) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [active, setActive] = useState(0);
 
@@ -72,7 +78,7 @@ export function FeaturedSchoolsCarousel({ schools }: { schools: FeaturedSchool[]
       >
         {schools.map((school, i) => (
           <div key={school.id} className="shrink-0 w-[85%] sm:w-[46%] md:w-[31%] lg:w-[23%] xl:w-[19%] snap-start">
-            <SchoolCard school={school} toneIndex={i} />
+            <SchoolCard school={school} toneIndex={i} showBadges={showBadges} />
           </div>
         ))}
       </div>

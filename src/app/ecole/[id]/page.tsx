@@ -19,7 +19,6 @@ import { AnnouncementTicker } from "@/components/hero/AnnouncementTicker";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { useSiteTickerItems } from "@/lib/useSiteTickerItems";
 import { SchoolHeroCarousel } from "@/components/school/SchoolHeroCarousel";
-import { getPrimaryPublicBadge, resolveEstablishmentTrustState, trustInputFromEstablishmentRow } from "@/lib/trust/resolveEstablishmentTrustState";
 import type { AdmissionsConfig } from "@/components/school/ParentTab";
 import { resolveSectionConfig } from "@/lib/schoolPage/sections";
 import { buildSchoolPageSections, type SchoolPageViewModel } from "@/components/school/SchoolPageSections";
@@ -142,8 +141,6 @@ export default function SchoolPage() {
   // official_verification ne peut jamais dépasser OFFICIAL_SOURCE_FOUND ici
   // — c'est un sous-ensemble sûr et conservateur du calcul complet, jamais
   // un badge "officiellement vérifié" inventé côté client.
-  const trustState = resolveEstablishmentTrustState(trustInputFromEstablishmentRow(school));
-  const trustBadge = getPrimaryPublicBadge(trustState);
   const preinscriptionHref = `/preinscription?ecole=${school.id}`;
   const hasLocation = !!(school.latitude && school.longitude);
   const mapsHref = hasLocation ? `https://www.google.com/maps?q=${school.latitude},${school.longitude}` : null;
@@ -204,7 +201,7 @@ export default function SchoolPage() {
         city={school.city}
         neighborhood={school.neighborhood}
         category={school.main_category}
-        trustBadge={trustBadge}
+        trustBadge={null}
         premium={isPremium}
         preinscriptionHref={preinscriptionHref}
         backHref="/"
