@@ -23,7 +23,7 @@
 import { NextResponse } from "next/server";
 import { authorizeSchoolMutation } from "@/lib/cms/authorizeSchoolMutation";
 import { buildLiveSnapshot } from "@/lib/schoolPage/snapshot";
-import type { SchoolPageDraftPayload } from "@/lib/schoolPage/draftPayload";
+import { normalizeSchoolPageDraftPayload, type SchoolPageDraftPayload } from "@/lib/schoolPage/draftPayload";
 
 export async function GET() {
   const auth = await authorizeSchoolMutation();
@@ -79,7 +79,11 @@ export async function GET() {
 
   let payload: SchoolPageDraftPayload;
   if (draftRes.data) {
-    payload = draftRes.data.payload as SchoolPageDraftPayload;
+    const normalized = normalizeSchoolPageDraftPayload(draftRes.data.payload);
+    if ("error" in normalized) {
+      return NextResponse.json({ error: `Brouillon persisté invalide : ${normalized.error}` }, { status: 422 });
+    }
+    payload = normalized.payload;
   } else {
     try {
       payload = await buildLiveSnapshot(context.supabase, context.establishmentId);

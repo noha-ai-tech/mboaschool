@@ -27,7 +27,11 @@ import { HERO_MODES, type HeroMode } from "@/lib/school/heroMode";
 import { CANONICAL_SECTION_KEYS, type SchoolPageSectionKey } from "@/lib/schoolPage/sections";
 import { FEE_KEYS } from "@/lib/schoolPage/pricing";
 import { INFRASTRUCTURE_KEYS as INFRA_KEYS } from "@/lib/schoolPage/infrastructure";
-import type { SchoolPageDraftPayload, SchoolPageDraftRow } from "@/lib/schoolPage/draftPayload";
+import {
+  normalizeSchoolPageDraftPayload,
+  type SchoolPageDraftPayload,
+  type SchoolPageDraftRow,
+} from "@/lib/schoolPage/draftPayload";
 import { buildLiveSnapshot } from "@/lib/schoolPage/snapshot";
 
 // CMS-F.3 — l'ordre canonique des 8 sections vient désormais de
@@ -77,7 +81,11 @@ export async function GET() {
     return NextResponse.json({ error: `Échec de lecture du brouillon : ${fetchError.message}` }, { status: 500 });
   }
   if (existing) {
-    return NextResponse.json({ ok: true, draft: existing as unknown as DraftRow });
+    const normalized = normalizeSchoolPageDraftPayload(existing.payload);
+    if ("error" in normalized) {
+      return NextResponse.json({ error: `Brouillon persisté invalide : ${normalized.error}` }, { status: 422 });
+    }
+    return NextResponse.json({ ok: true, draft: { ...existing, payload: normalized.payload } as unknown as DraftRow });
   }
 
   let payload: SchoolPageDraftPayload;
@@ -106,7 +114,11 @@ export async function GET() {
         .eq("establishment_id", context.establishmentId)
         .single();
       if (!racedError && raced) {
-        return NextResponse.json({ ok: true, draft: raced as unknown as DraftRow });
+        const normalized = normalizeSchoolPageDraftPayload(raced.payload);
+        if ("error" in normalized) {
+          return NextResponse.json({ error: `Brouillon persisté invalide : ${normalized.error}` }, { status: 422 });
+        }
+        return NextResponse.json({ ok: true, draft: { ...raced, payload: normalized.payload } as unknown as DraftRow });
       }
     }
     return NextResponse.json({ error: `Échec de création du brouillon : ${insertError.message}` }, { status: 500 });
@@ -449,16 +461,18 @@ export async function PATCH(req: NextRequest) {
   if (!body || typeof body !== "object") {
     return NextResponse.json({ error: "Corps de requête invalide" }, { status: 400 });
   }
-  const input = body as Record<string, unknown>;
+  const requestInput = body as Record<string, unknown>;
 
-  const unknownTopLevel = Object.keys(input).filter((k) => k !== "expected_updated_at" && !(PAYLOAD_KEYS as readonly string[]).includes(k));
+  const unknownTopLevel = Object.keys(requestInput).filter((k) => k !== "expected_updated_at" && !(PAYLOAD_KEYS as readonly string[]).includes(k));
   if (unknownTopLevel.length > 0) {
     return NextResponse.json({ error: `Champ(s) non autorisé(s) : ${unknownTopLevel.join(", ")}` }, { status: 400 });
   }
-  const missingTopLevel = PAYLOAD_KEYS.filter((k) => !(k in input));
-  if (missingTopLevel.length > 0) {
-    return NextResponse.json({ error: `Payload incomplet — champ(s) manquant(s) : ${missingTopLevel.join(", ")}` }, { status: 400 });
+  const rawPayload = Object.fromEntries(Object.entries(requestInput).filter(([key]) => key !== "expected_updated_at"));
+  const normalized = normalizeSchoolPageDraftPayload(rawPayload);
+  if ("error" in normalized) {
+    return NextResponse.json({ error: normalized.error }, { status: 400 });
   }
+  const input: Record<string, unknown> = normalized.payload as unknown as Record<string, unknown>;
 
   const presentation = validatePresentation(input.presentation);
   if ("error" in presentation) return NextResponse.json({ error: presentation.error }, { status: 400 });
@@ -543,8 +557,8 @@ export async function PATCH(req: NextRequest) {
     results: { remove_ids: resultRemoveIds.value },
   };
 
-  const expectedUpdatedAt = typeof input.expected_updated_at === "string" ? input.expected_updated_at : undefined;
-  if ("expected_updated_at" in input && expectedUpdatedAt === undefined) {
+  const expectedUpdatedAt = typeof requestInput.expected_updated_at === "string" ? requestInput.expected_updated_at : undefined;
+  if ("expected_updated_at" in requestInput && expectedUpdatedAt === undefined) {
     return NextResponse.json({ error: "expected_updated_at doit être une chaîne (timestamp) si fourni" }, { status: 400 });
   }
 

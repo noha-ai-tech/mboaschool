@@ -30,6 +30,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { authorizeSchoolMutation } from "@/lib/cms/authorizeSchoolMutation";
+import { normalizeSchoolPageDraftPayload } from "@/lib/schoolPage/draftPayload";
 
 const BUCKET = "school-images";
 
@@ -87,8 +88,15 @@ export async function POST(req: NextRequest) {
       .select("payload")
       .eq("establishment_id", context.establishmentId)
       .maybeSingle();
-    const removeIds = (draftRow?.payload as { gallery?: { remove_ids?: unknown } } | undefined)?.gallery?.remove_ids;
-    if (Array.isArray(removeIds) && removeIds.length > 0) {
+    const normalized = draftRow ? normalizeSchoolPageDraftPayload(draftRow.payload) : null;
+    if (normalized && "error" in normalized) {
+      return NextResponse.json(
+        { error: `Brouillon persisté invalide : ${normalized.error}`, error_code: "INVALID_DRAFT" },
+        { status: 422 }
+      );
+    }
+    const removeIds = normalized?.ok ? normalized.payload.gallery.remove_ids : [];
+    if (removeIds.length > 0) {
       const { data: images } = await context.supabase
         .from("school_images")
         .select("storage_path")
