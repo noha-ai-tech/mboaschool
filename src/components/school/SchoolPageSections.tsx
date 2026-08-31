@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Phone, Mail, Globe, MapPin } from "lucide-react";
-import { GeneralTab, FEE_COLS, INFRA_LABELS } from "@/components/school/GeneralTab";
+import { GeneralTab, INFRA_LABELS } from "@/components/school/GeneralTab";
 import { SchoolGallery } from "@/components/school/SchoolGallery";
 import { DocumentsTab } from "@/components/school/DocumentsTab";
 import { AnnouncementsTab } from "@/components/school/AnnouncementsTab";
@@ -9,6 +9,9 @@ import { ContactRow } from "@/components/school/ContactRow";
 import { computeAllHeroSlides, resolveHeroSlides, type HeroMode } from "@/lib/school/heroMode";
 import type { SchoolHeroSlide } from "@/components/school/SchoolHeroCarousel";
 import type { SchoolPageSectionKey } from "@/lib/schoolPage/sections";
+import type { SchoolPagePricing } from "@/lib/schoolPage/pricing";
+import { hasDisplayablePricing } from "@/components/school/StructuredPricing";
+import type { SchoolDocument } from "@/lib/schoolPage/documents";
 
 // CMS-F.4 — couche de rendu PARTAGÉE entre la fiche publique
 // (src/app/ecole/[id]/page.tsx) et l'Aperçu du brouillon
@@ -56,10 +59,10 @@ export const SECTION_LABEL: Record<SchoolPageSectionKey, string> = {
 
 export function buildSchoolPageSections(params: {
   school: SchoolPageViewModel;
-  fees: Record<string, number | string | null> | null;
+  fees: SchoolPagePricing | null;
   infra: Record<string, boolean> | null;
   images: { id: string; url: string; caption?: string | null }[];
-  docsList: any[];
+  docsList: SchoolDocument[];
   admissionsConfig: AdmissionsConfig | null;
   sectionConfig: { key: SchoolPageSectionKey; is_visible: boolean }[];
   newsCount: number | null;
@@ -79,7 +82,6 @@ export function buildSchoolPageSections(params: {
     ? `https://www.google.com/maps?q=${school.latitude},${school.longitude}`
     : null;
 
-  const feeRows = fees ? FEE_COLS.filter((f) => fees[f.key] && Number(fees[f.key]) > 0) : [];
   const infraItems = infra ? Object.keys(INFRA_LABELS).filter((k) => infra?.[k] === true) : [];
 
   // §13/§17 — une section sans contenu utile ne doit pas créer un bloc
@@ -90,7 +92,7 @@ export function buildSchoolPageSections(params: {
     switch (key) {
       case "gallery": return images.length === 0;
       case "documents": return docsList.length === 0;
-      case "pricing": return feeRows.length === 0;
+      case "pricing": return !hasDisplayablePricing(fees);
       case "infrastructure": return infraItems.length === 0;
       case "news": return newsCount === 0;
       default: return false;

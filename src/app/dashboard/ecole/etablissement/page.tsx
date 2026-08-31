@@ -90,6 +90,9 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { CANONICAL_SECTION_KEYS, type SchoolPageSectionKey } from "@/lib/schoolPage/sections";
 import type { SchoolPageDraftPayload, SchoolPageDraftRow } from "@/lib/schoolPage/draftPayload";
+import type { SchoolPagePricing } from "@/lib/schoolPage/pricing";
+import { StructuredPricingEditor } from "@/components/school/StructuredPricingEditor";
+import { SCHOOL_DOCUMENT_TYPE_LABELS } from "@/lib/schoolPage/documents";
 
 type SectionKey =
   | "presentation" | "admissions" | "tarifs" | "infrastructures"
@@ -160,6 +163,7 @@ type FormDraft = {
   address: string;
   city: string;
   fees: Record<string, string>;
+  pricing: SchoolPagePricing;
   infra: Record<string, boolean>;
   admissionsOpen: boolean;
   admissionsLevels: string;
@@ -250,6 +254,8 @@ export default function ModifierMaPagePage() {
   // Documents CMS-E — même pattern que Galerie (upload/suppression immédiats).
   const [docName, setDocName] = useState("");
   const [docType, setDocType] = useState("fiche");
+  const [docAcademicYear, setDocAcademicYear] = useState("");
+  const [docDescription, setDocDescription] = useState("");
   const [docUploading, setDocUploading] = useState(false);
   const [docDeletingId, setDocDeletingId] = useState<string | null>(null);
   const [docError, setDocError] = useState<string | null>(null);
@@ -807,6 +813,7 @@ export default function ModifierMaPagePage() {
       address: draftPayload.contact.address ?? "",
       city: draftPayload.contact.city ?? "",
       fees: Object.fromEntries(FEE_COLS.map((f) => [f.key, draftPayload.pricing[f.key] != null ? String(draftPayload.pricing[f.key]) : ""])),
+      pricing: structuredClone(draftPayload.pricing),
       infra: Object.fromEntries(Object.keys(INFRA_LABELS).map((k) => [k, !!draftPayload.infrastructure[k]])),
       admissionsOpen: admissionsConfig?.is_open ?? true, // reste live (immediate)
       admissionsLevels: (draftPayload.admissions.levels ?? []).join("\n"),
@@ -869,10 +876,10 @@ export default function ModifierMaPagePage() {
         });
       } else if (activeDrawer === "tarifs") {
         // Champ vide → NULL (jamais 0 pour "non renseigné", CMS-D §9).
-        const pricing = Object.fromEntries(
+        const legacyPricing = Object.fromEntries(
           FEE_COLS.map((f) => [f.key, formDraft.fees[f.key]?.trim() ? Number(formDraft.fees[f.key]) : null])
         );
-        result = await saveDraft({ pricing });
+        result = await saveDraft({ pricing: { ...formDraft.pricing, ...legacyPricing } });
       } else if (activeDrawer === "infrastructures") {
         result = await saveDraft({ infrastructure: formDraft.infra });
       } else if (activeDrawer === "admissions") {
@@ -1185,11 +1192,15 @@ export default function ModifierMaPagePage() {
       form.append("file", file);
       if (docName.trim()) form.append("name", docName.trim());
       form.append("type", docType);
+      if (docAcademicYear.trim()) form.append("academic_year", docAcademicYear.trim());
+      if (docDescription.trim()) form.append("description", docDescription.trim());
       const res = await fetch("/api/school-page/documents", { method: "POST", body: form });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(json.error ?? `Erreur ${res.status}`);
       setDocsList((prev: any[]) => [json.document, ...prev]);
       setDocName("");
+      setDocAcademicYear("");
+      setDocDescription("");
     } catch (e) {
       setDocError(e instanceof Error ? e.message : "Échec de l'envoi");
     } finally {
@@ -1268,7 +1279,7 @@ export default function ModifierMaPagePage() {
       case "presentation":
         return <GeneralTab school={draftSchool} fees={draftFeesView} infra={draftInfraView} sections={{ tarifs: false, infrastructures: false }} />;
       case "tarifs":
-        return <GeneralTab school={draftSchool} fees={draftFeesView} infra={draftInfraView} sections={{ presentation: false, infrastructures: false }} />;
+        return <GeneralTab school={draftSchool} fees={draftFeesView} infra={draftInfraView} pricingMode="admin" sections={{ presentation: false, infrastructures: false }} />;
       case "infrastructures":
         return <GeneralTab school={draftSchool} fees={draftFeesView} infra={draftInfraView} sections={{ presentation: false, tarifs: false }} />;
       case "admissions":
@@ -1566,6 +1577,7 @@ export default function ModifierMaPagePage() {
               />
             </div>
           ))}
+          <StructuredPricingEditor value={{ ...formDraft.pricing, ...Object.fromEntries(FEE_COLS.map((fee) => [fee.key, formDraft.fees[fee.key]?.trim() ? Number(formDraft.fees[fee.key]) : null])) } as SchoolPagePricing} onChange={(pricing) => setFormDraft((previous) => previous ? { ...previous, pricing } : previous)} />
           <p className="text-xs text-text-secondary bg-muted rounded-lg p-3">
             Laissez un champ vide pour un tarif non applicable — il n&apos;apparaîtra pas sur votre fiche publique.
           </p>
@@ -1693,14 +1705,7 @@ export default function ModifierMaPagePage() {
       );
     }
     if (activeDrawer === "documents") {
-      const DOC_TYPE_OPTIONS = [
-        { value: "fiche", label: "Fiche de renseignements" },
-        { value: "inscription", label: "Fiche d'inscription" },
-        { value: "fournitures", label: "Liste des fournitures" },
-        { value: "reglement", label: "Règlement intérieur" },
-        { value: "calendrier", label: "Calendrier scolaire" },
-        { value: "autre", label: "Autre document" },
-      ];
+      const DOC_TYPE_OPTIONS = Object.entries(SCHOOL_DOCUMENT_TYPE_LABELS).map(([value, label]) => ({ value, label }));
       return (
         <div>
           <input
@@ -1727,6 +1732,8 @@ export default function ModifierMaPagePage() {
             >
               {DOC_TYPE_OPTIONS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
             </select>
+            <input value={docAcademicYear} onChange={(e) => setDocAcademicYear(e.target.value)} placeholder="Année scolaire (ex. 2026-2027)" className="w-full bg-surface border border-border rounded-[10px] px-3 py-2 text-sm outline-none focus:border-primary" />
+            <textarea value={docDescription} onChange={(e) => setDocDescription(e.target.value)} placeholder="Description (optionnelle)" rows={2} className="w-full bg-surface border border-border rounded-[10px] px-3 py-2 text-sm outline-none focus:border-primary" />
           </div>
           <button
             type="button"

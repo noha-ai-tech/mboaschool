@@ -12,7 +12,8 @@ import {
   HeartPulse,
 } from "lucide-react";
 import { INFRASTRUCTURE_KEYS, INFRASTRUCTURE_LABELS, type InfrastructureKey } from "@/lib/schoolPage/infrastructure";
-import { FEE_COLS as FEE_COLS_SHARED } from "@/lib/schoolPage/pricing";
+import { FEE_COLS as FEE_COLS_SHARED, type SchoolPagePricing } from "@/lib/schoolPage/pricing";
+import { StructuredPricing } from "@/components/school/StructuredPricing";
 
 // CMS-F.3 — les clés et libellés viennent désormais de
 // src/lib/schoolPage/infrastructure.ts (source unique, réutilisée aussi par
@@ -47,17 +48,13 @@ type SchoolGeneralInfo = {
   phone: string | null;
 };
 
-type SchoolFees = {
-  currency?: string | null;
-  [key: string]: string | number | null | undefined;
-};
-
 type SchoolInfrastructures = Record<string, boolean | null>;
 
-export function GeneralTab({ school, fees, infra, sections }: {
+export function GeneralTab({ school, fees, infra, sections, pricingMode = "public" }: {
   school: SchoolGeneralInfo;
-  fees: SchoolFees | null;
+  fees: SchoolPagePricing | null;
   infra: SchoolInfrastructures | null;
+  pricingMode?: "public" | "admin";
   /** Isole un ou plusieurs blocs (éditeur CMS) — tous affichés par défaut, comme sur la fiche publique. */
   sections?: { presentation?: boolean; tarifs?: boolean; infrastructures?: boolean };
 }) {
@@ -66,11 +63,6 @@ export function GeneralTab({ school, fees, infra, sections }: {
   const showInfrastructures = sections?.infrastructures ?? true;
 
   const infraItems = Object.keys(INFRA_LABELS).filter((k) => infra?.[k] === true);
-  const feeRows = fees
-    ? FEE_COLS.filter((f) => fees[f.key] && Number(fees[f.key]) > 0)
-    : [];
-  const currency = fees?.currency ?? "FCFA";
-
   return (
     <div className="space-y-5">
       {showPresentation && (
@@ -96,23 +88,12 @@ export function GeneralTab({ school, fees, infra, sections }: {
       )}
 
       {showTarifs && (
-      <div id="tarifs" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
-        <h2 className="font-bold text-sm mb-4">Tarifs</h2>
-        {feeRows.length === 0 ? (
+      fees ? <StructuredPricing pricing={fees} mode={pricingMode} /> : (
+        <div id="tarifs" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
+          <h2 className="font-bold text-sm mb-4">Tarifs</h2>
           <p className="text-sm text-text-secondary">Tarifs non renseignés par l&apos;établissement.</p>
-        ) : (
-          <div className="divide-y divide-border">
-            {feeRows.map((f) => (
-              <div key={f.key} className="flex items-center justify-between py-3">
-                <span className="text-sm text-text-secondary">{f.label}</span>
-                <span className="text-sm font-bold text-text-primary">
-                  {Number(fees![f.key]).toLocaleString("fr-FR")} {currency}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+        </div>
+      )
       )}
 
       {showInfrastructures && (

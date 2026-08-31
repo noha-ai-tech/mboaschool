@@ -11,7 +11,9 @@ import { MiniSiteAboutPreview } from "@/components/school/MiniSiteAboutPreview";
 import { MiniSiteResultsPreview, type ExamResult, type OfficialRanking } from "@/components/school/MiniSiteResultsPreview";
 import { MiniSiteOfficialLinks } from "@/components/school/MiniSiteOfficialLinks";
 import { MiniSiteGalleryPreview } from "@/components/school/MiniSiteGalleryPreview";
-import { GeneralTab, FEE_COLS, INFRA_LABELS } from "@/components/school/GeneralTab";
+import { GeneralTab, INFRA_LABELS } from "@/components/school/GeneralTab";
+import { StructuredPricing, hasDisplayablePricing } from "@/components/school/StructuredPricing";
+import { DocumentDownloadCtas } from "@/components/school/DocumentDownloadCtas";
 import { SchoolGallery } from "@/components/school/SchoolGallery";
 import { DocumentsTab } from "@/components/school/DocumentsTab";
 import { AnnouncementsTab } from "@/components/school/AnnouncementsTab";
@@ -21,6 +23,8 @@ import { getPrimaryPublicBadge, resolveEstablishmentTrustState, trustInputFromEs
 import { computeAllHeroSlides, resolveHeroSlides } from "@/lib/school/heroMode";
 import { categories } from "@/lib/categories";
 import type { SchoolPageSectionKey } from "@/lib/schoolPage/sections";
+import type { SchoolPagePricing } from "@/lib/schoolPage/pricing";
+import type { SchoolDocument } from "@/lib/schoolPage/documents";
 
 // PUBLIC-SITE-02 §7 — CRITICAL PREVIEW PARITY. The public route
 // (src/app/ecole/[id]/page.tsx) renders PUBLISHED data through this
@@ -68,10 +72,10 @@ export type MiniSiteEstablishment = {
 
 export type MiniSiteRendererData = {
   establishment: MiniSiteEstablishment;
-  fees: Record<string, number | string | null> | null;
+  fees: SchoolPagePricing | null;
   infra: Record<string, boolean | null> | null;
   images: { id: string; url: string; caption?: string | null }[];
-  docsList: any[];
+  docsList: SchoolDocument[];
   sectionConfig: { key: SchoolPageSectionKey; is_visible: boolean }[];
   admissionsConfig: AdmissionsConfig | null;
   ranking: OfficialRanking | null;
@@ -102,13 +106,12 @@ export function MiniSiteRenderer({ data }: { data: MiniSiteRendererData }) {
   const admissionsOpen = admissionsConfig?.is_open ?? true;
   const admissionYearLabel = admissionYearLabelFrom(admissionsConfig?.period_start, admissionsConfig?.period_end);
 
-  const feeRows = fees ? FEE_COLS.filter((f) => fees[f.key] && Number(fees[f.key]) > 0) : [];
   const infraItems = infra ? Object.keys(INFRA_LABELS).filter((k) => infra?.[k] === true) : [];
 
   const showPresentation = isVisible("presentation");
   const showInfrastructure = isVisible("infrastructure") && infraItems.length > 0;
   const showContact = isVisible("contact");
-  const showPricing = isVisible("pricing") && feeRows.length > 0;
+  const showPricing = isVisible("pricing") && hasDisplayablePricing(fees);
   const showDocuments = isVisible("documents") && docsList.length > 0;
   const showGallery = isVisible("gallery") && images.length > 0;
   const showNews = isVisible("news") && (newsCount === null || newsCount > 0);
@@ -163,6 +166,8 @@ export function MiniSiteRenderer({ data }: { data: MiniSiteRendererData }) {
               studentCount={school.student_count}
               onReadMore={() => setActiveTab("etablissement")}
             />
+
+            {showDocuments && <DocumentDownloadCtas documents={docsList} />}
 
             {showAdmissions && (results.length > 0 || ranking) && (
               <MiniSiteResultsPreview category={school.main_category} results={results} ranking={ranking} />
@@ -266,19 +271,32 @@ export function MiniSiteRenderer({ data }: { data: MiniSiteRendererData }) {
         <TabShell>
           <ContextMenu
             items={[
+              showAdmissions ? { id: "formations", label: "Formations" } : null,
               showAdmissions ? { id: "admissions", label: "Admissions" } : null,
               showPricing ? { id: "tarifs", label: "Tarifs" } : null,
+              showAdmissions ? { id: "pieces-requises", label: "Pièces à fournir" } : null,
               showDocuments ? { id: "documents-admissions", label: "Documents" } : null,
             ]}
           />
           <div className="flex-1 space-y-5 min-w-0">
-            {showAdmissions && <ParentTab schoolId={school.id} admissionsConfig={admissionsConfig} />}
-            {showPricing && (
-              <GeneralTab school={school} fees={fees} infra={infra} sections={{ presentation: false, tarifs: true, infrastructures: false }} />
+            {showAdmissions && (
+              <div id="formations" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
+                <h2 className="font-bold text-sm mb-3">Formations</h2>
+                {admissionsConfig?.levels.length ? <p className="text-sm text-text-secondary">{admissionsConfig.levels.join(", ")}</p> : <p className="text-sm text-text-secondary">Formations non renseignées par l&apos;établissement.</p>}
+              </div>
+            )}
+            {showAdmissions && <ParentTab schoolId={school.id} admissionsConfig={admissionsConfig} showLevels={false} showRequiredDocuments={false} />}
+            {showPricing && fees && <StructuredPricing pricing={fees} />}
+            {showAdmissions && (
+              <div id="pieces-requises" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
+                <h2 className="font-bold text-sm mb-3">Pièces à fournir</h2>
+                {admissionsConfig?.required_documents.length ? <ul className="list-disc pl-5 text-sm text-text-secondary space-y-1">{admissionsConfig.required_documents.map((item) => <li key={item}>{item}</li>)}</ul> : <p className="text-sm text-text-secondary">Liste non renseignée par l&apos;établissement.</p>}
+              </div>
             )}
             {showDocuments && (
               <div id="documents-admissions" className="scroll-mt-20">
                 <h2 className="font-bold text-sm mb-3 px-1">Documents ({docsList.length})</h2>
+                <DocumentDownloadCtas documents={docsList} compact />
                 <DocumentsTab docs={docsList} />
               </div>
             )}

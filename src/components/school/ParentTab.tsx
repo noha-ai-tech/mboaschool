@@ -22,7 +22,12 @@ function formatPeriodDate(iso: string): string {
 // Absence de configuration (aucune ligne admissions_config pour cette
 // école — cas normal, lazy configuration §5/§6) : comportement identique
 // à avant CMS-D.1, CTA toujours actif.
-export function ParentTab({ schoolId, admissionsConfig }: { schoolId: string; admissionsConfig?: AdmissionsConfig | null }) {
+export function ParentTab({ schoolId, admissionsConfig, showLevels = true, showRequiredDocuments = true }: {
+  schoolId: string;
+  admissionsConfig?: AdmissionsConfig | null;
+  showLevels?: boolean;
+  showRequiredDocuments?: boolean;
+}) {
   const cards = [
     { icon: ClipboardList, title: "Dossier de l'enfant",  text: "Statut d'admission, pièces manquantes, décision de l'école." },
     { icon: GraduationCap,  title: "Classe assignée",     text: "Classe, enseignant, annonces et documents de classe." },
@@ -50,7 +55,7 @@ export function ParentTab({ schoolId, admissionsConfig }: { schoolId: string; ad
 
       {admissionsConfig && (admissionsConfig.levels.length > 0 || admissionsConfig.conditions || admissionsConfig.required_documents.length > 0 || hasPeriod || admissionsConfig.additional_info) && (
         <div className="grid sm:grid-cols-2 gap-3 mb-6">
-          {admissionsConfig.levels.length > 0 && (
+          {showLevels && admissionsConfig.levels.length > 0 && (
             <AdmissionsInfoCard icon={GraduationCap} title="Niveaux proposés">
               <p className="text-xs text-white/70 leading-relaxed">{admissionsConfig.levels.join(", ")}</p>
             </AdmissionsInfoCard>
@@ -64,7 +69,7 @@ export function ParentTab({ schoolId, admissionsConfig }: { schoolId: string; ad
               </p>
             </AdmissionsInfoCard>
           )}
-          {admissionsConfig.required_documents.length > 0 && (
+          {showRequiredDocuments && admissionsConfig.required_documents.length > 0 && (
             <AdmissionsInfoCard icon={ListChecks} title="Documents requis">
               <ul className="text-xs text-white/70 leading-relaxed list-disc list-inside">
                 {admissionsConfig.required_documents.map((doc) => <li key={doc}>{doc}</li>)}

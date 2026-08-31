@@ -109,7 +109,7 @@ export async function POST(req: NextRequest) {
     console.error("publish: failed to pre-read storage_path for remove_ids (non-blocking):", e);
   }
 
-  const { data, error } = await context.supabase.rpc("publish_school_page", {
+  const { data, error } = await context.supabase.rpc("publish_school_page_v2", {
     p_establishment_id: context.establishmentId,
     p_expected_draft_updated_at: expectedUpdatedAt,
   });

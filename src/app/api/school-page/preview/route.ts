@@ -51,6 +51,8 @@ export async function GET() {
       .from("school_documents")
       .select("*")
       .eq("establishment_id", context.establishmentId)
+      .eq("status", "live")
+      .eq("is_public", true)
       .order("created_at", { ascending: false }),
     context.supabase
       .from("admissions_config")

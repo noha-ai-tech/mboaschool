@@ -25,7 +25,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { authorizeSchoolMutation } from "@/lib/cms/authorizeSchoolMutation";
 import { HERO_MODES, type HeroMode } from "@/lib/school/heroMode";
 import { CANONICAL_SECTION_KEYS, type SchoolPageSectionKey } from "@/lib/schoolPage/sections";
-import { FEE_KEYS } from "@/lib/schoolPage/pricing";
+import { normalizeSchoolPagePricing } from "@/lib/schoolPage/pricing";
 import { INFRASTRUCTURE_KEYS as INFRA_KEYS } from "@/lib/schoolPage/infrastructure";
 import {
   normalizeSchoolPageDraftPayload,
@@ -40,7 +40,6 @@ import { buildLiveSnapshot } from "@/lib/schoolPage/snapshot";
 // /api/school-page/sections, trouvée lors de l'audit CMS-F.2).
 type DbSectionKey = SchoolPageSectionKey;
 const CANONICAL_SECTION_KEY_SET = new Set<string>(CANONICAL_SECTION_KEYS);
-const FEE_KEY_SET = new Set<string>(FEE_KEYS);
 const INFRA_KEY_SET = new Set<string>(INFRA_KEYS);
 
 const MAX_DESCRIPTION_LENGTH = 4000; // aligné sur presentation/route.ts
@@ -319,26 +318,9 @@ function validateHeroMode(input: unknown): FieldResult<HeroMode> {
   return { ok: true, value: input as HeroMode };
 }
 
-function validatePricing(input: unknown): FieldResult<Record<string, number | null>> {
-  if (typeof input !== "object" || input === null) return { ok: false, error: "pricing doit être un objet" };
-  const obj = input as Record<string, unknown>;
-  const unknown = Object.keys(obj).filter((k) => !FEE_KEY_SET.has(k));
-  if (unknown.length > 0) return { ok: false, error: `pricing : champ(s) inconnu(s) ${unknown.join(", ")}` };
-  const value: Record<string, number | null> = {};
-  for (const key of FEE_KEYS) {
-    if (!(key in obj)) return { ok: false, error: `pricing.${key} requis (nombre ou null)` };
-    const raw = obj[key];
-    if (raw === null) {
-      value[key] = null;
-      continue;
-    }
-    const n = typeof raw === "number" ? raw : Number(raw);
-    if (typeof raw !== "number" || !Number.isFinite(n) || n < 0) {
-      return { ok: false, error: `pricing.${key} invalide (nombre positif ou null)` };
-    }
-    value[key] = Math.round(n);
-  }
-  return { ok: true, value };
+function validatePricing(input: unknown): FieldResult<SchoolPageDraftPayload["pricing"]> {
+  const result = normalizeSchoolPagePricing(input);
+  return "error" in result ? { ok: false, error: result.error } : { ok: true, value: result.value };
 }
 
 function validateInfrastructure(input: unknown): FieldResult<Record<string, boolean>> {

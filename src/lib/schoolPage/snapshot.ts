@@ -1,9 +1,14 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { HeroMode } from "@/lib/school/heroMode";
 import { CANONICAL_SECTION_KEYS } from "@/lib/schoolPage/sections";
-import { FEE_KEYS } from "@/lib/schoolPage/pricing";
+import { FEE_KEYS, type SchoolAdditionalFee, type SchoolFeeSchedule, type SchoolPagePricing } from "@/lib/schoolPage/pricing";
 import { INFRASTRUCTURE_KEYS as INFRA_KEYS } from "@/lib/schoolPage/infrastructure";
 import type { SchoolPageDraftPayload } from "@/lib/schoolPage/draftPayload";
+
+type FeeScheduleRow = Omit<SchoolFeeSchedule, "installments"> & {
+  id: string;
+  school_fee_installments: SchoolFeeSchedule["installments"] | null;
+};
 
 // CMS-F.2 — extrait tel quel (comportement inchangé) depuis
 // /api/school-page/draft — c'était la seule implémentation avant CMS-F.4.
@@ -26,13 +31,13 @@ export async function buildLiveSnapshot(
   supabase: SupabaseClient,
   establishmentId: string
 ): Promise<SchoolPageDraftPayload> {
-  const [establishmentRes, feesRes, infraRes, admissionsRes, sectionsRes, rankingRes] = await Promise.all([
+  const [establishmentRes, feesRes, infraRes, admissionsRes, sectionsRes, rankingRes, schedulesRes, additionalFeesRes] = await Promise.all([
     supabase
       .from("establishments")
       .select("description, motto, history, mission, vision, phone, email, website, address, city, hero_mode, founding_year, student_count, teacher_count")
       .eq("id", establishmentId)
       .single(),
-    supabase.from("fees").select(FEE_KEYS.join(", ")).eq("establishment_id", establishmentId).maybeSingle(),
+    supabase.from("fees").select([...FEE_KEYS, "currency", "is_qualified"].join(", ")).eq("establishment_id", establishmentId).maybeSingle(),
     supabase.from("infrastructures").select(INFRA_KEYS.join(", ")).eq("establishment_id", establishmentId).maybeSingle(),
     supabase
       .from("admissions_config")
@@ -49,11 +54,24 @@ export async function buildLiveSnapshot(
       .select("year, rank, scope, source, source_url")
       .eq("establishment_id", establishmentId)
       .maybeSingle(),
+    supabase
+      .from("school_fee_schedules")
+      .select("id, academic_year, level_label, registration_fee, tuition_fee, currency, notes, position, school_fee_installments(label, position, amount, due_date, notes)")
+      .eq("establishment_id", establishmentId)
+      .order("position"),
+    supabase
+      .from("school_additional_fees")
+      .select("academic_year, category, label, amount, mandatory, frequency, notes, position")
+      .eq("establishment_id", establishmentId)
+      .order("position"),
   ]);
 
   if (establishmentRes.error) {
     throw new Error(`Lecture establishments impossible : ${establishmentRes.error.message}`);
   }
+  if (feesRes.error) throw new Error(`Lecture fees impossible : ${feesRes.error.message}`);
+  if (schedulesRes.error) throw new Error(`Lecture school_fee_schedules impossible : ${schedulesRes.error.message}`);
+  if (additionalFeesRes.error) throw new Error(`Lecture school_additional_fees impossible : ${additionalFeesRes.error.message}`);
 
   const establishment = establishmentRes.data as {
     description: string | null;
@@ -78,7 +96,7 @@ export async function buildLiveSnapshot(
     source: string;
     source_url: string | null;
   } | null;
-  const fees = (feesRes.data ?? null) as unknown as Record<string, number | null> | null;
+  const fees = (feesRes.data ?? null) as unknown as (Record<string, number | null> & { currency?: string | null; is_qualified?: boolean }) | null;
   const infra = (infraRes.data ?? null) as unknown as Record<string, boolean> | null;
   const admissions = (admissionsRes.data ?? null) as {
     levels: string[] | null;
@@ -91,8 +109,23 @@ export async function buildLiveSnapshot(
   const sectionRows = (sectionsRes.data ?? []) as { section_key: string; position: number; is_visible: boolean }[];
   const sectionRowByKey = new Map(sectionRows.map((r) => [r.section_key, r]));
 
-  const pricing: Record<string, number | null> = {};
+  const pricing = {} as SchoolPagePricing;
   for (const key of FEE_KEYS) pricing[key] = fees ? fees[key] ?? null : null;
+  pricing.currency = fees?.currency ?? "FCFA";
+  pricing.legacy_amounts_qualified = fees?.is_qualified ?? false;
+  pricing.schedules = ((schedulesRes.data ?? []) as unknown as FeeScheduleRow[]).map((schedule) => ({
+    academic_year: schedule.academic_year,
+    level_label: schedule.level_label,
+    registration_fee: schedule.registration_fee,
+    tuition_fee: schedule.tuition_fee,
+    currency: schedule.currency,
+    notes: schedule.notes,
+    position: schedule.position,
+    installments: [...(schedule.school_fee_installments ?? [])]
+      .sort((a, b) => a.position - b.position)
+      .map(({ label, position, amount, due_date, notes }) => ({ label, position, amount, due_date, notes })),
+  }));
+  pricing.additional_fees = (additionalFeesRes.data ?? []) as unknown as SchoolAdditionalFee[];
 
   const infrastructure: Record<string, boolean> = {};
   for (const key of INFRA_KEYS) infrastructure[key] = infra ? Boolean(infra[key]) : false;

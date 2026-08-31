@@ -73,10 +73,21 @@ test("legacy existing domains remain byte-for-byte semantically equivalent", () 
   for (const key of Object.keys(legacyPayload)) {
     if (key === "presentation") {
       assert.equal(normalized.presentation.description, legacyPayload.presentation.description);
+    } else if (key === "pricing") {
+      for (const [feeKey, amount] of Object.entries(legacyPayload.pricing)) assert.equal(normalized.pricing[feeKey], amount);
     } else {
       assert.equal(JSON.stringify(normalized[key]), JSON.stringify(legacyPayload[key]));
     }
   }
+});
+
+test("GUYSKULL-02 adds pricing lifecycle defaults without changing legacy amounts", () => {
+  const normalized = normalize(guyskullLegacyPayload);
+  assert.equal(normalized.pricing.tuition_fee, 29000);
+  assert.equal(normalized.pricing.currency, "FCFA");
+  assert.equal(normalized.pricing.legacy_amounts_qualified, false);
+  assert.deepEqual(normalized.pricing.schedules, []);
+  assert.deepEqual(normalized.pricing.additional_fees, []);
 });
 
 test("missing key_numbers receives the exact current empty shape", () => {
@@ -99,8 +110,12 @@ test("legacy presentation additions receive null without inventing content", () 
   });
 });
 
-test("fully populated current payload remains unchanged", () => {
-  assert.deepEqual(normalize(currentPayload), currentPayload);
+test("fully populated pre-GUYSKULL-02 payload changes only by compatible pricing defaults", () => {
+  const normalized = normalize(currentPayload);
+  assert.deepEqual({ ...normalized, pricing: currentPayload.pricing }, currentPayload);
+  assert.equal(normalized.pricing.registration_fee, null);
+  assert.equal(normalized.pricing.legacy_amounts_qualified, false);
+  assert.deepEqual(normalized.pricing.schedules, []);
 });
 
 test("malformed key_numbers is rejected", () => {
@@ -138,13 +153,15 @@ test("legacy payload passes preview preparation with safe direct access", () => 
 
 test("legacy payload passes publish preparation without losing existing domains", () => {
   const draft = normalize(legacyPayload);
-  for (const key of ["presentation", "contact", "pricing", "infrastructure", "gallery"]) {
+  for (const key of ["presentation", "contact", "infrastructure", "gallery"]) {
     const expected = key === "presentation"
       ? legacyPayload.presentation.description
       : JSON.stringify(legacyPayload[key]);
     const actual = key === "presentation" ? draft.presentation.description : JSON.stringify(draft[key]);
     assert.equal(actual, expected);
   }
+  assert.equal(draft.pricing.registration_fee, legacyPayload.pricing.registration_fee);
+  assert.equal(draft.pricing.legacy_amounts_qualified, false);
 });
 
 test("the captured Guyskull production draft normalizes to the current read contract", () => {

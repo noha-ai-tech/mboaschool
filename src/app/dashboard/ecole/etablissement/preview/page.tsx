@@ -152,7 +152,7 @@ export default function PreviewDraftPage() {
             official_id: establishment.official_id,
             source_ministry: establishment.source_ministry,
           },
-          fees: { ...draft.pricing, currency: "FCFA" },
+          fees: draft.pricing,
           infra: draft.infrastructure,
           images,
           docsList: documents,

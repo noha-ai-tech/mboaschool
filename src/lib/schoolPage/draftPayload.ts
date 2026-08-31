@@ -1,5 +1,6 @@
 import type { HeroMode } from "@/lib/school/heroMode";
 import type { SchoolPageSectionKey } from "@/lib/schoolPage/sections";
+import { normalizeSchoolPagePricing, type SchoolPagePricing } from "./pricing.ts";
 
 // CMS-F.3 — type partagé entre /api/school-page/draft (CMS-F.2) et
 // l'éditeur CMS (src/app/dashboard/ecole/etablissement/page.tsx), pour que
@@ -27,7 +28,7 @@ export type SchoolPageDraftPayload = {
     city: string | null;
   };
   hero_mode: HeroMode;
-  pricing: Record<string, number | null>;
+  pricing: SchoolPagePricing;
   infrastructure: Record<string, boolean>;
   admissions: {
     levels: string[];
@@ -173,7 +174,8 @@ export function normalizeSchoolPageDraftPayload(rawPayload: unknown): SchoolPage
   }
   if (!isRecord(rawPayload.contact)) return { ok: false, error: "contact doit être un objet" };
   if (typeof rawPayload.hero_mode !== "string") return { ok: false, error: "hero_mode doit être du texte" };
-  if (!isRecord(rawPayload.pricing)) return { ok: false, error: "pricing doit être un objet" };
+  const pricing = normalizeSchoolPagePricing(rawPayload.pricing);
+  if ("error" in pricing) return { ok: false, error: pricing.error };
   if (!isRecord(rawPayload.infrastructure)) return { ok: false, error: "infrastructure doit être un objet" };
   if (!isRecord(rawPayload.admissions)) return { ok: false, error: "admissions doit être un objet" };
   if (!Array.isArray(rawPayload.sections)) return { ok: false, error: "sections doit être une liste" };
@@ -181,6 +183,7 @@ export function normalizeSchoolPageDraftPayload(rawPayload: unknown): SchoolPage
   if (galleryError) return { ok: false, error: galleryError };
 
   const cloned = cloneJsonValue(rawPayload) as Record<string, unknown>;
+  cloned.pricing = pricing.value;
   const presentation = cloned.presentation as Record<string, unknown>;
   const addedFields: string[] = [];
 

@@ -9,6 +9,7 @@ import { MiniSiteRenderer, type MiniSiteRendererData } from "@/components/school
 import type { AdmissionsConfig } from "@/components/school/ParentTab";
 import type { ExamResult, OfficialRanking } from "@/components/school/MiniSiteResultsPreview";
 import { resolveSectionConfig } from "@/lib/schoolPage/sections";
+import { FEE_KEYS, type SchoolPagePricing } from "@/lib/schoolPage/pricing";
 
 // PUBLIC-SITE-01 — the public school page is a school-specific mini-site
 // (§2): the Écoles237 SiteHeader/SiteFooter/directory chrome are gone from
@@ -44,6 +45,8 @@ export default function SchoolPage() {
         { data: admissionsData },
         rankingRes,
         resultsRes,
+        schedulesRes,
+        additionalFeesRes,
       ] = await Promise.all([
         supabase.from("establishments").select(ESTABLISHMENT_COLUMNS).eq("id", id).single(),
         supabase.from("fees").select("*").eq("establishment_id", id).maybeSingle(),
@@ -51,7 +54,7 @@ export default function SchoolPage() {
         // CMS-F.6 — filtre status='live' explicite, défense en profondeur
         // avec la RLS publique (migration 0032).
         supabase.from("school_images").select("*").eq("establishment_id", id).eq("status", "live").order("created_at", { ascending: false }),
-        supabase.from("school_documents").select("*").eq("establishment_id", id).order("created_at", { ascending: false }),
+        supabase.from("school_documents").select("*").eq("establishment_id", id).eq("status", "live").eq("is_public", true).order("created_at", { ascending: false }),
         supabase.from("school_page_sections").select("section_key, position, is_visible").eq("establishment_id", id),
         supabase.from("admissions_config").select("is_open, levels, conditions, required_documents, period_start, period_end, additional_info").eq("establishment_id", id).maybeSingle(),
         // PUBLIC-SITE-02 — migration 0035, not yet executed: resolves to
@@ -61,6 +64,8 @@ export default function SchoolPage() {
         // working exactly as before the migration.
         supabase.from("school_official_ranking").select("year, rank, scope, source, source_url").eq("establishment_id", id).maybeSingle(),
         supabase.from("school_exam_results").select("id, exam, academic_year, candidates_count, admitted_count, success_rate_percent").eq("establishment_id", id).eq("status", "live").order("academic_year", { ascending: false }),
+        supabase.from("school_fee_schedules").select("academic_year, level_label, registration_fee, tuition_fee, currency, notes, position, school_fee_installments(label, position, amount, due_date, notes)").eq("establishment_id", id).order("position"),
+        supabase.from("school_additional_fees").select("academic_year, category, label, amount, mandatory, frequency, notes, position").eq("establishment_id", id).order("position"),
       ]);
 
       if (!schoolData) {
@@ -80,10 +85,19 @@ export default function SchoolPage() {
         admittedCount: r.admitted_count ?? undefined,
         totalCount: r.candidates_count ?? undefined,
       }));
+      const pricing = Object.fromEntries(FEE_KEYS.map((key) => [key, feesData?.[key] ?? null])) as unknown as SchoolPagePricing;
+      pricing.currency = feesData?.currency ?? "FCFA";
+      pricing.legacy_amounts_qualified = feesData?.is_qualified ?? false;
+      pricing.schedules = (schedulesRes.data ?? []).map((schedule: any) => ({
+        ...schedule,
+        installments: [...(schedule.school_fee_installments ?? [])].sort((a: any, b: any) => a.position - b.position),
+        school_fee_installments: undefined,
+      }));
+      pricing.additional_fees = (additionalFeesRes.data ?? []) as any;
 
       setData({
         establishment: schoolData as any,
-        fees: feesData ?? null,
+        fees: pricing,
         infra: infraData ?? null,
         images: imagesData ?? [],
         docsList: docsData ?? [],

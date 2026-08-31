@@ -8,11 +8,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { authorizeSchoolMutation } from "@/lib/cms/authorizeSchoolMutation";
+import { SCHOOL_DOCUMENT_TYPES } from "@/lib/schoolPage/documents";
 
 const BUCKET = "school-documents";
 const MAX_BYTES = 10 * 1024 * 1024; // 10 Mo — aligné sur la page dashboard existante.
 const MAX_NAME_LENGTH = 200;
-const DOC_TYPES = new Set(["fiche", "inscription", "fournitures", "reglement", "calendrier", "autre"]);
+const DOC_TYPES = new Set<string>(SCHOOL_DOCUMENT_TYPES);
 
 // Extension dérivée du MIME type validé, jamais du nom de fichier fourni
 // par le navigateur — élimine toute manipulation de chemin.
@@ -56,6 +57,10 @@ export async function POST(req: NextRequest) {
   const name = typeof rawName === "string" && rawName.trim().length > 0
     ? rawName.trim().slice(0, MAX_NAME_LENGTH)
     : file.name.replace(/\.[^/.]+$/, "").slice(0, MAX_NAME_LENGTH) || "Document";
+  const rawAcademicYear = form.get("academic_year");
+  const academicYear = typeof rawAcademicYear === "string" && /^\d{4}-\d{4}$/.test(rawAcademicYear) ? rawAcademicYear : null;
+  const rawDescription = form.get("description");
+  const description = typeof rawDescription === "string" && rawDescription.trim() ? rawDescription.trim().slice(0, 1000) : null;
 
   const { context } = auth;
   const path = `${context.establishmentId}/${randomUUID()}.${ext}`;
@@ -79,8 +84,13 @@ export async function POST(req: NextRequest) {
       type,
       url: publicUrlData.publicUrl,
       storage_path: path,
+      academic_year: academicYear,
+      mime_type: file.type,
+      description,
+      is_public: true,
+      status: "live",
     })
-    .select("id, name, type, url, created_at")
+    .select("id, name, type, url, academic_year, mime_type, description, is_public, status, created_at")
     .single();
 
   if (dbError) {
