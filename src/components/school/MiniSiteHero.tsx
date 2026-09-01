@@ -29,7 +29,7 @@ export function MiniSiteHero({
   whatsapp,
   mapsHref,
   website,
-  onDiscoverClick,
+  discoverHref,
   trustBadge,
   premium,
 }: {
@@ -44,7 +44,8 @@ export function MiniSiteHero({
   whatsapp: string | null;
   mapsHref: string | null;
   website: string | null;
-  onDiscoverClick: () => void;
+  /** GUYSKULL-05 — a real route (L'établissement view), not a client-state callback. */
+  discoverHref: string;
   trustBadge?: { label: string } | null;
   premium?: boolean;
 }) {
@@ -105,12 +106,12 @@ export function MiniSiteHero({
             )}
             {!motto && !description && <div className="mb-5" />}
             <div className="flex flex-wrap items-center gap-3">
-              <button
-                onClick={onDiscoverClick}
+              <Link
+                href={discoverHref}
                 className="inline-flex items-center h-11 px-6 rounded-card bg-white text-accent text-sm font-bold hover:bg-white/90 transition-colors duration-base"
               >
-                Découvrir notre établissement
-              </button>
+                Découvrir l&apos;établissement
+              </Link>
               {admissionsOpen && (
                 <Link
                   href={preinscriptionHref}

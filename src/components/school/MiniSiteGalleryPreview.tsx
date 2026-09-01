@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { ImageIcon } from "lucide-react";
 
 // PUBLIC-SITE-01 §4G — compact homepage gallery teaser. Reuses the exact
@@ -11,10 +12,11 @@ import { ImageIcon } from "lucide-react";
 // architecture.
 export function MiniSiteGalleryPreview({
   images,
-  onSeeAllClick,
+  seeAllHref,
 }: {
   images: { id: string; url: string; caption?: string | null }[];
-  onSeeAllClick: () => void;
+  /** GUYSKULL-05 — a real route (Galerie & Infos view). */
+  seeAllHref: string;
 }) {
   if (images.length === 0) return null;
 
@@ -24,19 +26,19 @@ export function MiniSiteGalleryPreview({
         <h2 className="font-bold text-sm flex items-center gap-2">
           <ImageIcon size={15} className="text-primary" /> Aperçu de l&apos;établissement
         </h2>
-        <button onClick={onSeeAllClick} className="text-xs font-bold text-primary hover:opacity-80 transition-opacity duration-base">
+        <Link href={seeAllHref} className="text-xs font-bold text-primary hover:opacity-80 transition-opacity duration-base">
           Voir la galerie →
-        </button>
+        </Link>
       </div>
       <div className="flex gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {images.slice(0, 10).map((img) => (
-          <button
+          <Link
             key={img.id}
-            onClick={onSeeAllClick}
+            href={seeAllHref}
             className="relative w-36 h-28 rounded-xl overflow-hidden bg-muted shrink-0"
           >
             <Image src={img.url} alt={img.caption ?? ""} fill sizes="144px" className="object-cover" />
-          </button>
+          </Link>
         ))}
       </div>
     </div>

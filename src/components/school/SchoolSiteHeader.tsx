@@ -2,36 +2,37 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Menu, X, PhoneCall } from "lucide-react";
+import { MINISITE_VIEWS, buildMiniSiteViewHref, type MiniSiteViewKey } from "@/lib/schoolPage/miniSiteViews";
 
 // PUBLIC-SITE-01 §3 — school-specific header. Deliberately NOT the
 // Écoles237 SiteHeader (§2 — the mini-site must feel like the school's own
-// website, not the directory). Reused nowhere else; scoped to
-// src/app/ecole/[id]/page.tsx only.
-export type MiniSiteTabKey = "accueil" | "etablissement" | "admissions" | "vie" | "galerie";
-
-export const MINISITE_TABS: { key: MiniSiteTabKey; label: string }[] = [
-  { key: "accueil", label: "Accueil" },
-  { key: "etablissement", label: "L'établissement" },
-  { key: "admissions", label: "Formations & Admissions" },
-  { key: "vie", label: "Vie & Résultats" },
-  { key: "galerie", label: "Galerie & Infos" },
-];
+// website, not the directory). Reused nowhere else; scoped to the public
+// mini-site route tree and its CMS Preview mirror.
+//
+// GUYSKULL-05 — the 5 tabs are now real routed links (buildMiniSiteViewHref),
+// not a client-state toggle: refresh/back-forward/deep-links all work, and
+// `aria-current="page"` marks the active one for assistive tech.
+export type { MiniSiteViewKey } from "@/lib/schoolPage/miniSiteViews";
+/** @deprecated kept for any lingering import — use MiniSiteViewKey. */
+export type MiniSiteTabKey = MiniSiteViewKey;
 
 export function SchoolSiteHeader({
   logoUrl,
   name,
   motto,
-  activeTab,
-  onTabChange,
+  baseHref,
+  activeView,
   phone,
   sticky = true,
 }: {
   logoUrl: string | null;
   name: string;
   motto?: string | null;
-  activeTab: MiniSiteTabKey;
-  onTabChange: (tab: MiniSiteTabKey) => void;
+  /** Root URL for this school's mini-site — `/ecole/<id>` in public, `/dashboard/ecole/etablissement/preview` in CMS Preview. */
+  baseHref: string;
+  activeView: MiniSiteViewKey;
   phone: string | null;
   /** PUBLIC-SITE-02 §7 — the CMS Preview stacks its own sticky "draft" banner
    * above this header; a second `sticky top-0` here would overlap it
@@ -39,11 +40,6 @@ export function SchoolSiteHeader({
   sticky?: boolean;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
-
-  function selectTab(tab: MiniSiteTabKey) {
-    onTabChange(tab);
-    setMenuOpen(false);
-  }
 
   return (
     <header className={`${sticky ? "sticky top-0" : ""} z-40 bg-white border-b border-border`}>
@@ -64,19 +60,20 @@ export function SchoolSiteHeader({
           </div>
         </div>
 
-        <nav className="hidden lg:flex items-center gap-1">
-          {MINISITE_TABS.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => selectTab(tab.key)}
-              className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors duration-base ${
-                activeTab === tab.key
+        <nav aria-label="Navigation de l'établissement" className="hidden lg:flex items-center gap-1">
+          {MINISITE_VIEWS.map((view) => (
+            <Link
+              key={view.key}
+              href={buildMiniSiteViewHref(baseHref, view.key)}
+              aria-current={activeView === view.key ? "page" : undefined}
+              className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors duration-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
+                activeView === view.key
                   ? "bg-primary-light text-primary"
                   : "text-text-secondary hover:text-text-primary hover:bg-muted"
               }`}
             >
-              {tab.label}
-            </button>
+              {view.label}
+            </Link>
           ))}
         </nav>
 
@@ -93,7 +90,8 @@ export function SchoolSiteHeader({
           <button
             onClick={() => setMenuOpen((v) => !v)}
             aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
-            className="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg border border-border text-text-primary"
+            aria-expanded={menuOpen}
+            className="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg border border-border text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             {menuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -101,17 +99,19 @@ export function SchoolSiteHeader({
       </div>
 
       {menuOpen && (
-        <nav className="lg:hidden border-t border-border px-4 py-2 flex flex-col">
-          {MINISITE_TABS.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => selectTab(tab.key)}
-              className={`text-left px-2 py-2.5 rounded-lg text-sm font-semibold ${
-                activeTab === tab.key ? "text-primary" : "text-text-secondary"
+        <nav aria-label="Navigation de l'établissement (mobile)" className="lg:hidden border-t border-border px-4 py-2 flex flex-col">
+          {MINISITE_VIEWS.map((view) => (
+            <Link
+              key={view.key}
+              href={buildMiniSiteViewHref(baseHref, view.key)}
+              aria-current={activeView === view.key ? "page" : undefined}
+              onClick={() => setMenuOpen(false)}
+              className={`text-left px-2 py-2.5 rounded-lg text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
+                activeView === view.key ? "text-primary" : "text-text-secondary"
               }`}
             >
-              {tab.label}
-            </button>
+              {view.label}
+            </Link>
           ))}
           {phone && (
             <a href={`tel:${phone}`} className="mt-1 mb-2 text-center bg-accent text-white text-sm font-bold py-2.5 rounded-card">

@@ -8,7 +8,11 @@ const root = new URL("../", import.meta.url);
 const sql = await readFile(new URL("supabase/migrations/0037_school_structured_pricing_documents.sql", root), "utf8");
 const rollback = await readFile(new URL("docs/guyskull/GUYSKULL-0037_ROLLBACK.sql", root), "utf8");
 const renderer = await readFile(new URL("src/components/school/StructuredPricing.tsx", root), "utf8");
-const miniSite = await readFile(new URL("src/components/school/MiniSiteRenderer.tsx", root), "utf8");
+// GUYSKULL-05 — MiniSiteRenderer.tsx was split into a shared shell + 5
+// independently routed views; the two assertions that used to read it now
+// read the specific view each pattern actually lives in.
+const admissionsView = await readFile(new URL("src/components/school/views/FormationsAdmissionsView.tsx", root), "utf8");
+const accueilView = await readFile(new URL("src/components/school/views/AccueilView.tsx", root), "utf8");
 const snapshot = await readFile(new URL("src/lib/schoolPage/snapshot.ts", root), "utf8");
 
 const base = {
@@ -36,8 +40,8 @@ test("enrollment CTA is shown for a published valid file", () => assert.equal(ge
 test("CTA is hidden for a draft document", () => assert.deepEqual(getPublishedDocumentCtas([{ id: "1", name: "X", type: "inscription", url: "https://example.test/x", status: "draft", is_public: true }]), []));
 test("29,000 legacy amount is never given a public semantic label", () => { assert.match(renderer, /Montant existant à qualifier/); assert.match(renderer, /mode === "admin"/); });
 test("pricing renderer prevents mobile overflow", () => { assert.match(renderer, /overflow-x-auto/); assert.match(renderer, /min-w-\[560px\]/); });
-test("admissions navigation exposes five focused sections", () => ["Formations", "Admissions", "Tarifs", "Pièces à fournir", "Documents"].forEach((label) => assert.match(miniSite, new RegExp(label))));
-test("unknown category falls back to neutral rendering", () => { assert.match(miniSite, /categoryLabel.*\?\.label \?\? null/); assert.match(miniSite, /Formations/); });
+test("admissions navigation exposes five focused sections", () => ["Formations", "Admissions", "Tarifs", "Pièces à fournir", "Documents"].forEach((label) => assert.match(admissionsView, new RegExp(label))));
+test("unknown category falls back to neutral rendering", () => { assert.match(accueilView, /categoryLabel.*\?\.label \?\? null/); assert.match(admissionsView, /Formations/); });
 test("snapshot includes published schedules and additional fees for discard", () => { assert.match(snapshot, /school_fee_schedules/); assert.match(snapshot, /school_additional_fees/); });
 test("migration revokes direct client pricing writes", () => { assert.match(sql, /revoke all on public\.school_fee_schedules[\s\S]*from public, anon, authenticated/i); assert.match(sql, /revoke all on public\.fees from public, anon, authenticated/i); });
 test("anonymous access is live read-only", () => { assert.match(sql, /for select to anon, authenticated using \(true\)/i); assert.doesNotMatch(sql, /grant (insert|update|delete)[^;]*school_fee_schedules[^;]*authenticated/i); });

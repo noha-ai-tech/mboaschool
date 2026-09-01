@@ -6,8 +6,13 @@ import { resolve } from "node:path";
 const root = process.cwd();
 const visualPackSource = readFileSync(resolve(root, "src/lib/schoolPage/visualPacks.ts"), "utf8");
 const editorSource = readFileSync(resolve(root, "src/app/dashboard/ecole/etablissement/page.tsx"), "utf8");
-const previewSource = readFileSync(resolve(root, "src/app/dashboard/ecole/etablissement/preview/page.tsx"), "utf8");
-const publicSource = readFileSync(resolve(root, "src/app/ecole/[id]/page.tsx"), "utf8");
+// GUYSKULL-05 — the preview fetch (and its visualPack query-param handling)
+// moved from preview/page.tsx into the shared preview/layout.tsx (the 5
+// mini-site views are now sibling routes under one layout, not client tabs).
+const previewSource = readFileSync(resolve(root, "src/app/dashboard/ecole/etablissement/preview/layout.tsx"), "utf8");
+const publicSource =
+  readFileSync(resolve(root, "src/app/ecole/[id]/page.tsx"), "utf8") +
+  readFileSync(resolve(root, "src/app/ecole/[id]/layout.tsx"), "utf8");
 
 const expectedFiles = [
   "guyskull-campus-master-v1.png",

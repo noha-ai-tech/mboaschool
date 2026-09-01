@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { MapPin, Building2, CalendarDays, Users } from "lucide-react";
 
 // PUBLIC-SITE-01 §4C / PUBLIC-SITE-02 §3 — homepage "about" teaser. All
@@ -13,7 +14,7 @@ export function MiniSiteAboutPreview({
   imageUrl,
   foundingYear,
   studentCount,
-  onReadMore,
+  readMoreHref,
 }: {
   description: string | null;
   categoryLabel: string | null;
@@ -22,7 +23,8 @@ export function MiniSiteAboutPreview({
   imageUrl: string | null;
   foundingYear?: number | null;
   studentCount?: number | null;
-  onReadMore: () => void;
+  /** GUYSKULL-05 — a real route (L'établissement view). */
+  readMoreHref: string;
 }) {
   const highlights = [
     categoryLabel ? { icon: Building2, text: categoryLabel } : null,
@@ -53,9 +55,9 @@ export function MiniSiteAboutPreview({
             ))}
           </div>
         )}
-        <button onClick={onReadMore} className="text-sm font-bold text-primary hover:opacity-80 transition-opacity duration-base">
-          En savoir plus →
-        </button>
+        <Link href={readMoreHref} className="text-sm font-bold text-primary hover:opacity-80 transition-opacity duration-base">
+          Découvrir l&apos;établissement →
+        </Link>
       </div>
     </div>
   );
