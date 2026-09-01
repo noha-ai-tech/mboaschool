@@ -93,6 +93,8 @@ import type { SchoolPageDraftPayload, SchoolPageDraftRow } from "@/lib/schoolPag
 import type { SchoolPagePricing } from "@/lib/schoolPage/pricing";
 import { StructuredPricingEditor } from "@/components/school/StructuredPricingEditor";
 import { SCHOOL_DOCUMENT_TYPE_LABELS } from "@/lib/schoolPage/documents";
+import { getSchoolVisualPack } from "@/lib/schoolPage/visualPacks";
+import { SchoolVisualPackPanel } from "@/components/school/SchoolVisualPackPanel";
 
 type SectionKey =
   | "presentation" | "admissions" | "tarifs" | "infrastructures"
@@ -1616,11 +1618,13 @@ export default function ModifierMaPagePage() {
     // Publish, avec une action "Annuler la suppression" tant qu'il n'a pas
     // eu lieu.
     if (activeDrawer === "galerie") {
+      const localVisualPack = getSchoolVisualPack(school?.id);
       return (
         <div>
           <p className="text-xs text-text-secondary bg-muted rounded-lg p-3 mb-4">
             Les nouvelles photos et les suppressions ne seront visibles publiquement qu&apos;après la publication de votre brouillon.
           </p>
+          {localVisualPack && <SchoolVisualPackPanel pack={localVisualPack} />}
           <input
             ref={galleryInputRef}
             type="file"

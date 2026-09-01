@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ImageIcon, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { groupSchoolGalleryImages } from "@/lib/school/galleryGroups";
 
 export type SchoolGalleryImage = { id: string; url: string; caption?: string | null };
 
@@ -21,41 +22,36 @@ export function SchoolGallery({ images }: { images: SchoolGalleryImage[] }) {
     );
   }
 
+  const groups = groupSchoolGalleryImages(images);
+  const imageIndexById = new Map(images.map((image, index) => [image.id, index]));
+
   return (
     <>
-      {/* Mobile — défilement horizontal compact */}
-      <div className="flex sm:hidden gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {images.map((img, i) => (
-          <button
-            key={img.id}
-            onClick={() => setLightboxIndex(i)}
-            className="relative w-40 h-40 rounded-[14px] overflow-hidden bg-muted shrink-0"
-          >
-            <Image src={img.url} alt={img.caption ?? ""} fill sizes="160px" className="object-cover" />
-          </button>
-        ))}
-      </div>
-
-      {/* Desktop — masonry en colonnes CSS */}
-      <div className="hidden sm:block columns-2 lg:columns-3 gap-4 [column-fill:balance]">
-        {images.map((img, i) => (
-          <button
-            key={img.id}
-            onClick={() => setLightboxIndex(i)}
-            className="group relative block w-full mb-4 break-inside-avoid rounded-[16px] overflow-hidden bg-muted border border-border hover:border-text-secondary/30 transition-colors duration-base"
-          >
-            <Image
-              src={img.url}
-              alt={img.caption ?? ""}
-              width={480}
-              height={360}
-              sizes="(max-width: 1024px) 50vw, 33vw"
-              className="w-full h-auto object-cover group-hover:scale-[1.02] transition-transform duration-base"
-            />
-            {img.caption && (
-              <p className="text-xs text-white bg-black/50 px-3 py-2 absolute bottom-0 inset-x-0">{img.caption}</p>
-            )}
-          </button>
+      <div className="grid gap-6 sm:grid-cols-2">
+        {groups.map((group) => (
+          <section key={group.key} className="rounded-[16px] border border-border bg-white p-3 sm:p-4">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <h3 className="text-sm font-bold text-text-primary">{group.label}</h3>
+              <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold text-text-secondary">{group.images.length}</span>
+            </div>
+            <div className="grid grid-cols-2 gap-2.5">
+              {group.images.map((img) => (
+                <button
+                  key={img.id}
+                  onClick={() => setLightboxIndex(imageIndexById.get(img.id) ?? 0)}
+                  className="group relative aspect-[4/3] overflow-hidden rounded-[12px] bg-muted border border-border hover:border-text-secondary/30 transition-colors duration-base"
+                >
+                  <Image
+                    src={img.url}
+                    alt={img.caption ?? group.label}
+                    fill
+                    sizes="(max-width: 640px) 45vw, (max-width: 1024px) 24vw, 20vw"
+                    className="object-cover group-hover:scale-[1.02] transition-transform duration-base"
+                  />
+                </button>
+              ))}
+            </div>
+          </section>
         ))}
       </div>
 

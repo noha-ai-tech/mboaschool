@@ -30,6 +30,7 @@ import type { AdmissionsConfig } from "@/components/school/ParentTab";
 import type { ExamResult, OfficialRanking } from "@/components/school/MiniSiteResultsPreview";
 import { resolveSectionConfig } from "@/lib/schoolPage/sections";
 import type { SchoolPageDraftPayload } from "@/lib/schoolPage/draftPayload";
+import { getSchoolVisualPack } from "@/lib/schoolPage/visualPacks";
 
 type PreviewApiData = {
   establishment: {
@@ -69,6 +70,7 @@ export default function PreviewDraftPage() {
   const [data, setData] = useState<MiniSiteRendererData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [localVisualPackName, setLocalVisualPackName] = useState<string | null>(null);
   const loadRequestIdRef = useRef(0);
 
   useEffect(() => {
@@ -84,6 +86,7 @@ export default function PreviewDraftPage() {
       setLoading(true);
       setError(null);
       setData(null);
+      setLocalVisualPackName(null);
 
       try {
         const res = await fetch("/api/school-page/preview");
@@ -93,6 +96,18 @@ export default function PreviewDraftPage() {
 
         const api = json as PreviewApiData;
         const { establishment, images, documents, admissionsIsOpen, results, draft } = api;
+        const requestedVisualPack = new URL(window.location.href).searchParams.get("visualPack");
+        const localVisualPack = requestedVisualPack
+          ? getSchoolVisualPack(establishment.id, requestedVisualPack)
+          : null;
+        const previewImages = localVisualPack
+          ? localVisualPack.assets.map((asset) => ({
+              id: `local-${asset.id}`,
+              url: asset.src,
+              caption: asset.caption,
+            }))
+          : images;
+        setLocalVisualPackName(localVisualPack?.name ?? null);
 
         // CMS-F.4 §11 — is_open vient LIVE, tout le reste du modèle
         // Admissions vient du brouillon.
@@ -154,7 +169,7 @@ export default function PreviewDraftPage() {
           },
           fees: draft.pricing,
           infra: draft.infrastructure,
-          images,
+          images: previewImages,
           docsList: documents,
           sectionConfig,
           admissionsConfig,
@@ -225,6 +240,11 @@ export default function PreviewDraftPage() {
           <div className="flex items-center gap-3 min-w-0">
             <span className="text-xs font-bold tracking-widest uppercase text-primary-light">Aperçu du brouillon</span>
             <span className="text-white/50 text-xs hidden sm:inline truncate">Cette version n&apos;est pas encore publique.</span>
+            {localVisualPackName && (
+              <span className="rounded-full bg-amber-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-950">
+                {localVisualPackName} — concepts locaux
+              </span>
+            )}
           </div>
           <Link
             href="/dashboard/ecole/etablissement"

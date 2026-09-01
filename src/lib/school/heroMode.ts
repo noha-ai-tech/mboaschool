@@ -8,6 +8,7 @@ import type { SchoolHeroSlide } from "@/components/school/SchoolHeroCarousel";
 
 export type HeroMode = "carousel" | "image" | "none";
 export const HERO_MODES: readonly HeroMode[] = ["carousel", "image", "none"];
+export const MAX_HERO_CAROUSEL_SLIDES = 5;
 
 // Diapositives disponibles avant application du mode : la galerie si elle
 // contient des photos, sinon le repli hérité cover_image_url — inchangé
@@ -23,7 +24,9 @@ export function computeAllHeroSlides(
 
 // Applique le mode choisi. `mode` null/undefined (donnée pas encore
 // chargée, ou colonne absente avant exécution de la migration) retombe sur
-// "carousel" — dégrade déjà gracieusement à 0/1 diapositive
+// "carousel" — limité à cinq images pour garder un hero court et lisible,
+// tout en laissant la galerie complète disponible dans sa section dédiée.
+// Il dégrade déjà gracieusement à 0/1 diapositive
 // (SchoolHeroCarousel n'affiche les contrôles qu'à partir de 2), donc
 // aucune régression visuelle pour les écoles existantes (mission §8).
 export function resolveHeroSlides(
@@ -33,5 +36,5 @@ export function resolveHeroSlides(
   const effective = mode ?? "carousel";
   if (effective === "none") return [];
   if (effective === "image") return allSlides.slice(0, 1);
-  return allSlides;
+  return allSlides.slice(0, MAX_HERO_CAROUSEL_SLIDES);
 }
