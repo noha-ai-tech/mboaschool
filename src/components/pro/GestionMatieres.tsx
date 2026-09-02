@@ -1,393 +1,64 @@
 "use client";
 
 import { useState } from "react";
+import { Check, ChevronDown, ChevronRight, Plus, Trash2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import { Plus, Trash2, ChevronDown, ChevronRight, Loader2, Check } from "lucide-react";
+import { SchoolAdminSectionCard } from "@/components/school-admin/ui/Card";
+import { SchoolAdminButton } from "@/components/school-admin/ui/Button";
+import { SchoolAdminDialog } from "@/components/school-admin/ui/Overlay";
+import { SchoolAdminFormField, SchoolAdminInput, SchoolAdminSelect } from "@/components/school-admin/ui/FormControls";
+import { SchoolAdminAlert, SchoolAdminEmptyState } from "@/components/school-admin/ui/Feedback";
+import { SchoolAdminStatusBadge } from "@/components/school-admin/ui/Badge";
 
 type Volume = { id: string; niveau: string; heures_semaine: number };
-type Matiere = {
-  id: string; nom: string; departement_disciplinaire: string;
-  couleur: string; volumes: Volume[];
-};
+type Matiere = { id: string; nom: string; departement_disciplinaire: string; couleur: string; volumes: Volume[] };
+type DeleteTarget = { kind: "matiere"; matiere: Matiere } | { kind: "volume"; matiere: Matiere; volume: Volume };
 
-const INPUT = "w-full border border-[#ddd] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#0a0a0a] transition-colors bg-white";
-const LABEL = "block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5";
-
-export function GestionMatieres({
-  initialMatieres,
-  niveaux,
-  departementsExistants,
-  etablissementId,
-}: {
-  initialMatieres: Matiere[];
-  niveaux: string[];
-  departementsExistants: string[];
-  etablissementId: string;
-}) {
-  const [matieres, setMatieres] = useState<Matiere[]>(initialMatieres);
+export function GestionMatieres({ initialMatieres, niveaux, departementsExistants, etablissementId }: { initialMatieres: Matiere[]; niveaux: string[]; departementsExistants: string[]; etablissementId: string }) {
+  const [matieres, setMatieres] = useState(initialMatieres);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [showAddForm, setShowAddForm] = useState(false);
-
-  // Formulaire nouvelle matière
   const [newForm, setNewForm] = useState({ nom: "", departement: "", couleur: "#007A3D" });
   const [addingMatiere, setAddingMatiere] = useState(false);
-  const [addError, setAddError] = useState<string | null>(null);
-
-  // Formulaire nouveau volume (par matière)
   const [volumeForms, setVolumeForms] = useState<Record<string, { niveau: string; heures: string }>>({});
   const [addingVolume, setAddingVolume] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState("");
 
-  // Confirmation de suppression
-  const [deletingMatiere, setDeletingMatiere] = useState<string | null>(null);
-  const [deletingVolume, setDeletingVolume] = useState<string | null>(null);
-
-  function toggleExpand(id: string) {
-    setExpanded((prev) => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
-    });
+  function toggleExpand(id: string) { setExpanded((current) => { const next = new Set(current); next.has(id) ? next.delete(id) : next.add(id); return next; }); }
+  async function addMatiere(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault(); if (!newForm.nom.trim() || !newForm.departement.trim() || addingMatiere) return;
+    setAddingMatiere(true); setError("");
+    const { data, error: addError } = await supabase.from("matieres").insert({ etablissement_id: etablissementId, nom: newForm.nom.trim(), departement_disciplinaire: newForm.departement.trim(), couleur: newForm.couleur }).select("id, nom, departement_disciplinaire, couleur").single();
+    setAddingMatiere(false); if (addError) { setError(addError.message); return; }
+    if (data) { setMatieres((current) => [...current, { ...data, volumes: [] }]); setNewForm({ nom: "", departement: "", couleur: "#007A3D" }); setShowAddForm(false); }
   }
-
-  async function addMatiere(e: React.FormEvent) {
-    e.preventDefault();
-    if (!newForm.nom.trim() || !newForm.departement.trim()) return;
-    setAddingMatiere(true);
-    setAddError(null);
-
-    const { data, error } = await supabase
-      .from("matieres")
-      .insert({
-        etablissement_id: etablissementId,
-        nom: newForm.nom.trim(),
-        departement_disciplinaire: newForm.departement.trim(),
-        couleur: newForm.couleur,
-      })
-      .select("id, nom, departement_disciplinaire, couleur")
-      .single();
-
-    setAddingMatiere(false);
-    if (error) { setAddError(error.message); return; }
-    if (data) {
-      setMatieres((prev) => [...prev, { ...data, volumes: [] }]);
-      setNewForm({ nom: "", departement: "", couleur: "#007A3D" });
-      setShowAddForm(false);
-    }
-  }
-
-  async function deleteMatiere(id: string) {
-    setDeletingMatiere(id);
-    await supabase.from("matieres").delete().eq("id", id);
-    setMatieres((prev) => prev.filter((m) => m.id !== id));
-    setDeletingMatiere(null);
-  }
-
   async function addVolume(matiereId: string) {
-    const vf = volumeForms[matiereId];
-    if (!vf?.niveau || !vf?.heures || Number(vf.heures) < 1) return;
-    setAddingVolume(matiereId);
-
-    const { data, error } = await supabase
-      .from("matieres_volume_horaire")
-      .upsert(
-        { matiere_id: matiereId, niveau: vf.niveau.trim(), heures_semaine: Number(vf.heures) },
-        { onConflict: "matiere_id,niveau" }
-      )
-      .select("id, niveau, heures_semaine")
-      .single();
-
-    setAddingVolume(null);
-    if (error || !data) return;
-
-    setMatieres((prev) =>
-      prev.map((m) => {
-        if (m.id !== matiereId) return m;
-        const existing = m.volumes.find((v) => v.niveau === data.niveau);
-        const volumes = existing
-          ? m.volumes.map((v) => (v.niveau === data.niveau ? data : v))
-          : [...m.volumes, data];
-        return { ...m, volumes };
-      })
-    );
-    setVolumeForms((prev) => ({ ...prev, [matiereId]: { niveau: "", heures: "" } }));
+    const values = volumeForms[matiereId]; if (!values?.niveau || !values.heures || Number(values.heures) < 1 || addingVolume) return;
+    setAddingVolume(matiereId); setError("");
+    const { data, error: volumeError } = await supabase.from("matieres_volume_horaire").upsert({ matiere_id: matiereId, niveau: values.niveau.trim(), heures_semaine: Number(values.heures) }, { onConflict: "matiere_id,niveau" }).select("id, niveau, heures_semaine").single();
+    setAddingVolume(null); if (volumeError || !data) { setError(volumeError?.message || "Le volume horaire n’a pas pu être enregistré."); return; }
+    setMatieres((current) => current.map((matiere) => matiere.id !== matiereId ? matiere : { ...matiere, volumes: matiere.volumes.some((volume) => volume.niveau === data.niveau) ? matiere.volumes.map((volume) => volume.niveau === data.niveau ? data : volume) : [...matiere.volumes, data] }));
+    setVolumeForms((current) => ({ ...current, [matiereId]: { niveau: "", heures: "" } }));
   }
-
-  async function deleteVolume(matiereId: string, volumeId: string) {
-    setDeletingVolume(volumeId);
-    await supabase.from("matieres_volume_horaire").delete().eq("id", volumeId);
-    setMatieres((prev) =>
-      prev.map((m) =>
-        m.id !== matiereId ? m : { ...m, volumes: m.volumes.filter((v) => v.id !== volumeId) }
-      )
-    );
-    setDeletingVolume(null);
+  async function confirmDelete() {
+    if (!deleteTarget || deleting) return; setDeleting(true); setError("");
+    const result = deleteTarget.kind === "matiere" ? await supabase.from("matieres").delete().eq("id", deleteTarget.matiere.id) : await supabase.from("matieres_volume_horaire").delete().eq("id", deleteTarget.volume.id);
+    setDeleting(false); if (result.error) { setError(result.error.message); return; }
+    setMatieres((current) => deleteTarget.kind === "matiere" ? current.filter((matiere) => matiere.id !== deleteTarget.matiere.id) : current.map((matiere) => matiere.id !== deleteTarget.matiere.id ? matiere : { ...matiere, volumes: matiere.volumes.filter((volume) => volume.id !== deleteTarget.volume.id) })); setDeleteTarget(null);
   }
+  const groups = new Map<string, Matiere[]>();
+  for (const matiere of matieres) groups.set(matiere.departement_disciplinaire, [...(groups.get(matiere.departement_disciplinaire) ?? []), matiere]);
 
-  // Grouper par département
-  const parDept = new Map<string, Matiere[]>();
-  for (const m of matieres) {
-    const list = parDept.get(m.departement_disciplinaire) ?? [];
-    list.push(m);
-    parDept.set(m.departement_disciplinaire, list);
-  }
-
-  const datalistId = "depts-list";
-
-  return (
-    <div className="max-w-3xl space-y-6">
-      {/* Formulaire ajout matière */}
-      {showAddForm ? (
-        <form onSubmit={addMatiere} className="bg-white border border-[#ebebeb] rounded-2xl p-6 space-y-4">
-          <h2 className="font-bold text-sm text-[#0a0a0a]">Nouvelle matière</h2>
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label className={LABEL}>Nom de la matière *</label>
-              <input
-                required
-                value={newForm.nom}
-                onChange={(e) => setNewForm({ ...newForm, nom: e.target.value })}
-                placeholder="ex. Mathématiques"
-                className={INPUT}
-              />
-            </div>
-            <div>
-              <label className={LABEL}>Département disciplinaire *</label>
-              <input
-                required
-                list={datalistId}
-                value={newForm.departement}
-                onChange={(e) => setNewForm({ ...newForm, departement: e.target.value })}
-                placeholder="ex. Sciences exactes"
-                className={INPUT}
-              />
-              <datalist id={datalistId}>
-                {departementsExistants.map((d) => <option key={d} value={d} />)}
-              </datalist>
-            </div>
-          </div>
-          <div>
-            <label className={LABEL}>Couleur d&apos;affichage</label>
-            <div className="flex items-center gap-3">
-              <input
-                type="color"
-                value={newForm.couleur}
-                onChange={(e) => setNewForm({ ...newForm, couleur: e.target.value })}
-                className="w-10 h-10 rounded-lg border border-[#ddd] cursor-pointer p-0.5"
-              />
-              <span className="text-sm text-slate-500 font-mono">{newForm.couleur}</span>
-              <div className="flex gap-1.5 ml-2">
-                {["#007A3D","#2563eb","#dc2626","#d97706","#7c3aed","#0891b2","#be185d"].map((c) => (
-                  <button
-                    key={c}
-                    type="button"
-                    onClick={() => setNewForm({ ...newForm, couleur: c })}
-                    className="w-6 h-6 rounded-full border-2 transition-all"
-                    style={{
-                      background: c,
-                      borderColor: newForm.couleur === c ? "#0a0a0a" : "transparent",
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-          {addError && (
-            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-2.5">
-              {addError}
-            </p>
-          )}
-          <div className="flex items-center gap-3">
-            <button
-              type="submit"
-              disabled={addingMatiere}
-              className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-emerald-700 transition-colors disabled:opacity-50"
-            >
-              {addingMatiere ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
-              Ajouter
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowAddForm(false)}
-              className="text-sm text-slate-400 hover:text-slate-700 transition-colors"
-            >
-              Annuler
-            </button>
-          </div>
-        </form>
-      ) : (
-        <button
-          onClick={() => setShowAddForm(true)}
-          className="flex items-center gap-2 bg-[#0a0a0a] text-white px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors"
-        >
-          <Plus size={15} />
-          Nouvelle matière
-        </button>
-      )}
-
-      {/* Liste des matières groupées par département */}
-      {matieres.length === 0 && !showAddForm ? (
-        <div className="bg-white border border-[#ebebeb] rounded-2xl py-16 text-center">
-          <p className="text-sm font-semibold text-slate-400">Aucune matière définie</p>
-          <p className="text-xs text-slate-400 mt-1">
-            Ajoutez vos premières matières pour pouvoir générer un emploi du temps.
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          {Array.from(parDept.entries()).map(([dept, ms]) => (
-            <div key={dept}>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 px-1">
-                {dept}
-              </p>
-              <div className="space-y-2">
-                {ms.map((m) => {
-                  const isExpanded = expanded.has(m.id);
-                  const vf = volumeForms[m.id] ?? { niveau: "", heures: "" };
-
-                  return (
-                    <div key={m.id} className="bg-white border border-[#ebebeb] rounded-2xl overflow-hidden hover:border-[#ccc] transition-colors">
-                      {/* En-tête de la matière */}
-                      <div
-                        className="flex items-center gap-3 px-5 py-3.5 cursor-pointer"
-                        onClick={() => toggleExpand(m.id)}
-                      >
-                        <span
-                          className="w-3 h-3 rounded-full shrink-0"
-                          style={{ background: m.couleur }}
-                        />
-                        <span className="font-bold text-sm text-[#0a0a0a] flex-1">{m.nom}</span>
-                        <span className="text-xs text-slate-400">
-                          {m.volumes.length} volume{m.volumes.length !== 1 ? "s" : ""}
-                        </span>
-                        {isExpanded ? (
-                          <ChevronDown size={15} className="text-slate-400" />
-                        ) : (
-                          <ChevronRight size={15} className="text-slate-400" />
-                        )}
-                        <button
-                          onClick={(ev) => { ev.stopPropagation(); deleteMatiere(m.id); }}
-                          disabled={deletingMatiere === m.id}
-                          className="ml-1 text-slate-300 hover:text-red-500 transition-colors p-1"
-                          title="Supprimer la matière"
-                        >
-                          {deletingMatiere === m.id ? (
-                            <Loader2 size={13} className="animate-spin" />
-                          ) : (
-                            <Trash2 size={13} />
-                          )}
-                        </button>
-                      </div>
-
-                      {/* Volumes horaires (expandable) */}
-                      {isExpanded && (
-                        <div className="border-t border-[#f5f5f5] px-5 py-4 bg-[#fafafa] space-y-3">
-                          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                            Volumes horaires par niveau
-                          </p>
-
-                          {m.volumes.length > 0 ? (
-                            <div className="flex flex-wrap gap-2 mb-3">
-                              {m.volumes.map((v) => (
-                                <div
-                                  key={v.id}
-                                  className="flex items-center gap-2 bg-white border border-[#ebebeb] rounded-lg px-3 py-1.5 text-sm"
-                                >
-                                  <span className="font-semibold text-[#0a0a0a]">{v.niveau}</span>
-                                  <span className="text-slate-400">→</span>
-                                  <span className="font-bold text-emerald-700">{v.heures_semaine}h/sem</span>
-                                  <button
-                                    onClick={() => deleteVolume(m.id, v.id)}
-                                    disabled={deletingVolume === v.id}
-                                    className="text-slate-300 hover:text-red-400 transition-colors ml-1"
-                                  >
-                                    {deletingVolume === v.id ? (
-                                      <Loader2 size={11} className="animate-spin" />
-                                    ) : (
-                                      <Trash2 size={11} />
-                                    )}
-                                  </button>
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <p className="text-xs text-slate-400 italic mb-2">
-                              Aucun volume défini — le générateur ignorera cette matière pour toutes les classes.
-                            </p>
-                          )}
-
-                          {/* Ajout d'un volume */}
-                          <div className="flex items-end gap-2">
-                            <div className="flex-1">
-                              <label className={LABEL + " !mb-1"}>Niveau</label>
-                              {niveaux.length > 0 ? (
-                                <select
-                                  value={vf.niveau}
-                                  onChange={(e) =>
-                                    setVolumeForms((prev) => ({
-                                      ...prev,
-                                      [m.id]: { ...vf, niveau: e.target.value },
-                                    }))
-                                  }
-                                  className={INPUT}
-                                >
-                                  <option value="">— Choisir —</option>
-                                  {niveaux.map((n) => <option key={n} value={n}>{n}</option>)}
-                                </select>
-                              ) : (
-                                <input
-                                  value={vf.niveau}
-                                  onChange={(e) =>
-                                    setVolumeForms((prev) => ({
-                                      ...prev,
-                                      [m.id]: { ...vf, niveau: e.target.value },
-                                    }))
-                                  }
-                                  placeholder="ex. 6ème"
-                                  className={INPUT}
-                                />
-                              )}
-                            </div>
-                            <div className="w-28">
-                              <label className={LABEL + " !mb-1"}>H/semaine</label>
-                              <input
-                                type="number"
-                                min="1"
-                                max="30"
-                                value={vf.heures}
-                                onChange={(e) =>
-                                  setVolumeForms((prev) => ({
-                                    ...prev,
-                                    [m.id]: { ...vf, heures: e.target.value },
-                                  }))
-                                }
-                                placeholder="4"
-                                className={INPUT}
-                              />
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() => addVolume(m.id)}
-                              disabled={addingVolume === m.id || !vf.niveau || !vf.heures}
-                              className="flex items-center gap-1.5 bg-[#0a0a0a] text-white px-3 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors disabled:opacity-40 shrink-0"
-                            >
-                              {addingVolume === m.id ? (
-                                <Loader2 size={13} className="animate-spin" />
-                              ) : (
-                                <Check size={13} />
-                              )}
-                              OK
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  return <div className="space-y-5">
+    <div className="flex justify-end"><SchoolAdminButton onClick={() => setShowAddForm(true)} leadingIcon={<Plus size={16} aria-hidden="true" />}>Nouvelle matière</SchoolAdminButton></div>
+    {error && <SchoolAdminAlert tone="danger">{error}</SchoolAdminAlert>}
+    {matieres.length === 0 ? <SchoolAdminEmptyState title="Aucune matière définie" description="Ajoutez une matière existante pour renseigner ses volumes horaires." /> : Array.from(groups.entries()).map(([department, items]) => <SchoolAdminSectionCard key={department} title={department || "Département non renseigné"} description={`${items.length} matière${items.length > 1 ? "s" : ""}`}><div className="space-y-3">{items.map((matiere) => {
+      const isExpanded = expanded.has(matiere.id); const values = volumeForms[matiere.id] ?? { niveau: "", heures: "" };
+      return <article key={matiere.id} className="rounded-xl border border-[var(--school-admin-border)]"><div className="flex items-center gap-3 p-4"><span className="h-3 w-3 shrink-0 rounded-full border border-black/10" style={{ backgroundColor: matiere.couleur }} aria-hidden="true" /><button type="button" onClick={() => toggleExpand(matiere.id)} aria-expanded={isExpanded} className="flex min-h-10 flex-1 items-center gap-2 text-left font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)]">{matiere.nom}<SchoolAdminStatusBadge tone="neutral" label={`${matiere.volumes.length} volume${matiere.volumes.length !== 1 ? "s" : ""}`} />{isExpanded ? <ChevronDown size={16} aria-hidden="true" /> : <ChevronRight size={16} aria-hidden="true" />}</button><button type="button" onClick={() => setDeleteTarget({ kind: "matiere", matiere })} aria-label={`Supprimer la matière ${matiere.nom}`} className="flex h-10 w-10 items-center justify-center rounded-lg text-[var(--school-admin-text-soft)] hover:text-[var(--school-admin-danger)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)]"><Trash2 size={16} aria-hidden="true" /></button></div>{isExpanded && <div className="space-y-4 border-t border-[var(--school-admin-border)] bg-[var(--school-admin-surface-muted)] p-4">{matiere.volumes.length ? <ul className="space-y-2">{matiere.volumes.map((volume) => <li key={volume.id} className="flex min-h-11 items-center justify-between rounded-lg bg-[var(--school-admin-surface)] px-3 text-sm"><span><strong>{volume.niveau}</strong> · {volume.heures_semaine} h/semaine</span><button type="button" onClick={() => setDeleteTarget({ kind: "volume", matiere, volume })} aria-label={`Supprimer le volume ${volume.niveau} de ${matiere.nom}`} className="flex h-10 w-10 items-center justify-center rounded-lg text-[var(--school-admin-text-soft)] hover:text-[var(--school-admin-danger)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)]"><Trash2 size={15} aria-hidden="true" /></button></li>)}</ul> : <p className="text-sm text-[var(--school-admin-text-muted)]">Aucun volume horaire renseigné.</p>}<div className="grid gap-3 sm:grid-cols-[1fr_10rem_auto] sm:items-end"><SchoolAdminFormField id={`level-${matiere.id}`} label="Niveau">{niveaux.length ? <SchoolAdminSelect value={values.niveau} onChange={(event) => setVolumeForms((current) => ({ ...current, [matiere.id]: { ...values, niveau: event.target.value } }))}><option value="">Choisir</option>{niveaux.map((niveau) => <option key={niveau}>{niveau}</option>)}</SchoolAdminSelect> : <SchoolAdminInput value={values.niveau} onChange={(event) => setVolumeForms((current) => ({ ...current, [matiere.id]: { ...values, niveau: event.target.value } }))} />}</SchoolAdminFormField><SchoolAdminFormField id={`hours-${matiere.id}`} label="Heures/semaine"><SchoolAdminInput type="number" min="1" max="30" value={values.heures} onChange={(event) => setVolumeForms((current) => ({ ...current, [matiere.id]: { ...values, heures: event.target.value } }))} /></SchoolAdminFormField><SchoolAdminButton onClick={() => addVolume(matiere.id)} loading={addingVolume === matiere.id} disabled={!values.niveau || !values.heures} leadingIcon={<Check size={15} aria-hidden="true" />}>Enregistrer</SchoolAdminButton></div></div>}</article>;
+    })}</div></SchoolAdminSectionCard>)}
+    <SchoolAdminDialog open={showAddForm} onClose={() => setShowAddForm(false)} title="Nouvelle matière" description="Le département est enregistré uniquement avec la matière, selon le contrat existant."><form onSubmit={addMatiere} className="space-y-5"><SchoolAdminFormField id="subject-name" label="Nom" required><SchoolAdminInput value={newForm.nom} onChange={(event) => setNewForm({ ...newForm, nom: event.target.value })} /></SchoolAdminFormField><SchoolAdminFormField id="subject-department" label="Département disciplinaire" required><SchoolAdminInput list="subject-departments" value={newForm.departement} onChange={(event) => setNewForm({ ...newForm, departement: event.target.value })} /></SchoolAdminFormField><datalist id="subject-departments">{departementsExistants.map((item) => <option key={item} value={item} />)}</datalist><SchoolAdminFormField id="subject-color" label="Couleur d’affichage"><SchoolAdminInput type="color" value={newForm.couleur} onChange={(event) => setNewForm({ ...newForm, couleur: event.target.value })} className="w-20" /></SchoolAdminFormField><div className="flex justify-end gap-2"><SchoolAdminButton variant="ghost" onClick={() => setShowAddForm(false)}>Annuler</SchoolAdminButton><SchoolAdminButton type="submit" loading={addingMatiere}>Ajouter</SchoolAdminButton></div></form></SchoolAdminDialog>
+    <SchoolAdminDialog open={Boolean(deleteTarget)} onClose={() => setDeleteTarget(null)} title={deleteTarget?.kind === "matiere" ? "Supprimer cette matière ?" : "Supprimer ce volume horaire ?"} description="Cette action utilise la suppression existante et demande confirmation."><p className="text-sm">{deleteTarget?.matiere.nom}{deleteTarget?.kind === "volume" ? ` · ${deleteTarget.volume.niveau}` : ""}</p><div className="mt-5 flex justify-end gap-2"><SchoolAdminButton variant="ghost" onClick={() => setDeleteTarget(null)}>Annuler</SchoolAdminButton><SchoolAdminButton variant="danger" loading={deleting} onClick={confirmDelete}>Supprimer</SchoolAdminButton></div></SchoolAdminDialog>
+  </div>;
 }

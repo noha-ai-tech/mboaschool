@@ -1,63 +1,16 @@
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Calculator, Loader2 } from "lucide-react";
+import { Calculator } from "lucide-react";
 import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
+import { SchoolAdminButton } from "@/components/school-admin/ui/Button";
+import { SchoolAdminDialog } from "@/components/school-admin/ui/Overlay";
+import { SchoolAdminFormField, SchoolAdminInput, SchoolAdminSelect } from "@/components/school-admin/ui/FormControls";
+import { SchoolAdminAlert, SchoolAdminEmptyState } from "@/components/school-admin/ui/Feedback";
 
 export function FormulaireCalculPaie({ staffMembers, establishmentId }: { staffMembers: { id: string; nom: string }[]; establishmentId: string }) {
-  const router = useRouter();
-  const [staffMemberId, setStaffMemberId] = useState(staffMembers[0]?.id ?? "");
-  const today = new Date();
-  const [periodeDebut, setPeriodeDebut] = useState(
-    new Date(today.getFullYear(), today.getMonth(), 1).toISOString().slice(0, 10)
-  );
-  const [periodeFin, setPeriodeFin] = useState(
-    new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().slice(0, 10)
-  );
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-
-  async function calculer(e: { preventDefault(): void }) {
-    e.preventDefault();
-    setSaving(true);
-    setError("");
-    const res = await fetch("/api/payroll/calculer", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ staffMemberId, periodeDebut, periodeFin, requestedEstablishmentId: establishmentId }),
-    });
-    const body = await res.json().catch(() => ({}));
-    setSaving(false);
-    if (!res.ok) { setError(body.error ?? "Echec du calcul"); return; }
-    router.push(withEstablishmentQuery(`/pro/paie/${body.bulletinId}`, establishmentId));
-  }
-
-  if (staffMembers.length === 0) {
-    return <p className="text-sm text-gray-400">Aucun membre du personnel avec un contrat actif.</p>;
-  }
-
-  return (
-    <form onSubmit={calculer} className="flex flex-wrap items-end gap-3 bg-white border border-[#ebebeb] rounded-2xl p-4">
-      <div>
-        <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Personnel</label>
-        <select value={staffMemberId} onChange={(e) => setStaffMemberId(e.target.value)} className="border border-[#ddd] rounded-lg px-3 py-2 text-sm bg-white">
-          {staffMembers.map((s) => <option key={s.id} value={s.id}>{s.nom}</option>)}
-        </select>
-      </div>
-      <div>
-        <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Debut periode</label>
-        <input type="date" value={periodeDebut} onChange={(e) => setPeriodeDebut(e.target.value)} className="border border-[#ddd] rounded-lg px-3 py-2 text-sm" />
-      </div>
-      <div>
-        <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Fin periode</label>
-        <input type="date" value={periodeFin} onChange={(e) => setPeriodeFin(e.target.value)} className="border border-[#ddd] rounded-lg px-3 py-2 text-sm" />
-      </div>
-      {error && <p className="text-xs text-red-600 w-full">{error}</p>}
-      <button type="submit" disabled={saving} className="flex items-center gap-2 bg-[#0a0a0a] text-white px-4 py-2 rounded-lg text-sm font-semibold disabled:opacity-50">
-        {saving ? <Loader2 size={14} className="animate-spin" /> : <Calculator size={14} />}
-        Calculer
-      </button>
-    </form>
-  );
+  const router = useRouter(); const [staffMemberId, setStaffMemberId] = useState(staffMembers[0]?.id ?? ""); const today = new Date(); const [periodeDebut, setPeriodeDebut] = useState(new Date(today.getFullYear(), today.getMonth(), 1).toISOString().slice(0, 10)); const [periodeFin, setPeriodeFin] = useState(new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().slice(0, 10)); const [saving, setSaving] = useState(false); const [error, setError] = useState(""); const [confirm, setConfirm] = useState(false);
+  async function calculer() { if (saving) return; setSaving(true); setError(""); try { const res = await fetch("/api/payroll/calculer", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ staffMemberId, periodeDebut, periodeFin, requestedEstablishmentId: establishmentId }) }); const body = await res.json().catch(() => ({})); if (!res.ok) { setError(body.error ?? "Échec du calcul"); return; } setConfirm(false); router.push(withEstablishmentQuery(`/pro/paie/${body.bulletinId}`, establishmentId)); } catch { setError("Impossible de calculer le bulletin pour le moment."); } finally { setSaving(false); } }
+  if (!staffMembers.length) return <SchoolAdminEmptyState title="Aucun contrat actif" description="Le calcul est indisponible tant qu’aucun membre du personnel n’a de contrat actif." />;
+  return <><form onSubmit={(event) => { event.preventDefault(); setConfirm(true); }} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1fr_11rem_11rem_auto] lg:items-end"><SchoolAdminFormField id="payroll-staff" label="Personnel" required><SchoolAdminSelect value={staffMemberId} onChange={(event) => setStaffMemberId(event.target.value)}>{staffMembers.map((staff) => <option key={staff.id} value={staff.id}>{staff.nom}</option>)}</SchoolAdminSelect></SchoolAdminFormField><SchoolAdminFormField id="payroll-start" label="Début de période" required><SchoolAdminInput type="date" value={periodeDebut} onChange={(event) => setPeriodeDebut(event.target.value)} /></SchoolAdminFormField><SchoolAdminFormField id="payroll-end" label="Fin de période" required><SchoolAdminInput type="date" value={periodeFin} onChange={(event) => setPeriodeFin(event.target.value)} /></SchoolAdminFormField><SchoolAdminButton type="submit" leadingIcon={<Calculator size={16} aria-hidden="true" />}>Calculer</SchoolAdminButton></form><SchoolAdminDialog open={confirm} onClose={() => !saving && setConfirm(false)} closeOnBackdrop={!saving} title="Calculer ce bulletin ?" description="Le moteur de paie existant utilisera la période et le contrat sélectionnés.">{error && <div className="mb-4"><SchoolAdminAlert tone="danger">{error}</SchoolAdminAlert></div>}<p className="text-sm text-[var(--school-admin-text-muted)]">Personnel : <strong>{staffMembers.find((staff) => staff.id === staffMemberId)?.nom}</strong><br />Période : {periodeDebut} au {periodeFin}</p><div className="mt-5 flex justify-end gap-2"><SchoolAdminButton variant="ghost" disabled={saving} onClick={() => setConfirm(false)}>Annuler</SchoolAdminButton><SchoolAdminButton loading={saving} onClick={calculer}>Confirmer le calcul</SchoolAdminButton></div></SchoolAdminDialog></>;
 }

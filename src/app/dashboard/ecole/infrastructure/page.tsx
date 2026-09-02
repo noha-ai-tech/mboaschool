@@ -3,141 +3,69 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useSchool } from "@/lib/useSchool";
-import { Save, CheckCircle2, BookOpen, FlaskConical, Monitor, Dumbbell, Utensils, BedDouble, Bus, ShieldCheck, Wifi, HeartPulse } from "lucide-react";
+import { BookOpen, FlaskConical, Monitor, Dumbbell, Utensils, BedDouble, Bus, ShieldCheck, Wifi, HeartPulse } from "lucide-react";
+import { SchoolAdminPageHeader } from "@/components/school-admin/ui/PageHeader";
+import { SchoolAdminSectionCard } from "@/components/school-admin/ui/Card";
+import { SchoolAdminButton } from "@/components/school-admin/ui/Button";
+import { SchoolAdminStatusBadge } from "@/components/school-admin/ui/Badge";
+import { SchoolAdminAlert, SchoolAdminLoadingState } from "@/components/school-admin/ui/Feedback";
 
 const INFRA_FIELDS = [
-  { key: "library",       label: "Bibliothèque",       icon: BookOpen },
-  { key: "laboratory",    label: "Laboratoire",        icon: FlaskConical },
-  { key: "computer_room", label: "Salle informatique", icon: Monitor },
-  { key: "sports_field",  label: "Terrain de sport",   icon: Dumbbell },
-  { key: "canteen",       label: "Cantine scolaire",   icon: Utensils },
-  { key: "boarding",      label: "Internat",           icon: BedDouble },
-  { key: "transport",     label: "Transport scolaire", icon: Bus },
-  { key: "security",      label: "Sécurité",           icon: ShieldCheck },
-  { key: "wifi",          label: "Connexion Wi-Fi",    icon: Wifi },
-  { key: "infirmary",     label: "Infirmerie",         icon: HeartPulse },
-];
-
-type InfraForm = Record<string, boolean>;
+  { key: "library", label: "Bibliothèque", icon: BookOpen }, { key: "laboratory", label: "Laboratoire", icon: FlaskConical },
+  { key: "computer_room", label: "Salle informatique", icon: Monitor }, { key: "sports_field", label: "Terrain de sport", icon: Dumbbell },
+  { key: "canteen", label: "Cantine scolaire", icon: Utensils }, { key: "boarding", label: "Internat", icon: BedDouble },
+  { key: "transport", label: "Transport scolaire", icon: Bus }, { key: "security", label: "Sécurité", icon: ShieldCheck },
+  { key: "wifi", label: "Connexion Wi-Fi", icon: Wifi }, { key: "infirmary", label: "Infirmerie", icon: HeartPulse },
+] as const;
+type InfraForm = Record<(typeof INFRA_FIELDS)[number]["key"], boolean>;
+const EMPTY_FORM = Object.fromEntries(INFRA_FIELDS.map(({ key }) => [key, false])) as InfraForm;
 
 export default function InfrastructurePage() {
   const { school, loading: schoolLoading } = useSchool();
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [existingId, setExistingId] = useState<string | null>(null);
-  const [form, setForm] = useState<InfraForm>(() =>
-    Object.fromEntries(INFRA_FIELDS.map((f) => [f.key, false]))
-  );
+  const [loading, setLoading] = useState(true); const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false); const [error, setError] = useState<string | null>(null);
+  const [existingId, setExistingId] = useState<string | null>(null); const [hasRecord, setHasRecord] = useState(false);
+  const [form, setForm] = useState<InfraForm>(EMPTY_FORM);
 
   useEffect(() => {
-    if (!school) return;
-    supabase
-      .from("infrastructures")
-      .select("*")
-      .eq("establishment_id", school.id)
-      .maybeSingle()
-      .then(({ data }) => {
-        if (data) {
-          setExistingId(data.id);
-          setForm(Object.fromEntries(
-            INFRA_FIELDS.map((f) => [f.key, Boolean(data[f.key])])
-          ));
-        }
-      });
+    if (!school) { setLoading(false); return; }
+    let current = true; setLoading(true); setError(null);
+    supabase.from("infrastructures").select("*").eq("establishment_id", school.id).maybeSingle().then(({ data, error: readError }) => {
+      if (!current) return;
+      if (readError) setError("Impossible de charger les infrastructures de cet établissement.");
+      if (data) { setExistingId(data.id); setHasRecord(true); setForm(Object.fromEntries(INFRA_FIELDS.map(({ key }) => [key, Boolean(data[key])])) as InfraForm); }
+      else { setExistingId(null); setHasRecord(false); setForm(EMPTY_FORM); }
+      setLoading(false);
+    });
+    return () => { current = false; };
   }, [school]);
 
-  function toggle(key: string) {
-    setForm((prev) => ({ ...prev, [key]: !prev[key] }));
-  }
-
-  async function save(e: { preventDefault(): void }) {
-    e.preventDefault();
-    if (!school) return;
-    setSaving(true);
-
-    if (existingId) {
-      await supabase.from("infrastructures").update(form).eq("id", existingId);
-    } else {
-      const { data } = await supabase.from("infrastructures")
-        .insert({ establishment_id: school.id, ...form })
-        .select("id")
-        .single();
-      if (data) setExistingId(data.id);
-    }
-
+  async function save(event: React.FormEvent) {
+    event.preventDefault(); if (!school || saving) return; setSaving(true); setSaved(false); setError(null);
+    const result = existingId
+      ? await supabase.from("infrastructures").update(form).eq("id", existingId)
+      : await supabase.from("infrastructures").insert({ establishment_id: school.id, ...form }).select("id").single();
+    if (result.error) setError("La sauvegarde a échoué. Vérifiez votre connexion puis réessayez.");
+    else { if (!existingId && result.data && "id" in result.data) { setExistingId(result.data.id); setHasRecord(true); } setSaved(true); setTimeout(() => setSaved(false), 3000); }
     setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
   }
 
-  if (schoolLoading) return <Skeleton />;
-
+  if (schoolLoading || loading) return <SchoolAdminLoadingState label="Chargement des infrastructures" />;
   const checked = Object.values(form).filter(Boolean).length;
-
-  return (
-    <div className="max-w-2xl">
-      <div className="mb-8">
-        <p className="text-xs font-semibold tracking-widest uppercase text-slate-400 mb-1">Dashboard</p>
-        <h1 className="text-3xl font-black tracking-tight text-[#0a0a0a]">Infrastructures</h1>
-        <p className="text-slate-500 text-sm mt-1">
-          Cochez les équipements disponibles dans votre établissement.
-          {checked > 0 && <span className="text-emerald-600 font-semibold"> {checked} sélectionné{checked > 1 ? "s" : ""}.</span>}
-        </p>
-      </div>
-
-      <form onSubmit={save} className="bg-white border border-[#ebebeb] rounded-2xl p-6">
-        <div className="grid sm:grid-cols-2 gap-3">
-          {INFRA_FIELDS.map(({ key, label, icon: Icon }) => {
-            const active = form[key];
-            return (
-              <button
-                key={key}
-                type="button"
-                onClick={() => toggle(key)}
-                className={`flex items-center gap-3 p-4 rounded-xl border text-left transition-all ${
-                  active
-                    ? "bg-emerald-50 border-emerald-300 text-emerald-800"
-                    : "bg-white border-[#e5e5e5] text-slate-500 hover:border-[#aaa]"
-                }`}
-              >
-                <Icon size={16} className={active ? "text-emerald-600" : "text-slate-300"} />
-                <span className="text-sm font-semibold">{label}</span>
-                {active && <CheckCircle2 size={13} className="ml-auto text-emerald-500 shrink-0" />}
-              </button>
-            );
-          })}
+  return <div className="mx-auto max-w-4xl">
+    <SchoolAdminPageHeader eyebrow="Configuration" title="Infrastructures" description="Indiquez uniquement les équipements réellement disponibles dans l’établissement." context={<SchoolAdminStatusBadge label={hasRecord ? `${checked} équipement${checked > 1 ? "s" : ""} actif${checked > 1 ? "s" : ""}` : "Configuration non renseignée"} tone={hasRecord ? "info" : "neutral"} />} />
+    {error ? <div className="mb-4"><SchoolAdminAlert tone="danger">{error}</SchoolAdminAlert></div> : null}
+    {saved ? <div className="mb-4"><SchoolAdminAlert tone="success">Infrastructures sauvegardées.</SchoolAdminAlert></div> : null}
+    <form onSubmit={save}>
+      <SchoolAdminSectionCard title="Équipements de l’établissement" description="Chaque option indique explicitement si l’équipement est actif ou inactif.">
+        <div className="grid gap-3 sm:grid-cols-2">
+          {INFRA_FIELDS.map(({ key, label, icon: Icon }) => { const active = form[key]; return <button key={key} type="button" role="switch" aria-checked={active} onClick={() => setForm((value) => ({ ...value, [key]: !value[key] }))} className="flex min-h-16 items-center gap-3 rounded-[var(--school-admin-radius-control)] border border-[var(--school-admin-border)] bg-[var(--school-admin-surface)] p-4 text-left transition hover:border-[var(--school-admin-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)] motion-reduce:transition-none">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--school-admin-primary-soft)] text-[var(--school-admin-primary)]"><Icon size={18} aria-hidden="true" /></span>
+            <span className="min-w-0 flex-1 text-sm font-bold text-[var(--school-admin-text)]">{label}</span><SchoolAdminStatusBadge label={active ? "Actif" : "Inactif"} tone={active ? "success" : "neutral"} />
+          </button>; })}
         </div>
-
-        <div className="flex items-center gap-3 mt-6">
-          <button
-            type="submit"
-            disabled={saving}
-            className="flex items-center gap-2 bg-[#0a0a0a] text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors disabled:opacity-50"
-          >
-            {saving
-              ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              : <Save size={15} />}
-            Enregistrer
-          </button>
-          {saved && (
-            <span className="flex items-center gap-1.5 text-sm text-emerald-700 font-semibold">
-              <CheckCircle2 size={15} /> Sauvegardé
-            </span>
-          )}
-        </div>
-      </form>
-    </div>
-  );
-}
-
-function Skeleton() {
-  return (
-    <div className="max-w-2xl space-y-5 animate-pulse">
-      <div className="space-y-2">
-        <div className="h-3 w-20 bg-slate-200 rounded" />
-        <div className="h-8 w-44 bg-slate-200 rounded" />
-      </div>
-      <div className="bg-white border border-[#ebebeb] rounded-2xl h-72" />
-    </div>
-  );
+        <div className="mt-6 flex justify-end"><SchoolAdminButton type="submit" loading={saving}>Enregistrer les infrastructures</SchoolAdminButton></div>
+      </SchoolAdminSectionCard>
+    </form>
+  </div>;
 }

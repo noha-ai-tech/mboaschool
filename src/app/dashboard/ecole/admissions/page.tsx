@@ -5,6 +5,15 @@ import { supabase } from "@/lib/supabase";
 import { useSchool } from "@/lib/useSchool";
 import { admissionStatusConfig, availableActions, type AdmissionStatus } from "@/lib/admissions/status";
 import { dispatchAdmissionNotification, type AdmissionNotificationEvent } from "@/lib/notifications/admissionNotifications";
+import { SchoolAdminPageHeader } from "@/components/school-admin/ui/PageHeader";
+import { SchoolAdminStatCard } from "@/components/school-admin/ui/StatCard";
+import { SchoolAdminFilterBar } from "@/components/school-admin/ui/FilterBar";
+import { SchoolAdminInput, SchoolAdminSelect, SchoolAdminTextarea } from "@/components/school-admin/ui/FormControls";
+import { SchoolAdminStatusBadge } from "@/components/school-admin/ui/Badge";
+import { SchoolAdminButton } from "@/components/school-admin/ui/Button";
+import { SchoolAdminDrawer } from "@/components/school-admin/ui/Overlay";
+import { SchoolAdminResponsiveTable } from "@/components/school-admin/ui/ResponsiveTable";
+import { SchoolAdminEmptyState, SchoolAdminLoadingState, SchoolAdminSkeleton } from "@/components/school-admin/ui/Feedback";
 import {
   ClipboardList,
   Search,
@@ -165,59 +174,64 @@ export default function AdmissionsPage() {
     ? `${Math.round((apps.filter((a) => a.admission_status === "accepted").length / decidees) * 100)}%`
     : "—";
 
-  if (schoolLoading) return <Skeleton />;
+  if (schoolLoading) return <SchoolAdminLoadingState label="Chargement des admissions" />;
 
   return (
-    <div className="max-w-6xl">
-      <div className="mb-8">
-        <p className="text-xs font-semibold tracking-widest uppercase text-slate-400 mb-1">Dashboard</p>
-        <h1 className="text-3xl font-black tracking-tight text-[#0a0a0a]">Admissions</h1>
-      </div>
+    <div className="mx-auto max-w-7xl">
+      <SchoolAdminPageHeader
+        eyebrow="Admissions"
+        title="Suivi des candidatures"
+        description="Recherchez un dossier, suivez son avancement et contactez les responsables depuis un espace unique."
+        context={school ? <p className="text-sm font-medium text-[var(--school-admin-text-muted)]">Établissement : {school.name}</p> : undefined}
+      />
 
       {/* Statistiques réelles */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-        <StatCard icon={ClipboardList} label="Demandes reçues" value={apps.length} color="text-slate-500" />
-        <StatCard icon={Clock} label="Ce mois-ci" value={demandesCeMois} color="text-blue-500" />
-        <StatCard icon={CheckCircle2} label="Acceptées" value={counts.accepted ?? 0} color="text-emerald-500" />
-        <StatCard icon={Clock} label="En attente" value={enAttente} color="text-yellow-500" />
-        <StatCard icon={TrendingUp} label="Taux d'acceptation" value={tauxAcceptation} color="text-purple-500" />
+      <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+        <SchoolAdminStatCard icon={<ClipboardList size={19} />} label="Demandes reçues" value={apps.length} tone="neutral" />
+        <SchoolAdminStatCard icon={<Clock size={19} />} label="Ce mois-ci" value={demandesCeMois} tone="neutral" />
+        <SchoolAdminStatCard icon={<CheckCircle2 size={19} />} label="Acceptées" value={counts.accepted ?? 0} />
+        <SchoolAdminStatCard icon={<Clock size={19} />} label="En attente" value={enAttente} tone="warning" />
+        <SchoolAdminStatCard icon={<TrendingUp size={19} />} label="Taux d’acceptation" value={tauxAcceptation} detail={decidees === 0 ? "Aucune décision disponible" : "Calculé sur les dossiers décidés"} />
       </div>
 
       {/* Toolbar */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-5">
-        <div className="flex items-center gap-2 bg-white border border-[#ebebeb] rounded-xl px-4 py-2.5 flex-1 focus-within:border-[#aaa] transition-colors">
-          <Search size={14} className="text-slate-400 shrink-0" />
-          <input
+      <SchoolAdminFilterBar className="mb-5">
+        <div className="relative min-w-0 flex-1 sm:min-w-64">
+          <SchoolAdminInput
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Rechercher par élève ou parent…"
-            className="bg-transparent outline-none text-sm flex-1 placeholder-slate-400"
+            aria-label="Rechercher par élève ou parent"
+            leadingIcon={<Search size={16} />}
+            className={query ? "pr-11" : ""}
           />
           {query && (
-            <button onClick={() => setQuery("")}>
-              <X size={13} className="text-slate-400 hover:text-slate-700" />
+            <button type="button" onClick={() => setQuery("")} aria-label="Effacer la recherche" className="absolute inset-y-0 right-1 flex w-10 items-center justify-center rounded-lg text-[var(--school-admin-text-muted)] hover:text-[var(--school-admin-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)]">
+              <X size={15} aria-hidden="true" />
             </button>
           )}
         </div>
 
         {levels.length > 0 && (
-          <select
+          <SchoolAdminSelect
             value={levelFilter}
             onChange={(e) => setLevelFilter(e.target.value)}
-            className="border border-[#ebebeb] rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:border-[#aaa]"
+            aria-label="Filtrer par niveau"
+            className="sm:w-52"
           >
             <option value="all">Tous les niveaux</option>
             {levels.map((l) => <option key={l} value={l}>{l}</option>)}
-          </select>
+          </SchoolAdminSelect>
         )}
-      </div>
+      </SchoolAdminFilterBar>
 
       {/* Colonnes du pipeline */}
       <div className="flex gap-1.5 flex-wrap mb-5">
         <button
           onClick={() => setFilter("all")}
-          className={`px-3 py-2 rounded-xl text-xs font-bold border transition-colors ${
-            filter === "all" ? "bg-[#0a0a0a] text-white border-[#0a0a0a]" : "bg-white text-slate-500 border-[#e5e5e5] hover:border-[#aaa]"
+          aria-pressed={filter === "all"}
+          className={`min-h-10 rounded-xl border px-3 py-2 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)] ${
+            filter === "all" ? "border-[var(--school-admin-primary)] bg-[var(--school-admin-primary)] text-white" : "border-[var(--school-admin-border)] bg-[var(--school-admin-surface)] text-[var(--school-admin-text-muted)] hover:border-[var(--school-admin-primary)]"
           }`}
         >
           Toutes <span className="ml-1.5 opacity-60">{apps.length}</span>
@@ -226,8 +240,9 @@ export default function AdmissionsPage() {
           <button
             key={col.value}
             onClick={() => setFilter(col.value)}
-            className={`px-3 py-2 rounded-xl text-xs font-bold border transition-colors ${
-              filter === col.value ? "bg-[#0a0a0a] text-white border-[#0a0a0a]" : "bg-white text-slate-500 border-[#e5e5e5] hover:border-[#aaa]"
+            aria-pressed={filter === col.value}
+            className={`min-h-10 rounded-xl border px-3 py-2 text-xs font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)] ${
+              filter === col.value ? "border-[var(--school-admin-primary)] bg-[var(--school-admin-primary)] text-white" : "border-[var(--school-admin-border)] bg-[var(--school-admin-surface)] text-[var(--school-admin-text-muted)] hover:border-[var(--school-admin-primary)]"
             }`}
           >
             {col.label} <span className="ml-1.5 opacity-60">{counts[col.value] ?? 0}</span>
@@ -235,97 +250,81 @@ export default function AdmissionsPage() {
         ))}
       </div>
 
-      {/* Table */}
-      <div className="bg-white border border-[#ebebeb] rounded-2xl overflow-hidden">
-        <div className="px-6 py-4 border-b border-[#ebebeb]">
-          <p className="text-sm font-semibold">
-            {loading ? "Chargement…" : (
-              <><span className="text-emerald-600">{filtered.length}</span> dossier{filtered.length !== 1 ? "s" : ""}</>
-            )}
-          </p>
-        </div>
-
-        {loading ? (
-          <div className="divide-y divide-[#f5f5f5]">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex items-center gap-4 px-6 py-4 animate-pulse">
-                <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-slate-100 rounded w-1/3" />
-                  <div className="h-3 bg-slate-50 rounded w-1/4" />
-                </div>
-                <div className="h-6 w-20 bg-slate-100 rounded-full" />
-              </div>
-            ))}
-          </div>
-        ) : filtered.length === 0 ? (
-          <div className="py-16 text-center">
-            <ClipboardList size={28} className="mx-auto text-slate-200 mb-3" />
-            <p className="text-sm text-slate-400">Aucun dossier trouvé</p>
-          </div>
-        ) : (
-          <div className="divide-y divide-[#f5f5f5]">
-            {filtered.map((app) => {
-              const name = app.full_student_name
-                ?? `${app.student_first_name ?? ""} ${app.student_last_name ?? ""}`.trim()
-                ?? "—";
-              const s = admissionStatusConfig(app.admission_status);
-              return (
-                <div
-                  key={app.id}
-                  className="flex items-center gap-4 px-6 py-4 hover:bg-slate-50/50 transition-colors cursor-pointer"
-                  onClick={() => openDetail(app)}
-                >
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm text-[#0a0a0a] truncate">{name}</p>
-                    <p className="text-xs text-slate-400 mt-0.5">
-                      {app.parent_name ?? "—"} · {app.parent_phone ?? "—"} · {app.desired_level ?? "Niveau non précisé"} ·{" "}
-                      {new Date(app.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "short" })}
-                    </p>
-                  </div>
-                  <span className={`shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-full border ${s.cls}`}>
-                    {s.label}
-                  </span>
-                  <Eye size={14} className="text-slate-300 shrink-0" />
-                </div>
-              );
-            })}
-          </div>
-        )}
+      <div className="mb-3 flex items-center justify-between">
+        <p className="text-sm font-semibold text-[var(--school-admin-text)]" aria-live="polite">
+          {loading ? "Chargement…" : <><span className="text-[var(--school-admin-primary)]">{filtered.length}</span> dossier{filtered.length !== 1 ? "s" : ""}</>}
+        </p>
       </div>
 
+      {loading ? (
+        <div className="space-y-2" role="status" aria-label="Chargement des dossiers">
+          {[1, 2, 3, 4].map((i) => <SchoolAdminSkeleton key={i} className="h-16" label={i === 1 ? "Chargement des dossiers" : ""} />)}
+        </div>
+      ) : filtered.length === 0 ? (
+        <SchoolAdminEmptyState title="Aucun dossier trouvé" description="Modifiez la recherche ou les filtres pour afficher d’autres candidatures." icon={<ClipboardList size={24} />} />
+      ) : (
+        <>
+          <SchoolAdminResponsiveTable label="Liste des dossiers d’admission" className="hidden md:block">
+            <table className="w-full min-w-[760px] border-collapse text-left text-sm">
+              <thead className="bg-[var(--school-admin-surface-muted)] text-xs uppercase tracking-wide text-[var(--school-admin-text-muted)]">
+                <tr><th scope="col" className="px-5 py-3 font-semibold">Élève</th><th scope="col" className="px-5 py-3 font-semibold">Responsable</th><th scope="col" className="px-5 py-3 font-semibold">Niveau</th><th scope="col" className="px-5 py-3 font-semibold">Réception</th><th scope="col" className="px-5 py-3 font-semibold">Statut</th><th scope="col" className="px-5 py-3"><span className="sr-only">Actions</span></th></tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--school-admin-border)]">
+                {filtered.map((app) => {
+                  const name = studentName(app);
+                  const status = admissionStatusConfig(app.admission_status);
+                  return <tr key={app.id} className="hover:bg-[var(--school-admin-surface-muted)]">
+                    <th scope="row" className="px-5 py-4 font-semibold text-[var(--school-admin-text)]">{name}</th>
+                    <td className="px-5 py-4 text-[var(--school-admin-text-muted)]">{app.parent_name ?? "—"}<span className="block text-xs">{app.parent_phone ?? "Téléphone indisponible"}</span></td>
+                    <td className="px-5 py-4 text-[var(--school-admin-text-muted)]">{app.desired_level ?? "Non précisé"}</td>
+                    <td className="px-5 py-4 text-[var(--school-admin-text-muted)]">{new Date(app.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "short" })}</td>
+                    <td className="px-5 py-4"><SchoolAdminStatusBadge tone={statusTone(app.admission_status)} label={status.label} /></td>
+                    <td className="px-5 py-4 text-right"><SchoolAdminButton variant="ghost" size="sm" onClick={() => openDetail(app)} leadingIcon={<Eye size={15} aria-hidden="true" />}>Ouvrir</SchoolAdminButton></td>
+                  </tr>;
+                })}
+              </tbody>
+            </table>
+          </SchoolAdminResponsiveTable>
+
+          <div className="space-y-3 md:hidden" aria-label="Liste des dossiers d’admission">
+            {filtered.map((app) => {
+              const name = studentName(app);
+              const status = admissionStatusConfig(app.admission_status);
+              return <button key={app.id} type="button" onClick={() => openDetail(app)} className="w-full rounded-[var(--school-admin-radius-card)] border border-[var(--school-admin-border)] bg-[var(--school-admin-surface)] p-4 text-left shadow-[var(--school-admin-shadow-sm)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)]">
+                <span className="flex items-start justify-between gap-3"><span className="min-w-0"><span className="block truncate text-sm font-bold text-[var(--school-admin-text)]">{name}</span><span className="mt-1 block text-xs text-[var(--school-admin-text-muted)]">{app.parent_name ?? "Responsable non précisé"} · {app.desired_level ?? "Niveau non précisé"}</span></span><SchoolAdminStatusBadge tone={statusTone(app.admission_status)} label={status.label} /></span>
+                <span className="mt-3 flex items-center justify-between border-t border-[var(--school-admin-border)] pt-3 text-xs text-[var(--school-admin-text-muted)]"><span>Reçu le {new Date(app.created_at).toLocaleDateString("fr-FR")}</span><span className="inline-flex items-center gap-1 font-semibold text-[var(--school-admin-primary)]">Voir le dossier <Eye size={14} aria-hidden="true" /></span></span>
+              </button>;
+            })}
+          </div>
+        </>
+      )}
+
       {/* Detail drawer */}
-      {selected && (
-        <div className="fixed inset-0 z-50 flex justify-end">
-          <div className="flex-1 bg-black/30" onClick={() => setSelected(null)} />
-          <div className="w-full max-w-md bg-white h-full overflow-y-auto shadow-2xl flex flex-col">
-
-            <div className="flex items-center justify-between px-6 py-5 border-b border-[#ebebeb] shrink-0">
-              <h2 className="font-black text-lg text-[#0a0a0a]">Dossier</h2>
-              <button onClick={() => setSelected(null)} aria-label="Fermer">
-                <X size={20} className="text-slate-400 hover:text-[#0a0a0a]" />
-              </button>
-            </div>
-
-            <div className="flex-1 px-6 py-5 space-y-6 overflow-y-auto">
+      <SchoolAdminDrawer
+        open={Boolean(selected)}
+        onClose={() => setSelected(null)}
+        title="Dossier d’admission"
+        description={selected ? studentName(selected) : undefined}
+      >
+        {selected && <div className="space-y-7">
 
               {/* Actions (transitions de statut) */}
               <div>
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Statut actuel</p>
-                <span className={`text-xs font-bold px-3 py-1.5 rounded-lg border ${admissionStatusConfig(selected.admission_status).cls}`}>
-                  {admissionStatusConfig(selected.admission_status).label}
-                </span>
+                <SchoolAdminStatusBadge tone={statusTone(selected.admission_status)} label={admissionStatusConfig(selected.admission_status).label} />
 
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mt-4 mb-2">Actions</p>
                 <div className="flex gap-2 flex-wrap">
                   {availableActions(selected.admission_status).map((action) => (
-                    <button
+                    <SchoolAdminButton
                       key={action.to}
-                      disabled={updating}
+                      loading={updating}
+                      variant="outline"
+                      size="sm"
                       onClick={() => changeStatus(selected.id, action.to, selected)}
-                      className="text-xs font-bold px-3 py-1.5 rounded-lg border bg-white text-slate-600 border-[#e5e5e5] hover:border-[#0a0a0a] hover:text-[#0a0a0a] transition-colors disabled:opacity-50"
                     >
                       {action.label}
-                    </button>
+                    </SchoolAdminButton>
                   ))}
                   {availableActions(selected.admission_status).length === 0 && (
                     <p className="text-xs text-slate-400">Statut final — aucune action disponible.</p>
@@ -338,7 +337,7 @@ export default function AdmissionsPage() {
                 <Section title="Code de suivi" icon={ClipboardList}>
                   <div className="flex items-center gap-2">
                     <p className="font-mono font-bold text-sm tracking-wider">{selected.tracking_code}</p>
-                    <button onClick={() => copyCode(selected.tracking_code)} className="text-slate-400 hover:text-[#0a0a0a]">
+                    <button type="button" onClick={() => copyCode(selected.tracking_code)} aria-label={copied ? "Code copié" : "Copier le code de suivi"} className="flex h-10 w-10 items-center justify-center rounded-lg text-[var(--school-admin-text-muted)] hover:bg-[var(--school-admin-surface-muted)] hover:text-[var(--school-admin-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)]">
                       {copied ? <Check size={13} className="text-emerald-600" /> : <Copy size={13} />}
                     </button>
                   </div>
@@ -400,53 +399,45 @@ export default function AdmissionsPage() {
 
               {/* Message au parent (public, visible sur /suivi-admission) */}
               <Section title="Message au parent (visible publiquement)" icon={MessageSquare}>
-                <textarea
+                <SchoolAdminTextarea
                   value={parentMessage}
                   onChange={(e) => setParentMessage(e.target.value)}
                   rows={3}
+                  aria-label="Message visible par le parent"
                   placeholder="Message visible par le parent sur la page de suivi…"
-                  className="w-full border border-emerald-200 bg-emerald-50/30 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-400 transition-colors resize-none"
                 />
-                <button
+                <SchoolAdminButton
                   onClick={() => saveParentMessage(selected.id)}
-                  disabled={updating}
-                  className="mt-2 text-xs font-bold text-emerald-700 border border-emerald-200 bg-emerald-50 px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition-colors disabled:opacity-50"
+                  loading={updating}
+                  variant="secondary"
+                  size="sm"
+                  className="mt-2"
                 >
-                  {updating ? "Sauvegarde…" : "Sauvegarder le message"}
-                </button>
+                  Sauvegarder le message
+                </SchoolAdminButton>
               </Section>
 
               {/* Note interne (jamais visible du parent) */}
               <Section title="Note interne (jamais visible du parent)" icon={MessageSquare}>
-                <textarea
+                <SchoolAdminTextarea
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
                   rows={3}
+                  aria-label="Note interne"
                   placeholder="Notes visibles uniquement par votre équipe…"
-                  className="w-full border border-[#ddd] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#0a0a0a] transition-colors resize-none"
                 />
-                <button
+                <SchoolAdminButton
                   onClick={() => saveNote(selected.id)}
-                  disabled={updating}
-                  className="mt-2 text-xs font-bold text-slate-700 border border-[#ddd] bg-white px-3 py-1.5 rounded-lg hover:border-[#aaa] transition-colors disabled:opacity-50"
+                  loading={updating}
+                  variant="outline"
+                  size="sm"
+                  className="mt-2"
                 >
-                  {updating ? "Sauvegarde…" : "Sauvegarder la note"}
-                </button>
+                  Sauvegarder la note
+                </SchoolAdminButton>
               </Section>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function StatCard({ icon: Icon, label, value, color }: { icon: React.ElementType; label: string; value: number | string; color: string }) {
-  return (
-    <div className="bg-white border border-[#ebebeb] rounded-xl p-4">
-      <Icon size={15} className={`${color} mb-2`} />
-      <p className="text-2xl font-black text-[#0a0a0a]">{value}</p>
-      <p className="text-xs text-slate-400 font-semibold mt-0.5">{label}</p>
+        </div>}
+      </SchoolAdminDrawer>
     </div>
   );
 }
@@ -471,20 +462,14 @@ function Row({ label, value }: { label: string; value: string }) {
   );
 }
 
-function Skeleton() {
-  return (
-    <div className="max-w-6xl space-y-6 animate-pulse">
-      <div className="space-y-2">
-        <div className="h-3 w-20 bg-slate-200 rounded" />
-        <div className="h-8 w-36 bg-slate-200 rounded" />
-      </div>
-      <div className="grid grid-cols-5 gap-4">
-        {[1, 2, 3, 4, 5].map((i) => <div key={i} className="h-24 bg-white border border-[#ebebeb] rounded-xl" />)}
-      </div>
-      <div className="h-10 bg-white border border-[#ebebeb] rounded-xl" />
-      <div className="bg-white border border-[#ebebeb] rounded-2xl">
-        {[1, 2, 3, 4].map((i) => <div key={i} className="h-16 border-b border-[#f5f5f5] last:border-0" />)}
-      </div>
-    </div>
-  );
+function statusTone(status: string): "success" | "warning" | "danger" | "info" | "neutral" {
+  if (status === "accepted") return "success";
+  if (status === "rejected") return "danger";
+  if (["documents_required", "interview", "waitlisted"].includes(status)) return "warning";
+  if (status === "in_review") return "info";
+  return "neutral";
+}
+
+function studentName(app: any) {
+  return app.full_student_name || `${app.student_first_name ?? ""} ${app.student_last_name ?? ""}`.trim() || "Élève";
 }

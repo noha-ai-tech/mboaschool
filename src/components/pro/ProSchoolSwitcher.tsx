@@ -41,7 +41,7 @@ export function ProSchoolSwitcher({ schools, fallbackSchoolId }: Props) {
       value={activeSchoolId ?? ""}
       onChange={(event) => handleChange(event.target.value)}
       aria-label="Changer d'établissement actif"
-      className="max-w-[240px] shrink-0 rounded-md border border-white/10 bg-white/10 px-2.5 py-1.5 text-xs font-medium text-white focus:border-emerald-500 focus:outline-none"
+      className="w-full rounded-md border border-white/15 bg-white/10 px-2.5 py-2 text-xs font-medium text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
     >
       {!activeSchoolId && <option value="">Sélectionner un établissement</option>}
       {schools.map((school) => (

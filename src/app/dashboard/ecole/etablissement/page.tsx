@@ -90,6 +90,8 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { CANONICAL_SECTION_KEYS, type SchoolPageSectionKey } from "@/lib/schoolPage/sections";
 import type { SchoolPageDraftPayload, SchoolPageDraftRow } from "@/lib/schoolPage/draftPayload";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
+import { SchoolAdminAlert, SchoolAdminLoadingState } from "@/components/school-admin/ui/Feedback";
 
 type SectionKey =
   | "presentation" | "admissions" | "tarifs" | "infrastructures"
@@ -1033,12 +1035,7 @@ export default function ModifierMaPagePage() {
   // --- États non-nominal (chargement / non authentifié / pas de fiche) ---
 
   if (schoolLoading || loading) {
-    return (
-      <div className="max-w-3xl space-y-4 animate-pulse">
-        <div className="h-8 bg-white rounded-xl w-1/3" />
-        <div className="h-64 bg-white border border-border rounded-card" />
-      </div>
-    );
+    return <SchoolAdminLoadingState label="Chargement de l’éditeur de la fiche publique" />;
   }
 
   if (!user) {
@@ -1627,7 +1624,7 @@ export default function ModifierMaPagePage() {
   }
 
   return (
-    <div className="-m-6 lg:-m-8 min-h-screen bg-[#ECECEA]">
+    <div className="-mx-4 -my-6 min-h-screen bg-[#ECECEA] sm:-m-6 lg:-m-8">
       <EditorToolbar
         schoolName={draftSchool.name}
         hasUnsavedChanges={hasUnsavedChanges}
@@ -1638,6 +1635,7 @@ export default function ModifierMaPagePage() {
         onPublish={publishDraft}
         canDiscard={canDiscard}
         onDiscard={discardDraft}
+        previewHref={withEstablishmentQuery("/dashboard/ecole/etablissement/preview", school.id)}
       />
 
       {/* Hero — zone spéciale, non réordonnable (§7) */}
@@ -1676,17 +1674,17 @@ export default function ModifierMaPagePage() {
 
       {draftError && (
         <div className="max-w-[1520px] mx-auto px-[18px] -mt-4 mb-4">
-          <p className="text-xs font-semibold text-danger">Brouillon : {draftError}</p>
+          <SchoolAdminAlert tone="danger" title="Le brouillon n’a pas pu être traité">{draftError}</SchoolAdminAlert>
         </div>
       )}
 
       {sectionsSaveState !== "idle" && (
         <div className="max-w-[1520px] mx-auto px-[18px] -mt-4 mb-4">
-          <p className={`text-xs font-semibold ${sectionsSaveState === "error" ? "text-danger" : "text-text-secondary"}`}>
+          <div role={sectionsSaveState === "error" ? "alert" : "status"} className={`text-xs font-semibold ${sectionsSaveState === "error" ? "text-danger" : "text-text-secondary"}`}>
             {sectionsSaveState === "saving" && "Enregistrement de l'ordre et de la visibilité…"}
             {sectionsSaveState === "saved" && "Ordre et visibilité enregistrés dans le brouillon."}
             {sectionsSaveState === "error" && "Erreur d'enregistrement de l'ordre/visibilité — nouvelle tentative au prochain changement."}
-          </p>
+          </div>
         </div>
       )}
 
@@ -1712,10 +1710,12 @@ export default function ModifierMaPagePage() {
         open={activeDrawer !== null}
         onClose={closeDrawer}
         title={drawerTitle()}
+        description={isFormDrawer ? "Les champs de cette section seront enregistrés dans le brouillon, sauf indication explicite de publication immédiate." : undefined}
+        closeDisabled={drawerSaveState === "saving"}
         footer={drawerFooter()}
       >
         {isFormDrawer && drawerSaveState === "error" && drawerError && (
-          <p className="text-xs text-danger bg-danger/10 rounded-lg p-3 mb-4">{drawerError}</p>
+          <div className="mb-4"><SchoolAdminAlert tone="danger" title="Enregistrement impossible">{drawerError}</SchoolAdminAlert></div>
         )}
         {renderDrawerBody()}
       </Drawer>

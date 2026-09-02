@@ -24,6 +24,9 @@ import type { AdmissionsConfig } from "@/components/school/ParentTab";
 import { resolveSectionConfig } from "@/lib/schoolPage/sections";
 import { buildSchoolPageSections, type SchoolPageViewModel } from "@/components/school/SchoolPageSections";
 import type { SchoolPageDraftPayload } from "@/lib/schoolPage/draftPayload";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
+import { SchoolAdminAlert, SchoolAdminLoadingState } from "@/components/school-admin/ui/Feedback";
+import { SchoolAdminButton } from "@/components/school-admin/ui/Button";
 
 type PreviewData = {
   establishment: {
@@ -89,12 +92,7 @@ export default function PreviewDraftPage() {
   }, [activeSchool, user, schoolLoading]);
 
   if (schoolLoading || loading) {
-    return (
-      <div className="max-w-3xl space-y-4 animate-pulse">
-        <div className="h-8 bg-white rounded-xl w-1/3" />
-        <div className="h-64 bg-white border border-border rounded-card" />
-      </div>
-    );
+    return <SchoolAdminLoadingState label="Chargement de l’aperçu privé" />;
   }
 
   if (!user) {
@@ -123,16 +121,14 @@ export default function PreviewDraftPage() {
   if (error || !data) {
     return (
       <div className="max-w-md">
-        <p className="font-bold text-lg mb-2 text-danger">Aperçu indisponible</p>
-        <p className="text-sm text-text-secondary mb-4">{error ?? "Erreur inconnue"}</p>
-        <Link href="/dashboard/ecole/etablissement" className="inline-flex h-10 items-center px-4 rounded-card bg-primary text-white text-sm font-bold">
-          ← Retour à l&apos;éditeur
-        </Link>
+        <SchoolAdminAlert tone="danger" title="Aperçu indisponible">{error ?? "Erreur inconnue"}</SchoolAdminAlert>
+        <Link href={withEstablishmentQuery("/dashboard/ecole/etablissement", activeSchool.id)} className="mt-4 inline-flex"><SchoolAdminButton>Retour à l’éditeur</SchoolAdminButton></Link>
       </div>
     );
   }
 
   const { establishment, images, documents, admissionsIsOpen, draft } = data;
+  const editorHref = withEstablishmentQuery("/dashboard/ecole/etablissement", activeSchool.id);
 
   // CMS-F.4 §11 — is_open vient LIVE, tout le reste du modèle Admissions
   // vient du brouillon. is_open n'est jamais lu depuis draft.admissions
@@ -193,7 +189,7 @@ export default function PreviewDraftPage() {
   });
 
   return (
-    <div className="-m-6 lg:-m-8 min-h-screen bg-[#ECECEA]">
+    <div className="-mx-4 -my-6 min-h-screen bg-[#ECECEA] sm:-m-6 lg:-m-8">
       {/* Bandeau privé — §18 : jamais confondre avec la page publique réelle */}
       <div className="sticky top-0 z-40 bg-[#0A0A0A] text-white">
         <div className="max-w-[1520px] mx-auto px-[18px] h-14 flex items-center justify-between gap-3">
@@ -202,8 +198,8 @@ export default function PreviewDraftPage() {
             <span className="text-white/50 text-xs hidden sm:inline truncate">Cette version n&apos;est pas encore publique.</span>
           </div>
           <Link
-            href="/dashboard/ecole/etablissement"
-            className="flex items-center gap-1.5 text-xs font-semibold text-white/80 hover:text-white transition-colors duration-fast shrink-0"
+            href={editorHref}
+            className="flex min-h-10 items-center gap-1.5 rounded-lg px-2 text-xs font-semibold text-white/80 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white motion-reduce:transition-none shrink-0"
           >
             <ArrowLeft size={13} />
             Retour à l&apos;éditeur
@@ -220,7 +216,7 @@ export default function PreviewDraftPage() {
         trustBadge={trustBadge}
         premium={viewModel.subscription_plan === "premium"}
         preinscriptionHref="#"
-        backHref="/dashboard/ecole/etablissement"
+        backHref={editorHref}
         backLabel="Retour à l'éditeur"
       />
 
@@ -231,8 +227,8 @@ export default function PreviewDraftPage() {
               {sectionNav.map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth", block: "start" })}
-                  className="px-5 py-3.5 text-sm font-semibold border-b-2 border-transparent text-text-secondary hover:text-text-primary hover:border-border transition-colors duration-fast shrink-0"
+                  onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" })}
+                  className="min-h-11 px-5 py-3.5 text-sm font-semibold border-b-2 border-transparent text-text-secondary hover:text-text-primary hover:border-border transition-colors duration-fast focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)] motion-reduce:transition-none shrink-0"
                 >
                   {item.label}
                 </button>

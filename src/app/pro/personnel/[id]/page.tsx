@@ -7,6 +7,9 @@ import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 import { PersonnelAcces } from "@/components/pro/PersonnelAcces";
 import { PersonnelContrat } from "@/components/pro/PersonnelContrat";
 import { PersonnelDocuments } from "@/components/pro/PersonnelDocuments";
+import { SchoolAdminPageHeader } from "@/components/school-admin/ui/PageHeader";
+import { SchoolAdminSectionCard } from "@/components/school-admin/ui/Card";
+import { SchoolAdminBadge, SchoolAdminStatusBadge } from "@/components/school-admin/ui/Badge";
 
 const ROLE_LABELS: Record<string, string> = {
   admin_principal: "Administrateur principal", directeur: "Directeur", proviseur: "Proviseur",
@@ -69,31 +72,22 @@ export default async function PersonnelDetailPage({ params, searchParams }: { pa
   );
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <Link href={withEstablishmentQuery("/pro/personnel", etablissement.id)} className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-[#0a0a0a] transition-colors mb-6">
-        <ArrowLeft size={15} /> Personnel
-      </Link>
+    <div className="mx-auto max-w-5xl">
+      <SchoolAdminPageHeader eyebrow="Ressources humaines" title={`${member.first_name} ${member.last_name}`} description="Fiche administrative, accès, contrat et documents du membre du personnel." context={<Link href={withEstablishmentQuery("/pro/personnel", etablissement.id)} className="inline-flex min-h-10 items-center gap-2 rounded-lg text-sm font-semibold text-[var(--school-admin-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)]"><ArrowLeft size={15} aria-hidden="true" />Retour au personnel</Link>} actions={<SchoolAdminStatusBadge tone={member.status === "actif" ? "success" : "neutral"} label={member.status === "actif" ? "Fiche active" : "Fiche inactive"} />} />
 
-      <div className="bg-white border border-[#ebebeb] rounded-2xl p-6 mb-5">
-        <div className="flex items-start justify-between mb-4">
+      <SchoolAdminSectionCard title="Identité et fonction" description={`${CATEGORY_LABELS[member.category] ?? member.category} · ${ROLE_LABELS[member.role] ?? member.role}`} className="mb-5">
+        <div className="mb-5 flex items-start gap-4">
           <div className="flex items-center gap-4">
             {member.photo_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
               <img src={member.photo_url} alt="" className="w-16 h-16 rounded-full object-cover border border-slate-100" />
             ) : (
               <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-xl font-black text-slate-400">
                 {member.first_name?.[0]}{member.last_name?.[0]}
               </div>
             )}
-            <div>
-              <h1 className="text-xl font-black text-[#0a0a0a]">{member.first_name} {member.last_name}</h1>
-              <p className="text-sm text-slate-500">
-                {ROLE_LABELS[member.role] ?? member.role} · {CATEGORY_LABELS[member.category] ?? member.category}
-              </p>
-            </div>
+            <div><p className="text-lg font-bold text-[var(--school-admin-text)]">{member.first_name} {member.last_name}</p><p className="text-sm text-[var(--school-admin-text-muted)]">{ROLE_LABELS[member.role] ?? member.role}</p></div>
           </div>
-          <span className={`text-xs font-bold px-3 py-1.5 rounded-full ${member.status === "actif" ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>
-            {member.status === "actif" ? "Actif" : "Inactif"}
-          </span>
         </div>
 
         <div className="grid sm:grid-cols-2 gap-4 text-sm pt-4 border-t border-slate-100">
@@ -108,9 +102,7 @@ export default async function PersonnelDetailPage({ params, searchParams }: { pa
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Matières</p>
             <div className="flex flex-wrap gap-2">
               {matieres.map((m, i) => (
-                <span key={i} className="text-xs font-semibold bg-slate-50 border border-slate-200 rounded-full px-3 py-1">
-                  {m.nom}
-                </span>
+                <SchoolAdminBadge key={i} tone="info">{m.nom}{m.departement_disciplinaire ? ` · ${m.departement_disciplinaire}` : ""}</SchoolAdminBadge>
               ))}
             </div>
           </div>
@@ -122,10 +114,9 @@ export default async function PersonnelDetailPage({ params, searchParams }: { pa
             <Link href={withEstablishmentQuery("/pro/enseignants", etablissement.id)} className="text-emerald-700 font-semibold">Enseignants</Link>.
           </p>
         )}
-      </div>
+      </SchoolAdminSectionCard>
 
-      <div className="bg-white border border-[#ebebeb] rounded-2xl p-6 mb-5">
-        <p className="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4">Accès</p>
+      <SchoolAdminSectionCard title="Accès" description="Compte et mode d’accès à l’espace professionnel." className="mb-5">
         <PersonnelAcces
           staffMemberId={member.id}
           establishmentId={etablissement.id}
@@ -133,17 +124,15 @@ export default async function PersonnelDetailPage({ params, searchParams }: { pa
           hasEmail={!!member.email}
           existingCode={member.access_code}
         />
-      </div>
+      </SchoolAdminSectionCard>
 
-      <div className="bg-white border border-[#ebebeb] rounded-2xl p-6 mb-5">
-        <p className="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4">Contrat</p>
+      <SchoolAdminSectionCard title="Contrat" description="Informations contractuelles disponibles pour cette fiche." className="mb-5">
         <PersonnelContrat staffMemberId={member.id} current={contract ?? null} />
-      </div>
+      </SchoolAdminSectionCard>
 
-      <div className="bg-white border border-[#ebebeb] rounded-2xl p-6">
-        <p className="text-xs font-bold tracking-widest uppercase text-slate-400 mb-4">Documents</p>
+      <SchoolAdminSectionCard title="Documents" description="Pièces administratives associées à ce membre du personnel.">
         <PersonnelDocuments staffMemberId={member.id} initialDocs={docs} />
-      </div>
+      </SchoolAdminSectionCard>
     </div>
   );
 }

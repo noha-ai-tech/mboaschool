@@ -4,6 +4,7 @@ import type { createClient } from "./server";
 import {
   ACTIVE_SCHOOL_COOKIE,
   resolveEstablishmentContext,
+  withEstablishmentQuery,
 } from "@/lib/school/establishmentContext";
 
 // Partagé avec src/lib/school/SchoolContext.tsx (côté client) — une seule
@@ -67,7 +68,10 @@ export async function requireActiveEstablishment(
     requestedEstablishmentId
   );
   if (!establishment) {
-    redirect(`/pro/selection-etablissement?next=${encodeURIComponent(returnPath)}`);
+    redirect(withEstablishmentQuery(
+      `/pro/selection-etablissement?next=${encodeURIComponent(returnPath)}`,
+      requestedEstablishmentId ?? null
+    ));
   }
   return establishment;
 }

@@ -1,13 +1,15 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { listAccessibleEstablishments } from "@/lib/school/establishmentAccess";
-import { safeProReturnPath } from "@/lib/school/establishmentContext";
+import { safeProReturnPath, scalarSearchParam, withEstablishmentQuery } from "@/lib/school/establishmentContext";
 import { EstablishmentSelectionList } from "@/components/pro/EstablishmentSelectionList";
+import { SchoolAdminPageHeader } from "@/components/school-admin/ui/PageHeader";
+import { SchoolAdminAlert } from "@/components/school-admin/ui/Feedback";
 
 export default async function SelectionEtablissementPage({
   searchParams,
 }: {
-  searchParams: Promise<{ next?: string }>;
+  searchParams: Promise<{ next?: string; school?: string | string[] }>;
 }) {
   const supabase = await createClient();
   const {
@@ -21,18 +23,20 @@ export default async function SelectionEtablissementPage({
   );
   const params = await searchParams;
   const returnPath = safeProReturnPath(params.next);
+  const requestedSchoolId = scalarSearchParam(params.school);
+  const ownedRequestedSchoolId = establishments.some(
+    (school) => school.id === requestedSchoolId && school.accessSources.includes("owner")
+  ) ? requestedSchoolId : null;
 
-  if (schools.length === 0) redirect("/pro/acces-restreint");
+  if (ownedRequestedSchoolId && !schools.some((school) => school.id === ownedRequestedSchoolId)) {
+    redirect(withEstablishmentQuery("/pro/acces-restreint", ownedRequestedSchoolId));
+  }
+  if (schools.length === 0) redirect(withEstablishmentQuery("/pro/acces-restreint", ownedRequestedSchoolId));
 
   return (
-    <div className="mx-auto max-w-xl px-4 py-12">
-      <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-emerald-700">
-        Contexte établissement
-      </p>
-      <h1 className="mb-2 text-2xl font-black text-slate-950">Choisir un établissement</h1>
-      <p className="mb-7 text-sm text-slate-500">
-        Cette sélection s’applique uniquement à cet onglet. Chaque requête sera vérifiée côté serveur.
-      </p>
+    <div className="mx-auto max-w-2xl px-4 py-8 sm:py-12">
+      <SchoolAdminPageHeader eyebrow="Contexte établissement" title="Choisir un établissement" description="Sélectionnez l’établissement Pro à administrer dans cet onglet." />
+      <div className="mb-6"><SchoolAdminAlert tone="info" title="Contexte limité à cet onglet">Le paramètre d’établissement reste explicite dans les liens et chaque requête est vérifiée côté serveur.</SchoolAdminAlert></div>
       <EstablishmentSelectionList
         schools={schools.map(({ id, name, city }) => ({ id, name, city }))}
         returnPath={returnPath}
