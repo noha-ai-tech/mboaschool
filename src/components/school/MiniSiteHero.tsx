@@ -67,8 +67,8 @@ export function MiniSiteHero({
   ].filter(Boolean) as { icon: typeof Phone; label: string; href: string; external: boolean }[];
 
   return (
-    <section className="relative bg-accent text-white overflow-hidden">
-      <div className="relative h-[440px] lg:h-[520px]">
+    <section className="relative text-white" style={{ background: "var(--school-primary-dark, #0A0F0D)" }}>
+      <div className="relative h-[460px] lg:h-[560px] overflow-hidden">
         {slides.map((slide, i) => (
           <div key={slide.id} aria-hidden={i !== active} className={`absolute inset-0 transition-opacity duration-slow ease-out ${i === active ? "opacity-100" : "opacity-0"}`}>
             <Image src={slide.image} alt="" fill priority={i === 0} sizes="100vw" className="object-cover" />
@@ -77,9 +77,9 @@ export function MiniSiteHero({
         {slides.length === 0 && (
           <div className="absolute inset-0 bg-[linear-gradient(135deg,#052015_0%,#083D2A_55%,#0A5C3C_100%)]" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/20 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/20 pointer-events-none" />
 
-        <div className="relative z-10 max-w-[1280px] mx-auto px-4 lg:px-6 h-full flex flex-col lg:flex-row lg:items-end gap-6 pb-10">
+        <div className="relative z-10 max-w-[1280px] mx-auto px-4 lg:px-6 h-full flex flex-col lg:flex-row lg:items-end gap-6 pb-10 lg:pb-24">
           <div className="flex-1 pt-16 lg:pt-0">
             {(trustBadge || premium) && (
               <div className="flex items-center gap-2 flex-wrap mb-3">
@@ -123,28 +123,35 @@ export function MiniSiteHero({
               )}
             </div>
           </div>
-
-          {quickActions.length > 0 && (
-            <div className="lg:w-[260px] shrink-0 bg-white/10 backdrop-blur-md border border-white/15 rounded-card p-4">
-              <p className="text-[10px] font-bold tracking-widest uppercase text-white/60 mb-3">Contact rapide</p>
-              <div className="space-y-2">
-                {quickActions.map((action) => (
-                  <a
-                    key={action.label}
-                    href={action.href}
-                    target={action.external ? "_blank" : undefined}
-                    rel={action.external ? "noopener noreferrer" : undefined}
-                    className="flex items-center gap-2.5 bg-white/10 hover:bg-white/20 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors duration-base"
-                  >
-                    <action.icon size={14} className="shrink-0" />
-                    {action.label}
-                  </a>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </div>
+
+      {/* GUYSKULL-06 §5 — pulled up out of the photo's own clipped box so
+          it visually straddles the hero/content boundary on desktop (the
+          reference's overlapping contact card); on mobile it simply
+          stacks below in normal flow, no negative offset. */}
+      {quickActions.length > 0 && (
+        <div className="relative max-w-[1280px] mx-auto px-4 lg:px-6">
+          <div className="lg:absolute lg:right-6 lg:-top-20 lg:w-[280px] w-full -mt-6 lg:mt-0 mb-6 lg:mb-0 bg-white text-text-primary shadow-elevation-3 border border-border rounded-card p-5" style={{ backgroundColor: "var(--school-surface, #ffffff)" }}>
+            <p className="text-[10px] font-bold tracking-widest uppercase mb-3" style={{ color: "var(--school-accent-gold, #C9A24B)" }}>Contact rapide</p>
+            <div className="space-y-2">
+              {quickActions.map((action) => (
+                <a
+                  key={action.label}
+                  href={action.href}
+                  target={action.external ? "_blank" : undefined}
+                  rel={action.external ? "noopener noreferrer" : undefined}
+                  className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-semibold text-text-primary transition-colors duration-base hover:bg-muted"
+                  style={{ border: "1px solid var(--school-border, #E8E6E1)" }}
+                >
+                  <action.icon size={14} className="shrink-0" style={{ color: "var(--school-primary, #0F2A4A)" }} />
+                  {action.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

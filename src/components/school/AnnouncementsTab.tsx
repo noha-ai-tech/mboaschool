@@ -104,23 +104,37 @@ export function AnnouncementsTab({
           <p className="text-sm text-text-secondary">Aucune actualité publiée.</p>
         </div>
       ) : (
-        visible.map((a) => (
-          <div key={a.id} className={`bg-white border rounded-card p-5 ${a.is_important ? "border-danger/30" : "border-border"}`}>
-            <div className="flex items-center gap-2 mb-2 flex-wrap">
-              {a.is_important && (
-                <span className="flex items-center gap-1 text-[10px] font-bold text-danger bg-red-50 border border-red-200 px-2 py-0.5 rounded-full">
-                  <AlertCircle size={9} /> Important
-                </span>
-              )}
-              <span className="text-[10px] text-text-secondary font-medium">
-                {displayDate(a).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
-                {a.event_date && a.event_start_time ? ` à ${a.event_start_time.slice(0, 5)}` : ""}
-              </span>
+        visible.map((a) => {
+          const date = displayDate(a);
+          return (
+            <div key={a.id} className={`bg-white border rounded-card p-5 flex gap-4 ${a.is_important ? "border-danger/30" : "border-border"}`}>
+              <div
+                className="hidden sm:flex flex-col items-center justify-center w-14 h-14 rounded-lg shrink-0"
+                style={{ backgroundColor: "var(--school-muted, #F4F3EF)", color: "var(--school-primary, #0F2A4A)" }}
+              >
+                <span className="text-[10px] font-bold uppercase leading-none">{date.toLocaleDateString("fr-FR", { month: "short" }).replace(".", "")}</span>
+                <span className="text-lg font-black leading-none mt-1">{date.getDate()}</span>
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2 mb-2 flex-wrap">
+                  {a.is_important && (
+                    <span className="flex items-center gap-1 text-[10px] font-bold text-danger bg-red-50 border border-red-200 px-2 py-0.5 rounded-full">
+                      <AlertCircle size={9} /> Important
+                    </span>
+                  )}
+                  <span className="text-[10px] text-text-secondary font-medium sm:hidden">
+                    {date.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
+                  </span>
+                  {a.event_date && a.event_start_time && (
+                    <span className="text-[10px] text-text-secondary font-medium">à {a.event_start_time.slice(0, 5)}</span>
+                  )}
+                </div>
+                <h3 className="font-bold text-text-primary mb-1">{a.title}</h3>
+                <p className="text-sm text-text-secondary leading-relaxed">{a.content}</p>
+              </div>
             </div>
-            <h3 className="font-bold text-text-primary mb-1">{a.title}</h3>
-            <p className="text-sm text-text-secondary leading-relaxed">{a.content}</p>
-          </div>
-        ))
+          );
+        })
       )}
     </div>
   );

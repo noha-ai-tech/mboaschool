@@ -50,7 +50,7 @@ export function SchoolSiteHeader({
               <Image src={logoUrl} alt="" fill sizes="36px" className="object-cover" />
             </div>
           ) : (
-            <div className="w-9 h-9 rounded-lg shrink-0 bg-accent text-white flex items-center justify-center font-black text-sm">
+            <div className="w-9 h-9 rounded-lg shrink-0 text-white flex items-center justify-center font-black text-sm" style={{ backgroundColor: "var(--school-primary, #0F2A4A)" }}>
               {name.charAt(0)}
             </div>
           )}
@@ -67,10 +67,13 @@ export function SchoolSiteHeader({
               href={buildMiniSiteViewHref(baseHref, view.key)}
               aria-current={activeView === view.key ? "page" : undefined}
               className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors duration-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
-                activeView === view.key
-                  ? "bg-primary-light text-primary"
-                  : "text-text-secondary hover:text-text-primary hover:bg-muted"
+                activeView === view.key ? "" : "text-text-secondary hover:text-text-primary hover:bg-muted"
               }`}
+              style={
+                activeView === view.key
+                  ? { backgroundColor: "var(--school-muted, #F4F3EF)", color: "var(--school-primary, #0F2A4A)" }
+                  : undefined
+              }
             >
               {view.label}
             </Link>
@@ -81,7 +84,8 @@ export function SchoolSiteHeader({
           {phone && (
             <a
               href={`tel:${phone}`}
-              className="hidden sm:inline-flex items-center gap-1.5 h-9 px-4 rounded-card bg-accent text-white text-sm font-bold hover:opacity-90 transition-opacity duration-base"
+              className="hidden sm:inline-flex items-center gap-1.5 h-9 px-4 rounded-card text-white text-sm font-bold hover:opacity-90 transition-opacity duration-base"
+              style={{ backgroundColor: "var(--school-primary, #0F2A4A)" }}
             >
               <PhoneCall size={13} />
               Nous contacter
@@ -106,15 +110,14 @@ export function SchoolSiteHeader({
               href={buildMiniSiteViewHref(baseHref, view.key)}
               aria-current={activeView === view.key ? "page" : undefined}
               onClick={() => setMenuOpen(false)}
-              className={`text-left px-2 py-2.5 rounded-lg text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
-                activeView === view.key ? "text-primary" : "text-text-secondary"
-              }`}
+              className="text-left px-2 py-2.5 rounded-lg text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary text-text-secondary"
+              style={activeView === view.key ? { color: "var(--school-primary, #0F2A4A)" } : undefined}
             >
               {view.label}
             </Link>
           ))}
           {phone && (
-            <a href={`tel:${phone}`} className="mt-1 mb-2 text-center bg-accent text-white text-sm font-bold py-2.5 rounded-card">
+            <a href={`tel:${phone}`} className="mt-1 mb-2 text-center text-white text-sm font-bold py-2.5 rounded-card" style={{ backgroundColor: "var(--school-primary, #0F2A4A)" }}>
               Nous contacter
             </a>
           )}

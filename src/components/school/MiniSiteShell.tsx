@@ -26,8 +26,23 @@ export function MiniSiteShell({
   const { establishment: school } = data;
   const address = [school.address, school.neighborhood, school.city].filter(Boolean).join(", ");
 
+  // GUYSKULL-06 §3 — the mini-site's own token layer, scoped to this
+  // subtree only via CSS custom properties on the root — never the
+  // platform-wide Tailwind `primary`/`accent` tokens (shared by the whole
+  // app). Every school gets this default premium palette today; a future
+  // school-branding feature only has to override these variables per
+  // establishment, no component changes required.
+  const schoolThemeStyle = {
+    "--school-primary": "#0F2A4A",
+    "--school-primary-dark": "#081A30",
+    "--school-accent-gold": "#C9A24B",
+    "--school-surface": "#FFFFFF",
+    "--school-muted": "#F4F3EF",
+    "--school-border": "#E8E6E1",
+  } as React.CSSProperties;
+
   return (
-    <div className="min-h-screen bg-[#F4F4F2]">
+    <div className="min-h-screen overflow-x-hidden bg-[#F4F4F2]" style={schoolThemeStyle}>
       <SchoolSiteHeader
         logoUrl={school.logo_url}
         name={school.name}
@@ -44,6 +59,8 @@ export function MiniSiteShell({
         name={school.name}
         motto={school.motto}
         description={school.description}
+        category={school.main_category}
+        baseHref={baseHref}
         address={address || null}
         phone={school.phone}
         whatsapp={school.whatsapp}

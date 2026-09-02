@@ -2,10 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Building2, CalendarDays, Users } from "lucide-react";
 
-// PUBLIC-SITE-01 §4C / PUBLIC-SITE-02 §3 — homepage "about" teaser. All
-// highlights come from real establishments data — category/location
-// (existing), founding year / student count (new PUBLIC-SITE-02 CMS
-// fields) — never a placeholder.
+// PUBLIC-SITE-01 §4C / PUBLIC-SITE-02 §3 — homepage "about" teaser.
+// GUYSKULL-06 §7 — redesigned as a compact card meant to sit in a 3-column
+// homepage grid (À propos / Admissions or Résultats / Événements), not a
+// full-width block — a small thumbnail on top, a 3-line clamp, and one CTA,
+// per the mission's "avoid huge vertical cards" direction. All highlights
+// still come from real establishments data — never a placeholder value.
 export function MiniSiteAboutPreview({
   description,
   categoryLabel,
@@ -34,28 +36,28 @@ export function MiniSiteAboutPreview({
   ].filter(Boolean) as { icon: typeof Building2; text: string }[];
 
   return (
-    <div id="etablissement-preview" className="bg-white border border-border rounded-card p-6 grid sm:grid-cols-[220px_1fr] gap-6 items-center">
+    <div id="etablissement-preview" className="h-full flex flex-col bg-white border border-border rounded-card overflow-hidden">
       {imageUrl && (
-        <div className="relative w-full aspect-[4/3] rounded-[16px] overflow-hidden bg-muted">
-          <Image src={imageUrl} alt="" fill sizes="220px" className="object-cover" />
+        <div className="relative w-full aspect-[16/9]">
+          <Image src={imageUrl} alt="" fill sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover" />
         </div>
       )}
-      <div>
-        <p className="text-[10px] font-bold tracking-widest uppercase text-primary mb-2">À propos</p>
-        <p className="text-sm text-text-secondary leading-relaxed mb-4">
+      <div className="flex-1 flex flex-col p-5">
+        <p className="text-[10px] font-bold tracking-widest uppercase mb-2" style={{ color: "var(--school-accent-gold, #C9A24B)" }}>À propos</p>
+        <p className="text-sm text-text-secondary leading-relaxed mb-3 line-clamp-3">
           {description || "Cet établissement n'a pas encore renseigné de présentation."}
         </p>
         {highlights.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-4">
-            {highlights.map((h) => (
-              <span key={h.text} className="inline-flex items-center gap-1.5 text-xs font-semibold text-text-primary bg-muted px-3 py-1.5 rounded-full">
-                <h.icon size={12} className="text-text-secondary" />
+          <div className="flex flex-wrap gap-1.5 mb-3">
+            {highlights.slice(0, 2).map((h) => (
+              <span key={h.text} className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-text-primary bg-muted px-2.5 py-1 rounded-full">
+                <h.icon size={11} className="text-text-secondary" />
                 {h.text}
               </span>
             ))}
           </div>
         )}
-        <Link href={readMoreHref} className="text-sm font-bold text-primary hover:opacity-80 transition-opacity duration-base">
+        <Link href={readMoreHref} className="mt-auto text-sm font-bold hover:opacity-80 transition-opacity duration-base" style={{ color: "var(--school-primary, #0F2A4A)" }}>
           Découvrir l&apos;établissement →
         </Link>
       </div>

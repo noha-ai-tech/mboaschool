@@ -128,7 +128,7 @@ test("mobile navigation collapses into a labeled hamburger menu, not squeezed de
 
 test("results/ranking preview only renders when results or ranking actually exist", async () => {
   const accueilView = await src("src/components/school/views/AccueilView.tsx");
-  assert.match(accueilView, /results\.length > 0 \|\| ranking/);
+  assert.match(accueilView, /results\.length > 0 \|\| !!ranking/);
 });
 
 test("MiniSiteResultsPreview component itself is the single source of the empty-state gate (no duplicated logic per view)", async () => {

@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, Trophy } from "lucide-react";
 import { MiniSiteHero } from "@/components/school/MiniSiteHero";
 import { MiniSiteKeyNumbers } from "@/components/school/MiniSiteKeyNumbers";
 import { MiniSiteAboutPreview } from "@/components/school/MiniSiteAboutPreview";
-import { MiniSiteResultsPreview } from "@/components/school/MiniSiteResultsPreview";
 import { MiniSiteOfficialLinks } from "@/components/school/MiniSiteOfficialLinks";
 import { MiniSiteGalleryPreview } from "@/components/school/MiniSiteGalleryPreview";
 import { DocumentDownloadCtas } from "@/components/school/DocumentDownloadCtas";
@@ -14,12 +13,47 @@ import { AnnouncementsTab } from "@/components/school/AnnouncementsTab";
 import { getPrimaryPublicBadge, resolveEstablishmentTrustState, trustInputFromEstablishmentRow } from "@/lib/trust/resolveEstablishmentTrustState";
 import { computeAllHeroSlides, resolveHeroSlides } from "@/lib/school/heroMode";
 import { categories } from "@/lib/categories";
+import { classifySchoolGalleryImage } from "@/lib/school/galleryGroups";
 import { buildMiniSiteViewHref } from "@/lib/schoolPage/miniSiteViews";
 import { admissionYearLabelFrom, computeMiniSiteFlags, type MiniSiteRendererData } from "@/lib/schoolPage/miniSiteData";
 
-// GUYSKULL-05 §4 — Accueil is a compact, dashboard-like school homepage,
-// not a dump of every other view's full content. Each preview block links
-// to its own dedicated, independently-routed view for the full content.
+// GUYSKULL-06 §7 — homepage content grid: [À propos] [Admissions ou
+// Résultats] [Prochains événements] as one compact row on desktop, one
+// column on mobile. Generic — the middle cell shows Résultats/Classement
+// whenever real data exists, Admissions otherwise; never an empty
+// placeholder card.
+function GridCard({
+  eyebrow,
+  icon: Icon,
+  title,
+  children,
+  href,
+  ctaLabel,
+}: {
+  eyebrow: string;
+  icon: React.ElementType;
+  title: string;
+  children: React.ReactNode;
+  href: string;
+  ctaLabel: string;
+}) {
+  return (
+    <div className="h-full flex flex-col bg-white border border-border rounded-card p-5">
+      <div className="flex items-center gap-2 mb-3">
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--school-muted, #F4F3EF)", color: "var(--school-primary, #0F2A4A)" }}>
+          <Icon size={15} />
+        </div>
+        <p className="text-[10px] font-bold tracking-widest uppercase" style={{ color: "var(--school-accent-gold, #C9A24B)" }}>{eyebrow}</p>
+      </div>
+      <p className="font-bold text-sm text-text-primary mb-2">{title}</p>
+      <div className="flex-1 text-sm text-text-secondary leading-relaxed mb-3">{children}</div>
+      <Link href={href} className="mt-auto text-sm font-bold hover:opacity-80 transition-opacity duration-base" style={{ color: "var(--school-primary, #0F2A4A)" }}>
+        {ctaLabel} →
+      </Link>
+    </div>
+  );
+}
+
 export function AccueilView({ data, baseHref }: { data: MiniSiteRendererData; baseHref: string }) {
   const { establishment: school, images, docsList, admissionsConfig, ranking, results, preinscriptionHref } = data;
   const [newsCount, setNewsCount] = useState<number | null>(null);
@@ -43,6 +77,13 @@ export function AccueilView({ data, baseHref }: { data: MiniSiteRendererData; ba
 
   const latestResult = results[0] ?? null;
   const newsVisible = flags.showNewsSection && (newsCount === null || newsCount > 0);
+  const hasResultsOrRanking = flags.showAdmissions && (results.length > 0 || !!ranking);
+
+  // GUYSKULL-06 §14 — a representative "campus" photo for the About card,
+  // generic (caption-classified, same mechanism as the grouped gallery),
+  // falling back to the establishment's own cover image, never invented.
+  const aboutImage =
+    images.find((img) => classifySchoolGalleryImage(img) === "campus")?.url ?? school.cover_image_url ?? null;
 
   return (
     <>
@@ -63,7 +104,7 @@ export function AccueilView({ data, baseHref }: { data: MiniSiteRendererData; ba
         premium={isPremium}
       />
 
-      <div className="max-w-[1280px] mx-auto px-4 lg:px-6 py-8 space-y-6">
+      <div className="max-w-[1280px] mx-auto px-4 lg:px-6 pt-6 lg:pt-10 pb-8 space-y-6">
         <MiniSiteKeyNumbers
           studentsCount={school.student_count}
           teachersCount={school.teacher_count}
@@ -72,56 +113,51 @@ export function AccueilView({ data, baseHref }: { data: MiniSiteRendererData; ba
           foundingYear={school.founding_year}
         />
 
-        <MiniSiteAboutPreview
-          description={school.description}
-          categoryLabel={categoryLabel}
-          city={school.city}
-          neighborhood={school.neighborhood}
-          imageUrl={school.cover_image_url}
-          foundingYear={school.founding_year}
-          studentCount={school.student_count}
-          readMoreHref={etablissementHref}
-        />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
+          <MiniSiteAboutPreview
+            description={school.description}
+            categoryLabel={categoryLabel}
+            city={school.city}
+            neighborhood={school.neighborhood}
+            imageUrl={aboutImage}
+            foundingYear={school.founding_year}
+            studentCount={school.student_count}
+            readMoreHref={etablissementHref}
+          />
 
-        {flags.showAdmissions && (
-          <div className="bg-white border border-border rounded-card p-6 flex items-center justify-between gap-4 flex-wrap">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-10 h-10 rounded-lg bg-primary-light text-primary flex items-center justify-center shrink-0">
-                <GraduationCap size={18} />
+          {hasResultsOrRanking ? (
+            <GridCard eyebrow="Résultats" icon={Trophy} title={ranking ? `Classement ${ranking.scope}` : "Résultats aux examens"} href={vieHref} ctaLabel="Voir les résultats">
+              {ranking ? (
+                <p>{ranking.rank} — {ranking.source} ({ranking.year})</p>
+              ) : latestResult ? (
+                <p>{latestResult.examLabel} {latestResult.year} — {latestResult.successRatePercent}% de réussite</p>
+              ) : null}
+            </GridCard>
+          ) : flags.showAdmissions ? (
+            <GridCard eyebrow="Admissions" icon={GraduationCap} title={flags.admissionsOpen ? "Admissions ouvertes" : "Informations sur les admissions"} href={admissionsHref} ctaLabel="Voir les admissions">
+              <p className="line-clamp-3">
+                {admissionsConfig?.levels?.length ? admissionsConfig.levels.slice(0, 4).join(", ") : "Formations, tarifs et pièces à fournir."}
+                {admissionYearLabel ? ` — ${admissionYearLabel}` : ""}
+              </p>
+            </GridCard>
+          ) : null}
+
+          {newsVisible && (
+            <div className="h-full flex flex-col bg-white border border-border rounded-card p-5">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-[10px] font-bold tracking-widest uppercase" style={{ color: "var(--school-accent-gold, #C9A24B)" }}>Prochains événements</p>
+                <Link href={vieHref} className="text-xs font-bold hover:opacity-80 transition-opacity duration-base" style={{ color: "var(--school-primary, #0F2A4A)" }}>
+                  Tout voir →
+                </Link>
               </div>
-              <div className="min-w-0">
-                <p className="font-bold text-sm text-text-primary">
-                  {flags.admissionsOpen ? "Admissions ouvertes" : "Informations sur les admissions"}
-                  {admissionYearLabel ? ` — ${admissionYearLabel}` : ""}
-                </p>
-                <p className="text-xs text-text-secondary truncate">
-                  {admissionsConfig?.levels?.length ? admissionsConfig.levels.slice(0, 3).join(", ") : "Formations, tarifs et pièces à fournir"}
-                </p>
+              <div className="flex-1">
+                <AnnouncementsTab schoolId={school.id} variant="compact" limit={3} onCountChange={setNewsCount} />
               </div>
             </div>
-            <Link href={admissionsHref} className="shrink-0 text-sm font-bold text-primary hover:opacity-80 transition-opacity duration-base">
-              Voir les admissions →
-            </Link>
-          </div>
-        )}
+          )}
+        </div>
 
         {docsList.length > 0 && <DocumentDownloadCtas documents={docsList} />}
-
-        {flags.showAdmissions && (results.length > 0 || ranking) && (
-          <MiniSiteResultsPreview category={school.main_category} results={results} ranking={ranking} />
-        )}
-
-        {newsVisible && (
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="font-bold text-sm">Événements à venir</h2>
-              <Link href={vieHref} className="text-xs font-bold text-primary hover:opacity-80 transition-opacity duration-base">
-                Tout voir →
-              </Link>
-            </div>
-            <AnnouncementsTab schoolId={school.id} variant="compact" limit={3} onCountChange={setNewsCount} />
-          </div>
-        )}
 
         <MiniSiteOfficialLinks category={school.main_category} website={school.website} />
 

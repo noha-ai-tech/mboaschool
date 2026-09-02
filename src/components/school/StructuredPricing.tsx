@@ -24,7 +24,7 @@ export function StructuredPricing({ pricing, mode = "public" }: { pricing: Schoo
   const legacyRows = FEE_COLS.filter(({ key }) => (pricing[key] ?? 0) > 0);
 
   return (
-    <div id="tarifs" className="bg-white border border-border rounded-card p-4 sm:p-6 scroll-mt-20 min-w-0 overflow-hidden">
+    <div id="tarifs" className="bg-white border border-border rounded-card p-4 sm:p-6 scroll-mt-20 min-w-0 overflow-hidden" style={{ borderTop: "3px solid var(--school-primary, #0F2A4A)" }}>
       <h2 className="font-bold text-sm mb-4">Tarifs</h2>
 
       {pricing.schedules.length > 0 && (
@@ -39,7 +39,7 @@ export function StructuredPricing({ pricing, mode = "public" }: { pricing: Schoo
                 <td className="py-3 pr-3 font-semibold"><span className="block">{schedule.level_label}</span><span className="text-[11px] font-normal text-text-secondary">{schedule.academic_year}</span></td>
                 <td className="py-3 px-3 whitespace-nowrap">{money(schedule.registration_fee, schedule.currency)}</td>
                 <td className="py-3 px-3 whitespace-nowrap">{money(schedule.tuition_fee, schedule.currency)}</td>
-                <td className="py-3 pl-3 text-right font-bold whitespace-nowrap">{money(feeScheduleTotal(schedule), schedule.currency)}</td>
+                <td className="py-3 pl-3 text-right font-bold whitespace-nowrap" style={{ color: "var(--school-primary, #0F2A4A)" }}>{money(feeScheduleTotal(schedule), schedule.currency)}</td>
               </tr>
             ))}</tbody>
           </table>
@@ -47,9 +47,13 @@ export function StructuredPricing({ pricing, mode = "public" }: { pricing: Schoo
       )}
 
       {pricing.schedules.some((schedule) => schedule.notes) && (
-        <div className="mt-3 space-y-1">
+        <div className="mt-3 space-y-1.5">
           {pricing.schedules.filter((schedule) => schedule.notes).map((schedule) => (
-            <p key={`schedule-note-${schedule.academic_year}-${schedule.position}`} className="text-xs text-text-secondary italic">
+            <p
+              key={`schedule-note-${schedule.academic_year}-${schedule.position}`}
+              className="text-xs leading-relaxed rounded-lg px-3 py-2"
+              style={{ backgroundColor: "var(--school-muted, #F4F3EF)", color: "var(--school-primary, #0F2A4A)" }}
+            >
               {schedule.notes}
             </p>
           ))}
