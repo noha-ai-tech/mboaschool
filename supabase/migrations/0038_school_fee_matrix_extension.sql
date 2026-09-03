@@ -282,8 +282,25 @@ begin
     raise exception 'PRICING_01_POSTCHECK_AMOUNT_STILL_NOT_NULL';
   end if;
 
+  -- PRICING-0038-HOTFIX-VERIFY — the prior direct array-equality comparison
+  -- (`proconfig is distinct from array['search_path=']`) could never
+  -- succeed: PostgreSQL serializes `set search_path = ''` in proconfig as
+  -- the GUC-list-quoted element `search_path=""` (two literal double-quote
+  -- characters denoting one empty list element), not the bare, unquoted
+  -- `search_path=`. Live-verified against the already-correct 0037
+  -- function before ever relying on this check. pg_options_to_table()
+  -- parses proconfig into proper (option_name, option_value) rows instead
+  -- of relying on exact-array-literal/position matching, so this also
+  -- correctly tolerates config-entry reordering and explicitly rejects any
+  -- additional, unexpected proconfig entry (count <> 1) as well as a wrong
+  -- value, a missing search_path entry, or a null/empty proconfig.
   if (
-    select p.prosecdef is distinct from true or p.proconfig is distinct from array['search_path=']::text[]
+    select p.prosecdef is distinct from true
+      or (select count(*) from pg_options_to_table(p.proconfig)) <> 1
+      or not exists (
+        select 1 from pg_options_to_table(p.proconfig) o
+        where o.option_name = 'search_path' and o.option_value = '""'
+      )
     from pg_proc p where p.oid = 'public.publish_school_page_v2(uuid,timestamp with time zone)'::regprocedure
   ) then
     raise exception 'PRICING_01_POSTCHECK_FUNCTION_SECURITY_PROPERTIES_CHANGED';
