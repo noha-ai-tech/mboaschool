@@ -33,6 +33,7 @@ export function GalerieInfosView({ data }: { data: MiniSiteRendererData }) {
   return (
     <>
       <ViewBanner
+        eyebrow={school.name}
         title="Galerie & Infos"
         subtitle="Photos, actualités, documents et ressources utiles."
         images={images}

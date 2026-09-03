@@ -7,7 +7,7 @@ import { MiniSiteHero } from "@/components/school/MiniSiteHero";
 import { MiniSiteKeyNumbers } from "@/components/school/MiniSiteKeyNumbers";
 import { MiniSiteAboutPreview } from "@/components/school/MiniSiteAboutPreview";
 import { MiniSiteOfficialLinks } from "@/components/school/MiniSiteOfficialLinks";
-import { MiniSiteGalleryPreview } from "@/components/school/MiniSiteGalleryPreview";
+import { MiniSiteEnvironmentShowcase } from "@/components/school/MiniSiteEnvironmentShowcase";
 import { DocumentDownloadCtas } from "@/components/school/DocumentDownloadCtas";
 import { AnnouncementsTab } from "@/components/school/AnnouncementsTab";
 import { getPrimaryPublicBadge, resolveEstablishmentTrustState, trustInputFromEstablishmentRow } from "@/lib/trust/resolveEstablishmentTrustState";
@@ -17,11 +17,12 @@ import { classifySchoolGalleryImage } from "@/lib/school/galleryGroups";
 import { buildMiniSiteViewHref } from "@/lib/schoolPage/miniSiteViews";
 import { admissionYearLabelFrom, computeMiniSiteFlags, type MiniSiteRendererData } from "@/lib/schoolPage/miniSiteData";
 
-// GUYSKULL-06 §7 — homepage content grid: [À propos] [Admissions ou
-// Résultats] [Prochains événements] as one compact row on desktop, one
-// column on mobile. Generic — the middle cell shows Résultats/Classement
-// whenever real data exists, Admissions otherwise; never an empty
-// placeholder card.
+// GUYSKULL-06 §7 / GUYSKULL-06C §12 — homepage content grid: [À propos]
+// [Admissions ou Résultats] [Prochains événements] as one compact row on
+// desktop, one column on mobile. Generic — the middle cell shows
+// Résultats/Classement whenever real data exists, Admissions otherwise;
+// never an empty placeholder card. Cards follow their content's natural
+// height — no forced stretch, no fixed minimum.
 function GridCard({
   eyebrow,
   icon: Icon,
@@ -38,7 +39,7 @@ function GridCard({
   ctaLabel: string;
 }) {
   return (
-    <div className="h-full flex flex-col bg-white border border-border rounded-card p-5">
+    <div className="flex flex-col bg-white border border-border rounded-card p-5">
       <div className="flex items-center gap-2 mb-3">
         <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--school-muted, #F4F3EF)", color: "var(--school-primary, #0F2A4A)" }}>
           <Icon size={15} />
@@ -46,7 +47,7 @@ function GridCard({
         <p className="text-[10px] font-bold tracking-widest uppercase" style={{ color: "var(--school-accent-gold, #C9A24B)" }}>{eyebrow}</p>
       </div>
       <p className="font-bold text-sm text-text-primary mb-2">{title}</p>
-      <div className="flex-1 text-sm text-text-secondary leading-relaxed mb-3">{children}</div>
+      <div className="text-sm text-text-secondary leading-relaxed mb-3">{children}</div>
       <Link href={href} className="mt-auto text-sm font-bold hover:opacity-80 transition-opacity duration-base" style={{ color: "var(--school-primary, #0F2A4A)" }}>
         {ctaLabel} →
       </Link>
@@ -55,7 +56,7 @@ function GridCard({
 }
 
 export function AccueilView({ data, baseHref }: { data: MiniSiteRendererData; baseHref: string }) {
-  const { establishment: school, images, docsList, admissionsConfig, ranking, results, preinscriptionHref } = data;
+  const { establishment: school, images, docsList, admissionsConfig, ranking, results } = data;
   const [newsCount, setNewsCount] = useState<number | null>(null);
   const flags = computeMiniSiteFlags(data);
 
@@ -92,81 +93,85 @@ export function AccueilView({ data, baseHref }: { data: MiniSiteRendererData; ba
         name={school.name}
         motto={school.motto}
         description={school.description}
-        admissionsOpen={flags.showAdmissions && flags.admissionsOpen}
-        admissionYearLabel={admissionYearLabel}
-        preinscriptionHref={preinscriptionHref}
         phone={school.phone}
         whatsapp={school.whatsapp}
         mapsHref={mapsHref}
         website={school.website}
         discoverHref={etablissementHref}
+        admissionsHref={admissionsHref}
+        showAdmissionsCta={flags.showAdmissions}
         trustBadge={trustBadge}
         premium={isPremium}
       />
 
-      <div className="max-w-[1280px] mx-auto px-4 lg:px-6 pt-6 lg:pt-10 pb-8 space-y-6">
-        <MiniSiteKeyNumbers
-          studentsCount={school.student_count}
-          teachersCount={school.teacher_count}
-          successRatePercent={latestResult?.successRatePercent ?? null}
-          officialRanking={ranking?.rank ?? null}
-          foundingYear={school.founding_year}
-        />
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
-          <MiniSiteAboutPreview
-            description={school.description}
-            categoryLabel={categoryLabel}
-            city={school.city}
-            neighborhood={school.neighborhood}
-            imageUrl={aboutImage}
+      <div className="max-w-[1280px] mx-auto px-4 lg:px-6 pt-6 lg:pt-10 pb-12 space-y-10">
+        <div className="space-y-6">
+          <MiniSiteKeyNumbers
+            studentsCount={school.student_count}
+            teachersCount={school.teacher_count}
+            successRatePercent={latestResult?.successRatePercent ?? null}
+            officialRanking={ranking?.rank ?? null}
             foundingYear={school.founding_year}
-            studentCount={school.student_count}
-            readMoreHref={etablissementHref}
           />
 
-          {hasResultsOrRanking ? (
-            <GridCard eyebrow="Résultats" icon={Trophy} title={ranking ? `Classement ${ranking.scope}` : "Résultats aux examens"} href={vieHref} ctaLabel="Voir les résultats">
-              {ranking ? (
-                <p>{ranking.rank} — {ranking.source} ({ranking.year})</p>
-              ) : latestResult ? (
-                <p>{latestResult.examLabel} {latestResult.year} — {latestResult.successRatePercent}% de réussite</p>
-              ) : null}
-            </GridCard>
-          ) : flags.showAdmissions ? (
-            <GridCard eyebrow="Admissions" icon={GraduationCap} title={flags.admissionsOpen ? "Admissions ouvertes" : "Informations sur les admissions"} href={admissionsHref} ctaLabel="Voir les admissions">
-              <p className="line-clamp-3">
-                {admissionsConfig?.levels?.length ? admissionsConfig.levels.slice(0, 4).join(", ") : "Formations, tarifs et pièces à fournir."}
-                {admissionYearLabel ? ` — ${admissionYearLabel}` : ""}
-              </p>
-            </GridCard>
-          ) : null}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+            <MiniSiteAboutPreview
+              description={school.description}
+              categoryLabel={categoryLabel}
+              city={school.city}
+              neighborhood={school.neighborhood}
+              imageUrl={aboutImage}
+              foundingYear={school.founding_year}
+              studentCount={school.student_count}
+              readMoreHref={etablissementHref}
+            />
 
-          {newsVisible && (
-            <div className="h-full flex flex-col bg-white border border-border rounded-card p-5">
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-[10px] font-bold tracking-widest uppercase" style={{ color: "var(--school-accent-gold, #C9A24B)" }}>Prochains événements</p>
-                <Link href={vieHref} className="text-xs font-bold hover:opacity-80 transition-opacity duration-base" style={{ color: "var(--school-primary, #0F2A4A)" }}>
-                  Tout voir →
-                </Link>
+            {hasResultsOrRanking ? (
+              <GridCard eyebrow="Résultats" icon={Trophy} title={ranking ? `Classement ${ranking.scope}` : "Résultats aux examens"} href={vieHref} ctaLabel="Voir les résultats">
+                {ranking ? (
+                  <p>{ranking.rank} — {ranking.source} ({ranking.year})</p>
+                ) : latestResult ? (
+                  <p>{latestResult.examLabel} {latestResult.year} — {latestResult.successRatePercent}% de réussite</p>
+                ) : null}
+              </GridCard>
+            ) : flags.showAdmissions ? (
+              <GridCard eyebrow="Admissions" icon={GraduationCap} title="Formations & admissions" href={admissionsHref} ctaLabel="Voir les admissions">
+                {admissionsConfig?.levels?.length ? (
+                  <div className="flex flex-wrap gap-1.5">
+                    {admissionsConfig.levels.slice(0, 4).map((level) => (
+                      <span key={level} className="text-[11px] font-semibold px-2 py-1 rounded-full" style={{ backgroundColor: "var(--school-muted, #F4F3EF)" }}>
+                        {level}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p>Formations, tarifs et pièces à fournir{admissionYearLabel ? ` — ${admissionYearLabel}` : ""}.</p>
+                )}
+              </GridCard>
+            ) : null}
+
+            {newsVisible && (
+              <div className="flex flex-col bg-white border border-border rounded-card p-5">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-[10px] font-bold tracking-widest uppercase" style={{ color: "var(--school-accent-gold, #C9A24B)" }}>Prochains événements</p>
+                  <Link href={vieHref} className="text-xs font-bold hover:opacity-80 transition-opacity duration-base shrink-0" style={{ color: "var(--school-primary, #0F2A4A)" }}>
+                    Tout voir →
+                  </Link>
+                </div>
+                <AnnouncementsTab schoolId={school.id} variant="full" limit={2} onCountChange={setNewsCount} />
               </div>
-              <div className="flex-1">
-                <AnnouncementsTab schoolId={school.id} variant="compact" limit={3} onCountChange={setNewsCount} />
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
+
+        <MiniSiteEnvironmentShowcase
+          images={images.map((img) => ({ id: img.id, url: img.url, caption: img.caption }))}
+          seeAllHref={galerieHref}
+        />
 
         {docsList.length > 0 && <DocumentDownloadCtas documents={docsList} />}
 
         <MiniSiteOfficialLinks category={school.main_category} website={school.website} />
-
-        {images.length > 0 && (
-          <MiniSiteGalleryPreview
-            images={images.map((img) => ({ id: img.id, url: img.url, caption: img.caption }))}
-            seeAllHref={galerieHref}
-          />
-        )}
       </div>
     </>
   );

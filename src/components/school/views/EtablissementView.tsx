@@ -30,7 +30,8 @@ export function EtablissementView({ data }: { data: MiniSiteRendererData }) {
   return (
     <>
       <ViewBanner
-        title={`${school.name} — L'établissement`}
+        eyebrow={school.name}
+        title="L'établissement"
         subtitle={school.description}
         images={images}
         preferredGroups={["campus", "courtyard"]}
@@ -88,14 +89,14 @@ export function EtablissementView({ data }: { data: MiniSiteRendererData }) {
           )}
 
           {values.length > 0 && (
-            <div id="valeurs" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
+            <div id="valeurs" className="rounded-card p-6 scroll-mt-20" style={{ backgroundColor: "var(--school-muted, #F4F3EF)" }}>
               <h2 className="font-bold text-sm mb-4">Nos valeurs</h2>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {values.map((v, i) => {
                   const Icon = VALUE_ICONS[i % VALUE_ICONS.length];
                   return (
-                    <div key={v.label} className="flex items-start gap-3 rounded-xl p-3" style={{ backgroundColor: "var(--school-muted, #F4F3EF)" }}>
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-white" style={{ color: "var(--school-primary, #0F2A4A)" }}>
+                    <div key={v.label} className="flex items-start gap-3 rounded-xl bg-white p-3.5 border border-border/60">
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--school-muted, #F4F3EF)", color: "var(--school-primary, #0F2A4A)" }}>
                         <Icon size={15} />
                       </div>
                       <div className="min-w-0">
@@ -110,22 +111,22 @@ export function EtablissementView({ data }: { data: MiniSiteRendererData }) {
           )}
 
           {flags.showContact && (
-            <div id="contact" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
+            <div id="contact" className="rounded-card p-6 scroll-mt-20 text-white" style={{ backgroundColor: "var(--school-primary-dark, #0A0F0D)" }}>
               <h2 className="font-bold text-sm mb-4">Contact</h2>
               {!school.phone && !school.email && !address ? (
-                <p className="text-sm text-text-secondary">Coordonnées non renseignées par l&apos;établissement.</p>
+                <p className="text-sm text-white/60">Coordonnées non renseignées par l&apos;établissement.</p>
               ) : (
                 <div className="grid sm:grid-cols-2 gap-4">
-                  {school.phone && <ContactRow icon={Phone} label="Téléphone" value={school.phone} href={`tel:${school.phone}`} />}
-                  {school.email && <ContactRow icon={Mail} label="Email" value={school.email} href={`mailto:${school.email}`} />}
-                  {address && <ContactRow icon={MapPin} label="Adresse" value={address} href={mapsHref ?? undefined} />}
-                  {school.website && <ContactRow icon={Globe} label="Site web" value={school.website} href={school.website} />}
+                  {school.phone && <ContactRow icon={Phone} label="Téléphone" value={school.phone} href={`tel:${school.phone}`} dark />}
+                  {school.email && <ContactRow icon={Mail} label="Email" value={school.email} href={`mailto:${school.email}`} dark />}
+                  {address && <ContactRow icon={MapPin} label="Adresse" value={address} href={mapsHref ?? undefined} dark />}
+                  {school.website && <ContactRow icon={Globe} label="Site web" value={school.website} href={school.website} dark />}
                 </div>
               )}
               {data.mode === "public" && !school.owner_id && (
-                <p className="text-xs text-text-secondary/70 mt-4 pt-4 border-t border-border">
+                <p className="text-xs text-white/50 mt-4 pt-4 border-t border-white/10">
                   Vous représentez cet établissement ?{" "}
-                  <Link href={`/revendiquer/${school.id}`} className="font-semibold text-text-secondary hover:text-primary underline">
+                  <Link href={`/revendiquer/${school.id}`} className="font-semibold text-white/80 hover:text-white underline">
                     Revendiquez cette fiche
                   </Link>
                 </p>

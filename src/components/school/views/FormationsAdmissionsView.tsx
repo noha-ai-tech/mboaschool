@@ -26,6 +26,7 @@ export function FormationsAdmissionsView({ data }: { data: MiniSiteRendererData 
   return (
     <>
       <ViewBanner
+        eyebrow={school.name}
         title="Formations & Admissions"
         subtitle="Niveaux proposés, démarche d'admission, tarifs et pièces à fournir."
         images={images}

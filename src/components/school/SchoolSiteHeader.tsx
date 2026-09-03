@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Menu, X, PhoneCall } from "lucide-react";
 import { MINISITE_VIEWS, buildMiniSiteViewHref, type MiniSiteViewKey } from "@/lib/schoolPage/miniSiteViews";
+import { schoolMonogram } from "@/lib/school/schoolMonogram";
 
 // PUBLIC-SITE-01 §3 — school-specific header. Deliberately NOT the
 // Écoles237 SiteHeader (§2 — the mini-site must feel like the school's own
@@ -43,20 +44,23 @@ export function SchoolSiteHeader({
 
   return (
     <header className={`${sticky ? "sticky top-0" : ""} z-40 bg-white border-b border-border`}>
-      <div className="max-w-[1280px] mx-auto px-4 lg:px-6 h-16 flex items-center justify-between gap-4">
+      <div className="max-w-[1280px] mx-auto px-4 lg:px-6 h-[72px] flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 min-w-0">
           {logoUrl ? (
-            <div className="relative w-9 h-9 rounded-lg overflow-hidden shrink-0 bg-muted">
-              <Image src={logoUrl} alt="" fill sizes="36px" className="object-cover" />
+            <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0 bg-muted ring-1 ring-black/5">
+              <Image src={logoUrl} alt="" fill sizes="40px" className="object-cover" />
             </div>
           ) : (
-            <div className="w-9 h-9 rounded-lg shrink-0 text-white flex items-center justify-center font-black text-sm" style={{ backgroundColor: "var(--school-primary, #0F2A4A)" }}>
-              {name.charAt(0)}
+            <div
+              className="relative w-10 h-10 rounded-full shrink-0 text-white flex items-center justify-center font-black text-[15px] tracking-tight ring-1 ring-black/5"
+              style={{ backgroundColor: "var(--school-primary, #0F2A4A)", fontFamily: "Georgia, 'Times New Roman', serif" }}
+            >
+              {schoolMonogram(name)}
             </div>
           )}
           <div className="min-w-0">
-            <p className="font-bold text-sm text-text-primary truncate leading-tight">{name}</p>
-            {motto && <p className="text-[11px] text-text-secondary truncate leading-tight italic">{motto}</p>}
+            <p className="font-black text-[15px] text-text-primary truncate leading-tight tracking-tight">{name}</p>
+            {motto && <p className="text-[11px] text-text-secondary/80 truncate leading-tight italic mt-0.5">{motto}</p>}
           </div>
         </div>
 
@@ -66,15 +70,15 @@ export function SchoolSiteHeader({
               key={view.key}
               href={buildMiniSiteViewHref(baseHref, view.key)}
               aria-current={activeView === view.key ? "page" : undefined}
-              className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors duration-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
-                activeView === view.key ? "" : "text-text-secondary hover:text-text-primary hover:bg-muted"
+              className={`relative px-4 py-2.5 text-[13.5px] font-semibold transition-colors duration-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
+                activeView === view.key ? "text-text-primary" : "text-text-secondary hover:text-text-primary"
               }`}
-              style={
-                activeView === view.key
-                  ? { backgroundColor: "var(--school-muted, #F4F3EF)", color: "var(--school-primary, #0F2A4A)" }
-                  : undefined
-              }
             >
+              <span
+                className="absolute left-4 right-4 -bottom-px h-[2px] rounded-full transition-opacity duration-base"
+                style={{ backgroundColor: "var(--school-accent-gold, #C9A24B)", opacity: activeView === view.key ? 1 : 0 }}
+                aria-hidden="true"
+              />
               {view.label}
             </Link>
           ))}

@@ -21,7 +21,7 @@ export function ViewContextMenu({ items }: { items: ({ id: string; label: string
 
   return (
     <>
-      <nav aria-label="Sections de la page" className="hidden lg:block w-[200px] shrink-0 sticky top-[88px] space-y-1">
+      <nav aria-label="Sections de la page" className="hidden lg:block w-[200px] shrink-0 sticky top-[96px] space-y-1">
         {visible.map((item) => (
           <button
             key={item.id}
