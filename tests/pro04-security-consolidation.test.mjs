@@ -39,6 +39,27 @@ async function text(path) {
   return (await readFile(path, "utf8")).replaceAll("\r\n", "\n");
 }
 
+function normalizeSqlLineEndings(raw, label = "SQL") {
+  const decoded = raw.toString("utf8");
+  assert.deepEqual(
+    Buffer.from(decoded, "utf8"),
+    raw,
+    `${label}: checksum input must be valid UTF-8`,
+  );
+  assert.doesNotMatch(
+    decoded,
+    /\r(?!\n)/,
+    `${label}: lone CR is not an accepted line ending`,
+  );
+  return decoded.replaceAll("\r\n", "\n");
+}
+
+function normalizedSqlSha256(raw, label) {
+  return createHash("sha256")
+    .update(normalizeSqlLineEndings(raw, label), "utf8")
+    .digest("hex");
+}
+
 function stripConsolidationHeader(sql) {
   return sql.split("\n").slice(4).join("\n");
 }
@@ -442,7 +463,7 @@ test("executed lot 02 migration is an exact traceable copy", async () => {
 
   assert.deepEqual(migration, source);
   assert.equal(
-    createHash("sha256").update(migration).digest("hex"),
+    normalizedSqlSha256(migration, "lot 02 migration"),
     "5076efc88c8d6de9543f3afa6f6187c290c344b39eb00f1f7f6ecd38ea9ba6c2",
   );
 });
@@ -567,7 +588,7 @@ test("executed lot 03 migration is an exact traceable copy", async () => {
 
   assert.deepEqual(migration, source);
   assert.equal(
-    createHash("sha256").update(migration).digest("hex"),
+    normalizedSqlSha256(migration, "lot 03 migration"),
     "c651ca9b7695bc8db8e8829bcc8154ec9705d9b02a9a69581bb386cad217786e",
   );
 });
@@ -684,7 +705,7 @@ test("executed lot 04 migration is an exact traceable copy", async () => {
 
   assert.deepEqual(migration, source);
   assert.equal(
-    createHash("sha256").update(migration).digest("hex"),
+    normalizedSqlSha256(migration, "lot 04 migration"),
     "afb829a79170fe87136ec15651c4b99f0746861da1885fb1aad21151dcc2f1c7",
   );
 });
@@ -736,15 +757,24 @@ test("PRO-04 SQL does not touch registry-sensitive business columns", async () =
   }
 });
 
-test("PRO-04.1 checksum manifest matches every consolidation byte-for-byte", async () => {
+test("PRO-04.1 checksum manifest matches every consolidation after documented line-ending normalization", async () => {
   const manifest = JSON.parse(await text("docs/pro/PRO-04_1_CHECKSUMS.json"));
+
+  assert.equal(
+    normalizedSqlSha256(Buffer.from("select 1;\n", "utf8"), "LF fixture"),
+    normalizedSqlSha256(Buffer.from("select 1;\r\n", "utf8"), "CRLF fixture"),
+  );
+  assert.throws(
+    () => normalizeSqlLineEndings(Buffer.from("select 1;\r", "utf8"), "lone CR fixture"),
+    /lone CR is not an accepted line ending/,
+  );
 
   for (const entry of manifest.migrations) {
     const raw = await readFile(entry.path);
-    const fileHash = createHash("sha256").update(raw).digest("hex");
+    const fileHash = normalizedSqlSha256(raw, entry.path);
     assert.equal(fileHash, entry.file_sha256, entry.path);
 
-    const normalized = raw.toString("utf8").replaceAll("\r\n", "\n");
+    const normalized = normalizeSqlLineEndings(raw, entry.path);
     const body = stripConsolidationHeader(normalized);
     const bodyHash = createHash("sha256").update(body, "utf8").digest("hex");
     assert.equal(bodyHash, entry.canonical_body_lf_sha256, entry.path);

@@ -2,7 +2,7 @@
   "algorithm": "SHA-256",
   "generated_at": "2026-08-22",
   "rules": {
-    "file_sha256": "Exact on-disk bytes.",
+    "file_sha256": "UTF-8 SQL normalized from CRLF or LF to LF before hashing; lone CR is rejected.",
     "canonical_body_lf_sha256": "UTF-8 text, CRLF normalized to LF, four PRO-04 consolidation banner lines removed.",
     "production_snapshot_sha256": "Exact on-disk bytes of the sanitized read-only catalog snapshot.",
     "recorded_statement_sha256": "Digest of the exact UTF-8 statement stored in supabase_migrations.schema_migrations.statements[1]."
