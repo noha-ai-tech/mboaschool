@@ -1,135 +1,43 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { UserCheck, Clock, UserX, Plus } from "lucide-react";
+import { GraduationCap, KeyRound, Plus, UserCheck, UserX } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
-import { BoutonInviter } from "@/components/pro/BoutonInviter";
+import { SchoolAdminPageHeader } from "@/components/school-admin/ui/PageHeader";
+import { SchoolAdminStatCard } from "@/components/school-admin/ui/StatCard";
+import { SchoolAdminStatusBadge } from "@/components/school-admin/ui/Badge";
+import { SchoolAdminResponsiveTable } from "@/components/school-admin/ui/ResponsiveTable";
+import { SchoolAdminEmptyState, SchoolAdminAlert } from "@/components/school-admin/ui/Feedback";
+
+type Teacher = { id: string; nom: string; prenom: string; email: string | null; code_pointage: string | null; user_id: string | null; invite_envoyee_le: string | null };
+
+function accountStatus(teacher: Teacher) {
+  if (teacher.user_id) return <SchoolAdminStatusBadge tone="success" label="Compte actif" icon={<UserCheck size={13} />} />;
+  if (teacher.invite_envoyee_le) return <SchoolAdminStatusBadge tone="info" label="Invitation enregistrée" />;
+  return <SchoolAdminStatusBadge tone="neutral" label="Sans compte" icon={<UserX size={13} />} />;
+}
 
 export default async function EnseignantsPage({ searchParams }: { searchParams: Promise<{ school?: string }> }) {
   const { school } = await searchParams;
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/auth/connexion");
-
   const etablissement = await requireActiveEstablishment(supabase, user.id, school, "/pro/enseignants");
+  const { data } = await supabase.from("enseignants").select("id, nom, prenom, email, code_pointage, user_id, invite_envoyee_le").eq("etablissement_id", etablissement.id).order("nom");
+  const enseignants = (data ?? []) as Teacher[];
+  const activeAccounts = enseignants.filter((teacher) => Boolean(teacher.user_id)).length;
+  const withPin = enseignants.filter((teacher) => Boolean(teacher.code_pointage)).length;
 
-  const { data: enseignants } = await supabase
-    .from("enseignants")
-    .select("id, nom, prenom, email, code_pointage, user_id, invite_envoyee_le")
-    .eq("etablissement_id", etablissement.id)
-    .order("nom");
-
-  function statutBadge(e: {
-    user_id: string | null;
-    invite_envoyee_le: string | null;
-    email: string | null;
-  }) {
-    if (e.user_id) {
-      return (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 text-emerald-700 px-2.5 py-0.5 text-xs font-bold">
-          <UserCheck size={11} />
-          Compte actif
-        </span>
-      );
-    }
-    if (e.invite_envoyee_le) {
-      const d = new Date(e.invite_envoyee_le);
-      const label = d.toLocaleDateString("fr-FR", { day: "2-digit", month: "short" });
-      return (
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-100 text-blue-700 px-2.5 py-0.5 text-xs font-bold">
-          <Clock size={11} />
-          Invitation envoyée le {label}
-        </span>
-      );
-    }
-    return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 text-gray-500 px-2.5 py-0.5 text-xs font-bold">
-        <UserX size={11} />
-        Sans compte
-      </span>
-    );
-  }
-
-  return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="mb-8 flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Enseignants</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Gérez vos enseignants, leurs matières et leurs accès.
-          </p>
-        </div>
-        <Link
-          href={withEstablishmentQuery("/pro/enseignants/nouveau", etablissement.id)}
-          className="flex items-center gap-2 bg-[#0a0a0a] text-white px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors shrink-0"
-        >
-          <Plus size={15} />
-          Nouvel enseignant
-        </Link>
-      </div>
-
-      {!enseignants?.length ? (
-        <div className="rounded-xl border border-gray-200 bg-white p-12 text-center text-sm text-gray-400">
-          Aucun enseignant dans cet établissement.
-        </div>
-      ) : (
-        <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-          <table className="w-full text-sm border-collapse">
-            <thead>
-              <tr className="bg-gray-50 border-b border-gray-200">
-                <th className="text-left p-3 text-xs font-semibold tracking-widest uppercase text-gray-400">Enseignant</th>
-                <th className="text-left p-3 text-xs font-semibold tracking-widest uppercase text-gray-400 hidden sm:table-cell">Email</th>
-                <th className="text-left p-3 text-xs font-semibold tracking-widest uppercase text-gray-400 hidden md:table-cell">Code pointage</th>
-                <th className="text-left p-3 text-xs font-semibold tracking-widest uppercase text-gray-400">Statut compte</th>
-                <th className="text-right p-3 text-xs font-semibold tracking-widest uppercase text-gray-400">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {enseignants.map((e) => (
-                <tr key={e.id} className="border-b border-gray-100 last:border-0 hover:bg-gray-50">
-                  <td className="p-3">
-                    <span className="font-semibold text-gray-900">
-                      {e.prenom} {e.nom}
-                    </span>
-                    {/* Email visible en mobile sous le nom */}
-                    {e.email && (
-                      <span className="block text-xs text-gray-400 sm:hidden">{e.email}</span>
-                    )}
-                  </td>
-                  <td className="p-3 text-gray-500 hidden sm:table-cell">
-                    {e.email ?? <span className="text-gray-300">—</span>}
-                  </td>
-                  <td className="p-3 hidden md:table-cell">
-                    {e.code_pointage ? (
-                      <span className="font-mono bg-gray-100 text-gray-700 rounded px-2 py-0.5 text-xs font-bold">
-                        {e.code_pointage}
-                      </span>
-                    ) : (
-                      <span className="text-gray-300">—</span>
-                    )}
-                  </td>
-                  <td className="p-3">{statutBadge(e)}</td>
-                  <td className="p-3 text-right">
-                    {!e.user_id && e.email ? (
-                      <BoutonInviter enseignantId={e.id} establishmentId={etablissement.id} />
-                    ) : !e.email ? (
-                      <span className="text-xs text-gray-300">Pas d&apos;email</span>
-                    ) : null}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      <p className="mt-4 text-xs text-gray-400">
-        L&apos;enseignant recevra un email avec un lien pour créer son mot de passe.
-        Le kiosque PIN continue de fonctionner indépendamment.
-      </p>
+  return <div className="mx-auto max-w-7xl">
+    <SchoolAdminPageHeader eyebrow="Équipe pédagogique" title="Enseignants" description="Gérez les profils pédagogiques, les codes de pointage et les affectations aux matières. Les contrats et documents restent dans l’espace Personnel." actions={<Link href={withEstablishmentQuery("/pro/enseignants/nouveau", etablissement.id)} className="inline-flex min-h-10 items-center gap-2 rounded-[var(--school-admin-radius-control)] bg-[var(--school-admin-primary)] px-4 text-sm font-semibold text-white hover:bg-[var(--school-admin-primary-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)] focus-visible:ring-offset-2"><Plus size={16} aria-hidden="true" />Nouvel enseignant</Link>} />
+    <div className="mb-6 grid gap-4 sm:grid-cols-3"><SchoolAdminStatCard label="Enseignants" value={enseignants.length} icon={<GraduationCap size={19} />} /><SchoolAdminStatCard label="Comptes actifs" value={activeAccounts} icon={<UserCheck size={19} />} /><SchoolAdminStatCard label="Codes de pointage" value={withPin} icon={<KeyRound size={19} />} tone="neutral" /></div>
+    <SchoolAdminAlert tone="info" title="Invitations temporairement indisponibles">La création des fiches et les codes de pointage restent disponibles. L’envoi d’invitations de compte demeure fermé conformément au dispositif de sécurité actuel.</SchoolAdminAlert>
+    <div className="mt-6">
+      {!enseignants.length ? <SchoolAdminEmptyState title="Aucun enseignant" description="Créez un premier profil pédagogique pour commencer les affectations." icon={<GraduationCap size={24} />} action={<Link href={withEstablishmentQuery("/pro/enseignants/nouveau", etablissement.id)} className="font-semibold text-[var(--school-admin-primary)] underline-offset-4 hover:underline">Créer un enseignant</Link>} /> : <>
+        <SchoolAdminResponsiveTable label="Liste des enseignants" className="hidden md:block"><table className="w-full min-w-[720px] border-collapse text-left text-sm"><thead className="bg-[var(--school-admin-surface-muted)] text-xs uppercase tracking-wide text-[var(--school-admin-text-muted)]"><tr><th scope="col" className="px-5 py-3">Enseignant</th><th scope="col" className="px-5 py-3">Email</th><th scope="col" className="px-5 py-3">Code pointage</th><th scope="col" className="px-5 py-3">Compte</th><th scope="col" className="px-5 py-3">Invitation</th></tr></thead><tbody className="divide-y divide-[var(--school-admin-border)]">{enseignants.map((teacher) => <tr key={teacher.id} className="hover:bg-[var(--school-admin-surface-muted)]"><th scope="row" className="px-5 py-4 font-semibold text-[var(--school-admin-text)]">{teacher.prenom} {teacher.nom}</th><td className="px-5 py-4 text-[var(--school-admin-text-muted)]">{teacher.email ?? "Non renseigné"}</td><td className="px-5 py-4">{teacher.code_pointage ? <code className="rounded bg-[var(--school-admin-surface-muted)] px-2 py-1 text-xs font-bold">{teacher.code_pointage}</code> : <span className="text-[var(--school-admin-text-soft)]">Indisponible</span>}</td><td className="px-5 py-4">{accountStatus(teacher)}</td><td className="px-5 py-4"><SchoolAdminStatusBadge tone="neutral" label={teacher.user_id ? "Non requise" : "Indisponible"} /></td></tr>)}</tbody></table></SchoolAdminResponsiveTable>
+        <div className="space-y-3 md:hidden" aria-label="Liste des enseignants">{enseignants.map((teacher) => <article key={teacher.id} className="rounded-[var(--school-admin-radius-card)] border border-[var(--school-admin-border)] bg-[var(--school-admin-surface)] p-4 shadow-[var(--school-admin-shadow-sm)]"><div className="flex items-start justify-between gap-3"><div><h2 className="text-sm font-bold text-[var(--school-admin-text)]">{teacher.prenom} {teacher.nom}</h2><p className="mt-1 text-xs text-[var(--school-admin-text-muted)]">{teacher.email ?? "Email non renseigné"}</p></div>{accountStatus(teacher)}</div><dl className="mt-4 grid grid-cols-2 gap-3 border-t border-[var(--school-admin-border)] pt-3 text-xs"><div><dt className="text-[var(--school-admin-text-soft)]">Code pointage</dt><dd className="mt-1 font-mono font-bold text-[var(--school-admin-text)]">{teacher.code_pointage ?? "Indisponible"}</dd></div><div><dt className="text-[var(--school-admin-text-soft)]">Invitation</dt><dd className="mt-1 font-semibold text-[var(--school-admin-text-muted)]">{teacher.user_id ? "Non requise" : "Indisponible"}</dd></div></dl></article>)}</div>
+      </>}
     </div>
-  );
+  </div>;
 }

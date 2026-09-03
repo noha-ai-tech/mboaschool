@@ -1,100 +1,24 @@
-import { redirect, notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Download } from "lucide-react";
+import { ArrowLeft, Clock3, Download, WalletCards } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 import { PaieValidation } from "@/components/pro/PaieValidation";
+import { SchoolAdminPageHeader } from "@/components/school-admin/ui/PageHeader";
+import { SchoolAdminStatCard } from "@/components/school-admin/ui/StatCard";
+import { SchoolAdminSectionCard } from "@/components/school-admin/ui/Card";
+import { SchoolAdminStatusBadge } from "@/components/school-admin/ui/Badge";
+import { SchoolAdminEmptyState } from "@/components/school-admin/ui/Feedback";
 
 export default async function BulletinDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ school?: string }> }) {
-  const { id } = await params;
-  const { school } = await searchParams;
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/auth/connexion");
-
-  const etablissement = await requireActiveEstablishment(supabase, user.id, school, `/pro/paie/${id}`);
-
-  const { data: bulletin } = await supabase
-    .from("bulletins_paie")
-    .select("*, staff_members(first_name, last_name)")
-    .eq("id", id)
-    .eq("etablissement_id", etablissement.id)
-    .single();
-  if (!bulletin) notFound();
-
-  const { data: lignes } = await supabase
-    .from("bulletin_paie_lignes")
-    .select("id, libelle, montant, signe")
-    .eq("bulletin_id", id);
-
-  const { data: historique } = await supabase
-    .from("bulletin_paie_historique")
-    .select("statut_nouveau, change_le")
-    .eq("bulletin_id", id)
-    .order("change_le", { ascending: true });
-
-  const staffMember = bulletin.staff_members as { first_name: string; last_name: string } | null;
-
-  return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
-      <Link href={withEstablishmentQuery("/pro/paie", etablissement.id)} className="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors mb-6">
-        <ArrowLeft size={15} /> Paie
-      </Link>
-
-      <div className="bg-white border border-[#ebebeb] rounded-2xl p-6 mb-5">
-        <div className="flex items-start justify-between mb-4">
-          <div>
-            <h1 className="text-xl font-black text-gray-900">
-              {staffMember?.first_name} {staffMember?.last_name}
-            </h1>
-            <p className="text-sm text-gray-500">
-              {new Date(bulletin.periode_debut).toLocaleDateString("fr-FR")} – {new Date(bulletin.periode_fin).toLocaleDateString("fr-FR")}
-            </p>
-          </div>
-          <a href={`/api/payroll/${id}/export`} className="flex items-center gap-2 border border-gray-200 text-gray-600 px-3 py-2 rounded-xl text-xs font-semibold hover:border-gray-400 transition-colors">
-            <Download size={13} /> Export CSV
-          </a>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4 text-sm pt-4 border-t border-gray-100 mb-4">
-          <div><p className="text-xs text-gray-400">Heures prévues</p><p className="font-semibold">{Number(bulletin.heures_prevues).toFixed(1)}h</p></div>
-          <div><p className="text-xs text-gray-400">Heures effectuées</p><p className="font-semibold">{Number(bulletin.heures_effectuees).toFixed(1)}h</p></div>
-        </div>
-
-        <div className="space-y-2 text-sm pt-4 border-t border-gray-100">
-          {(lignes ?? []).map((l) => (
-            <div key={l.id} className="flex items-center justify-between">
-              <span className="text-gray-500">{l.libelle}</span>
-              <span className={`font-mono font-semibold ${l.signe === "-" ? "text-red-600" : "text-gray-900"}`}>
-                {l.signe}{Number(l.montant).toLocaleString("fr-FR")} FCFA
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <div className="flex items-center justify-between pt-4 mt-4 border-t border-gray-200">
-          <span className="font-black text-gray-900">Salaire net</span>
-          <span className="font-mono font-black text-lg text-gray-900">{Number(bulletin.salaire_net).toLocaleString("fr-FR")} FCFA</span>
-        </div>
-      </div>
-
-      <div className="bg-white border border-[#ebebeb] rounded-2xl p-6 mb-5">
-        <p className="text-xs font-bold tracking-widest uppercase text-gray-400 mb-4">Validation</p>
-        <PaieValidation bulletinId={id} statut={bulletin.statut} establishmentId={etablissement.id} />
-      </div>
-
-      <div className="bg-white border border-[#ebebeb] rounded-2xl p-6">
-        <p className="text-xs font-bold tracking-widest uppercase text-gray-400 mb-4">Historique</p>
-        <div className="space-y-2 text-sm">
-          {(historique ?? []).map((h, i) => (
-            <div key={i} className="flex items-center justify-between">
-              <span className="text-gray-600">{h.statut_nouveau}</span>
-              <span className="text-xs text-gray-400">{new Date(h.change_le).toLocaleString("fr-FR")}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+  const { id } = await params; const { school } = await searchParams; const supabase = await createClient(); const { data: { user } } = await supabase.auth.getUser(); if (!user) redirect("/auth/connexion"); const etablissement = await requireActiveEstablishment(supabase, user.id, school, `/pro/paie/${id}`);
+  const { data: bulletin } = await supabase.from("bulletins_paie").select("*, staff_members(first_name, last_name)").eq("id", id).eq("etablissement_id", etablissement.id).single(); if (!bulletin) notFound();
+  const { data: lignes } = await supabase.from("bulletin_paie_lignes").select("id, libelle, montant, signe").eq("bulletin_id", id);
+  const { data: historique } = await supabase.from("bulletin_paie_historique").select("statut_nouveau, change_le").eq("bulletin_id", id).order("change_le", { ascending: true });
+  const staff = bulletin.staff_members as { first_name: string; last_name: string } | null; const person = `${staff?.first_name ?? ""} ${staff?.last_name ?? ""}`.trim() || "Personnel non renseigné"; const money = (value: unknown) => `${Number(value).toLocaleString("fr-FR")} FCFA`;
+  return <div className="mx-auto max-w-6xl"><Link href={withEstablishmentQuery("/pro/paie", etablissement.id)} className="mb-5 inline-flex min-h-10 items-center gap-2 rounded-lg text-sm font-semibold text-[var(--school-admin-text-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)]"><ArrowLeft size={16} aria-hidden="true" />Retour à la paie</Link><SchoolAdminPageHeader eyebrow="Bulletin de paie" title={person} description={`${new Date(bulletin.periode_debut).toLocaleDateString("fr-FR")} – ${new Date(bulletin.periode_fin).toLocaleDateString("fr-FR")}`} actions={<a href={`/api/payroll/${id}/export`} className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-[var(--school-admin-border-strong)] px-4 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)]"><Download size={16} aria-hidden="true" />Exporter en CSV</a>} />
+    <div className="mb-6 grid gap-4 sm:grid-cols-3"><SchoolAdminStatCard label="Heures prévues" value={`${Number(bulletin.heures_prevues).toFixed(1)} h`} icon={<Clock3 size={19} />} /><SchoolAdminStatCard label="Heures effectuées" value={`${Number(bulletin.heures_effectuees).toFixed(1)} h`} icon={<Clock3 size={19} />} tone="neutral" /><SchoolAdminStatCard label="Salaire net" value={money(bulletin.salaire_net)} icon={<WalletCards size={19} />} tone="neutral" /></div>
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)]"><div className="space-y-6"><SchoolAdminSectionCard title="Lignes du bulletin" description="Montants positifs et négatifs issus du calcul existant.">{lignes?.length ? <div className="divide-y divide-[var(--school-admin-border)]">{lignes.map((line) => <div key={line.id} className="flex items-center justify-between gap-4 py-3 text-sm"><span>{line.libelle}</span><span className="font-mono font-bold"><span className="sr-only">{line.signe === "-" ? "Déduction" : "Ajout"} </span>{line.signe}{money(line.montant)}</span></div>)}</div> : <SchoolAdminEmptyState title="Aucune ligne disponible" description="Aucun détail de calcul n’est associé à ce bulletin." />}<div className="mt-4 flex items-center justify-between border-t-2 border-[var(--school-admin-border-strong)] pt-4"><strong>Salaire net</strong><strong className="font-mono text-lg">{money(bulletin.salaire_net)}</strong></div></SchoolAdminSectionCard><SchoolAdminSectionCard title="Historique" description="Étapes enregistrées pour ce bulletin.">{historique?.length ? <ol className="space-y-3">{historique.map((entry, index) => <li key={index} className="flex flex-col gap-1 rounded-lg bg-[var(--school-admin-surface-muted)] p-3 text-sm sm:flex-row sm:items-center sm:justify-between"><SchoolAdminStatusBadge label={entry.statut_nouveau} /><time className="text-xs text-[var(--school-admin-text-muted)]">{new Date(entry.change_le).toLocaleString("fr-FR")}</time></li>)}</ol> : <SchoolAdminEmptyState title="Aucun historique" description="Aucune transition n’est enregistrée." />}</SchoolAdminSectionCard></div><SchoolAdminSectionCard title="Validation" description="Action financière sensible soumise aux contrôles existants."><PaieValidation bulletinId={id} statut={bulletin.statut} establishmentId={etablissement.id} /></SchoolAdminSectionCard></div>
+  </div>;
 }

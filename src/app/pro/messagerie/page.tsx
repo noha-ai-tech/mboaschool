@@ -1,8 +1,12 @@
 import { redirect } from "next/navigation";
-import { Globe, BookOpen, CheckCircle2 } from "lucide-react";
+import { Globe, BookOpen } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 import { FormulaireMessage } from "@/components/pro/FormulaireMessage";
+import { SchoolAdminPageHeader } from "@/components/school-admin/ui/PageHeader";
+import { SchoolAdminSectionCard } from "@/components/school-admin/ui/Card";
+import { SchoolAdminStatusBadge } from "@/components/school-admin/ui/Badge";
+import { SchoolAdminAlert, SchoolAdminEmptyState } from "@/components/school-admin/ui/Feedback";
 
 export default async function MessageriePage({
   searchParams,
@@ -44,24 +48,16 @@ export default async function MessageriePage({
     .limit(50);
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Messagerie interne</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Envoyez des messages à tout l&apos;établissement ou à un département disciplinaire.
-        </p>
-      </div>
+    <div className="mx-auto max-w-5xl">
+      <SchoolAdminPageHeader eyebrow="Communications" title="Messagerie interne" description="Envoyez un message à l’établissement ou à un département disciplinaire existant." />
 
       {/* Confirmation d'envoi */}
       {params.sent === "1" && (
-        <div className="mb-6 flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-200 p-4 text-sm text-emerald-800">
-          <CheckCircle2 size={18} className="shrink-0 text-emerald-600" />
-          <span className="font-medium">Message envoyé avec succès.</span>
-        </div>
+        <div className="mb-6"><SchoolAdminAlert tone="success">Message envoyé avec succès.</SchoolAdminAlert></div>
       )}
 
       {/* Formulaire d'envoi */}
-      <FormulaireMessage departements={departementsUniques} establishmentId={etablissement.id} />
+      <SchoolAdminSectionCard title="Nouveau message" description="Aucun email, SMS, réponse ou pièce jointe n’est envoyé."><FormulaireMessage departements={departementsUniques} establishmentId={etablissement.id} /></SchoolAdminSectionCard>
 
       {/* Liste des messages envoyés */}
       <div className="mt-10">
@@ -70,9 +66,7 @@ export default async function MessageriePage({
         </h2>
 
         {!messages?.length ? (
-          <div className="rounded-xl border border-gray-200 bg-white p-10 text-center text-sm text-gray-400">
-            Aucun message envoyé pour l&apos;instant.
-          </div>
+          <SchoolAdminEmptyState title="Aucun message envoyé" description="L’historique des messages internes apparaîtra ici." />
         ) : (
           <div className="flex flex-col gap-3">
             {messages.map((m) => (
@@ -82,17 +76,7 @@ export default async function MessageriePage({
               >
                 <div className="flex items-start gap-3">
                   {/* Badge canal */}
-                  {m.canal === "global" ? (
-                    <span className="mt-0.5 inline-flex items-center gap-1.5 rounded-full bg-blue-100 text-blue-700 px-2.5 py-0.5 text-xs font-bold shrink-0">
-                      <Globe size={10} />
-                      Global
-                    </span>
-                  ) : (
-                    <span className="mt-0.5 inline-flex items-center gap-1.5 rounded-full bg-violet-100 text-violet-700 px-2.5 py-0.5 text-xs font-bold shrink-0 max-w-[200px] truncate">
-                      <BookOpen size={10} className="shrink-0" />
-                      {m.departement_disciplinaire}
-                    </span>
-                  )}
+                  <SchoolAdminStatusBadge tone={m.canal === "global" ? "info" : "neutral"} label={m.canal === "global" ? "Établissement" : (m.departement_disciplinaire || "Département indisponible")} icon={m.canal === "global" ? <Globe size={10} /> : <BookOpen size={10} />} />
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-baseline justify-between gap-2 mb-1">

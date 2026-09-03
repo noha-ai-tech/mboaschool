@@ -17,6 +17,65 @@ body {
   font-family: var(--font-manrope), sans-serif;
 }
 
+/* Écoles237 — fondations réservées à l'administration scolaire. */
+.school-admin-theme {
+  --school-admin-primary: #075f3b;
+  --school-admin-primary-strong: #064a32;
+  --school-admin-primary-soft: #e9f6ef;
+  --school-admin-primary-soft-hover: #dcefe5;
+  --school-admin-background: #faf8f3;
+  --school-admin-surface: #ffffff;
+  --school-admin-surface-muted: #f4f3ef;
+  --school-admin-border: #e7e5df;
+  --school-admin-border-strong: #d5d2ca;
+  --school-admin-text: #17211c;
+  --school-admin-text-muted: #5f6b64;
+  --school-admin-text-soft: #7b857f;
+  --school-admin-focus: #0b7a4b;
+  --school-admin-focus-soft: rgb(11 122 75 / 18%);
+  --school-admin-warning: #f4c542;
+  --school-admin-warning-soft: #fff7d6;
+  --school-admin-warning-border: #efd777;
+  --school-admin-warning-text: #755500;
+  --school-admin-success-soft: #e6f6ed;
+  --school-admin-success-border: #a7dfbd;
+  --school-admin-success-text: #075f3b;
+  --school-admin-danger: #c73b3b;
+  --school-admin-danger-strong: #a92f2f;
+  --school-admin-danger-soft: #fff0f0;
+  --school-admin-danger-border: #efb7b7;
+  --school-admin-info: #245b9b;
+  --school-admin-info-soft: #eef5ff;
+  --school-admin-info-border: #b8d2f1;
+  --school-admin-radius-control: 10px;
+  --school-admin-radius-card: 14px;
+  --school-admin-shadow-sm: 0 2px 10px rgb(23 33 28 / 6%);
+  --school-admin-shadow-md: 0 10px 28px rgb(23 33 28 / 10%);
+  --school-admin-shadow-lg: 0 24px 64px rgb(10 32 22 / 20%);
+  background: var(--school-admin-background);
+  color: var(--school-admin-text);
+}
+
+.school-admin-skeleton {
+  background-image: linear-gradient(
+    90deg,
+    var(--school-admin-surface-muted) 25%,
+    #e8e6df 37%,
+    var(--school-admin-surface-muted) 63%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+.school-admin-skeleton-inverse {
+  background-image: linear-gradient(
+    90deg,
+    rgb(255 255 255 / 6%) 25%,
+    rgb(255 255 255 / 14%) 37%,
+    rgb(255 255 255 / 6%) 63%
+  );
+}
+
 /* Design System V2 — docs/03_DESIGN_SYSTEM/04_COMPONENTS.md §Skeleton */
 @keyframes shimmer {
   0% { background-position: -200% 0; }
@@ -32,6 +91,15 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .skeleton-shimmer {
     animation: none;
+  }
+
+  .school-admin-theme *,
+  .school-admin-theme *::before,
+  .school-admin-theme *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

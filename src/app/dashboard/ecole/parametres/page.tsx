@@ -1,251 +1,189 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import { ExternalLink, Crown, CreditCard, UserCog, Users, ShieldCheck } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useSchool } from "@/lib/useSchool";
-import { Save, CheckCircle2, ExternalLink, UserCog, ShieldCheck, Users, Crown, CreditCard } from "lucide-react";
-import Link from "next/link";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
+import { SchoolAdminPageHeader } from "@/components/school-admin/ui/PageHeader";
+import { SchoolAdminSectionCard } from "@/components/school-admin/ui/Card";
+import { SchoolAdminButton } from "@/components/school-admin/ui/Button";
+import { SchoolAdminStatusBadge } from "@/components/school-admin/ui/Badge";
+import { SchoolAdminAlert, SchoolAdminLoadingState } from "@/components/school-admin/ui/Feedback";
+import { SchoolAdminFormField, SchoolAdminInput, SchoolAdminSelect } from "@/components/school-admin/ui/FormControls";
 
 const CATEGORIES = ["garderie", "primaire", "secondaire", "superieur", "autres"];
 
+// RELEASE-CONSOLIDATION-02 §5D — SECURITY CRITICAL.
+//
+// PUBLIC-SITE-03 — phone/email/website/address/city/description are NOT
+// part of this form. They are governed exclusively by the school-page
+// Draft/Publish CMS (school_page_drafts -> publish_school_page(),
+// payload.contact + payload.presentation) and protected by a DB trigger
+// (migration 0035) against direct writes on `establishments`: a single
+// UPDATE bundling any of those 6 fields in with this page's other fields
+// would fail entirely (trigger raises 42501), taking name/neighborhood/
+// whatsapp/main_category down with it. Editing those 6 fields happens in
+// the CMS editor (/dashboard/ecole/etablissement) only — linked below.
+//
+// acc7175 (feat(school-admin): unify management interface) restyled this
+// page with the new SchoolAdmin UI shell but reintroduced all 6 protected
+// fields into the save payload. That version is schema-incompatible with
+// 0035+ (it only appeared to work because origin/integration/complete-
+// school-platform, where it was authored, had not yet incorporated 0035).
+// This resolution keeps acc7175's shell/UX (dirty-state tracking, the
+// unsaved-changes warning, shared components) and guyskull's trimmed,
+// trigger-safe field set.
+const EMPTY_FORM = { name: "", neighborhood: "", whatsapp: "", main_category: "" };
+type SettingsForm = typeof EMPTY_FORM;
+
 export default function ParametresPage() {
-  const { school, loading: schoolLoading } = useSchool();
+  const { school, loading } = useSchool();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  // PUBLIC-SITE-03 — phone/email/website/address/city/description removed
-  // from this form. They are now governed exclusively by the school-page
-  // Draft/Publish CMS (school_page_drafts -> publish_school_page(),
-  // payload.contact + payload.presentation) and protected by a DB trigger
-  // (0035) against direct writes — this page's old single-statement
-  // UPDATE bundling every field together would now fail entirely (trigger
-  // raises 42501) the moment any one of those 6 fields is included, taking
-  // name/neighborhood/whatsapp/main_category down with it. Editing those 6
-  // fields now happens in the CMS editor (/dashboard/ecole/etablissement),
-  // linked below.
-  const [form, setForm] = useState({
-    name: "",
-    neighborhood: "",
-    whatsapp: "",
-    main_category: "",
-  });
+  const [error, setError] = useState<string | null>(null);
+  const [form, setForm] = useState<SettingsForm>(EMPTY_FORM);
+  const [initial, setInitial] = useState<SettingsForm>(EMPTY_FORM);
 
   useEffect(() => {
     if (!school) return;
-    setForm({
-      name:          school.name ?? "",
-      neighborhood:  school.neighborhood ?? "",
-      whatsapp:      school.whatsapp ?? "",
+    const value = {
+      name: school.name ?? "",
+      neighborhood: school.neighborhood ?? "",
+      whatsapp: school.whatsapp ?? "",
       main_category: school.main_category ?? "",
-    });
+    };
+    setForm(value);
+    setInitial(value);
   }, [school]);
 
-  async function save(e: { preventDefault(): void }) {
-    e.preventDefault();
-    if (!school) return;
+  const dirty = JSON.stringify(form) !== JSON.stringify(initial);
+
+  useEffect(() => {
+    const warn = (event: BeforeUnloadEvent) => {
+      if (!dirty || saving) return;
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [dirty, saving]);
+
+  function field(key: keyof SettingsForm, value: string) {
+    setForm((current) => ({ ...current, [key]: value }));
+    setSaved(false);
+  }
+
+  async function save(event: React.FormEvent) {
+    event.preventDefault();
+    if (!school || saving) return;
     setSaving(true);
-    await supabase
-      .from("establishments")
-      .update(form)
-      .eq("id", school.id);
+    setSaved(false);
+    setError(null);
+    const result = await supabase.from("establishments").update(form).eq("id", school.id);
+    if (result.error) {
+      setError("La sauvegarde a échoué. Vérifiez les informations puis réessayez.");
+    } else {
+      setInitial(form);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    }
     setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
   }
 
-  function field(key: keyof typeof form, value: string) {
-    setForm((f) => ({ ...f, [key]: value }));
-  }
-
-  if (schoolLoading) return <Skeleton />;
+  if (loading) return <SchoolAdminLoadingState label="Chargement des paramètres de l'établissement" />;
   if (!school) return null;
 
+  const publicHref = `/ecole/${school.id}`;
+  const editorHref = withEstablishmentQuery("/dashboard/ecole/etablissement", school.id);
+  const paymentsHref = withEstablishmentQuery("/dashboard/ecole/paiements", school.id);
+
   return (
-    <div className="max-w-2xl">
-      {/* Header */}
-      <div className="flex items-start justify-between mb-8">
-        <div>
-          <p className="text-xs font-semibold tracking-widest uppercase text-slate-400 mb-1">Dashboard</p>
-          <h1 className="text-3xl font-black tracking-tight text-[#0a0a0a]">Paramètres</h1>
-        </div>
-        <Link
-          href={`/ecole/${school.id}`}
-          target="_blank"
-          className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 border border-[#ddd] px-3 py-2 rounded-xl hover:border-[#aaa] transition-colors"
-        >
-          <ExternalLink size={12} />
-          Voir la fiche
-        </Link>
-      </div>
+    <div className="mx-auto max-w-4xl">
+      <SchoolAdminPageHeader
+        eyebrow="Configuration"
+        title="Paramètres de l'établissement"
+        description="Mettez à jour les informations générales de l'établissement."
+        context={
+          dirty
+            ? <SchoolAdminStatusBadge label="Modifications non enregistrées" tone="warning" />
+            : <SchoolAdminStatusBadge label="Informations à jour" tone="success" />
+        }
+        actions={
+          <Link href={publicHref} target="_blank" rel="noreferrer">
+            <SchoolAdminButton variant="outline" leadingIcon={<ExternalLink size={16} aria-hidden="true" />}>
+              Voir la fiche publique
+            </SchoolAdminButton>
+          </Link>
+        }
+      />
+
+      {error ? <div className="mb-4"><SchoolAdminAlert tone="danger">{error}</SchoolAdminAlert></div> : null}
+      {saved ? <div className="mb-4"><SchoolAdminAlert tone="success">Modifications sauvegardées.</SchoolAdminAlert></div> : null}
 
       <form onSubmit={save} className="space-y-5">
-
-        {/* Infos principales */}
-        <div className="bg-white border border-[#ebebeb] rounded-2xl p-6">
-          <h2 className="font-bold text-sm mb-5">Informations principales</h2>
-          <div className="space-y-4">
-            <Field label="Nom de l'établissement" required>
-              <input
-                required
-                value={form.name}
-                onChange={(e) => field("name", e.target.value)}
-              />
-            </Field>
-
-            <div className="grid sm:grid-cols-2 gap-4">
-              <Field label="Catégorie">
-                <select
-                  value={form.main_category}
-                  onChange={(e) => field("main_category", e.target.value)}
-                >
-                  <option value="">— Choisir —</option>
-                  {CATEGORIES.map((c) => (
-                    <option key={c} value={c}>
-                      {c.charAt(0).toUpperCase() + c.slice(1)}
-                    </option>
-                  ))}
-                </select>
-              </Field>
-
-              <Field label="Quartier">
-                <input
-                  value={form.neighborhood}
-                  onChange={(e) => field("neighborhood", e.target.value)}
-                  placeholder="Bastos, Bonamoussadi…"
-                />
-              </Field>
-            </div>
+        <SchoolAdminSectionCard title="Informations générales" description="Identité et catégorie de l'établissement.">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <SchoolAdminFormField id="school-name" label="Nom de l'établissement" required>
+              <SchoolAdminInput value={form.name} onChange={(e) => field("name", e.target.value)} />
+            </SchoolAdminFormField>
+            <SchoolAdminFormField id="school-category" label="Catégorie">
+              <SchoolAdminSelect value={form.main_category} onChange={(e) => field("main_category", e.target.value)}>
+                <option value="">— Choisir —</option>
+                {CATEGORIES.map((category) => (
+                  <option key={category} value={category}>{category.charAt(0).toUpperCase() + category.slice(1)}</option>
+                ))}
+              </SchoolAdminSelect>
+            </SchoolAdminFormField>
+            <SchoolAdminFormField id="school-neighborhood" label="Quartier">
+              <SchoolAdminInput value={form.neighborhood} onChange={(e) => field("neighborhood", e.target.value)} placeholder="Bastos, Bonamoussadi…" />
+            </SchoolAdminFormField>
+            <SchoolAdminFormField id="school-whatsapp" label="WhatsApp">
+              <SchoolAdminInput type="tel" value={form.whatsapp} onChange={(e) => field("whatsapp", e.target.value)} placeholder="+237 6XX XXX XXX" />
+            </SchoolAdminFormField>
           </div>
-        </div>
+        </SchoolAdminSectionCard>
 
-        {/* Contact */}
-        <div className="bg-white border border-[#ebebeb] rounded-2xl p-6">
-          <h2 className="font-bold text-sm mb-5">Contact</h2>
-          <div className="grid sm:grid-cols-2 gap-4">
-            <Field label="WhatsApp">
-              <input
-                value={form.whatsapp}
-                onChange={(e) => field("whatsapp", e.target.value)}
-                placeholder="+237 6XX XXX XXX"
-              />
-            </Field>
-          </div>
-          <p className="text-xs text-slate-400 mt-4">
-            Téléphone, email, site web, adresse, ville et description se gèrent désormais depuis{" "}
-            <Link href="/dashboard/ecole/etablissement" className="font-semibold text-slate-600 underline">
-              l&apos;éditeur de la page école
-            </Link>{" "}
-            (brouillon → aperçu → publication).
-          </p>
-        </div>
+        <SchoolAdminAlert tone="info" title="Téléphone, email, site web, adresse, ville et présentation">
+          Ces informations se gèrent désormais depuis{" "}
+          <Link href={editorHref} className="font-semibold underline">l&apos;éditeur de la page école</Link>{" "}
+          (brouillon → aperçu → publication), et non depuis cette page.
+        </SchoolAdminAlert>
 
-        {/* Submit */}
-        <div className="flex items-center gap-3">
-          <button
-            type="submit"
-            disabled={saving}
-            className="flex items-center gap-2 bg-[#0a0a0a] text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors disabled:opacity-50"
-          >
-            {saving
-              ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              : <Save size={15} />}
-            Enregistrer
-          </button>
-
-          {saved && (
-            <span className="flex items-center gap-1.5 text-sm text-emerald-700 font-semibold">
-              <CheckCircle2 size={15} />
-              Modifications sauvegardées
-            </span>
-          )}
+        <div className="flex flex-col-reverse items-stretch gap-3 sm:flex-row sm:items-center sm:justify-end">
+          <span className="text-sm text-[var(--school-admin-text-muted)]" role="status">
+            {dirty ? "Des modifications restent à enregistrer." : "Aucune modification en attente."}
+          </span>
+          <SchoolAdminButton type="submit" loading={saving} disabled={!dirty}>Enregistrer les paramètres</SchoolAdminButton>
         </div>
       </form>
 
-      {/* Sections additionnelles (Mission 03, Phase 8) — structure prévue,
-          fonctionnalités non développées tant qu'elles n'existent pas
-          réellement (multi-utilisateur, sécurité avancée, facturation). */}
-      <div className="mt-10 pt-8 border-t border-[#ebebeb] space-y-4">
-        <p className="text-xs font-bold tracking-widest uppercase text-slate-400">Autres paramètres</p>
-
-        <div className="bg-white border border-[#ebebeb] rounded-2xl p-6 flex items-start justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <Crown size={18} className="text-emerald-600 mt-0.5 shrink-0" />
-            <div>
-              <p className="font-bold text-sm text-[#0a0a0a]">Abonnement</p>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Forfait actuel : <strong className="text-slate-600">{school.forfait === "pro" ? "Pro" : school.forfait === "gere" ? "Géré" : "Gratuit"}</strong>
-              </p>
-            </div>
+      <div className="mt-8 space-y-4">
+        <SchoolAdminSectionCard title="Forfait actuel" description="Le forfait est affiché à titre informatif et ne peut pas être modifié ici.">
+          <div className="flex items-center gap-3">
+            <Crown size={20} className="text-[var(--school-admin-primary)]" aria-hidden="true" />
+            <SchoolAdminStatusBadge label={school.forfait === "pro" ? "Pro" : school.forfait === "gere" ? "Géré" : "Gratuit"} tone="info" />
           </div>
-        </div>
-
-        <Link
-          href="/dashboard/ecole/paiements"
-          className="flex items-start gap-3 bg-white border border-[#ebebeb] rounded-2xl p-6 hover:border-[#ccc] transition-colors"
-        >
-          <CreditCard size={18} className="text-slate-400 mt-0.5 shrink-0" />
-          <div>
-            <p className="font-bold text-sm text-[#0a0a0a]">Paiements</p>
-            <p className="text-xs text-slate-400 mt-0.5">Suivi des règlements — bientôt disponible.</p>
-          </div>
+        </SchoolAdminSectionCard>
+        <Link href={paymentsHref} className="block rounded-[var(--school-admin-radius-card)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)]">
+          <SchoolAdminSectionCard title="Paiements" description="Suivi des règlements — bientôt disponible.">
+            <CreditCard size={20} aria-hidden="true" />
+          </SchoolAdminSectionCard>
         </Link>
-
-        <div className="bg-white border border-dashed border-slate-200 rounded-2xl p-6 flex items-start gap-3">
-          <UserCog size={18} className="text-slate-300 mt-0.5 shrink-0" />
-          <div>
-            <p className="font-bold text-sm text-slate-400">Responsables</p>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Désigner d&apos;autres responsables pour cet établissement — bientôt disponible.
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-white border border-dashed border-slate-200 rounded-2xl p-6 flex items-start gap-3">
-          <Users size={18} className="text-slate-300 mt-0.5 shrink-0" />
-          <div>
-            <p className="font-bold text-sm text-slate-400">Utilisateurs</p>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Gestion des accès multi-utilisateurs — bientôt disponible. Un seul Administrateur Principal par
-              établissement pour l&apos;instant.
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-white border border-dashed border-slate-200 rounded-2xl p-6 flex items-start gap-3">
-          <ShieldCheck size={18} className="text-slate-300 mt-0.5 shrink-0" />
-          <div>
-            <p className="font-bold text-sm text-slate-400">Sécurité</p>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Changement de mot de passe et double authentification — bientôt disponible.
-            </p>
-          </div>
-        </div>
+        {[
+          { icon: UserCog, title: "Responsables", text: "Désigner d'autres responsables — bientôt disponible." },
+          { icon: Users, title: "Utilisateurs", text: "Gestion des accès multi-utilisateurs — bientôt disponible." },
+          { icon: ShieldCheck, title: "Sécurité", text: "Paramètres de sécurité avancés — bientôt disponible." },
+        ].map(({ icon: Icon, title, text }) => (
+          <SchoolAdminSectionCard key={title} title={title} description={text} className="opacity-80">
+            <div className="flex items-center gap-3 text-[var(--school-admin-text-muted)]">
+              <Icon size={20} aria-hidden="true" />
+              <SchoolAdminStatusBadge label="Indisponible" />
+            </div>
+          </SchoolAdminSectionCard>
+        ))}
       </div>
-    </div>
-  );
-}
-
-function Field({ label, children, required }: { label: string; children: React.ReactNode; required?: boolean }) {
-  return (
-    <div>
-      <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
-        {label}{required && <span className="text-red-400 ml-0.5">*</span>}
-      </label>
-      <div className="[&_input]:w-full [&_input]:border [&_input]:border-[#ddd] [&_input]:rounded-xl [&_input]:px-4 [&_input]:py-2.5 [&_input]:text-sm [&_input]:bg-white [&_input]:placeholder-slate-400 [&_input]:focus:outline-none [&_input]:focus:border-[#0a0a0a] [&_input]:transition-colors [&_select]:w-full [&_select]:border [&_select]:border-[#ddd] [&_select]:rounded-xl [&_select]:px-4 [&_select]:py-2.5 [&_select]:text-sm [&_select]:bg-white [&_select]:focus:outline-none [&_select]:focus:border-[#0a0a0a] [&_select]:transition-colors [&_textarea]:w-full [&_textarea]:border [&_textarea]:border-[#ddd] [&_textarea]:rounded-xl [&_textarea]:px-4 [&_textarea]:py-2.5 [&_textarea]:text-sm [&_textarea]:bg-white [&_textarea]:placeholder-slate-400 [&_textarea]:focus:outline-none [&_textarea]:focus:border-[#0a0a0a] [&_textarea]:transition-colors [&_textarea]:resize-none">
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function Skeleton() {
-  return (
-    <div className="max-w-2xl space-y-5 animate-pulse">
-      <div className="space-y-2">
-        <div className="h-3 w-20 bg-slate-200 rounded" />
-        <div className="h-8 w-36 bg-slate-200 rounded" />
-      </div>
-      <div className="bg-white border border-[#ebebeb] rounded-2xl h-64" />
-      <div className="bg-white border border-[#ebebeb] rounded-2xl h-40" />
     </div>
   );
 }

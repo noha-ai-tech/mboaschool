@@ -20,18 +20,17 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSchool } from "@/lib/useSchool";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
+import { SchoolAdminLoadingState } from "@/components/school-admin/ui/Feedback";
 
 export default function GaleriePageRedirect() {
   const router = useRouter();
+  const { school, loading } = useSchool();
 
   useEffect(() => {
-    router.replace("/dashboard/ecole/etablissement");
-  }, [router]);
+    if (!loading) router.replace(withEstablishmentQuery("/dashboard/ecole/etablissement", school?.id));
+  }, [loading, router, school?.id]);
 
-  return (
-    <div className="max-w-3xl space-y-4 animate-pulse">
-      <div className="h-8 bg-white rounded-xl w-1/3" />
-      <div className="h-64 bg-white border border-border rounded-card" />
-    </div>
-  );
+  return <SchoolAdminLoadingState label="Ouverture du gestionnaire de galerie" />;
 }

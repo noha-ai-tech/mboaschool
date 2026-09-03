@@ -239,8 +239,13 @@ export default function PreviewDraftLayout({ children }: { children: React.React
 
   const activeView = resolveMiniSiteView(pathname, PREVIEW_BASE_HREF);
 
+  // RELEASE-CONSOLIDATION-02 §5B — mobile edge-to-edge fix ported from
+  // acc7175 (feat(school-admin): unify management interface): the old
+  // "-m-6 lg:-m-8" left an uncompensated dashboard-shell gutter at mobile
+  // widths; "-mx-4 -my-6" matches the shell's own mobile padding before
+  // the sm/lg breakpoints restore the desktop compensation.
   return (
-    <div className="-m-6 lg:-m-8 min-h-screen bg-[#F4F4F2]">
+    <div className="-mx-4 -my-6 min-h-screen bg-[#F4F4F2] sm:-m-6 lg:-m-8">
       {/* Bandeau privé — jamais confondre avec la page publique réelle */}
       <div className="sticky top-0 z-50 bg-[#0A0A0A] text-white">
         <div className="max-w-[1280px] mx-auto px-4 lg:px-6 h-11 flex items-center justify-between gap-3">

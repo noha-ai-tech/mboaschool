@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { Lock } from "lucide-react";
 import { Logo } from "@/components/branding/Logo";
+import { scalarSearchParam, withEstablishmentQuery } from "@/lib/school/establishmentContext";
 
-export default function AccesRestreintPage() {
+export default async function AccesRestreintPage({ searchParams }: { searchParams: Promise<{ school?: string | string[] }> }) {
+  const schoolId = scalarSearchParam((await searchParams).school);
+
   return (
     <div className="min-h-screen bg-[#f9f7f2] flex flex-col items-center justify-center px-4">
       <div className="w-full max-w-md text-center">
@@ -23,11 +26,11 @@ export default function AccesRestreintPage() {
           <strong className="text-[#0a0a0a]">forfait Pro</strong>.
         </p>
         <p className="text-slate-400 text-sm mb-8">
-          Pour activer le forfait Pro, contactez l'équipe Écoles237.
+          Pour activer le forfait Pro, contactez l&apos;équipe Écoles237.
         </p>
 
         <Link
-          href="/dashboard/ecole"
+          href={withEstablishmentQuery("/dashboard/ecole", schoolId)}
           className="inline-flex items-center gap-2 bg-[#0a0a0a] text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors"
         >
           ← Retour au tableau de bord

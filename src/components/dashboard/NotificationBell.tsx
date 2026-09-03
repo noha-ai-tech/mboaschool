@@ -10,6 +10,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 import { Bell, ClipboardList, UserCog, FileWarning, Sparkles, LifeBuoy } from "lucide-react";
 
 export function NotificationBell({ schoolId }: { schoolId: string | null }) {
@@ -94,7 +95,7 @@ export function NotificationBell({ schoolId }: { schoolId: string | null }) {
                 return (
                   <Link
                     key={item.label}
-                    href={item.href}
+                    href={withEstablishmentQuery(item.href, schoolId)}
                     onClick={() => setOpen(false)}
                     className="flex items-start gap-3 px-4 py-3 hover:bg-slate-50 transition-colors"
                   >

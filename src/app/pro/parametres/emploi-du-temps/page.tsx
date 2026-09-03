@@ -2,6 +2,9 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 import { FormulaireContraintes } from "@/components/pro/FormulaireContraintes";
+import { CalendarRange, Clock3 } from "lucide-react";
+import { SchoolAdminPageHeader } from "@/components/school-admin/ui/PageHeader";
+import { SchoolAdminStatCard } from "@/components/school-admin/ui/StatCard";
 
 export default async function ParametresEmploiDuTempsPage({ searchParams }: { searchParams: Promise<{ school?: string }> }) {
   const { school } = await searchParams;
@@ -40,17 +43,11 @@ export default async function ParametresEmploiDuTempsPage({ searchParams }: { se
     : null;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
-      <div className="mb-8">
-        <p className="text-xs font-semibold tracking-widest uppercase text-slate-400 mb-1">
-          Emplois du temps
-        </p>
-        <h1 className="text-2xl font-black tracking-tight text-[#0a0a0a]">
-          Contraintes d&apos;établissement
-        </h1>
-        <p className="text-sm text-slate-500 mt-1">
-          Ces réglages définissent la grille de créneaux horaires utilisée par le générateur.
-        </p>
+    <div className="mx-auto max-w-5xl">
+      <SchoolAdminPageHeader eyebrow="Planification" title="Paramètres de l’emploi du temps" description="Configurez les jours, horaires, pauses et limites déjà prises en charge par le générateur." />
+      <div className="mb-6 grid gap-4 sm:grid-cols-2">
+        <SchoolAdminStatCard label="Créneaux existants" value={count ?? 0} icon={<Clock3 size={19} />} />
+        <SchoolAdminStatCard label="Configuration" value={contraintes ? "Renseignée" : "À compléter"} icon={<CalendarRange size={19} />} tone={contraintes ? "neutral" : "warning"} />
       </div>
 
       <FormulaireContraintes

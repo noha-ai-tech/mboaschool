@@ -1,66 +1,32 @@
 import { redirect } from "next/navigation";
-import { CalendarOff } from "lucide-react";
+import { CalendarDays, CalendarOff, Plane, Stethoscope } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
 import { FormulaireAbsence } from "@/components/pro/FormulaireAbsence";
+import { SchoolAdminPageHeader } from "@/components/school-admin/ui/PageHeader";
+import { SchoolAdminStatCard } from "@/components/school-admin/ui/StatCard";
+import { SchoolAdminSectionCard } from "@/components/school-admin/ui/Card";
+import { SchoolAdminStatusBadge, type SchoolAdminStatusTone } from "@/components/school-admin/ui/Badge";
+import { SchoolAdminResponsiveTable } from "@/components/school-admin/ui/ResponsiveTable";
+import { SchoolAdminAlert, SchoolAdminEmptyState } from "@/components/school-admin/ui/Feedback";
 
 const TYPE_LABELS: Record<string, string> = { absence: "Absence", conge: "Congé", mission: "Mission" };
 const STATUT_LABELS: Record<string, string> = { declaree: "Déclarée", justifiee: "Justifiée", refusee: "Refusée" };
+const STATUS_TONES: Record<string, SchoolAdminStatusTone> = { declaree: "warning", justifiee: "success", refusee: "danger" };
 
 export default async function AbsencesPage({ searchParams }: { searchParams: Promise<{ school?: string }> }) {
-  const { school } = await searchParams;
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/auth/connexion");
-
+  const { school } = await searchParams; const supabase = await createClient(); const { data: { user } } = await supabase.auth.getUser(); if (!user) redirect("/auth/connexion");
   const etablissement = await requireActiveEstablishment(supabase, user.id, school, "/pro/absences");
-
-  const { data: staffMembers } = await supabase
-    .from("staff_members")
-    .select("id, first_name, last_name")
-    .eq("etablissement_id", etablissement.id)
-    .order("last_name");
-
-  const { data: absences } = await supabase
-    .from("absences")
-    .select("id, type, date_debut, date_fin, motif, statut, staff_members(first_name, last_name)")
-    .in("staff_member_id", (staffMembers ?? []).map((s) => s.id))
-    .order("date_debut", { ascending: false });
-
-  return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Absences, congés et missions</h1>
-        <p className="text-sm text-gray-500 mt-1">Alimente le calcul de la paie (heures non rémunérées).</p>
-      </div>
-
-      <div className="mb-6">
-        <FormulaireAbsence staffMembers={(staffMembers ?? []).map((s) => ({ id: s.id, nom: `${s.first_name} ${s.last_name}` }))} />
-      </div>
-
-      {!absences?.length ? (
-        <div className="rounded-xl border border-gray-200 bg-white p-12 text-center text-sm text-gray-400">
-          <CalendarOff size={24} className="mx-auto mb-3 text-gray-200" />
-          Aucune absence enregistrée.
-        </div>
-      ) : (
-        <div className="rounded-xl border border-gray-200 bg-white overflow-hidden divide-y divide-gray-100">
-          {absences.map((a: any) => (
-            <div key={a.id} className="flex items-center justify-between px-4 py-3 text-sm">
-              <div>
-                <p className="font-semibold text-gray-900">{a.staff_members?.first_name} {a.staff_members?.last_name}</p>
-                <p className="text-xs text-gray-400">
-                  {TYPE_LABELS[a.type]} · {new Date(a.date_debut).toLocaleDateString("fr-FR")} – {new Date(a.date_fin).toLocaleDateString("fr-FR")}
-                  {a.motif ? ` · ${a.motif}` : ""}
-                </p>
-              </div>
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600">
-                {STATUT_LABELS[a.statut] ?? a.statut}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  const { data: staffMembers } = await supabase.from("staff_members").select("id, first_name, last_name").eq("etablissement_id", etablissement.id).order("last_name");
+  const { data: absences } = await supabase.from("absences").select("id, type, date_debut, date_fin, motif, statut, staff_members(first_name, last_name)").in("staff_member_id", (staffMembers ?? []).map((staff) => staff.id)).order("date_debut", { ascending: false });
+  const rows = absences ?? []; const countType = (type: string) => rows.filter((item: any) => item.type === type).length;
+  return <div className="mx-auto max-w-6xl">
+    <SchoolAdminPageHeader eyebrow="Présences" title="Absences, congés et missions" description="Consultez les périodes déclarées et leurs statuts existants. Ces données alimentent le calcul actuel de la paie." />
+    <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"><SchoolAdminStatCard label="Périodes" value={rows.length} icon={<CalendarDays size={19} />} /><SchoolAdminStatCard label="Absences" value={countType("absence")} icon={<Stethoscope size={19} />} tone="neutral" /><SchoolAdminStatCard label="Congés" value={countType("conge")} icon={<CalendarOff size={19} />} tone="neutral" /><SchoolAdminStatCard label="Missions" value={countType("mission")} icon={<Plane size={19} />} tone="neutral" /></div>
+    <div className="mb-6"><SchoolAdminAlert tone="info">Aucun workflow d’approbation supplémentaire n’est disponible sur cet écran. Les statuts affichés proviennent uniquement des données existantes.</SchoolAdminAlert></div>
+    <SchoolAdminSectionCard title="Déclarer une période" description="Enregistrez une absence, un congé ou une mission avec les champs actuellement disponibles.">{staffMembers?.length ? <FormulaireAbsence staffMembers={staffMembers.map((staff) => ({ id: staff.id, nom: `${staff.first_name} ${staff.last_name}` }))} /> : <SchoolAdminEmptyState title="Aucun membre du personnel" description="La déclaration est indisponible tant qu’aucun membre du personnel n’est enregistré." />}</SchoolAdminSectionCard>
+    <div className="mt-6">{!rows.length ? <SchoolAdminEmptyState title="Aucune période enregistrée" description="Les absences, congés et missions déclarés apparaîtront ici." icon={<CalendarOff size={24} />} /> : <><SchoolAdminResponsiveTable label="Absences, congés et missions" className="hidden md:block"><table className="w-full min-w-[820px] text-left text-sm"><thead className="bg-[var(--school-admin-surface-muted)] text-xs uppercase tracking-wide text-[var(--school-admin-text-muted)]"><tr><th scope="col" className="px-5 py-3">Personnel</th><th scope="col" className="px-5 py-3">Type</th><th scope="col" className="px-5 py-3">Période</th><th scope="col" className="px-5 py-3">Motif</th><th scope="col" className="px-5 py-3">Statut</th></tr></thead><tbody className="divide-y divide-[var(--school-admin-border)]">{rows.map((item: any) => <tr key={item.id}><th scope="row" className="px-5 py-4 font-semibold">{personName(item)}</th><td className="px-5 py-4"><SchoolAdminStatusBadge tone="info" label={TYPE_LABELS[item.type] ?? item.type ?? "Non renseigné"} /></td><td className="px-5 py-4">{period(item)}</td><td className="max-w-xs px-5 py-4 text-[var(--school-admin-text-muted)]">{item.motif || "Non renseigné"}</td><td className="px-5 py-4"><SchoolAdminStatusBadge tone={STATUS_TONES[item.statut] ?? "neutral"} label={STATUT_LABELS[item.statut] ?? item.statut ?? "Non renseigné"} /></td></tr>)}</tbody></table></SchoolAdminResponsiveTable><div className="space-y-3 md:hidden" aria-label="Absences, congés et missions">{rows.map((item: any) => <article key={item.id} className="rounded-xl border border-[var(--school-admin-border)] bg-[var(--school-admin-surface)] p-4"><div className="flex items-start justify-between gap-3"><div><h2 className="font-bold">{personName(item)}</h2><p className="mt-1 text-sm text-[var(--school-admin-text-muted)]">{period(item)}</p></div><SchoolAdminStatusBadge tone={STATUS_TONES[item.statut] ?? "neutral"} label={STATUT_LABELS[item.statut] ?? item.statut ?? "Non renseigné"} /></div><dl className="mt-4 grid gap-3 border-t border-[var(--school-admin-border)] pt-3 text-sm"><div><dt className="text-[var(--school-admin-text-muted)]">Type</dt><dd className="mt-1 font-semibold">{TYPE_LABELS[item.type] ?? item.type ?? "Non renseigné"}</dd></div><div><dt className="text-[var(--school-admin-text-muted)]">Motif</dt><dd className="mt-1 font-semibold">{item.motif || "Non renseigné"}</dd></div></dl></article>)}</div></>}</div>
+  </div>;
 }
+function personName(item: any) { return `${item.staff_members?.first_name ?? ""} ${item.staff_members?.last_name ?? ""}`.trim() || "Personnel non renseigné"; }
+function period(item: any) { return `${new Date(item.date_debut).toLocaleDateString("fr-FR")} – ${new Date(item.date_fin).toLocaleDateString("fr-FR")}`; }

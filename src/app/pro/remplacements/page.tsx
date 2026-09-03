@@ -1,69 +1,26 @@
-// Remplacements — Mission 05, Phase 6 : "architecture uniquement". Cette
-// page liste les remplacements existants (table `remplacements`, migration
-// 0010_timetable_engine.sql) mais ne construit aucun algorithme de
-// recherche d'enseignant disponible ni aucun formulaire de déclaration —
-// voir docs/timetable/02_ENGINE.md pour le détail de ce qui reste à
-// concevoir avant une implémentation complète.
-
 import { redirect } from "next/navigation";
-import { UserX } from "lucide-react";
+import { CalendarDays, UserRoundCheck, UserX } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { SchoolAdminPageHeader } from "@/components/school-admin/ui/PageHeader";
+import { SchoolAdminStatCard } from "@/components/school-admin/ui/StatCard";
+import { SchoolAdminStatusBadge, type SchoolAdminStatusTone } from "@/components/school-admin/ui/Badge";
+import { SchoolAdminResponsiveTable } from "@/components/school-admin/ui/ResponsiveTable";
+import { SchoolAdminAlert, SchoolAdminEmptyState } from "@/components/school-admin/ui/Feedback";
 
-const STATUT_LABELS: Record<string, string> = {
-  absence_declaree: "Absence déclarée",
-  propose: "Remplaçant proposé",
-  valide: "Validé",
-  refuse: "Refusé",
-  annule: "Annulé",
-};
+const STATUT_LABELS: Record<string, string> = { absence_declaree: "Absence déclarée", propose: "Remplaçant proposé", valide: "Validé", refuse: "Refusé", annule: "Annulé" };
+const STATUT_TONES: Record<string, SchoolAdminStatusTone> = { absence_declaree: "warning", propose: "info", valide: "success", refuse: "danger", annule: "neutral" };
 
 export default async function RemplacementsPage({ searchParams }: { searchParams: Promise<{ school?: string }> }) {
-  const { school } = await searchParams;
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/auth/connexion");
-
+  const { school } = await searchParams; const supabase = await createClient(); const { data: { user } } = await supabase.auth.getUser(); if (!user) redirect("/auth/connexion");
   const etablissement = await requireActiveEstablishment(supabase, user.id, school, "/pro/remplacements");
-
-  const { data: remplacements } = await supabase
-    .from("remplacements")
-    .select("id, date_cours, statut, motif_absence, enseignants!remplacements_enseignant_absent_id_fkey(nom, prenom)")
-    .eq("etablissement_id", etablissement.id)
-    .order("date_cours", { ascending: false });
-
-  return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Remplacements</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Architecture préparée (Mission 05, Phase 6) — la recherche automatique d&apos;un enseignant disponible
-          et le formulaire de déclaration d&apos;absence restent à construire dans une mission dédiée.
-        </p>
-      </div>
-
-      {!remplacements?.length ? (
-        <div className="rounded-xl border border-gray-200 bg-white p-12 text-center text-sm text-gray-400">
-          <UserX size={24} className="mx-auto mb-3 text-gray-200" />
-          Aucun remplacement enregistré.
-        </div>
-      ) : (
-        <div className="rounded-xl border border-gray-200 bg-white overflow-hidden divide-y divide-gray-100">
-          {remplacements.map((r: any) => (
-            <div key={r.id} className="flex items-center justify-between px-4 py-3 text-sm">
-              <div>
-                <p className="font-semibold text-gray-900">
-                  {r.enseignants?.prenom} {r.enseignants?.nom}
-                </p>
-                <p className="text-xs text-gray-400">{new Date(r.date_cours).toLocaleDateString("fr-FR")}</p>
-              </div>
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-gray-100 text-gray-600">
-                {STATUT_LABELS[r.statut] ?? r.statut}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  const { data: remplacements } = await supabase.from("remplacements").select("id, date_cours, statut, motif_absence, enseignants!remplacements_enseignant_absent_id_fkey(nom, prenom)").eq("etablissement_id", etablissement.id).order("date_cours", { ascending: false });
+  const rows = remplacements ?? []; const validated = rows.filter((item: any) => item.statut === "valide").length;
+  return <div className="mx-auto max-w-6xl">
+    <SchoolAdminPageHeader eyebrow="Planification" title="Remplacements" description="Consultez les remplacements existants et leur état actuel." />
+    <div className="mb-6 grid gap-4 sm:grid-cols-3"><SchoolAdminStatCard label="Remplacements" value={rows.length} icon={<CalendarDays size={19} />} /><SchoolAdminStatCard label="Validés" value={validated} icon={<UserRoundCheck size={19} />} tone="neutral" /><SchoolAdminStatCard label="À traiter" value={rows.length - validated} icon={<UserX size={19} />} tone={rows.length - validated ? "warning" : "neutral"} /></div>
+    <div className="mb-6"><SchoolAdminAlert tone="info">La recherche automatique d’un enseignant disponible et la déclaration depuis cet écran restent indisponibles. Aucun remplaçant, classe ou horaire absent du contrat actuel n’est déduit.</SchoolAdminAlert></div>
+    {!rows.length ? <SchoolAdminEmptyState title="Aucun remplacement enregistré" description="Cette page reste en lecture seule tant que les fonctions de gestion ne sont pas disponibles." icon={<UserX size={24} />} /> : <><SchoolAdminResponsiveTable label="Liste des remplacements" className="hidden md:block"><table className="w-full min-w-[760px] text-left text-sm"><thead className="bg-[var(--school-admin-surface-muted)] text-xs uppercase tracking-wide text-[var(--school-admin-text-muted)]"><tr><th scope="col" className="px-5 py-3">Enseignant absent</th><th scope="col" className="px-5 py-3">Date du cours</th><th scope="col" className="px-5 py-3">Motif</th><th scope="col" className="px-5 py-3">Statut</th><th scope="col" className="px-5 py-3">Remplaçant / classe</th></tr></thead><tbody className="divide-y divide-[var(--school-admin-border)]">{rows.map((item: any) => <tr key={item.id}><th scope="row" className="px-5 py-4 font-semibold">{teacherName(item)}</th><td className="px-5 py-4">{new Date(item.date_cours).toLocaleDateString("fr-FR")}</td><td className="px-5 py-4 text-[var(--school-admin-text-muted)]">{item.motif_absence || "Non renseigné"}</td><td className="px-5 py-4"><SchoolAdminStatusBadge tone={STATUT_TONES[item.statut] ?? "neutral"} label={STATUT_LABELS[item.statut] ?? item.statut ?? "Non renseigné"} /></td><td className="px-5 py-4 text-[var(--school-admin-text-soft)]">Indisponible dans les données actuelles</td></tr>)}</tbody></table></SchoolAdminResponsiveTable><div className="space-y-3 md:hidden" aria-label="Liste des remplacements">{rows.map((item: any) => <article key={item.id} className="rounded-xl border border-[var(--school-admin-border)] bg-[var(--school-admin-surface)] p-4"><div className="flex items-start justify-between gap-3"><div><h2 className="font-bold">{teacherName(item)}</h2><p className="mt-1 text-sm text-[var(--school-admin-text-muted)]">{new Date(item.date_cours).toLocaleDateString("fr-FR")}</p></div><SchoolAdminStatusBadge tone={STATUT_TONES[item.statut] ?? "neutral"} label={STATUT_LABELS[item.statut] ?? item.statut ?? "Non renseigné"} /></div><dl className="mt-4 space-y-3 border-t border-[var(--school-admin-border)] pt-3 text-sm"><div><dt className="text-[var(--school-admin-text-muted)]">Motif</dt><dd className="mt-1 font-semibold">{item.motif_absence || "Non renseigné"}</dd></div><div><dt className="text-[var(--school-admin-text-muted)]">Remplaçant et classe</dt><dd className="mt-1 font-semibold">Indisponibles dans les données actuelles</dd></div></dl></article>)}</div></>}
+  </div>;
 }
+function teacherName(item: any) { return `${item.enseignants?.prenom ?? ""} ${item.enseignants?.nom ?? ""}`.trim() || "Enseignant non renseigné"; }

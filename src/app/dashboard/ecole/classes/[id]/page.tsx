@@ -1,248 +1,81 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { ArrowLeft, Bell, GraduationCap, Plus, Trash2, Users } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useSchool } from "@/lib/useSchool";
-import {
-  ArrowLeft,
-  GraduationCap,
-  Bell,
-  Plus,
-  Trash2,
-  X,
-  AlertCircle,
-} from "lucide-react";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
+import { SchoolAdminPageHeader } from "@/components/school-admin/ui/PageHeader";
+import { SchoolAdminStatCard } from "@/components/school-admin/ui/StatCard";
+import { SchoolAdminSectionCard } from "@/components/school-admin/ui/Card";
+import { SchoolAdminStatusBadge } from "@/components/school-admin/ui/Badge";
+import { SchoolAdminButton } from "@/components/school-admin/ui/Button";
+import { SchoolAdminDialog } from "@/components/school-admin/ui/Overlay";
+import { SchoolAdminFormField, SchoolAdminInput, SchoolAdminSelect, SchoolAdminTextarea } from "@/components/school-admin/ui/FormControls";
+import { SchoolAdminAlert, SchoolAdminEmptyState, SchoolAdminLoadingState } from "@/components/school-admin/ui/Feedback";
 
-const POST_TYPES = [
-  { value: "announcement", label: "Annonce" },
-  { value: "homework", label: "Devoir" },
-  { value: "event", label: "Événement" },
-  { value: "reminder", label: "Rappel" },
-];
+const POST_TYPES = [{ value: "announcement", label: "Annonce" }, { value: "homework", label: "Devoir" }, { value: "event", label: "Événement" }, { value: "reminder", label: "Rappel" }];
 
 export default function ClassDetailPage() {
-  const params = useParams();
-  const classId = params.id as string;
+  const classId = useParams().id as string;
   const { school } = useSchool();
-
   const [classe, setClasse] = useState<any>(null);
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<any | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({ title: "", content: "", type: "announcement" });
 
-  useEffect(() => {
-    load();
-  }, [classId]);
-
-  async function load() {
+  const load = useCallback(async () => {
     setLoading(true);
-
-    const { data: classData } = await supabase
-      .from("classes")
-      .select("*")
-      .eq("id", classId)
-      .single();
-
-    const { data: postsData } = await supabase
-      .from("school_announcements")
-      .select("*")
-      .eq("establishment_id", classData?.establishment_id ?? "")
-      .eq("class_id", classId)
-      .order("created_at", { ascending: false });
-
+    const { data: classData } = await supabase.from("classes").select("*").eq("id", classId).single();
+    const { data: postsData } = await supabase.from("school_announcements").select("*").eq("establishment_id", classData?.establishment_id ?? "").eq("class_id", classId).order("created_at", { ascending: false });
     if (classData) setClasse(classData);
     if (postsData) setPosts(postsData);
     setLoading(false);
-  }
-
-  async function createPost(e: { preventDefault(): void }) {
-    e.preventDefault();
-    if (!classe) return;
-    setSaving(true);
-    const { error } = await supabase.from("school_announcements").insert({
-      establishment_id: classe.establishment_id,
-      class_id: classId,
-      type: form.type,
-      title: form.title,
-      content: form.content,
-    });
+  }, [classId]);
+  useEffect(() => { load(); }, [load]);
+  async function createPost(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!classe || saving) return;
+    setSaving(true); setError("");
+    const { error: createError } = await supabase.from("school_announcements").insert({ establishment_id: classe.establishment_id, class_id: classId, type: form.type, title: form.title, content: form.content });
     setSaving(false);
-    if (!error) {
-      setForm({ title: "", content: "", type: "announcement" });
-      setShowForm(false);
-      load();
-    }
+    if (createError) { setError(createError.message); return; }
+    setForm({ title: "", content: "", type: "announcement" }); setShowForm(false); load();
+  }
+  async function deletePost() {
+    if (!deleteTarget || deleting) return;
+    setDeleting(true); setError("");
+    const { error: deleteError } = await supabase.from("school_announcements").delete().eq("id", deleteTarget.id);
+    setDeleting(false);
+    if (deleteError) { setError(deleteError.message); return; }
+    setDeleteTarget(null); load();
   }
 
-  async function deletePost(id: string) {
-    await supabase.from("school_announcements").delete().eq("id", id);
-    load();
-  }
-
-  if (loading) {
-    return (
-      <div className="max-w-3xl space-y-4 animate-pulse">
-        <div className="h-5 w-24 bg-slate-200 rounded" />
-        <div className="h-24 bg-white border border-[#ebebeb] rounded-2xl" />
-        <div className="h-48 bg-white border border-[#ebebeb] rounded-2xl" />
-      </div>
-    );
-  }
-
-  if (!classe) {
-    return (
-      <div className="text-center py-20">
-        <p className="text-slate-400 mb-3">Classe introuvable.</p>
-        <Link href="/dashboard/ecole/classes" className="text-sm text-emerald-700 font-semibold">
-          ← Retour aux classes
-        </Link>
-      </div>
-    );
-  }
-
-  return (
-    <div className="max-w-3xl">
-
-      {/* Back */}
-      <Link
-        href="/dashboard/ecole/classes"
-        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-[#0a0a0a] transition-colors mb-6"
-      >
-        <ArrowLeft size={15} />
-        Classes
-      </Link>
-
-      {/* Class header */}
-      <div className="bg-[#0a0f0d] text-white rounded-2xl p-6 mb-6">
-        <span className="text-[10px] font-bold tracking-widest uppercase text-emerald-400">
-          {classe.level}
-        </span>
-        <h1 className="text-3xl font-black mt-2 mb-1 flex items-center gap-3">
-          <GraduationCap size={26} />
-          {classe.name}
-        </h1>
-        <p className="text-slate-400 text-sm">
-          {classe.teacher_name ? `Enseignant : ${classe.teacher_name}` : "Aucun enseignant assigné"}
-        </p>
-      </div>
-
-      {/* Stats row */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        {[
-          { label: "Publications", value: posts.length, icon: Bell },
-          { label: "Élèves", value: "—", icon: GraduationCap },
-          { label: "Classe", value: classe.level ?? "—", icon: AlertCircle },
-        ].map((s) => {
-          const Icon = s.icon;
-          return (
-            <div key={s.label} className="bg-white border border-[#ebebeb] rounded-xl p-4">
-              <Icon size={15} className="text-slate-400 mb-2" />
-              <p className="text-2xl font-black text-[#0a0a0a]">{s.value}</p>
-              <p className="text-xs text-slate-400 font-semibold mt-0.5">{s.label}</p>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Publish button */}
-      <div className="flex items-center justify-between mb-5">
-        <h2 className="font-bold text-sm text-[#0a0a0a]">Publications de la classe</h2>
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-2 bg-[#0a0a0a] text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors"
-        >
-          {showForm ? <X size={13} /> : <Plus size={13} />}
-          {showForm ? "Annuler" : "Publier"}
-        </button>
-      </div>
-
-      {/* Create form */}
-      {showForm && (
-        <form onSubmit={createPost} className="bg-white border border-[#ebebeb] rounded-2xl p-5 mb-5">
-          <div className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Type</label>
-              <select
-                value={form.type}
-                onChange={(e) => setForm({ ...form, type: e.target.value })}
-                className="w-full border border-[#ddd] rounded-xl px-4 py-2.5 text-sm bg-white focus:outline-none focus:border-[#0a0a0a] transition-colors"
-              >
-                {POST_TYPES.map((t) => (
-                  <option key={t.value} value={t.value}>{t.label}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Titre</label>
-              <input
-                required
-                value={form.title}
-                onChange={(e) => setForm({ ...form, title: e.target.value })}
-                placeholder="Titre de la publication"
-                className="w-full border border-[#ddd] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#0a0a0a] transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Message</label>
-              <textarea
-                required
-                value={form.content}
-                onChange={(e) => setForm({ ...form, content: e.target.value })}
-                rows={4}
-                placeholder="Message pour les parents et élèves…"
-                className="w-full border border-[#ddd] rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-[#0a0a0a] transition-colors resize-none"
-              />
-            </div>
-          </div>
-          <button
-            type="submit"
-            disabled={saving}
-            className="mt-4 flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-emerald-700 transition-colors disabled:opacity-50"
-          >
-            {saving
-              ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              : <Plus size={15} />}
-            Publier
-          </button>
-        </form>
-      )}
-
-      {/* Posts list */}
-      {posts.length === 0 ? (
-        <div className="bg-white border border-[#ebebeb] rounded-2xl py-14 text-center">
-          <Bell size={28} className="mx-auto text-slate-200 mb-4" />
-          <p className="text-sm text-slate-400">Aucune publication pour cette classe.</p>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {posts.map((p) => (
-            <div
-              key={p.id}
-              className="group bg-white border border-[#ebebeb] rounded-2xl p-5 hover:border-[#ccc] transition-colors"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-semibold text-slate-400 mb-1.5">
-                    {new Date(p.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
-                  </p>
-                  <h3 className="font-bold text-[#0a0a0a] mb-1.5">{p.title}</h3>
-                  <p className="text-sm text-slate-500 leading-relaxed">{p.content}</p>
-                </div>
-                <button
-                  onClick={() => deletePost(p.id)}
-                  className="opacity-0 group-hover:opacity-100 shrink-0 text-slate-300 hover:text-red-500 transition-all p-1"
-                >
-                  <Trash2 size={14} />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+  const backHref = withEstablishmentQuery("/dashboard/ecole/classes", school?.id);
+  if (loading) return <SchoolAdminLoadingState label="Chargement de la classe" />;
+  if (!classe) return <SchoolAdminEmptyState title="Classe introuvable" description="Cette classe n’est pas disponible dans le contexte actuel." action={<Link href={backHref} className="font-semibold text-[var(--school-admin-primary)]">Retour aux classes</Link>} />;
+  return <div className="mx-auto max-w-6xl">
+    <Link href={backHref} className="mb-5 inline-flex min-h-10 items-center gap-2 rounded-lg text-sm font-semibold text-[var(--school-admin-text-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)]"><ArrowLeft size={16} aria-hidden="true" />Retour aux classes</Link>
+    <SchoolAdminPageHeader eyebrow="Gestion scolaire" title={classe.name} description="Informations générales et publications actuellement rattachées à cette classe." actions={<SchoolAdminButton onClick={() => setShowForm(true)} leadingIcon={<Plus size={16} aria-hidden="true" />}>Nouvelle publication</SchoolAdminButton>} />
+    <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <SchoolAdminStatCard label="Niveau" value={classe.level || "Non renseigné"} icon={<GraduationCap size={19} />} />
+      <SchoolAdminStatCard label="Section" value={classe.section || "Non renseignée"} icon={<GraduationCap size={19} />} tone="neutral" />
+      <SchoolAdminStatCard label="Effectif" value={typeof classe.effectif === "number" ? classe.effectif : "Indisponible"} icon={<Users size={19} />} tone="neutral" detail={typeof classe.effectif === "number" ? undefined : "Aucune donnée fournie"} />
+      <SchoolAdminStatCard label="Publications" value={posts.length} icon={<Bell size={19} />} />
     </div>
-  );
+    {error && <div className="mb-5"><SchoolAdminAlert tone="danger">{error}</SchoolAdminAlert></div>}
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+      <SchoolAdminSectionCard title="Informations générales" description="Uniquement les informations disponibles."><dl className="space-y-4 text-sm"><div><dt className="text-[var(--school-admin-text-muted)]">Classe</dt><dd className="font-semibold">{classe.name}</dd></div><div><dt className="text-[var(--school-admin-text-muted)]">Niveau</dt><dd className="mt-1"><SchoolAdminStatusBadge tone="info" label={classe.level || "Non renseigné"} /></dd></div><div><dt className="text-[var(--school-admin-text-muted)]">Enseignant</dt><dd className="font-semibold">{classe.teacher_name || "Non assigné"}</dd></div><div><dt className="text-[var(--school-admin-text-muted)]">Établissement</dt><dd className="font-semibold">{school?.name || "Contexte actif"}</dd></div></dl></SchoolAdminSectionCard>
+      <SchoolAdminSectionCard title="Publications de la classe" description="Le canal existant de publications est conservé. Le module historique d’annonces de classe reste fermé.">{posts.length === 0 ? <SchoolAdminEmptyState title="Aucune publication" description="Aucun message n’est actuellement rattaché à cette classe." icon={<Bell size={24} />} /> : <div className="space-y-3">{posts.map((post) => <article key={post.id} className="rounded-xl border border-[var(--school-admin-border)] p-4"><div className="flex items-start justify-between gap-3"><div className="min-w-0"><div className="mb-2 flex flex-wrap items-center gap-2"><SchoolAdminStatusBadge tone="neutral" label={POST_TYPES.find((item) => item.value === post.type)?.label || post.type || "Publication"} /><time className="text-xs text-[var(--school-admin-text-muted)]">{new Date(post.created_at).toLocaleDateString("fr-FR")}</time></div><h3 className="font-bold">{post.title}</h3><p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-[var(--school-admin-text-muted)]">{post.content}</p></div><button type="button" onClick={() => setDeleteTarget(post)} aria-label={`Supprimer la publication ${post.title}`} className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-[var(--school-admin-text-soft)] hover:text-[var(--school-admin-danger)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)]"><Trash2 size={16} aria-hidden="true" /></button></div></article>)}</div>}</SchoolAdminSectionCard>
+    </div>
+    <SchoolAdminDialog open={showForm} onClose={() => setShowForm(false)} title="Nouvelle publication" description="Publiez via le canal existant de l’établissement."><form onSubmit={createPost} className="space-y-5"><SchoolAdminFormField id="post-type" label="Type"><SchoolAdminSelect value={form.type} onChange={(event) => setForm({ ...form, type: event.target.value })}>{POST_TYPES.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</SchoolAdminSelect></SchoolAdminFormField><SchoolAdminFormField id="post-title" label="Titre" required><SchoolAdminInput value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} /></SchoolAdminFormField><SchoolAdminFormField id="post-content" label="Message" required><SchoolAdminTextarea value={form.content} onChange={(event) => setForm({ ...form, content: event.target.value })} /></SchoolAdminFormField><div className="flex justify-end gap-2"><SchoolAdminButton variant="ghost" onClick={() => setShowForm(false)}>Annuler</SchoolAdminButton><SchoolAdminButton type="submit" loading={saving}>Publier</SchoolAdminButton></div></form></SchoolAdminDialog>
+    <SchoolAdminDialog open={Boolean(deleteTarget)} onClose={() => setDeleteTarget(null)} title="Supprimer cette publication ?" description="Cette action utilise la suppression existante."><p className="text-sm">{deleteTarget?.title}</p><div className="mt-5 flex justify-end gap-2"><SchoolAdminButton variant="ghost" onClick={() => setDeleteTarget(null)}>Annuler</SchoolAdminButton><SchoolAdminButton variant="danger" loading={deleting} onClick={deletePost} leadingIcon={<Trash2 size={15} aria-hidden="true" />}>Supprimer</SchoolAdminButton></div></SchoolAdminDialog>
+  </div>;
 }
