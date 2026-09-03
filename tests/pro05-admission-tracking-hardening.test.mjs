@@ -1,15 +1,20 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const migrationPath =
   "docs/pro/PRO-05_2_ADMISSION_TRACKING_HARDENING_PROPOSED.sql";
+const executedMigrationPath =
+  "supabase/migrations/20260825054125_pro_05_2_admission_tracking_hardening.sql";
 const rollbackPath =
   "docs/pro/PRO-05_2_ADMISSION_TRACKING_HARDENING_ROLLBACK.sql";
 const auditPath = "docs/pro/PRO-05_2_ADMISSION_TRACKING_ORACLE_AUDIT.md";
 
 async function text(path) {
-  return readFile(path, "utf8");
+  const value = await readFile(path, "utf8");
+  assert.doesNotMatch(value, /\r(?!\n)/, `${path}: lone CR is not accepted`);
+  return value.replaceAll("\r\n", "\n");
 }
 
 function extractHardenedFunction(sql) {
@@ -45,7 +50,22 @@ class RateLimitModel {
 }
 
 test("PRO-05.2 migration is transactional, state-gated and replay-safe", async () => {
-  const sql = await text(migrationPath);
+  const [sql, executedSql] = await Promise.all([
+    text(migrationPath),
+    text(executedMigrationPath),
+  ]);
+
+  assert.equal(
+    createHash("sha256").update(executedSql, "utf8").digest("hex"),
+    "7dcf54518fa3a5b49acda52707f9130a0aab9e3e351c9f6379f9de10cbfbdbba",
+  );
+  assert.notEqual(executedSql.indexOf("\nbegin;"), -1);
+  assert.notEqual(sql.indexOf("\nbegin;"), -1);
+  assert.equal(
+    executedSql.slice(executedSql.indexOf("\nbegin;") + 1),
+    sql.slice(sql.indexOf("\nbegin;") + 1),
+    "the exact remote migration and proposal must have the same executable body",
+  );
 
   assert.match(sql, /^-- PRO-05\.2[\s\S]*?\nbegin;/i);
   assert.match(sql, /set local lock_timeout = '5s'/i);
