@@ -3,7 +3,7 @@
 // par src/app/api/recherche/route.ts.
 
 import { normalizeSearchText, serverSearchWordForms } from "./normalizeSearchText";
-import { GRAND_NORD, ZONE_ANGLOPHONE, normalizeRegionCasing } from "@/lib/cameroonRegions";
+import { regionsForFilterValue } from "@/lib/cameroonRegions";
 import { getMajorCity } from "@/lib/cameroonMajorCities";
 
 /**
@@ -44,13 +44,16 @@ export function clampInt(raw: string | null, fallback: number, min: number, max:
   return Math.min(max, Math.max(min, n));
 }
 
-/** §16 — macro-zone produit -> liste de régions réelles. Jamais region = "Grand Nord" en base. */
+/**
+ * §16 — macro-zone produit -> liste de régions réelles. Jamais
+ * region = "Grand Nord" en base. Mapping partagé avec le filtrage client
+ * (voir @/lib/cameroonRegions.regionsForFilterValue), pour que le dropdown
+ * Ville et /api/recherche restent toujours d'accord sur ce qu'une macro-zone
+ * recouvre réellement.
+ */
 export function resolveRegionFilter(raw: string | null): { regions: string[] } | null {
-  if (!raw || raw === "all") return null;
-  if (raw === "grand-nord") return { regions: [...GRAND_NORD] };
-  if (raw === "zone-anglophone") return { regions: [...ZONE_ANGLOPHONE] };
-  const canonical = normalizeRegionCasing(raw);
-  return canonical ? { regions: [canonical] } : null;
+  const regions = regionsForFilterValue(raw);
+  return regions ? { regions } : null;
 }
 
 /**

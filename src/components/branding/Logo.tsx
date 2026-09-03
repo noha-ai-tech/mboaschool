@@ -5,10 +5,28 @@
 // position fixed dès le premier paint (LCP) — aucune dépendance à un fichier
 // externe ni à l'optimiseur d'image.
 
+import type { CSSProperties } from "react";
+
 const HEIGHTS = { sm: 32, md: 48, lg: 72, header: 40, xl: 60 } as const;
 
 export type LogoSize = keyof typeof HEIGHTS;
 export type LogoVariant = "light" | "dark";
+
+// Reflet "chromé/verni" façon logo historique (fichiers de marque
+// public/branding/logo-*.png) : chaque segment du mot-mark porte un dégradé
+// clair-sombre-clair qui simule une bande de lumière réfléchie, plus une
+// légère lueur de la couleur de marque pour les chiffres — jamais une
+// animation, un effet statique et sobre.
+function glossyStyle(base: string, sheen: string, glow?: string): CSSProperties {
+  return {
+    backgroundImage: `linear-gradient(180deg, ${base} 0%, ${base} 36%, ${sheen} 50%, ${base} 64%, ${base} 100%)`,
+    WebkitBackgroundClip: "text",
+    backgroundClip: "text",
+    color: "transparent",
+    WebkitTextFillColor: "transparent",
+    textShadow: glow ? `0 1px 1px rgba(11,59,46,0.35), 0 0 7px ${glow}` : "0 1px 1px rgba(11,59,46,0.25)",
+  };
+}
 
 export function Logo({
   variant = "light",
@@ -24,7 +42,10 @@ export function Logo({
 }) {
   const height = HEIGHTS[size];
   const markWidth = Math.round(height * (96 / 130));
-  const textColor = variant === "dark" ? "#FFFFFF" : "#132019";
+  const ecoleStyle =
+    variant === "dark"
+      ? glossyStyle("rgba(255,255,255,0.88)", "#FFFFFF")
+      : glossyStyle("#132019", "#6E7D74");
 
   return (
     <span
@@ -55,13 +76,13 @@ export function Logo({
         <path d="M34 28 L46 28" stroke="#F2AE1F" strokeWidth="6" strokeLinecap="round" />
       </svg>
       <span
-        className="font-[family-name:var(--font-fraunces)] font-semibold leading-none whitespace-nowrap"
-        style={{ color: textColor, fontSize: Math.round(height * 0.42) }}
+        className="font-[family-name:var(--font-fraunces)] font-bold leading-none whitespace-nowrap"
+        style={{ fontSize: Math.round(height * 0.42) }}
       >
-        École
-        <span style={{ color: "#1F8A5D" }}>2</span>
-        <span style={{ color: "#C8202F" }}>3</span>
-        <span style={{ color: "#F2AE1F" }}>7</span>
+        <span style={ecoleStyle}>École</span>
+        <span style={glossyStyle("#1F8A5D", "#C9F5DF", "rgba(31,138,93,0.6)")}>2</span>
+        <span style={glossyStyle("#C8202F", "#FFD3D7", "rgba(200,32,47,0.55)")}>3</span>
+        <span style={glossyStyle("#F2AE1F", "#FFF3CE", "rgba(242,174,31,0.6)")}>7</span>
       </span>
     </span>
   );

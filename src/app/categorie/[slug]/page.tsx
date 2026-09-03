@@ -6,11 +6,10 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
 import { supabase } from "@/lib/supabase";
 import {
-  ArrowLeft, MapPin, CheckCircle2, ArrowRight, School, Search, X, ChevronUp, ChevronDown,
+  ArrowLeft, MapPin, ArrowRight, School, Search, X, ChevronUp, ChevronDown, Heart,
 } from "lucide-react";
 import { CAT_META } from "./catMeta";
 import { includesInsensitive } from "@/lib/textSearch";
-import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
 import { formatQuartierCity } from "@/lib/formatSchoolLocation";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
@@ -18,6 +17,9 @@ import { AnnouncementTicker, type TickerItem } from "@/components/hero/Announcem
 import { FeaturedSchoolsCarousel } from "@/components/schools/FeaturedSchoolsCarousel";
 import { THUMBNAIL_TONES, type FeaturedSchool } from "@/components/schools/SchoolCard";
 import { HERO_PHOTOS } from "@/lib/heroPhotos";
+import { useNearMeFilter, haversineKm } from "@/lib/useNearMeFilter";
+import { citiesForRegionFilter, getMajorCity } from "@/lib/cameroonMajorCities";
+import { REGION_FILTER_OPTIONS, regionsForFilterValue } from "@/lib/cameroonRegions";
 
 // Typographie de marque (skill ecoles237-design-system) — Fraunces pour les
 // titres éditoriaux, scopée à cette page via variable CSS (voir même
@@ -41,10 +43,10 @@ const jakarta = Plus_Jakarta_Sans({
 // Volontairement pas un encart "publicitaire"/"sponsorisé" : une slide = une
 // vraie école "mise en avant" dans cette catégorie (`establishments.is_featured`,
 // le même signal que l'admin bascule sous le libellé "Mise en avant
-// (sponsorisé)" — voir dashboard/admin/ecoles/[id]), avec le même libellé
-// public "À la une" que partout ailleurs sur le site (SchoolCard, grille de
-// la présente page) — jamais le mot "Sponsorisé", qui évoque à tort un
-// emplacement publicitaire payant qui n'existe pas dans le produit.
+// (sponsorisé)" — voir dashboard/admin/ecoles/[id]). Volontairement sans
+// badge visible ("À la une"/"Sponsorisé") — juste un défilement de vraies
+// photos d'écoles avec nom/description/lien réels, jamais une étiquette
+// commerciale sur la carte.
 // La photo vient de `school_images` (statut live) puis `cover_image_url` en
 // repli, comme sur le reste du site (voir useShowcasePhotos) ; si aucune
 // photo réelle n'existe encore pour cette école précise, le fond utilise une
@@ -84,7 +86,6 @@ function FeaturedCarousel({ slides }: { slides: FeaturedSlide[] }) {
           style={{ background: "linear-gradient(135deg, rgba(6,37,27,0.85) 0%, rgba(6,37,27,0.55) 100%)" }}
         />
         <div className="relative h-full flex flex-col items-center justify-center text-center p-8">
-          <p className="text-xs font-bold uppercase tracking-wider text-[#F2AE1F] mb-2">À la une</p>
           <p className="text-sm text-white/85 max-w-[260px]">
             Aucune école mise en avant dans cette catégorie pour l&apos;instant.
           </p>
@@ -114,9 +115,6 @@ function FeaturedCarousel({ slides }: { slides: FeaturedSlide[] }) {
             }}
           />
           <div className="absolute inset-0 flex flex-col justify-end p-6">
-            <span className="inline-flex w-fit items-center bg-[#F2AE1F] text-[#0B3B2E] text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md mb-3">
-              À la une
-            </span>
             <h3 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-white leading-tight mb-2">
               {slide.name}
             </h3>
@@ -170,11 +168,31 @@ function CategoryPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const activeSub = searchParams.get("sous") ?? "all";
+  // § filtres cohérents avec /recherche : Nom/Région/Ville/Près de moi, état
+  // d'URL comme source de vérité (même pattern que /recherche/page.tsx).
+  const urlRegion = searchParams.get("region") ?? "all";
+  const urlCity = searchParams.get("ville") ?? "all";
 
   const meta = CAT_META[slug];
   const [schools, setSchools] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
+  const near = useNearMeFilter();
+  const [likedIds, setLikedIds] = useState<string[]>([]);
+  const toggleLiked = (id: string) =>
+    setLikedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+
+  // Ville dépend de la Région choisie — même correspondance que /recherche.
+  const cityOptions = useMemo(() => ["all", ...citiesForRegionFilter(urlRegion).map((c) => c.name)], [urlRegion]);
+
+  function updateParams(next: Record<string, string | null>) {
+    const params = new URLSearchParams(searchParams.toString());
+    for (const [key, value] of Object.entries(next)) {
+      if (!value || value === "all" || value === "") params.delete(key);
+      else params.set(key, value);
+    }
+    router.replace(`/categorie/${slug}${params.toString() ? `?${params}` : ""}`);
+  }
 
   useEffect(() => {
     if (!meta) return;
@@ -183,7 +201,8 @@ function CategoryPageInner() {
       .from("establishments")
       .select(`
         id, name, main_category, sub_category, description,
-        city, neighborhood, cover_image_url,
+        city, region, neighborhood, cover_image_url,
+        latitude, longitude,
         is_verified, is_featured, is_claimed, subscription_plan,
         fees(registration_fee, tuition_fee),
         school_images(url)
@@ -265,16 +284,32 @@ function CategoryPageInner() {
 
   const { label, description, icon: CatIcon, subcategories } = meta;
 
-  // Subcategory counts — combine predefined + DB values
-  const dbSubcats = Array.from(new Set(schools.map((s) => s.sub_category).filter(Boolean)));
-  const allSubcats = Array.from(new Set([...subcategories, ...dbSubcats]));
+  // Sous-catégories réelles — regroupées insensible à la casse/espaces pour
+  // ne jamais créer deux tuiles pour la même valeur (ex. "Primaire public"
+  // prédéfini vs "primaire public" en base), et toute école sans
+  // sous-catégorie renseignée (null/vide) rejoint une tuile "Non classée"
+  // plutôt que de disparaître du décompte — garantit que la somme des
+  // tuiles est TOUJOURS exactement égale à `schools.length` (§ demande
+  // "le chiffre affiché doit être calculé dynamiquement... jamais un
+  // chiffre en dur").
+  const UNCLASSIFIED_KEY = "__non_classee__";
+  const subcatLabelByKey = new Map<string, string>();
+  subcategories.forEach((sub) => subcatLabelByKey.set(sub.toLowerCase(), sub));
+  schools.forEach((s) => {
+    const raw = (s.sub_category ?? "").trim();
+    if (raw && !subcatLabelByKey.has(raw.toLowerCase())) {
+      subcatLabelByKey.set(raw.toLowerCase(), raw);
+    }
+  });
+  const allSubcats = Array.from(subcatLabelByKey.values());
 
   const subcatCounts: Record<string, number> = {};
   allSubcats.forEach((sub) => {
     subcatCounts[sub] = schools.filter(
-      (s) => (s.sub_category ?? "").toLowerCase() === sub.toLowerCase()
+      (s) => (s.sub_category ?? "").trim().toLowerCase() === sub.toLowerCase()
     ).length;
   });
+  const unclassifiedCount = schools.filter((s) => !(s.sub_category ?? "").trim()).length;
 
   // "Mis en avant" = uniquement is_featured (signal commercial réel, distinct
   // de la vérification). Vérifié reste un badge indépendant affiché sur
@@ -282,11 +317,30 @@ function CategoryPageInner() {
   // (voir docs/03_DESIGN_SYSTEM, hiérarchie commerciale organic/verified/sponsored).
   const featured = schools.filter((s) => s.is_featured);
 
+  // Ville/Région — même logique de correspondance que /recherche
+  // (regionsForFilterValue + getMajorCity pour résoudre les alias de ville).
+  const regionsForFilter = regionsForFilterValue(urlRegion);
+
   // Filtered list
   const filtered = schools.filter((s) => {
-    if (activeSub !== "all" && (s.sub_category ?? "").toLowerCase() !== activeSub.toLowerCase()) return false;
+    if (activeSub !== "all") {
+      if (activeSub === UNCLASSIFIED_KEY) {
+        if ((s.sub_category ?? "").trim()) return false;
+      } else if ((s.sub_category ?? "").trim().toLowerCase() !== activeSub.toLowerCase()) {
+        return false;
+      }
+    }
     if (query && !includesInsensitive(`${s.name} ${s.city ?? ""} ${s.neighborhood ?? ""} ${s.sub_category ?? ""}`, query)) {
       return false;
+    }
+    if (regionsForFilter && !(s.region && regionsForFilter.includes(s.region))) return false;
+    if (urlCity !== "all") {
+      const majorName = getMajorCity(s.city)?.name ?? s.city;
+      if (!majorName || majorName.toLowerCase() !== urlCity.toLowerCase()) return false;
+    }
+    if (near.useLocation && near.userLocation) {
+      if (s.latitude == null || s.longitude == null) return false;
+      if (haversineKm(near.userLocation.lat, near.userLocation.lng, s.latitude, s.longitude) > Number(near.radius)) return false;
     }
     return true;
   });
@@ -314,10 +368,7 @@ function CategoryPageInner() {
   tickerItems.push({ id: "inscription", label: "Inscrire mon établissement", href: "/auth/inscription" });
 
   function setSubcat(sub: string) {
-    const params = new URLSearchParams(searchParams.toString());
-    if (sub === "all") params.delete("sous");
-    else params.set("sous", sub);
-    router.replace(`/categorie/${slug}?${params.toString()}`);
+    updateParams({ sous: sub === "all" ? null : sub });
   }
 
   return (
@@ -358,11 +409,6 @@ function CategoryPageInner() {
                   </span>
                   <span className="ml-1.5 text-[#5A695F]">établissement{schools.length !== 1 ? "s" : ""}</span>
                 </span>
-                {featured.length > 0 && (
-                  <span className="inline-flex items-center gap-1.5 bg-[#FBEFD8] text-[#D6941A] text-xs font-bold px-2.5 py-1 rounded-full">
-                    ★ {featured.length} mis en avant
-                  </span>
-                )}
               </div>
             </div>
           </div>
@@ -416,6 +462,25 @@ function CategoryPageInner() {
                 </button>
               );
             })}
+
+            {unclassifiedCount > 0 && (
+              <button
+                onClick={() => setSubcat(UNCLASSIFIED_KEY)}
+                className={`flex flex-col items-start p-5 rounded-[16px] border text-left transition-colors duration-base ${
+                  activeSub === UNCLASSIFIED_KEY
+                    ? "bg-[#0B3B2E] text-white border-[#0B3B2E]"
+                    : "bg-white border-[#E7E0D7] hover:border-[#12543F]"
+                }`}
+              >
+                <span className={`font-[family-name:var(--font-fraunces)] text-2xl font-semibold ${activeSub === UNCLASSIFIED_KEY ? "text-white" : "text-[#132019]"}`}>
+                  {loading ? "—" : unclassifiedCount}
+                </span>
+                <p className={`font-semibold text-sm mt-2 ${activeSub === UNCLASSIFIED_KEY ? "text-white" : "text-[#132019]"}`}>Non classée</p>
+                <p className={`text-xs mt-0.5 ${activeSub === UNCLASSIFIED_KEY ? "text-white/60" : "text-[#5A695F]"}`}>
+                  école{unclassifiedCount !== 1 ? "s" : ""}
+                </p>
+              </button>
+            )}
           </div>
         </section>
 
@@ -425,26 +490,28 @@ function CategoryPageInner() {
             <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-[#132019] mb-5">
               Établissements à découvrir
             </h2>
-            <FeaturedSchoolsCarousel schools={featuredForCarousel} />
+            <FeaturedSchoolsCarousel schools={featuredForCarousel} showBadges={false} />
           </section>
         )}
 
         {/* ── LISTE DES ÉTABLISSEMENTS ──────────────────────────────── */}
         <section className="pb-16">
-          <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
-            <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-[#132019]">
-              {activeSub === "all" ? "Tous les établissements" : activeSub}
-              <span className="ml-2 text-sm font-medium text-[#5A695F]">
-                ({loading ? "…" : filtered.length})
-              </span>
-            </h2>
-            <div className="flex items-center gap-2 bg-white border border-[#E7E0D7] rounded-[11px] px-3.5 py-2.5 focus-within:border-[#12543F] transition-colors duration-base">
-              <Search size={14} className="text-[#5A695F] shrink-0" />
+          <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-[#132019] mb-5">
+            {activeSub === "all" ? "Tous les établissements" : activeSub === UNCLASSIFIED_KEY ? "Non classée" : activeSub}
+          </h2>
+
+          {/* Filtres — mêmes champs et même style que /recherche (Nom, Région,
+              Ville dépendante, Près de moi), sans "Toutes catégories"
+              puisque cette page est déjà scopée à une catégorie. */}
+          <div className="bg-white border border-[#E7E0D7] rounded-[16px] shadow-[0_8px_24px_-14px_rgba(11,59,46,0.15)] p-3.5 flex items-center gap-2.5 mb-6 flex-wrap">
+            <div className="flex items-center gap-2 bg-[#FCFAF7] border border-[#E7E0D7] rounded-[10px] px-3 h-10 flex-1 min-w-[220px] max-w-sm focus-within:border-[#12543F] transition-colors duration-base">
+              <Search size={15} className="text-[#5A695F] shrink-0" />
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Rechercher…"
-                className="bg-transparent outline-none text-sm w-40 placeholder-[#5A695F]/70 text-[#132019]"
+                placeholder="Nom d'établissement…"
+                aria-label="Rechercher un établissement"
+                className="bg-transparent outline-none text-sm flex-1 min-w-0 placeholder-[#5A695F]/70 text-[#132019]"
               />
               {query && (
                 <button onClick={() => setQuery("")} aria-label="Effacer la recherche">
@@ -452,7 +519,62 @@ function CategoryPageInner() {
                 </button>
               )}
             </div>
+
+            <select
+              value={urlRegion}
+              onChange={(e) => {
+                const nextRegion = e.target.value;
+                const stillValid = urlCity === "all" || citiesForRegionFilter(nextRegion).some((c) => c.name === urlCity);
+                updateParams(stillValid ? { region: nextRegion } : { region: nextRegion, ville: null });
+              }}
+              aria-label="Filtrer par région"
+              className="border border-[#E7E0D7] rounded-[10px] px-3 h-10 text-sm font-medium bg-[#FCFAF7] text-[#132019]"
+            >
+              {REGION_FILTER_OPTIONS.map((r) => (
+                <option key={r.value} value={r.value}>{r.label}</option>
+              ))}
+            </select>
+
+            <select
+              value={urlCity}
+              onChange={(e) => updateParams({ ville: e.target.value })}
+              aria-label="Filtrer par ville"
+              className="border border-[#E7E0D7] rounded-[10px] px-3 h-10 text-sm font-medium bg-[#FCFAF7] text-[#132019]"
+            >
+              {cityOptions.map((c) => (
+                <option key={c} value={c}>{c === "all" ? "Toutes les villes" : c}</option>
+              ))}
+            </select>
+
+            <button
+              onClick={near.handleLocationToggle}
+              disabled={near.locating}
+              className="flex items-center gap-1.5 border border-[#DCEEE3] bg-[#EEF6F1] text-[#12543F] rounded-[10px] px-3.5 h-10 text-sm font-semibold hover:bg-[#E3F1E9] transition-colors duration-base disabled:opacity-50 whitespace-nowrap"
+            >
+              <MapPin size={14} />
+              {near.locating ? "Localisation…" : "Près de moi"}
+            </button>
+
+            {near.useLocation && (
+              <span className="flex items-center gap-2 px-3 py-2 bg-[#E9F5EE] text-[#0B3B2E] rounded-lg text-sm font-semibold border border-[#DCEEE3]">
+                À moins de {near.radius} km
+                <button onClick={near.clearLocation} aria-label="Retirer le filtre de proximité"><X size={13} /></button>
+              </span>
+            )}
+
+            <span className="ml-auto text-sm text-[#5A695F] font-medium whitespace-nowrap" aria-live="polite">
+              {loading ? "Chargement…" : <><span className="text-[#132019] font-bold font-[family-name:var(--font-fraunces)]">{filtered.length}</span> résultat{filtered.length !== 1 ? "s" : ""}</>}
+            </span>
           </div>
+
+          {near.locationError && (
+            <div className="flex items-center justify-between gap-3 mb-6 px-4 py-3 bg-[#F4F3EF] border border-[#E7E0D7] rounded-[10px] text-sm text-[#5A695F]">
+              <span>{near.locationError}</span>
+              <button onClick={() => near.setLocationError(null)} aria-label="Fermer" className="text-[#5A695F] hover:text-[#132019] shrink-0">
+                <X size={14} />
+              </button>
+            </div>
+          )}
 
           {loading ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -474,66 +596,65 @@ function CategoryPageInner() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {filtered.map((s, i) => {
                 const tuition = s.fees?.[0]?.tuition_fee ?? 0;
-                const isClaimed = s.is_claimed ?? true;
                 const [tone1, tone2] = THUMBNAIL_TONES[i % THUMBNAIL_TONES.length];
-                const href = isClaimed ? `/ecole/${s.id}` : `/auth/inscription?ecole=${s.id}`;
                 const location = formatQuartierCity(s.neighborhood, s.city);
                 return (
-                  <Link
+                  <div
                     key={s.id}
-                    href={href}
                     className="group bg-white border border-[#E7E0D7] rounded-[16px] overflow-hidden shadow-[0_8px_24px_-14px_rgba(11,59,46,0.2)] hover:shadow-[0_16px_34px_-14px_rgba(11,59,46,0.26)] hover:-translate-y-0.5 transition-all duration-base"
                   >
                     <div
                       className="relative h-40 overflow-hidden"
                       style={{ background: `linear-gradient(150deg, ${tone1}, ${tone2})` }}
                     >
-                      <div className="absolute top-2.5 left-2.5 right-2.5 flex flex-col items-start gap-1.5">
-                        {s.is_featured && (
-                          <span className="bg-[#F2AE1F] text-[#0B3B2E] text-[10px] font-black px-2 py-1 rounded-full tracking-wide whitespace-nowrap">
-                            À la une
-                          </span>
-                        )}
-                        {s.is_verified && (
-                          <span className="inline-flex items-center gap-1 whitespace-nowrap bg-white/90 backdrop-blur-sm text-[#0B3B2E] text-[9px] font-bold px-2 py-1 rounded-full">
-                            <CheckCircle2 size={10} className="shrink-0" /> {TRUST_BADGE_LABELS.PLATFORM_VERIFIED}
-                          </span>
-                        )}
-                        {!isClaimed && (
-                          <span className="whitespace-nowrap bg-white/85 backdrop-blur-sm text-[#5A695F] text-[9px] font-bold px-2 py-1 rounded-full">
-                            Non revendiquée
-                          </span>
-                        )}
-                      </div>
+                      <Link href={`/ecole/${s.id}`} className="absolute inset-0" aria-label={s.name} />
+                      <button
+                        type="button"
+                        onClick={() => toggleLiked(s.id)}
+                        aria-label={likedIds.includes(s.id) ? "Retirer des favoris" : "Ajouter aux favoris"}
+                        aria-pressed={likedIds.includes(s.id)}
+                        className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-white/85 backdrop-blur-sm text-[#5A695F] hover:text-red-500 transition-colors duration-base"
+                      >
+                        <Heart size={14} className={likedIds.includes(s.id) ? "fill-red-500 text-red-500" : ""} />
+                      </button>
                     </div>
 
-                    <div className="p-4">
-                      <p className="font-bold text-[#132019] truncate">{s.name}</p>
-                      {location && (
-                        <p className="text-xs text-[#5A695F] mt-1 flex items-center gap-1">
-                          <MapPin size={10} /> {location}
-                        </p>
-                      )}
-                      {s.sub_category && (
-                        <span className="inline-block mt-2 text-[10px] font-semibold text-[#5A695F] bg-[#F4F3EF] px-2 py-0.5 rounded-full">
-                          {s.sub_category}
-                        </span>
-                      )}
-                      <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#F4F3EF]">
-                        {tuition > 0 ? (
-                          <p className="text-xs text-[#5A695F]">
-                            <span className="font-bold text-[#132019]">{tuition.toLocaleString("fr-FR")}</span>
-                            <span className="ml-1">FCFA/an</span>
+                    <Link href={`/ecole/${s.id}`}>
+                      <div className="p-4 pb-0">
+                        <p className="font-bold text-[#132019] truncate">{s.name}</p>
+                        {location && (
+                          <p className="text-xs text-[#5A695F] mt-1 flex items-center gap-1">
+                            <MapPin size={10} /> {location}
                           </p>
-                        ) : (
-                          <p className="text-xs text-[#5A695F]">Frais non renseignés</p>
                         )}
-                        <span className="text-xs font-semibold text-[#12543F] flex items-center gap-1 group-hover:gap-2 transition-all duration-base">
-                          Voir <ArrowRight size={11} />
-                        </span>
+                        {s.sub_category && (
+                          <span className="inline-block mt-2 text-[10px] font-semibold text-[#5A695F] bg-[#F4F3EF] px-2 py-0.5 rounded-full">
+                            {s.sub_category}
+                          </span>
+                        )}
+                        <div className="mt-3 pt-3 border-t border-[#F4F3EF]">
+                          {tuition > 0 ? (
+                            <p className="text-xs text-[#5A695F]">
+                              <span className="font-bold text-[#132019]">{tuition.toLocaleString("fr-FR")}</span>
+                              <span className="ml-1">FCFA/an</span>
+                            </p>
+                          ) : (
+                            <p className="text-xs text-[#5A695F]">Frais non renseignés</p>
+                          )}
+                        </div>
                       </div>
+                    </Link>
+
+                    <div className="p-4 pt-3">
+                      <Link
+                        href={`/ecole/${s.id}`}
+                        className="group/voir inline-flex items-center justify-center gap-1.5 h-8 px-3.5 rounded-[9px] bg-[#F2AE1F] text-[#0B3B2E] text-[13px] font-bold shadow-[0_6px_16px_-8px_rgba(11,59,46,0.45)] hover:bg-[#D6941A] hover:shadow-[0_10px_22px_-8px_rgba(11,59,46,0.5)] hover:-translate-y-0.5 active:translate-y-0 active:shadow-[0_4px_10px_-6px_rgba(11,59,46,0.4)] transition-all duration-base"
+                      >
+                        Voir
+                        <ArrowRight size={12} strokeWidth={2.5} className="transition-transform duration-base group-hover/voir:translate-x-0.5" />
+                      </Link>
                     </div>
-                  </Link>
+                  </div>
                 );
               })}
             </div>
