@@ -132,6 +132,26 @@ body {
   }
 }
 
+/* Hero plein cadre (Landing V9 — refonte visuelle) — zoom lent continu en
+   va-et-vient sur la photo active du carrousel hero, pour un fond "vivant"
+   sans jamais couper brutalement (utilisé avec le fondu opacity existant de
+   HeroPhotoCard). Distinct de .animate-hero-zoom (one-shot, non réutilisé
+   ici) : celui-ci boucle indéfiniment tant que la photo reste active. */
+@keyframes hero-kenburns {
+  from { transform: scale(1.05); }
+  to { transform: scale(1.13); }
+}
+
+.animate-hero-kenburns {
+  animation: hero-kenburns 14s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-kenburns {
+    animation: none;
+  }
+}
+
 /* Sidebars Pro (Sprint M) — scrollbar discrète : le chrome visuel est fin et
    quasi invisible au repos, mais le scroll clavier/molette/tactile reste
    entièrement fonctionnel (pas de overflow:hidden, juste un style de piste). */
