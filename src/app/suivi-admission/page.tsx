@@ -5,8 +5,10 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { admissionStatusConfig } from "@/lib/admissions/status";
 import { ArrowLeft, Search, MessageSquare } from "lucide-react";
-import { AuthHeader } from "@/components/layout/AuthHeader";
+import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
+import { AnnouncementTicker } from "@/components/hero/AnnouncementTicker";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { useSiteTickerItems } from "@/lib/useSiteTickerItems";
 
 type Result = {
   establishment_name: string;
@@ -21,6 +23,7 @@ const STAGED_TRACKING_CODE_KEY = "ecoles237.admission-tracking-code:v1";
 const TRACKING_CODE_PATTERN = /^E237-[A-HJ-NP-Z2-9]{6}$/;
 
 function SuiviForm() {
+  const tickerItems = useSiteTickerItems();
   const [code, setCode] = useState("");
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
@@ -81,7 +84,9 @@ function SuiviForm() {
 
   return (
     <div className="min-h-screen bg-[#ECECEA] flex flex-col">
-      <AuthHeader />
+      <SiteHeader />
+      <SiteHeaderSpacer />
+      <AnnouncementTicker items={tickerItems} />
 
       <div className="flex-1 px-6 py-10">
         <div className="max-w-[560px] mx-auto">

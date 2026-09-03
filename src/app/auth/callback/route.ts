@@ -6,6 +6,7 @@ import {
   secureInvitationResponse,
   TARGETED_INVITATION_COOKIE,
 } from "@/lib/invitations/targetedInvitation";
+import { listAccessibleEstablishments } from "@/lib/school/establishmentAccess";
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
@@ -64,6 +65,23 @@ export async function GET(request: Request) {
       if (profile?.role === "teacher") {
         return secureInvitationResponse(
           NextResponse.redirect(new URL("/enseignant/mon-espace", origin))
+        );
+      }
+
+      // AMÉLIORATION 1 — même logique d'accès que le dashboard/SchoolContext
+      // (src/app/api/establishments/accessible) : un compte "école" sans
+      // établissement lié (ni propriétaire, ni membre du staff) atterrit sur
+      // le formulaire de liaison/inscription plutôt que sur un dashboard
+      // vide. En cas d'échec de la vérification, on ne bloque jamais la
+      // connexion : repli sur le dashboard existant.
+      const { establishments } = await listAccessibleEstablishments({
+        supabase,
+        userId: user.id,
+      }).catch(() => ({ establishments: [] as Awaited<ReturnType<typeof listAccessibleEstablishments>>["establishments"] }));
+
+      if (establishments.length === 0) {
+        return secureInvitationResponse(
+          NextResponse.redirect(new URL("/revendiquer", origin))
         );
       }
       return secureInvitationResponse(

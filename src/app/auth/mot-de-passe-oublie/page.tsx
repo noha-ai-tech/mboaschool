@@ -2,12 +2,27 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { Fraunces } from "next/font/google";
 import { supabase } from "@/lib/supabase";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import { Logo } from "@/components/branding/Logo";
 import { AuthBranding } from "@/components/auth/AuthBranding";
+import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
+import { AnnouncementTicker } from "@/components/hero/AnnouncementTicker";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { useSiteTickerItems } from "@/lib/useSiteTickerItems";
+
+// Chargée ici uniquement pour l'accroche de AuthBranding (Fraunces) —
+// aucun autre texte de cette page n'est concerné par la présente tâche.
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  style: ["normal"],
+  variable: "--font-fraunces",
+  display: "swap",
+});
 
 export default function MotDePasseOubliePage() {
+  const tickerItems = useSiteTickerItems();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -31,7 +46,12 @@ export default function MotDePasseOubliePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className={`min-h-screen bg-background flex flex-col ${fraunces.variable}`}>
+      <SiteHeader />
+      <SiteHeaderSpacer />
+      <AnnouncementTicker items={tickerItems} />
+
+      <div className="flex-1 flex">
       <AuthBranding />
 
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
@@ -109,6 +129,8 @@ export default function MotDePasseOubliePage() {
           </Link>
         </div>
       </div>
+      </div>
+      <SiteFooter />
     </div>
   );
 }
