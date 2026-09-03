@@ -1,10 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { ArrowRight, Eye, EyeOff, CheckCircle2 } from "lucide-react";
 import { Logo } from "@/components/branding/Logo";
+import {
+  getSignUpErrorMessage,
+  validatePasswordPair,
+} from "@/lib/auth/passwordSecurity";
 
 export default function InscriptionPage() {
   const [form, setForm] = useState({
@@ -27,12 +32,12 @@ export default function InscriptionPage() {
     e.preventDefault();
     setError("");
 
-    if (form.password !== form.confirm_password) {
-      setError("Les mots de passe ne correspondent pas.");
-      return;
-    }
-    if (form.password.length < 8) {
-      setError("Le mot de passe doit contenir au moins 8 caractères.");
+    const passwordError = validatePasswordPair(
+      form.password,
+      form.confirm_password
+    );
+    if (passwordError) {
+      setError(passwordError);
       return;
     }
 
@@ -48,9 +53,7 @@ export default function InscriptionPage() {
     setLoading(false);
 
     if (authError) {
-      setError(authError.message.includes("already registered")
-        ? "Cet email est déjà utilisé."
-        : authError.message);
+      setError(getSignUpErrorMessage(authError));
       return;
     }
     setSuccess(true);
@@ -65,7 +68,7 @@ export default function InscriptionPage() {
           </div>
           <h2 className="text-2xl font-black mb-2">Compte créé !</h2>
           <p className="text-slate-500 text-sm mb-8 leading-relaxed">
-            Vérifiez votre boîte email et cliquez sur le lien de confirmation pour activer votre compte.
+            Votre compte est prêt. Vous pouvez maintenant accéder à votre espace.
           </p>
           <Link
             href="/auth/connexion"
@@ -84,9 +87,12 @@ export default function InscriptionPage() {
 
       {/* Right image panel */}
       <div className="hidden lg:flex flex-col lg:w-[48%] bg-[#0a0f0d] relative overflow-hidden order-last">
-        <img
+        <Image
           src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80"
           alt=""
+          fill
+          priority
+          sizes="48vw"
           className="absolute inset-0 w-full h-full object-cover opacity-35"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f0d] via-transparent" />
@@ -229,7 +235,7 @@ export default function InscriptionPage() {
               </Link>
             </p>
             <Link href="/" className="block mt-3 text-xs text-slate-400 hover:text-slate-600 transition-colors">
-              ← Retour à l'accueil
+              ← Retour à l&apos;accueil
             </Link>
           </div>
         </div>
