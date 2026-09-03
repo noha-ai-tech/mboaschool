@@ -1,0 +1,222 @@
+{
+  "snapshot_version": 1,
+  "captured_at": "2026-08-30T15:33:57.926378+00:00",
+  "capture_mode": "production read-only",
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "establishment": {
+    "id": "a4cc4966-0d85-4c63-9c24-0538b8d5133b",
+    "owner_id": "84884e49-3596-451a-b0b6-b8eeda4a9e50",
+    "name": "guyskull",
+    "slug": "guyskull-1787873135316",
+    "main_category": "garderie",
+    "sub_category": null,
+    "ownership_type": null,
+    "description": "hhhhhh",
+    "region": null,
+    "department": null,
+    "city": "Douala",
+    "arrondissement": null,
+    "neighborhood": "Pk10",
+    "address": null,
+    "latitude": null,
+    "longitude": null,
+    "phone": "+237674816227",
+    "whatsapp": null,
+    "email": null,
+    "website": null,
+    "logo_url": null,
+    "cover_image_url": null,
+    "image_url": null,
+    "owner_email": null,
+    "is_claimed": false,
+    "quartier": null,
+    "couleur_primaire": null,
+    "couleur_secondaire": null,
+    "emoji_logo": null,
+    "forfait": "gratuit",
+    "verification_status": "referenced",
+    "is_verified": false,
+    "is_featured": false,
+    "accepts_online_payment": false,
+    "subscription_plan": "free",
+    "region_id": null,
+    "department_id": null,
+    "arrondissement_id": null,
+    "official_id": null,
+    "source_ministry": null,
+    "source_reference": null,
+    "source_url": null,
+    "source_updated_at": null,
+    "registry_import_batch": null,
+    "organization_id": null,
+    "hero_mode": "carousel",
+    "motto": null,
+    "history": null,
+    "mission": null,
+    "vision": null,
+    "founding_year": null,
+    "student_count": null,
+    "teacher_count": null,
+    "created_at": "2026-08-27T23:25:35.780142+00:00",
+    "updated_at": "2026-08-27T23:25:35.780142+00:00"
+  },
+  "fees": [
+    {
+      "id": "2e03677c-db6b-4b70-98c0-a4e9ba34d9d5",
+      "establishment_id": "a4cc4966-0d85-4c63-9c24-0538b8d5133b",
+      "registration_fee": null,
+      "tuition_fee": 29000,
+      "transport_fee": null,
+      "canteen_fee": null,
+      "uniform_fee": null,
+      "exam_fee": null,
+      "other_fees": null,
+      "currency": "FCFA",
+      "created_at": "2026-08-28T18:00:06.4108+00:00"
+    }
+  ],
+  "infrastructures": [
+    {
+      "id": "2a489662-f285-4926-91bc-1a89b9653ee6",
+      "establishment_id": "a4cc4966-0d85-4c63-9c24-0538b8d5133b",
+      "library": false,
+      "laboratory": false,
+      "computer_room": false,
+      "sports_field": false,
+      "canteen": false,
+      "boarding": false,
+      "transport": false,
+      "security": false,
+      "wifi": false,
+      "infirmary": false,
+      "created_at": "2026-08-28T18:00:06.4108+00:00"
+    }
+  ],
+  "admissions_config": [
+    {
+      "id": "dfe348f9-6c7d-422f-aad4-08f6d62195ea",
+      "establishment_id": "a4cc4966-0d85-4c63-9c24-0538b8d5133b",
+      "is_open": true,
+      "levels": [],
+      "conditions": null,
+      "required_documents": [],
+      "period_start": null,
+      "period_end": null,
+      "additional_info": null,
+      "created_at": "2026-08-28T18:00:06.4108+00:00",
+      "updated_at": "2026-08-28T18:00:06.4108+00:00"
+    }
+  ],
+  "school_images": [
+    {
+      "id": "48295f7f-af6c-45e5-b110-e35b65a3962f",
+      "establishment_id": "a4cc4966-0d85-4c63-9c24-0538b8d5133b",
+      "url": "https://umcwwynrftidytxgqkwi.supabase.co/storage/v1/object/public/school-images/a4cc4966-0d85-4c63-9c24-0538b8d5133b/9a92dff4-b1b0-4b16-9d38-83edfffd4742.jpg",
+      "storage_path": "a4cc4966-0d85-4c63-9c24-0538b8d5133b/9a92dff4-b1b0-4b16-9d38-83edfffd4742.jpg",
+      "caption": null,
+      "status": "live",
+      "created_at": "2026-08-28T17:56:59.346355+00:00"
+    }
+  ],
+  "storage_objects": [
+    {
+      "id": "85aba23d-c8f5-4cef-9d1a-177bf60f3d35",
+      "bucket_id": "school-images",
+      "name": "a4cc4966-0d85-4c63-9c24-0538b8d5133b/9a92dff4-b1b0-4b16-9d38-83edfffd4742.jpg",
+      "metadata": {
+        "size": 71868,
+        "mimetype": "image/jpeg",
+        "cacheControl": "max-age=3600",
+        "contentLength": 71868,
+        "httpStatusCode": 200
+      },
+      "created_at": "2026-08-28T17:56:59.043864+00:00",
+      "updated_at": "2026-08-28T17:56:59.043864+00:00",
+      "last_accessed_at": "2026-08-28T17:56:59.043864+00:00"
+    }
+  ],
+  "school_documents": [],
+  "school_announcements": [],
+  "school_exam_results": [],
+  "school_official_ranking": [],
+  "classes": [],
+  "sections": [],
+  "applications": [],
+  "school_page_sections": [
+    { "id": "c617f52d-dc7a-4d91-b22d-0f46c0ee39e9", "section_key": "presentation", "position": 0, "is_visible": true },
+    { "id": "b11853ab-abe7-4c84-bdd5-57d7cae35b84", "section_key": "admissions", "position": 1, "is_visible": true },
+    { "id": "1ab52407-a917-41e5-bfee-230c35d25898", "section_key": "pricing", "position": 2, "is_visible": true },
+    { "id": "4176c225-4d7a-4a91-a7da-75307eb2a8e2", "section_key": "infrastructure", "position": 3, "is_visible": true },
+    { "id": "bf23f743-a2d3-44dc-b9e8-bfd599697fa9", "section_key": "gallery", "position": 4, "is_visible": true },
+    { "id": "8585917d-bd87-4c9b-a269-12815592084b", "section_key": "news", "position": 5, "is_visible": true },
+    { "id": "283363b0-a59c-44ec-b25f-c34ba66a58a6", "section_key": "documents", "position": 6, "is_visible": true },
+    { "id": "a25f419c-e2d5-44ca-87f9-feadfbc5c4f4", "section_key": "contact", "position": 7, "is_visible": true }
+  ],
+  "school_page_drafts": [
+    {
+      "id": "45f4c53c-2af6-4fae-b312-f57020fd2471",
+      "establishment_id": "a4cc4966-0d85-4c63-9c24-0538b8d5133b",
+      "is_dirty": false,
+      "created_at": "2026-08-28T17:51:11.637406+00:00",
+      "updated_at": "2026-08-28T18:00:06.4108+00:00",
+      "payload": {
+        "presentation": { "description": "hhhhhh" },
+        "contact": {
+          "phone": "+237674816227",
+          "email": null,
+          "website": null,
+          "address": null,
+          "city": "Douala"
+        },
+        "hero_mode": "carousel",
+        "pricing": {
+          "registration_fee": null,
+          "tuition_fee": 29000,
+          "transport_fee": null,
+          "canteen_fee": null,
+          "uniform_fee": null,
+          "exam_fee": null,
+          "other_fees": null
+        },
+        "infrastructure": {
+          "library": false,
+          "laboratory": false,
+          "computer_room": false,
+          "sports_field": false,
+          "canteen": false,
+          "boarding": false,
+          "transport": false,
+          "security": false,
+          "wifi": false,
+          "infirmary": false
+        },
+        "admissions": {
+          "levels": [],
+          "conditions": null,
+          "required_documents": [],
+          "period_start": null,
+          "period_end": null,
+          "additional_info": null
+        },
+        "sections": [
+          { "section_key": "presentation", "position": 0, "is_visible": true },
+          { "section_key": "admissions", "position": 1, "is_visible": true },
+          { "section_key": "pricing", "position": 2, "is_visible": true },
+          { "section_key": "infrastructure", "position": 3, "is_visible": true },
+          { "section_key": "gallery", "position": 4, "is_visible": true },
+          { "section_key": "news", "position": 5, "is_visible": true },
+          { "section_key": "documents", "position": 6, "is_visible": true },
+          { "section_key": "contact", "position": 7, "is_visible": true }
+        ],
+        "gallery": { "remove_ids": [] }
+      }
+    }
+  ],
+  "integrity_notes": [
+    "Snapshot generated through read-only SELECT statements; database writes: 0.",
+    "No secrets, authentication tokens, or private credentials are included.",
+    "The storage object checksum/eTag is intentionally omitted; object identity, path, type, and size are retained.",
+    "The draft payload has the legacy eight domains and does not contain key_numbers, results, or ranking."
+  ]
+}
+

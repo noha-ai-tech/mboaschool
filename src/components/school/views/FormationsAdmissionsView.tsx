@@ -81,7 +81,7 @@ export function FormationsAdmissionsView({ data }: { data: MiniSiteRendererData 
           )}
 
           {flags.showAdmissions && <ParentTab schoolId={school.id} admissionsConfig={admissionsConfig} showLevels={false} showRequiredDocuments={false} />}
-          {flags.showPricing && fees && <StructuredPricing pricing={fees} />}
+          {flags.showPricing && fees && <StructuredPricing pricing={fees} documents={docsList} />}
           {flags.showAdmissions && (
             <div id="pieces-requises" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
               <h2 className="font-bold text-sm mb-3">Pièces à fournir</h2>

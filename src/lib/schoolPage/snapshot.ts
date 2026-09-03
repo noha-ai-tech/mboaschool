@@ -56,12 +56,12 @@ export async function buildLiveSnapshot(
       .maybeSingle(),
     supabase
       .from("school_fee_schedules")
-      .select("id, academic_year, level_label, registration_fee, tuition_fee, currency, notes, position, school_fee_installments(label, position, amount, due_date, notes)")
+      .select("id, academic_year, cycle, level_label, registration_fee, tuition_fee, currency, notes, position, school_fee_installments(label, position, amount, due_date, notes)")
       .eq("establishment_id", establishmentId)
       .order("position"),
     supabase
       .from("school_additional_fees")
-      .select("academic_year, category, label, amount, mandatory, frequency, notes, position")
+      .select("academic_year, category, label, amount, status, frequency, notes, position")
       .eq("establishment_id", establishmentId)
       .order("position"),
   ]);
@@ -115,6 +115,7 @@ export async function buildLiveSnapshot(
   pricing.legacy_amounts_qualified = fees?.is_qualified ?? false;
   pricing.schedules = ((schedulesRes.data ?? []) as unknown as FeeScheduleRow[]).map((schedule) => ({
     academic_year: schedule.academic_year,
+    cycle: schedule.cycle ?? null,
     level_label: schedule.level_label,
     registration_fee: schedule.registration_fee,
     tuition_fee: schedule.tuition_fee,

@@ -55,22 +55,24 @@ export function MiniSiteShell({
 
       <main>{children}</main>
 
-      <SchoolSiteFooter
-        name={school.name}
-        motto={school.motto}
-        description={school.description}
-        category={school.main_category}
-        baseHref={baseHref}
-        address={address || null}
-        phone={school.phone}
-        whatsapp={school.whatsapp}
-        email={school.email}
-        website={school.website}
-      />
+      <div className="print:hidden">
+        <SchoolSiteFooter
+          name={school.name}
+          motto={school.motto}
+          description={school.description}
+          category={school.main_category}
+          baseHref={baseHref}
+          address={address || null}
+          phone={school.phone}
+          whatsapp={school.whatsapp}
+          email={school.email}
+          website={school.website}
+        />
+      </div>
 
       {data.mode === "public" && (
         <>
-          <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-border p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+          <div className="lg:hidden print:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-border p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
             <Link
               href={data.preinscriptionHref}
               className="block w-full text-center bg-gradient-to-r from-primary to-primary-dark text-white py-3 rounded-card text-sm font-bold"

@@ -53,6 +53,8 @@ export type SchoolFeeInstallment = {
 
 export type SchoolFeeSchedule = {
   academic_year: string;
+  /** PRICING-01 — optional free-text cycle grouping (e.g. "Maternelle"). Never a fixed enum — every school system differs. */
+  cycle: string | null;
   level_label: string;
   registration_fee: number | null;
   tuition_fee: number | null;
@@ -62,12 +64,19 @@ export type SchoolFeeSchedule = {
   installments: SchoolFeeInstallment[];
 };
 
+// PRICING-01 §10 — replaces the old boolean `mandatory`: "included" (covered
+// by tuition, no separate charge — never a fake 0 FCFA) and "contact"
+// (amount genuinely unpublished) are now expressible without lying.
+export const ADDITIONAL_FEE_STATUSES = ["mandatory", "optional", "included", "contact"] as const;
+export type AdditionalFeeStatus = (typeof ADDITIONAL_FEE_STATUSES)[number];
+
 export type SchoolAdditionalFee = {
   academic_year: string;
   category: AdditionalFeeCategory;
   label: string;
-  amount: number;
-  mandatory: boolean;
+  /** null only when status === "contact". */
+  amount: number | null;
+  status: AdditionalFeeStatus;
   frequency: string;
   notes: string | null;
   position: number;
@@ -161,6 +170,9 @@ export function normalizeSchoolPagePricing(raw: unknown): PricingResult {
       const error = requiredText(schedule[field], `pricing.schedules[${index}].${field}`, max);
       if (error) return { ok: false, error };
     }
+    if (!("cycle" in schedule)) schedule.cycle = null;
+    const cycleError = nullableText(schedule.cycle, `pricing.schedules[${index}].cycle`, 60);
+    if (cycleError) return { ok: false, error: cycleError };
     for (const field of ["registration_fee", "tuition_fee"] as const) {
       const error = nullableAmount(schedule[field], `pricing.schedules[${index}].${field}`);
       if (error) return { ok: false, error };
@@ -207,9 +219,15 @@ export function normalizeSchoolPagePricing(raw: unknown): PricingResult {
       const error = requiredText(fee[field], `${prefix}.${field}`, max);
       if (error) return { ok: false, error };
     }
-    const amountError = requiredAmount(fee.amount, `${prefix}.amount`);
-    if (amountError) return { ok: false, error: amountError };
-    if (typeof fee.mandatory !== "boolean") return { ok: false, error: `${prefix}.mandatory doit être booléen` };
+    if (typeof fee.status !== "string" || !ADDITIONAL_FEE_STATUSES.includes(fee.status as AdditionalFeeStatus)) {
+      return { ok: false, error: `${prefix}.status est invalide` };
+    }
+    if (fee.status === "contact") {
+      if (fee.amount !== null) return { ok: false, error: `${prefix}.amount doit être null quand status = "contact"` };
+    } else {
+      const amountError = requiredAmount(fee.amount, `${prefix}.amount`);
+      if (amountError) return { ok: false, error: amountError };
+    }
     const notesError = nullableText(fee.notes, `${prefix}.notes`);
     if (notesError) return { ok: false, error: notesError };
     if (typeof fee.position !== "number" || !Number.isInteger(fee.position) || fee.position < 0 || additionalPositions.has(fee.position)) {
@@ -223,4 +241,18 @@ export function normalizeSchoolPagePricing(raw: unknown): PricingResult {
 
 export function feeScheduleTotal(schedule: Pick<SchoolFeeSchedule, "registration_fee" | "tuition_fee">): number {
   return (schedule.registration_fee ?? 0) + (schedule.tuition_fee ?? 0);
+}
+
+export function installmentsTotal(installments: Pick<SchoolFeeInstallment, "amount">[]): number {
+  return installments.reduce((sum, i) => sum + i.amount, 0);
+}
+
+// PRICING-01 §6 — "warn strongly but do not block": the CMS editor calls
+// this to show a non-blocking warning when a schedule's installments don't
+// sum to its tuition_fee. Publish is never blocked by this — a mismatch
+// might be intentional (e.g. a discount applied only at the installment
+// level) and the system must never silently "correct" the school's numbers.
+export function installmentsMismatchTuition(schedule: Pick<SchoolFeeSchedule, "tuition_fee" | "installments">): boolean {
+  if (schedule.tuition_fee === null || schedule.installments.length === 0) return false;
+  return installmentsTotal(schedule.installments) !== schedule.tuition_fee;
 }

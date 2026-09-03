@@ -64,7 +64,7 @@ export function SchoolSiteHeader({
           </div>
         </div>
 
-        <nav aria-label="Navigation de l'établissement" className="hidden lg:flex items-center gap-1">
+        <nav aria-label="Navigation de l'établissement" className="hidden lg:flex items-center gap-1 print:hidden">
           {MINISITE_VIEWS.map((view) => (
             <Link
               key={view.key}
@@ -88,7 +88,7 @@ export function SchoolSiteHeader({
           {phone && (
             <a
               href={`tel:${phone}`}
-              className="hidden sm:inline-flex items-center gap-1.5 h-9 px-4 rounded-card text-white text-sm font-bold hover:opacity-90 transition-opacity duration-base"
+              className="hidden sm:inline-flex print:hidden items-center gap-1.5 h-9 px-4 rounded-card text-white text-sm font-bold hover:opacity-90 transition-opacity duration-base"
               style={{ backgroundColor: "var(--school-primary, #0F2A4A)" }}
             >
               <PhoneCall size={13} />
@@ -99,7 +99,7 @@ export function SchoolSiteHeader({
             onClick={() => setMenuOpen((v) => !v)}
             aria-label={menuOpen ? "Fermer le menu" : "Ouvrir le menu"}
             aria-expanded={menuOpen}
-            className="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg border border-border text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            className="lg:hidden print:hidden w-9 h-9 flex items-center justify-center rounded-lg border border-border text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
             {menuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>

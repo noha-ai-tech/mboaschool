@@ -63,8 +63,8 @@ export default function SchoolMiniSiteLayout({ children }: { children: React.Rea
         supabase.from("admissions_config").select("is_open, levels, conditions, required_documents, period_start, period_end, additional_info").eq("establishment_id", id).maybeSingle(),
         supabase.from("school_official_ranking").select("year, rank, scope, source, source_url").eq("establishment_id", id).maybeSingle(),
         supabase.from("school_exam_results").select("id, exam, academic_year, candidates_count, admitted_count, success_rate_percent").eq("establishment_id", id).eq("status", "live").order("academic_year", { ascending: false }),
-        supabase.from("school_fee_schedules").select("academic_year, level_label, registration_fee, tuition_fee, currency, notes, position, school_fee_installments(label, position, amount, due_date, notes)").eq("establishment_id", id).order("position"),
-        supabase.from("school_additional_fees").select("academic_year, category, label, amount, mandatory, frequency, notes, position").eq("establishment_id", id).order("position"),
+        supabase.from("school_fee_schedules").select("academic_year, cycle, level_label, registration_fee, tuition_fee, currency, notes, position, school_fee_installments(label, position, amount, due_date, notes)").eq("establishment_id", id).order("position"),
+        supabase.from("school_additional_fees").select("academic_year, category, label, amount, status, frequency, notes, position").eq("establishment_id", id).order("position"),
       ]);
 
       if (cancelled) return;

@@ -21,7 +21,7 @@ const base = {
   legacy_amounts_qualified: false, schedules: [], additional_fees: [],
 };
 const schedule = {
-  academic_year: "2026-2027", level_label: "6e", registration_fee: 15000,
+  academic_year: "2026-2027", cycle: null, level_label: "6e", registration_fee: 15000,
   tuition_fee: 120000, currency: "FCFA", notes: null, position: 0,
   installments: [{ label: "1re tranche", position: 0, amount: 60000, due_date: "2026-09-15", notes: null }],
 };
@@ -31,15 +31,28 @@ test("registration fee cannot be negative", () => assert.equal(normalizeSchoolPa
 test("tuition fee cannot be negative", () => assert.equal(normalizeSchoolPagePricing({ ...base, tuition_fee: -1 }).ok, false));
 test("installment amount cannot be negative", () => assert.equal(normalizeSchoolPagePricing({ ...base, schedules: [{ ...schedule, installments: [{ ...schedule.installments[0], amount: -1 }] }] }).ok, false));
 test("summary total is registration plus tuition", () => assert.equal(feeScheduleTotal(schedule), 135000));
-test("mandatory additional fee is accepted", () => assert.equal(normalizeSchoolPagePricing({ ...base, additional_fees: [{ academic_year: "2026-2027", category: "uniform", label: "Uniforme", amount: 12000, mandatory: true, frequency: "Une fois", notes: null, position: 0 }] }).ok, true));
-test("optional additional fee is accepted", () => assert.equal(normalizeSchoolPagePricing({ ...base, additional_fees: [{ academic_year: "2026-2027", category: "transport", label: "Transport", amount: 10000, mandatory: false, frequency: "Mensuel", notes: null, position: 0 }] }).ok, true));
+test("mandatory additional fee is accepted", () => assert.equal(normalizeSchoolPagePricing({ ...base, additional_fees: [{ academic_year: "2026-2027", category: "uniform", label: "Uniforme", amount: 12000, status: "mandatory", frequency: "Une fois", notes: null, position: 0 }] }).ok, true));
+test("optional additional fee is accepted", () => assert.equal(normalizeSchoolPagePricing({ ...base, additional_fees: [{ academic_year: "2026-2027", category: "transport", label: "Transport", amount: 10000, status: "optional", frequency: "Mensuel", notes: null, position: 0 }] }).ok, true));
+test("included fee needs no amount qualification but must still have an amount", () => assert.equal(normalizeSchoolPagePricing({ ...base, additional_fees: [{ academic_year: "2026-2027", category: "canteen", label: "Cantine", amount: 0, status: "included", frequency: "Incluse", notes: null, position: 0 }] }).ok, true));
+test("contact-only fee requires a null amount", () => assert.equal(normalizeSchoolPagePricing({ ...base, additional_fees: [{ academic_year: "2026-2027", category: "transport", label: "Transport", amount: null, status: "contact", frequency: "Variable", notes: null, position: 0 }] }).ok, true));
+test("contact-only fee rejects a non-null amount", () => assert.equal(normalizeSchoolPagePricing({ ...base, additional_fees: [{ academic_year: "2026-2027", category: "transport", label: "Transport", amount: 5000, status: "contact", frequency: "Variable", notes: null, position: 0 }] }).ok, false));
+test("non-contact fee rejects a null amount", () => assert.equal(normalizeSchoolPagePricing({ ...base, additional_fees: [{ academic_year: "2026-2027", category: "transport", label: "Transport", amount: null, status: "optional", frequency: "Variable", notes: null, position: 0 }] }).ok, false));
+test("unknown status is rejected", () => assert.equal(normalizeSchoolPagePricing({ ...base, additional_fees: [{ academic_year: "2026-2027", category: "transport", label: "Transport", amount: 5000, status: "sometimes", frequency: "Variable", notes: null, position: 0 }] }).ok, false));
 test("non-consecutive academic year is rejected", () => assert.equal(normalizeSchoolPagePricing({ ...base, schedules: [{ ...schedule, academic_year: "2026-2028" }] }).ok, false));
 test("duplicate positions are rejected", () => assert.equal(normalizeSchoolPagePricing({ ...base, schedules: [schedule, { ...schedule }] }).ok, false));
 test("download CTA is hidden without a document", () => assert.deepEqual(getPublishedDocumentCtas([]), []));
 test("enrollment CTA is shown for a published valid file", () => assert.equal(getPublishedDocumentCtas([{ id: "1", name: "Inscription", type: "inscription", url: "https://example.test/file.pdf", status: "live", is_public: true }])[0].label, "Télécharger la fiche d'inscription"));
 test("CTA is hidden for a draft document", () => assert.deepEqual(getPublishedDocumentCtas([{ id: "1", name: "X", type: "inscription", url: "https://example.test/x", status: "draft", is_public: true }]), []));
 test("29,000 legacy amount is never given a public semantic label", () => { assert.match(renderer, /Montant existant à qualifier/); assert.match(renderer, /mode === "admin"/); });
-test("pricing renderer prevents mobile overflow", () => { assert.match(renderer, /overflow-x-auto/); assert.match(renderer, /min-w-\[560px\]/); });
+test("pricing renderer prevents mobile overflow", () => {
+  // PRICING-01 — the matrix has dynamic, unbounded column counts now (N
+  // installments, not a fixed 3), so there is no fixed min-width to assert
+  // on; instead the desktop table scrolls within its own container and a
+  // fully separate mobile card layout replaces it below `sm`.
+  assert.match(renderer, /overflow-x-auto/);
+  assert.match(renderer, /hidden sm:block/);
+  assert.match(renderer, /sm:hidden/);
+});
 test("admissions navigation exposes five focused sections", () => ["Formations", "Admissions", "Tarifs", "Pièces à fournir", "Documents"].forEach((label) => assert.match(admissionsView, new RegExp(label))));
 test("unknown category falls back to neutral rendering", () => { assert.match(accueilView, /categoryLabel.*\?\.label \?\? null/); assert.match(admissionsView, /Formations/); });
 test("snapshot includes published schedules and additional fees for discard", () => { assert.match(snapshot, /school_fee_schedules/); assert.match(snapshot, /school_additional_fees/); });
