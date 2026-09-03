@@ -55,9 +55,20 @@ test("PRO-05.2 migration is transactional, state-gated and replay-safe", async (
     text(executedMigrationPath),
   ]);
 
+  // RELEASE-CONSOLIDATION-03 — this file's own header comment previously
+  // read "(PROPOSED, NOT EXECUTED)", which live inspection of
+  // supabase_migrations.schema_migrations proved false: version
+  // 20260825054125 is recorded as executed, and its stored statement's MD5
+  // (4d756d2e180d7cead44911b0952e590a) matched this file's pre-correction
+  // content exactly. The header was corrected to document that; the SHA-256
+  // pin below now covers the corrected file. The executable-body equality
+  // check just below (unaffected by any header text, by construction) is
+  // what actually guarantees the DDL that ran matches this repo — same
+  // pattern already used for the SYNC-03-renumbered migrations elsewhere
+  // in this history.
   assert.equal(
     createHash("sha256").update(executedSql, "utf8").digest("hex"),
-    "7dcf54518fa3a5b49acda52707f9130a0aab9e3e351c9f6379f9de10cbfbdbba",
+    "9d7c82d816540f42cf036482366b972885266d19ac4852add144428a513c856f",
   );
   assert.notEqual(executedSql.indexOf("\nbegin;"), -1);
   assert.notEqual(sql.indexOf("\nbegin;"), -1);
@@ -333,8 +344,13 @@ test("audit documents consumers, residual risks and the non-execution gate", asy
     "10/15 minutes",
     "denial of service",
     "service_role",
-    "MIGRATION EXECUTED: **NO**",
-    "DATABASE WRITES: **0**",
+    // RELEASE-CONSOLIDATION-03 — the audit's original "MIGRATION EXECUTED:
+    // NO" / "DATABASE WRITES: 0" lines described its 2026-08-24 authoring
+    // date; live inspection of production later proved the migration was
+    // in fact executed. The doc now carries both the original lines
+    // (marked as historical) and a corrected status section — assert the
+    // corrected claim, not the stale one.
+    "MIGRATION EXECUTED: **YES**",
   ]) {
     assert.match(audit, new RegExp(marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"));
   }

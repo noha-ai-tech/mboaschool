@@ -57,7 +57,7 @@ Sa parité normalisée et exacte est attestée par le SHA-256
 
 - Configuration Supabase Auth modifiée : **NON**
 - Protection contre les mots de passe compromis activée : **NON**
-- Migration exécutée : **NON**
+- Migration exécutée : **NON** *(par cette session PRO-05.3, qui ne touche aucun schéma ; la migration PRO-05.2 mentionnée plus haut avait déjà été exécutée par un processus antérieur — voir la mise à jour de statut dans PRO-05_2_ADMISSION_TRACKING_ORACLE_AUDIT.md, vérifiée en RELEASE-CONSOLIDATION-03)*
 - Écriture base de données : **0**
 - Push ou déploiement : **NON**
 

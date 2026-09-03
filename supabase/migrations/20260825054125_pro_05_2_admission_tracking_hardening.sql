@@ -1,6 +1,21 @@
--- PRO-05.2 â€” Admission tracking oracle hardening (PROPOSED, NOT EXECUTED)
--- Local preparation only. Do not apply without Eddy + architect approval and
--- a fresh read-only production snapshot.
+-- PRO-05.2 — Admission tracking oracle hardening
+--
+-- RELEASE-CONSOLIDATION-03 — STATUS CORRECTION. This header previously read
+-- "(PROPOSED, NOT EXECUTED)". Verified false by direct, read-only inspection
+-- of supabase_migrations.schema_migrations on production (umcwwynrftidytxgqkwi):
+-- version 20260825054125 / pro_05_2_admission_tracking_hardening IS recorded
+-- as executed. The recorded statement's MD5 (4d756d2e180d7cead44911b0952e590a,
+-- 23398 bytes) is byte-for-byte identical to this file after CRLF/LF
+-- normalization. Live schema also matches this migration's own "final state"
+-- preflight checks exactly: private.admission_tracking_rate_limits exists
+-- with the expected 5 columns/constraints/indexes, RLS enabled with zero
+-- policies, zero anon/authenticated/service_role grants; public.
+-- get_admission_by_tracking is SECURITY DEFINER, search_path='', and
+-- anon/authenticated may execute while service_role may not.
+--
+-- This migration is ALREADY LIVE. Do not attempt to re-apply it; its own
+-- preflight is idempotency-guarded (PRO05_2_PREFLIGHT_STATE_DRIFT) and would
+-- reject a naive re-run, but there is no reason to run it again.
 
 begin;
 

@@ -200,5 +200,34 @@ changed.
 - TYPESCRIPT: **PASS**
 - TARGETED LINT: **PASS — 0 warning, 0 error**
 - BUILD: **PASS — 93/93 pages**
-- MIGRATION EXECUTED: **NO**
-- DATABASE WRITES: **0**
+- MIGRATION EXECUTED: **NO** *(true as of this document's 2026-08-24 date — see status update below)*
+- DATABASE WRITES: **0** *(true as of this document's 2026-08-24 date — see status update below)*
+
+## RELEASE-CONSOLIDATION-03 status update (verified 2026-09-02)
+
+The two lines above described the state at the time this audit was written,
+before the execution gate mentioned under "Migration safety" was cleared.
+Direct, read-only inspection of production (`umcwwynrftidytxgqkwi`) now shows
+this migration **has since been executed**:
+
+- `supabase_migrations.schema_migrations` records version `20260825054125` /
+  `pro_05_2_admission_tracking_hardening` as applied; its stored statement's
+  MD5 (`4d756d2e180d7cead44911b0952e590a`, 23398 bytes) is byte-for-byte
+  identical to the executed migration file's body.
+- `private.admission_tracking_rate_limits` exists live with exactly the 5
+  columns/5 constraints/2 indexes this migration's own "final state" preflight
+  check expects, RLS enabled, zero policies, zero `anon`/`authenticated`/
+  `service_role` grants.
+- `public.get_admission_by_tracking` is live as `SECURITY DEFINER`,
+  `search_path=''`, with `anon`/`authenticated` able to execute and
+  `service_role` unable to — the hardened target state, not the pre-hardening
+  `STABLE`/`search_path=public` state this document's "Current boundary"
+  table above describes.
+
+No production write was made by this or the two prior RELEASE-CONSOLIDATION
+missions to reach this conclusion — this is a report of pre-existing state,
+found via read-only queries. Current corrected status:
+
+- MIGRATION EXECUTED: **YES**
+- DATABASE WRITES: **1 migration, applied prior to 2026-08-26** (exact
+  timestamp not independently determinable from `schema_migrations` alone)
