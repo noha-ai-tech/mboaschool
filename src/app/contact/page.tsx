@@ -3,12 +3,15 @@
 // Page Contact (nav publique). Aucune coordonnée réelle (email/téléphone)
 // n'existe aujourd'hui dans le produit ni dans les variables
 // d'environnement — les cartes email/téléphone l'assument clairement
-// ("Bientôt disponible") plutôt que d'afficher une adresse ou un numéro
-// inventés (choix confirmé explicitement plutôt que de reproduire les
-// coordonnées placeholder de la maquette). Les vrais parcours déjà
-// opérationnels (recherche, inscription d'établissement) sont mis en avant
-// à la place, en plus des réseaux sociaux — mêmes placeholders décoratifs
-// que le footer, aucun compte réel n'existe encore.
+// ("Adresse dédiée à venir" / "Ligne directe à venir") plutôt que d'afficher
+// une adresse ou un numéro inventés (choix confirmé explicitement plutôt
+// que de reproduire les coordonnées placeholder de la maquette).
+// RELEASE-CONSOLIDATION-08 §30 — reworded from a bare "Bientôt disponible"
+// to something more specific, to avoid stacking the same generic label
+// across the page; still no fabricated contact detail. Les vrais parcours
+// déjà opérationnels (recherche, inscription d'établissement) sont mis en
+// avant à la place, en plus des réseaux sociaux — mêmes placeholders
+// décoratifs que le footer, aucun compte réel n'existe encore.
 import Link from "next/link";
 import { Fraunces } from "next/font/google";
 import { Mail, Phone, Share2, Search, Building2 } from "lucide-react";
@@ -73,7 +76,7 @@ export default function ContactPage() {
             </div>
             <h3 className="text-[15px] font-semibold text-[#132019] mb-1.5">Par email</h3>
             <p className="font-[family-name:var(--font-fraunces)] font-semibold text-base text-[#5A695F]">
-              Bientôt disponible
+              Adresse dédiée à venir
             </p>
           </div>
 
@@ -83,7 +86,7 @@ export default function ContactPage() {
             </div>
             <h3 className="text-[15px] font-semibold text-[#132019] mb-1.5">Par téléphone</h3>
             <p className="font-[family-name:var(--font-fraunces)] font-semibold text-base text-[#5A695F]">
-              Bientôt disponible
+              Ligne directe à venir
             </p>
           </div>
 

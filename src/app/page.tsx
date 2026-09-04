@@ -30,7 +30,6 @@ import { AnnouncementTicker, type TickerItem } from "@/components/hero/Announcem
 import { CategoryCard } from "@/components/categories/CategoryCard";
 import { FeaturedSchoolsCarousel } from "@/components/schools/FeaturedSchoolsCarousel";
 import { StatCard as LandingStatCard } from "@/components/landing/StatCard";
-import { PartnerPlaceholder } from "@/components/landing/PartnerPlaceholder";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { REGION_FILTER_OPTIONS } from "@/lib/cameroonRegions";
 import { citiesForRegionFilter } from "@/lib/cameroonMajorCities";
@@ -882,31 +881,6 @@ export default function HomePage() {
         </section>
 
         {/* ── PARTENAIRES ───────────────────────────────────────────── */}
-        {/* Aucun partenariat réel n'existe aujourd'hui — emplacements par
-            catégorie générique uniquement, jamais une marque nommée sans
-            accord. Toujours étiquetés "Bientôt disponible" pour ne jamais
-            laisser croire à un partenariat actif. */}
-        <section className="border-t border-[#E7E0D7]">
-          <div className="px-[18px] py-16 lg:py-20">
-            <div className="max-w-md mb-10">
-              <SectionEyebrow label="Ils nous rejoignent" />
-              <h2 className="font-[family-name:var(--font-fraunces)] text-2xl lg:text-3xl font-semibold text-[#132019]">
-                Partenaires
-              </h2>
-              <p className="text-sm text-[#5A695F] mt-3">
-                Écoles237 s&apos;ouvre progressivement à des partenaires qui simplifient la vie des familles et des établissements.
-              </p>
-            </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-              <PartnerPlaceholder label="Banques" description="Financement des frais de scolarité" />
-              <PartnerPlaceholder label="Télécoms" description="Paiement et notifications SMS" />
-              <PartnerPlaceholder label="Librairies" description="Fournitures et manuels scolaires" />
-              <PartnerPlaceholder label="Universités" description="Passerelles vers l'enseignement supérieur" />
-              <PartnerPlaceholder label="ONG" description="Bourses et accès à l'éducation" />
-              <PartnerPlaceholder label="Assurances" description="Couverture scolaire et santé" />
-            </div>
-          </div>
-        </section>
       </div>
 
       <SiteFooter />
