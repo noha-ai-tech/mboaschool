@@ -54,9 +54,9 @@ export function SchoolSiteHeader({
             <input name="q" aria-label="Rechercher une école" placeholder="Rechercher une école, une ville, une catégorie…" className="h-11 w-full rounded-xl bg-slate-50 pl-11 pr-4 text-sm outline-none ring-1 ring-slate-100 focus:ring-2 focus:ring-blue-500" />
           </form>
           <nav className="ml-auto hidden items-center gap-6 text-sm font-semibold text-slate-700 lg:flex" aria-label="Navigation Écoles237">
-            <Link href="/">Accueil</Link><Link href="/recherche">Annuaire</Link><Link href="/recherche">Catégories</Link><Link href="/a-propos">À propos</Link><Link href="/contact">Contact</Link>
+            <Link href="/">Accueil</Link><Link href="/recherche">Annuaire</Link><Link href="/recherche">Catégories</Link><Link href="/qui-sommes-nous">À propos</Link><Link href="/contact">Contact</Link>
           </nav>
-          <Link href="/connexion" aria-label="Mon compte" className="ml-auto grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-slate-50 text-slate-700 lg:ml-0"><UserRound size={19} /></Link>
+          <Link href="/auth/connexion" aria-label="Mon compte" className="ml-auto grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-slate-50 text-slate-700 lg:ml-0"><UserRound size={19} /></Link>
         </div>
       </header>
     );

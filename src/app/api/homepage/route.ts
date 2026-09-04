@@ -77,11 +77,17 @@ export async function GET() {
     if (selectedError) throw selectedError;
     if (genericError) throw genericError;
 
+    // Guyskull is the deliberate public showcase school — it must always
+    // link straight to its real minisite from "Établissements à la une",
+    // never behind the claim/signup flow real unclaimed schools get
+    // (RELEASE-CONSOLIDATION-07D §5: SchoolCard routes unclaimed schools to
+    // /auth/inscription, which is correct for real listings but broke
+    // Guyskull's featured card here since it's stored as unclaimed).
     const featured = [selected, ...(generic ?? [])]
       .filter((school): school is NonNullable<typeof school> => Boolean(school))
       .filter((school, index, list) => list.findIndex((candidate) => candidate.id === school.id) === index)
       .slice(0, FEATURED_LIMIT)
-      .map((school) => school.id === GUYSKULL_ID ? { ...school, is_featured: true } : school);
+      .map((school) => school.id === GUYSKULL_ID ? { ...school, is_featured: true, is_claimed: true } : school);
 
     return NextResponse.json({
       stats: {
