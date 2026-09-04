@@ -76,7 +76,12 @@ export function buildSchoolViewMetadata(view: MiniSiteViewKey, school: PublicSch
     ? (rawDescription.length > 155 ? `${rawDescription.slice(0, 154).trimEnd()}…` : rawDescription)
     : `Découvrez les informations disponibles sur ${school.name}${location ? `, établissement situé à ${location}` : ""}, sur Écoles237.`;
 
-  const image = school.cover_image_url || school.logo_url || undefined;
+  // Prefer the school's own real photo; when none exists, fall back to the
+  // platform's own brand logo (already used site-wide as the default OG
+  // image in the root layout) rather than leaving link previews imageless —
+  // this is the platform's own consistent branding, not an unrelated stock
+  // image standing in for the school.
+  const image = school.cover_image_url || school.logo_url || "/branding/logo-light.png";
 
   return {
     title: { absolute: fullTitle },
@@ -88,13 +93,13 @@ export function buildSchoolViewMetadata(view: MiniSiteViewKey, school: PublicSch
       url: path,
       siteName: "Écoles237",
       type: "website",
-      images: image ? [{ url: image }] : undefined,
+      images: [{ url: image }],
     },
     twitter: {
-      card: image ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title: fullTitle,
       description,
-      images: image ? [image] : undefined,
+      images: [image],
     },
   };
 }
