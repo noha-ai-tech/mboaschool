@@ -108,13 +108,13 @@ test("shared shell (header/footer) is used by both the public layout and the pre
   assert.match(previewLayout, /MiniSiteShell/);
 });
 
-// ==================== STRUCTURED PRICING SCOPED TO ITS OWN VIEW ====================
+// ==================== STRUCTURED PRICING — DETAIL + HOMEPAGE PREVIEW ====================
 
-test("StructuredPricing renders only inside FormationsAdmissionsView, not on Accueil", async () => {
+test("StructuredPricing remains in FormationsAdmissionsView and is conditionally previewed on Accueil", async () => {
   const admissionsView = await src("src/components/school/views/FormationsAdmissionsView.tsx");
   const accueilView = await src("src/components/school/views/AccueilView.tsx");
   assert.match(admissionsView, /<StructuredPricing/);
-  assert.doesNotMatch(accueilView, /<StructuredPricing/);
+  assert.match(accueilView, /flags\.showPricing && fees && <StructuredPricing/);
 });
 
 // ==================== ACTIVE NAVIGATION / ACCESSIBILITY (static) ====================

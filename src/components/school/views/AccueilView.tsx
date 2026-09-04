@@ -10,6 +10,10 @@ import { MiniSiteOfficialLinks } from "@/components/school/MiniSiteOfficialLinks
 import { MiniSiteEnvironmentShowcase } from "@/components/school/MiniSiteEnvironmentShowcase";
 import { DocumentDownloadCtas } from "@/components/school/DocumentDownloadCtas";
 import { AnnouncementsTab } from "@/components/school/AnnouncementsTab";
+import { StructuredPricing } from "@/components/school/StructuredPricing";
+import { MiniSiteResultsPreview } from "@/components/school/MiniSiteResultsPreview";
+import { SchoolQuickInfoAside } from "@/components/school/SchoolQuickInfoAside";
+import { GeneralTab } from "@/components/school/GeneralTab";
 import { getPrimaryPublicBadge, resolveEstablishmentTrustState, trustInputFromEstablishmentRow } from "@/lib/trust/resolveEstablishmentTrustState";
 import { computeAllHeroSlides, resolveHeroSlides } from "@/lib/school/heroMode";
 import { categories } from "@/lib/categories";
@@ -56,7 +60,7 @@ function GridCard({
 }
 
 export function AccueilView({ data, baseHref }: { data: MiniSiteRendererData; baseHref: string }) {
-  const { establishment: school, images, docsList, admissionsConfig, ranking, results } = data;
+  const { establishment: school, fees, infra, images, docsList, admissionsConfig, ranking, results } = data;
   const [newsCount, setNewsCount] = useState<number | null>(null);
   const flags = computeMiniSiteFlags(data);
 
@@ -102,10 +106,14 @@ export function AccueilView({ data, baseHref }: { data: MiniSiteRendererData; ba
         showAdmissionsCta={flags.showAdmissions}
         trustBadge={trustBadge}
         premium={isPremium}
+        logoUrl={school.logo_url}
+        categoryLabel={categoryLabel}
+        locationLabel={[school.neighborhood, school.city].filter(Boolean).join(", ") || null}
       />
 
-      <div className="max-w-[1280px] mx-auto px-4 lg:px-6 pt-6 lg:pt-10 pb-12 space-y-10">
-        <div className="space-y-6">
+      <div className="max-w-[1280px] mx-auto px-4 lg:px-6 pt-6 lg:pt-10 pb-12">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_310px] lg:items-start">
+          <div className="min-w-0 space-y-8">
           <MiniSiteKeyNumbers
             studentsCount={school.student_count}
             teachersCount={school.teacher_count}
@@ -113,6 +121,21 @@ export function AccueilView({ data, baseHref }: { data: MiniSiteRendererData; ba
             officialRanking={ranking?.rank ?? null}
             foundingYear={school.founding_year}
           />
+
+          <GeneralTab school={school} fees={fees} infra={infra} sections={{ presentation: true, tarifs: false, infrastructures: flags.showInfrastructure }} />
+
+          {flags.showAdmissions && admissionsConfig?.levels?.length ? (
+            <section className="rounded-card border border-border bg-white p-6">
+              <div className="mb-4 flex items-end justify-between gap-4"><div><p className="text-[10px] font-bold uppercase tracking-widest text-emerald-600">Parcours</p><h2 className="mt-1 text-xl font-black text-text-primary">Programmes et niveaux</h2></div><Link href={admissionsHref} className="text-sm font-bold text-[var(--school-primary)]">Tout voir →</Link></div>
+              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">{admissionsConfig.levels.slice(0, 8).map((level, index) => <div key={level} className={`rounded-xl border p-4 ${["bg-emerald-50 border-emerald-100","bg-blue-50 border-blue-100","bg-violet-50 border-violet-100","bg-orange-50 border-orange-100"][index % 4]}`}><GraduationCap size={20} className="mb-3 text-[var(--school-primary)]"/><p className="text-sm font-black text-text-primary">{level}</p></div>)}</div>
+            </section>
+          ) : null}
+
+          {flags.showPricing && fees && <StructuredPricing pricing={fees} documents={docsList} />}
+
+          <MiniSiteEnvironmentShowcase images={images.map((img) => ({ id: img.id, url: img.url, caption: img.caption }))} seeAllHref={galerieHref} />
+
+          <MiniSiteResultsPreview category={school.main_category} results={results} ranking={ranking} />
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
             <MiniSiteAboutPreview
@@ -162,16 +185,13 @@ export function AccueilView({ data, baseHref }: { data: MiniSiteRendererData; ba
               </div>
             )}
           </div>
+
+          {docsList.length > 0 && <DocumentDownloadCtas documents={docsList} />}
+
+          <MiniSiteOfficialLinks category={school.main_category} website={school.website} />
+          </div>
+          <SchoolQuickInfoAside data={data} />
         </div>
-
-        <MiniSiteEnvironmentShowcase
-          images={images.map((img) => ({ id: img.id, url: img.url, caption: img.caption }))}
-          seeAllHref={galerieHref}
-        />
-
-        {docsList.length > 0 && <DocumentDownloadCtas documents={docsList} />}
-
-        <MiniSiteOfficialLinks category={school.main_category} website={school.website} />
       </div>
     </>
   );

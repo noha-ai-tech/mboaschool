@@ -38,6 +38,9 @@ export function MiniSiteHero({
   showAdmissionsCta,
   trustBadge,
   premium,
+  logoUrl,
+  categoryLabel,
+  locationLabel,
 }: {
   slides: SchoolHeroSlide[];
   name: string;
@@ -54,6 +57,9 @@ export function MiniSiteHero({
   showAdmissionsCta: boolean;
   trustBadge?: { label: string } | null;
   premium?: boolean;
+  logoUrl?: string | null;
+  categoryLabel?: string | null;
+  locationLabel?: string | null;
 }) {
   const [active, setActive] = useState(0);
 
@@ -78,7 +84,7 @@ export function MiniSiteHero({
 
   return (
     <section className="relative text-white" style={{ background: "var(--school-primary-dark, #0A0F0D)" }}>
-      <div className="relative h-[500px] lg:h-[620px] overflow-hidden">
+      <div className="relative h-[440px] lg:h-[500px] overflow-hidden">
         {slides.map((slide, i) => (
           <div key={slide.id} aria-hidden={i !== active} className={`absolute inset-0 transition-opacity duration-slow ease-out ${i === active ? "opacity-100" : "opacity-0"}`}>
             <Image src={slide.image} alt="" fill priority={i === 0} sizes="100vw" className="object-cover" />
@@ -94,8 +100,13 @@ export function MiniSiteHero({
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-black/5 pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none" />
 
-        <div className="relative z-10 max-w-[1280px] mx-auto px-4 lg:px-6 h-full flex flex-col lg:flex-row lg:items-end gap-6 pb-10 lg:pb-28">
-          <div className="flex-1 pt-16 lg:pt-0">
+        <div className="relative z-10 max-w-[1280px] mx-auto px-4 lg:px-6 h-full flex items-end gap-6 pb-10 lg:pb-12">
+          {logoUrl && (
+            <div className="relative hidden md:block h-44 w-44 shrink-0 overflow-hidden rounded-[28px] border-4 border-white bg-white shadow-2xl">
+              <Image src={logoUrl} alt={`Logo ${name}`} fill sizes="176px" className="object-contain p-2" />
+            </div>
+          )}
+          <div className="flex-1">
             {(trustBadge || premium) && (
               <div className="flex items-center gap-2 flex-wrap mb-4">
                 {trustBadge && (
@@ -115,6 +126,12 @@ export function MiniSiteHero({
             </h1>
             {motto && (
               <p className="text-base md:text-lg text-white/85 italic max-w-[520px] leading-snug mb-2.5">{motto}</p>
+            )}
+            {(categoryLabel || locationLabel) && (
+              <div className="mb-5 flex flex-wrap items-center gap-2">
+                {categoryLabel && <span className="rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-[var(--school-primary)]">{categoryLabel}</span>}
+                {locationLabel && <span className="inline-flex items-center gap-1.5 rounded-lg bg-black/30 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm"><NavigationIcon size={12} />{locationLabel}</span>}
+              </div>
             )}
             {description && (
               <p className="text-sm md:text-[15px] text-white/70 max-w-[480px] leading-relaxed mb-6 line-clamp-2">{description}</p>
