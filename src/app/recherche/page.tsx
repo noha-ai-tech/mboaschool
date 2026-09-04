@@ -35,6 +35,7 @@ import { citiesForRegionFilter } from "@/lib/cameroonMajorCities";
 import { REGION_FILTER_OPTIONS } from "@/lib/cameroonRegions";
 import type { SchoolSearchResponse, SchoolSearchResult } from "@/lib/search/types";
 import { DEFAULT_PAGE_SIZE, MOBILE_PAGE_SIZE } from "@/lib/search/types";
+import { SearchSuggestions } from "@/components/search/SearchSuggestions";
 
 const LocalSchoolMap = dynamic(() => import("@/components/LocalSchoolMap"), {
   ssr: false,
@@ -444,7 +445,7 @@ function RecherchePageInner() {
 
         {/* Filtres */}
         <div className="bg-white border border-[#E7E0D7] rounded-[16px] shadow-[0_8px_24px_-14px_rgba(11,59,46,0.15)] p-3.5 flex items-center gap-2.5 mb-5 flex-wrap">
-          <div className="flex items-center gap-2 bg-[#FCFAF7] border border-[#E7E0D7] rounded-[10px] px-3 h-10 flex-1 min-w-[220px] max-w-sm focus-within:border-[#12543F] transition-colors duration-base">
+          <div className="relative flex items-center gap-2 bg-[#FCFAF7] border border-[#E7E0D7] rounded-[10px] px-3 h-10 flex-1 min-w-[220px] max-w-sm focus-within:border-[#12543F] transition-colors duration-base">
             <Search size={15} className="text-[#5A695F] shrink-0" />
             <input
               value={queryInput}
@@ -458,6 +459,7 @@ function RecherchePageInner() {
                 <X size={13} className="text-[#5A695F]" />
               </button>
             )}
+            <SearchSuggestions query={queryInput} onSelectCity={(city) => { setQueryInput(""); updateParams({ q: null, region: null, ville: city }); }} />
           </div>
 
           <select

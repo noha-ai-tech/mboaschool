@@ -22,7 +22,6 @@ import {
   LayoutGrid,
   CalendarCheck,
 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
 import { Logo } from "@/components/branding/Logo";
 import { HeroSearch } from "@/components/hero/HeroSearch";
 import { HeroPhotoCard, type HeroPhoto } from "@/components/hero/HeroPhotoCard";
@@ -33,10 +32,9 @@ import { FeaturedSchoolsCarousel } from "@/components/schools/FeaturedSchoolsCar
 import { StatCard as LandingStatCard } from "@/components/landing/StatCard";
 import { PartnerPlaceholder } from "@/components/landing/PartnerPlaceholder";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { getCameroonRegion } from "@/lib/cameroonRegions";
-import { MAJOR_CITIES } from "@/lib/cameroonMajorCities";
+import { REGION_FILTER_OPTIONS } from "@/lib/cameroonRegions";
+import { citiesForRegionFilter } from "@/lib/cameroonMajorCities";
 import { categories } from "@/lib/categories";
-import { normalizeForSearch, dedupeInsensitive } from "@/lib/textSearch";
 
 // Typographie de marque (skill ecoles237-design-system) — chargée ici, scopée
 // à la page d'accueil via les variables CSS ci-dessous, sans toucher au
@@ -243,7 +241,10 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("all");
   const [query, setQuery] = useState("");
+  const [region, setRegion] = useState("all");
   const [city, setCity] = useState("all");
+  const [stats, setStats] = useState({ establishments: 0, regions: 0, cities: 0, categories: 0 });
+  const [categoryCounts, setCategoryCounts] = useState<Record<string, number>>({});
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [radius, setRadius] = useState("5");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -304,27 +305,18 @@ export default function HomePage() {
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const { data } = await supabase
-        .from("establishments")
-        .select(`
-          id, name, main_category, sub_category,
-          city, quartier, neighborhood, phone,
-          cover_image_url, is_verified, is_claimed,
-          accepts_online_payment, is_featured,
-          couleur_primaire, couleur_secondaire, emoji_logo,
-          latitude, longitude,
-          fees(registration_fee, tuition_fee),
-          infrastructures(library, laboratory, computer_room, sports_field, canteen, transport, wifi, boarding, security, infirmary),
-          school_images(url)
-        `)
-        // CMS-F.6 — ne remonter que les photos publiées (défense en
-        // profondeur avec la policy RLS, migration 0029 PRÉPARÉE NON
-        // EXÉCUTÉE) ; un embed standard filtre les lignes imbriquées sans
-        // exclure l'établissement parent.
-        .eq("school_images.status", "live")
-        .order("is_featured", { ascending: false });
-      if (data) setSchools(data.map(transformSchool));
-      setLoading(false);
+      try {
+        const response = await fetch("/api/homepage", { cache: "no-store" });
+        if (!response.ok) throw new Error("Homepage data unavailable");
+        const data = await response.json();
+        setSchools((data.featured ?? []).map(transformSchool));
+        setStats(data.stats);
+        setCategoryCounts(data.categoryCounts ?? {});
+      } catch (error) {
+        console.error("[homepage] Unable to load homepage data:", error);
+      } finally {
+        setLoading(false);
+      }
     }
     load();
   }, []);
@@ -356,6 +348,7 @@ export default function HomePage() {
     const q = overrides?.q ?? query;
     if (q.trim()) params.set("q", q.trim());
     if (activeCategory !== "all") params.set("categorie", activeCategory);
+    if (region !== "all") params.set("region", region);
     if (city !== "all") params.set("ville", city);
     if (userLocation) {
       params.set("lat", String(userLocation.lat));
@@ -366,39 +359,13 @@ export default function HomePage() {
     router.push(qs ? `/recherche?${qs}` : "/recherche");
   }
 
-  // Dédoublonnage insensible à la casse/accents — "Douala", "douala",
-  // "DOUALA" comptent comme une seule ville dans le filtre. Sert uniquement
-  // au stat "villes couvertes" (donnée réelle) ci-dessous, PAS au formulaire
-  // de recherche du Hero (voir heroSearchCities, SPRINT R.2-B §31).
-  const cities = useMemo(
-    () => ["all", ...dedupeInsensitive(schools.map((s) => s.city))],
-    [schools]
+  const heroSearchCities = useMemo(
+    () => ["all", ...citiesForRegionFilter(region).map((item) => item.name)],
+    [region]
   );
-
-  // SPRINT R.2-B §31 — le sélecteur de ville du Hero ne doit pas dépendre du
-  // chargement de toute la table `establishments` : liste statique produit
-  // (déjà utilisée par /recherche et le Review Center), zéro coût réseau.
-  const heroSearchCities = useMemo(() => ["all", ...MAJOR_CITIES.map((c) => c.name)], []);
 
   // Données réelles pour Catégories / À la une / Statistiques — aucune valeur inventée.
-  const featuredSchools = useMemo(() => schools.filter((s) => s.isFeatured), [schools]);
-  const categoryCounts = useMemo(() => {
-    const map: Record<string, number> = {};
-    for (const cat of categories) map[cat.key] = schools.filter((s) => s.category === cat.key).length;
-    return map;
-  }, [schools]);
-  const statCities = Math.max(cities.length - 1, 0);
-  const statVerified = schools.filter((s) => s.verified).length;
-  // Régions réellement couvertes — dérivé des vraies villes en base via une
-  // table de correspondance géographique factuelle (src/lib/cameroonRegions),
-  // jamais un chiffre cible. "Préinscriptions envoyées" n'est pas affichable
-  // ici : la table `applications` n'a pas de policy RLS de lecture pour le
-  // rôle anonyme, et créer cette policy sortirait du périmètre Supabase de
-  // ce sprint — remplacé par une 4e statistique honnête.
-  const statRegions = useMemo(
-    () => new Set(schools.map((s) => getCameroonRegion(s.city)).filter((r): r is string => r !== null)).size,
-    [schools]
-  );
+  const featuredSchools = schools;
   // Photos du panneau Hero — fournies par Eddy (public/hero/), affichées
   // sans nom/badge/CTA puisque ce panneau illustre la plateforme dans son
   // ensemble, pas un établissement précis. Pas de repli Supabase : ce sont
@@ -416,17 +383,17 @@ export default function HomePage() {
         href: featuredSchools[0].isClaimed ? `/ecole/${featuredSchools[0].id}` : `/auth/inscription?ecole=${featuredSchools[0].id}`,
       });
     }
-    if (!loading && schools.length > 0) {
+    if (!loading && stats.establishments > 0) {
       items.push({
         id: "count",
-        label: `${schools.length}+ établissement${schools.length !== 1 ? "s" : ""} déjà référencé${schools.length !== 1 ? "s" : ""}`,
+        label: `${stats.establishments.toLocaleString("fr-FR")} établissement${stats.establishments !== 1 ? "s" : ""} référencé${stats.establishments !== 1 ? "s" : ""}`,
         href: "/recherche",
       });
     }
     items.push({ id: "preinscription", label: "Préinscription en ligne", href: "/preinscription" });
     items.push({ id: "inscription", label: "Inscrire mon établissement", href: "/auth/inscription" });
     return items;
-  }, [loading, schools.length, featuredSchools]);
+  }, [loading, stats.establishments, featuredSchools]);
 
   return (
     <div
@@ -635,7 +602,7 @@ export default function HomePage() {
                   <span aria-hidden="true" className="w-1.5 h-1.5 rounded-full bg-[#F2AE1F]" />
                   {loading
                     ? "Annuaire scolaire du Cameroun"
-                    : `Plus de ${schools.length.toLocaleString("fr-FR")} établissement${schools.length !== 1 ? "s" : ""} référencé${schools.length !== 1 ? "s" : ""} dans tout le Cameroun`}
+                    : `${stats.establishments.toLocaleString("fr-FR")} établissement${stats.establishments !== 1 ? "s" : ""} référencé${stats.establishments !== 1 ? "s" : ""} dans tout le Cameroun`}
                 </span>
 
                 <h1 className="font-[family-name:var(--font-fraunces)] text-[32px] sm:text-[40px] lg:text-[46px] leading-[1.1] font-semibold text-white tracking-[-0.01em]">
@@ -666,6 +633,9 @@ export default function HomePage() {
                       activeCategory={activeCategory}
                       onCategoryChange={setActiveCategory}
                       categories={categories}
+                      region={region}
+                      onRegionChange={(value) => { setRegion(value); setCity("all"); }}
+                      regions={REGION_FILTER_OPTIONS}
                       city={city}
                       onCityChange={setCity}
                       cities={heroSearchCities}
@@ -683,21 +653,21 @@ export default function HomePage() {
                 <div className="flex items-center gap-6 sm:gap-9 flex-wrap mt-7">
                   <div>
                     <p className="font-[family-name:var(--font-fraunces)] text-2xl font-semibold text-white leading-none tabular-nums">
-                      {loading ? "—" : schools.length.toLocaleString("fr-FR")}
+                      {loading ? "—" : stats.establishments.toLocaleString("fr-FR")}
                     </p>
                     <p className="text-[11px] font-semibold uppercase tracking-wider text-white/60 mt-1">Établissements</p>
                   </div>
                   <span aria-hidden="true" className="hidden sm:block w-px h-9 bg-white/20" />
                   <div>
                     <p className="font-[family-name:var(--font-fraunces)] text-2xl font-semibold text-white leading-none tabular-nums">
-                      {loading ? "—" : statRegions.toLocaleString("fr-FR")}
+                      {loading ? "—" : stats.regions.toLocaleString("fr-FR")}
                     </p>
                     <p className="text-[11px] font-semibold uppercase tracking-wider text-white/60 mt-1">Régions couvertes</p>
                   </div>
                   <span aria-hidden="true" className="hidden sm:block w-px h-9 bg-white/20" />
                   <div>
                     <p className="font-[family-name:var(--font-fraunces)] text-2xl font-semibold text-white leading-none tabular-nums">
-                      {loading ? "—" : statCities.toLocaleString("fr-FR")}
+                      {loading ? "—" : stats.cities.toLocaleString("fr-FR")}
                     </p>
                     <p className="text-[11px] font-semibold uppercase tracking-wider text-white/60 mt-1">Villes couvertes</p>
                   </div>
@@ -872,28 +842,28 @@ export default function HomePage() {
               <LandingStatCard
                 variant="cell-dark"
                 icon={Building2}
-                value={loading ? "—" : schools.length.toLocaleString("fr-FR")}
+                value={loading ? "—" : stats.establishments.toLocaleString("fr-FR")}
                 label="Établissements référencés"
                 description="Dans tout le Cameroun."
               />
               <LandingStatCard
                 variant="cell-dark"
                 icon={MapIcon}
-                value={loading ? "—" : statRegions.toLocaleString("fr-FR")}
+                value={loading ? "—" : stats.regions.toLocaleString("fr-FR")}
                 label="Régions couvertes"
                 description="Sur 10 régions au total."
               />
               <LandingStatCard
                 variant="cell-dark"
-                icon={CheckCircle2}
-                value={loading ? "—" : statVerified.toLocaleString("fr-FR")}
-                label="Vérifiés par Écoles237"
-                description="Contrôlés par notre équipe, pas un agrément ministériel."
+                icon={LayoutGrid}
+                value={loading ? "—" : stats.categories.toLocaleString("fr-FR")}
+                label="Catégories représentées"
+                description="Issues des établissements du registre."
               />
               <LandingStatCard
                 variant="cell-dark"
                 icon={MapPin}
-                value={loading ? "—" : statCities.toLocaleString("fr-FR")}
+                value={loading ? "—" : stats.cities.toLocaleString("fr-FR")}
                 label="Villes couvertes"
                 description="Et de nouvelles chaque semaine."
               />

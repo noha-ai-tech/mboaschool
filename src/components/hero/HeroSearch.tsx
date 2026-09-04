@@ -1,10 +1,12 @@
 "use client";
 
 import { Search, X, Navigation, ArrowRight } from "lucide-react";
+import { SearchSuggestions } from "@/components/search/SearchSuggestions";
 
 const RADIUS_OPTIONS = ["5", "10", "20", "50"];
 
 type CategoryOption = { key: string; label: string };
+type RegionOption = { value: string; label: string };
 
 // Formulaire de recherche du Hero — plus de titre/sous-titre internes (Landing
 // V6 : le titre "Trouvez l'école idéale..." vit désormais directement dans le
@@ -17,6 +19,9 @@ export function HeroSearch({
   activeCategory,
   onCategoryChange,
   categories,
+  region,
+  onRegionChange,
+  regions,
   city,
   onCityChange,
   cities,
@@ -32,6 +37,9 @@ export function HeroSearch({
   activeCategory: string;
   onCategoryChange: (value: string) => void;
   categories: CategoryOption[];
+  region: string;
+  onRegionChange: (value: string) => void;
+  regions: RegionOption[];
   city: string;
   onCityChange: (value: string) => void;
   cities: string[];
@@ -55,7 +63,7 @@ export function HeroSearch({
 
   return (
     <div className="w-full flex flex-col gap-3.5">
-      <div className={`flex items-center gap-2.5 rounded-xl px-4 h-14 focus-within:border-white/40 transition-colors duration-base ${fieldCls}`}>
+      <div className={`relative flex items-center gap-2.5 rounded-xl px-4 h-14 focus-within:border-white/40 transition-colors duration-base ${fieldCls}`}>
         <Search size={18} className={`shrink-0 ${iconCls}`} />
         <input
           className="bg-transparent outline-none text-base flex-1 min-w-0 placeholder:inherit"
@@ -69,22 +77,34 @@ export function HeroSearch({
             <X size={16} />
           </button>
         )}
+        <SearchSuggestions query={query} onSelectCity={(selectedCity) => { onRegionChange("all"); onCityChange(selectedCity); onQueryChange(""); }} />
       </div>
 
-      <div className="grid grid-cols-2 gap-2.5">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
         <select
           value={activeCategory}
           onChange={(e) => onCategoryChange(e.target.value)}
           className={`min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
         >
-          <option value="all" className="text-[#0a0a0a]">Toutes catégories</option>
+          <option value="all" className="text-[#0a0a0a]">Toutes les catégories</option>
           {categories.map((cat) => (
             <option key={cat.key} value={cat.key} className="text-[#0a0a0a]">{cat.label}</option>
           ))}
         </select>
         <select
+          value={region}
+          onChange={(e) => onRegionChange(e.target.value)}
+          aria-label="Filtrer par région"
+          className={`min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
+        >
+          {regions.map((item) => (
+            <option key={item.value} value={item.value} className="text-[#0a0a0a]">{item.label}</option>
+          ))}
+        </select>
+        <select
           value={city}
           onChange={(e) => onCityChange(e.target.value)}
+          aria-label="Filtrer par ville"
           className={`min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
         >
           {cities.map((c) => (
