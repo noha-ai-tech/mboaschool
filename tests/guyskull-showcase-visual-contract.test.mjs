@@ -34,3 +34,11 @@ test("les neuf onglets changent le contenu sans quitter la coque Guyskull", () =
   assert.match(showcase, /onClick=\{\(\)=>setActiveTab\(key\)\}/);
   assert.doesNotMatch(showcase, /href=\{buildMiniSiteViewHref\(baseHref,key\)\}/);
 });
+
+test("la galerie est organisée en six groupes avec au moins deux visuels", () => {
+  for (const group of ["Cantine", "Sanitaires", "Aire de jeux", "Salle informatique", "Salles de classe", "Bibliothèque"]) {
+    assert.ok(showcase.includes(`title: \"${group}\"`), `groupe manquant: ${group}`);
+  }
+  assert.match(showcase, /group\.images\.length/);
+  assert.match(showcase, /sm:grid-cols-2/);
+});
