@@ -20,6 +20,7 @@ import { categories } from "@/lib/categories";
 import { classifySchoolGalleryImage } from "@/lib/school/galleryGroups";
 import { buildMiniSiteViewHref } from "@/lib/schoolPage/miniSiteViews";
 import { admissionYearLabelFrom, computeMiniSiteFlags, type MiniSiteRendererData } from "@/lib/schoolPage/miniSiteData";
+import { GuyskullShowcase } from "@/components/school/GuyskullShowcase";
 
 // GUYSKULL-06 §7 / GUYSKULL-06C §12 — homepage content grid: [À propos]
 // [Admissions ou Résultats] [Prochains événements] as one compact row on
@@ -60,8 +61,11 @@ function GridCard({
 }
 
 export function AccueilView({ data, baseHref }: { data: MiniSiteRendererData; baseHref: string }) {
-  const { establishment: school, fees, infra, images, docsList, admissionsConfig, ranking, results } = data;
   const [newsCount, setNewsCount] = useState<number | null>(null);
+  if (data.establishment.id === "a4cc4966-0d85-4c63-9c24-0538b8d5133b") {
+    return <GuyskullShowcase data={data} baseHref={baseHref} />;
+  }
+  const { establishment: school, fees, infra, images, docsList, admissionsConfig, ranking, results } = data;
   const flags = computeMiniSiteFlags(data);
 
   const hasLocation = !!(school.latitude && school.longitude);

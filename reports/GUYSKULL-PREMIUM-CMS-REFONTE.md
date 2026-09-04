@@ -1,5 +1,13 @@
 # Refonte fiche école premium — moteur CMS partagé
 
+## Passe de fidélité visuelle — 4 septembre 2026
+
+La page d'accueil Guyskull dispose désormais d'une composition dédiée proche de la maquette validée : en-tête Écoles237, héros institutionnel, navigation secondaire, présentation, programmes, tableau de frais, galerie, performances et colonne d'actions/informations.
+
+Les enrichissements éditoriaux et chiffrés restent strictement limités à l'UUID Guyskull et sont marqués comme contenus de démonstration. Les autres établissements continuent d'afficher uniquement leurs données publiées. Aucun changement n'a été appliqué à la base et aucun déploiement de production n'a été lancé.
+
+Contrôles finaux : TypeScript réussi, lint sans erreur (4 avertissements préexistants), 361 tests généraux réussis, 3 tests visuels dédiés réussis, build de 95 pages réussi. QA navigateur réussie à 1440, 1024, 768 et 390 px, sans débordement horizontal ni écran d'erreur.
+
 Date : 2026-09-03  
 Branche : `integration/final-platform-consolidation`  
 Référence visuelle : maquette Guyskull fournie par le fondateur  

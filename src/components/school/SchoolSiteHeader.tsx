@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, X, PhoneCall } from "lucide-react";
+import { Menu, X, PhoneCall, Search, UserRound } from "lucide-react";
+import { Logo } from "@/components/branding/Logo";
 import { MINISITE_VIEWS, buildMiniSiteViewHref, type MiniSiteViewKey } from "@/lib/schoolPage/miniSiteViews";
 import { schoolMonogram } from "@/lib/school/schoolMonogram";
 
@@ -41,6 +42,25 @@ export function SchoolSiteHeader({
   sticky?: boolean;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const isGuyskullShowcase = baseHref.includes("a4cc4966-0d85-4c63-9c24-0538b8d5133b");
+
+  if (isGuyskullShowcase) {
+    return (
+      <header className={`${sticky ? "sticky top-0" : ""} z-40 border-b border-slate-200 bg-white print:hidden`}>
+        <div className="mx-auto flex h-[72px] max-w-[1440px] items-center gap-5 px-4 lg:px-7">
+          <Link href="/" aria-label="Accueil Écoles237" className="shrink-0"><Logo size="header" priority /></Link>
+          <form action="/recherche" className="relative hidden min-w-0 max-w-[470px] flex-1 md:block">
+            <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={17} />
+            <input name="q" aria-label="Rechercher une école" placeholder="Rechercher une école, une ville, une catégorie…" className="h-11 w-full rounded-xl bg-slate-50 pl-11 pr-4 text-sm outline-none ring-1 ring-slate-100 focus:ring-2 focus:ring-blue-500" />
+          </form>
+          <nav className="ml-auto hidden items-center gap-6 text-sm font-semibold text-slate-700 lg:flex" aria-label="Navigation Écoles237">
+            <Link href="/">Accueil</Link><Link href="/recherche">Annuaire</Link><Link href="/recherche">Catégories</Link><Link href="/a-propos">À propos</Link><Link href="/contact">Contact</Link>
+          </nav>
+          <Link href="/connexion" aria-label="Mon compte" className="ml-auto grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-slate-50 text-slate-700 lg:ml-0"><UserRound size={19} /></Link>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className={`${sticky ? "sticky top-0" : ""} z-40 bg-white border-b border-border`}>
