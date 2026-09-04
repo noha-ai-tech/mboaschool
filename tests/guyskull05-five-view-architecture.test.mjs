@@ -46,14 +46,17 @@ test("exactly 5 views are declared, matching the mission's required order", () =
 // ==================== DIRECT-ROUTE-REFRESH ARCHITECTURE (static checks) ====================
 
 test("public route tree has one page.tsx per view plus a shared layout.tsx (no client-only fake tabs)", async () => {
-  const layout = await src("src/app/ecole/[id]/layout.tsx");
+  // RELEASE-CONSOLIDATION-07 §3 — layout.tsx is now a thin Server Component
+  // (owns per-school JSON-LD only); the client shell logic asserted here
+  // moved verbatim into the sibling SchoolMiniSiteLayoutClient.tsx.
+  const layoutClient = await src("src/app/ecole/[id]/SchoolMiniSiteLayoutClient.tsx");
   const accueil = await src("src/app/ecole/[id]/page.tsx");
   const etab = await src("src/app/ecole/[id]/etablissement/page.tsx");
   const admissions = await src("src/app/ecole/[id]/formations-admissions/page.tsx");
   const vie = await src("src/app/ecole/[id]/vie-resultats/page.tsx");
   const galerie = await src("src/app/ecole/[id]/galerie-infos/page.tsx");
-  assert.match(layout, /MiniSiteDataProvider/);
-  assert.match(layout, /resolveMiniSiteView/);
+  assert.match(layoutClient, /MiniSiteDataProvider/);
+  assert.match(layoutClient, /resolveMiniSiteView/);
   for (const page of [accueil, etab, admissions, vie, galerie]) {
     assert.doesNotMatch(page, /useState<.*activeTab/i, "no page should hold its own fake tab state");
   }
@@ -78,12 +81,15 @@ test("CMS Preview route tree mirrors the same 5 sub-routes under one layout", as
 // ==================== PREVIEW / PUBLIC RENDERER PARITY ====================
 
 test("preview and public routes for the same view import the exact same view component", async () => {
+  // RELEASE-CONSOLIDATION-07 §3 — each public page.tsx now renders a
+  // sibling *PageClient.tsx that holds the verbatim former view-component
+  // import/render; that's where the component reference actually lives now.
   const pairs = [
-    ["src/app/ecole/[id]/page.tsx", "src/app/dashboard/ecole/etablissement/preview/page.tsx", "AccueilView"],
-    ["src/app/ecole/[id]/etablissement/page.tsx", "src/app/dashboard/ecole/etablissement/preview/etablissement/page.tsx", "EtablissementView"],
-    ["src/app/ecole/[id]/formations-admissions/page.tsx", "src/app/dashboard/ecole/etablissement/preview/formations-admissions/page.tsx", "FormationsAdmissionsView"],
-    ["src/app/ecole/[id]/vie-resultats/page.tsx", "src/app/dashboard/ecole/etablissement/preview/vie-resultats/page.tsx", "VieResultatsView"],
-    ["src/app/ecole/[id]/galerie-infos/page.tsx", "src/app/dashboard/ecole/etablissement/preview/galerie-infos/page.tsx", "GalerieInfosView"],
+    ["src/app/ecole/[id]/AccueilPageClient.tsx", "src/app/dashboard/ecole/etablissement/preview/page.tsx", "AccueilView"],
+    ["src/app/ecole/[id]/etablissement/EtablissementPageClient.tsx", "src/app/dashboard/ecole/etablissement/preview/etablissement/page.tsx", "EtablissementView"],
+    ["src/app/ecole/[id]/formations-admissions/FormationsAdmissionsPageClient.tsx", "src/app/dashboard/ecole/etablissement/preview/formations-admissions/page.tsx", "FormationsAdmissionsView"],
+    ["src/app/ecole/[id]/vie-resultats/VieResultatsPageClient.tsx", "src/app/dashboard/ecole/etablissement/preview/vie-resultats/page.tsx", "VieResultatsView"],
+    ["src/app/ecole/[id]/galerie-infos/GalerieInfosPageClient.tsx", "src/app/dashboard/ecole/etablissement/preview/galerie-infos/page.tsx", "GalerieInfosView"],
   ];
   for (const [publicPath, previewPath, componentName] of pairs) {
     const publicSrc = await src(publicPath);
@@ -94,9 +100,11 @@ test("preview and public routes for the same view import the exact same view com
 });
 
 test("shared shell (header/footer) is used by both the public layout and the preview layout — never a second implementation", async () => {
-  const publicLayout = await src("src/app/ecole/[id]/layout.tsx");
+  // RELEASE-CONSOLIDATION-07 §3 — MiniSiteShell usage lives in
+  // SchoolMiniSiteLayoutClient.tsx now; see layout.tsx split rationale above.
+  const publicLayoutClient = await src("src/app/ecole/[id]/SchoolMiniSiteLayoutClient.tsx");
   const previewLayout = await src("src/app/dashboard/ecole/etablissement/preview/layout.tsx");
-  assert.match(publicLayout, /MiniSiteShell/);
+  assert.match(publicLayoutClient, /MiniSiteShell/);
   assert.match(previewLayout, /MiniSiteShell/);
 });
 

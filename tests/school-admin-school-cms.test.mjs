@@ -32,16 +32,21 @@ test("l’aperçu reste privé, contextualisé et utilise le renderer public exi
   // private-preview banner, and the auth/establishment context; each
   // page.tsx (including the Accueil root asserted here) is a thin view
   // that only reads from useMiniSiteContext(). The equivalent public page
-  // (src/app/ecole/[id]/page.tsx) follows the identical thin pattern.
+  // follows the identical thin pattern.
+  //
+  // RELEASE-CONSOLIDATION-07 §3 — the public accueil route was split so
+  // page.tsx could become a Server Component exporting generateMetadata();
+  // the thin useMiniSiteContext() view itself moved verbatim into
+  // AccueilPageClient.tsx, which page.tsx now renders unchanged.
   const previewLayout = await read("src/app/dashboard/ecole/etablissement/preview/layout.tsx");
   const previewPage = await read("src/app/dashboard/ecole/etablissement/preview/page.tsx");
-  const publicPage = await read("src/app/ecole/[id]/page.tsx");
+  const publicPageClient = await read("src/app/ecole/[id]/AccueilPageClient.tsx");
   assert.match(previewLayout, /fetch\("\/api\/school-page\/preview"\)/);
   assert.match(previewLayout, /MiniSiteDataProvider/);
   assert.match(previewLayout, /Cette version n&apos;est pas encore publique/);
   assert.doesNotMatch(previewLayout, /\.from\("applications"\)/);
   assert.match(previewPage, /useMiniSiteContext/);
-  assert.match(publicPage, /useMiniSiteContext/);
+  assert.match(publicPageClient, /useMiniSiteContext/);
 });
 
 test("la galerie reste une redirection unique et le tiroir conserve ses garanties accessibles", async () => {

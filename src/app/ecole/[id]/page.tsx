@@ -1,13 +1,20 @@
-"use client";
+import type { Metadata } from "next";
+import { fetchPublicSchoolMetaSource, buildSchoolViewMetadata } from "@/lib/schoolPage/publicSchoolMeta";
+import { AccueilPageClient } from "./AccueilPageClient";
 
-import { AccueilView } from "@/components/school/views/AccueilView";
-import { useMiniSiteContext } from "@/lib/schoolPage/miniSiteContext";
+type RouteParams = { params: Promise<{ id: string }> };
 
-// GUYSKULL-05 — Accueil is the root of the 5-view mini-site. Data comes
-// from the shared layout (src/app/ecole/[id]/layout.tsx) via context —
-// this page owns no fetch of its own.
+// RELEASE-CONSOLIDATION-07 — Server Component wrapper: owns generateMetadata()
+// only. Per-school JSON-LD is emitted once from the shared layout.tsx (see
+// its own comment for why). The actual mini-site render is unchanged and
+// lives in AccueilPageClient (verbatim former contents of this file), fed
+// by the existing client-side layout fetch — this file never touches that path.
+export async function generateMetadata({ params }: RouteParams): Promise<Metadata> {
+  const { id } = await params;
+  const school = await fetchPublicSchoolMetaSource(id);
+  return buildSchoolViewMetadata("accueil", school, id);
+}
+
 export default function SchoolAccueilPage() {
-  const { data, baseHref } = useMiniSiteContext();
-  if (!data) return null;
-  return <AccueilView data={data} baseHref={baseHref} />;
+  return <AccueilPageClient />;
 }

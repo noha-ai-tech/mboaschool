@@ -1,10 +1,17 @@
-"use client";
+import type { Metadata } from "next";
+import { fetchPublicSchoolMetaSource, buildSchoolViewMetadata } from "@/lib/schoolPage/publicSchoolMeta";
+import { FormationsAdmissionsPageClient } from "./FormationsAdmissionsPageClient";
 
-import { FormationsAdmissionsView } from "@/components/school/views/FormationsAdmissionsView";
-import { useMiniSiteContext } from "@/lib/schoolPage/miniSiteContext";
+type RouteParams = { params: Promise<{ id: string }> };
+
+// RELEASE-CONSOLIDATION-07 — Server Component wrapper: see accueil page.tsx
+// for the split rationale. Render logic is unchanged, in FormationsAdmissionsPageClient.
+export async function generateMetadata({ params }: RouteParams): Promise<Metadata> {
+  const { id } = await params;
+  const school = await fetchPublicSchoolMetaSource(id);
+  return buildSchoolViewMetadata("admissions", school, id);
+}
 
 export default function SchoolFormationsAdmissionsPage() {
-  const { data } = useMiniSiteContext();
-  if (!data) return null;
-  return <FormationsAdmissionsView data={data} />;
+  return <FormationsAdmissionsPageClient />;
 }
