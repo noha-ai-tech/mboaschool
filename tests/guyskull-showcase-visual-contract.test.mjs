@@ -26,3 +26,11 @@ test("la composition reprend les blocs structurants de la maquette", () => {
   assert.match(showcase, /sm:grid-cols-2/);
   assert.match(showcase, /lg:grid-cols/);
 });
+
+test("les neuf onglets changent le contenu sans quitter la coque Guyskull", () => {
+  for (const label of ["Accueil", "À propos", "Programmes", "Frais de scolarité", "Vie scolaire", "Résultats", "Galerie", "Actualités", "Contact"]) {
+    assert.ok(showcase.includes(`[\"${label}\"`) || showcase.includes(`>${label}<`) || showcase.includes(`>${label} `), `onglet manquant: ${label}`);
+  }
+  assert.match(showcase, /onClick=\{\(\)=>setActiveTab\(key\)\}/);
+  assert.doesNotMatch(showcase, /href=\{buildMiniSiteViewHref\(baseHref,key\)\}/);
+});
