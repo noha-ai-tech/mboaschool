@@ -12,7 +12,7 @@ import type { TickerItem } from "@/components/hero/AnnouncementTicker";
 // jamais un message inventé (voir AnnouncementTicker, masqué si vide).
 export function useSiteTickerItems(): TickerItem[] {
   const [schoolCount, setSchoolCount] = useState<number | null>(null);
-  const [featured, setFeatured] = useState<{ id: string; name: string; isClaimed: boolean } | null>(null);
+  const [featured, setFeatured] = useState<{ id: string; name: string } | null>(null);
 
   useEffect(() => {
     supabase
@@ -23,12 +23,12 @@ export function useSiteTickerItems(): TickerItem[] {
       });
     supabase
       .from("establishments")
-      .select("id, name, is_claimed")
+      .select("id, name")
       .eq("is_featured", true)
       .limit(1)
       .then(({ data }) => {
         if (data && data[0]) {
-          setFeatured({ id: data[0].id, name: data[0].name, isClaimed: data[0].is_claimed ?? true });
+          setFeatured({ id: data[0].id, name: data[0].name });
         }
       });
   }, []);
@@ -38,7 +38,7 @@ export function useSiteTickerItems(): TickerItem[] {
     items.push({
       id: "featured",
       label: `École à la une : ${featured.name}`,
-      href: featured.isClaimed ? `/ecole/${featured.id}` : `/auth/inscription?ecole=${featured.id}`,
+      href: `/ecole/${featured.id}`,
     });
   }
   if (schoolCount != null && schoolCount > 0) {

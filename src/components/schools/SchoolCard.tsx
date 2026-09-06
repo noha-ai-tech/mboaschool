@@ -50,7 +50,10 @@ export function SchoolCard({
    * autres usages (ex. accueil). */
   showBadges?: boolean;
 }) {
-  const href = school.isClaimed ? `/ecole/${school.id}` : `/auth/inscription?ecole=${school.id}`;
+  // HOTFIX — a public school profile exists independently of whether it has
+  // been claimed; is_claimed must never decide where the card's primary
+  // click goes (claiming is a separate action, e.g. a "Revendiquer" CTA).
+  const href = `/ecole/${school.id}`;
   const [liked, setLiked] = useState(false);
   const [tone1, tone2] = THUMBNAIL_TONES[toneIndex % THUMBNAIL_TONES.length];
 

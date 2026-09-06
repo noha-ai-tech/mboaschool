@@ -379,7 +379,7 @@ export default function HomePage() {
       items.push({
         id: "featured",
         label: `École à la une : ${featuredSchools[0].name}`,
-        href: featuredSchools[0].isClaimed ? `/ecole/${featuredSchools[0].id}` : `/auth/inscription?ecole=${featuredSchools[0].id}`,
+        href: `/ecole/${featuredSchools[0].id}`,
       });
     }
     if (!loading && stats.establishments > 0) {

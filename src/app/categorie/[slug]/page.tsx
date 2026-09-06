@@ -354,7 +354,7 @@ function CategoryPageInner() {
     tickerItems.push({
       id: "featured",
       label: `École à la une : ${featured[0].name}`,
-      href: (featured[0].is_claimed ?? true) ? `/ecole/${featured[0].id}` : `/auth/inscription?ecole=${featured[0].id}`,
+      href: `/ecole/${featured[0].id}`,
     });
   }
   if (!loading && schools.length > 0) {

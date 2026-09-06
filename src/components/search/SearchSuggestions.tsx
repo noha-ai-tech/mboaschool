@@ -52,7 +52,7 @@ export function SearchSuggestions({ query, onSelectCity }: { query: string; onSe
         </button>
       ))}
       {schools.map((school) => (
-        <button key={school.id} type="button" onClick={() => router.push(school.is_claimed ? `/ecole/${school.id}` : `/auth/inscription?ecole=${school.id}`)} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm hover:bg-[#F4F3EF]" role="option" aria-selected="false">
+        <button key={school.id} type="button" onClick={() => router.push(`/ecole/${school.id}`)} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm hover:bg-[#F4F3EF]" role="option" aria-selected="false">
           <Building2 size={15} className="shrink-0 text-[#1F8A5D]" />
           <span className="min-w-0"><strong className="block truncate">{school.name}</strong>{school.city && <span className="block text-xs text-[#5A695F]">{school.city}</span>}</span>
         </button>

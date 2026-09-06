@@ -80,37 +80,54 @@ export function HeroSearch({
         <SearchSuggestions query={query} onSelectCity={(selectedCity) => { onRegionChange("all"); onCityChange(selectedCity); onQueryChange(""); }} />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-        <select
-          value={activeCategory}
-          onChange={(e) => onCategoryChange(e.target.value)}
-          className={`min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
-        >
-          <option value="all" className="text-[#0a0a0a]">Toutes les catégories</option>
-          {categories.map((cat) => (
-            <option key={cat.key} value={cat.key} className="text-[#0a0a0a]">{cat.label}</option>
-          ))}
-        </select>
-        <select
-          value={region}
-          onChange={(e) => onRegionChange(e.target.value)}
-          aria-label="Filtrer par région"
-          className={`min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
-        >
-          {regions.map((item) => (
-            <option key={item.value} value={item.value} className="text-[#0a0a0a]">{item.label}</option>
-          ))}
-        </select>
-        <select
-          value={city}
-          onChange={(e) => onCityChange(e.target.value)}
-          aria-label="Filtrer par ville"
-          className={`min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
-        >
-          {cities.map((c) => (
-            <option key={c} value={c} className="text-[#0a0a0a]">{c === "all" ? "Toutes les villes" : c}</option>
-          ))}
-        </select>
+      {/* HOTFIX — this card is capped at max-w-[440px] by its parent (see
+          src/app/page.tsx) at every breakpoint from `sm:` upward, so a
+          3-column row never has room for full French labels ("Toutes les
+          catégories" etc.) and was silently ellipsis-truncating to "Toutes
+          les c...". One column per control at every width guarantees each
+          select is wide enough for its full text; a small caption above
+          each one keeps "Catégories / Région / Ville" clear regardless of
+          which value is currently selected. */}
+      <div className="grid grid-cols-1 gap-2.5">
+        <div>
+          <p className={`mb-1 text-[11px] font-bold uppercase tracking-wide ${dark ? "text-white/70" : "text-text-secondary"}`}>Catégories</p>
+          <select
+            value={activeCategory}
+            onChange={(e) => onCategoryChange(e.target.value)}
+            className={`w-full min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
+          >
+            <option value="all" className="text-[#0a0a0a]">Toutes les catégories</option>
+            {categories.map((cat) => (
+              <option key={cat.key} value={cat.key} className="text-[#0a0a0a]">{cat.label}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <p className={`mb-1 text-[11px] font-bold uppercase tracking-wide ${dark ? "text-white/70" : "text-text-secondary"}`}>Région</p>
+          <select
+            value={region}
+            onChange={(e) => onRegionChange(e.target.value)}
+            aria-label="Filtrer par région"
+            className={`w-full min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
+          >
+            {regions.map((item) => (
+              <option key={item.value} value={item.value} className="text-[#0a0a0a]">{item.label}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <p className={`mb-1 text-[11px] font-bold uppercase tracking-wide ${dark ? "text-white/70" : "text-text-secondary"}`}>Ville</p>
+          <select
+            value={city}
+            onChange={(e) => onCityChange(e.target.value)}
+            aria-label="Filtrer par ville"
+            className={`w-full min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
+          >
+            {cities.map((c) => (
+              <option key={c} value={c} className="text-[#0a0a0a]">{c === "all" ? "Toutes les villes" : c}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="flex items-center gap-2.5">
