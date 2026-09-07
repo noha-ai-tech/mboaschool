@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Fraunces } from "next/font/google";
 import { supabase } from "@/lib/supabase";
 import { ArrowRight, Eye, EyeOff, Lock } from "lucide-react";
@@ -25,7 +24,6 @@ const fraunces = Fraunces({
 
 export default function ConnexionPage() {
   const tickerItems = useSiteTickerItems();
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPwd, setShowPwd] = useState(false);
@@ -95,7 +93,19 @@ export default function ConnexionPage() {
       return;
     }
 
-    router.push(destination);
+    // HOTFIX — router.push() here was observed in production (never in
+    // local dev) resolving and returning with no error, yet the visible
+    // URL/page never actually changed: the user stayed stuck on the login
+    // form indefinitely despite a fully successful sign-in. Reproduced
+    // reliably against a local production build (`next build && next
+    // start`), never against `next dev` — consistent with a client-router
+    // navigation race specific to production's more aggressive route
+    // prefetching (the header's own "Mon espace" link starts prefetching
+    // /dashboard the moment auth state updates mid-submit, competing with
+    // this push). A hard navigation sidesteps the whole failure class
+    // deterministically and also guarantees the server sees the fresh
+    // session cookie on the very first request to the destination.
+    window.location.href = destination;
   }
 
   return (
@@ -128,7 +138,7 @@ export default function ConnexionPage() {
                 <p className="mt-1 leading-relaxed">{weakPasswordNotice}</p>
                 <button
                   type="button"
-                  onClick={() => router.push(authenticatedDestination)}
+                  onClick={() => { window.location.href = authenticatedDestination; }}
                   className="mt-4 inline-flex items-center gap-2 font-bold text-amber-950 underline underline-offset-4"
                 >
                   Continuer vers mon espace <ArrowRight size={14} />
