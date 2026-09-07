@@ -28,6 +28,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
+      url: `/categorie/${slug}`,
       type: "website",
       locale: "fr_CM",
       siteName: "Écoles237",
