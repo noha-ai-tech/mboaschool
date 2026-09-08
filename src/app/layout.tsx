@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import { Manrope } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { OfflineRuntime } from '@/components/offline/OfflineRuntime'
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -84,6 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         {children}
+        <OfflineRuntime />
         <Analytics />
         <SpeedInsights />
       </body>
