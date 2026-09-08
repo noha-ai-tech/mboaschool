@@ -118,6 +118,35 @@ function stripAccentsLower(s: string): string {
   return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 }
 
+// Options du filtre "Région" — partagées par toutes les pages publiques qui
+// filtrent des établissements (/recherche, /categorie/[slug]) pour que la
+// liste soit identique partout (§ demande "filtres cohérents dans toutes
+// les pages"). Inclut les deux macro-zones produit en plus des 10 régions
+// administratives canoniques.
+export const REGION_FILTER_OPTIONS: { value: string; label: string }[] = [
+  { value: "all", label: "Toutes les régions" },
+  { value: "grand-nord", label: "Grand Nord (Adamaoua, Nord, Extrême-Nord)" },
+  { value: "zone-anglophone", label: "Zone anglophone (Nord-Ouest, Sud-Ouest)" },
+  ...CANONICAL_REGIONS.map((r) => ({ value: r, label: r })),
+];
+
+/**
+ * Traduit une valeur de filtre Région (macro-zone produit OU région
+ * canonique) en la liste des vraies valeurs `establishments.region` à
+ * comparer. Même correspondance que src/lib/search/queryBuilder.ts
+ * (resolveRegionFilter, réutilisé ici plutôt que dupliqué) — pour que le
+ * dropdown Ville et le filtrage client affichent exactement ce que
+ * /api/recherche retournerait pour la même région. Retourne `null` pour
+ * "toutes les régions" (aucun filtre à appliquer).
+ */
+export function regionsForFilterValue(raw: string | null | undefined): string[] | null {
+  if (!raw || raw === "all") return null;
+  if (raw === "grand-nord") return [...GRAND_NORD];
+  if (raw === "zone-anglophone") return [...ZONE_ANGLOPHONE];
+  const canonical = normalizeRegionCasing(raw);
+  return canonical ? [canonical] : null;
+}
+
 /**
  * Fait correspondre une valeur de région dans n'importe quelle casse/accentuation
  * (ex. "CENTRE", "extreme-nord") à sa forme canonique exacte — UNIQUEMENT en cas

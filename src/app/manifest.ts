@@ -9,8 +9,8 @@ export default function manifest(): MetadataRoute.Manifest {
       "Annuaire scolaire camerounais : trouvez, comparez et préinscrivez votre enfant dans les meilleures écoles du Cameroun.",
     start_url: "/",
     display: "standalone",
-    background_color: "#f9f7f2",
-    theme_color: "#059669",
+    background_color: "#FBF6F2",
+    theme_color: "#0B3B2E",
     icons: [
       {
         src: "/branding/favicon.png",

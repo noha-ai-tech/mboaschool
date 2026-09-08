@@ -14,8 +14,10 @@ import {
   Loader2,
 } from "lucide-react";
 import { ClaimBranding } from "@/components/claim/ClaimBranding";
-import { AuthHeader } from "@/components/layout/AuthHeader";
+import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
+import { AnnouncementTicker } from "@/components/hero/AnnouncementTicker";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { useSiteTickerItems } from "@/lib/useSiteTickerItems";
 import { joinWithSeparator } from "@/lib/formatSchoolLocation";
 import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
 
@@ -62,9 +64,12 @@ const STEPS = [
 ];
 
 function Shell({ children }: { children: React.ReactNode }) {
+  const tickerItems = useSiteTickerItems();
   return (
     <div className="min-h-screen bg-[#ECECEA] flex flex-col">
-      <AuthHeader />
+      <SiteHeader />
+      <SiteHeaderSpacer />
+      <AnnouncementTicker items={tickerItems} />
       <div className="flex-1 flex flex-col lg:flex-row">
         <ClaimBranding {...CLAIM_BRANDING_PROPS} />
         <div className="flex-1 flex items-center justify-center px-6 py-12">{children}</div>
@@ -76,6 +81,7 @@ function Shell({ children }: { children: React.ReactNode }) {
 
 export default function RevendiquerPage() {
   const params = useParams() as { id: string };
+  const tickerItems = useSiteTickerItems();
 
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -106,6 +112,9 @@ export default function RevendiquerPage() {
     supabase
       .from("establishments")
       .select("id, name, city, owner_id, main_category, is_verified, cover_image_url, school_images(url)")
+      // CMS-F.6 — défense en profondeur avec la policy RLS publique
+      // (migration 0029, PRÉPARÉE NON EXÉCUTÉE).
+      .eq("school_images.status", "live")
       .eq("id", params.id)
       .single()
       .then(({ data }) => {
@@ -280,7 +289,9 @@ export default function RevendiquerPage() {
 
   return (
     <div className="min-h-screen bg-[#ECECEA] flex flex-col">
-      <AuthHeader />
+      <SiteHeader />
+      <SiteHeaderSpacer />
+      <AnnouncementTicker items={tickerItems} />
       <div className="flex-1 flex flex-col lg:flex-row">
       <ClaimBranding {...CLAIM_BRANDING_PROPS} />
 

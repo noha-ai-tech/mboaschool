@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { authorizeEstablishmentRoute } from "@/lib/school/establishmentRoute";
 
 const VALID_CATEGORIES = ["teacher", "admin", "direction", "support"];
 const VALID_ROLES = [
@@ -16,18 +17,16 @@ const VALID_ROLES = [
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
-
-  const { data: etablissement } = await supabase
-    .from("establishments")
-    .select("id")
-    .eq("owner_id", user.id)
-    .single();
-  if (!etablissement) return NextResponse.json({ error: "Accès refusé" }, { status: 403 });
-
   const body = await req.json().catch(() => null);
   if (!body) return NextResponse.json({ error: "Corps de requête invalide" }, { status: 400 });
+
+  const access = await authorizeEstablishmentRoute({
+    supabase,
+    requestedEstablishmentId: body.requestedEstablishmentId,
+    capability: "personnel:manage",
+  });
+  if (!access.ok) return access.response;
+  const etablissement = access.establishment;
 
   const { first_name, last_name, email, phone, category, role, employment_type, date_entree } = body as {
     first_name?: string; last_name?: string; email?: string; phone?: string;

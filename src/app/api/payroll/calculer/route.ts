@@ -14,22 +14,22 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { calculerBulletin } from "@/lib/payroll/calculate";
 import type { ContractType } from "@/lib/payroll/types";
+import { authorizeEstablishmentRoute } from "@/lib/school/establishmentRoute";
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Non authentifie" }, { status: 401 });
-
-  const { data: etablissement } = await supabase
-    .from("establishments")
-    .select("id")
-    .eq("owner_id", user.id)
-    .single();
-  if (!etablissement) return NextResponse.json({ error: "Acces refuse" }, { status: 403 });
+  const body = await req.json().catch(() => null);
+  if (!body) return NextResponse.json({ error: "Corps invalide" }, { status: 400 });
+  const access = await authorizeEstablishmentRoute({
+    supabase,
+    requestedEstablishmentId: body.requestedEstablishmentId,
+    capability: "payroll:manage",
+  });
+  if (!access.ok) return access.response;
+  const { establishment: etablissement, user } = access;
   const etablissementId = etablissement.id;
 
-  const body = await req.json().catch(() => null);
   const { staffMemberId, periodeDebut, periodeFin } = body as {
     staffMemberId?: string; periodeDebut?: string; periodeFin?: string;
   };
@@ -66,6 +66,7 @@ export async function POST(req: NextRequest) {
       p_enseignant_id: staffMember.enseignant_id,
       p_date_debut: periodeDebut,
       p_date_fin: periodeFin,
+      p_etablissement_id: etablissementId,
     });
     heuresEffectuees = Number(heuresRpc ?? 0);
 

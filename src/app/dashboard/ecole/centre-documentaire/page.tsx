@@ -1,119 +1,22 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
-
-// Centre documentaire (Mission 03, Phase 7) — architecture uniquement pour
-// les catégories qui n'ont pas encore de fonctionnalité dédiée (Brochures,
-// Téléchargements). Documents administratifs et Photos affichent des
-// compteurs réels et renvoient vers les pages existantes (inchangées) qui
-// gèrent effectivement l'upload.
-
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { FileText, FolderDown, ImageIcon } from "lucide-react";
 import { useSchool } from "@/lib/useSchool";
 import { supabase } from "@/lib/supabase";
-import { FileText, ImageIcon, Image as LogoIcon, FolderDown, ArrowRight } from "lucide-react";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
+import { SchoolAdminPageHeader } from "@/components/school-admin/ui/PageHeader";
+import { SchoolAdminStatCard } from "@/components/school-admin/ui/StatCard";
+import { SchoolAdminSectionCard } from "@/components/school-admin/ui/Card";
+import { SchoolAdminStatusBadge } from "@/components/school-admin/ui/Badge";
+import { SchoolAdminEmptyState, SchoolAdminLoadingState } from "@/components/school-admin/ui/Feedback";
 
 export default function CentreDocumentairePage() {
-  const { school, loading: schoolLoading } = useSchool();
-  const [docCount, setDocCount] = useState<number | null>(null);
-  const [imageCount, setImageCount] = useState<number | null>(null);
-  const [logoUrl, setLogoUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!school) return;
-    supabase
-      .from("school_documents")
-      .select("id", { count: "exact", head: true })
-      .eq("establishment_id", school.id)
-      .then(({ count }) => setDocCount(count ?? 0));
-
-    supabase
-      .from("school_images")
-      .select("id", { count: "exact", head: true })
-      .eq("establishment_id", school.id)
-      .then(({ count }) => setImageCount(count ?? 0));
-
-    supabase
-      .from("establishments")
-      .select("logo_url")
-      .eq("id", school.id)
-      .single()
-      .then(({ data }) => setLogoUrl(data?.logo_url ?? null));
-  }, [school]);
-
-  if (schoolLoading) {
-    return <div className="max-w-3xl h-64 bg-white rounded-2xl animate-pulse" />;
-  }
-  if (!school) return null;
-
-  return (
-    <div className="max-w-3xl">
-      <div className="mb-8">
-        <p className="text-xs font-semibold tracking-widest uppercase text-slate-400 mb-1">Dashboard</p>
-        <h1 className="text-3xl font-black tracking-tight text-[#0a0a0a]">Centre documentaire</h1>
-        <p className="text-slate-500 text-sm mt-1">Tous les fichiers liés à votre établissement, au même endroit.</p>
-      </div>
-
-      <div className="grid sm:grid-cols-2 gap-4 mb-4">
-        <Link
-          href="/dashboard/ecole/documents"
-          className="flex items-center justify-between bg-white border border-[#ebebeb] rounded-2xl p-5 hover:border-[#ccc] transition-colors"
-        >
-          <div className="flex items-center gap-3">
-            <FileText size={18} className="text-slate-400" />
-            <div>
-              <p className="font-bold text-sm text-[#0a0a0a]">Documents administratifs</p>
-              <p className="text-xs text-slate-400">{docCount === null ? "…" : `${docCount} document(s)`}</p>
-            </div>
-          </div>
-          <ArrowRight size={14} className="text-slate-300" />
-        </Link>
-
-        <Link
-          href="/dashboard/ecole/galerie"
-          className="flex items-center justify-between bg-white border border-[#ebebeb] rounded-2xl p-5 hover:border-[#ccc] transition-colors"
-        >
-          <div className="flex items-center gap-3">
-            <ImageIcon size={18} className="text-slate-400" />
-            <div>
-              <p className="font-bold text-sm text-[#0a0a0a]">Photos</p>
-              <p className="text-xs text-slate-400">{imageCount === null ? "…" : `${imageCount} photo(s)`}</p>
-            </div>
-          </div>
-          <ArrowRight size={14} className="text-slate-300" />
-        </Link>
-      </div>
-
-      <div className="bg-white border border-[#ebebeb] rounded-2xl p-5 mb-4">
-        <div className="flex items-center gap-3 mb-3">
-          <LogoIcon size={18} className="text-slate-400" />
-          <p className="font-bold text-sm text-[#0a0a0a]">Logo</p>
-        </div>
-        {logoUrl ? (
-          <img src={logoUrl} alt="Logo de l'établissement" className="h-16 w-16 object-contain rounded-lg border border-slate-100" />
-        ) : (
-          <p className="text-xs text-slate-400">
-            Aucun logo pour l&apos;instant. L&apos;ajout de logo n&apos;est pas encore disponible dans le formulaire —
-            contactez le support pour en ajouter un manuellement en attendant.
-          </p>
-        )}
-      </div>
-
-      <div className="grid sm:grid-cols-2 gap-4">
-        <div className="bg-white border border-dashed border-slate-200 rounded-2xl p-5">
-          <div className="flex items-center gap-3 mb-1">
-            <FolderDown size={18} className="text-slate-300" />
-            <p className="font-bold text-sm text-slate-400">Brochures</p>
-          </div>
-          <p className="text-xs text-slate-400">Bientôt disponible.</p>
-        </div>
-        <div className="bg-white border border-dashed border-slate-200 rounded-2xl p-5">
-          <div className="flex items-center gap-3 mb-1">
-            <FolderDown size={18} className="text-slate-300" />
-            <p className="font-bold text-sm text-slate-400">Téléchargements</p>
-          </div>
-          <p className="text-xs text-slate-400">Bientôt disponible.</p>
-        </div>
-      </div>
-    </div>
-  );
+  const { school, loading: schoolLoading } = useSchool(); const [docCount, setDocCount] = useState<number | null>(null); const [imageCount, setImageCount] = useState<number | null>(null); const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  useEffect(() => { if (!school) return; Promise.all([supabase.from("school_documents").select("id", { count: "exact", head: true }).eq("establishment_id", school.id), supabase.from("school_images").select("id", { count: "exact", head: true }).eq("establishment_id", school.id), supabase.from("establishments").select("logo_url").eq("id", school.id).single()]).then(([docs, images, establishment]) => { setDocCount(docs.count ?? 0); setImageCount(images.count ?? 0); setLogoUrl(establishment.data?.logo_url ?? null); }); }, [school]);
+  if (schoolLoading || (school && (docCount === null || imageCount === null))) return <SchoolAdminLoadingState label="Chargement du centre documentaire" />; if (!school) return <SchoolAdminEmptyState title="Aucun établissement actif" description="Sélectionnez un établissement." />;
+  const href = (path: string) => withEstablishmentQuery(path, school.id);
+  return <div className="mx-auto max-w-5xl"><SchoolAdminPageHeader eyebrow="Documents et CMS" title="Centre documentaire" description="Synthèse des fichiers réels et accès aux gestionnaires existants." /><div className="mb-6 grid gap-4 sm:grid-cols-2"><SchoolAdminStatCard label="Documents" value={docCount ?? 0} icon={<FileText size={19} />} /><SchoolAdminStatCard label="Photos" value={imageCount ?? 0} icon={<ImageIcon size={19} />} tone="neutral" /></div><div className="grid gap-4 sm:grid-cols-2"><ManagerLink href={href("/dashboard/ecole/documents")} title="Documents administratifs" detail={`${docCount ?? 0} document(s)`} icon={<FileText size={20} />} /><ManagerLink href={href("/dashboard/ecole/galerie")} title="Photos" detail={`${imageCount ?? 0} photo(s)`} icon={<ImageIcon size={20} />} /></div><div className="mt-6 grid gap-4 sm:grid-cols-2"><SchoolAdminSectionCard title="Logo" action={<SchoolAdminStatusBadge label={logoUrl ? "Disponible" : "Indisponible"} />}>{logoUrl ? <img src={logoUrl} alt="Logo de l’établissement" className="h-16 w-16 rounded-lg object-contain" /> : <p className="text-sm text-[var(--school-admin-text-muted)]">Aucun logo disponible. Aucun upload n’est créé ici.</p>}</SchoolAdminSectionCard><SchoolAdminSectionCard title="Autres catégories" action={<SchoolAdminStatusBadge tone="warning" label="Prochainement" />}><p className="flex items-center gap-2 text-sm text-[var(--school-admin-text-muted)]"><FolderDown size={18} aria-hidden="true" />Brochures et téléchargements restent indisponibles.</p></SchoolAdminSectionCard></div></div>;
 }
+function ManagerLink({ href, title, detail, icon }: { href: string; title: string; detail: string; icon: React.ReactNode }) { return <Link href={href} className="flex min-h-28 items-center gap-4 rounded-xl border border-[var(--school-admin-border)] bg-[var(--school-admin-surface)] p-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)] motion-reduce:transition-none"><span aria-hidden="true">{icon}</span><span><strong className="block">{title}</strong><span className="mt-1 block text-sm text-[var(--school-admin-text-muted)]">{detail}</span></span></Link>; }

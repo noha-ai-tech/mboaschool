@@ -11,7 +11,14 @@
 // technologie derrière.
 
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { FileSpreadsheet, FileText, Settings2, ArrowRight, Clock } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
+import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
+import { SchoolAdminPageHeader } from "@/components/school-admin/ui/PageHeader";
+import { SchoolAdminCard } from "@/components/school-admin/ui/Card";
+import { SchoolAdminStatusBadge } from "@/components/school-admin/ui/Badge";
 
 const MODES = [
   {
@@ -40,39 +47,37 @@ const MODES = [
   },
 ] as const;
 
-export default function ConfigurerEtablissementPage() {
+export default async function ConfigurerEtablissementPage({ searchParams }: { searchParams: Promise<{ school?: string }> }) {
+  const { school } = await searchParams;
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/auth/connexion");
+  const establishment = await requireActiveEstablishment(
+    supabase,
+    user.id,
+    school,
+    "/pro/configurer-etablissement"
+  );
   return (
-    <div className="max-w-4xl mx-auto px-6 py-12">
-      <p className="text-xs font-semibold tracking-widest uppercase text-emerald-700 mb-2">
-        Configurer mon établissement
-      </p>
-      <h1 className="text-2xl lg:text-3xl font-black text-[#0a0a0a] mb-3">
-        Comment souhaitez-vous commencer ?
-      </h1>
-      <p className="text-sm text-slate-500 max-w-xl mb-10">
-        Vous n&apos;avez pas à tout recréer depuis zéro. Reprenez l&apos;organisation que vous
-        avez déjà, et ajustez seulement ce qui a changé.
-      </p>
+    <div className="max-w-4xl mx-auto px-4 py-8 sm:px-6 sm:py-12">
+      <SchoolAdminPageHeader eyebrow="Configurer mon établissement" title="Comment souhaitez-vous commencer ?" description="Reprenez l’organisation existante de votre établissement et ajustez uniquement ce qui a changé." />
 
       <div className="grid sm:grid-cols-3 gap-4">
         {MODES.map((mode) => {
           const Icon = mode.icon;
           const content = (
             <>
-              <div className="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center mb-4">
-                <Icon size={20} className="text-emerald-700" />
+              <div className="w-11 h-11 rounded-xl bg-[var(--school-admin-primary-soft)] flex items-center justify-center mb-4">
+                <Icon size={20} className="text-[var(--school-admin-primary)]" aria-hidden="true" />
               </div>
               <h2 className="font-bold text-[#0a0a0a] mb-1.5">{mode.title}</h2>
               <p className="text-xs text-slate-500 leading-relaxed mb-4">{mode.description}</p>
               {mode.status ? (
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400">
-                  <Clock size={12} />
-                  {mode.status}
-                </span>
+                <SchoolAdminStatusBadge label={mode.status} tone="neutral" icon={<Clock size={12} />} />
               ) : (
                 <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700">
                   Commencer
-                  <ArrowRight size={12} />
+                  <ArrowRight size={12} aria-hidden="true" />
                 </span>
               )}
             </>
@@ -80,18 +85,16 @@ export default function ConfigurerEtablissementPage() {
 
           if (!mode.href) {
             return (
-              <div key={mode.key} className="bg-white border border-[#ebebeb] rounded-2xl p-6 opacity-70 cursor-not-allowed">
-                {content}
-              </div>
+              <SchoolAdminCard key={mode.key} aria-disabled="true" className="cursor-not-allowed">{content}</SchoolAdminCard>
             );
           }
           return (
             <Link
               key={mode.key}
-              href={mode.href}
-              className="bg-white border border-[#ebebeb] rounded-2xl p-6 hover:border-emerald-300 hover:shadow-sm transition-all"
+              href={withEstablishmentQuery(mode.href, establishment.id)}
+              className="block rounded-[var(--school-admin-radius-card)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)]"
             >
-              {content}
+              <SchoolAdminCard variant="interactive" className="h-full">{content}</SchoolAdminCard>
             </Link>
           );
         })}

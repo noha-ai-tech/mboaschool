@@ -18,6 +18,10 @@ export function useShowcasePhotos(limit: number): ShowcasePhoto[] {
       const { data } = await supabase
         .from("establishments")
         .select("id, name, city, cover_image_url, is_verified, is_featured, school_images(url)")
+        // CMS-F.6 — ne remonter que les photos publiées (défense en
+        // profondeur avec la policy RLS, migration 0029 PRÉPARÉE NON
+        // EXÉCUTÉE).
+        .eq("school_images.status", "live")
         .or("is_verified.eq.true,is_featured.eq.true")
         .limit(10);
       if (cancelled || !data) return;

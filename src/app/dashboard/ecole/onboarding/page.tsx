@@ -71,7 +71,7 @@ export default function OnboardingPage() {
 
           <div>
             <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
-              Nom de l'établissement <span className="text-red-400">*</span>
+              Nom de l&apos;établissement <span className="text-red-400">*</span>
             </label>
             <input
               required
@@ -164,7 +164,7 @@ export default function OnboardingPage() {
         </form>
 
         <p className="text-center text-xs text-slate-400 mt-4">
-          Votre fiche sera visible publiquement après vérification par l'équipe Écoles237.
+          Votre fiche sera visible publiquement après vérification par l&apos;équipe Écoles237.
         </p>
       </div>
     </div>

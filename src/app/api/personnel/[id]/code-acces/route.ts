@@ -17,23 +17,24 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { authorizeEstablishmentRoute } from "@/lib/school/establishmentRoute";
 
 export async function POST(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id: staffMemberId } = await params;
   const supabase = await createClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
-
-  const { data: etablissement } = await supabase
-    .from("establishments")
-    .select("id")
-    .eq("owner_id", user.id)
-    .single();
-  if (!etablissement) return NextResponse.json({ error: "Accès refusé" }, { status: 403 });
+  const body = await req.json().catch(() => null);
+  if (!body) return NextResponse.json({ error: "Corps de requête invalide" }, { status: 400 });
+  const access = await authorizeEstablishmentRoute({
+    supabase,
+    requestedEstablishmentId: body.requestedEstablishmentId,
+    capability: "personnel:manage",
+  });
+  if (!access.ok) return access.response;
+  const etablissement = access.establishment;
 
   const { data: member } = await supabase
     .from("staff_members")
@@ -62,7 +63,8 @@ export async function POST(
   const { error } = await supabase
     .from("staff_members")
     .update({ access_mode: "code", access_code: code })
-    .eq("id", staffMemberId);
+    .eq("id", staffMemberId)
+    .eq("etablissement_id", etablissement.id);
 
   if (error) {
     return NextResponse.json({ error: `Échec : ${error.message}` }, { status: 500 });

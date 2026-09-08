@@ -1,0 +1,157 @@
+{
+  "snapshot_version": 1,
+  "project_ref": "umcwwynrftidytxgqkwi",
+  "read_only": true,
+  "captured_at": "2026-08-22T20:29:16.59258+00:00",
+  "counts": [
+    {
+      "object_name": "public.absences",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.ai_usage",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.annees_scolaires",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.bulletin_paie_historique",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.bulletin_paie_lignes",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.bulletins_paie",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.conges_vacances",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.contraintes_etablissement",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.creneaux_horaires",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.emplois_du_temps",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.enseignant_disponibilites",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.enseignant_indisponibilites",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.enseignant_matieres",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.enseignants",
+      "row_count": 5
+    },
+    {
+      "object_name": "public.matieres",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.matieres_volume_horaire",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.messages",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.payroll_config",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.pointages",
+      "row_count": 6
+    },
+    {
+      "object_name": "public.primes",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.remplacements",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.retenues",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.salle_indisponibilites",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.salles",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.school_setup_drafts",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.school_setup_files",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.school_setup_imports",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.school_setup_issues",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.sections",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.staff_contracts",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.staff_documents",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.staff_members",
+      "row_count": 3
+    },
+    {
+      "object_name": "public.trimestres",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.types_primes",
+      "row_count": 0
+    },
+    {
+      "object_name": "public.types_retenues",
+      "row_count": 0
+    },
+    {
+      "object_name": "storage.objects:pointages-photos",
+      "row_count": 6
+    },
+    {
+      "object_name": "storage.objects:staff-documents",
+      "row_count": 0
+    }
+  ]
+}
+

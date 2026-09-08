@@ -36,12 +36,33 @@ sur tout `src/`).
 
 ## `school_announcements`
 
+**[CORRECTION POST-CMS-E, 2026-08-22]** La ligne `published_at` ci-dessous a été écrite avant toute vérification
+directe en production et s'est révélée **fausse**. CMS-E (sprint CMS-E, sonde live via un insert volontairement
+incomplet côté service-role — voir `src/app/api/school-page/news/route.ts`) a confirmé l'état réel :
+
+- `published_at` **N'EXISTE PAS** en production, malgré sa présence dans `auth-setup.sql` (`published_at
+  timestamptz default now()`, ligne 118). La migration historique n'est pas réécrite (un historique reste un
+  historique) — c'est cette section "current state" qui est corrigée.
+- `content` est **NOT NULL** en production — non documenté nulle part avant CMS-E, deuxième point de dérive non
+  détecté par l'audit original ci-dessous.
+- `is_important`, `class_id`, `type` : la dérive signalée initialement était correcte et a bien été comblée par
+  0007 (colonnes ajoutées, contrainte `check` sur `type`, FK sur `class_id`) — ce constat reste exact.
+
+Colonnes réelles de production, confirmées par sonde live (autorité pour CMS-F, voir
+`docs/01_ARCHITECT_HANDOFF/05_DATABASE_CURRENT_STATE.md`) :
+`id, establishment_id, title, content (NOT NULL), is_important, created_at, class_id, type`.
+
+Tableau original (pour mémoire — la colonne "Migration contient" reflète `auth-setup.sql`, qui ne reflète plus
+la production réelle pour `published_at`) :
+
 | Colonne | Code attend | Migration contient | Divergence | Risque | Correction proposée |
 |---|---|---|---|---|---|
-| `id`, `establishment_id`, `title`, `content`, `published_at`, `created_at` | Oui | `auth-setup.sql` | Aucune | Aucun | — |
-| `is_important` | Oui — `dashboard/ecole/annonces/page.tsx` | **[DÉRIVE] absente** | Colonne de production non tracée | **Élevé** | Inclure dans 0007 |
-| `class_id` | Oui — `dashboard/ecole/classes/[id]/page.tsx` (annonces liées à une classe) | **[DÉRIVE] absente, aucune contrainte de clé étrangère versionnée vers `classes`** | Colonne structurante (lien vers une classe) sans FK tracée — risque d'intégrité référentielle non garanti par le schéma versionné | **Élevé** | Inclure dans 0007 avec `references classes(id) on delete cascade` |
-| `type` | Oui — `announcement`/`homework`/`event`/`reminder` (`dashboard/ecole/classes/[id]/page.tsx`) | **[DÉRIVE] absente, aucune contrainte `check` versionnée** | Valeurs non contraintes en base — n'importe quelle chaîne pourrait être insérée hors du client applicatif actuel | **Moyen** | Inclure dans 0007 avec `check (type in (...))` |
+| `id`, `establishment_id`, `title`, `content`, `created_at` | Oui | `auth-setup.sql` | Aucune | Aucun | — |
+| `published_at` | **Non — colonne inexistante en production, jamais sélectionnée par le code CMS-E** | `auth-setup.sql` (déclarée mais jamais appliquée telle quelle, ou retirée hors migration versionnée) | **[DÉRIVE CONFIRMÉE] absente en production réelle** | **Élevé** (documentation trompeuse pendant plusieurs sprints) | Aucune action DB — ne jamais sélectionner cette colonne ; documenter l'absence (fait, cette section) |
+| `content NOT NULL` | Oui, implicitement (le CMS exige un contenu) | `auth-setup.sql` déclare `content text` sans `not null` | **[DÉRIVE CONFIRMÉE] contrainte NOT NULL réelle non tracée** | **Moyen** | Aucune action DB — le code CMS-E traite déjà `content` comme requis |
+| `is_important` | Oui — `dashboard/ecole/annonces/page.tsx` | **[DÉRIVE] absente** | Colonne de production non tracée | **Élevé** | Comblé par 0007 |
+| `class_id` | Oui — `dashboard/ecole/classes/[id]/page.tsx` (annonces liées à une classe) | **[DÉRIVE] absente, aucune contrainte de clé étrangère versionnée vers `classes`** | Colonne structurante (lien vers une classe) sans FK tracée — risque d'intégrité référentielle non garanti par le schéma versionné | **Élevé** | Comblé par 0007 avec `references classes(id) on delete cascade` |
+| `type` | Oui — `announcement`/`homework`/`event`/`reminder` (`dashboard/ecole/classes/[id]/page.tsx`) | **[DÉRIVE] absente, aucune contrainte `check` versionnée** | Valeurs non contraintes en base — n'importe quelle chaîne pourrait être insérée hors du client applicatif actuel | **Moyen** | Comblé par 0007 avec `check (type in (...))` |
 
 ## Tables du module Pro (migrations 0001-0004) — confirmées cohérentes
 

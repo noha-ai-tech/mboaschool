@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Plus, Trash2, Loader2, Check, AlertTriangle } from "lucide-react";
+import { Plus, Trash2, Check, AlertTriangle } from "lucide-react";
+import { SchoolAdminButton } from "@/components/school-admin/ui/Button";
+import { SchoolAdminAlert } from "@/components/school-admin/ui/Feedback";
 
 type Recreation = { debut: string; fin: string };
 
@@ -145,6 +147,7 @@ export function FormulaireContraintes({
                 key={j.val}
                 type="button"
                 onClick={() => toggleJour(j.val)}
+                aria-pressed={active}
                 className={`px-4 py-2 rounded-xl text-sm font-bold border transition-colors ${
                   active
                     ? "bg-[#0a0a0a] text-white border-[#0a0a0a]"
@@ -201,13 +204,16 @@ export function FormulaireContraintes({
       <div className="bg-white border border-[#ebebeb] rounded-2xl p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-bold text-sm text-[#0a0a0a]">Pause déjeuner</h2>
-          <label className="flex items-center gap-2 cursor-pointer">
+          <div className="flex items-center gap-2">
             <span className="text-xs text-slate-400">{form.pause_active ? "Activée" : "Désactivée"}</span>
-            <div
+            <button
+              type="button"
               onClick={() => setForm({ ...form, pause_active: !form.pause_active })}
+              aria-pressed={form.pause_active}
+              aria-label="Activer ou désactiver la pause déjeuner"
               className={`relative w-10 h-5.5 rounded-full transition-colors cursor-pointer ${
                 form.pause_active ? "bg-emerald-500" : "bg-slate-200"
-              }`}
+              } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)] motion-reduce:transition-none`}
               style={{ width: 40, height: 22 }}
             >
               <div
@@ -216,8 +222,8 @@ export function FormulaireContraintes({
                 }`}
                 style={{ width: 18, height: 18, top: 2 }}
               />
-            </div>
-          </label>
+            </button>
+          </div>
         </div>
         {form.pause_active && (
           <div className="grid grid-cols-2 gap-4">
@@ -283,6 +289,7 @@ export function FormulaireContraintes({
                 <button
                   type="button"
                   onClick={() => removeRecreation(i)}
+                  aria-label={`Supprimer la récréation ${i + 1}`}
                   className="text-slate-300 hover:text-red-500 transition-colors pb-2.5"
                 >
                   <Trash2 size={14} />
@@ -323,24 +330,10 @@ export function FormulaireContraintes({
       </div>
 
       {/* Erreur + bouton */}
-      {error && (
-        <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-2.5">
-          {error}
-        </p>
-      )}
+      {error && <SchoolAdminAlert tone="danger">{error}</SchoolAdminAlert>}
+      {saved && <SchoolAdminAlert tone="success">Modifications sauvegardées.</SchoolAdminAlert>}
 
-      <button
-        type="submit"
-        disabled={saving}
-        className="flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-emerald-700 transition-colors disabled:opacity-50"
-      >
-        {saving ? (
-          <Loader2 size={14} className="animate-spin" />
-        ) : saved ? (
-          <Check size={14} />
-        ) : null}
-        {saving ? "Enregistrement…" : saved ? "Modifications sauvegardées" : "Enregistrer les contraintes"}
-      </button>
+      <SchoolAdminButton type="submit" loading={saving} leadingIcon={saved ? <Check size={14} aria-hidden="true" /> : undefined}>Enregistrer les contraintes</SchoolAdminButton>
     </form>
   );
 }

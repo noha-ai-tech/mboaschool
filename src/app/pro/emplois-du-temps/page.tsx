@@ -1,10 +1,16 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { getActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { requireActiveEstablishment } from "@/lib/supabase/activeEstablishment";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
 import { GrilleEmploiDuTemps } from "@/components/timetable/GrilleEmploiDuTemps";
 import { BoutonGenerer } from "@/components/timetable/BoutonGenerer";
 import { BoutonPublier } from "@/components/timetable/BoutonPublier";
+import { CalendarDays, Clock3, LayoutGrid } from "lucide-react";
+import { SchoolAdminPageHeader } from "@/components/school-admin/ui/PageHeader";
+import { SchoolAdminStatCard } from "@/components/school-admin/ui/StatCard";
+import { SchoolAdminStatusBadge } from "@/components/school-admin/ui/Badge";
+import { SchoolAdminSectionCard } from "@/components/school-admin/ui/Card";
 
 const ANNEE_SCOLAIRE_COURANTE = "2026-2027";
 
@@ -37,6 +43,7 @@ export default async function EmploisDuTempsPage({
     departement?: string;
     matiere?: string;
     salle?: string;
+    school?: string;
   }>;
 }) {
   const supabase = await createClient();
@@ -52,16 +59,9 @@ export default async function EmploisDuTempsPage({
     return <p className="p-6 text-sm text-gray-500">Non authentifié.</p>;
   }
 
-  const etablissement = await getActiveEstablishment(supabase, user.id);
-
-  if (!etablissement?.id) {
-    return (
-      <p className="p-6 text-sm text-gray-500">
-        Aucun établissement rattaché à ce compte.
-      </p>
-    );
-  }
+  const etablissement = await requireActiveEstablishment(supabase, user.id, params.school, "/pro/emplois-du-temps");
   const etablissementId = etablissement.id;
+  const schoolHref = (href: string) => withEstablishmentQuery(href, etablissementId);
 
   const { data: creneaux } = await supabase
     .from("creneaux_horaires")
@@ -122,7 +122,7 @@ export default async function EmploisDuTempsPage({
         {classes.map((c) => (
           <Link
             key={c.id}
-            href={`/pro/emplois-du-temps?vue=classe&classe=${c.id}`}
+            href={schoolHref(`/pro/emplois-du-temps?vue=classe&classe=${c.id}`)}
             className={`rounded-full px-3 py-1 text-sm border ${
               c.id === classeSelectionnee.id
                 ? "bg-[#007A3D] text-white border-[#007A3D]"
@@ -177,7 +177,7 @@ export default async function EmploisDuTempsPage({
         {enseignants.map((e) => (
           <Link
             key={e.id}
-            href={`/pro/emplois-du-temps?vue=individuelle&enseignant=${e.id}`}
+            href={schoolHref(`/pro/emplois-du-temps?vue=individuelle&enseignant=${e.id}`)}
             className={`rounded-full px-3 py-1 text-sm border ${
               e.id === enseignantSelectionne.id
                 ? "bg-[#007A3D] text-white border-[#007A3D]"
@@ -245,7 +245,7 @@ export default async function EmploisDuTempsPage({
         {departements.map((d) => (
           <Link
             key={d}
-            href={`/pro/emplois-du-temps?vue=departement&departement=${encodeURIComponent(d)}`}
+            href={schoolHref(`/pro/emplois-du-temps?vue=departement&departement=${encodeURIComponent(d)}`)}
             className={`rounded-full px-3 py-1 text-sm border ${
               d === departementSelectionne
                 ? "bg-[#007A3D] text-white border-[#007A3D]"
@@ -299,7 +299,7 @@ export default async function EmploisDuTempsPage({
         {matieres.map((m) => (
           <Link
             key={m.id}
-            href={`/pro/emplois-du-temps?vue=matiere&matiere=${m.id}`}
+            href={schoolHref(`/pro/emplois-du-temps?vue=matiere&matiere=${m.id}`)}
             className={`rounded-full px-3 py-1 text-sm border ${
               m.id === matiereSelectionnee.id
                 ? "bg-[#007A3D] text-white border-[#007A3D]"
@@ -325,7 +325,7 @@ export default async function EmploisDuTempsPage({
         <div className="p-6">
           <p className="text-sm text-gray-500">
             Aucune salle enregistrée. La gestion des salles est nouvelle (Mission 05) — ajoutez-en depuis{" "}
-            <Link href="/pro/salles" className="text-[#007A3D] font-medium">Salles</Link>.
+            <Link href={schoolHref("/pro/salles")} className="text-[#007A3D] font-medium">Salles</Link>.
           </p>
         </div>
       );
@@ -356,7 +356,7 @@ export default async function EmploisDuTempsPage({
         {salles.map((s) => (
           <Link
             key={s.id}
-            href={`/pro/emplois-du-temps?vue=salle&salle=${s.id}`}
+            href={schoolHref(`/pro/emplois-du-temps?vue=salle&salle=${s.id}`)}
             className={`rounded-full px-3 py-1 text-sm border ${
               s.id === salleSelectionnee.id
                 ? "bg-[#007A3D] text-white border-[#007A3D]"
@@ -396,28 +396,30 @@ export default async function EmploisDuTempsPage({
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-        <div>
-          <h1 className="text-xl font-semibold text-gray-900">Emplois du temps</h1>
-          <p className="text-sm text-gray-500">Année scolaire {ANNEE_SCOLAIRE_COURANTE}</p>
+    <div className="mx-auto max-w-7xl">
+      <SchoolAdminPageHeader eyebrow="Planification" title="Emplois du temps" description="Consultez la grille active selon l’établissement, la classe, l’enseignant, la matière ou la salle." actions={
+        <div className="flex flex-wrap items-center gap-2">
+          <BoutonGenerer anneeScolaire={ANNEE_SCOLAIRE_COURANTE} establishmentId={etablissementId} />
+          <BoutonPublier anneeScolaire={ANNEE_SCOLAIRE_COURANTE} hasBrouillon={(brouillonCount ?? 0) > 0} establishmentId={etablissementId} />
         </div>
-        <div className="flex items-center gap-3">
-          <BoutonGenerer anneeScolaire={ANNEE_SCOLAIRE_COURANTE} />
-          <BoutonPublier anneeScolaire={ANNEE_SCOLAIRE_COURANTE} hasBrouillon={(brouillonCount ?? 0) > 0} />
-        </div>
+      } />
+      <div className="mb-6 grid gap-4 sm:grid-cols-3">
+        <SchoolAdminStatCard label="Créneaux configurés" value={(creneaux ?? []).length} icon={<Clock3 size={19} />} />
+        <SchoolAdminStatCard label="Affectations affichées" value={affectations.length} icon={<CalendarDays size={19} />} tone="neutral" />
+        <SchoolAdminStatCard label="État de travail" value={(brouillonCount ?? 0) > 0 ? "Brouillon disponible" : "Aucun brouillon"} icon={<LayoutGrid size={19} />} tone={(brouillonCount ?? 0) > 0 ? "warning" : "neutral"} />
       </div>
 
-      <div className="mb-6 border-b border-gray-200">
-        <nav className="flex">
+      <div className="mb-6 rounded-[var(--school-admin-radius-card)] border border-[var(--school-admin-border)] bg-[var(--school-admin-surface)] p-2 shadow-[var(--school-admin-shadow-sm)]">
+        <nav className="flex flex-wrap gap-1" aria-label="Vues de l’emploi du temps">
           {TABS.map((tab) => (
             <Link
               key={tab.vue}
-              href={`/pro/emplois-du-temps?vue=${tab.vue}`}
-              className={`px-4 py-2 text-sm font-medium border-b-2 -mb-px ${
+              href={schoolHref(`/pro/emplois-du-temps?vue=${tab.vue}`)}
+              aria-current={vue === tab.vue ? "page" : undefined}
+              className={`min-h-10 rounded-lg border px-3 py-2 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)] ${
                 vue === tab.vue
-                  ? "border-[#007A3D] text-[#007A3D]"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  ? "border-[var(--school-admin-primary)] bg-[var(--school-admin-primary-soft)] text-[var(--school-admin-primary-strong)] shadow-sm"
+                  : "border-transparent text-[var(--school-admin-text-muted)] hover:bg-[var(--school-admin-surface-muted)]"
               }`}
             >
               {tab.label}
@@ -426,13 +428,14 @@ export default async function EmploisDuTempsPage({
         </nav>
       </div>
 
+      <SchoolAdminSectionCard title="Grille active" description="Les états et affectations affichés proviennent uniquement des données actuellement disponibles." action={<SchoolAdminStatusBadge tone={(brouillonCount ?? 0) > 0 ? "warning" : "neutral"} label={(brouillonCount ?? 0) > 0 ? "Brouillon prêt à publier" : "Aucun brouillon"} />}>
       {selectorNode}
-
       <GrilleEmploiDuTemps
         creneaux={creneaux ?? []}
         affectations={affectations}
         showClasse={showClasse}
       />
+      </SchoolAdminSectionCard>
     </div>
   );
 }

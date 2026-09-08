@@ -7,6 +7,12 @@ import { useSchool } from "@/lib/useSchool";
 import { admissionStatusConfig } from "@/lib/admissions/status";
 import { joinWithSeparator } from "@/lib/formatSchoolLocation";
 import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
+import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
+import { SchoolAdminPageHeader } from "@/components/school-admin/ui/PageHeader";
+import { SchoolAdminBadge, SchoolAdminStatusBadge } from "@/components/school-admin/ui/Badge";
+import { SchoolAdminSectionCard } from "@/components/school-admin/ui/Card";
+import { SchoolAdminStatCard } from "@/components/school-admin/ui/StatCard";
+import { SchoolAdminLoadingState, SchoolAdminSkeleton } from "@/components/school-admin/ui/Feedback";
 import {
   ClipboardList,
   GraduationCap,
@@ -168,14 +174,7 @@ export default function DashboardEcoleHome() {
   ] : [];
 
   if (schoolLoading) {
-    return (
-      <div className="space-y-4 animate-pulse">
-        <div className="h-8 bg-white rounded-card w-1/3" />
-        <div className="grid grid-cols-4 gap-4">
-          {[1,2,3,4].map(i => <div key={i} className="h-24 bg-white rounded-card" />)}
-        </div>
-      </div>
-    );
+    return <SchoolAdminLoadingState label="Chargement du tableau de bord" />;
   }
 
   if (!school) {
@@ -196,29 +195,25 @@ export default function DashboardEcoleHome() {
   }
 
   const isPro = school.forfait === "pro";
+  const contextHref = (href: string) => withEstablishmentQuery(href, school.id);
 
   return (
-    <div className="max-w-6xl">
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-2 mb-2 flex-wrap">
-          <h1 className="text-2xl font-bold tracking-tight text-text-primary">{school.name}</h1>
-          {school.is_verified && (
-            <span className="flex items-center gap-1 text-[10px] font-semibold text-primary bg-primary-light border border-primary/20 px-2 py-0.5 rounded-full">
-              <CheckCircle size={9} /> {TRUST_BADGE_LABELS.PLATFORM_VERIFIED}
-            </span>
-          )}
-          {isPro && (
-            <span className="flex items-center gap-1 text-[10px] font-bold text-[#0A0A0A] bg-[#FCD116] px-2 py-0.5 rounded-full">
-              <Sparkles size={9} /> Pro
-            </span>
-          )}
-        </div>
-        <p className="text-text-secondary text-sm">{joinWithSeparator(school.city, school.main_category)}</p>
-      </div>
+    <div className="mx-auto max-w-7xl">
+      <SchoolAdminPageHeader
+        eyebrow="Vue d’ensemble"
+        title={`Bonjour, bienvenue à ${school.name}`}
+        description="Retrouvez les dossiers à traiter, les tâches prioritaires et les principaux repères de votre établissement."
+        context={
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm text-[var(--school-admin-text-muted)]">{joinWithSeparator(school.city, school.main_category)}</span>
+            {school.is_verified && <SchoolAdminStatusBadge tone="success" label={TRUST_BADGE_LABELS.PLATFORM_VERIFIED} icon={<CheckCircle size={13} />} />}
+            {isPro && <SchoolAdminBadge tone="warning"><Sparkles size={13} className="mr-1.5" aria-hidden="true" />Forfait Pro</SchoolAdminBadge>}
+          </div>
+        }
+      />
 
       {/* KPI — 4 maximum, données réelles uniquement */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard icon={ClipboardList} value={loading ? "—" : pending} label="Admissions en attente" />
         <KpiCard icon={Gauge} value={loading ? "—" : `${completionPct}%`} label="Profil complété" />
         <KpiCard icon={GraduationCap} value={loading ? "—" : classes.length} label="Classes" />
@@ -226,10 +221,9 @@ export default function DashboardEcoleHome() {
       </div>
 
       {/* À traiter */}
-      <div className="bg-white border border-border rounded-card p-5 mb-6">
-        <p className="font-bold text-sm text-text-primary mb-3">À traiter</p>
+      <SchoolAdminSectionCard title="À traiter en priorité" description="Actions qui nécessitent votre attention aujourd’hui." className="mb-6">
         {loading ? (
-          <div className="h-10 bg-muted rounded-lg animate-pulse" />
+          <SchoolAdminSkeleton className="h-10" label="Chargement des actions prioritaires" />
         ) : attentionItems.length === 0 ? (
           <p className="text-sm text-text-secondary">Rien ne nécessite votre attention.</p>
         ) : (
@@ -237,8 +231,8 @@ export default function DashboardEcoleHome() {
             {attentionItems.map((item) => (
               <Link
                 key={item.label}
-                href={item.href}
-                className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm text-text-primary hover:bg-muted transition-colors duration-base"
+                href={contextHref(item.href)}
+                className="flex min-h-11 items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium text-[var(--school-admin-text)] transition hover:bg-[var(--school-admin-surface-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)]"
               >
                 <span className="flex items-center gap-2.5">
                   <AlertCircle size={14} className="text-warning shrink-0" />
@@ -249,17 +243,20 @@ export default function DashboardEcoleHome() {
             ))}
           </div>
         )}
-      </div>
+      </SchoolAdminSectionCard>
 
       <div className="grid lg:grid-cols-2 gap-5 mb-6">
         {/* Admissions */}
-        <div className="bg-white border border-border rounded-card overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-border">
-            <h2 className="font-bold text-sm">Admissions récentes</h2>
-            <Link href="/dashboard/ecole/admissions" className="text-xs font-semibold text-primary hover:opacity-80 flex items-center gap-1">
+        <SchoolAdminSectionCard
+          title="Admissions récentes"
+          description="Les derniers dossiers reçus par l’établissement."
+          contentClassName="p-0"
+          action={
+            <Link href={contextHref("/dashboard/ecole/admissions")} className="flex min-h-10 items-center gap-1 rounded-lg px-2 text-xs font-semibold text-[var(--school-admin-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)]">
               Voir tout <ArrowRight size={12} />
             </Link>
-          </div>
+          }
+        >
           {loading ? (
             <div className="p-5 space-y-3">
               {[1, 2, 3].map((i) => <div key={i} className="h-10 bg-muted rounded-lg animate-pulse" />)}
@@ -282,20 +279,20 @@ export default function DashboardEcoleHome() {
                         {app.desired_level ?? "Niveau non précisé"} · {new Date(app.created_at).toLocaleDateString("fr-FR", { day: "numeric", month: "short" })}
                       </p>
                     </div>
-                    <span className={`ml-4 shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-full border ${s.cls}`}>{s.label}</span>
+                    <SchoolAdminStatusBadge tone={admissionTone(app.admission_status)} label={s.label} />
                   </div>
                 );
               })}
             </div>
           )}
-        </div>
+        </SchoolAdminSectionCard>
 
         {/* Personnel / Présences */}
         {isPro ? (
           <div className="bg-white border border-border rounded-card overflow-hidden">
             <div className="flex items-center justify-between px-5 py-4 border-b border-border">
               <h2 className="font-bold text-sm">Personnel aujourd&apos;hui</h2>
-              <Link href="/pro/pointage/historique" className="text-xs font-semibold text-primary hover:opacity-80 flex items-center gap-1">
+              <Link href={contextHref("/pro/pointage/historique")} className="text-xs font-semibold text-primary hover:opacity-80 flex items-center gap-1">
                 Voir tout <ArrowRight size={12} />
               </Link>
             </div>
@@ -326,7 +323,7 @@ export default function DashboardEcoleHome() {
           <div className="bg-white border border-border rounded-card overflow-hidden">
             <div className="flex items-center justify-between px-5 py-4 border-b border-border">
               <h2 className="font-bold text-sm">Emploi du temps</h2>
-              <Link href="/pro/emplois-du-temps" className="text-xs font-semibold text-primary hover:opacity-80 flex items-center gap-1">
+              <Link href={contextHref("/pro/emplois-du-temps")} className="text-xs font-semibold text-primary hover:opacity-80 flex items-center gap-1">
                 Voir tout <ArrowRight size={12} />
               </Link>
             </div>
@@ -348,7 +345,7 @@ export default function DashboardEcoleHome() {
           <div className="bg-white border border-border rounded-card overflow-hidden">
             <div className="flex items-center justify-between px-5 py-4 border-b border-border">
               <h2 className="font-bold text-sm">Paie</h2>
-              <Link href="/pro/paie" className="text-xs font-semibold text-primary hover:opacity-80 flex items-center gap-1">
+              <Link href={contextHref("/pro/paie")} className="text-xs font-semibold text-primary hover:opacity-80 flex items-center gap-1">
                 Voir tout <ArrowRight size={12} />
               </Link>
             </div>
@@ -389,7 +386,7 @@ export default function DashboardEcoleHome() {
               {incomplete.slice(0, 2).map((c) => (
                 <Link
                   key={c.label}
-                  href={c.href}
+                  href={contextHref(c.href)}
                   className="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-text-secondary hover:bg-muted hover:text-text-primary transition-colors duration-base"
                 >
                   {c.label}
@@ -414,7 +411,7 @@ export default function DashboardEcoleHome() {
               return (
                 <Link
                   key={l.href}
-                  href={l.href}
+                  href={contextHref(l.href)}
                   className="flex items-center gap-3 px-2 py-2.5 rounded-lg text-sm text-text-secondary hover:text-text-primary hover:bg-muted transition-colors duration-base"
                 >
                   <Icon size={15} className="text-text-secondary" />
@@ -430,13 +427,15 @@ export default function DashboardEcoleHome() {
 }
 
 function KpiCard({ icon: Icon, value, label }: { icon: React.ElementType; value: React.ReactNode; label: string }) {
-  return (
-    <div className="bg-white border border-border rounded-[18px] p-5 shadow-[0_1px_2px_rgba(10,15,13,0.04)]">
-      <Icon size={16} className="text-primary mb-3" />
-      <p className="text-2xl font-extrabold text-text-primary">{value}</p>
-      <p className="text-xs text-text-secondary font-medium mt-1">{label}</p>
-    </div>
-  );
+  return <SchoolAdminStatCard icon={<Icon size={19} />} value={value} label={label} />;
+}
+
+function admissionTone(status: string): "success" | "warning" | "danger" | "info" | "neutral" {
+  if (status === "accepted") return "success";
+  if (status === "rejected") return "danger";
+  if (["documents_required", "interview", "waitlisted"].includes(status)) return "warning";
+  if (status === "in_review") return "info";
+  return "neutral";
 }
 
 function ProLockedCard({ icon: Icon, title, description }: { icon: React.ElementType; title: string; description: string }) {

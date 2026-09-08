@@ -11,9 +11,18 @@ import type {
   ContraintesEtablissement,
   CreneauHoraire,
 } from "@/lib/timetable/types";
+import { authorizeEstablishmentRoute } from "@/lib/school/establishmentRoute";
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
+  const body = await req.json().catch(() => null);
+  if (!body) return NextResponse.json({ error: "Corps invalide" }, { status: 400 });
+  const access = await authorizeEstablishmentRoute({
+    supabase,
+    requestedEstablishmentId: body.requestedEstablishmentId,
+    capability: "timetable:manage",
+  });
+  if (!access.ok) return access.response;
 
   const {
     data: { user },
@@ -25,14 +34,15 @@ export async function POST(req: NextRequest) {
   const { data: etablissement } = await supabase
     .from("establishments")
     .select("id")
+    .eq("id", access.establishment.id)
     .eq("owner_id", user.id)
-    .single();
+    .maybeSingle();
 
   if (!etablissement?.id) {
     return NextResponse.json({ error: "Aucun �tablissement rattach� � ce compte" }, { status: 403 });
   }
 
-  const { anneeScolaire } = await req.json();
+  const { anneeScolaire } = body;
   if (!anneeScolaire) {
     return NextResponse.json({ error: "anneeScolaire manquant" }, { status: 400 });
   }

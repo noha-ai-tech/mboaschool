@@ -1,0 +1,2 @@
+*.sql text eol=lf
+docs/pro/*.json text eol=lf

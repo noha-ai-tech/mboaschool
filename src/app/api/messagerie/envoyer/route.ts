@@ -1,30 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { authorizeEstablishmentRoute } from "@/lib/school/establishmentRoute";
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
-  }
-
-  const { data: etablissement } = await supabase
-    .from("establishments")
-    .select("id")
-    .eq("owner_id", user.id)
-    .single();
-
-  if (!etablissement?.id) {
-    return NextResponse.json({ error: "Accès refusé" }, { status: 403 });
-  }
 
   const body = await req.json().catch(() => null);
   if (!body) {
     return NextResponse.json({ error: "Corps de requête invalide" }, { status: 400 });
   }
+
+  const access = await authorizeEstablishmentRoute({
+    supabase,
+    requestedEstablishmentId: body.requestedEstablishmentId,
+    capability: "messaging:manage",
+  });
+  if (!access.ok) return access.response;
+  const { establishment: etablissement, user } = access;
 
   const { titre, contenu, canal, departement_disciplinaire } = body as {
     titre?: string;

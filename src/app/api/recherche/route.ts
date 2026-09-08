@@ -58,7 +58,13 @@ export async function GET(req: NextRequest) {
   // nouveau constructeur à chaque appel, donc rappeler cette fonction est
   // sûr même après avoir déjà `await`é une requête précédente.
   function buildFilteredQuery() {
-    let q = supabase!.from("establishments").select(PUBLIC_FIELDS, { count: "exact" });
+    // CMS-F.6 — filtre embarqué explicite : ne remonter que les photos
+    // status='live' dans school_images(url) (défense en profondeur avec la
+    // policy RLS publique, migration 0029 PRÉPARÉE NON EXÉCUTÉE). Un embed
+    // PostgREST standard (sans !inner) filtre les lignes imbriquées sans
+    // exclure l'établissement parent — une école sans photo live continue
+    // d'apparaître, simplement avec school_images: [].
+    let q = supabase!.from("establishments").select(PUBLIC_FIELDS, { count: "exact" }).eq("school_images.status", "live");
 
     // §18 — catégorie : réutilise la taxonomie existante, pas de valeur codée en dur.
     if (categoryParam && categoryParam !== "all" && categories.some((c) => c.key === categoryParam)) {

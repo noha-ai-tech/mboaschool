@@ -1,6 +1,8 @@
 import './globals.css'
 import type { Metadata, Viewport } from 'next'
 import { Manrope } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -11,7 +13,7 @@ const manrope = Manrope({
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 
 export const viewport: Viewport = {
-  themeColor: "#059669",
+  themeColor: "#0B3B2E",
 };
 
 export const metadata: Metadata = {
@@ -26,11 +28,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
-  icons: {
-    icon: "/branding/favicon.png",
-    shortcut: "/branding/favicon.png",
-    apple: "/branding/favicon.png",
-  },
+  // Icône d'onglet/app : gérée par convention de fichiers Next.js
+  // (src/app/icon.svg pour le favicon, src/app/apple-icon.png pour iOS) —
+  // pas besoin de la déclarer ici, Next.js génère les balises <link> voulues.
   openGraph: {
     type: "website",
     locale: "fr_CM",
@@ -84,6 +84,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         {children}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

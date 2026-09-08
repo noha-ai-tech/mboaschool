@@ -11,6 +11,8 @@
 // configuration sert uniquement une couche de recherche/produit — voir §29,
 // ne jamais en déduire une valeur `city` fabriquée.
 
+import { regionsForFilterValue } from "./cameroonRegions";
+
 export type CityPriority = "A" | "B" | "C";
 
 export interface MajorCity {
@@ -86,4 +88,15 @@ export function getMajorCity(name: string | null | undefined): MajorCity | null 
   if (!name) return null;
   const key = name.trim().toLowerCase();
   return MAJOR_CITIES.find((c) => c.name.toLowerCase() === key || (c.aliases ?? []).some((a) => a.toLowerCase() === key)) ?? null;
+}
+
+// Filtre "Ville dépend de la Région" (§ demande "filtres cohérents") —
+// réutilise exactement la même correspondance macro-zone -> régions réelles
+// que /api/recherche (voir @/lib/cameroonRegions.regionsForFilterValue),
+// pour que le dropdown Ville ne propose jamais une ville qui n'aurait de
+// toute façon aucun résultat pour la région choisie.
+export function citiesForRegionFilter(regionParam: string | null | undefined): MajorCity[] {
+  const regions = regionsForFilterValue(regionParam);
+  if (!regions) return MAJOR_CITIES;
+  return MAJOR_CITIES.filter((c) => regions.includes(c.region));
 }

@@ -1,10 +1,12 @@
 "use client";
 
 import { Search, X, Navigation, ArrowRight } from "lucide-react";
+import { SearchSuggestions } from "@/components/search/SearchSuggestions";
 
 const RADIUS_OPTIONS = ["5", "10", "20", "50"];
 
 type CategoryOption = { key: string; label: string };
+type RegionOption = { value: string; label: string };
 
 // Formulaire de recherche du Hero — plus de titre/sous-titre internes (Landing
 // V6 : le titre "Trouvez l'école idéale..." vit désormais directement dans le
@@ -17,6 +19,9 @@ export function HeroSearch({
   activeCategory,
   onCategoryChange,
   categories,
+  region,
+  onRegionChange,
+  regions,
   city,
   onCityChange,
   cities,
@@ -32,6 +37,9 @@ export function HeroSearch({
   activeCategory: string;
   onCategoryChange: (value: string) => void;
   categories: CategoryOption[];
+  region: string;
+  onRegionChange: (value: string) => void;
+  regions: RegionOption[];
   city: string;
   onCityChange: (value: string) => void;
   cities: string[];
@@ -46,16 +54,16 @@ export function HeroSearch({
   const dark = tone === "dark";
 
   const fieldCls = dark
-    ? "border-0 bg-white text-[#23302a] placeholder:text-[#9aa5a0]"
+    ? "border-0 bg-white text-[#132019] placeholder:text-[#8A9691]"
     : "border border-border bg-muted text-text-primary placeholder:text-text-secondary";
   const selectCls = dark
-    ? "border-0 bg-white text-[#23302a]"
+    ? "border-0 bg-white text-[#132019]"
     : "border border-border bg-surface text-text-primary";
-  const iconCls = dark ? "text-[#8d9a93]" : "text-text-secondary";
+  const iconCls = dark ? "text-[#12543F]" : "text-text-secondary";
 
   return (
     <div className="w-full flex flex-col gap-3.5">
-      <div className={`flex items-center gap-2.5 rounded-xl px-4 h-14 focus-within:border-white/40 transition-colors duration-base ${fieldCls}`}>
+      <div className={`relative flex items-center gap-2.5 rounded-xl px-4 h-14 focus-within:border-white/40 transition-colors duration-base ${fieldCls}`}>
         <Search size={18} className={`shrink-0 ${iconCls}`} />
         <input
           className="bg-transparent outline-none text-base flex-1 min-w-0 placeholder:inherit"
@@ -65,32 +73,61 @@ export function HeroSearch({
           onKeyDown={(e) => { if (e.key === "Enter") onSearch(); }}
         />
         {query && (
-          <button onClick={() => onQueryChange("")} className={dark ? "text-[#8d9a93] hover:text-[#23302a]" : "text-text-secondary hover:text-text-primary"} aria-label="Effacer">
+          <button onClick={() => onQueryChange("")} className={dark ? "text-[#8A9691] hover:text-[#132019]" : "text-text-secondary hover:text-text-primary"} aria-label="Effacer">
             <X size={16} />
           </button>
         )}
+        <SearchSuggestions query={query} onSelectCity={(selectedCity) => { onRegionChange("all"); onCityChange(selectedCity); onQueryChange(""); }} />
       </div>
 
-      <div className="grid grid-cols-2 gap-2.5">
-        <select
-          value={activeCategory}
-          onChange={(e) => onCategoryChange(e.target.value)}
-          className={`min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
-        >
-          <option value="all" className="text-[#0a0a0a]">Toutes catégories</option>
-          {categories.map((cat) => (
-            <option key={cat.key} value={cat.key} className="text-[#0a0a0a]">{cat.label}</option>
-          ))}
-        </select>
-        <select
-          value={city}
-          onChange={(e) => onCityChange(e.target.value)}
-          className={`min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
-        >
-          {cities.map((c) => (
-            <option key={c} value={c} className="text-[#0a0a0a]">{c === "all" ? "Toutes les villes" : c}</option>
-          ))}
-        </select>
+      {/* HOTFIX — this card is capped at max-w-[440px] by its parent (see
+          src/app/page.tsx) at every breakpoint from `sm:` upward, so a
+          3-column row never has room for full French labels ("Toutes les
+          catégories" etc.) and was silently ellipsis-truncating to "Toutes
+          les c...". One column per control at every width guarantees each
+          select is wide enough for its full text; a small caption above
+          each one keeps "Catégories / Région / Ville" clear regardless of
+          which value is currently selected. */}
+      <div className="grid grid-cols-1 gap-2.5">
+        <div>
+          <p className={`mb-1 text-[11px] font-bold uppercase tracking-wide ${dark ? "text-white/70" : "text-text-secondary"}`}>Catégories</p>
+          <select
+            value={activeCategory}
+            onChange={(e) => onCategoryChange(e.target.value)}
+            className={`w-full min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
+          >
+            <option value="all" className="text-[#0a0a0a]">Toutes les catégories</option>
+            {categories.map((cat) => (
+              <option key={cat.key} value={cat.key} className="text-[#0a0a0a]">{cat.label}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <p className={`mb-1 text-[11px] font-bold uppercase tracking-wide ${dark ? "text-white/70" : "text-text-secondary"}`}>Région</p>
+          <select
+            value={region}
+            onChange={(e) => onRegionChange(e.target.value)}
+            aria-label="Filtrer par région"
+            className={`w-full min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
+          >
+            {regions.map((item) => (
+              <option key={item.value} value={item.value} className="text-[#0a0a0a]">{item.label}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <p className={`mb-1 text-[11px] font-bold uppercase tracking-wide ${dark ? "text-white/70" : "text-text-secondary"}`}>Ville</p>
+          <select
+            value={city}
+            onChange={(e) => onCityChange(e.target.value)}
+            aria-label="Filtrer par ville"
+            className={`w-full min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
+          >
+            {cities.map((c) => (
+              <option key={c} value={c} className="text-[#0a0a0a]">{c === "all" ? "Toutes les villes" : c}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="flex items-center gap-2.5">
@@ -109,7 +146,7 @@ export function HeroSearch({
           disabled={locating}
           aria-label="Me localiser"
           className={`shrink-0 w-12 h-12 flex items-center justify-center rounded-xl transition-colors duration-base disabled:opacity-50 ${
-            dark ? "border border-white/20 bg-white/5 text-[#f5c518] hover:bg-white/10" : "border border-border text-text-secondary hover:text-text-primary hover:bg-muted"
+            dark ? "border border-white/20 bg-white/5 text-[#F2AE1F] hover:bg-white/10" : "border border-border text-text-secondary hover:text-text-primary hover:bg-muted"
           }`}
         >
           <Navigation size={18} />
@@ -120,8 +157,8 @@ export function HeroSearch({
         onClick={onSearch}
         className={`group inline-flex items-center justify-center gap-2 w-full h-14 rounded-xl font-bold text-base transition-all duration-base ${
           dark
-            ? "bg-[#f5c518] text-[#2a2103] hover:bg-[#f5b91a] hover:shadow-elevation-2 hover:-translate-y-0.5"
-            : "bg-emerald-500 text-white hover:bg-emerald-400 hover:shadow-elevation-2 hover:-translate-y-0.5"
+            ? "bg-[#F2AE1F] text-[#0B3B2E] hover:bg-[#D6941A] hover:shadow-elevation-2 hover:-translate-y-0.5"
+            : "bg-[#1F8A5D] text-white hover:bg-[#12543F] hover:shadow-elevation-2 hover:-translate-y-0.5"
         }`}
       >
         <Search size={18} />

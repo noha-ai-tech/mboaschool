@@ -67,27 +67,17 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/auth/connexion", request.url));
     }
 
-    const { data: etablissement } = await supabase
-      .from("establishments")
-      .select("forfait")
-      .eq("owner_id", user.id)
-      .maybeSingle();
-
-    if (etablissement?.forfait !== "pro") {
-      if (isProApi) {
-        return NextResponse.json(
-          { error: "Cette fonctionnalité nécessite le forfait Pro" },
-          { status: 403 }
-        );
-      }
-      return NextResponse.redirect(
-        new URL("/pro/acces-restreint", request.url)
-      );
-    }
+    // Le middleware choisit uniquement une zone générale. L'établissement et
+    // son forfait sont validés dans la couche serveur à partir de l'ID explicite.
   }
 
   // ── /auth/* si déjà connecté ──────────────────────────────────────────────
-  if (path.startsWith("/auth") && user) {
+  const isInvitationCompletion =
+    path === "/auth/callback" ||
+    path === "/auth/preparer-invitation" ||
+    path === "/auth/consommer-invitation" ||
+    path === "/auth/enseignant-bienvenue";
+  if (path.startsWith("/auth") && user && !isInvitationCompletion) {
     const { data: profile } = await supabase
       .from("profiles")
       .select("role")

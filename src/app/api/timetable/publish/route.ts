@@ -7,9 +7,18 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { authorizeEstablishmentRoute } from "@/lib/school/establishmentRoute";
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
+  const body = await req.json().catch(() => null);
+  if (!body) return NextResponse.json({ error: "Corps invalide" }, { status: 400 });
+  const access = await authorizeEstablishmentRoute({
+    supabase,
+    requestedEstablishmentId: body.requestedEstablishmentId,
+    capability: "timetable:manage",
+  });
+  if (!access.ok) return access.response;
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
@@ -19,14 +28,15 @@ export async function POST(req: NextRequest) {
   const { data: etablissement } = await supabase
     .from("establishments")
     .select("id")
+    .eq("id", access.establishment.id)
     .eq("owner_id", user.id)
-    .single();
+    .maybeSingle();
   if (!etablissement?.id) {
     return NextResponse.json({ error: "Aucun etablissement rattache a ce compte" }, { status: 403 });
   }
   const etablissementId = etablissement.id;
 
-  const { anneeScolaire } = await req.json().catch(() => ({}));
+  const { anneeScolaire } = body;
   if (!anneeScolaire) {
     return NextResponse.json({ error: "anneeScolaire manquant" }, { status: 400 });
   }

@@ -104,11 +104,12 @@ export function SidebarNavItem({
       href={href}
       onClick={onClick}
       aria-label={collapsed ? label : undefined}
-      className={`group/item relative flex items-center rounded-lg text-sm font-medium transition-colors duration-150 ${
+      aria-current={active ? "page" : undefined}
+      className={`group/item relative flex items-center rounded-lg text-sm font-medium transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400 ${
         collapsed ? "justify-center px-0 py-2.5" : "gap-3 px-3 py-2.5"
-      } ${active ? "bg-emerald-600/20 text-emerald-400" : "text-slate-400 hover:text-white hover:bg-white/5"}`}
+      } ${active ? "bg-emerald-500/15 text-white shadow-[inset_3px_0_0_#34d399]" : "text-slate-300 hover:text-white hover:bg-white/5"}`}
     >
-      <Icon size={16} className={`shrink-0 ${active ? "text-emerald-400" : ""}`} />
+      <Icon size={16} aria-hidden="true" className={`shrink-0 ${active ? "text-emerald-300" : ""}`} />
       {!collapsed && (
         <>
           <span className="truncate">{label}</span>
