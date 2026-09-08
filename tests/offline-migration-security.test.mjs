@@ -55,7 +55,7 @@ test("l'autorisation dans la fonction SECURITY DEFINER reproduit exactement la g
   const src = await source(MIGRATION);
   const fnStart = src.indexOf("create or replace function public.sync_apply_absence_create");
   const fnBody = src.slice(fnStart, src.indexOf("$$;", fnStart));
-  assert.match(fnBody, /e\.owner_id = auth\.uid\(\)/);
+  assert.match(fnBody, /e\.owner_id = v_caller/);
   assert.match(fnBody, /e\.forfait = 'pro'/);
 });
 
@@ -69,4 +69,66 @@ test("la migration ne modifie aucune table/policy existante (absences, staff_mem
 test("marquée comme non appliquée en production, comme les migrations précédentes de ce sprint", async () => {
   const src = await source(MIGRATION);
   assert.match(src, /PRÉPARÉE MAIS NON EXÉCUTÉE/);
+});
+
+// ============================================================================
+// OFFLINE-01.1 — correctif P1 : un mutation_id est une clé d'idempotence,
+// jamais un jeton d'accès. Les tests ci-dessous verrouillent la présence
+// de la revalidation identité + périmètre sur LES DEUX chemins de replay
+// (ligne déjà existante ET rattrapage unique_violation). Voir
+// tests/offline-sync-security-postgres.test.mjs pour la preuve par
+// exécution réelle contre un vrai Postgres (y compris une course
+// concurrente cross-user authentique).
+
+test("P1 FIX — le chemin de replay normal revalide acteur ET établissement avant de renvoyer le résultat existant", async () => {
+  const src = await source(MIGRATION);
+  const fnStart = src.indexOf("create or replace function public.sync_apply_absence_create");
+  const fnBody = src.slice(fnStart, src.indexOf("$$;", fnStart));
+
+  const replayBlock = fnBody.slice(
+    fnBody.indexOf("if v_existing.mutation_id is not null then"),
+    fnBody.indexOf("select exists (")
+  );
+  assert.match(replayBlock, /v_existing\.actor_user_id != v_caller or v_existing\.establishment_id != p_establishment_id/);
+  assert.match(replayBlock, /return query select 'rejected'::text, null::uuid, v_generic_denial;/);
+});
+
+test("P1 FIX — le chemin unique_violation (course concurrente) applique EXACTEMENT la même revalidation avant de renvoyer quoi que ce soit", async () => {
+  const src = await source(MIGRATION);
+  const fnStart = src.indexOf("create or replace function public.sync_apply_absence_create");
+  const fnBody = src.slice(fnStart, src.indexOf("$$;", fnStart));
+
+  const exceptionBlock = fnBody.slice(fnBody.indexOf("when unique_violation then"));
+  assert.match(exceptionBlock, /v_existing\.mutation_id is null or v_existing\.actor_user_id != v_caller or v_existing\.establishment_id != p_establishment_id/);
+  assert.match(exceptionBlock, /return query select 'rejected'::text, null::uuid, v_generic_denial;/);
+});
+
+test("P1 FIX — un seul message de refus générique partagé par tous les chemins, jamais un message distinct qui confirmerait l'existence de la mutation d'un tiers", async () => {
+  const src = await source(MIGRATION);
+  const fnStart = src.indexOf("create or replace function public.sync_apply_absence_create");
+  const fnBody = src.slice(fnStart, src.indexOf("$$;", fnStart));
+
+  assert.match(fnBody, /v_generic_denial text := 'Accès refusé pour cet établissement ou ce membre du personnel'/);
+  // Les trois chemins de refus (non autorisé, replay étranger, course
+  // étrangère) référencent tous la MÊME variable — jamais une chaîne
+  // littérale distincte qui laisserait deviner "cette mutation existe
+  // mais appartient à quelqu'un d'autre".
+  const denialReferences = [...fnBody.matchAll(/v_generic_denial/g)];
+  assert.ok(denialReferences.length >= 4, "attendu : la déclaration + au moins 3 usages (non autorisé, replay étranger, course étrangère)");
+});
+
+test("P1 FIX — la fonction exige explicitement une identité résolue (auth.uid() non nul) avant tout traitement", async () => {
+  const src = await source(MIGRATION);
+  const fnStart = src.indexOf("create or replace function public.sync_apply_absence_create");
+  const fnBody = src.slice(fnStart, src.indexOf("$$;", fnStart));
+  assert.match(fnBody, /v_caller uuid := auth\.uid\(\);/);
+  assert.match(fnBody, /if v_caller is null then\s*\n\s*raise exception 'Non authentifié';/);
+});
+
+test("P1 FIX — la garde d'autorisation initiale utilise la même variable v_caller capturée une fois, pas des appels auth.uid() séparés pouvant diverger", async () => {
+  const src = await source(MIGRATION);
+  const fnStart = src.indexOf("create or replace function public.sync_apply_absence_create");
+  const fnBody = src.slice(fnStart, src.indexOf("$$;", fnStart));
+  assert.match(fnBody, /and e\.owner_id = v_caller/);
+  assert.doesNotMatch(fnBody, /and e\.owner_id = auth\.uid\(\)/);
 });

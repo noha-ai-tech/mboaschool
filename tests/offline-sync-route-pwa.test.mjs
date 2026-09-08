@@ -36,6 +36,32 @@ test("la route n'utilise jamais createAdminClient — RLS reste l'autorité (Pha
   assert.doesNotMatch(src, /createAdminClient/);
 });
 
+// OFFLINE-01.1 Phase 5 — l'autorisation/idempotence réelle vit désormais
+// entièrement dans la fonction Postgres (voir
+// tests/offline-sync-security-postgres.test.mjs pour la preuve par
+// exécution réelle) ; ces tests vérifient que la route elle-même ne
+// réintroduit AUCUNE fuite au-dessus de ce que la fonction renvoie déjà.
+test("chaque mutation d'un lot est traitée indépendamment et son résultat reste apparié à son propre mutationId — jamais de résultat croisé entre mutations d'un même lot", async () => {
+  const src = await source(ROUTE);
+  const forBlock = src.slice(src.indexOf("for (const mutation of mutations)"), src.indexOf("return NextResponse.json({ results });"));
+  assert.match(forBlock, /results\.push\(await applyOne\(supabase, mutation\)\)/);
+  const applyOneFn = src.slice(src.indexOf("async function applyOne"), src.indexOf("async function applyAbsenceCreate"));
+  assert.match(applyOneFn, /mutationId: mutationId \?\? "unknown", status: "rejected"/);
+  assert.match(applyOneFn, /return applyAbsenceCreate\(supabase, mutation\);/);
+});
+
+test("le résultat renvoyé par le RPC (rejected/applied/duplicate/conflict) est transmis tel quel, la route n'ajoute aucune donnée supplémentaire au résultat", async () => {
+  const src = await source(ROUTE);
+  const applyAbsenceFn = src.slice(src.indexOf("async function applyAbsenceCreate"), src.indexOf("// Rejets qui n'impliquent aucune écriture"));
+  assert.match(applyAbsenceFn, /status,\s*\n\s*serverId: row\.result_entity_id \?\? undefined,\s*\n\s*error: row\.result_error \?\? undefined,/);
+});
+
+test("un mutationId, entityId ou payload manquant est rejeté avant tout appel RPC — jamais transmis tel quel à la fonction SECURITY DEFINER", async () => {
+  const src = await source(ROUTE);
+  assert.match(src, /if \(!mutationId \|\| !entityType \|\| !operation \|\| !establishmentId\) \{/);
+  assert.match(src, /Mutation malformée/);
+});
+
 test("un type d'entité non pris en charge et une opération non câblée sont explicitement rejetés, jamais silencieusement ignorés", async () => {
   const src = await source(ROUTE);
   assert.match(src, /Type d'entité non pris en charge/);

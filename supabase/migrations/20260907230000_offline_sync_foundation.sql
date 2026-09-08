@@ -81,6 +81,21 @@ create policy "platform_admin reads all sync mutations" on public.sync_mutations
 -- garde forfait='pro' de requireEstablishmentAccess (voir
 -- src/lib/school/establishmentAccess.ts) — jamais élargie par rapport à
 -- ce qu'un insert direct en ligne aurait autorisé.
+--
+-- OFFLINE-01.1 (correctif P1) — un mutation_id est une clé d'idempotence,
+-- PAS un jeton d'accès. Cette fonction étant SECURITY DEFINER, un simple
+-- `select ... where mutation_id = p_mutation_id` contourne RLS de plein
+-- droit : sans revalider acteur + établissement AVANT de renvoyer le
+-- résultat d'une mutation déjà existante, connaître (deviner, intercepter,
+-- réutiliser) le mutation_id d'un tiers suffirait à lire son résultat
+-- (entity_id, statut, erreur) malgré RLS. Les DEUX chemins de replay —
+-- ligne déjà existante ET rattrapage unique_violation après une vraie
+-- course concurrente — appliquent donc EXACTEMENT la même vérification
+-- avant de rien renvoyer. En cas de désaccord (acteur différent OU
+-- établissement différent de celui déclaré par CET appel), la fonction
+-- renvoie le message générique de refus — jamais un message distinct qui
+-- confirmerait l'existence de la mutation d'un tiers (fuite d'information
+-- évitée, Phase 2).
 create or replace function public.sync_apply_absence_create(
   p_mutation_id uuid,
   p_establishment_id uuid,
@@ -98,9 +113,20 @@ declare
   v_existing public.sync_mutations;
   v_authorized boolean;
   v_new_absence_id uuid;
+  v_caller uuid := auth.uid();
+  v_generic_denial text := 'Accès refusé pour cet établissement ou ce membre du personnel';
 begin
+  if v_caller is null then
+    raise exception 'Non authentifié';
+  end if;
+
   select * into v_existing from public.sync_mutations where mutation_id = p_mutation_id for update;
+
   if v_existing.mutation_id is not null then
+    if v_existing.actor_user_id != v_caller or v_existing.establishment_id != p_establishment_id then
+      return query select 'rejected'::text, null::uuid, v_generic_denial;
+      return;
+    end if;
     return query select v_existing.status, v_existing.entity_id, v_existing.error;
     return;
   end if;
@@ -111,14 +137,14 @@ begin
     join public.establishments e on e.id = sm.etablissement_id
     where sm.id = p_staff_member_id
       and sm.etablissement_id = p_establishment_id
-      and e.owner_id = auth.uid()
+      and e.owner_id = v_caller
       and e.forfait = 'pro'
   ) into v_authorized;
 
   if not v_authorized then
     insert into public.sync_mutations (mutation_id, entity_type, operation, establishment_id, actor_user_id, entity_id, status, error)
-    values (p_mutation_id, 'absence', 'create', p_establishment_id, auth.uid(), null, 'rejected', 'Accès refusé pour cet établissement ou ce membre du personnel');
-    return query select 'rejected'::text, null::uuid, 'Accès refusé pour cet établissement ou ce membre du personnel'::text;
+    values (p_mutation_id, 'absence', 'create', p_establishment_id, v_caller, null, 'rejected', v_generic_denial);
+    return query select 'rejected'::text, null::uuid, v_generic_denial;
     return;
   end if;
 
@@ -128,13 +154,20 @@ begin
     returning id into v_new_absence_id;
 
     insert into public.sync_mutations (mutation_id, entity_type, operation, establishment_id, actor_user_id, entity_id, status, error)
-    values (p_mutation_id, 'absence', 'create', p_establishment_id, auth.uid(), v_new_absence_id, 'applied', null);
+    values (p_mutation_id, 'absence', 'create', p_establishment_id, v_caller, v_new_absence_id, 'applied', null);
   exception
     when unique_violation then
       -- Une transaction concurrente a gagné la course sur ce mutation_id.
       -- Notre insert dans `absences` ci-dessus vient d'être annulé
       -- automatiquement avec cette exception — aucun doublon possible.
+      -- Le "gagnant" peut être n'importe quel acteur si le mutation_id a
+      -- été réutilisé/deviné/partagé : même contrôle identité + périmètre
+      -- qu'au chemin de replay normal ci-dessus avant de rien renvoyer.
       select * into v_existing from public.sync_mutations where mutation_id = p_mutation_id;
+      if v_existing.mutation_id is null or v_existing.actor_user_id != v_caller or v_existing.establishment_id != p_establishment_id then
+        return query select 'rejected'::text, null::uuid, v_generic_denial;
+        return;
+      end if;
       return query select v_existing.status, v_existing.entity_id, v_existing.error;
       return;
   end;
