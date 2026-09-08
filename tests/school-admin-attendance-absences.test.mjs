@@ -44,7 +44,11 @@ test("les absences conservent leurs contrats sans inventer d’approbation", asy
   assert.match(page, /select\("id, type, date_debut, date_fin, motif, statut, staff_members\(first_name, last_name\)"\)/);
   assert.match(page, /Aucun workflow d’approbation supplémentaire n’est disponible/);
   assert.match(page, /SchoolAdminResponsiveTable/);
-  assert.match(form, /\.from\("absences"\)\.insert\(\{ staff_member_id: staffMemberId, type, date_debut: dateDebut, date_fin: dateFin, motif: motif \|\| null \}\)/);
-  assert.match(form, /if \(!staffMemberId \|\| !dateDebut \|\| !dateFin \|\| saving\) return/);
+  assert.match(page, /establishmentId=\{etablissement\.id\}/);
   assert.doesNotMatch(`${page}\n${form}`, /approve|approuver|valider-direction/);
 });
+
+// OFFLINE-01 Phase 10 — le pilote fait passer la déclaration d'absence par
+// l'outbox locale plutôt que par un insert Supabase direct. Voir
+// tests/offline-absences-pilot.test.mjs pour la couverture complète du
+// contrat offline ; ce fichier ne verrouille plus l'ancien insert direct.
