@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
-import { supabase } from "@/lib/supabase";
 import { enqueueMutation } from "@/lib/offline/outbox";
 import { triggerManualSync } from "@/lib/offline/syncEngine";
+import { getActiveSyncIdentity, subscribeActiveSyncIdentity } from "@/lib/offline/syncIdentity";
 import { SchoolAdminButton } from "@/components/school-admin/ui/Button";
 import { SchoolAdminFormField, SchoolAdminInput, SchoolAdminSelect } from "@/components/school-admin/ui/FormControls";
 import { SchoolAdminAlert } from "@/components/school-admin/ui/Feedback";
@@ -19,9 +19,12 @@ import { SyncStatus } from "@/components/offline/SyncStatus";
 // perdue silencieusement. En ligne, la synchronisation est déclenchée
 // immédiatement — l'expérience reste celle d'un enregistrement instantané.
 export function FormulaireAbsence({ staffMembers, establishmentId }: { staffMembers: { id: string; nom: string }[]; establishmentId: string }) {
-  const router = useRouter(); const [staffMemberId, setStaffMemberId] = useState(staffMembers[0]?.id ?? ""); const [type, setType] = useState("absence"); const [dateDebut, setDateDebut] = useState(""); const [dateFin, setDateFin] = useState(""); const [motif, setMotif] = useState(""); const [saving, setSaving] = useState(false); const [error, setError] = useState(""); const [success, setSuccess] = useState(""); const [userId, setUserId] = useState<string | null>(null);
+  const router = useRouter(); const [staffMemberId, setStaffMemberId] = useState(staffMembers[0]?.id ?? ""); const [type, setType] = useState("absence"); const [dateDebut, setDateDebut] = useState(""); const [dateFin, setDateFin] = useState(""); const [motif, setMotif] = useState(""); const [saving, setSaving] = useState(false); const [error, setError] = useState(""); const [success, setSuccess] = useState(""); const [userId, setUserId] = useState<string | null>(() => getActiveSyncIdentity().userId);
 
-  useEffect(() => { supabase.auth.getUser().then(({ data }) => setUserId(data.user?.id ?? null)); }, []);
+  // Source unique de vérité pour "quel utilisateur authentifié" (OFFLINE-01.2)
+  // — la même identité que le moteur de synchronisation utilise, jamais un
+  // second appel getUser() séparé qui pourrait diverger.
+  useEffect(() => subscribeActiveSyncIdentity((identity) => setUserId(identity.userId)), []);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); if (!staffMemberId || !dateDebut || !dateFin || saving || !userId) return;
