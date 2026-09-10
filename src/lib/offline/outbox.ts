@@ -46,7 +46,8 @@ export async function enqueueMutation<TPayload>(
   return mutation;
 }
 
-export type UserScope = { userId: string };
+// isCurrent est évalué dans la transaction, juste avant put/delete.
+export type UserScope = { userId: string; isCurrent?: () => boolean };
 
 // Jamais de valeur par défaut permettant d'omettre userId — un appel sans
 // userId explicite est une erreur de programmation, pas un cas à
@@ -96,7 +97,7 @@ export async function updateMutation(
 
     getRequest.onsuccess = () => {
       const existing = getRequest.result as OfflineMutation | undefined;
-      if (existing && existing.userId === scope.userId) {
+      if (existing && existing.userId === scope.userId && (scope.isCurrent?.() ?? true)) {
         store.put({ ...existing, ...patch });
         ok = true;
       }
@@ -124,7 +125,7 @@ export async function removeMutation(mutationId: string, scope: UserScope): Prom
 
     getRequest.onsuccess = () => {
       const existing = getRequest.result as OfflineMutation | undefined;
-      if (existing && existing.userId === scope.userId) {
+      if (existing && existing.userId === scope.userId && (scope.isCurrent?.() ?? true)) {
         store.delete(mutationId);
         ok = true;
       }

@@ -90,41 +90,45 @@ export async function runSync(options: RunSyncOptions = {}): Promise<SyncEngineS
   const startedGeneration = startedIdentity.generation;
   const fetchImpl = options.fetchImpl ?? fetch;
 
-  if (!userId) return state; // Rien à synchroniser sans utilisateur authentifié actif.
+  if (!userId || userId !== startedIdentity.userId) return state; // Rien à synchroniser sans utilisateur authentifié actif.
 
   const scope: UserScope = { userId };
 
   const isOnline = typeof navigator === "undefined" || navigator.onLine !== false;
   if (!isOnline) return state;
 
-  const pending = await listPendingMutations(scope);
-  if (pending.length === 0) return state;
+  const isStale = () => getActiveSyncIdentity().generation !== startedGeneration;
+  const writeScope: UserScope = { ...scope, isCurrent: () => !isStale() };
+  let pending: OfflineMutation[] = [];
+  const marked = new Set<string>();
 
-  state = { ...state, syncing: true };
-  emit();
-
+  // OFFLINE-01.3 : verrou acquis avant la première attente IndexedDB.
   syncInFlight = (async () => {
-    // Vrai à tout moment où l'identité active a divergé de celle qui a
-    // lancé cette synchronisation — vérifié avant CHAQUE écriture, pas
-    // seulement une fois au début (Phase 9 : la bascule peut survenir à
-    // n'importe quel instant de l'aller-retour réseau).
-    const isStale = () => getActiveSyncIdentity().generation !== startedGeneration;
-
     async function revertInFlightToPending() {
       for (const mutation of pending) {
+        if (!marked.has(mutation.mutationId)) continue;
         await updateMutation(mutation.mutationId, { status: "pending" }, scope).catch(() => {});
       }
     }
 
     try {
+      pending = await listPendingMutations(scope);
+      if (isStale() || pending.length === 0) return;
+      state = { ...state, syncing: true };
+      emit();
       for (const mutation of pending) {
-        await updateMutation(mutation.mutationId, { status: "syncing" }, scope);
+        if (isStale()) return;
+        const updated = await updateMutation(mutation.mutationId, { status: "syncing" }, writeScope);
+        if (updated.ok) marked.add(mutation.mutationId);
       }
+      if (isStale()) return;
+      pending = pending.filter((mutation) => marked.has(mutation.mutationId));
+      if (pending.length === 0) return;
 
       const response = await fetchImpl("/api/sync/push", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mutations: pending.map(toWire) }),
+        body: JSON.stringify({ expectedUserId: userId, mutations: pending.map(toWire) }),
       });
 
       if (isStale()) {
@@ -134,12 +138,12 @@ export async function runSync(options: RunSyncOptions = {}): Promise<SyncEngineS
         // autre utilisateur) redeviennent "pending" pour une prochaine
         // synchronisation légitime, sans être marquées rejected/synced
         // sur la base d'un contexte qui n'est plus le bon.
-        await revertInFlightToPending();
         return;
       }
 
       if (!response.ok) {
         const body = await response.json().catch(() => ({}));
+        if (isStale()) return;
         const error = body?.error ?? `Échec de synchronisation (HTTP ${response.status})`;
         for (const mutation of pending) {
           await updateMutation(
@@ -150,7 +154,7 @@ export async function runSync(options: RunSyncOptions = {}): Promise<SyncEngineS
               retryCount: mutation.retryCount + 1,
               nextRetryAt: computeNextRetryAt(mutation.retryCount + 1),
             },
-            scope
+            writeScope
           );
         }
         state = { syncing: false, lastSyncAt: state.lastSyncAt, lastError: error };
@@ -161,13 +165,13 @@ export async function runSync(options: RunSyncOptions = {}): Promise<SyncEngineS
       const body: SyncPushResponse = await response.json();
 
       if (isStale()) {
-        await revertInFlightToPending();
         return;
       }
 
       const byId = new Map(body.results.map((result) => [result.mutationId, result]));
 
       for (const mutation of pending) {
+        if (isStale()) return;
         const result = byId.get(mutation.mutationId);
         if (!result) {
           await updateMutation(
@@ -178,31 +182,31 @@ export async function runSync(options: RunSyncOptions = {}): Promise<SyncEngineS
               retryCount: mutation.retryCount + 1,
               nextRetryAt: computeNextRetryAt(mutation.retryCount + 1),
             },
-            scope
+            writeScope
           );
           continue;
         }
 
         if (result.status === "applied" || result.status === "duplicate") {
-          await removeMutation(mutation.mutationId, scope);
+          await removeMutation(mutation.mutationId, writeScope);
         } else if (result.status === "conflict") {
-          await updateMutation(mutation.mutationId, { status: "conflict", lastError: result.error ?? "Conflit détecté" }, scope);
+          await updateMutation(mutation.mutationId, { status: "conflict", lastError: result.error ?? "Conflit détecté" }, writeScope);
         } else {
           // rejected : erreur définitive (ex: droit retiré) — jamais réessayée
           // automatiquement, l'utilisateur doit être informé explicitement.
           await updateMutation(
             mutation.mutationId,
             { status: "rejected", lastError: result.error ?? "Mutation refusée par le serveur" },
-            scope
+            writeScope
           );
         }
       }
 
+      if (isStale()) return;
       state = { syncing: false, lastSyncAt: new Date().toISOString(), lastError: null };
       emit();
     } catch (error) {
       if (isStale()) {
-        await revertInFlightToPending();
         return;
       }
       const message = error instanceof Error ? error.message : "Erreur réseau pendant la synchronisation";
@@ -215,18 +219,28 @@ export async function runSync(options: RunSyncOptions = {}): Promise<SyncEngineS
             retryCount: mutation.retryCount + 1,
             nextRetryAt: computeNextRetryAt(mutation.retryCount + 1),
           },
-          scope
+          writeScope
         ).catch(() => {});
       }
       state = { syncing: false, lastSyncAt: state.lastSyncAt, lastError: message };
       emit();
     } finally {
-      syncInFlight = null;
+      if (isStale()) {
+        await revertInFlightToPending();
+        state = { syncing: false, lastSyncAt: null, lastError: null };
+      } else {
+        state = { ...state, syncing: false };
+      }
+      emit();
     }
   })();
 
-  await syncInFlight;
-  return state;
+  try {
+    await syncInFlight;
+    return state;
+  } finally {
+    syncInFlight = null;
+  }
 }
 
 const MIN_INTERVAL_MS = 15_000;

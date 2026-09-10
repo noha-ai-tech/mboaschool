@@ -31,16 +31,18 @@ export function OfflineRuntime() {
   useEffect(() => {
     let stopSyncEngine: (() => void) | null = null;
     let cancelled = false;
+    let authRevision = 0;
 
     async function resolveInitialIdentityThenStart() {
       // getUser() revalide auprès de Supabase plutôt que de faire confiance
       // à un état local potentiellement périmé — c'est cette identité,
       // pas une supposition, qui détermine ce que le moteur peut toucher.
+      const startedRevision = authRevision;
       const {
         data: { user },
       } = await supabase.auth.getUser();
       if (cancelled) return;
-      setActiveSyncUser(user?.id ?? null);
+      if (authRevision === startedRevision) setActiveSyncUser(user?.id ?? null);
 
       registerServiceWorker();
       stopSyncEngine = initSyncEngine();
@@ -49,7 +51,9 @@ export function OfflineRuntime() {
     void resolveInitialIdentityThenStart();
 
     const { data: subscription } = supabase.auth.onAuthStateChange((event, session) => {
+      authRevision += 1;
       switch (event) {
+        case "INITIAL_SESSION":
         case "SIGNED_IN":
         case "TOKEN_REFRESHED":
         case "USER_UPDATED":

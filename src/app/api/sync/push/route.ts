@@ -39,6 +39,10 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json().catch(() => null);
+  // Bind the batch to the authenticated actor, including cross-tab cookie changes.
+  if (typeof body?.expectedUserId !== "string" || body.expectedUserId !== user.id) {
+    return NextResponse.json({ error: "Session de synchronisation modifiée" }, { status: 409 });
+  }
   const mutations: OfflineMutationWire[] | undefined = body?.mutations;
   if (!Array.isArray(mutations) || mutations.length === 0) {
     return NextResponse.json({ error: "Aucune mutation fournie" }, { status: 400 });
