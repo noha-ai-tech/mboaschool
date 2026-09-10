@@ -1,12 +1,15 @@
 // OFFLINE-01 Phase 4 — stratégie de conflit par type d'entité.
 //
-// Aucune table actuelle ne porte encore de colonne updated_at/version
-// (voir l'audit Phase 0) : le pilote "absence" est create-only et ne
-// déclenche donc jamais ce chemin en conditions réelles aujourd'hui. Cette
-// fonction existe pour que les futurs modules update-heavy (Présence,
-// Timesheet) réutilisent immédiatement le moteur sans le reconstruire —
-// elle est prouvée par des tests avec un type d'entité synthétique
-// ("draft-note") plutôt que simulée dans le pilote lui-même.
+// Le pilote "absence" (OFFLINE-01) était create-only et ne déclenchait
+// jamais ce chemin en conditions réelles. MOBILE-01 introduit le premier
+// module réellement update-heavy (l'appel élève, `attendance`) : le
+// conflit y est détecté et résolu côté serveur (comparaison de
+// last_recorded_by dans sync_apply_attendance_mark, pas d'un simple
+// horodatage — voir le commentaire de cette fonction pour pourquoi une
+// comparaison de version naïve produirait un faux conflit dès la 2e
+// correction du même enseignant), mais la stratégie déclarée ici reste la
+// référence documentée : jamais de last-write-wins silencieux pour une
+// donnée opérationnelle.
 //
 // Règle non négociable (Phase 4) : jamais d'écrasement silencieux. Le
 // last-write-wins n'est autorisé que pour les types explicitement classés
@@ -21,6 +24,7 @@ const STRATEGY_BY_ENTITY: Record<OfflineEntityType, ConflictStrategy> = {
   // créations ne "s'écrasent" jamais, elles coexistent. Classée ici pour
   // documenter l'intention si une édition est ajoutée plus tard.
   absence: "server-wins-explicit-conflict",
+  attendance: "server-wins-explicit-conflict",
   "draft-note": "last-write-wins",
 };
 

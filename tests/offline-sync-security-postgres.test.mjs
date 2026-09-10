@@ -20,19 +20,44 @@ import pg from "pg";
 
 const testDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(testDirectory, "..");
-const DATABASE_URL = process.env.OFFLINE01_TEST_DATABASE_URL ?? "postgres://postgres:testpass@localhost:55432/postgres";
+const ADMIN_DATABASE_URL = process.env.OFFLINE01_TEST_ADMIN_DATABASE_URL ?? "postgres://postgres:testpass@localhost:55432/postgres";
+// Dédiée à ce fichier (MOBILE-01) : node --test exécute les fichiers en
+// parallèle par défaut, et ce fichier tourne aux côtés de
+// tests/mobile01-attendance-security-postgres.test.mjs qui reconstruit
+// aussi tout son schéma "public" — sans base dédiée, les deux "drop
+// schema public cascade" concurrents se percutent.
+const DATABASE_NAME = process.env.OFFLINE01_TEST_DATABASE_NAME ?? "offline01_security_test";
 
 let pool;
 let dbAvailable = false;
 let unavailableReason = "not checked yet";
 
 test.before(async () => {
-  pool = new pg.Pool({ connectionString: DATABASE_URL, max: 5 });
+  try {
+    const adminPool = new pg.Pool({ connectionString: ADMIN_DATABASE_URL, max: 1 });
+    try {
+      const existing = await adminPool.query("select 1 from pg_database where datname = $1", [DATABASE_NAME]);
+      if (existing.rowCount === 0) {
+        await adminPool.query(`create database ${DATABASE_NAME}`);
+      }
+    } finally {
+      await adminPool.end();
+    }
+  } catch (e) {
+    unavailableReason = `Postgres unreachable at ${ADMIN_DATABASE_URL}: ${e.message}`;
+    console.error(unavailableReason);
+    dbAvailable = false;
+    return;
+  }
+
+  const dbUrl = new URL(ADMIN_DATABASE_URL);
+  dbUrl.pathname = `/${DATABASE_NAME}`;
+  pool = new pg.Pool({ connectionString: dbUrl.toString(), max: 5 });
   try {
     await pool.query("select 1");
     dbAvailable = true;
   } catch (e) {
-    unavailableReason = `Postgres unreachable at ${DATABASE_URL}: ${e.message}`;
+    unavailableReason = `Postgres unreachable at ${dbUrl.toString()}: ${e.message}`;
     console.error(unavailableReason);
     dbAvailable = false;
     return;
