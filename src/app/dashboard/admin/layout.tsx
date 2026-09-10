@@ -40,6 +40,7 @@ import {
   Search,
   ChevronDown,
   Database,
+  FilePlus2,
 } from "lucide-react";
 
 type NavItem = { href: string; label: string; icon: React.ElementType; permission?: PlatformPermission };
@@ -56,6 +57,7 @@ const NAV_GROUPS: NavGroup[] = [
       { href: "/dashboard/admin/ecoles", label: "Établissements", icon: Building2, permission: "manage_schools" },
       { href: "/dashboard/admin/registre", label: "Registre national", icon: Database, permission: "manage_schools" },
       { href: "/dashboard/admin/verifications", label: "Revendications", icon: ClipboardCheck, permission: "manage_schools" },
+      { href: "/dashboard/admin/etablissements-proposes", label: "Établissements proposés", icon: FilePlus2, permission: "manage_schools" },
       { href: "/dashboard/admin/abonnements", label: "Abonnements", icon: CreditCard, permission: "manage_subscriptions" },
       { href: "/dashboard/admin/crm", label: "CRM", icon: Users2, permission: "manage_crm" },
       { href: "/dashboard/admin/support", label: "Support", icon: LifeBuoy, permission: "manage_support" },
