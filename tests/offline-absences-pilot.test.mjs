@@ -50,3 +50,14 @@ test("la page /pro/absences fournit bien establishmentId depuis l'établissement
   const src = await source("src/app/pro/absences/page.tsx");
   assert.match(src, /establishmentId=\{etablissement\.id\}/);
 });
+
+// OFFLINE-01.2 (P1 fix) — une seule source de vérité pour "quel
+// utilisateur authentifié" (syncIdentity.ts), la même que le moteur de
+// synchronisation utilise, plutôt qu'un second appel getUser() séparé
+// qui pourrait diverger de l'identité active du moteur offline.
+test("le pilote lit l'identité active partagée (syncIdentity) plutôt qu'un appel getUser() séparé", async () => {
+  const src = await source(FORM);
+  assert.match(src, /getActiveSyncIdentity\(\)\.userId/);
+  assert.match(src, /subscribeActiveSyncIdentity\(\(identity\) => setUserId\(identity\.userId\)\)/);
+  assert.doesNotMatch(src, /supabase\.auth\.getUser\(\)/);
+});

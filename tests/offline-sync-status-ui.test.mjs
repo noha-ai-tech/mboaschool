@@ -54,7 +54,31 @@ test("le composant est accessible (role=status, aria-live) pour une mise à jour
 
 test("useSyncStatus rafraîchit l'outbox périodiquement en plus des événements réseau — un changement hors du moteur (nouvelle saisie) reste visible", async () => {
   const src = await source("src/lib/offline/useSyncStatus.ts");
-  assert.match(src, /window\.setInterval\(refreshMutations, 4000\)/);
+  assert.match(src, /window\.setInterval\(\(\) => refreshMutations\(getActiveSyncIdentity\(\)\.userId\), 4000\)/);
   assert.match(src, /window\.addEventListener\("online"/);
   assert.match(src, /window\.addEventListener\("offline"/);
+});
+
+// OFFLINE-01.2 (P1 fix) — <SyncStatus /> ne doit jamais compter les
+// mutations d'un autre utilisateur. Voir
+// tests/offline-outbox-isolation.test.mjs pour la preuve par exécution
+// réelle (scénario 10) ; ces tests verrouillent le câblage source qui la
+// rend possible.
+test("useSyncStatus lit l'outbox scopée par l'identité active partagée, jamais un listMutations() global", async () => {
+  const src = await source("src/lib/offline/useSyncStatus.ts");
+  assert.match(src, /listMutations\(\{ userId: forUserId \}\)/);
+  assert.doesNotMatch(src, /listMutations\(\)/);
+});
+
+test("un changement d'utilisateur actif vide immédiatement les compteurs affichés avant même que la nouvelle lecture ne revienne", async () => {
+  const src = await source("src/lib/offline/useSyncStatus.ts");
+  const subscribeBlock = src.slice(src.indexOf("subscribeActiveSyncIdentity((identity)"), src.indexOf("const onOnline"));
+  assert.match(subscribeBlock, /setMutations\(EMPTY_SNAPSHOT_MUTATIONS\)/);
+  assert.match(subscribeBlock, /refreshMutations\(identity\.userId\)/);
+});
+
+test("une lecture d'outbox devenue obsolète (l'utilisateur actif a changé pendant l'appel) est jetée plutôt qu'affichée", async () => {
+  const src = await source("src/lib/offline/useSyncStatus.ts");
+  const refreshFn = src.slice(src.indexOf("const refreshMutations ="), src.indexOf("}, []);"));
+  assert.match(refreshFn, /if \(getActiveSyncIdentity\(\)\.userId !== forUserId\) return;/);
 });

@@ -4,11 +4,20 @@ import test from "node:test";
 import { clearOfflineCache } from "../src/lib/offline/db.ts";
 import { enqueueMutation, listMutations } from "../src/lib/offline/outbox.ts";
 import { runSync } from "../src/lib/offline/syncEngine.ts";
+import { __resetSyncIdentityForTests, setActiveSyncUser } from "../src/lib/offline/syncIdentity.ts";
 
 // OFFLINE-01 Phase 3/14 — exécution réelle du moteur de synchronisation
 // (outbox réelle via fake-indexeddb + fetch simulé) plutôt que de simples
 // assertions sur le texte source. Couvre directement les scénarios Phase 14
 // F (double envoi), G (retry) et E (retour réseau après mutation offline).
+//
+// OFFLINE-01.2 — runSync() lit désormais l'identité active partagée
+// (syncIdentity.ts) ; ces tests fixent cette identité sur "user-1" comme
+// le ferait OfflineRuntime en production, plutôt que de passer un userId
+// arbitraire. Voir tests/offline-outbox-isolation.test.mjs pour les
+// scénarios d'isolation cross-utilisateur eux-mêmes.
+
+const USER = "user-1";
 
 function jsonResponse(body, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
@@ -16,6 +25,8 @@ function jsonResponse(body, status = 200) {
 
 test.beforeEach(async () => {
   await clearOfflineCache();
+  __resetSyncIdentityForTests();
+  setActiveSyncUser(USER);
 });
 
 async function seedAbsenceMutation() {
@@ -25,7 +36,7 @@ async function seedAbsenceMutation() {
     entityId: null,
     payload: { staff_member_id: "staff-1", type: "absence", date_debut: "2026-09-01", date_fin: "2026-09-02" },
     baseVersion: null,
-    userId: "user-1",
+    userId: USER,
     establishmentId: "school-1",
   });
 }
@@ -39,11 +50,11 @@ test("scénario D→E : une mutation en attente est envoyée au serveur et retir
     return jsonResponse({ results: [{ mutationId: mutation.mutationId, status: "applied", serverId: "server-abs-1" }] });
   };
 
-  await runSync(fakeFetch);
+  await runSync({ fetchImpl: fakeFetch });
 
   assert.equal(capturedBody.mutations.length, 1);
   assert.equal(capturedBody.mutations[0].mutationId, mutation.mutationId);
-  assert.equal((await listMutations()).length, 0, "une mutation confirmée 'applied' doit disparaître de l'outbox");
+  assert.equal((await listMutations({ userId: USER })).length, 0, "une mutation confirmée 'applied' doit disparaître de l'outbox");
 });
 
 test("scénario F : le serveur renvoie 'duplicate' pour un second envoi du même mutationId — pas d'erreur, pas de doublon local", async () => {
@@ -51,8 +62,8 @@ test("scénario F : le serveur renvoie 'duplicate' pour un second envoi du même
   const fakeFetch = async () =>
     jsonResponse({ results: [{ mutationId: mutation.mutationId, status: "duplicate", serverId: "server-abs-1" }] });
 
-  await runSync(fakeFetch);
-  assert.equal((await listMutations()).length, 0, "un statut 'duplicate' doit être traité comme un succès, la mutation sort de l'outbox");
+  await runSync({ fetchImpl: fakeFetch });
+  assert.equal((await listMutations({ userId: USER })).length, 0, "un statut 'duplicate' doit être traité comme un succès, la mutation sort de l'outbox");
 });
 
 test("scénario M : le serveur rejette une mutation (droit retiré) — jamais réessayée automatiquement, marquée 'rejected'", async () => {
@@ -60,8 +71,8 @@ test("scénario M : le serveur rejette une mutation (droit retiré) — jamais r
   const fakeFetch = async () =>
     jsonResponse({ results: [{ mutationId: mutation.mutationId, status: "rejected", error: "Accès refusé pour cet établissement" }] });
 
-  await runSync(fakeFetch);
-  const [stored] = await listMutations();
+  await runSync({ fetchImpl: fakeFetch });
+  const [stored] = await listMutations({ userId: USER });
   assert.equal(stored.status, "rejected");
   assert.equal(stored.lastError, "Accès refusé pour cet établissement");
 });
@@ -71,8 +82,8 @@ test("scénario O : le serveur signale un conflit de version — la mutation res
   const fakeFetch = async () =>
     jsonResponse({ results: [{ mutationId: mutation.mutationId, status: "conflict", error: "Conflit de version" }] });
 
-  await runSync(fakeFetch);
-  const [stored] = await listMutations();
+  await runSync({ fetchImpl: fakeFetch });
+  const [stored] = await listMutations({ userId: USER });
   assert.equal(stored.status, "conflict");
 });
 
@@ -82,8 +93,8 @@ test("scénario G/erreur réseau : une panne réseau pendant l'envoi marque la m
     throw new Error("network down");
   };
 
-  await runSync(fakeFetch);
-  const [stored] = await listMutations();
+  await runSync({ fetchImpl: fakeFetch });
+  const [stored] = await listMutations({ userId: USER });
   assert.equal(stored.status, "error");
   assert.equal(stored.retryCount, 1);
   assert.ok(stored.nextRetryAt, "une mutation en erreur doit porter un prochain essai programmé");
@@ -102,13 +113,13 @@ test("hors-ligne : runSync ne tente aucun appel réseau et laisse la mutation in
   };
 
   try {
-    await runSync(fakeFetch);
+    await runSync({ fetchImpl: fakeFetch });
   } finally {
     if (originalNavigator) Object.defineProperty(globalThis, "navigator", originalNavigator);
   }
 
   assert.equal(fetchCalled, false, "aucun appel réseau ne doit être tenté hors-ligne");
-  const [stored] = await listMutations();
+  const [stored] = await listMutations({ userId: USER });
   assert.equal(stored.status, "pending", "la mutation doit rester intacte et visible, jamais perdue");
 });
 
@@ -126,7 +137,21 @@ test("un lot avec plusieurs mutations est envoyé en une seule requête (économ
     });
   };
 
-  await runSync(fakeFetch);
+  await runSync({ fetchImpl: fakeFetch });
   assert.equal(callCount, 1, "trois mutations en attente doivent partir dans une seule requête HTTP, pas trois");
-  assert.equal((await listMutations()).length, 0);
+  assert.equal((await listMutations({ userId: USER })).length, 0);
+});
+
+test("sans utilisateur actif, runSync ne fait rien (pas d'appel réseau, rien lu ni modifié)", async () => {
+  __resetSyncIdentityForTests(); // userId: null
+  await seedAbsenceMutation(); // toujours créée pour USER, mais personne n'est "actif"
+
+  let fetchCalled = false;
+  const fakeFetch = async () => {
+    fetchCalled = true;
+    return jsonResponse({ results: [] });
+  };
+
+  await runSync({ fetchImpl: fakeFetch });
+  assert.equal(fetchCalled, false);
 });

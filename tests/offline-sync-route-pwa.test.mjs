@@ -117,10 +117,32 @@ test("la page /offline est statique, non indexée, et ne prétend enregistrer au
 
 test("OfflineRuntime nettoie tout le cache local au SIGNED_OUT (Phase 8) et câble le moteur de sync une seule fois", async () => {
   const src = await source("src/components/offline/OfflineRuntime.tsx");
-  assert.match(src, /event === "SIGNED_OUT"/);
+  assert.match(src, /case "SIGNED_OUT":/);
   assert.match(src, /clearOfflineCache\(\)/);
   assert.match(src, /initSyncEngine\(\)/);
   assert.match(src, /registerServiceWorker\(\)/);
+});
+
+// OFFLINE-01.2 (P1 fix) — OfflineRuntime ne doit plus s'appuyer sur
+// SIGNED_OUT comme seule protection (Phase 5) : il résout la vraie
+// session au montage et suit aussi SIGNED_IN/TOKEN_REFRESHED/USER_UPDATED.
+test("OfflineRuntime résout la session réelle au montage (getUser()) avant de démarrer le moteur, plutôt que de supposer que le cache local appartient à la session courante", async () => {
+  const src = await source("src/components/offline/OfflineRuntime.tsx");
+  const startFn = src.slice(src.indexOf("async function resolveInitialIdentityThenStart"), src.indexOf("void resolveInitialIdentityThenStart"));
+  assert.match(startFn, /supabase\.auth\.getUser\(\)/);
+  assert.match(startFn, /setActiveSyncUser\(user\?\.id \?\? null\)/);
+  // getUser() doit être résolu AVANT initSyncEngine(), jamais l'inverse.
+  const getUserIdx = startFn.indexOf("supabase.auth.getUser()");
+  const initSyncIdx = startFn.indexOf("initSyncEngine()");
+  assert.ok(getUserIdx > -1 && initSyncIdx > -1 && getUserIdx < initSyncIdx);
+});
+
+test("OfflineRuntime écoute SIGNED_IN, TOKEN_REFRESHED et USER_UPDATED — pas seulement SIGNED_OUT — pour ne jamais supposer l'identité active", async () => {
+  const src = await source("src/components/offline/OfflineRuntime.tsx");
+  assert.match(src, /case "SIGNED_IN":/);
+  assert.match(src, /case "TOKEN_REFRESHED":/);
+  assert.match(src, /case "USER_UPDATED":/);
+  assert.match(src, /setActiveSyncUser\(session\?\.user\?\.id \?\? null\)/);
 });
 
 test("le layout racine monte OfflineRuntime une seule fois", async () => {
