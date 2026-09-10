@@ -1,0 +1,151 @@
+import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import test from "node:test";
+import { fileURLToPath } from "node:url";
+
+const testDirectory = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = path.resolve(testDirectory, "..");
+
+async function source(relativePath) {
+  return readFile(path.join(projectRoot, relativePath), "utf8");
+}
+
+const ROUTE = "src/app/api/sync/push/route.ts";
+
+test("la route exige une authentification avant tout traitement", async () => {
+  const src = await source(ROUTE);
+  const authIndex = src.indexOf("if (!user)");
+  assert.ok(authIndex > -1);
+  assert.match(src.slice(authIndex, authIndex + 100), /status: 401/);
+});
+
+test("la route plafonne la taille du lot (économie réseau / anti-abus, Phase 6)", async () => {
+  const src = await source(ROUTE);
+  assert.match(src, /mutations\.length > 50/);
+});
+
+test("la mutation métier réelle passe par la fonction RPC atomique, jamais par un insert direct dans cette route", async () => {
+  const src = await source(ROUTE);
+  assert.match(src, /\.rpc\("sync_apply_absence_create"/);
+  assert.doesNotMatch(src, /\.from\("absences"\)\.insert/);
+});
+
+test("la route n'utilise jamais createAdminClient — RLS reste l'autorité (Phase 8)", async () => {
+  const src = await source(ROUTE);
+  assert.doesNotMatch(src, /createAdminClient/);
+});
+
+// OFFLINE-01.1 Phase 5 — l'autorisation/idempotence réelle vit désormais
+// entièrement dans la fonction Postgres (voir
+// tests/offline-sync-security-postgres.test.mjs pour la preuve par
+// exécution réelle) ; ces tests vérifient que la route elle-même ne
+// réintroduit AUCUNE fuite au-dessus de ce que la fonction renvoie déjà.
+test("chaque mutation d'un lot est traitée indépendamment et son résultat reste apparié à son propre mutationId — jamais de résultat croisé entre mutations d'un même lot", async () => {
+  const src = await source(ROUTE);
+  const forBlock = src.slice(src.indexOf("for (const mutation of mutations)"), src.indexOf("return NextResponse.json({ results });"));
+  assert.match(forBlock, /results\.push\(await applyOne\(supabase, mutation\)\)/);
+  const applyOneFn = src.slice(src.indexOf("async function applyOne"), src.indexOf("async function applyAbsenceCreate"));
+  assert.match(applyOneFn, /mutationId: mutationId \?\? "unknown", status: "rejected"/);
+  assert.match(applyOneFn, /return applyAbsenceCreate\(supabase, mutation\);/);
+});
+
+test("le résultat renvoyé par le RPC (rejected/applied/duplicate/conflict) est transmis tel quel, la route n'ajoute aucune donnée supplémentaire au résultat", async () => {
+  const src = await source(ROUTE);
+  const applyAbsenceFn = src.slice(src.indexOf("async function applyAbsenceCreate"), src.indexOf("// Rejets qui n'impliquent aucune écriture"));
+  assert.match(applyAbsenceFn, /status,\s*\n\s*serverId: row\.result_entity_id \?\? undefined,\s*\n\s*error: row\.result_error \?\? undefined,/);
+});
+
+test("un mutationId, entityId ou payload manquant est rejeté avant tout appel RPC — jamais transmis tel quel à la fonction SECURITY DEFINER", async () => {
+  const src = await source(ROUTE);
+  assert.match(src, /if \(!mutationId \|\| !entityType \|\| !operation \|\| !establishmentId\) \{/);
+  assert.match(src, /Mutation malformée/);
+});
+
+test("un type d'entité non pris en charge et une opération non câblée sont explicitement rejetés, jamais silencieusement ignorés", async () => {
+  const src = await source(ROUTE);
+  assert.match(src, /Type d'entité non pris en charge/);
+  assert.match(src, /operation !== "create"/);
+  assert.match(src, /non encore prise en charge pour/);
+});
+
+test("les rejets sans effet de bord métier utilisent un upsert idempotent (ignoreDuplicates) plutôt qu'un insert qui pourrait échouer en course", async () => {
+  const src = await source(ROUTE);
+  assert.match(src, /ignoreDuplicates: true/);
+  assert.match(src, /onConflict: "mutation_id"/);
+});
+
+// PWA — Phase 7 : coquille applicative minimale, jamais de cache dangereux
+// de pages sensibles.
+test("le service worker exclut explicitement /api, /dashboard, /pro, /auth et /enseignant de toute mise en cache", async () => {
+  const sw = await source("public/sw.js");
+  assert.match(sw, /pathname\.startsWith\("\/api\/"\)/);
+  assert.match(sw, /pathname\.startsWith\("\/dashboard\/"\)/);
+  assert.match(sw, /pathname\.startsWith\("\/pro\/"\)/);
+  assert.match(sw, /pathname\.startsWith\("\/auth\/"\)/);
+  assert.match(sw, /pathname\.startsWith\("\/enseignant\/"\)/);
+});
+
+test("l'enregistrement du service worker gère le cas où l'événement 'load' est déjà passé au montage (readyState complete), pas seulement le cas où il reste à venir", async () => {
+  // Bug réel trouvé en QA live : un simple addEventListener("load", ...)
+  // raterait l'événement s'il a déjà eu lieu avant que ce composant client
+  // ne se monte (fréquent : le montage post-hydratation React survient
+  // souvent après le `load` du navigateur) — le service worker ne
+  // s'enregistrait alors jamais, silencieusement.
+  const src = await source("src/lib/offline/registerServiceWorker.ts");
+  assert.match(src, /document\.readyState === "complete"/);
+  assert.match(src, /doRegister\(\)/);
+  assert.match(src, /addEventListener\("load", doRegister, \{ once: true \}\)/);
+});
+
+test("le service worker ignore les requêtes non-GET (jamais de mutation interceptée)", async () => {
+  const sw = await source("public/sw.js");
+  assert.match(sw, /if \(request\.method !== "GET"\) return;/);
+});
+
+test("le service worker ne répond en repli hors-ligne que pour une navigation dont le réseau a réellement échoué (network-first)", async () => {
+  const sw = await source("public/sw.js");
+  assert.match(sw, /request\.mode === "navigate"/);
+  assert.match(sw, /fetch\(request\)\.catch\(\(\) => caches\.match\(OFFLINE_URL\)/);
+});
+
+test("la page /offline est statique, non indexée, et ne prétend enregistrer aucune donnée serveur", async () => {
+  const src = await source("src/app/offline/page.tsx");
+  assert.match(src, /robots: \{ index: false, follow: false \}/);
+  assert.doesNotMatch(src, /supabase|fetch\(/);
+});
+
+test("OfflineRuntime nettoie tout le cache local au SIGNED_OUT (Phase 8) et câble le moteur de sync une seule fois", async () => {
+  const src = await source("src/components/offline/OfflineRuntime.tsx");
+  assert.match(src, /case "SIGNED_OUT":/);
+  assert.match(src, /clearOfflineCache\(\)/);
+  assert.match(src, /initSyncEngine\(\)/);
+  assert.match(src, /registerServiceWorker\(\)/);
+});
+
+// OFFLINE-01.2 (P1 fix) — OfflineRuntime ne doit plus s'appuyer sur
+// SIGNED_OUT comme seule protection (Phase 5) : il résout la vraie
+// session au montage et suit aussi SIGNED_IN/TOKEN_REFRESHED/USER_UPDATED.
+test("OfflineRuntime résout la session réelle au montage (getUser()) avant de démarrer le moteur, plutôt que de supposer que le cache local appartient à la session courante", async () => {
+  const src = await source("src/components/offline/OfflineRuntime.tsx");
+  const startFn = src.slice(src.indexOf("async function resolveInitialIdentityThenStart"), src.indexOf("void resolveInitialIdentityThenStart"));
+  assert.match(startFn, /supabase\.auth\.getUser\(\)/);
+  assert.match(startFn, /setActiveSyncUser\(user\?\.id \?\? null\)/);
+  // getUser() doit être résolu AVANT initSyncEngine(), jamais l'inverse.
+  const getUserIdx = startFn.indexOf("supabase.auth.getUser()");
+  const initSyncIdx = startFn.indexOf("initSyncEngine()");
+  assert.ok(getUserIdx > -1 && initSyncIdx > -1 && getUserIdx < initSyncIdx);
+});
+
+test("OfflineRuntime écoute SIGNED_IN, TOKEN_REFRESHED et USER_UPDATED — pas seulement SIGNED_OUT — pour ne jamais supposer l'identité active", async () => {
+  const src = await source("src/components/offline/OfflineRuntime.tsx");
+  assert.match(src, /case "SIGNED_IN":/);
+  assert.match(src, /case "TOKEN_REFRESHED":/);
+  assert.match(src, /case "USER_UPDATED":/);
+  assert.match(src, /setActiveSyncUser\(session\?\.user\?\.id \?\? null\)/);
+});
+
+test("le layout racine monte OfflineRuntime une seule fois", async () => {
+  const src = await source("src/app/layout.tsx");
+  assert.match(src, /<OfflineRuntime \/>/);
+});
