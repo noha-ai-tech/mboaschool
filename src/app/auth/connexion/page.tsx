@@ -57,7 +57,11 @@ export default function ConnexionPage() {
     if (profile?.role === "platform_admin") {
       destination = "/dashboard/admin";
     } else if (profile?.role === "teacher") {
-      destination = "/enseignant/mon-espace";
+      // MOBILE-01 — la nouvelle route "Aujourd'hui" mobile-first remplace
+      // /enseignant/mon-espace comme destination d'atterrissage ; seule
+      // cette chaîne change, le mécanisme de navigation (window.location.href
+      // ci-dessous) reste strictement celui du correctif AUTH P0.
+      destination = "/enseignant";
     } else {
       // AMÉLIORATION 1 — même logique d'accès que le dashboard/SchoolContext
       // (src/app/api/establishments/accessible, déjà utilisé par

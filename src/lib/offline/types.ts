@@ -15,7 +15,7 @@ export type MutationStatus =
 // Types d'entités supportées par le moteur. "draft-note" n'est utilisé que
 // par les tests génériques de conflit (Phase 4) — aucune fonctionnalité
 // réelle de ce type n'existe encore dans ce sprint.
-export type OfflineEntityType = "absence" | "draft-note";
+export type OfflineEntityType = "absence" | "attendance" | "draft-note";
 
 export type OfflineMutation<TPayload = unknown> = {
   mutationId: string; // uuid client — clé d'idempotence

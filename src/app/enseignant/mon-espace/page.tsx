@@ -1,9 +1,13 @@
 import { redirect } from "next/navigation";
-import { AlertTriangle, Globe, BookOpen, MessageSquare, CalendarDays, FileText, Wallet, Download, ArrowRight, CheckCircle2, Clock3 } from "lucide-react";
+import { AlertTriangle, Globe, BookOpen, MessageSquare, CalendarDays, FileText, Wallet, Download, CheckCircle2, Clock3 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { SelecteurEtablissement } from "@/components/enseignant/SelecteurEtablissement";
 
-const JOUR_SEMAINE_AUJOURDHUI = new Date().getDay(); // 0=dimanche…6=samedi, correspond à creneaux_horaires.jour_semaine (1=lundi..6=samedi)
+// MOBILE-01 — "Prochain cours" et "Ma journée" ont été retirés d'ici :
+// cette information vit maintenant sur /enseignant (nouvelle route
+// canonique mobile), pour éviter d'afficher la même chose à deux endroits.
+// Cette page reste la référence pour heures/salaire/documents/présences/
+// messages, inchangée par ailleurs.
 
 export default async function MonEspacePage({
   searchParams,
@@ -101,12 +105,12 @@ export default async function MonEspacePage({
     .order("created_at", { ascending: false })
     .limit(30);
 
-  // Mon emploi du temps (Phase 7, Mission 04) — nécessite la policy
-  // edt_self_read (migration 0009_pro_hr_foundation.sql, non exécutée).
-  // Tableau vide sans erreur bloquante tant qu'elle n'est pas appliquée.
+  // "Mes classes" ci-dessous — l'emploi du temps complet vit maintenant sur
+  // /enseignant/emploi-du-temps (MOBILE-01), seule la liste des classes
+  // distinctes reste nécessaire ici.
   const { data: edt } = await supabase
     .from("emplois_du_temps")
-    .select("id, classe_id, matiere_id, classes(name), matieres(nom), creneaux_horaires(jour_semaine, heure_debut, heure_fin)")
+    .select("classe_id, classes(name)")
     .eq("enseignant_id", enseignant.id)
     .eq("etablissement_id", enseignant.etablissement_id);
 
@@ -117,16 +121,6 @@ export default async function MonEspacePage({
         .filter(([, name]) => name)
     ).entries()
   );
-
-  // Cours du jour, triés par heure — dérivé de l'emploi du temps ci-dessus,
-  // aucune nouvelle requête. jour_semaine (1=lundi..6=samedi) correspond
-  // directement à Date.getDay() (0=dimanche..6=samedi).
-  const coursDuJour: any[] = ((edt ?? []) as any[])
-    .filter((e: any) => e.creneaux_horaires?.jour_semaine === JOUR_SEMAINE_AUJOURDHUI)
-    .sort((a: any, b: any) => (a.creneaux_horaires?.heure_debut ?? "").localeCompare(b.creneaux_horaires?.heure_debut ?? ""));
-
-  const nowHHMM = today.toTimeString().slice(0, 5);
-  const prochainCours = coursDuJour.find((e: any) => (e.creneaux_horaires?.heure_fin ?? "") > nowHHMM);
 
   // Mes documents (Phase 7) — via la fiche staff_members liée, si elle
   // existe (migration 0009). Vide sans erreur tant que non exécutée.
@@ -276,67 +270,27 @@ export default async function MonEspacePage({
         </div>
       )}
 
-      <div className="grid lg:grid-cols-[1fr_320px] gap-5 mb-6">
-        {/* Prochain cours — bloc dominant */}
-        <div className="bg-white border border-border rounded-card p-6">
-          <p className="text-xs font-semibold tracking-widest uppercase text-text-secondary mb-4">Prochain cours</p>
-          {prochainCours ? (
-            <>
-              <p className="text-3xl font-extrabold text-text-primary tracking-tight">
-                {prochainCours.creneaux_horaires?.heure_debut}–{prochainCours.creneaux_horaires?.heure_fin}
-              </p>
-              <p className="text-xl font-bold text-text-primary mt-2">{prochainCours.matieres?.nom ?? "—"}</p>
-              <p className="text-sm text-text-secondary mt-1">{prochainCours.classes?.name ?? "—"}</p>
-              <a href="#horaire" className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:opacity-80 transition-opacity duration-base mt-4">
-                Voir mon emploi du temps
-                <ArrowRight size={13} />
-              </a>
-            </>
-          ) : (
-            <p className="text-sm text-text-secondary py-4">Aucun autre cours prévu aujourd&apos;hui.</p>
-          )}
-        </div>
-
-        {/* Présence */}
-        <div className="bg-white border border-border rounded-card p-6">
-          <p className="text-xs font-semibold tracking-widest uppercase text-text-secondary mb-4">Présence</p>
-          {presenceStatut === "non_pointe" && (
-            <p className="text-lg font-bold text-text-secondary">Non pointé</p>
-          )}
-          {presenceStatut === "present" && arriveeJour && (
-            <>
-              <p className="text-lg font-bold text-primary flex items-center gap-1.5">
-                <CheckCircle2 size={16} /> Présent
-              </p>
-              <p className="text-sm text-text-secondary mt-1">Arrivée : {formatHeure(arriveeJour.horodatage)}</p>
-            </>
-          )}
-          {presenceStatut === "depart" && arriveeJour && departJour && (
-            <>
-              <p className="text-lg font-bold text-text-primary">Départ enregistré</p>
-              <p className="text-sm text-text-secondary mt-1">
-                Arrivée : {formatHeure(arriveeJour.horodatage)} · Départ : {formatHeure(departJour.horodatage)}
-              </p>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* Ma journée */}
-      <div className="bg-white border border-border rounded-card p-6 mb-6">
-        <p className="text-xs font-semibold tracking-widest uppercase text-text-secondary mb-4">Ma journée</p>
-        {coursDuJour.length === 0 ? (
-          <p className="text-sm text-text-secondary">Aucun cours prévu aujourd&apos;hui.</p>
-        ) : (
-          <div className="space-y-3">
-            {coursDuJour.map((e: any) => (
-              <div key={e.id} className="flex items-center gap-4 text-sm">
-                <span className="font-mono font-semibold text-text-primary w-12 shrink-0">{e.creneaux_horaires?.heure_debut}</span>
-                <span className="font-semibold text-text-primary">{e.matieres?.nom ?? "—"}</span>
-                <span className="text-text-secondary">{e.classes?.name ?? "—"}</span>
-              </div>
-            ))}
-          </div>
+      {/* Présence — pointage du jour (distinct de l'appel élève, voir /enseignant) */}
+      <div className="bg-white border border-border rounded-card p-6 mb-6 max-w-sm">
+        <p className="text-xs font-semibold tracking-widest uppercase text-text-secondary mb-4">Présence</p>
+        {presenceStatut === "non_pointe" && (
+          <p className="text-lg font-bold text-text-secondary">Non pointé</p>
+        )}
+        {presenceStatut === "present" && arriveeJour && (
+          <>
+            <p className="text-lg font-bold text-primary flex items-center gap-1.5">
+              <CheckCircle2 size={16} /> Présent
+            </p>
+            <p className="text-sm text-text-secondary mt-1">Arrivée : {formatHeure(arriveeJour.horodatage)}</p>
+          </>
+        )}
+        {presenceStatut === "depart" && arriveeJour && departJour && (
+          <>
+            <p className="text-lg font-bold text-text-primary">Départ enregistré</p>
+            <p className="text-sm text-text-secondary mt-1">
+              Arrivée : {formatHeure(arriveeJour.horodatage)} · Départ : {formatHeure(departJour.horodatage)}
+            </p>
+          </>
         )}
       </div>
 
@@ -393,7 +347,7 @@ export default async function MonEspacePage({
 
       {/* Quick actions — 3 maximum */}
       <div className="flex flex-wrap gap-2 mb-8">
-        <a href="#horaire" className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-card border border-border text-sm font-semibold text-text-secondary hover:text-text-primary hover:border-text-secondary transition-colors duration-base">
+        <a href="/enseignant/emploi-du-temps" className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-card border border-border text-sm font-semibold text-text-secondary hover:text-text-primary hover:border-text-secondary transition-colors duration-base">
           <CalendarDays size={13} /> Voir emploi du temps
         </a>
         <a href="#presences" className="inline-flex items-center gap-1.5 h-9 px-3.5 rounded-card border border-border text-sm font-semibold text-text-secondary hover:text-text-primary hover:border-text-secondary transition-colors duration-base">
@@ -425,33 +379,6 @@ export default async function MonEspacePage({
           Appliquer
         </button>
       </form>
-
-      {/* Mon emploi du temps (liste complète) */}
-      <div id="horaire" className="mb-8 scroll-mt-20">
-        <div className="flex items-center gap-2 mb-4">
-          <CalendarDays size={14} className="text-text-secondary" />
-          <h2 className="text-xs font-semibold tracking-widest uppercase text-text-secondary">Mon emploi du temps</h2>
-        </div>
-        {!edt?.length ? (
-          <div className="rounded-card border border-border bg-white p-8 text-center text-sm text-text-secondary">
-            Aucun créneau assigné pour l&apos;instant.
-          </div>
-        ) : (
-          <div className="rounded-card border border-border bg-white overflow-hidden divide-y divide-border">
-            {edt.map((e: any) => (
-              <div key={e.id} className="flex items-center justify-between px-4 py-3 text-sm">
-                <span className="font-semibold text-text-primary">{e.matieres?.nom ?? "—"}</span>
-                <span className="text-text-secondary">{e.classes?.name ?? "—"}</span>
-                {e.creneaux_horaires && (
-                  <span className="text-xs text-text-secondary">
-                    {e.creneaux_horaires.heure_debut}–{e.creneaux_horaires.heure_fin}
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
 
       {/* Mes classes */}
       <div id="classes" className="mb-8 scroll-mt-20">

@@ -25,15 +25,15 @@ import {
   X,
 } from "lucide-react";
 
-// Shell enseignant — toutes les sections vivent aujourd'hui sur UNE seule
-// page (/enseignant/mon-espace, ancres #salaire/#horaire/...), il n'existe
-// pas de route distincte par section. La sidebar reflète cette réalité :
-// des liens vers des ancres, jamais des pages inexistantes. Sidebar
+// Shell enseignant — MOBILE-01 introduit deux routes dédiées
+// (/enseignant "Aujourd'hui" et /enseignant/emploi-du-temps) ; le reste
+// (heures/salaire/documents/présences/messages) continue de vivre sur
+// /enseignant/mon-espace via ses ancres existantes, inchangé. Sidebar
 // réductible (Sprint M) via les primitives partagées CollapsibleSidebar.
 const NAV = [
-  { href: "/enseignant/mon-espace", label: "Aujourd'hui", icon: LayoutDashboard },
+  { href: "/enseignant", label: "Aujourd'hui", icon: LayoutDashboard },
   { group: "Mon travail" },
-  { href: "/enseignant/mon-espace#horaire", label: "Mon emploi du temps", icon: CalendarDays },
+  { href: "/enseignant/emploi-du-temps", label: "Mon emploi du temps", icon: CalendarDays },
   { href: "/enseignant/mon-espace#classes", label: "Mes classes", icon: Users },
   { href: "/enseignant/mon-espace#presences", label: "Mes présences", icon: Clock3 },
   { href: "/enseignant/mon-espace#heures", label: "Mes heures", icon: Clock3 },
@@ -42,6 +42,14 @@ const NAV = [
   { group: "Ressources" },
   { href: "/enseignant/mon-espace#documents", label: "Mes documents", icon: FileText },
 ] as const;
+
+function headerTitle(pathname: string): string {
+  if (pathname === "/enseignant") return "Aujourd'hui";
+  if (pathname === "/enseignant/emploi-du-temps") return "Mon emploi du temps";
+  if (pathname.startsWith("/enseignant/cours/")) return "Le cours";
+  if (pathname === "/enseignant/mon-espace") return "Mon espace";
+  return "Écoles237";
+}
 
 export default function EnseignantLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -86,7 +94,7 @@ export default function EnseignantLayout({ children }: { children: React.ReactNo
                 href={item.href}
                 label={item.label}
                 icon={item.icon}
-                active={pathname === "/enseignant/mon-espace" && item.href === "/enseignant/mon-espace"}
+                active={pathname === item.href}
                 collapsed={c}
                 onClick={() => setMobileOpen(false)}
               />
@@ -148,7 +156,7 @@ export default function EnseignantLayout({ children }: { children: React.ReactNo
           <button onClick={() => setMobileOpen(true)} className="lg:hidden" aria-label="Menu">
             <Menu size={22} />
           </button>
-          <span className="font-bold text-sm">Aujourd&apos;hui</span>
+          <span className="font-bold text-sm">{headerTitle(pathname)}</span>
           <button onClick={() => setMobileOpen(false)} className="lg:hidden" aria-label="Fermer le menu">
             {mobileOpen ? <X size={22} /> : <div className="w-6" />}
           </button>

@@ -22,10 +22,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import type { OfflineMutationWire, SyncMutationResult } from "@/lib/offline/types";
 
-type SupportedEntity = "absence";
+type SupportedEntity = "absence" | "attendance";
 
 function isSupportedEntity(entityType: string): entityType is SupportedEntity {
-  return entityType === "absence";
+  return entityType === "absence" || entityType === "attendance";
 }
 
 export async function POST(req: NextRequest) {
@@ -75,10 +75,15 @@ async function applyOne(
 
   if (operation !== "create") {
     // Phase 9 : le contrat générique existe, mais seule la création est
-    // câblée pour le pilote "absence" dans ce sprint — aucune table
-    // actuelle ne porte de colonne updated_at/version permettant une mise
-    // à jour offline sûre (voir Phase 0 / conflict.ts).
+    // câblée pour "absence" et "attendance" dans ce sprint. Pour
+    // "attendance", chaque tap enseignant EST une création au sens du
+    // moteur offline (un événement de marquage) — la fonction serveur
+    // fait l'upsert, jamais un "update" explicite côté client.
     return recordRejection(supabase, mutation, `Opération "${operation}" non encore prise en charge pour ${entityType}`);
+  }
+
+  if (entityType === "attendance") {
+    return applyAttendanceMark(supabase, mutation);
   }
 
   return applyAbsenceCreate(supabase, mutation);
@@ -109,6 +114,51 @@ async function applyAbsenceCreate(
       p_date_debut: payload.date_debut,
       p_date_fin: payload.date_fin,
       p_motif: payload.motif || null,
+    })
+    .single();
+
+  if (error || !data) {
+    return { mutationId: mutation.mutationId, status: "rejected", error: error?.message ?? "Échec de synchronisation" };
+  }
+
+  const row = data as { result_status: string; result_entity_id: string | null; result_error: string | null };
+  const status = row.result_status as SyncMutationResult["status"];
+
+  return {
+    mutationId: mutation.mutationId,
+    status,
+    serverId: row.result_entity_id ?? undefined,
+    error: row.result_error ?? undefined,
+  };
+}
+
+// MOBILE-01 — marque de présence élève. Chaque tap enseignant (y compris
+// une correction) est une nouvelle mutation "create" ; sync_apply_
+// attendance_mark upserte la ligne réelle et détecte un conflit
+// cross-acteur (voir le commentaire de cette fonction dans la migration).
+async function applyAttendanceMark(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  mutation: OfflineMutationWire
+): Promise<SyncMutationResult> {
+  const payload = mutation.payload as {
+    emploi_du_temps_id?: string;
+    student_id?: string;
+    session_date?: string;
+    status?: string;
+  };
+
+  if (!payload?.emploi_du_temps_id || !payload.student_id || !payload.session_date || !payload.status) {
+    return recordRejection(supabase, mutation, "Champs requis manquants");
+  }
+
+  const { data, error } = await supabase
+    .rpc("sync_apply_attendance_mark", {
+      p_mutation_id: mutation.mutationId,
+      p_establishment_id: mutation.establishmentId,
+      p_emploi_du_temps_id: payload.emploi_du_temps_id,
+      p_student_id: payload.student_id,
+      p_session_date: payload.session_date,
+      p_status: payload.status,
     })
     .single();
 

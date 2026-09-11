@@ -65,7 +65,7 @@ test("establishment lookup failure is bounded and failure-safe: destination stil
 test("role destinations remain correct: admin, teacher, and default owner/parent paths are all preserved", async () => {
   const src = await source("src/app/auth/connexion/page.tsx");
   assert.match(src, /profile\?\.role === "platform_admin"[\s\S]{0,40}destination = "\/dashboard\/admin"/);
-  assert.match(src, /profile\?\.role === "teacher"[\s\S]{0,40}destination = "\/enseignant\/mon-espace"/);
+  assert.match(src, /profile\?\.role === "teacher"[\s\S]{0,500}destination = "\/enseignant"/);
   assert.match(src, /destination = hasSchool \? "\/dashboard\/ecole" : "\/revendiquer";/);
 });
 

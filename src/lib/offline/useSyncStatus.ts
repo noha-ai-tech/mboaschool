@@ -37,7 +37,14 @@ export type SyncStatusSnapshot = {
 const EMPTY_SNAPSHOT_MUTATIONS: OfflineMutation[] = [];
 
 export function useSyncStatus(): SyncStatusSnapshot {
-  const [online, setOnline] = useState(typeof navigator === "undefined" ? true : navigator.onLine);
+  // Toujours "true" au premier rendu, y compris côté client : lire
+  // navigator.onLine directement dans l'état initial ferait diverger le
+  // tout premier rendu client de l'HTML serveur (qui ne peut, lui, que
+  // supposer "en ligne") dès que le navigateur est réellement hors-ligne à
+  // cet instant précis — provoquant une vraie erreur d'hydratation React
+  // (#418), trouvée par le test navigateur MOBILE-01.2. La valeur réelle
+  // n'est lue qu'après montage, dans l'effet ci-dessous.
+  const [online, setOnline] = useState(true);
   const [mutations, setMutations] = useState<OfflineMutation[]>(EMPTY_SNAPSHOT_MUTATIONS);
   const [engineSyncing, setEngineSyncing] = useState(false);
   const [lastSyncAt, setLastSyncAt] = useState<string | null>(null);
@@ -67,6 +74,7 @@ export function useSyncStatus(): SyncStatusSnapshot {
       refreshMutations(identity.userId);
     });
 
+    setOnline(navigator.onLine);
     const onOnline = () => setOnline(true);
     const onOffline = () => setOnline(false);
     window.addEventListener("online", onOnline);
