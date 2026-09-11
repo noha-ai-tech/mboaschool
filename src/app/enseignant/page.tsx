@@ -80,7 +80,7 @@ export default async function EnseignantAujourdhuiPage({
   // pour rien si le cours n'est finalement jamais ouvert offline.
   const classeIdsAujourdhui = Array.from(new Set(coursDuJour.map((e) => e.classe_id)));
   const { data: rosters } = classeIdsAujourdhui.length
-    ? await supabase.from("students").select("id, classe_id, first_name, last_name").in("classe_id", classeIdsAujourdhui)
+    ? await supabase.from("students").select("id, classe_id, first_name, last_name").in("classe_id", classeIdsAujourdhui).eq("status", "active")
     : { data: [] as { id: string; classe_id: string; first_name: string; last_name: string }[] };
 
   const nowHHMM = today.toTimeString().slice(0, 5);

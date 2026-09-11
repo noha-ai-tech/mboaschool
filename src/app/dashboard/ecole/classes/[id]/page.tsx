@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { ArrowLeft, Bell, GraduationCap, Plus, Trash2, Users } from "lucide-react";
+import { ArrowLeft, Bell, GraduationCap, Plus, Trash2, Users, ArrowRight } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useSchool } from "@/lib/useSchool";
 import { withEstablishmentQuery } from "@/lib/school/establishmentContext";
@@ -23,6 +23,7 @@ export default function ClassDetailPage() {
   const { school } = useSchool();
   const [classe, setClasse] = useState<any>(null);
   const [posts, setPosts] = useState<any[]>([]);
+  const [studentCount, setStudentCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -35,8 +36,13 @@ export default function ClassDetailPage() {
     setLoading(true);
     const { data: classData } = await supabase.from("classes").select("*").eq("id", classId).single();
     const { data: postsData } = await supabase.from("school_announcements").select("*").eq("establishment_id", classData?.establishment_id ?? "").eq("class_id", classId).order("created_at", { ascending: false });
+    // MOBILE-01.1 — compteur du roster réel (élèves actifs), distinct du
+    // champ `effectif` existant (une estimation manuelle non liée à
+    // public.students).
+    const { count } = await supabase.from("students").select("id", { count: "exact", head: true }).eq("classe_id", classId).eq("status", "active");
     if (classData) setClasse(classData);
     if (postsData) setPosts(postsData);
+    setStudentCount(count ?? 0);
     setLoading(false);
   }, [classId]);
   useEffect(() => { load(); }, [load]);
@@ -63,11 +69,13 @@ export default function ClassDetailPage() {
   if (!classe) return <SchoolAdminEmptyState title="Classe introuvable" description="Cette classe n’est pas disponible dans le contexte actuel." action={<Link href={backHref} className="font-semibold text-[var(--school-admin-primary)]">Retour aux classes</Link>} />;
   return <div className="mx-auto max-w-6xl">
     <Link href={backHref} className="mb-5 inline-flex min-h-10 items-center gap-2 rounded-lg text-sm font-semibold text-[var(--school-admin-text-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--school-admin-focus)]"><ArrowLeft size={16} aria-hidden="true" />Retour aux classes</Link>
-    <SchoolAdminPageHeader eyebrow="Gestion scolaire" title={classe.name} description="Informations générales et publications actuellement rattachées à cette classe." actions={<SchoolAdminButton onClick={() => setShowForm(true)} leadingIcon={<Plus size={16} aria-hidden="true" />}>Nouvelle publication</SchoolAdminButton>} />
+    <SchoolAdminPageHeader eyebrow="Gestion scolaire" title={classe.name} description="Informations générales et publications actuellement rattachées à cette classe." actions={<div className="flex flex-wrap gap-2"><Link href={withEstablishmentQuery(`/dashboard/ecole/classes/${classId}/eleves`, school?.id)}><SchoolAdminButton variant="ghost" leadingIcon={<Users size={16} aria-hidden="true" />}>Gérer les élèves</SchoolAdminButton></Link><SchoolAdminButton onClick={() => setShowForm(true)} leadingIcon={<Plus size={16} aria-hidden="true" />}>Nouvelle publication</SchoolAdminButton></div>} />
     <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <SchoolAdminStatCard label="Niveau" value={classe.level || "Non renseigné"} icon={<GraduationCap size={19} />} />
       <SchoolAdminStatCard label="Section" value={classe.section || "Non renseignée"} icon={<GraduationCap size={19} />} tone="neutral" />
-      <SchoolAdminStatCard label="Effectif" value={typeof classe.effectif === "number" ? classe.effectif : "Indisponible"} icon={<Users size={19} />} tone="neutral" detail={typeof classe.effectif === "number" ? undefined : "Aucune donnée fournie"} />
+      <Link href={withEstablishmentQuery(`/dashboard/ecole/classes/${classId}/eleves`, school?.id)} className="block rounded-[var(--school-admin-radius-card)] transition hover:-translate-y-0.5">
+        <SchoolAdminStatCard label="Élèves inscrits" value={studentCount} icon={<Users size={19} />} detail={<span className="inline-flex items-center gap-1 text-[var(--school-admin-primary)]">Gérer le roster <ArrowRight size={12} aria-hidden="true" /></span>} />
+      </Link>
       <SchoolAdminStatCard label="Publications" value={posts.length} icon={<Bell size={19} />} />
     </div>
     {error && <div className="mb-5"><SchoolAdminAlert tone="danger">{error}</SchoolAdminAlert></div>}

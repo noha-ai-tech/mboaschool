@@ -55,6 +55,7 @@ export default async function CoursPage({
     .from("students")
     .select("id, first_name, last_name")
     .eq("classe_id", edt.classe_id)
+    .eq("status", "active")
     .order("last_name", { ascending: true });
 
   const { data: session } = await supabase
