@@ -48,6 +48,7 @@ const NAVIGATION_GROUPS: NavigationGroup[] = [
   { label: "Présences", items: [
     { href: "/pro/pointage/kiosque", label: "Kiosque de présence", icon: ClipboardCheck, requiresPro: true },
     { href: "/pro/pointage/historique", label: "Historique", icon: Clock3, requiresPro: true },
+    { href: "/pro/pointage/validation", label: "Heures à valider", icon: Clock3, requiresPro: true },
     { href: "/pro/absences", label: "Absences", icon: ShieldCheck, requiresPro: true },
   ] },
   { label: "Planification", items: [

@@ -36,7 +36,7 @@ const NAV = [
   { href: "/enseignant/emploi-du-temps", label: "Mon emploi du temps", icon: CalendarDays },
   { href: "/enseignant/mon-espace#classes", label: "Mes classes", icon: Users },
   { href: "/enseignant/mon-espace#presences", label: "Mes présences", icon: Clock3 },
-  { href: "/enseignant/mon-espace#heures", label: "Mes heures", icon: Clock3 },
+  { href: "/enseignant/heures", label: "Mes heures", icon: Clock3 },
   { group: "Rémunération" },
   { href: "/enseignant/mon-espace#salaire", label: "Mon salaire", icon: Wallet },
   { group: "Ressources" },
@@ -47,6 +47,7 @@ function headerTitle(pathname: string): string {
   if (pathname === "/enseignant") return "Aujourd'hui";
   if (pathname === "/enseignant/emploi-du-temps") return "Mon emploi du temps";
   if (pathname.startsWith("/enseignant/cours/")) return "Le cours";
+  if (pathname === "/enseignant/heures") return "Mes heures";
   if (pathname === "/enseignant/mon-espace") return "Mon espace";
   return "Écoles237";
 }

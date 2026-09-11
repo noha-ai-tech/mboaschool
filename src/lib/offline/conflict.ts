@@ -25,6 +25,11 @@ const STRATEGY_BY_ENTITY: Record<OfflineEntityType, ConflictStrategy> = {
   // documenter l'intention si une édition est ajoutée plus tard.
   absence: "server-wins-explicit-conflict",
   attendance: "server-wins-explicit-conflict",
+  // TIMESHEET-01 — un pointage (arrivée/départ) est create-only comme
+  // absence, jamais une édition : deux check-in ne "s'écrasent" pas, le
+  // second est refusé explicitement par sync_apply_staff_punch (séquence
+  // impossible), jamais par ce mécanisme de version.
+  staff_punch: "server-wins-explicit-conflict",
   "draft-note": "last-write-wins",
 };
 

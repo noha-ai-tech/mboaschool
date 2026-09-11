@@ -22,10 +22,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import type { OfflineMutationWire, SyncMutationResult } from "@/lib/offline/types";
 
-type SupportedEntity = "absence" | "attendance";
+type SupportedEntity = "absence" | "attendance" | "staff_punch";
 
 function isSupportedEntity(entityType: string): entityType is SupportedEntity {
-  return entityType === "absence" || entityType === "attendance";
+  return entityType === "absence" || entityType === "attendance" || entityType === "staff_punch";
 }
 
 export async function POST(req: NextRequest) {
@@ -86,7 +86,53 @@ async function applyOne(
     return applyAttendanceMark(supabase, mutation);
   }
 
+  if (entityType === "staff_punch") {
+    return applyStaffPunch(supabase, mutation);
+  }
+
   return applyAbsenceCreate(supabase, mutation);
+}
+
+// TIMESHEET-01 — pointage enseignant self-service (arrivée/départ). Chaque
+// tap est une création au sens du moteur offline ; sync_apply_staff_punch
+// résout l'identité enseignant côté serveur (jamais depuis le payload),
+// horodate côté serveur, et rejette explicitement les séquences
+// impossibles (double arrivée active, départ sans arrivée).
+async function applyStaffPunch(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  mutation: OfflineMutationWire
+): Promise<SyncMutationResult> {
+  const payload = mutation.payload as {
+    type?: string;
+    device_occurred_at?: string | null;
+  };
+
+  if (!payload?.type) {
+    return recordRejection(supabase, mutation, "Champs requis manquants");
+  }
+
+  const { data, error } = await supabase
+    .rpc("sync_apply_staff_punch", {
+      p_mutation_id: mutation.mutationId,
+      p_establishment_id: mutation.establishmentId,
+      p_type: payload.type,
+      p_device_occurred_at: payload.device_occurred_at ?? null,
+    })
+    .single();
+
+  if (error || !data) {
+    return { mutationId: mutation.mutationId, status: "rejected", error: error?.message ?? "Échec de synchronisation" };
+  }
+
+  const row = data as { result_status: string; result_entity_id: string | null; result_error: string | null; result_anomaly: string | null };
+  const status = row.result_status as SyncMutationResult["status"];
+
+  return {
+    mutationId: mutation.mutationId,
+    status,
+    serverId: row.result_entity_id ?? undefined,
+    error: row.result_error ?? (row.result_anomaly ? `anomaly:${row.result_anomaly}` : undefined),
+  };
 }
 
 async function applyAbsenceCreate(

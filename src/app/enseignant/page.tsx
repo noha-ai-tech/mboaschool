@@ -4,6 +4,7 @@ import { ArrowRight, CalendarDays, ClipboardList, MessageSquare, AlertTriangle }
 import { createClient } from "@/lib/supabase/server";
 import { SelecteurEtablissement } from "@/components/enseignant/SelecteurEtablissement";
 import { TeacherDayCachePrimer } from "@/components/enseignant/TeacherDayCachePrimer";
+import { StaffPunch } from "@/components/enseignant/StaffPunch";
 
 // MOBILE-01 — nouvelle route canonique mobile de l'enseignant. Réutilise
 // exactement le même schéma de requête que /enseignant/mon-espace
@@ -82,6 +83,21 @@ export default async function EnseignantAujourdhuiPage({
   const { data: rosters } = classeIdsAujourdhui.length
     ? await supabase.from("students").select("id, classe_id, first_name, last_name").in("classe_id", classeIdsAujourdhui).eq("status", "active")
     : { data: [] as { id: string; classe_id: string; first_name: string; last_name: string }[] };
+
+  // TIMESHEET-01 — dernier pointage self-service du jour pour déterminer
+  // l'état initial (pointé / non pointé). Une seule ligne suffit : si
+  // c'est une "arrivee", l'enseignant est actuellement présent ; si c'est
+  // un "depart" ou qu'il n'y a rien, il ne l'est pas.
+  const { data: lastPunch } = await supabase
+    .from("pointages")
+    .select("type, horodatage")
+    .eq("enseignant_id", enseignant.id)
+    .eq("source", "mobile_self_service")
+    .gte("horodatage", `${todayStr}T00:00:00`)
+    .order("horodatage", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  const checkedInAt = lastPunch?.type === "arrivee" ? lastPunch.horodatage : null;
 
   const nowHHMM = today.toTimeString().slice(0, 5);
 
@@ -169,6 +185,8 @@ export default async function EnseignantAujourdhuiPage({
           <p className="text-sm text-text-secondary py-3">Aucun cours restant aujourd&apos;hui.</p>
         )}
       </div>
+
+      <StaffPunch establishmentId={enseignant.etablissement_id} initialCheckedInAt={checkedInAt} />
 
       {/* Ma journée */}
       <div className="bg-white border border-border rounded-card p-5 mb-5">

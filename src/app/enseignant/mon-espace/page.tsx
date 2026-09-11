@@ -295,9 +295,13 @@ export default async function MonEspacePage({
       </div>
 
       <div className="grid sm:grid-cols-2 gap-5 mb-6">
-        {/* Mes heures */}
+        {/* TIMESHEET-01 — retitré pour ne plus entrer en collision avec le
+            nouveau /enseignant/heures (suivi pointé/validé). Cette section
+            reste l'estimation salariale existante (taux_horaire x heures
+            calculées depuis les pointages kiosque), un calcul différent,
+            non touché fonctionnellement par TIMESHEET-01. */}
         <div id="heures" className="bg-white border border-border rounded-card p-6 scroll-mt-20">
-          <p className="text-xs font-semibold tracking-widest uppercase text-text-secondary mb-4">Mes heures</p>
+          <p className="text-xs font-semibold tracking-widest uppercase text-text-secondary mb-4">Estimation heures &amp; salaire</p>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-2xl font-extrabold text-text-primary">{formatH(heures)}</p>
