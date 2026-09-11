@@ -98,7 +98,7 @@ test("no existing table is modified (classes, emplois_du_temps, enseignants, est
 
 test("attendance is a registered offline entity type", async () => {
   const src = await source("src/lib/offline/types.ts");
-  assert.match(src, /"absence" \| "attendance" \| "draft-note"/);
+  assert.match(src, /"absence" \| "attendance" \| "staff_punch" \| "draft-note"/);
 });
 
 test("attendance has an explicit conflict strategy: server-wins-explicit-conflict, never silent last-write-wins", async () => {
@@ -218,7 +218,11 @@ test("mon-espace no longer duplicates 'Prochain cours'/'Ma journée' now that /e
 
 test("mon-espace still preserves hours/salary/documents/messages sections, untouched by the MOBILE-01 trim", async () => {
   const src = await source("src/app/enseignant/mon-espace/page.tsx");
-  assert.match(src, /Mes heures/);
+  // TIMESHEET-01 — retitré "Estimation heures & salaire" pour ne plus
+  // entrer en collision avec le nouveau /enseignant/heures (suivi
+  // pointé/validé) ; ce calcul salarial existant reste inchangé
+  // fonctionnellement, seul le libellé change pour désambiguïser.
+  assert.match(src, /Estimation heures &amp; salaire/);
   assert.match(src, /Mon salaire/);
   assert.match(src, /Mes documents/);
   assert.match(src, /Messages de la direction/);
