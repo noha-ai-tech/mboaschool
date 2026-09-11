@@ -80,7 +80,7 @@ function ScheduleList({ entries }: { entries: ScheduleEntry[] }) {
     <div className="bg-white border border-border rounded-card divide-y divide-border overflow-hidden">
       {entries.map((e) => (
         <Link key={e.emploiDuTempsId} href={`/enseignant/cours/${e.emploiDuTempsId}`} className="flex items-center gap-3 px-4 py-3 hover:bg-muted/60 transition-colors duration-base">
-          <span className="font-mono text-sm font-semibold text-text-primary w-12 shrink-0">{e.heureDebut}</span>
+          <span className="font-mono text-sm font-semibold text-text-primary w-12 shrink-0">{e.heureDebut.slice(0, 5)}</span>
           <span className="flex-1 min-w-0">
             <span className="block text-sm font-semibold text-text-primary truncate">{e.matiereNom}</span>
             <span className="block text-xs text-text-secondary truncate">

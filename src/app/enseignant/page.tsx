@@ -185,7 +185,7 @@ export default async function EnseignantAujourdhuiPage({
                   href={`/enseignant/cours/${c.id}`}
                   className="flex items-center gap-3 py-2.5 -mx-1 px-1 rounded-lg hover:bg-muted/60 transition-colors duration-base"
                 >
-                  <span className="font-mono text-sm font-semibold text-text-primary w-12 shrink-0">{c.creneaux_horaires?.heure_debut}</span>
+                  <span className="font-mono text-sm font-semibold text-text-primary w-12 shrink-0">{c.creneaux_horaires?.heure_debut?.slice(0, 5)}</span>
                   <span className="flex-1 min-w-0">
                     <span className="block text-sm font-semibold text-text-primary truncate">{c.matieres?.nom ?? "—"}</span>
                     <span className="block text-xs text-text-secondary truncate">{c.classes?.name ?? "—"}</span>
