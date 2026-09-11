@@ -105,6 +105,47 @@ test.before(async () => {
       enseignant_id uuid not null references public.enseignants(id),
       creneau_id uuid not null references public.creneaux_horaires(id)
     );
+
+    -- Reproduit l'état réel pré-MOBILE-01.2 (0001_timetable_schema.sql +
+    -- 0003_comptes_enseignants.sql + 0009_pro_hr_foundation.sql) : RLS
+    -- activée avec un scope propriétaire uniquement sur enseignants/
+    -- matieres/creneaux_horaires/emplois_du_temps, plus le "self read" déjà
+    -- existant sur enseignants et emplois_du_temps. Nécessaire pour que le
+    -- test ci-dessous puisse réellement échouer sans le correctif
+    -- MOBILE-01.2 (sans RLS activée ici, matieres/creneaux_horaires
+    -- seraient lisibles par tout le monde, masquant le bug).
+    create or replace function public.current_establishment_id()
+    returns uuid language sql stable as $$
+      select id from public.establishments where owner_id = auth.uid();
+    $$;
+
+    alter table public.enseignants enable row level security;
+    drop policy if exists enseignants_scope on public.enseignants;
+    create policy enseignants_scope on public.enseignants
+      for all using (etablissement_id = current_establishment_id());
+    drop policy if exists enseignants_self_read on public.enseignants;
+    create policy enseignants_self_read on public.enseignants
+      for select using (user_id = auth.uid());
+
+    alter table public.matieres enable row level security;
+    drop policy if exists matieres_scope on public.matieres;
+    create policy matieres_scope on public.matieres
+      for all using (etablissement_id = current_establishment_id());
+
+    alter table public.creneaux_horaires enable row level security;
+    drop policy if exists creneaux_scope on public.creneaux_horaires;
+    create policy creneaux_scope on public.creneaux_horaires
+      for all using (etablissement_id = current_establishment_id());
+
+    alter table public.emplois_du_temps enable row level security;
+    drop policy if exists edt_scope on public.emplois_du_temps;
+    create policy edt_scope on public.emplois_du_temps
+      for all using (etablissement_id = current_establishment_id());
+    drop policy if exists edt_self_read on public.emplois_du_temps;
+    create policy edt_self_read on public.emplois_du_temps
+      for select using (
+        enseignant_id in (select id from public.enseignants where user_id = auth.uid())
+      );
   `);
 
   const migrationSql = await readFile(
@@ -113,6 +154,13 @@ test.before(async () => {
   );
   const lifecycleSql = await readFile(
     path.join(projectRoot, "supabase/migrations/20260911090000_mobile_01_1_student_lifecycle.sql"),
+    "utf8"
+  );
+  // MOBILE-01.2 — le correctif RLS réel : sans lui, un enseignant ne peut
+  // jamais lire la matière/le créneau de son propre cours (voir le fichier
+  // lui-même pour la cause racine confirmée par E2E navigateur réel).
+  const teacherScheduleRlsFixSql = await readFile(
+    path.join(projectRoot, "supabase/migrations/20260912100000_mobile_01_2_teacher_schedule_rls_fix.sql"),
     "utf8"
   );
   try {
@@ -135,6 +183,7 @@ test.before(async () => {
     `);
     await adminPool.query(migrationSql);
     await adminPool.query(lifecycleSql);
+    await adminPool.query(teacherScheduleRlsFixSql);
 
     // Rôle low-privilege reproduisant "authenticated" : RLS réellement
     // appliqué (contrairement au superuser "postgres", qui la contourne
@@ -389,4 +438,57 @@ test("real Postgres RLS — the roster query only ever returns students of the r
   const result = await asUser(school.owner, (client) => client.query("select * from public.students where classe_id = $1", [school.classeId]));
   assert.equal(result.rows.length, 1);
   assert.equal(result.rows[0].first_name, "Jean");
+});
+
+// MOBILE-01.2 — regression for a real bug found by browser E2E: a teacher's
+// /enseignant, /enseignant/emploi-du-temps and /enseignant/cours/[id] pages
+// all embed matieres(nom) and creneaux_horaires(...) from emplois_du_temps.
+// Before the 20260912100000_mobile_01_2_teacher_schedule_rls_fix.sql
+// migration, neither table had ANY teacher-facing RLS policy, so those
+// embeds silently resolved to null for every teacher (PostgREST embeds are
+// left joins, not errors) and the entire "my day" schedule computation,
+// which filters on creneaux_horaires.jour_semaine, always came back empty.
+async function seedTeacherWithSchedule(establishmentId, classeId) {
+  const teacherUserId = newId();
+  await adminPool.query("insert into auth.users (id) values ($1)", [teacherUserId]);
+  const enseignantId = (await adminPool.query("insert into public.enseignants (etablissement_id, user_id) values ($1, $2) returning id", [establishmentId, teacherUserId])).rows[0].id;
+  const matiereId = (await adminPool.query("insert into public.matieres (etablissement_id, nom) values ($1, 'Mathématiques') returning id", [establishmentId])).rows[0].id;
+  const creneauId = (await adminPool.query("insert into public.creneaux_horaires (etablissement_id, jour_semaine) values ($1, 4) returning id", [establishmentId])).rows[0].id;
+  await adminPool.query("insert into public.emplois_du_temps (etablissement_id, classe_id, matiere_id, enseignant_id, creneau_id) values ($1, $2, $3, $4, $5)", [
+    establishmentId,
+    classeId,
+    matiereId,
+    enseignantId,
+    creneauId,
+  ]);
+  return { teacherUserId, enseignantId, matiereId, creneauId };
+}
+
+test("real Postgres RLS — MOBILE-01.2: a teacher CAN read the subject and time slot of their own assigned course", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const school = await seedSchool();
+  const { teacherUserId, matiereId, creneauId } = await seedTeacherWithSchedule(school.establishmentId, school.classeId);
+
+  const matiere = await asUser(teacherUserId, (client) => client.query("select nom from public.matieres where id = $1", [matiereId]));
+  assert.equal(matiere.rows.length, 1, "a teacher must be able to read the subject of their own course — this was silently empty before the MOBILE-01.2 fix");
+  assert.equal(matiere.rows[0].nom, "Mathématiques");
+
+  const creneau = await asUser(teacherUserId, (client) => client.query("select jour_semaine from public.creneaux_horaires where id = $1", [creneauId]));
+  assert.equal(creneau.rows.length, 1, "a teacher must be able to read the time slot of their own course — this was silently empty before the MOBILE-01.2 fix");
+  assert.equal(creneau.rows[0].jour_semaine, 4);
+});
+
+test("real Postgres RLS — MOBILE-01.2: a teacher CANNOT read another school's subjects or time slots, even ones on the same day of week", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const schoolA = await seedSchool();
+  const schoolB = await seedSchool();
+  await seedTeacherWithSchedule(schoolA.establishmentId, schoolA.classeId);
+  const { teacherUserId: teacherB, matiereId: matiereB, creneauId: creneauB } = await seedTeacherWithSchedule(schoolB.establishmentId, schoolB.classeId);
+  const { matiereId: matiereA } = await seedTeacherWithSchedule(schoolA.establishmentId, schoolA.classeId);
+
+  const crossSchoolMatiere = await asUser(teacherB, (client) => client.query("select id from public.matieres where id = $1", [matiereA]));
+  assert.equal(crossSchoolMatiere.rows.length, 0, "a teacher must never read a subject belonging to a different school's course");
+
+  const ownMatiere = await asUser(teacherB, (client) => client.query("select id from public.matieres where id = $1", [matiereB]));
+  assert.equal(ownMatiere.rows.length, 1, "the same teacher must still read their own school's subject normally");
 });

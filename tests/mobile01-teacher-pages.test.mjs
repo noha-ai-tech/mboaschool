@@ -223,3 +223,29 @@ test("mon-espace still preserves hours/salary/documents/messages sections, untou
   assert.match(src, /Mes documents/);
   assert.match(src, /Messages de la direction/);
 });
+
+// MOBILE-01.2 — regression for a real bug found by browser E2E: the time
+// label in the "Ma journée" list (both on /enseignant and
+// /enseignant/emploi-du-temps) sits in a fixed w-12 (48px) box sized for a
+// 5-character "08:00" string. Postgres `time` columns serialize as
+// "08:00:00" (8 characters) over PostgREST, so the un-truncated value
+// visually overflowed its box and overlapped the subject name next to it —
+// confirmed by an actual screenshot at 390px, not just a DOM overflow
+// check (the page's overall scrollWidth/clientWidth stayed equal, since
+// this was text overlapping text, not a layout overflow). Fixed by
+// trimming to HH:MM at the display call site in both places.
+test("MOBILE-01.2: the schedule time label is trimmed to HH:MM before display, never the raw HH:MM:SS from Postgres — prevents it overlapping the subject name in its fixed-width box", async () => {
+  const scheduleViewSrc = await source("src/components/enseignant/ScheduleView.tsx");
+  assert.match(
+    scheduleViewSrc,
+    /w-12 shrink-0">\{e\.heureDebut\.slice\(0, 5\)\}/,
+    "ScheduleView must trim heureDebut to 5 characters (HH:MM) before rendering it in its fixed-width box"
+  );
+
+  const enseignantHomeSrc = await source("src/app/enseignant/page.tsx");
+  assert.match(
+    enseignantHomeSrc,
+    /w-12 shrink-0">\{c\.creneaux_horaires\?\.heure_debut\?\.slice\(0, 5\)\}/,
+    "/enseignant's 'Ma journée' list must trim heure_debut to 5 characters (HH:MM) before rendering it in its fixed-width box"
+  );
+});

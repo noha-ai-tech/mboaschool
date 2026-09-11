@@ -82,3 +82,26 @@ test("une lecture d'outbox devenue obsolète (l'utilisateur actif a changé pend
   const refreshFn = src.slice(src.indexOf("const refreshMutations ="), src.indexOf("}, []);"));
   assert.match(refreshFn, /if \(getActiveSyncIdentity\(\)\.userId !== forUserId\) return;/);
 });
+
+// MOBILE-01.2 — regression for a real bug found by browser E2E: the
+// `online` state's initial useState value used to read `navigator.onLine`
+// directly (`typeof navigator === "undefined" ? true : navigator.onLine`).
+// The server can only ever assume "online" (no navigator exists there), so
+// the moment a real browser's very first client render evaluated
+// navigator.onLine as false, that first render diverged from the
+// server-rendered HTML — a genuine React hydration error (#418), observed
+// live on /enseignant/cours/[id] with Playwright against a real Next.js
+// server. Locking the fix in place: the initial value must always be the
+// server-safe literal `true`, with the real browser value applied only
+// after mount, inside the effect.
+test("useSyncStatus never reads navigator.onLine for its initial render — only the server-safe default, applied for real only after mount", async () => {
+  const src = await source("src/lib/offline/useSyncStatus.ts");
+  assert.match(src, /const \[online, setOnline\] = useState\(true\);/, "the initial client render must match what the server assumed (online), never read navigator.onLine synchronously");
+  assert.doesNotMatch(
+    src.slice(src.indexOf("const [online, setOnline]"), src.indexOf("useEffect(() => {")),
+    /navigator\.onLine/,
+    "navigator.onLine must never be read before the first effect runs (post-hydration) — reading it in the initial render/state reintroduces the hydration mismatch"
+  );
+  const effectBlock = src.slice(src.indexOf("useEffect(() => {"), src.indexOf("const onOnline ="));
+  assert.match(effectBlock, /setOnline\(navigator\.onLine\)/, "the real value must be applied once mounted, inside the effect");
+});
