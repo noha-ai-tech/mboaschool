@@ -126,9 +126,16 @@ test.before(async () => {
     path.join(projectRoot, "supabase/migrations/20260910120000_mobile_01_student_roster_attendance.sql"),
     "utf8"
   );
+  // MOBILE-01.1 — évolution additive (colonne status + redéfinition de la
+  // RPC), appliquée après le fichier d'origine, jamais à sa place.
+  const lifecycleSql = await readFile(
+    path.join(projectRoot, "supabase/migrations/20260911090000_mobile_01_1_student_lifecycle.sql"),
+    "utf8"
+  );
   try {
     await pool.query(offlineFoundationSql);
     await pool.query(migrationSql);
+    await pool.query(lifecycleSql);
   } catch (e) {
     unavailableReason = `Failed to apply the real migration SQL against the stub schema: ${e.message}`;
     console.error(unavailableReason);
@@ -326,6 +333,25 @@ test("real Postgres — concurrent double-submit (retry race) creates exactly on
 
   const count = await pool.query("select count(*)::int as n from public.student_attendance where student_id = $1", [c.studentId]);
   assert.equal(count.rows[0].n, 1, "a genuine concurrent double-submit must never create two attendance rows");
+});
+
+// MOBILE-01.1 — an archived student must never be markable again, even by
+// their real assigned teacher, while their existing attendance history
+// (if any) must remain untouched.
+test("real Postgres — MOBILE-01.1: an archived student cannot be marked present/absent/late, even by the real assigned teacher", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const c = await seedClassroom();
+
+  const before = await callAs(c.teacherUserId, { mutationId: newMutationId(), establishmentId: c.establishmentId, emploiDuTempsId: c.emploiDuTempsId, studentId: c.studentId, status: "present" });
+  assert.equal(before.result_status, "applied");
+
+  await pool.query("update public.students set status = 'archived' where id = $1", [c.studentId]);
+
+  const afterArchive = await callAs(c.teacherUserId, { mutationId: newMutationId(), establishmentId: c.establishmentId, emploiDuTempsId: c.emploiDuTempsId, studentId: c.studentId, status: "absent" });
+  assert.equal(afterArchive.result_status, "rejected", "an archived student must never be markable again");
+
+  const historyRow = await pool.query("select status from public.student_attendance where id = $1", [before.result_entity_id]);
+  assert.equal(historyRow.rows[0].status, "present", "archiving a student must never alter or delete their existing attendance history");
 });
 
 // Attendance authorization is purely assignment-based (emplois_du_temps.
