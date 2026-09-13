@@ -583,8 +583,30 @@ create trigger applications_emit_accepted_event
 -- 7. DAILY DETERMINISTIC PROOF — agrégation correction-aware, sans IA
 --    (mission §37/§39). Pour l'attendance, ne compte jamais naïvement tous
 --    les événements : ne retient que le DERNIER événement student.* par
---    (subject_id) parmi ceux dont la source (student_attendance.session_id)
---    correspond à une séance du jour demandé, puis compte par type final.
+--    ATTENDANCE FACT — jamais par student seul (EVENT-01.1, fix du P1 trouvé
+--    par le gate de consolidation EVENT-01).
+--
+--    Identité canonique d'un "attendance fact" = source_id. Preuve :
+--    student_attendance a unique(session_id, student_id), et
+--    sync_apply_attendance_mark fait un upsert `on conflict (session_id,
+--    student_id) do update` — une correction du MÊME (student, session)
+--    réutilise donc le MÊME student_attendance.id, donc le MÊME source_id
+--    (emit_school_event reçoit toujours v_existing_attendance.id). Une
+--    session DIFFERENTE pour le même student produit forcément une AUTRE
+--    ligne student_attendance (contrainte unique sur session_id+student_id),
+--    donc un AUTRE source_id. source_id encode donc exactement et
+--    naturellement (student, session) sans avoir besoin d'un second champ :
+--      même session, statut corrigé  → même source_id → un seul fait retenu
+--      session différente, même jour → source_id différent → deux faits
+--    L'ancien `distinct on (subject_id)` confondait ces deux cas et pouvait
+--    supprimer silencieusement une présence légitime dès qu'un élève avait
+--    plus d'une lesson_session le même jour (le cas normal de tout emploi du
+--    temps réel). Compteurs = nombre d'attendance facts (session, student)
+--    dans leur état final, jamais un nombre d'élèves uniques par jour.
+--
+--    Tie-break déterministe (P3 du gate) : occurred_at reste l'autorité
+--    métier ; recorded_at puis id ne servent qu'à départager une égalité
+--    exacte d'occurred_at, jamais à décider seuls de l'état final.
 -- ============================================================================
 create or replace function public.get_daily_school_proof(p_establishment_id uuid, p_day date)
 returns table (
@@ -598,17 +620,20 @@ security invoker
 set search_path = public
 as $$
   with attendance_events as (
-    -- Un seul événement retenu par élève : le plus récent parmi ceux
-    -- rattachés à une séance du jour demandé (correction-aware, mission §39).
-    select distinct on (se.subject_id)
-      se.id, se.event_type, se.subject_id, se.occurred_at
+    -- Un seul événement retenu par ATTENDANCE FACT (source_id, cf. § 7
+    -- ci-dessus) : le plus récent parmi ceux rattachés à une séance du jour
+    -- demandé (correction-aware, mission §39). Deux lesson_sessions
+    -- distinctes du même élève le même jour ont deux source_id distincts et
+    -- restent donc deux faits séparés (EVENT-01.1).
+    select distinct on (se.source_id)
+      se.id, se.event_type, se.source_id, se.occurred_at
     from public.school_events se
     join public.student_attendance sa on sa.id = se.source_id and se.source_type = 'student_attendance'
     join public.lesson_sessions ls on ls.id = sa.session_id
     where se.establishment_id = p_establishment_id
       and se.event_type in ('student.present', 'student.absent', 'student.late')
       and ls.session_date = p_day
-    order by se.subject_id, se.occurred_at desc
+    order by se.source_id, se.occurred_at desc, se.recorded_at desc, se.id desc
   ),
   staff_in as (
     select id from public.school_events
