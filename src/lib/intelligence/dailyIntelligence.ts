@@ -1,42 +1,65 @@
 import type { createClient } from "@/lib/supabase/server";
 import { getDailySchoolProof, getSchoolEvents, type SchoolEventType } from "@/lib/events/schoolEvents";
 
-// DAILY-INTELLIGENCE-01 — deterministic "what happened in my school today"
-// contract, built strictly on the School Event Engine (EVENT-01 +
-// EVENT-01.1). No LLM, no prompt, no heuristic narrative: every field here
-// is a direct, traceable count or a bounded list of real events. This is
-// also the exact, contractual surface a future ScorgIA MUST be built on —
-// never arbitrary school_events/operational-table SQL, never service_role
-// (mission §41/§42). See docs/intelligence/daily-intelligence-v1.md.
+// DAILY-INTELLIGENCE-01 (+ DAILY-INTELLIGENCE-01.1 local-day fix) —
+// deterministic "what happened in my school today" contract, built
+// strictly on the School Event Engine (EVENT-01 + EVENT-01.1). No LLM, no
+// prompt, no heuristic narrative: every field here is a direct, traceable
+// count or a bounded list of real events. This is also the exact,
+// contractual surface a future ScorgIA MUST be built on — never arbitrary
+// school_events/operational-table SQL, never service_role (mission
+// §41/§42). See docs/intelligence/daily-intelligence-v1.md.
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
 
 // Écoles237 has no per-establishment timezone column today (audited,
 // confirmed absent from `establishments`). Cameroon (Africa/Douala) is a
 // fixed UTC+1 offset year-round, no DST — this is the single, explicit,
-// documented place that assumption is made, never silently inherited from
-// server/browser local time. A canonical per-establishment timezone column
-// is deferred (mission §16/§58) until the product needs one.
-const SCHOOL_DAY_UTC_OFFSET = "+01:00";
+// documented place that assumption is NAMED, though the actual conversion
+// arithmetic lives in exactly one place, the SQL function
+// `school_day_window(p_day)`
+// (20260916090000_daily_intelligence_01_activity.sql) — never duplicated
+// here or anywhere else (DAILY-INTELLIGENCE-01.1: the previous version of
+// this file computed its own "+01:00" window in TypeScript, which is
+// exactly the "scattered arithmetic" the mission's own local-day audit
+// flagged; every reducer, including this one, now asks Postgres for the
+// same canonical window instead). A canonical per-establishment timezone
+// column is deferred (mission §12/§58) until the product needs one — only
+// `school_day_window`'s body would need to change then.
 export const SCHOOL_DAY_TIMEZONE_ASSUMPTION =
   "Africa/Douala (UTC+1, fixe, sans heure d'été) — aucun fuseau horaire par établissement n'existe encore ; voir docs/intelligence/daily-intelligence-v1.md.";
 
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
+export class InvalidSchoolDateError extends Error {
+  constructor(date: string) {
+    super(`Invalid date "${date}", expected an existing calendar date in YYYY-MM-DD format`);
+    this.name = "InvalidSchoolDateError";
+  }
+}
+
+// A regex only checks shape ("2026-13-40" matches \d{4}-\d{2}-\d{2}" but
+// month 13 / day 40 do not exist). Round-tripping through Date.UTC and
+// checking the components survive unchanged rejects any impossible
+// calendar date (Feb 30, month 13, ...) while correctly accepting every
+// real one, leap years included — never a silent reinterpretation
+// (mission §13).
+export function isValidCalendarDate(value: string): boolean {
+  if (!DATE_PATTERN.test(value)) return false;
+  const [year, month, day] = value.split("-").map(Number);
+  const asUtc = new Date(Date.UTC(year, month - 1, day));
+  return asUtc.getUTCFullYear() === year && asUtc.getUTCMonth() === month - 1 && asUtc.getUTCDate() === day;
+}
+
 // "Today" resolved in the school's assumed timezone, never the server's or
 // browser's local time — deterministic regardless of where this runs.
+// Cameroon has no DST, so a fixed +1h shift correctly identifies which
+// calendar date it is in Africa/Douala right now; this is only ever used
+// to pick the `p_day` string handed to school_day_window, never to
+// compute the window itself.
 export function resolveTodayInSchoolTimezone(): string {
   const shifted = new Date(Date.now() + 60 * 60 * 1000);
   return shifted.toISOString().slice(0, 10);
-}
-
-function resolveDayWindow(date: string): { from: string; to: string } {
-  const from = new Date(`${date}T00:00:00.000${SCHOOL_DAY_UTC_OFFSET}`);
-  if (Number.isNaN(from.getTime())) {
-    throw new Error(`getSchoolDailyIntelligence: invalid date "${date}", expected YYYY-MM-DD`);
-  }
-  const to = new Date(from.getTime() + 24 * 60 * 60 * 1000);
-  return { from: from.toISOString(), to: to.toISOString() };
 }
 
 export type DailyMetric = { count: number; eventIds: string[] };
@@ -84,7 +107,10 @@ export type SchoolDailyIntelligence = {
     // Derived, NOT a raw event count (mission §22/§23): the number of staff
     // whose check-in count exceeds their check-out count in the window —
     // i.e., an unclosed shift as of the most recent punch. Never presented
-    // as "N staff present" without this distinction.
+    // as "N staff present" without this distinction; the UI label must say
+    // "shift(s) still open," never "personnel actuellement sur place" —
+    // this cannot prove physical on-site presence, only an unmatched punch
+    // pair (mission §23, DAILY-INTELLIGENCE-01.1).
     currentlyCheckedInCount: number;
   };
   admissions: {
@@ -132,6 +158,8 @@ type OpenShiftRow = {
   last_checked_in_at: string;
 };
 
+type SchoolDayWindowRow = { window_from: string; window_to: string };
+
 // Canonical, tenant-safe, correction-aware, multi-session-correct,
 // traceable daily projection over school_events. Authorization is the
 // caller's responsibility (see src/lib/school/establishmentAccess.ts,
@@ -146,20 +174,26 @@ export async function getSchoolDailyIntelligence(input: {
   activityLimit?: number;
 }): Promise<SchoolDailyIntelligence> {
   const date = input.date ?? resolveTodayInSchoolTimezone();
-  if (!DATE_PATTERN.test(date)) {
-    throw new Error(`getSchoolDailyIntelligence: invalid date "${date}", expected YYYY-MM-DD`);
+  if (!isValidCalendarDate(date)) {
+    throw new InvalidSchoolDateError(date);
   }
   const activityLimit = input.activityLimit ?? 20;
-  const { from, to } = resolveDayWindow(date);
+
+  // Ask Postgres for the one canonical window — never recomputed here.
+  const windowResult = await input.supabase.rpc("school_day_window", { p_day: date });
+  if (windowResult.error) throw new Error(`getSchoolDailyIntelligence: ${windowResult.error.message}`);
+  const windowRow = ((windowResult.data ?? []) as SchoolDayWindowRow[])[0];
+  if (!windowRow) throw new Error(`getSchoolDailyIntelligence: school_day_window returned no row for "${date}"`);
+  const { window_from: from, window_to: to } = windowRow;
 
   const [proof, admissionAcceptedEvents, activityResult, openShiftResult] = await Promise.all([
     getDailySchoolProof({ supabase: input.supabase, establishmentId: input.establishmentId, day: date }),
-    // get_daily_school_proof (EVENT-01, never modified here) does not
-    // compute an admission.accepted count — this reuses the existing,
-    // already-tested getSchoolEvents repository directly against
-    // school_events (still event-first, never the applications table)
-    // rather than adding a third SQL function for a single low-volume
-    // metric.
+    // get_daily_school_proof does not compute an admission.accepted count
+    // — this reuses the existing, already-tested getSchoolEvents
+    // repository directly against school_events (still event-first, never
+    // the applications table) rather than adding a fourth SQL function
+    // for a single low-volume metric. It uses the exact same canonical
+    // window fetched above, never a second computation of it.
     getSchoolEvents({
       supabase: input.supabase,
       establishmentId: input.establishmentId,
@@ -171,14 +205,11 @@ export async function getSchoolDailyIntelligence(input: {
     input.supabase.rpc("get_school_daily_activity", {
       p_establishment_id: input.establishmentId,
       p_day: date,
-      p_from: from,
-      p_to: to,
       p_limit: activityLimit + 1, // one extra row, purely to detect truncation deterministically
     }),
     input.supabase.rpc("get_school_staff_open_shifts", {
       p_establishment_id: input.establishmentId,
-      p_from: from,
-      p_to: to,
+      p_day: date,
     }),
   ]);
 

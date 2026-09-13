@@ -275,7 +275,7 @@ export default function DashboardEcoleHome() {
             <div className="space-y-5">
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <TodayStat label="Présences" value={dailyIntel.attendance.presentFacts.count} detail={`${dailyIntel.attendance.absentFacts.count} absence(s) · ${dailyIntel.attendance.lateFacts.count} retard(s)`} />
-                <TodayStat label="Personnel pointé" value={dailyIntel.staff.checkedIn.count} detail={dailyIntel.staff.currentlyCheckedInCount > 0 ? `${dailyIntel.staff.currentlyCheckedInCount} présence(s) en cours` : "Aucune présence en cours"} />
+                <TodayStat label="Personnel pointé" value={dailyIntel.staff.checkedIn.count} detail={dailyIntel.staff.currentlyCheckedInCount > 0 ? `${dailyIntel.staff.currentlyCheckedInCount} arrivée(s) sans départ enregistré` : "Toutes les arrivées ont un départ enregistré"} />
                 <TodayStat label="Admissions" value={dailyIntel.admissions.applicationsReceived.count} detail={`${dailyIntel.admissions.admissionsAccepted.count} acceptée(s) aujourd’hui`} />
                 <TodayStat label="Feuilles de temps" value={dailyIntel.timesheets.approvals.count} detail="Approbations du jour" />
               </div>

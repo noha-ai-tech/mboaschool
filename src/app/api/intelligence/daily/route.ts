@@ -12,9 +12,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { authorizeEstablishmentRoute } from "@/lib/school/establishmentRoute";
-import { getSchoolDailyIntelligence } from "@/lib/intelligence/dailyIntelligence";
-
-const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+import { getSchoolDailyIntelligence, isValidCalendarDate, InvalidSchoolDateError } from "@/lib/intelligence/dailyIntelligence";
 
 export async function GET(req: NextRequest) {
   const supabase = await createClient();
@@ -28,9 +26,12 @@ export async function GET(req: NextRequest) {
   if (!access.ok) return access.response;
 
   const dateParam = searchParams.get("date");
-  if (dateParam !== null && !DATE_PATTERN.test(dateParam)) {
+  // Rejects malformed shapes ("15-09-2026", "garbage") AND impossible but
+  // correctly-shaped calendar dates ("2026-13-40", "2026-02-30") — never
+  // silently reinterpreted (mission §13, DAILY-INTELLIGENCE-01.1).
+  if (dateParam !== null && !isValidCalendarDate(dateParam)) {
     return NextResponse.json(
-      { error: "date doit être au format YYYY-MM-DD", code: "INVALID_DATE" },
+      { error: "date doit être une date calendaire réelle au format YYYY-MM-DD", code: "INVALID_DATE" },
       { status: 400 }
     );
   }
@@ -43,6 +44,9 @@ export async function GET(req: NextRequest) {
     });
     return NextResponse.json(intelligence);
   } catch (error) {
+    if (error instanceof InvalidSchoolDateError) {
+      return NextResponse.json({ error: error.message, code: "INVALID_DATE" }, { status: 400 });
+    }
     // A repository failure must never look like a valid, empty result —
     // that would hide a real error behind the same shape as a legitimate
     // quiet day (mission §55/§56).
