@@ -87,6 +87,15 @@ unambiguous thing that pair can express without inventing shift/break
 semantics. It is the source of the single V1 alert type,
 `staff_checked_in_without_checkout`.
 
+**(DAILY-INTELLIGENCE-01.1)** The UI must never word this as "personnel
+actuellement sur place" or any other phrasing implying provable physical
+on-site presence — the reducer can only prove an unmatched punch pair,
+never actual attendance (a phone left checked in, a missed checkout, a
+device issue are all indistinguishable from genuine presence at this
+layer). The dashboard's wording is "arrivée(s) sans départ enregistré"
+("arrival(s) with no departure recorded") — a precise statement of what
+was actually observed, not an inference about where anyone physically is.
+
 ## Admission semantics
 
 `applicationsReceived` counts `application.received` events (applications
@@ -162,42 +171,48 @@ matching EVENT-01's own design.
 Écoles237 has no per-establishment timezone column (audited, confirmed
 absent from `establishments`). Cameroon (Africa/Douala) is a fixed UTC+1
 offset year-round, with no DST. This is the **single, explicit, documented**
-place that assumption is made
-(`SCHOOL_DAY_TIMEZONE_ASSUMPTION` in `dailyIntelligence.ts`) — never
-silently inherited from server or browser local time. A canonical
+assumption (`SCHOOL_DAY_TIMEZONE_ASSUMPTION` in `dailyIntelligence.ts`) —
+never silently inherited from server or browser local time. A canonical
 per-establishment timezone column is deferred until the product expands
 beyond a single timezone and genuinely needs one.
 
-Two different day-boundary mechanisms coexist by necessity, and this is
-worth being precise about:
+**(DAILY-INTELLIGENCE-01.1)** The actual conversion arithmetic lives in
+exactly **one** place: the SQL function `school_day_window(p_day)`
+(`20260916090000_daily_intelligence_01_activity.sql`), using Postgres's
+own tzdata (`p_day::timestamp at time zone 'Africa/Douala'`) rather than
+hand-rolled "+01:00" offset arithmetic. Every event-timestamp-based
+reducer — `get_school_daily_activity`, `get_school_staff_open_shifts`,
+and `get_daily_school_proof` (fixed via a new migration,
+`20260917090000_daily_intelligence_01_1_local_day_boundary.sql`, since it
+was already merged into integration and could not be edited in place) —
+calls this same helper. The original V1 implementation had
+`get_daily_school_proof` still classify staff/application/timesheet
+events with `occurred_at::date = p_day` (an implicit UTC-session cast),
+which could disagree with the Africa/Douala window the rest of Daily
+Intelligence used for the same requested date — found and classified P1
+by this mission's own audit, fixed by routing everything through
+`school_day_window`. Regression-tested at the exact boundary
+(22:59:59Z/23:00:00Z either side of a day change) for every affected
+category.
 
-- **Attendance** uses `lesson_sessions.session_date` — a plain date
-  supplied directly by the marking device at the moment of the mark. This
-  is already inherently local to whoever is marking attendance; no
-  server-side timezone math is needed or would even be correct here. Both
-  `get_daily_school_proof` (EVENT-01) and the new
-  `get_school_daily_activity` compare against this same field.
-- **Staff/applications/admissions/timesheets** are bounded by an explicit
-  `[from, to)` timestamptz window, computed from the requested date using
-  the Africa/Douala assumption above. `get_daily_school_proof`'s own
-  aggregate counts for these same categories, however, use
-  `occurred_at::date = p_day` internally — an implicit cast in whatever
-  timezone the Postgres session defaults to (UTC on Supabase). This is
-  **inherited unchanged from EVENT-01/EVENT-01.1, not modified here**
-  (touching that already-shipped, already-tested function was out of
-  scope for this mission). The practical consequence: for an event that
-  occurs in the narrow ~1-hour window between 23:00 and 00:00 UTC (i.e.
-  00:00–01:00 Africa/Douala), the aggregate count from
-  `get_daily_school_proof` and the precise, Africa/Douala-aware activity
-  timeline could attribute that event to different calendar days. This is
-  a known, narrow, explicitly-documented limitation — not silently
-  patched, not expanded into a fix for already-merged code.
+**Attendance** is deliberately the one path that does **not** go through
+`school_day_window`: a `student_attendance` fact's day is
+`lesson_sessions.session_date` — a plain date supplied directly by the
+marking device at the moment of the mark. This is already inherently
+local to whoever is marking attendance; converting it through a
+timezone-aware window would be both unnecessary and wrong. Both paths
+refer to the same logical school day; they are simply resolved
+differently because they start from different kinds of source data (an
+already-local date vs. a UTC instant needing conversion).
 
 `getSchoolDailyIntelligence` accepts an explicit `date` and defaults to
 "today" resolved in the same Africa/Douala assumption
 (`resolveTodayInSchoolTimezone()`), never the server's or a browser's local
 `Date`. Historical dates work identically — there is nothing today-specific
-hardcoded in the query path.
+hardcoded in the query path. `isValidCalendarDate()` rejects both
+malformed shapes and impossible-but-correctly-shaped dates (`2026-13-40`,
+`2026-02-30`) with an explicit `400`, never a silent reinterpretation or
+a 500 from a downstream date-parsing failure.
 
 ## Privacy
 
