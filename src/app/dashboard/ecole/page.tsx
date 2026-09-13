@@ -13,6 +13,7 @@ import { SchoolAdminBadge, SchoolAdminStatusBadge } from "@/components/school-ad
 import { SchoolAdminSectionCard } from "@/components/school-admin/ui/Card";
 import { SchoolAdminStatCard } from "@/components/school-admin/ui/StatCard";
 import { SchoolAdminLoadingState, SchoolAdminSkeleton } from "@/components/school-admin/ui/Feedback";
+import type { SchoolDailyIntelligence } from "@/lib/intelligence/dailyIntelligence";
 import {
   ClipboardList,
   GraduationCap,
@@ -28,6 +29,7 @@ import {
   Clock3,
   CalendarDays,
   AlertCircle,
+  Activity,
 } from "lucide-react";
 
 const ANNEE_SCOLAIRE_COURANTE = "2026-2027";
@@ -53,10 +55,11 @@ export default function DashboardEcoleHome() {
   } | null>(null);
   const [pro, setPro] = useState<{
     teacherCount: number;
-    clockedInToday: number;
     scheduledClasses: number;
     paieCounts: Record<string, number>;
   } | null>(null);
+  const [dailyIntel, setDailyIntel] = useState<SchoolDailyIntelligence | null>(null);
+  const [dailyIntelError, setDailyIntelError] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -103,16 +106,8 @@ export default function DashboardEcoleHome() {
     // Widgets Écoles237 Pro — uniquement si le forfait est réellement actif,
     // lecture seule sur les mêmes tables que le module Pro existant.
     if (isPro) {
-      const startOfDay = new Date();
-      startOfDay.setHours(0, 0, 0, 0);
-
-      const [{ data: teachers }, { count: clockedCount }, { count: scheduleCount }, { data: bulletins }] = await Promise.all([
+      const [{ data: teachers }, { count: scheduleCount }, { data: bulletins }] = await Promise.all([
         supabase.from("enseignants").select("id").eq("etablissement_id", schoolId),
-        supabase
-          .from("pointages")
-          .select("enseignant_id", { count: "exact", head: true })
-          .eq("etablissement_id", schoolId)
-          .gte("horodatage", startOfDay.toISOString()),
         supabase
           .from("emplois_du_temps")
           .select("classe_id", { count: "exact", head: true })
@@ -126,10 +121,27 @@ export default function DashboardEcoleHome() {
 
       setPro({
         teacherCount: teachers?.length ?? 0,
-        clockedInToday: clockedCount ?? 0,
         scheduledClasses: scheduleCount ?? 0,
         paieCounts,
       });
+
+      // DAILY-INTELLIGENCE-01 — seule source pour "aujourd'hui" : ne
+      // recalcule jamais un compteur pointages/attendance en parallèle
+      // (cela produirait une deuxième vérité, potentiellement
+      // contradictoire, pour la même journée — mission §2/§6).
+      try {
+        const res = await fetch(`/api/intelligence/daily?establishmentId=${schoolId}`);
+        if (res.ok) {
+          setDailyIntel(await res.json());
+          setDailyIntelError(false);
+        } else {
+          setDailyIntel(null);
+          setDailyIntelError(true);
+        }
+      } catch {
+        setDailyIntel(null);
+        setDailyIntelError(true);
+      }
     }
 
     setLoading(false);
@@ -245,6 +257,63 @@ export default function DashboardEcoleHome() {
         )}
       </SchoolAdminSectionCard>
 
+      {/* Aujourd'hui — DAILY-INTELLIGENCE-01, seule source pour "que s'est-il
+          passé aujourd'hui", jamais un second calcul indépendant. */}
+      {isPro && (
+        <SchoolAdminSectionCard
+          title="Aujourd’hui"
+          description="Ce qui s’est réellement passé dans votre établissement aujourd’hui."
+          className="mb-6"
+        >
+          {loading ? (
+            <SchoolAdminSkeleton className="h-10" label="Chargement de l’activité du jour" />
+          ) : dailyIntelError ? (
+            <p className="text-sm text-text-secondary">Activité du jour indisponible pour le moment.</p>
+          ) : !dailyIntel ? (
+            <p className="text-sm text-text-secondary">Aucune activité enregistrée aujourd’hui.</p>
+          ) : (
+            <div className="space-y-5">
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <TodayStat label="Présences" value={dailyIntel.attendance.presentFacts.count} detail={`${dailyIntel.attendance.absentFacts.count} absence(s) · ${dailyIntel.attendance.lateFacts.count} retard(s)`} />
+                <TodayStat label="Personnel pointé" value={dailyIntel.staff.checkedIn.count} detail={dailyIntel.staff.currentlyCheckedInCount > 0 ? `${dailyIntel.staff.currentlyCheckedInCount} arrivée(s) sans départ enregistré` : "Toutes les arrivées ont un départ enregistré"} />
+                <TodayStat label="Admissions" value={dailyIntel.admissions.applicationsReceived.count} detail={`${dailyIntel.admissions.admissionsAccepted.count} acceptée(s) aujourd’hui`} />
+                <TodayStat label="Feuilles de temps" value={dailyIntel.timesheets.approvals.count} detail="Approbations du jour" />
+              </div>
+
+              {dailyIntel.alerts.length > 0 && (
+                <div className="rounded-lg bg-[var(--school-admin-warning-soft)] px-3 py-2.5 text-sm text-[var(--school-admin-warning-text)]">
+                  {dailyIntel.alerts.length} membre(s) du personnel ont pointé une arrivée sans départ enregistré aujourd’hui.
+                </div>
+              )}
+
+              <div>
+                <p className="text-[10px] font-semibold tracking-widest uppercase text-text-secondary mb-2">Activité récente</p>
+                {dailyIntel.activity.length === 0 ? (
+                  <p className="text-sm text-text-secondary">Aucune activité notable enregistrée aujourd’hui.</p>
+                ) : (
+                  <div className="space-y-1">
+                    {dailyIntel.activity.map((item) => (
+                      <div key={item.id} className="flex items-center justify-between gap-3 px-2 py-2 rounded-lg text-sm">
+                        <span className="flex items-center gap-2.5 min-w-0">
+                          <Activity size={13} className="text-text-secondary shrink-0" />
+                          <span className="truncate text-text-primary">{item.label}{item.wasCorrected ? " (corrigée)" : ""}</span>
+                        </span>
+                        <span className="text-xs text-text-secondary shrink-0 tabular-nums">
+                          {new Date(item.occurredAt).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
+                        </span>
+                      </div>
+                    ))}
+                    {dailyIntel.meta.activityTruncated && (
+                      <p className="text-xs text-text-secondary px-2 pt-1">D’autres événements ont eu lieu aujourd’hui.</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </SchoolAdminSectionCard>
+      )}
+
       <div className="grid lg:grid-cols-2 gap-5 mb-6">
         {/* Admissions */}
         <SchoolAdminSectionCard
@@ -298,7 +367,7 @@ export default function DashboardEcoleHome() {
             </div>
             <div className="p-5 flex items-center gap-6">
               <div>
-                <p className="text-2xl font-extrabold text-text-primary">{loading || !pro ? "—" : pro.clockedInToday}</p>
+                <p className="text-2xl font-extrabold text-text-primary">{loading || !dailyIntel ? "—" : dailyIntel.staff.checkedIn.count}</p>
                 <p className="text-xs text-text-secondary mt-0.5">Pointés aujourd&apos;hui</p>
               </div>
               <div className="h-8 w-px bg-border" />
@@ -428,6 +497,16 @@ export default function DashboardEcoleHome() {
 
 function KpiCard({ icon: Icon, value, label }: { icon: React.ElementType; value: React.ReactNode; label: string }) {
   return <SchoolAdminStatCard icon={<Icon size={19} />} value={value} label={label} />;
+}
+
+function TodayStat({ label, value, detail }: { label: string; value: number; detail: string }) {
+  return (
+    <div className="rounded-lg border border-border p-4">
+      <p className="text-2xl font-extrabold tabular-nums text-text-primary">{value}</p>
+      <p className="text-xs font-medium text-text-secondary mt-0.5">{label}</p>
+      <p className="text-xs text-text-secondary/80 mt-1.5">{detail}</p>
+    </div>
+  );
 }
 
 function admissionTone(status: string): "success" | "warning" | "danger" | "info" | "neutral" {

@@ -66,10 +66,20 @@ test.before(async () => {
     create function auth.uid() returns uuid language sql stable as $$
       select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid
     $$;
+    -- DAILY-INTELLIGENCE-01.1 consolidation gate: "if not exists, create"
+    -- has a check-then-act race when multiple *-security-postgres test
+    -- files run concurrently (node --test's default) against the SAME
+    -- shared Postgres instance and all try to create these same global
+    -- role names — two files can both see "not exists" before either
+    -- commits its create, and the loser hits a real unique-violation. This
+    -- became reachable the moment a second file adopted this exact
+    -- bootstrap (daily-intelligence-01-security-postgres.test.mjs) instead
+    -- of only ever running alone. Catching duplicate_object makes the
+    -- creation atomic and race-free, unlike the exists-check.
     do $$ begin
-      if not exists (select 1 from pg_roles where rolname='anon') then create role anon; end if;
-      if not exists (select 1 from pg_roles where rolname='authenticated') then create role authenticated; end if;
-      if not exists (select 1 from pg_roles where rolname='service_role') then create role service_role; end if;
+      begin create role anon; exception when duplicate_object then null; end;
+      begin create role authenticated; exception when duplicate_object then null; end;
+      begin create role service_role; exception when duplicate_object then null; end;
     end $$;
 
     create type admission_status as enum ('submitted','in_review','documents_required','interview','waitlisted','accepted','rejected','cancelled');
@@ -141,9 +151,18 @@ test.before(async () => {
   `);
 
   const migrationSql = await readFile(path.join(projectRoot, "supabase/migrations/20260915090000_event_01_school_event_engine.sql"), "utf8");
+  // DAILY-INTELLIGENCE-01.1 replaced get_daily_school_proof's day-boundary
+  // computation in a later migration (already-shipped functions cannot be
+  // edited in place) — applying it here too means these 30 tests validate
+  // the real, cumulative, final schema state, not a stale mid-point
+  // snapshot of a function that no longer exists in the current baseline.
+  const dailyIntelSql = await readFile(path.join(projectRoot, "supabase/migrations/20260916090000_daily_intelligence_01_activity.sql"), "utf8");
+  const localDayFixSql = await readFile(path.join(projectRoot, "supabase/migrations/20260917090000_daily_intelligence_01_1_local_day_boundary.sql"), "utf8");
 
   try {
     await adminPool.query(migrationSql);
+    await adminPool.query(dailyIntelSql);
+    await adminPool.query(localDayFixSql);
 
     await adminPool.query(`
       do $$

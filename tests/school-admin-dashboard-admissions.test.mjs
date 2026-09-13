@@ -32,12 +32,18 @@ test("les lectures métier du dashboard restent présentes", async () => {
     "school_images",
     "school_announcements",
     "enseignants",
-    "pointages",
     "emplois_du_temps",
     "bulletins_paie",
   ]) {
     assert.match(dashboard, new RegExp(`from\\("${table}"\\)`));
   }
+  // DAILY-INTELLIGENCE-01 — "Pointés aujourd'hui" ne recalcule plus un
+  // compteur pointages ad hoc (JS local midnight) en parallèle du School
+  // Event Engine ; il lit désormais l'unique source canonique pour
+  // "aujourd'hui", ce qui élimine un risque de double vérité contradictoire
+  // relevé lors de l'audit de ce sprint.
+  assert.doesNotMatch(dashboard, /from\("pointages"\)/);
+  assert.match(dashboard, /\/api\/intelligence\/daily/);
 });
 
 test("admissions conserve recherche, filtres, transitions et communications", async () => {
