@@ -214,9 +214,12 @@ async function markAttendance(userId, establishmentId, edtId, studentId, session
   return r.rows[0];
 }
 
-async function seedSchool() {
-  const owner = newId();
-  await adminPool.query("insert into auth.users (id) values ($1)", [owner]);
+async function seedSchool(existingOwnerId = null) {
+  // DAILY-INTELLIGENCE-02 — an optional existing owner id lets a test build
+  // a real multi-school-owner fixture (one owner, several establishments)
+  // without duplicating this whole setup.
+  const owner = existingOwnerId ?? newId();
+  if (!existingOwnerId) await adminPool.query("insert into auth.users (id) values ($1)", [owner]);
   const establishmentId = (await adminPool.query("insert into public.establishments (owner_id, forfait) values ($1,'pro') returning id", [owner])).rows[0].id;
   const teacherUserId = newId();
   await adminPool.query("insert into auth.users (id) values ($1)", [teacherUserId]);
@@ -675,4 +678,96 @@ test("real Postgres — school_day_window rejects an impossible calendar date", 
     () => adminPool.query("select * from public.school_day_window($1)", ["2026-13-40"]),
     /date\/time field value out of range|invalid input syntax/i
   );
+});
+
+// ============================================================================
+// DAILY-INTELLIGENCE-02 — SOURCE BLENDING (mission §6): all six event
+// categories in the same establishment/day must coexist without any
+// category overwriting another, deterministic ordering, corrections kept
+// as final state, no unjustified duplicates, no metric recomputed from an
+// operational table.
+// ============================================================================
+test("real Postgres — source blending: attendance (with a correction), staff in/out, application.received, admission.accepted, and timesheet.approved all coexist correctly the same day", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  const day = new Date().toISOString().slice(0, 10); // real "today" — applications/timesheets/staff key off occurred_at
+
+  // Attendance: one routine present, one corrected absent->present
+  const student2 = (await adminPool.query("insert into public.students (establishment_id, classe_id, first_name, last_name) values ($1,$2,'Marie','Ngo') returning id", [a.establishmentId, a.classeId])).rows[0].id;
+  await markAttendance(a.teacherUserId, a.establishmentId, a.emploiDuTempsId, a.studentId, day, "present");
+  await markAttendance(a.teacherUserId, a.establishmentId, a.emploiDuTempsId, student2, day, "absent");
+  await markAttendance(a.teacherUserId, a.establishmentId, a.emploiDuTempsId, student2, day, "present");
+
+  // Staff: check-in only (open shift)
+  await punch(a.teacherUserId, a.establishmentId, "arrivee");
+
+  // Admissions
+  await adminPool.query("insert into public.applications (establishment_id, student_name) values ($1,'Blend App')", [a.establishmentId]);
+  const app = (await adminPool.query("insert into public.applications (establishment_id, student_name) values ($1,'Blend Accepted') returning id", [a.establishmentId])).rows[0].id;
+  await asUser(a.owner, (c) => c.query("update public.applications set admission_status='accepted' where id=$1", [app]));
+
+  // Timesheet
+  await asUser(a.owner, (c) =>
+    c.query("insert into public.timesheet_approvals (establishment_id, enseignant_id, period_start, period_end, approved_minutes, approved_by) values ($1,$2,current_date-6,current_date,480,$3)", [a.establishmentId, a.enseignantId, a.owner])
+  );
+
+  const proof = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1,$2)", [a.establishmentId, day]));
+  const proofMap = Object.fromEntries(proof.rows.map((r) => [r.metric, Number(r.count_value)]));
+  assert.equal(proofMap.students_present, 2, "one routine present + one corrected-to-present, never the superseded absent");
+  assert.equal(proofMap.students_absent, 0, "the correction must not leave the superseded state counted alongside the final one");
+  assert.equal(proofMap.staff_checked_in, 1);
+  assert.equal(proofMap.applications_received, 2);
+  assert.equal(proofMap.timesheets_approved, 1);
+
+  const rows = await activity(a.owner, a.establishmentId, day, 50);
+  const types = rows.map((r) => r.event_type).sort();
+  assert.deepEqual(types, ["admission.accepted", "application.received", "application.received", "staff.checked_in", "student.present", "timesheet.approved"], "every category is present, no category overwritten by another, exactly one corrected-attendance item (final state), no duplicate injustified rows");
+  assert.equal(new Set(rows.map((r) => r.id)).size, rows.length, "no duplicate event ids across categories");
+  // deterministic ordering: strictly non-increasing occurred_at
+  for (let i = 1; i < rows.length; i++) {
+    assert.ok(new Date(rows[i - 1].occurred_at).getTime() >= new Date(rows[i].occurred_at).getTime(), "activity must be strictly ordered by occurred_at desc");
+  }
+
+  const openShiftRows = await openShifts(a.owner, a.establishmentId, day);
+  assert.equal(openShiftRows.length, 1);
+});
+
+// ============================================================================
+// DAILY-INTELLIGENCE-02 — MULTI-SCHOOL (mission §7): one owner with TWO
+// establishments must get results correctly scoped to whichever
+// establishmentId is actually requested — same owner_id must never leak
+// data across their own two schools.
+// ============================================================================
+test("real Postgres — one owner with two establishments never mixes A1 and A2 data", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a1 = await seedSchool();
+  const a2 = await seedSchool(a1.owner); // same owner, second establishment
+  assert.notEqual(a1.establishmentId, a2.establishmentId);
+
+  await punch(a1.teacherUserId, a1.establishmentId, "arrivee");
+  await punch(a1.teacherUserId, a1.establishmentId, "depart");
+  await punch(a2.teacherUserId, a2.establishmentId, "arrivee");
+
+  const today = new Date().toISOString().slice(0, 10);
+  const proofA1 = await asUser(a1.owner, (c) => c.query("select * from public.get_daily_school_proof($1,$2)", [a1.establishmentId, today]));
+  const proofA2 = await asUser(a1.owner, (c) => c.query("select * from public.get_daily_school_proof($1,$2)", [a2.establishmentId, today]));
+  const mapA1 = Object.fromEntries(proofA1.rows.map((r) => [r.metric, Number(r.count_value)]));
+  const mapA2 = Object.fromEntries(proofA2.rows.map((r) => [r.metric, Number(r.count_value)]));
+
+  assert.equal(mapA1.staff_checked_in, 1);
+  assert.equal(mapA1.staff_checked_out, 1);
+  assert.equal(mapA2.staff_checked_in, 1);
+  assert.equal(mapA2.staff_checked_out, 0, "A2 must never see A1's checkout");
+
+  const shiftsA1 = await openShifts(a1.owner, a1.establishmentId, today);
+  const shiftsA2 = await openShifts(a1.owner, a2.establishmentId, today);
+  assert.equal(shiftsA1.length, 0, "A1's teacher completed their cycle");
+  assert.equal(shiftsA2.length, 1, "A2's teacher has an open shift — must not be conflated with A1's closed one");
+
+  const activityA1 = await activity(a1.owner, a1.establishmentId, today, 50);
+  const activityA2 = await activity(a1.owner, a2.establishmentId, today, 50);
+  assert.equal(activityA1.length, 2);
+  assert.equal(activityA2.length, 1);
+  assert.ok(!activityA1.some((r) => r.subject_id === a2.enseignantId), "A1's activity must never include A2's teacher");
+  assert.ok(!activityA2.some((r) => r.subject_id === a1.enseignantId), "A2's activity must never include A1's teacher");
 });
