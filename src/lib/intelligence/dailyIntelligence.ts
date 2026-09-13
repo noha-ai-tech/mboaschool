@@ -1,5 +1,26 @@
 import type { createClient } from "@/lib/supabase/server";
 import { getDailySchoolProof, getSchoolEvents, type SchoolEventType } from "@/lib/events/schoolEvents";
+import {
+  buildDirectionBrief,
+  type DailyMetric,
+  type SchoolDailyAlert,
+  type SchoolDailyAlertType,
+  type SchoolDirectionBrief,
+  type SchoolDirectionBriefItem,
+  type SchoolDirectionBriefKind,
+  type SchoolDirectionBriefSource,
+} from "./directionBrief";
+
+export {
+  buildDirectionBrief,
+  type DailyMetric,
+  type SchoolDailyAlert,
+  type SchoolDailyAlertType,
+  type SchoolDirectionBrief,
+  type SchoolDirectionBriefItem,
+  type SchoolDirectionBriefKind,
+  type SchoolDirectionBriefSource,
+};
 
 // DAILY-INTELLIGENCE-01 (+ DAILY-INTELLIGENCE-01.1 local-day fix) —
 // deterministic "what happened in my school today" contract, built
@@ -62,8 +83,6 @@ export function resolveTodayInSchoolTimezone(): string {
   return shifted.toISOString().slice(0, 10);
 }
 
-export type DailyMetric = { count: number; eventIds: string[] };
-
 const EMPTY_METRIC: DailyMetric = { count: 0, eventIds: [] };
 
 export type SchoolDailyActivityItem = {
@@ -82,14 +101,6 @@ export type SchoolDailyActivityItem = {
   // they are counted in `attendance`, not itemized in the timeline
   // (mission §10/§11 — never dump hundreds of individual marks).
   wasCorrected: boolean;
-};
-
-export type SchoolDailyAlertType = "staff_checked_in_without_checkout";
-
-export type SchoolDailyAlert = {
-  type: SchoolDailyAlertType;
-  subjectId: string;
-  eventId: string;
 };
 
 export type SchoolDailyIntelligence = {
@@ -127,6 +138,7 @@ export type SchoolDailyIntelligence = {
     activityLimit: number;
     activityTruncated: boolean;
   };
+  directionBrief: SchoolDirectionBrief;
 };
 
 const EVENT_TYPE_LABELS: Record<SchoolEventType, string> = {
@@ -237,32 +249,38 @@ export async function getSchoolDailyIntelligence(input: {
     eventId: row.last_checked_in_event_id,
   }));
 
+  const attendance = {
+    presentFacts: proof.students_present ?? EMPTY_METRIC,
+    absentFacts: proof.students_absent ?? EMPTY_METRIC,
+    lateFacts: proof.students_late ?? EMPTY_METRIC,
+  };
+  const staff = {
+    checkedIn: proof.staff_checked_in ?? EMPTY_METRIC,
+    checkedOut: proof.staff_checked_out ?? EMPTY_METRIC,
+    currentlyCheckedInCount: openShifts.length,
+  };
+  const admissions = {
+    applicationsReceived: proof.applications_received ?? EMPTY_METRIC,
+    admissionsAccepted: {
+      count: admissionAcceptedEvents.length,
+      eventIds: admissionAcceptedEvents.map((e) => e.id),
+    },
+  };
+  const timesheets = {
+    approvals: proof.timesheets_approved ?? EMPTY_METRIC,
+  };
+
   return {
     establishmentId: input.establishmentId,
     date,
     generatedAt: new Date().toISOString(),
-    attendance: {
-      presentFacts: proof.students_present ?? EMPTY_METRIC,
-      absentFacts: proof.students_absent ?? EMPTY_METRIC,
-      lateFacts: proof.students_late ?? EMPTY_METRIC,
-    },
-    staff: {
-      checkedIn: proof.staff_checked_in ?? EMPTY_METRIC,
-      checkedOut: proof.staff_checked_out ?? EMPTY_METRIC,
-      currentlyCheckedInCount: openShifts.length,
-    },
-    admissions: {
-      applicationsReceived: proof.applications_received ?? EMPTY_METRIC,
-      admissionsAccepted: {
-        count: admissionAcceptedEvents.length,
-        eventIds: admissionAcceptedEvents.map((e) => e.id),
-      },
-    },
-    timesheets: {
-      approvals: proof.timesheets_approved ?? EMPTY_METRIC,
-    },
+    attendance,
+    staff,
+    admissions,
+    timesheets,
     activity,
     alerts,
+    directionBrief: buildDirectionBrief({ establishmentId: input.establishmentId, day: date, attendance, staff, admissions, timesheets, alerts }),
     meta: {
       timezoneAssumption: SCHOOL_DAY_TIMEZONE_ASSUMPTION,
       activityLimit,
