@@ -141,9 +141,18 @@ test.before(async () => {
   `);
 
   const migrationSql = await readFile(path.join(projectRoot, "supabase/migrations/20260915090000_event_01_school_event_engine.sql"), "utf8");
+  // DAILY-INTELLIGENCE-01.1 replaced get_daily_school_proof's day-boundary
+  // computation in a later migration (already-shipped functions cannot be
+  // edited in place) — applying it here too means these 30 tests validate
+  // the real, cumulative, final schema state, not a stale mid-point
+  // snapshot of a function that no longer exists in the current baseline.
+  const dailyIntelSql = await readFile(path.join(projectRoot, "supabase/migrations/20260916090000_daily_intelligence_01_activity.sql"), "utf8");
+  const localDayFixSql = await readFile(path.join(projectRoot, "supabase/migrations/20260917090000_daily_intelligence_01_1_local_day_boundary.sql"), "utf8");
 
   try {
     await adminPool.query(migrationSql);
+    await adminPool.query(dailyIntelSql);
+    await adminPool.query(localDayFixSql);
 
     await adminPool.query(`
       do $$

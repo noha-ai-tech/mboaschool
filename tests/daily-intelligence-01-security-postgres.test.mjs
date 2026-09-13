@@ -5,11 +5,11 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import pg from "pg";
 
-// DAILY-INTELLIGENCE-01 — real RLS/RPC enforcement tests for the two new
-// deterministic reducers (get_school_daily_activity,
-// get_school_staff_open_shifts) built on top of the School Event Engine
-// (EVENT-01 + EVENT-01.1). Same technique as every other
-// *-security-postgres.test.mjs file in this repo.
+// DAILY-INTELLIGENCE-01 (+ DAILY-INTELLIGENCE-01.1 local-day fix) — real
+// RLS/RPC enforcement tests for school_day_window, get_school_daily_activity,
+// get_school_staff_open_shifts, and the corrected get_daily_school_proof,
+// built on top of the School Event Engine (EVENT-01 + EVENT-01.1). Same
+// technique as every other *-security-postgres.test.mjs file in this repo.
 //
 // CRITICAL: every event exercised here is produced by calling the REAL
 // canonical write paths (sync_apply_attendance_mark, sync_apply_staff_punch,
@@ -147,10 +147,12 @@ test.before(async () => {
 
   const event01Sql = await readFile(path.join(projectRoot, "supabase/migrations/20260915090000_event_01_school_event_engine.sql"), "utf8");
   const dailyIntelSql = await readFile(path.join(projectRoot, "supabase/migrations/20260916090000_daily_intelligence_01_activity.sql"), "utf8");
+  const localDayFixSql = await readFile(path.join(projectRoot, "supabase/migrations/20260917090000_daily_intelligence_01_1_local_day_boundary.sql"), "utf8");
 
   try {
     await adminPool.query(event01Sql);
     await adminPool.query(dailyIntelSql);
+    await adminPool.query(localDayFixSql);
 
     await adminPool.query(`
       do $$
@@ -237,22 +239,42 @@ async function addSession(a) {
   return emploiDuTempsId;
 }
 
-function dayWindow(date) {
-  const from = new Date(`${date}T00:00:00.000+01:00`);
-  const to = new Date(from.getTime() + 24 * 60 * 60 * 1000);
-  return { from: from.toISOString(), to: to.toISOString() };
+// Ask Postgres for the canonical window itself (school_day_window) rather
+// than recomputing it in the test — this is exactly the same call the
+// production repository makes, so a test bug in reimplementing the
+// arithmetic can never mask (or falsely flag) a real regression.
+async function dayWindow(date) {
+  const r = await adminPool.query("select window_from, window_to from public.school_day_window($1)", [date]);
+  return { from: r.rows[0].window_from.toISOString(), to: r.rows[0].window_to.toISOString() };
 }
 
 async function activity(userId, establishmentId, date, limit = 20) {
-  const { from, to } = dayWindow(date);
-  const r = await asUser(userId, (c) => c.query("select * from public.get_school_daily_activity($1,$2,$3,$4,$5)", [establishmentId, date, from, to, limit]));
+  const r = await asUser(userId, (c) => c.query("select * from public.get_school_daily_activity($1,$2,$3)", [establishmentId, date, limit]));
   return r.rows;
 }
 
 async function openShifts(userId, establishmentId, date) {
-  const { from, to } = dayWindow(date);
-  const r = await asUser(userId, (c) => c.query("select * from public.get_school_staff_open_shifts($1,$2,$3)", [establishmentId, from, to]));
+  const r = await asUser(userId, (c) => c.query("select * from public.get_school_staff_open_shifts($1,$2)", [establishmentId, date]));
   return r.rows;
+}
+
+// Insert a real staff.checked_in/checked_out event pair with an EXACT
+// occurred_at we control, going through the real write path
+// (sync_apply_staff_punch always uses now()) is impossible for this
+// purpose — the mission's own midnight-boundary tests require placing
+// events at exact instants around a day boundary, which no real clock can
+// produce on demand. This helper still never inserts directly into
+// school_events with fabricated establishment/actor/subject wiring: it
+// calls the real punch RPC to get a fully valid, correctly-wired event,
+// then retimes ONLY that one row's occurred_at to the exact test instant
+// — the same "pin a real row's timestamp" technique already used by
+// EVENT-01.1's tie-break audit, applied here to test a boundary no real
+// clock can hit deterministically.
+async function punchAt(userId, establishmentId, type, occurredAt) {
+  const result = await punch(userId, establishmentId, type);
+  await adminPool.query("update public.pointages set horodatage=$1 where id=$2", [occurredAt, result.result_entity_id]);
+  await adminPool.query("update public.school_events set occurred_at=$1 where source_type='pointages' and source_id=$2", [occurredAt, result.result_entity_id]);
+  return result;
 }
 
 test.beforeEach(async () => {
@@ -471,7 +493,7 @@ test("real Postgres — full scenario: all daily-intelligence pieces match the h
   const proof = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1,$2)", [a.establishmentId, day]));
   const proofMap = Object.fromEntries(proof.rows.map((r) => [r.metric, Number(r.count_value)]));
 
-  const { from, to } = dayWindow(day);
+  const { from, to } = await dayWindow(day);
   const admissionAccepted = await asUser(a.owner, (c) =>
     c.query("select id from public.school_events where establishment_id=$1 and event_type='admission.accepted' and occurred_at >= $2 and occurred_at < $3", [a.establishmentId, from, to])
   );
@@ -497,4 +519,156 @@ test("real Postgres — invalid/nonexistent establishment yields an empty, valid
   const shifts = await openShifts(a.owner, fakeEstablishmentId, "2026-09-15");
   assert.deepEqual(rows, []);
   assert.deepEqual(shifts, []);
+});
+
+// ============================================================================
+// DAILY-INTELLIGENCE-01.1 — school_day_window, the single centralized
+// Africa/Douala resolution every reducer now shares.
+// ============================================================================
+test("real Postgres — school_day_window resolves the exact mission example (2026-09-15 Africa/Douala)", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const r = await adminPool.query("select window_from, window_to from public.school_day_window($1)", ["2026-09-15"]);
+  assert.equal(r.rows[0].window_from.toISOString(), "2026-09-14T23:00:00.000Z");
+  assert.equal(r.rows[0].window_to.toISOString(), "2026-09-15T23:00:00.000Z");
+});
+
+// ============================================================================
+// MIDNIGHT BOUNDARY — mission §8/§9, exact instants, exact expected result.
+// Logical date under test: 2026-09-15 (Africa/Douala) => window
+// [2026-09-14T23:00:00Z, 2026-09-15T23:00:00Z).
+//
+// staff.checked_in / staff.checked_out and admission.accepted all force
+// occurred_at to real now() inside their respective RPC/trigger — there is
+// no legitimate write-path parameter to place them at an exact historical
+// instant. For these three, a real, fully-validated event is created via
+// the real write path first (punch / real admission transition), then
+// ONLY its occurred_at is pinned to the exact test instant — never a
+// fabricated event, never invented tenant/actor/subject wiring. This is
+// the same "pin a real row's timestamp" technique used by EVENT-01.1's own
+// tie-break audit; it is the only way to test a clock boundary no real
+// wall-clock execution can hit on demand. application.received and
+// timesheet.approved, in contrast, key off applications.created_at /
+// timesheet_approvals.approved_at — real, client-settable columns — so
+// those are created with the exact instant already in the INSERT, a
+// completely ordinary write, no pinning needed.
+// ============================================================================
+
+const BOUNDARY_INSTANTS = {
+  beforeStart: "2026-09-14T22:59:59.000Z", // Sep 14 23:59:59 Douala -> excluded
+  atStart: "2026-09-14T23:00:00.000Z", // Sep 15 00:00:00 Douala -> included (inclusive)
+  insideEarly: "2026-09-14T23:30:00.000Z", // Sep 15 00:30:00 Douala -> included
+  insideLate: "2026-09-15T22:59:59.000Z", // Sep 15 23:59:59 Douala -> included
+  atEnd: "2026-09-15T23:00:00.000Z", // Sep 16 00:00:00 Douala -> excluded
+};
+const LOGICAL_DAY = "2026-09-15";
+
+test("real Postgres — staff.checked_in obeys the local-day boundary at every tested instant", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  for (const instant of Object.values(BOUNDARY_INSTANTS)) {
+    await punchAt(a.teacherUserId, a.establishmentId, "arrivee", instant);
+  }
+  const proof = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1,$2)", [a.establishmentId, LOGICAL_DAY]));
+  const count = Number(proof.rows.find((r) => r.metric === "staff_checked_in").count_value);
+  assert.equal(count, 3, "only atStart, insideEarly, insideLate must be counted for 2026-09-15");
+});
+
+test("real Postgres — staff.checked_out obeys the local-day boundary at every tested instant", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  for (const instant of Object.values(BOUNDARY_INSTANTS)) {
+    // sync_apply_staff_punch rejects a "depart" without an active "arrivee"
+    // first (already-tested product behavior) — open the shift for real,
+    // then pin only the depart being tested to the exact boundary instant.
+    await punch(a.teacherUserId, a.establishmentId, "arrivee");
+    await punchAt(a.teacherUserId, a.establishmentId, "depart", instant);
+  }
+  const proof = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1,$2)", [a.establishmentId, LOGICAL_DAY]));
+  const count = Number(proof.rows.find((r) => r.metric === "staff_checked_out").count_value);
+  assert.equal(count, 3);
+});
+
+test("real Postgres — application.received obeys the local-day boundary at every tested instant", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  for (const instant of Object.values(BOUNDARY_INSTANTS)) {
+    await adminPool.query("insert into public.applications (establishment_id, student_name, created_at) values ($1,'Boundary Test',$2)", [a.establishmentId, instant]);
+  }
+  const proof = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1,$2)", [a.establishmentId, LOGICAL_DAY]));
+  const count = Number(proof.rows.find((r) => r.metric === "applications_received").count_value);
+  assert.equal(count, 3);
+});
+
+test("real Postgres — timesheet.approved obeys the local-day boundary at every tested instant", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  let periodStartOffset = 100; // keep periods non-overlapping so no supersession relationship is implied
+  for (const instant of Object.values(BOUNDARY_INSTANTS)) {
+    await asUser(a.owner, (c) =>
+      c.query(
+        "insert into public.timesheet_approvals (establishment_id, enseignant_id, period_start, period_end, approved_minutes, approved_by, approved_at) values ($1,$2,current_date-$3::int,current_date-$4::int,480,$5,$6)",
+        [a.establishmentId, a.enseignantId, periodStartOffset, periodStartOffset - 6, a.owner, instant]
+      )
+    );
+    periodStartOffset -= 7;
+  }
+  const proof = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1,$2)", [a.establishmentId, LOGICAL_DAY]));
+  const count = Number(proof.rows.find((r) => r.metric === "timesheets_approved").count_value);
+  assert.equal(count, 3);
+});
+
+test("real Postgres — admission.accepted obeys the local-day boundary at every tested instant", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  const { from, to } = await dayWindow(LOGICAL_DAY);
+  for (const instant of Object.values(BOUNDARY_INSTANTS)) {
+    const app = (await adminPool.query("insert into public.applications (establishment_id, student_name) values ($1,'Boundary Admission') returning id", [a.establishmentId])).rows[0].id;
+    await asUser(a.owner, (c) => c.query("update public.applications set admission_status='accepted' where id=$1", [app]));
+    await adminPool.query("update public.school_events set occurred_at=$1 where source_type='applications' and source_id=$2 and event_type='admission.accepted'", [instant, app]);
+  }
+  const admissionAccepted = await asUser(a.owner, (c) =>
+    c.query("select id from public.school_events where establishment_id=$1 and event_type='admission.accepted' and occurred_at >= $2 and occurred_at < $3", [a.establishmentId, from, to])
+  );
+  assert.equal(admissionAccepted.rows.length, 3);
+});
+
+// ============================================================================
+// ADJACENT DAYS + HISTORICAL DATE — mission §10/§11: each fact must appear
+// exactly once across adjacent logical days, never zero times, never twice
+// — and the same correctness must hold for a date that is not "today".
+// ============================================================================
+test("real Postgres — a fact exactly at a day boundary appears in exactly one of two adjacent logical days, never both, never neither", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  await punchAt(a.teacherUserId, a.establishmentId, "arrivee", BOUNDARY_INSTANTS.atStart); // start of Sep 15
+  const proofDayBefore = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1,$2)", [a.establishmentId, "2026-09-14"]));
+  const proofDay = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1,$2)", [a.establishmentId, "2026-09-15"]));
+  const countBefore = Number(proofDayBefore.rows.find((r) => r.metric === "staff_checked_in").count_value);
+  const countDay = Number(proofDay.rows.find((r) => r.metric === "staff_checked_in").count_value);
+  assert.equal(countBefore, 0, "must not also appear in the day before");
+  assert.equal(countDay, 1, "must appear exactly once, in the day it actually belongs to");
+});
+
+test("real Postgres — historical dates (not server 'today') resolve the local-day window correctly, same as any other date", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  const historicalDay = "2020-01-15"; // deliberately far from any real "today"
+  await punchAt(a.teacherUserId, a.establishmentId, "arrivee", "2020-01-14T23:00:00.000Z"); // start of 2020-01-15 Douala
+  await punchAt(a.teacherUserId, a.establishmentId, "arrivee", "2020-01-15T23:00:00.000Z"); // start of 2020-01-16 Douala, must NOT count
+  const proof = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1,$2)", [a.establishmentId, historicalDay]));
+  const count = Number(proof.rows.find((r) => r.metric === "staff_checked_in").count_value);
+  assert.equal(count, 1, "a historical date must resolve its own local-day window, never depend on the server's real current date");
+});
+
+// ============================================================================
+// INVALID DATE — mission §13: malformed AND impossible-but-correctly-shaped
+// dates must be rejected explicitly by school_day_window itself, since
+// every reducer relies on it — never silently reinterpreted.
+// ============================================================================
+test("real Postgres — school_day_window rejects an impossible calendar date", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  await assert.rejects(
+    () => adminPool.query("select * from public.school_day_window($1)", ["2026-13-40"]),
+    /date\/time field value out of range|invalid input syntax/i
+  );
 });
