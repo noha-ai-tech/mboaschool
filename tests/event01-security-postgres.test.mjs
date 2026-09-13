@@ -596,3 +596,147 @@ test("real Postgres — every count in the daily proof carries traceable event i
   const ev = await adminPool.query("select source_id from public.school_events where id=$1", [presentRow.event_ids[0]]);
   assert.equal(ev.rows[0].source_id, result.result_entity_id, "the traced event id must resolve back to the exact source row");
 });
+
+// ============================================================================
+// EVENT-01.1 — multi-session attendance reducer fix regression
+//
+// The consolidation gate found a P1: get_daily_school_proof used
+// `distinct on (subject_id)` across the whole day, which conflated two
+// different things — a correction of the SAME lesson_session, and a
+// student's attendance in a DIFFERENT, equally legitimate lesson_session the
+// same day. Since student_attendance has `unique(session_id, student_id)`
+// and sync_apply_attendance_mark upserts on that key, source_id already IS
+// the canonical (student, session) attendance-fact identity: a correction
+// reuses the same source_id, a different session always gets a different
+// one. The fix groups by source_id instead. These tests reproduce the exact
+// scenario the gate found and must FAIL against the old `subject_id`
+// grouping and PASS against the fix — never via a direct school_events
+// insert, only via real sync_apply_attendance_mark calls.
+// ============================================================================
+
+async function addSession(a) {
+  const matiereId = (await adminPool.query("insert into public.matieres (etablissement_id) values ($1) returning id", [a.establishmentId])).rows[0].id;
+  const creneauId = (await adminPool.query("insert into public.creneaux_horaires (etablissement_id) values ($1) returning id", [a.establishmentId])).rows[0].id;
+  const emploiDuTempsId = (
+    await adminPool.query(
+      "insert into public.emplois_du_temps (etablissement_id, classe_id, matiere_id, enseignant_id, creneau_id) values ($1,$2,$3,$4,$5) returning id",
+      [a.establishmentId, a.classeId, matiereId, a.enseignantId, creneauId]
+    )
+  ).rows[0].id;
+  return emploiDuTempsId;
+}
+
+test("real Postgres — EVENT-01.1: same student, two distinct lesson_sessions same day, both attendance facts survive", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  const sessionB = await addSession(a);
+
+  await markAttendance(a.teacherUserId, a.establishmentId, a.emploiDuTempsId, a.studentId, "2026-09-15", "present"); // session A
+  await markAttendance(a.teacherUserId, a.establishmentId, sessionB, a.studentId, "2026-09-15", "absent"); // session B
+
+  const proof = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1, '2026-09-15')", [a.establishmentId]));
+  const map = Object.fromEntries(proof.rows.map((r) => [r.metric, Number(r.count_value)]));
+  assert.equal(map.students_present, 1, "the Math-session presence must not be discarded by the French-session absence");
+  assert.equal(map.students_absent, 1, "the French-session absence is a distinct, legitimate fact");
+});
+
+test("real Postgres — EVENT-01.1: same student/session correction still collapses to the final state (no regression)", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  await markAttendance(a.teacherUserId, a.establishmentId, a.emploiDuTempsId, a.studentId, "2026-09-15", "absent");
+  await markAttendance(a.teacherUserId, a.establishmentId, a.emploiDuTempsId, a.studentId, "2026-09-15", "present");
+
+  const proof = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1, '2026-09-15')", [a.establishmentId]));
+  const map = Object.fromEntries(proof.rows.map((r) => [r.metric, Number(r.count_value)]));
+  assert.equal(map.students_present, 1, "the correction must still win for its own session");
+  assert.equal(map.students_absent, 0, "the superseded state must never be double-counted");
+});
+
+test("real Postgres — EVENT-01.1: mixed multi-session + correction for one student yields exactly 3 distinct final facts", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  const sessionB = await addSession(a);
+  const sessionC = await addSession(a);
+
+  await markAttendance(a.teacherUserId, a.establishmentId, a.emploiDuTempsId, a.studentId, "2026-09-15", "absent");
+  await markAttendance(a.teacherUserId, a.establishmentId, a.emploiDuTempsId, a.studentId, "2026-09-15", "present"); // correction, session A
+  await markAttendance(a.teacherUserId, a.establishmentId, sessionB, a.studentId, "2026-09-15", "late");
+  await markAttendance(a.teacherUserId, a.establishmentId, sessionC, a.studentId, "2026-09-15", "absent");
+
+  const proof = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1, '2026-09-15')", [a.establishmentId]));
+  const map = Object.fromEntries(proof.rows.map((r) => [r.metric, Number(r.count_value)]));
+  assert.equal(map.students_present, 1, "session A corrected to present");
+  assert.equal(map.students_late, 1, "session B late");
+  assert.equal(map.students_absent, 1, "session C absent");
+  assert.equal(map.students_present + map.students_late + map.students_absent, 3, "exactly 3 final attendance facts, no loss, no duplication");
+});
+
+test("real Postgres — EVENT-01.1: multiple students, multiple sessions, mixed corrections — no cross-student or cross-session bleed", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool(); // student A = a.studentId
+  const sessionA1 = a.emploiDuTempsId;
+  const sessionA2 = await addSession(a);
+  const studentB = (await adminPool.query("insert into public.students (establishment_id, classe_id, first_name, last_name) values ($1,$2,'Marie','Ngo') returning id", [a.establishmentId, a.classeId])).rows[0].id;
+  const studentC = (await adminPool.query("insert into public.students (establishment_id, classe_id, first_name, last_name) values ($1,$2,'Paul','Etoa') returning id", [a.establishmentId, a.classeId])).rows[0].id;
+
+  // Student A: session1 present, session2 absent
+  await markAttendance(a.teacherUserId, a.establishmentId, sessionA1, a.studentId, "2026-09-15", "present");
+  await markAttendance(a.teacherUserId, a.establishmentId, sessionA2, a.studentId, "2026-09-15", "absent");
+  // Student B: session1 late, session2 present
+  await markAttendance(a.teacherUserId, a.establishmentId, sessionA1, studentB, "2026-09-15", "late");
+  await markAttendance(a.teacherUserId, a.establishmentId, sessionA2, studentB, "2026-09-15", "present");
+  // Student C: session1 absent -> corrected present, session2 late
+  await markAttendance(a.teacherUserId, a.establishmentId, sessionA1, studentC, "2026-09-15", "absent");
+  await markAttendance(a.teacherUserId, a.establishmentId, sessionA1, studentC, "2026-09-15", "present");
+  await markAttendance(a.teacherUserId, a.establishmentId, sessionA2, studentC, "2026-09-15", "late");
+
+  const proof = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1, '2026-09-15')", [a.establishmentId]));
+  const map = Object.fromEntries(proof.rows.map((r) => [r.metric, Number(r.count_value)]));
+  // present: A-s1, B-s2, C-s1(corrected) = 3
+  assert.equal(map.students_present, 3);
+  // absent: A-s2 = 1
+  assert.equal(map.students_absent, 1);
+  // late: B-s1, C-s2 = 2
+  assert.equal(map.students_late, 2);
+  assert.equal(map.students_present + map.students_absent + map.students_late, 6, "6 total final facts across 3 students x 2 sessions, none lost, none duplicated");
+});
+
+test("real Postgres — EVENT-01.1: a session on a different day never pollutes today's or tomorrow's proof", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  const sessionB = await addSession(a);
+
+  await markAttendance(a.teacherUserId, a.establishmentId, a.emploiDuTempsId, a.studentId, "2026-09-15", "present");
+  await markAttendance(a.teacherUserId, a.establishmentId, sessionB, a.studentId, "2026-09-16", "absent");
+
+  const proofToday = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1, '2026-09-15')", [a.establishmentId]));
+  const mapToday = Object.fromEntries(proofToday.rows.map((r) => [r.metric, Number(r.count_value)]));
+  assert.equal(mapToday.students_present, 1);
+  assert.equal(mapToday.students_absent, 0, "tomorrow's session must not leak into today's proof");
+
+  const proofTomorrow = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1, '2026-09-16')", [a.establishmentId]));
+  const mapTomorrow = Object.fromEntries(proofTomorrow.rows.map((r) => [r.metric, Number(r.count_value)]));
+  assert.equal(mapTomorrow.students_absent, 1);
+  assert.equal(mapTomorrow.students_present, 0, "today's session must not leak into tomorrow's proof");
+});
+
+test("real Postgres — EVENT-01.1: multi-session grouping stays establishment-scoped, no cross-school mix", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  const b = await seedSchool();
+  const aSessionB = await addSession(a);
+
+  await markAttendance(a.teacherUserId, a.establishmentId, a.emploiDuTempsId, a.studentId, "2026-09-15", "present");
+  await markAttendance(a.teacherUserId, a.establishmentId, aSessionB, a.studentId, "2026-09-15", "absent");
+  await markAttendance(b.teacherUserId, b.establishmentId, b.emploiDuTempsId, b.studentId, "2026-09-15", "present");
+
+  const proofA = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1, '2026-09-15')", [a.establishmentId]));
+  const mapA = Object.fromEntries(proofA.rows.map((r) => [r.metric, Number(r.count_value)]));
+  assert.equal(mapA.students_present, 1);
+  assert.equal(mapA.students_absent, 1);
+
+  const proofB = await asUser(b.owner, (c) => c.query("select * from public.get_daily_school_proof($1, '2026-09-15')", [b.establishmentId]));
+  const mapB = Object.fromEntries(proofB.rows.map((r) => [r.metric, Number(r.count_value)]));
+  assert.equal(mapB.students_present, 1);
+  assert.equal(mapB.students_absent, 0, "School A's second-session absence must never appear in School B's proof");
+});
