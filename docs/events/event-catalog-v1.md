@@ -138,12 +138,38 @@ therefore be wrong — it would count both the original and the corrected
 mark.
 
 The correct read is a **reducer**: for a given `(session, student)` pair,
-take only the event with the latest `occurred_at`. `get_daily_school_proof`
-implements exactly this via `DISTINCT ON (subject_id) ... ORDER BY
-occurred_at DESC` scoped to the sessions of the requested day, before
-counting by final `event_type`. Verified with a dedicated test:
-`present` → `absent` correction yields `students_present = 0`,
-`students_absent = 1` — never `1` and `1`.
+take only the event with the latest `occurred_at`. Since
+`student_attendance` has `unique (session_id, student_id)` and
+`sync_apply_attendance_mark` upserts on that key, `source_id` (the
+`student_attendance.id`) already **is** the canonical `(session, student)`
+attendance-fact identity — a correction to the same session reuses the
+same `source_id`; a different session for the same student always gets a
+different one. `get_daily_school_proof` implements the reducer via
+`DISTINCT ON (source_id) ... ORDER BY source_id, occurred_at DESC,
+recorded_at DESC, id DESC` (the last two columns are a deterministic
+tie-break only, never the deciding authority — `occurred_at` remains that),
+scoped to the sessions of the requested day, before counting by final
+`event_type`.
+
+**(EVENT-01.1 fix)** — the original V1 implementation grouped by
+`subject_id` alone (one retained event per *student*, across the whole
+day), which conflated a same-session correction with a different,
+legitimate session for the same student on the same day, silently
+discarding the earlier fact. This was found by the EVENT-01 consolidation
+gate and classified P1 before any merge; fixed by switching the grouping
+key to `source_id`, with no changes to `school_events`'s schema or to any
+write path. See `tests/event01-security-postgres.test.mjs` (the
+`EVENT-01.1:` tests) for the exact reproduction and regression coverage,
+including a multi-student, multi-session, mixed-correction scenario.
+
+**Metric semantics**: `students_present` / `students_absent` /
+`students_late` count **final attendance facts per (student, session)** for
+the requested day — not unique students. A student attending two subjects
+the same day contributes up to two facts (one per session); a corrected
+mark contributes exactly one (its final state). These are deliberately
+*not* "unique students present today" metrics — that is a different,
+currently unneeded aggregate, left to a future consumer (e.g.
+DAILY-INTELLIGENCE-01) if a real need for it emerges.
 
 ## Privacy minimization
 
