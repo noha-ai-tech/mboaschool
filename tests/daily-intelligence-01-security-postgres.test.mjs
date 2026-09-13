@@ -71,10 +71,14 @@ test.before(async () => {
     create function auth.uid() returns uuid language sql stable as $$
       select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid
     $$;
+    -- Atomic, race-free role creation — see the identical comment in
+    -- event01-security-postgres.test.mjs for why "if not exists, create"
+    -- is unsafe once more than one *-security-postgres file shares these
+    -- global role names under node --test's concurrent file execution.
     do $$ begin
-      if not exists (select 1 from pg_roles where rolname='anon') then create role anon; end if;
-      if not exists (select 1 from pg_roles where rolname='authenticated') then create role authenticated; end if;
-      if not exists (select 1 from pg_roles where rolname='service_role') then create role service_role; end if;
+      begin create role anon; exception when duplicate_object then null; end;
+      begin create role authenticated; exception when duplicate_object then null; end;
+      begin create role service_role; exception when duplicate_object then null; end;
     end $$;
 
     create type admission_status as enum ('submitted','in_review','documents_required','interview','waitlisted','accepted','rejected','cancelled');

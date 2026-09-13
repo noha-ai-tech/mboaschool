@@ -66,10 +66,20 @@ test.before(async () => {
     create function auth.uid() returns uuid language sql stable as $$
       select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid
     $$;
+    -- DAILY-INTELLIGENCE-01.1 consolidation gate: "if not exists, create"
+    -- has a check-then-act race when multiple *-security-postgres test
+    -- files run concurrently (node --test's default) against the SAME
+    -- shared Postgres instance and all try to create these same global
+    -- role names — two files can both see "not exists" before either
+    -- commits its create, and the loser hits a real unique-violation. This
+    -- became reachable the moment a second file adopted this exact
+    -- bootstrap (daily-intelligence-01-security-postgres.test.mjs) instead
+    -- of only ever running alone. Catching duplicate_object makes the
+    -- creation atomic and race-free, unlike the exists-check.
     do $$ begin
-      if not exists (select 1 from pg_roles where rolname='anon') then create role anon; end if;
-      if not exists (select 1 from pg_roles where rolname='authenticated') then create role authenticated; end if;
-      if not exists (select 1 from pg_roles where rolname='service_role') then create role service_role; end if;
+      begin create role anon; exception when duplicate_object then null; end;
+      begin create role authenticated; exception when duplicate_object then null; end;
+      begin create role service_role; exception when duplicate_object then null; end;
     end $$;
 
     create type admission_status as enum ('submitted','in_review','documents_required','interview','waitlisted','accepted','rejected','cancelled');
