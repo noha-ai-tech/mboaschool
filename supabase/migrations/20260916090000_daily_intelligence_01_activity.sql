@@ -1,8 +1,9 @@
--- DAILY-INTELLIGENCE-01 — deterministic daily activity + staff open-shift
--- reducers, built strictly on top of the School Event Engine
+-- DAILY-INTELLIGENCE-01 (+ DAILY-INTELLIGENCE-01.1 local-day fix, applied
+-- in place since this migration has never been merged/shipped anywhere) —
+-- deterministic daily activity + staff open-shift reducers, built strictly
+-- on top of the School Event Engine
 -- (20260915090000_event_01_school_event_engine.sql). No AI/LLM, no new
--- event types, no changes to school_events, emit_school_event, or
--- get_daily_school_proof — those stay exactly as EVENT-01.1 left them.
+-- event types, no changes to school_events or emit_school_event.
 --
 -- Purpose: get_daily_school_proof already gives correction-aware,
 -- multi-session-correct AGGREGATE counts. It does not give a bounded,
@@ -21,14 +22,54 @@
 -- defense-in-depth, not a substitute).
 
 -- ============================================================================
+-- 0. CANONICAL SCHOOL-DAY WINDOW (DAILY-INTELLIGENCE-01.1)
+--
+--    Single, centralized place resolving a logical school date into an
+--    exact [from, to) UTC instant window — every event-timestamp-based
+--    reducer below calls this, instead of each inventing its own
+--    arithmetic. No per-establishment timezone column exists yet
+--    (audited, confirmed absent from `establishments`); Écoles237's
+--    current operational scope is Cameroon, so the V1 fallback is the
+--    fixed IANA zone `Africa/Douala` (UTC+1, no DST). `at time zone`
+--    uses Postgres's own tzdata rather than hand-rolled "-1 hour"
+--    arithmetic, so this is correct even if the server/session timezone
+--    is something else entirely. When a per-establishment timezone field
+--    is eventually added, only this one function's body needs to change
+--    — every caller stays the same.
+--
+--    Attendance is deliberately NOT resolved through this window: a
+--    student_attendance fact's day is `lesson_sessions.session_date`, a
+--    plain date supplied directly by the marking device at the moment of
+--    the mark — already inherently local, never a UTC-derived value, so
+--    converting it through this window would be both unnecessary and
+--    wrong. Both paths (this window, and session_date) refer to the same
+--    logical school day; they are just resolved differently because they
+--    start from different kinds of source data (a timestamp vs. an
+--    already-local date) — see docs/intelligence/daily-intelligence-v1.md.
+-- ============================================================================
+create or replace function public.school_day_window(p_day date)
+returns table (window_from timestamptz, window_to timestamptz)
+language sql
+immutable
+set search_path = public
+as $$
+  select
+    (p_day::timestamp at time zone 'Africa/Douala'),
+    ((p_day + 1)::timestamp at time zone 'Africa/Douala');
+$$;
+
+revoke all on function public.school_day_window(date) from public, anon, service_role;
+grant execute on function public.school_day_window(date) to authenticated;
+
+-- ============================================================================
 -- 1. BOUNDED DAILY ACTIVITY — a small, deterministic, chronological list of
 --    "what happened", never a raw event dump.
 --
 --    Two kinds of rows are included, deliberately excluding everything else:
 --      a) every staff.checked_in / staff.checked_out / application.received
---         / admission.accepted / timesheet.approved event in the window —
---         these are naturally low-volume (one row per real action), safe to
---         show individually.
+--         / admission.accepted / timesheet.approved event in the
+--         school_day_window(p_day) — these are naturally low-volume (one
+--         row per real action), safe to show individually.
 --      b) attendance (student.*) facts are EXCLUDED by default — a single
 --         school day can have thousands of individual marks, which would
 --         turn "activity" into exactly the event dump the mission forbids.
@@ -40,26 +81,13 @@
 --         (occurred_at desc, recorded_at desc, id desc), so the timeline
 --         never shows a superseded state as current. Routine, uncorrected
 --         marks stay purely in the aggregate counts — that is what those
---         counts are for.
---
---    p_from/p_to are exact timestamptz bounds for the non-attendance
---    categories, resolved by the caller (never a bare date + implicit
---    session-timezone cast) — see docs/intelligence/daily-intelligence-v1.md
---    for how "today" is resolved for a school day with no canonical
---    per-establishment timezone column yet. p_day is separate and applies
---    only to attendance: exactly like get_daily_school_proof, a
---    student_attendance fact's day is `lesson_sessions.session_date` — a
---    plain date supplied directly by the marking device, never derived
---    from occurred_at — so it must be compared the same way here, not
---    against the timestamptz window (mission §16's audit finding: this is
---    inherently already device-local, no server-side timezone math needed
---    or correct for it).
+--         counts are for. Attendance's day boundary is
+--         lesson_sessions.session_date, exactly like get_daily_school_proof
+--         — never school_day_window (see §0 above for why).
 -- ============================================================================
 create or replace function public.get_school_daily_activity(
   p_establishment_id uuid,
   p_day date,
-  p_from timestamptz,
-  p_to timestamptz,
   p_limit integer default 20
 )
 returns table (
@@ -78,19 +106,22 @@ stable
 security invoker
 set search_path = public
 as $$
-  with notable_events as (
+  with window_bounds as (
+    select * from public.school_day_window(p_day)
+  ),
+  notable_events as (
     select se.id, se.event_type, se.occurred_at, se.recorded_at, se.subject_type, se.subject_id, se.source_type, se.source_id, false as was_corrected
-    from public.school_events se
+    from public.school_events se, window_bounds w
     where se.establishment_id = p_establishment_id
       and se.event_type in ('staff.checked_in', 'staff.checked_out', 'application.received', 'admission.accepted', 'timesheet.approved')
-      and se.occurred_at >= p_from and se.occurred_at < p_to
+      and se.occurred_at >= w.window_from and se.occurred_at < w.window_to
   ),
   attendance_corrections as (
     -- Only source_ids with more than one event that day (a real correction
     -- happened) are represented, and only by their final state — same
     -- identity and tie-break as EVENT-01.1's get_daily_school_proof. Day
     -- boundary is lesson_sessions.session_date, exactly like
-    -- get_daily_school_proof — not the occurred_at timestamptz window.
+    -- get_daily_school_proof — not school_day_window.
     select distinct on (se.source_id)
       se.id, se.event_type, se.occurred_at, se.recorded_at, se.subject_type, se.subject_id, se.source_type, se.source_id, true as was_corrected
     from public.school_events se
@@ -116,23 +147,23 @@ as $$
   limit greatest(p_limit, 0);
 $$;
 
-revoke all on function public.get_school_daily_activity(uuid, date, timestamptz, timestamptz, integer) from public, anon, service_role;
-grant execute on function public.get_school_daily_activity(uuid, date, timestamptz, timestamptz, integer) to authenticated;
+revoke all on function public.get_school_daily_activity(uuid, date, integer) from public, anon, service_role;
+grant execute on function public.get_school_daily_activity(uuid, date, integer) to authenticated;
 
 -- ============================================================================
 -- 2. STAFF OPEN SHIFTS — deterministic, rule-based (never a heuristic or an
---    invented threshold): a teacher has an open shift in the window if their
---    staff.checked_in event count exceeds their staff.checked_out event
---    count. This is the exact and only state this event pair can express
---    without ambiguity; it is NOT the same thing as "N staff present now"
---    (a staff.checked_in COUNT is an event count, never a headcount — see
---    docs/intelligence/daily-intelligence-v1.md). Used to derive the single
---    V1 alert type: "staff_checked_in_without_checkout".
+--    invented threshold): a teacher has an open shift in the
+--    school_day_window(p_day) if their staff.checked_in event count
+--    exceeds their staff.checked_out event count. This is the exact and
+--    only state this event pair can express without ambiguity; it is NOT
+--    the same thing as "N staff present now" (a staff.checked_in COUNT is
+--    an event count, never a headcount — see
+--    docs/intelligence/daily-intelligence-v1.md). Used to derive the
+--    single V1 alert type: "staff_checked_in_without_checkout".
 -- ============================================================================
 create or replace function public.get_school_staff_open_shifts(
   p_establishment_id uuid,
-  p_from timestamptz,
-  p_to timestamptz
+  p_day date
 )
 returns table (
   subject_id uuid,
@@ -144,22 +175,25 @@ stable
 security invoker
 set search_path = public
 as $$
-  with counts as (
+  with window_bounds as (
+    select * from public.school_day_window(p_day)
+  ),
+  counts as (
     select subject_id,
       count(*) filter (where event_type = 'staff.checked_in') as in_count,
       count(*) filter (where event_type = 'staff.checked_out') as out_count
-    from public.school_events
+    from public.school_events, window_bounds w
     where establishment_id = p_establishment_id
       and event_type in ('staff.checked_in', 'staff.checked_out')
-      and occurred_at >= p_from and occurred_at < p_to
+      and occurred_at >= w.window_from and occurred_at < w.window_to
     group by subject_id
   ),
   last_checkin as (
     select distinct on (subject_id) subject_id, id, occurred_at
-    from public.school_events
+    from public.school_events, window_bounds w
     where establishment_id = p_establishment_id
       and event_type = 'staff.checked_in'
-      and occurred_at >= p_from and occurred_at < p_to
+      and occurred_at >= w.window_from and occurred_at < w.window_to
     order by subject_id, occurred_at desc, recorded_at desc, id desc
   )
   select c.subject_id, lc.id as last_checked_in_event_id, lc.occurred_at as last_checked_in_at
@@ -168,5 +202,5 @@ as $$
   where c.in_count > c.out_count;
 $$;
 
-revoke all on function public.get_school_staff_open_shifts(uuid, timestamptz, timestamptz) from public, anon, service_role;
-grant execute on function public.get_school_staff_open_shifts(uuid, timestamptz, timestamptz) to authenticated;
+revoke all on function public.get_school_staff_open_shifts(uuid, date) from public, anon, service_role;
+grant execute on function public.get_school_staff_open_shifts(uuid, date) to authenticated;
