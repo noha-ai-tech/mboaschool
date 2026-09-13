@@ -1,4 +1,4 @@
-# Daily Intelligence — V1 (DAILY-INTELLIGENCE-01)
+# Daily Intelligence — V1 (DAILY-INTELLIGENCE-01 + 01.1 + 02)
 
 Status: **deterministic, no AI/LLM involved.**
 
@@ -145,6 +145,67 @@ Exactly one deterministic, rule-based alert type exists in V1:
 were introduced — the mission explicitly forbids inventing one without a
 canonical, product-defined rule, and none is deferred as a placeholder;
 they are simply not built (mission §12/§13).
+
+## Direction brief (DAILY-INTELLIGENCE-02)
+
+`SchoolDailyIntelligence.directionBrief` is a deterministic reshaping of
+the same fields already computed above — never a new query, never a
+second source of truth, and deliberately a **property** of
+`SchoolDailyIntelligence` rather than a competing sibling DTO (every fact
+it needs already exists on the object it lives inside). It is built by
+`buildDirectionBrief()` (`src/lib/intelligence/directionBrief.ts`), a pure
+function with zero I/O and zero `@/` imports — testable directly, without
+a database, alongside the Postgres-level tests covering the reducers that
+feed it real data.
+
+- `headline`: a single, fixed-template sentence with interpolated numbers
+  only ("4 faits enregistrés aujourd'hui, dont 1 nécessitant votre
+  attention.") — never generated prose, never an AI narrative.
+- `highlights`: informative, positive/neutral facts — applications
+  received, admissions accepted, timesheets approved.
+- `attentionItems`: facts that may warrant direction's attention —
+  absent/late attendance facts, and open staff shifts. Classification is
+  a plain presence check (`count > 0`), never an invented numeric
+  threshold ("more than N is high") — no canonical threshold exists in
+  the product today, so none is fabricated.
+- `sources`: a coarse-grained provenance summary (`{ type, count }` per
+  non-zero category) for transparency — not a duplicate count.
+
+Every highlight/attention item carries `sourceType`/`sourceIds` pointing
+at the exact underlying `school_events` ids already present elsewhere on
+`SchoolDailyIntelligence` — no new traceability mechanism, no metadata
+beyond what already existed.
+
+**Wording discipline carries over exactly from the underlying reducers**:
+the open-shift attention item is always "N arrivée(s) sans départ
+enregistré," never "N employés sont encore dans l'école" or any phrasing
+implying proven physical presence — the reducer can only prove an
+unmatched punch pair.
+
+## Multi-school (DAILY-INTELLIGENCE-02)
+
+No new establishment-selection system was introduced — `Daily
+Intelligence` reuses `establishmentContext.ts` / `SchoolContext.tsx`
+exactly as they already existed. Verified end-to-end with a real
+two-establishment owner: switching schools re-fetches
+`SchoolDailyIntelligence` for the newly-selected `establishmentId`, and a
+stale in-flight response for the *previous* school is now explicitly
+discarded (`dashboard/ecole/page.tsx` tracks a per-request token and
+ignores any response that resolves after a newer selection has already
+started loading) — a real, reproducible race that predates this feature
+and affected every fetch in `loadData`, not only the Daily Intelligence
+one, closed here because this mission's own multi-school verification
+depended on it being safe.
+
+**Audit finding, fixed**: a multi-school owner who had never made a
+selection yet (no cookie, no `?school=` param) previously had no way to
+choose one at all — `DashboardSchoolAdminShell`'s switcher only rendered
+once a school was *already* active, so the shell fell back to "Aucun
+établissement lié" (a message meant for zero establishments) even though
+real establishments existed. Fixed by rendering the same, existing
+`<select>` whenever more than one school is accessible, regardless of
+whether one is currently selected — the first choice now happens through
+the existing mechanism, never a guessed URL.
 
 ## Authorization
 
