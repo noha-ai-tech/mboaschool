@@ -12,7 +12,8 @@ export type EstablishmentCapability =
   | "messaging:manage"
   | "payroll:manage"
   | "attendance:manage"
-  | "timetable:manage";
+  | "timetable:manage"
+  | "intelligence:view";
 
 export type AccessibleEstablishment = {
   id: string;
