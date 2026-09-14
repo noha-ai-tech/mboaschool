@@ -167,7 +167,17 @@ export function SchoolAdminShell({
         {loading ? <SchoolAdminSkeleton className="h-11" tone="inverse" label="Chargement de l’établissement" /> : schoolName ? <div>
           <div className="flex items-start gap-2"><div className="min-w-0 flex-1"><p className="truncate text-sm font-bold text-white">{schoolName}</p>{schoolCity && <p className="truncate text-xs text-slate-400">{schoolCity}</p>}</div>{schoolVerified && <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-emerald-400" aria-label="Établissement vérifié" />}</div>
           {schoolSelector && <div className="mt-2">{schoolSelector}</div>}
-        </div> : <Link href="/dashboard/ecole/onboarding" className="text-xs font-semibold text-emerald-300 underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400">Lier mon établissement</Link>}
+        </div> : schoolSelector ? (
+          // DAILY-INTELLIGENCE-02 audit finding (§7/§22): a multi-school
+          // owner who has never picked one yet has real establishments —
+          // "Lier mon établissement" (an onboarding link to CREATE a new
+          // one) is the wrong message here. Show the same selector so the
+          // first choice happens through it, not by guessing a URL.
+          <div>
+            <p className="mb-2 text-xs text-slate-300">Choisissez un établissement.</p>
+            {schoolSelector}
+          </div>
+        ) : <Link href="/dashboard/ecole/onboarding" className="text-xs font-semibold text-emerald-300 underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400">Lier mon établissement</Link>}
       </div>}
 
       <nav aria-label="Navigation de l’administration scolaire" className={`sidebar-scroll flex-1 space-y-4 overflow-y-auto py-4 ${isCollapsed ? "px-2" : "px-3"}`}>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useSchool } from "@/lib/useSchool";
 import { admissionStatusConfig } from "@/lib/admissions/status";
@@ -62,12 +62,22 @@ export default function DashboardEcoleHome() {
   const [dailyIntelError, setDailyIntelError] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // DAILY-INTELLIGENCE-02 — a switch between establishments (multi-school
+  // owner) must never let a slower, in-flight fetch for the PREVIOUS
+  // school overwrite state after a faster fetch for the newly-selected
+  // one has already rendered. loadData had no such guard for any of its
+  // fetches (pre-existing gap, not introduced here) — this affects the
+  // Daily Intelligence fetch just as much as the others, so the guard
+  // covers the whole function rather than only the new call.
+  const loadRequestRef = useRef(0);
+
   useEffect(() => {
     if (!school) return;
     loadData(school.id, school.forfait === "pro");
   }, [school]);
 
   async function loadData(schoolId: string, isPro: boolean) {
+    const requestId = ++loadRequestRef.current;
     setLoading(true);
     const [{ data: apps }, { data: cls }, estRes, feesRes, infraRes, imagesRes, annRes] = await Promise.all([
       supabase
@@ -92,6 +102,7 @@ export default function DashboardEcoleHome() {
         .order("created_at", { ascending: false })
         .limit(1),
     ]);
+    if (requestId !== loadRequestRef.current) return; // a newer school selection has since started loading
     if (apps) setApplications(apps);
     if (cls) setClasses(cls);
     setProfile({
@@ -116,6 +127,7 @@ export default function DashboardEcoleHome() {
         supabase.from("bulletins_paie").select("statut").eq("etablissement_id", schoolId),
       ]);
 
+      if (requestId !== loadRequestRef.current) return;
       const paieCounts: Record<string, number> = {};
       (bulletins ?? []).forEach((b: any) => { paieCounts[b.statut] = (paieCounts[b.statut] ?? 0) + 1; });
 
@@ -131,20 +143,23 @@ export default function DashboardEcoleHome() {
       // contradictoire, pour la même journée — mission §2/§6).
       try {
         const res = await fetch(`/api/intelligence/daily?establishmentId=${schoolId}`);
+        const body = res.ok ? await res.json() : null;
+        if (requestId !== loadRequestRef.current) return; // switched schools again before this resolved
         if (res.ok) {
-          setDailyIntel(await res.json());
+          setDailyIntel(body);
           setDailyIntelError(false);
         } else {
           setDailyIntel(null);
           setDailyIntelError(true);
         }
       } catch {
+        if (requestId !== loadRequestRef.current) return;
         setDailyIntel(null);
         setDailyIntelError(true);
       }
     }
 
-    setLoading(false);
+    if (requestId === loadRequestRef.current) setLoading(false);
   }
 
   const pending = applications.filter((a) =>
@@ -273,18 +288,37 @@ export default function DashboardEcoleHome() {
             <p className="text-sm text-text-secondary">Aucune activité enregistrée aujourd’hui.</p>
           ) : (
             <div className="space-y-5">
+              <h3 className="text-sm font-semibold text-text-primary">{dailyIntel.directionBrief.headline}</h3>
+
+              {(dailyIntel.directionBrief.highlights.length > 0 || dailyIntel.directionBrief.attentionItems.length > 0) && (
+                <div className="flex flex-wrap gap-2">
+                  {dailyIntel.directionBrief.attentionItems.map((item) => (
+                    <span
+                      key={item.id}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-[var(--school-admin-warning-soft)] text-[var(--school-admin-warning-text)] px-3 py-1.5 text-xs font-semibold"
+                    >
+                      <AlertCircle size={12} aria-hidden="true" />
+                      {item.label}
+                    </span>
+                  ))}
+                  {dailyIntel.directionBrief.highlights.map((item) => (
+                    <span
+                      key={item.id}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-[var(--school-admin-primary-soft)] text-[var(--school-admin-primary)] px-3 py-1.5 text-xs font-semibold"
+                    >
+                      <CheckCircle size={12} aria-hidden="true" />
+                      {item.label}
+                    </span>
+                  ))}
+                </div>
+              )}
+
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <TodayStat label="Présences" value={dailyIntel.attendance.presentFacts.count} detail={`${dailyIntel.attendance.absentFacts.count} absence(s) · ${dailyIntel.attendance.lateFacts.count} retard(s)`} />
                 <TodayStat label="Personnel pointé" value={dailyIntel.staff.checkedIn.count} detail={dailyIntel.staff.currentlyCheckedInCount > 0 ? `${dailyIntel.staff.currentlyCheckedInCount} arrivée(s) sans départ enregistré` : "Toutes les arrivées ont un départ enregistré"} />
                 <TodayStat label="Admissions" value={dailyIntel.admissions.applicationsReceived.count} detail={`${dailyIntel.admissions.admissionsAccepted.count} acceptée(s) aujourd’hui`} />
                 <TodayStat label="Feuilles de temps" value={dailyIntel.timesheets.approvals.count} detail="Approbations du jour" />
               </div>
-
-              {dailyIntel.alerts.length > 0 && (
-                <div className="rounded-lg bg-[var(--school-admin-warning-soft)] px-3 py-2.5 text-sm text-[var(--school-admin-warning-text)]">
-                  {dailyIntel.alerts.length} membre(s) du personnel ont pointé une arrivée sans départ enregistré aujourd’hui.
-                </div>
-              )}
 
               <div>
                 <p className="text-[10px] font-semibold tracking-widest uppercase text-text-secondary mb-2">Activité récente</p>
