@@ -234,6 +234,24 @@ async function seedSchool(existingOwnerId = null) {
   return { owner, establishmentId, teacherUserId, enseignantId, classeId, emploiDuTempsId, studentId };
 }
 
+// DAILY-INTELLIGENCE-02 consolidation gate finding: sync_apply_staff_punch
+// rejects a second "arrivee" whenever an existing pointages row for that
+// teacher already has horodatage::date = today's REAL wall-clock date
+// (a genuine, correct business rule — "one open shift per real day", not
+// a bug). punchAt's technique (real-time punch, then retroactively pin
+// occurred_at to a fixed test date) collides with that rule the moment
+// real time reaches the hardcoded 2026-09-14/15 test window — confirmed:
+// this container's real clock is 2026-09-14 as of this gate. A fresh
+// teacher per boundary instant sidesteps the collision entirely
+// (v_last_open is scoped per enseignant_id), independent of what real
+// date the suite happens to run on.
+async function addTeacher(a) {
+  const teacherUserId = newId();
+  await adminPool.query("insert into auth.users (id) values ($1)", [teacherUserId]);
+  const enseignantId = (await adminPool.query("insert into public.enseignants (etablissement_id, user_id) values ($1,$2) returning id", [a.establishmentId, teacherUserId])).rows[0].id;
+  return { teacherUserId, enseignantId };
+}
+
 async function addSession(a) {
   const matiereId = (await adminPool.query("insert into public.matieres (etablissement_id) values ($1) returning id", [a.establishmentId])).rows[0].id;
   const creneauId = (await adminPool.query("insert into public.creneaux_horaires (etablissement_id) values ($1) returning id", [a.establishmentId])).rows[0].id;
@@ -572,8 +590,12 @@ const LOGICAL_DAY = "2026-09-15";
 test("real Postgres — staff.checked_in obeys the local-day boundary at every tested instant", async (t) => {
   if (!dbAvailable) return t.skip(unavailableReason);
   const a = await seedSchool();
+  // A fresh teacher per instant — sync_apply_staff_punch's "one open shift
+  // per real day" check is scoped per teacher, so this is independent of
+  // whatever the real wall-clock date is when this suite runs.
   for (const instant of Object.values(BOUNDARY_INSTANTS)) {
-    await punchAt(a.teacherUserId, a.establishmentId, "arrivee", instant);
+    const teacher = await addTeacher(a);
+    await punchAt(teacher.teacherUserId, a.establishmentId, "arrivee", instant);
   }
   const proof = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1,$2)", [a.establishmentId, LOGICAL_DAY]));
   const count = Number(proof.rows.find((r) => r.metric === "staff_checked_in").count_value);
@@ -584,11 +606,14 @@ test("real Postgres — staff.checked_out obeys the local-day boundary at every 
   if (!dbAvailable) return t.skip(unavailableReason);
   const a = await seedSchool();
   for (const instant of Object.values(BOUNDARY_INSTANTS)) {
-    // sync_apply_staff_punch rejects a "depart" without an active "arrivee"
-    // first (already-tested product behavior) — open the shift for real,
-    // then pin only the depart being tested to the exact boundary instant.
-    await punch(a.teacherUserId, a.establishmentId, "arrivee");
-    await punchAt(a.teacherUserId, a.establishmentId, "depart", instant);
+    // A fresh teacher per instant (see staff.checked_in test above for
+    // why) — sync_apply_staff_punch rejects a "depart" without an active
+    // "arrivee" first (already-tested product behavior), so each fresh
+    // teacher opens their own shift for real, then only the depart being
+    // tested is pinned to the exact boundary instant.
+    const teacher = await addTeacher(a);
+    await punch(teacher.teacherUserId, a.establishmentId, "arrivee");
+    await punchAt(teacher.teacherUserId, a.establishmentId, "depart", instant);
   }
   const proof = await asUser(a.owner, (c) => c.query("select * from public.get_daily_school_proof($1,$2)", [a.establishmentId, LOGICAL_DAY]));
   const count = Number(proof.rows.find((r) => r.metric === "staff_checked_out").count_value);
