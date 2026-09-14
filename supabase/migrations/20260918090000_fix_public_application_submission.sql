@@ -29,15 +29,35 @@
 -- table lisible par un rôle anonyme. La RPC ne retourne que id et
 -- tracking_code, jamais un accès SELECT à la table elle-même.
 --
+-- HOTFIX-APPLICATIONS-01.1 — CORRECTION APRÈS GATE INDÉPENDANT (deux P1
+-- trouvés par vérification production en lecture seule, projet lié
+-- umcwwynrftidytxgqkwi, jamais mergée/appliquée avant cette correction) :
+--
+--   P1 #1 — `student_name` n'existe PAS sur public.applications en
+--   production (confirmé par `supabase db dump --linked -s public`,
+--   schéma seul, aucune ligne). schema.sql (qui documente `student_name
+--   text not null`) est un instantané historique du commit initial,
+--   jamais réexécuté depuis, et ne reflète pas la réalité de production
+--   — les colonnes réellement utilisées par tout le code applicatif
+--   (dashboard école, suivi-admission) sont student_first_name,
+--   student_last_name, full_student_name (ajoutées par 0007). La
+--   fonction n'insère donc plus jamais dans student_name ; aucune
+--   migration n'est ajoutée pour recréer cette colonne — elle n'a aucun
+--   lecteur nulle part dans le code.
+--
+--   P1 #2 — la policy `applications_public_insert` réellement présente
+--   en production (anon + authenticated, WITH CHECK (true), aucune
+--   restriction de colonne) combinée au grant direct `INSERT` sur `anon`
+--   permet AUJOURD'HUI à un client anonyme d'insérer une ligne
+--   arbitraire par appel REST direct, y compris un `parent_id` usurpé ou
+--   un `tracking_code` choisi (le trigger applications_set_tracking_code
+--   ne le régénère que s'il est nul). Cette policy et son grant n'ont
+--   plus aucun rôle utile une fois le seul chemin de création public
+--   déplacé vers submit_public_application(...) — voir section 2
+--   ci-dessous, qui les retire plutôt que de les laisser inertes.
+--
 -- DÉFAUTS SUPPLÉMENTAIRES FERMÉS PAR CONSTRUCTION (trouvés pendant
--- l'audit, indépendants du problème RLS initial) :
---   - `student_name` (colonne d'origine, `not null`, schema.sql) n'est
---     plus jamais renseignée par le formulaire actuel, qui n'utilise que
---     student_first_name/student_last_name/full_student_name depuis
---     0007 — un insert direct échouerait sur cette contrainte NOT NULL
---     avant même d'atteindre RLS. La RPC la dérive elle-même, exactement
---     comme get_admission_by_tracking() le fait déjà pour l'affichage
---     (0012_admissions_v1.sql) — aucune nouvelle convention inventée.
+-- l'audit initial, indépendants du problème RLS) :
 --   - `notes` (interne, jamais exposée en lecture publique) et
 --     `tracking_code` (sinon écrasable par le client — le trigger
 --     existant ne le régénère QUE s'il est déjà nul) ne sont tout
@@ -58,14 +78,23 @@
 -- automatiquement puisque c'est un trigger BEFORE INSERT sur la table —
 -- aucune logique anti-abus dupliquée ici.
 --
--- STATUT DE DÉPLOIEMENT DE 0007/0012 : leurs propres en-têtes indiquent
--- "PRÉPARÉE MAIS NON EXÉCUTÉE", contrairement à
--- 20260825054125_pro_05_2_admission_tracking_hardening.sql dont l'en-tête
--- a été corrigé après vérification directe en lecture seule sur la
--- production. Aucune vérification équivalente n'a été faite ici pour
--- 0007/0012 (hors périmètre de cette mission, aucune inspection
--- production autorisée) — ce point est documenté comme risque explicite
--- dans le rapport final, pas résolu silencieusement.
+-- authenticated conserve, sans modification par cette migration, ses
+-- grants SELECT/UPDATE table-level (nécessaires au tableau de bord
+-- propriétaire — src/app/dashboard/ecole/admissions/page.tsx fait des
+-- UPDATE directs sur admission_status/notes/parent_message) et ses
+-- policies RLS de lecture/mise à jour scoping par établissement,
+-- inchangées. Son grant direct INSERT devient inutilisé par tout le code
+-- applicatif après cette migration (plus aucun `.from("applications").
+-- insert(...)` nulle part dans src/, confirmé par audit), mais n'est pas
+-- révoqué ici pour ne pas élargir le périmètre de ce hotfix au-delà des
+-- deux P1 — documenté comme piste de durcissement future, pas appliqué
+-- silencieusement. Le retrait de la policy applications_public_insert
+-- (section 2) rend de toute façon tout INSERT direct impossible pour
+-- authenticated comme pour anon : sans aucune policy INSERT permissive,
+-- RLS refuse l'écriture pour tout rôle qui n'est pas propriétaire de la
+-- table, et seule submit_public_application(...) (SECURITY DEFINER,
+-- exécutée en tant que postgres, propriétaire de la table, donc exemptée
+-- de RLS) peut encore créer une ligne.
 
 -- ============================================================================
 -- 1. RETRAIT DES PRIVILÈGES DIRECTS ANON SUR LA TABLE — moindre privilège,
@@ -75,6 +104,17 @@
 -- ============================================================================
 revoke all on table public.applications from anon;
 revoke all on table public.applications from public;
+
+-- ============================================================================
+-- 1bis. RETRAIT DE LA POLICY PUBLIQUE PERMISSIVE — plus aucun rôle utile
+--    une fois le seul chemin de création public déplacé vers la RPC
+--    ci-dessous ; la laisser active serait une policy WITH CHECK (true)
+--    oubliée, un vrai risque même une fois le grant anon révoqué (elle
+--    s'appliquerait encore à `authenticated`, sans plus-value puisque
+--    tout code applicatif passe désormais par la RPC).
+-- ============================================================================
+drop policy if exists "applications_public_insert" on public.applications;
+drop policy if exists "Anyone authenticated can create applications" on public.applications;
 
 -- ============================================================================
 -- 2. RPC PUBLIQUE DE SOUMISSION — SECURITY DEFINER, jamais de SQL
@@ -129,7 +169,11 @@ begin
   end if;
 
   -- Même dérivation que get_admission_by_tracking() (0012) — aucune
-  -- nouvelle convention de nom affiché inventée ici.
+  -- nouvelle convention de nom affiché inventée ici. `student_name`
+  -- (colonne d'origine de schema.sql) n'existe pas sur la production
+  -- réelle — voir l'en-tête de migration — donc jamais insérée ici ;
+  -- seule full_student_name (0007, réellement présente et lue par tout
+  -- le code applicatif) porte le nom complet dérivé.
   v_full_student_name := trim(p_student_first_name || ' ' || p_student_last_name);
 
   -- parent_id, admission_status/status, tracking_code, notes : jamais des
@@ -139,12 +183,12 @@ begin
   -- correcte pour la policy "Parents can read own applications".
   insert into public.applications (
     parent_id, establishment_id,
-    student_name, student_first_name, student_last_name, full_student_name,
+    student_first_name, student_last_name, full_student_name,
     student_birth_date, student_age, desired_level, previous_school,
     parent_name, parent_phone, parent_email, message, annee_scolaire_id
   ) values (
     auth.uid(), p_establishment_id,
-    v_full_student_name, p_student_first_name, p_student_last_name, v_full_student_name,
+    p_student_first_name, p_student_last_name, v_full_student_name,
     p_student_birth_date, p_student_age, p_desired_level, p_previous_school,
     p_parent_name, p_parent_phone, p_parent_email, p_message, p_annee_scolaire_id
   )

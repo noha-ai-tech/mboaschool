@@ -146,16 +146,25 @@ test.before(async () => {
     alter table public.annees_scolaires enable row level security;
     create policy "Public can read annees_scolaires" on public.annees_scolaires for select using (true);
 
+    -- NO student_name column here — HOTFIX-APPLICATIONS-01.1 corrected this
+    -- bootstrap after a production read-only audit (project umcwwynrftidytxgqkwi,
+    -- supabase db dump --linked -s public) proved student_name does not exist
+    -- on the real applications table. schema.sql's student_name text not null
+    -- is a historical snapshot from the initial commit, never re-executed since,
+    -- and does not reflect production reality — this bootstrap must track the
+    -- real table, not schema.sql, precisely because the previous version of this
+    -- file silently masked that drift (all 18 tests passed against a schema the
+    -- real submit_public_application() could never actually run against).
     create table public.applications (
       id uuid primary key default gen_random_uuid(),
       parent_id uuid references public.profiles(id) on delete set null,
       establishment_id uuid references public.establishments(id) on delete cascade,
-      student_name text not null, student_age integer, student_level text,
+      student_age integer, student_level text,
       parent_name text, parent_phone text, parent_email text, message text,
       status application_status default 'pending', created_at timestamptz default now()
     );
     alter table public.applications enable row level security;
-    create policy "Anyone authenticated can create applications" on public.applications for insert with check (auth.uid() is not null);
+    create policy "applications_public_insert" on public.applications for insert to anon, authenticated with check (true);
     create policy "Parents can read own applications" on public.applications for select using (auth.uid() = parent_id);
     create policy "Owners can read establishment applications" on public.applications for select using (
       exists (select 1 from public.establishments e where e.id = establishment_id and e.owner_id = auth.uid())
@@ -309,7 +318,7 @@ test("real Postgres — anon cannot INSERT applications directly", async (t) => 
   if (!dbAvailable) return t.skip(unavailableReason);
   const a = await seedSchool();
   await assert.rejects(
-    () => asUser(null, (c) => c.query("insert into public.applications (establishment_id, student_name) values ($1,'Direct')", [a.establishmentId])),
+    () => asUser(null, (c) => c.query("insert into public.applications (establishment_id, parent_name) values ($1,'Direct')", [a.establishmentId])),
     /permission denied/i
   );
 });
@@ -351,7 +360,9 @@ test("real Postgres — the RPC's DB row is correctly established, server-contro
   const dbRow = (await adminPool.query("select * from public.applications where id=$1", [result.rows[0].id])).rows[0];
   assert.equal(dbRow.establishment_id, a.establishmentId);
   assert.equal(dbRow.admission_status, "submitted", "server-controlled initial status, never client-settable");
-  assert.equal(dbRow.student_name, "Jean Mbarga", "derived server-side from first+last, same convention as get_admission_by_tracking");
+  assert.equal(dbRow.student_first_name, "Jean");
+  assert.equal(dbRow.student_last_name, "Mbarga");
+  assert.equal(dbRow.full_student_name, "Jean Mbarga", "derived server-side from first+last, same convention as get_admission_by_tracking");
   assert.equal(dbRow.parent_id, null, "a genuinely anonymous submitter must never be attributed to any profile");
 });
 
@@ -361,6 +372,54 @@ test("real Postgres — the RPC's DB row is correctly established, server-contro
 test("real Postgres — an invalid/nonexistent establishment is rejected with a clean error", async (t) => {
   if (!dbAvailable) return t.skip(unavailableReason);
   await assert.rejects(() => submit(null, { p_establishment_id: newId() }), /introuvable/i);
+});
+
+// ============================================================================
+// PRODUCTION-CONTRACT REGRESSION GUARD (HOTFIX-APPLICATIONS-01.1) — a real,
+// read-only production catalog dump (project umcwwynrftidytxgqkwi) proved
+// that public.applications has no student_name column, contradicting
+// schema.sql (an unexecuted historical snapshot from the initial commit) and
+// the previous version of this exact bootstrap. This asserts the real
+// contract directly, so reintroducing student_name anywhere in the RPC or
+// this bootstrap fails loudly instead of silently masking drift again.
+// ============================================================================
+test("production contract — public.applications must NOT have a student_name column", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const result = await adminPool.query(
+    "select 1 from information_schema.columns where table_schema='public' and table_name='applications' and column_name='student_name'"
+  );
+  assert.equal(result.rowCount, 0, "student_name does not exist on production — it must never be reintroduced");
+});
+
+test("production contract — public.applications has every column submit_public_application relies on", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const expected = [
+    "id", "parent_id", "establishment_id", "student_first_name", "student_last_name",
+    "full_student_name", "student_birth_date", "student_age", "desired_level",
+    "previous_school", "parent_name", "parent_phone", "parent_email", "message",
+    "annee_scolaire_id", "admission_status", "tracking_code",
+  ];
+  const result = await adminPool.query(
+    "select column_name from information_schema.columns where table_schema='public' and table_name='applications'"
+  );
+  const actual = new Set(result.rows.map((r) => r.column_name));
+  for (const column of expected) {
+    assert.ok(actual.has(column), `expected production column missing from bootstrap: ${column}`);
+  }
+});
+
+test("production contract — the RPC inserts successfully with no student_name reference anywhere", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  const result = await submit(null, {
+    p_establishment_id: a.establishmentId,
+    p_student_first_name: "Amina",
+    p_student_last_name: "Njoya",
+  });
+  const dbRow = (await adminPool.query("select student_first_name, student_last_name, full_student_name from public.applications where id=$1", [result.rows[0].id])).rows[0];
+  assert.equal(dbRow.student_first_name, "Amina");
+  assert.equal(dbRow.student_last_name, "Njoya");
+  assert.equal(dbRow.full_student_name, "Amina Njoya");
 });
 
 // ============================================================================
@@ -388,6 +447,77 @@ test("real Postgres — an injected tracking_code or parent_id parameter is impo
     )),
     /function .* does not exist/i
   );
+});
+
+// ============================================================================
+// FORGERY REGRESSION TESTS (HOTFIX-APPLICATIONS-01.1) — reproduce the exact
+// live production vulnerability found during the read-only gate: before this
+// migration, `applications_public_insert` (anon+authenticated, WITH CHECK
+// (true)) plus a direct anon INSERT grant let an anonymous client forge
+// parent_id (impersonating any real user) or choose their own tracking_code
+// via a raw REST insert. These tests prove that path is now closed —
+// dropping the permissive policy and revoking the table grant means RLS
+// denies the write outright, regardless of which columns are targeted.
+// ============================================================================
+test("forgery — anon direct insert attempting to forge parent_id is denied", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  const victimId = a.owner;
+  await assert.rejects(
+    () => asUser(null, (c) => c.query(
+      "insert into public.applications (establishment_id, parent_id, parent_name, parent_phone) values ($1,$2,'Forged','699000000')",
+      [a.establishmentId, victimId]
+    )),
+    /permission denied/i
+  );
+});
+
+test("forgery — anon direct insert attempting to choose tracking_code is denied", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  await assert.rejects(
+    () => asUser(null, (c) => c.query(
+      "insert into public.applications (establishment_id, tracking_code, parent_name, parent_phone) values ($1,'E237-CHOSEN','Forged','699000000')",
+      [a.establishmentId]
+    )),
+    /permission denied/i
+  );
+});
+
+test("forgery — the RPC has no parent_id parameter to inject through", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  await assert.rejects(
+    () => asUser(null, (c) => c.query(
+      "select * from public.submit_public_application(p_establishment_id => $1, p_student_first_name => 'A', p_student_last_name => 'B', p_parent_name => 'C', p_parent_phone => '699', p_parent_id => $2)",
+      [a.establishmentId, a.owner]
+    )),
+    /function .* does not exist/i
+  );
+});
+
+test("forgery — a fully legitimate anon RPC call always produces parent_id NULL, a server-generated tracking_code, and admission_status 'submitted'", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const a = await seedSchool();
+  const result = await submit(null, { p_establishment_id: a.establishmentId, p_parent_phone: "699123123" });
+  const dbRow = (await adminPool.query("select parent_id, tracking_code, admission_status from public.applications where id=$1", [result.rows[0].id])).rows[0];
+  assert.equal(dbRow.parent_id, null);
+  assert.equal(dbRow.tracking_code, result.rows[0].tracking_code);
+  assert.match(dbRow.tracking_code, /^E237-/, "server-generated by the canonical trigger, never client-supplied");
+  assert.equal(dbRow.admission_status, "submitted");
+});
+
+test("ACL introspection — anon has zero privileges of any kind on public.applications, including MAINTAIN", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const privileges = ["SELECT", "INSERT", "UPDATE", "DELETE", "TRUNCATE", "REFERENCES", "TRIGGER", "MAINTAIN"];
+  for (const privilege of privileges) {
+    const result = await adminPool.query("select has_table_privilege($1, 'public.applications', $2) as has", [APP_ROLE, privilege]);
+    assert.equal(result.rows[0].has, false, `anon must not have ${privilege} on applications`);
+  }
+  const policyCount = await adminPool.query(
+    "select count(*)::int as n from pg_policies where schemaname='public' and tablename='applications' and cmd='INSERT'"
+  );
+  assert.equal(policyCount.rows[0].n, 0, "no INSERT policy should remain on applications — the RPC (table owner, RLS-exempt) is the only writer");
 });
 
 // ============================================================================
