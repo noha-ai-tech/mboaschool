@@ -119,37 +119,42 @@ function PreinscriptionForm() {
   }
 
   async function handleSubmit() {
-    if (!form.establishment_id) return;
+    // HOTFIX-APPLICATIONS-01 — garde synchrone contre un double appel
+    // (double-clic/double-tap) qui arriverait avant que React ne
+    // re-rende le bouton désactivé ; le bouton `disabled={loading}` reste
+    // la protection principale, ceci est une seconde ligne minimale.
+    if (loading || !form.establishment_id) return;
     setLoading(true);
     setSubmitError(null);
-    const { data, error } = await supabase
-      .from("applications")
-      .insert({
-        establishment_id: form.establishment_id,
-        annee_scolaire_id: form.annee_scolaire_id || null,
-        parent_name: form.parent_name,
-        parent_phone: form.parent_phone,
-        parent_email: form.parent_email || null,
-        student_first_name: form.student_first_name,
-        student_last_name: form.student_last_name,
-        full_student_name: `${form.student_first_name} ${form.student_last_name}`,
-        student_birth_date: form.student_birth_date || null,
-        student_age: form.student_age ? Number(form.student_age) : null,
-        desired_level: form.desired_level,
-        previous_school: form.previous_school || null,
-        message: form.message || null,
-        status: "pending",
-      })
-      .select("id, tracking_code")
-      .single();
+    // Soumission publique anonyme : passe par submit_public_application
+    // (SECURITY DEFINER), jamais un insert direct sur applications — voir
+    // 20260918090000_fix_public_application_submission.sql. Le rôle
+    // navigateur (anon) n'a plus aucun privilège direct sur la table ;
+    // seuls les champs strictement nécessaires sont transmis, jamais de
+    // statut, tracking_code ou identifiant parent choisi par le client.
+    const { data, error } = await supabase.rpc("submit_public_application", {
+      p_establishment_id: form.establishment_id,
+      p_student_first_name: form.student_first_name,
+      p_student_last_name: form.student_last_name,
+      p_parent_name: form.parent_name,
+      p_parent_phone: form.parent_phone,
+      p_student_birth_date: form.student_birth_date || null,
+      p_student_age: form.student_age ? Number(form.student_age) : null,
+      p_desired_level: form.desired_level || null,
+      p_previous_school: form.previous_school || null,
+      p_parent_email: form.parent_email || null,
+      p_message: form.message || null,
+      p_annee_scolaire_id: form.annee_scolaire_id || null,
+    });
     setLoading(false);
+    const result = data?.[0] ?? null;
     if (!error) {
-      setTrackingCode(data?.tracking_code ?? null);
+      setTrackingCode(result?.tracking_code ?? null);
       setSuccess(true);
-      if (data?.id) {
+      if (result?.id) {
         dispatchAdmissionNotification({
           event: "admission_submitted",
-          applicationId: data.id,
+          applicationId: result.id,
           establishmentName: selectedSchool?.name ?? "établissement",
           studentName: `${form.student_first_name} ${form.student_last_name}`,
           parentPhone: form.parent_phone,
