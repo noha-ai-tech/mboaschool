@@ -48,7 +48,8 @@ export function SchoolShowcase({ data, baseHref, activeView = "accueil" }: { dat
   const visible = (key: string) => data.sectionConfig.find((section) => section.key === key)?.is_visible ?? true;
   const categoryLabel = categories.find((category) => category.key === school.main_category)?.label ?? null;
   const location = [school.neighborhood, school.city].filter(Boolean).join(", ");
-  const slides = resolveHeroSlides(computeAllHeroSlides(data.images, school.cover_image_url), school.hero_mode as HeroMode | null);
+  const [failedImages, setFailedImages] = useState<string[]>([]);
+  const slides = resolveHeroSlides(computeAllHeroSlides(data.images, school.cover_image_url), school.hero_mode as HeroMode | null).filter((slide) => !failedImages.includes(slide.image));
   const [activeHero, setActiveHero] = useState(0);
   const [favorite, setFavorite] = useState(false);
   const photoIndex = activeHero % Math.max(slides.length, 1);
@@ -62,6 +63,7 @@ export function SchoolShowcase({ data, baseHref, activeView = "accueil" }: { dat
   useEffect(() => {
     setActiveHero(0);
     setFavorite(false);
+    setFailedImages([]);
   }, [school.id]);
   useEffect(() => {
     if (slides.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -121,11 +123,11 @@ export function SchoolShowcase({ data, baseHref, activeView = "accueil" }: { dat
 
   return <div className="bg-[#f8fafc] text-[#102750]">
     <section className="relative overflow-hidden bg-gradient-to-br from-[#052d64] via-[#07539b] to-[#102750]">
-      {slides.map((slide, index) => <Image key={slide.id} src={slide.image} alt={index === photoIndex ? school.name : ""} fill priority={index === 0} sizes="100vw" className={`object-cover transition-opacity duration-700 ${index === photoIndex ? "opacity-100" : "opacity-0"}`} />)}
+      {slides.map((slide, index) => <Image key={slide.id} src={slide.image} alt={index === photoIndex ? school.name : ""} fill priority={index === 0} sizes="100vw" onError={() => setFailedImages((urls) => [...urls, slide.image])} className={`object-cover transition-opacity duration-700 ${index === photoIndex ? "opacity-100" : "opacity-0"}`} />)}
       <div className="absolute inset-0 bg-gradient-to-r from-[#052d64]/85 via-[#07539b]/55 to-[#052d64]/20" />
       <div className="relative mx-auto flex min-h-[390px] max-w-[1440px] items-end gap-8 px-5 pb-16 pt-24 lg:px-8">
         <div className="relative hidden h-48 w-48 shrink-0 items-center justify-center overflow-hidden rounded-[34px] border-4 border-white bg-white text-5xl font-black text-[#102750] shadow-2xl md:flex">
-          {school.logo_url ? <Image src={school.logo_url} alt={`Logo ${school.name}`} fill sizes="192px" className="object-contain p-3" /> : schoolMonogram(school.name)}
+          {school.logo_url && !failedImages.includes(school.logo_url) ? <Image src={school.logo_url} alt={`Logo ${school.name}`} fill sizes="192px" onError={() => setFailedImages((urls) => [...urls, school.logo_url!])} className="object-contain p-3" /> : schoolMonogram(school.name)}
         </div>
         <div className="min-w-0 flex-1 text-white">
           <h1 className="break-words text-3xl font-extrabold tracking-tight md:text-5xl">{school.name}</h1>
