@@ -15,7 +15,7 @@ import { StructuredPricing } from "./StructuredPricing";
 import { SchoolGallery } from "./SchoolGallery";
 import { MiniSiteResultsPreview } from "./MiniSiteResultsPreview";
 import { AnnouncementsTab } from "./AnnouncementsTab";
-import { DocumentDownloadCtas } from "./DocumentDownloadCtas";
+import { DocumentsTab } from "./DocumentsTab";
 import { INFRA_LABELS } from "./GeneralTab";
 
 const navigation: { label: string; view: MiniSiteViewKey; anchor?: string }[] = [
@@ -107,7 +107,7 @@ export function SchoolShowcase({ data, baseHref, activeView = "accueil" }: { dat
   const results = <Section id="performances" title="Résultats et performances" icon={<Trophy className="shrink-0 text-emerald-600" />}>{data.results.length > 0 || !!data.ranking ? <MiniSiteResultsPreview category={school.main_category} results={data.results} ranking={data.ranking} /> : <Pending>Les résultats de l’établissement seront affichés lorsqu’ils seront publiés.</Pending>}</Section>;
   const infrastructure = <Section id="vie-scolaire" title="Vie scolaire et équipements" icon={<Building2 className="shrink-0 text-blue-600" />}>{flags.infraItems.length ? <div className="grid gap-3 sm:grid-cols-2">{flags.infraItems.map((key) => { const item = INFRA_LABELS[key]; const Icon = item.icon; return <div key={key} className="flex items-center gap-3 rounded-xl bg-blue-50 p-4"><Icon size={20} className="text-blue-600" /><span className="font-semibold">{item.label}</span></div>; })}</div> : <Pending>Les équipements et la vie scolaire seront présentés ici.</Pending>}</Section>;
   const news = <Section id="actualites" title="Actualités"><AnnouncementsTab key={school.id} schoolId={school.id} /></Section>;
-  const documents = <Section id="documents" title="Documents">{flags.showDocuments ? <DocumentDownloadCtas documents={data.docsList} /> : <Pending>Aucun document public n’est disponible pour le moment.</Pending>}</Section>;
+  const documents = <Section id="documents" title="Documents">{flags.showDocuments ? <DocumentsTab docs={data.docsList} /> : <Pending>Aucun document public n’est disponible pour le moment.</Pending>}</Section>;
   const contact = <Section id="contact" title="Contact"><div className="space-y-4 text-sm text-slate-600">
     <p>{[school.address, location].filter(Boolean).join(", ") || "Adresse à venir."}</p>
     {school.phone ? <a href={`tel:${school.phone}`} className="flex items-center gap-2 font-semibold text-emerald-700"><Phone size={17} />{school.phone}</a> : <p>Téléphone à venir.</p>}

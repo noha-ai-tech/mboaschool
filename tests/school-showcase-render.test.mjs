@@ -82,3 +82,8 @@ test('qualified fees and published results are rendered from the school data', (
   assert.ok(html.includes('123') && html.includes('456'));
   assert.ok(html.includes('Baccalauréat Alpha') && html.includes('72%'));
 });
+test('the documents section retains public files beyond fee and enrollment forms', () => {
+  const html = render(fixture({ docsList: [{ id: 'rules', name: 'Règlement intérieur Alpha', type: 'reglement', url: 'https://example.test/rules.pdf', status: 'live', is_public: true }] }), 'galerie');
+  assert.ok(html.includes('Règlement intérieur Alpha'));
+  assert.ok(html.includes('https://example.test/rules.pdf'));
+});
