@@ -9,7 +9,7 @@ type CategoryOption = { key: string; label: string };
 type RegionOption = { value: string; label: string };
 
 // Formulaire de recherche du Hero — plus de titre/sous-titre internes (Landing
-// V6 : le titre "Trouvez l'école idéale..." vit désormais directement dans le
+// V6 : le titre de l'accueil vit directement dans le
 // panneau du Hero, au-dessus de ce formulaire, pas dans ce composant). Deux
 // tons : "light" (fond clair) et "dark" (carte vert foncé actuelle — champs
 // blancs opaques, comme la maquette de référence, pas de verre translucide).

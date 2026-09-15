@@ -605,11 +605,8 @@ export default function HomePage() {
                 </span>
 
                 <h1 className="font-[family-name:var(--font-fraunces)] text-[32px] sm:text-[40px] lg:text-[46px] leading-[1.1] font-semibold text-white tracking-[-0.01em]">
-                  Trouvez l&apos;école idéale pour votre enfant, <em className="text-[#F2AE1F]">en toute confiance.</em>
+                  Le portail vers l&apos;éducation au Cameroun
                 </h1>
-                <p className="text-[15px] sm:text-base text-white/80 mt-4 max-w-[430px] leading-relaxed">
-                  De la garderie à l&apos;université, ainsi que les formations professionnelles et techniques — rassemblés et vérifiés au même endroit.
-                </p>
 
                 <div className="relative rounded-[20px] overflow-hidden mt-7 max-w-[440px] shadow-[0_20px_44px_-16px_rgba(0,0,0,0.5)]">
                   <div
