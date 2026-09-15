@@ -23,11 +23,11 @@ const SOCIAL_PLACEHOLDERS = [
 // remplacer ces <span> par des <Link>.
 const LEGAL_LINKS = ["Mentions légales", "Confidentialité"];
 
-export function SiteFooter() {
+export function SiteFooter({ tone = "default" }: { tone?: "default" | "landing" }) {
   return (
     <>
-      <footer className="bg-[#0B3B2E] text-white">
-        <div className="max-w-[1520px] mx-auto px-[18px] py-16 grid md:grid-cols-5 gap-10">
+      <footer className={tone === "landing" ? "bg-[#146149] text-white" : "bg-[#0B3B2E] text-white"}>
+        <div className={`max-w-[1520px] mx-auto px-[18px] ${tone === "landing" ? "py-12" : "py-16"} grid md:grid-cols-5 gap-10`}>
           <div className="md:col-span-2">
             <Link href="/" className="inline-block">
               <Logo variant="dark" />

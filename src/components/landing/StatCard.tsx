@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 
-// Carte KPI de la section Statistiques — chiffre réel en grand (Fraunces),
+// Carte KPI de la section Statistiques — chiffre réel en grand (Plus Jakarta Sans),
 // titre, description courte. Pas d'icône répétée dans un cercle sur chaque
 // carte (voir references/anti-ai-tells.md du skill de design : ce pattern
 // "icône-dans-cercle identique" est le signe le plus classique d'un écran
@@ -33,7 +33,7 @@ export function StatCard({
   if (variant === "cell-dark") {
     return (
       <div className="bg-[#0F4736] p-5 lg:p-6">
-        <p className="font-[family-name:var(--font-fraunces)] text-[32px] leading-none font-semibold text-white tabular-nums">
+        <p className="font-[family-name:var(--font-jakarta)] tracking-[-0.04em] text-[36px] leading-none font-semibold text-white tabular-nums">
           {value}
         </p>
         <p className="text-sm font-bold text-[#F2AE1F] mt-2.5">{label}</p>
@@ -44,7 +44,7 @@ export function StatCard({
   const isCell = variant === "cell";
   return (
     <div className={isCell ? "bg-white p-5 lg:p-6" : "bg-white border border-[#E7E0D7] rounded-[18px] p-5"}>
-      <p className="font-[family-name:var(--font-fraunces)] text-[32px] leading-none font-semibold text-[#0B3B2E] tabular-nums">
+      <p className="font-[family-name:var(--font-jakarta)] tracking-[-0.04em] text-[36px] leading-none font-semibold text-[#0B3B2E] tabular-nums">
         {value}
       </p>
       <p className="text-sm font-bold text-[#132019] mt-2.5">{label}</p>

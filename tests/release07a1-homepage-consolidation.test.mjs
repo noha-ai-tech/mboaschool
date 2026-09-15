@@ -22,9 +22,9 @@ test("homepage exposes category, region and dependent city filters to the direct
   const page = await source("src/app/page.tsx");
   const search = await source("src/components/hero/HeroSearch.tsx");
 
-  assert.match(search, /Toutes les catégories/);
+  assert.match(search, /Filtrer par catégorie/);
   assert.match(search, /Filtrer par région/);
-  assert.match(search, /Toutes les villes/);
+  assert.match(search, /Filtrer par ville/);
   assert.match(page, /citiesForRegionFilter\(region\)/);
   assert.match(page, /setRegion\(value\); setCity\("all"\)/);
   assert.match(page, /params\.set\("region", region\)/);

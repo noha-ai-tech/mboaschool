@@ -62,8 +62,8 @@ export function HeroSearch({
   const iconCls = dark ? "text-[#12543F]" : "text-text-secondary";
 
   return (
-    <div className="w-full flex flex-col gap-3.5">
-      <div className={`relative flex items-center gap-2.5 rounded-xl px-4 h-14 focus-within:border-white/40 transition-colors duration-base ${fieldCls}`}>
+    <div className="w-full flex flex-col gap-3">
+      <div className={`relative flex items-center gap-2.5 rounded-xl px-4 h-12 focus-within:border-white/40 transition-colors duration-base ${fieldCls}`}>
         <Search size={18} className={`shrink-0 ${iconCls}`} />
         <input
           className="bg-transparent outline-none text-base flex-1 min-w-0 placeholder:inherit"
@@ -80,23 +80,17 @@ export function HeroSearch({
         <SearchSuggestions query={query} onSelectCity={(selectedCity) => { onRegionChange("all"); onCityChange(selectedCity); onQueryChange(""); }} />
       </div>
 
-      {/* HOTFIX — this card is capped at max-w-[440px] by its parent (see
-          src/app/page.tsx) at every breakpoint from `sm:` upward, so a
-          3-column row never has room for full French labels ("Toutes les
-          catégories" etc.) and was silently ellipsis-truncating to "Toutes
-          les c...". One column per control at every width guarantees each
-          select is wide enough for its full text; a small caption above
-          each one keeps "Catégories / Région / Ville" clear regardless of
-          which value is currently selected. */}
-      <div className="grid grid-cols-1 gap-2.5">
+      {/* Deux lignes de filtres, avec des libellés courts. */}
+      <div className="grid grid-cols-2 gap-x-3 gap-y-2.5">
         <div>
-          <p className={`mb-1 text-[11px] font-bold uppercase tracking-wide ${dark ? "text-white/70" : "text-text-secondary"}`}>Catégories</p>
+          <p className={`mb-1 text-[11px] font-bold uppercase tracking-wide ${dark ? "text-white/70" : "text-text-secondary"}`}>Catégorie</p>
           <select
+            aria-label="Filtrer par catégorie"
             value={activeCategory}
             onChange={(e) => onCategoryChange(e.target.value)}
-            className={`w-full min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
+            className={`w-full min-w-0 rounded-xl px-2.5 h-11 text-sm font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
           >
-            <option value="all" className="text-[#0a0a0a]">Toutes les catégories</option>
+            <option value="all" className="text-[#0a0a0a]">Sélectionner</option>
             {categories.map((cat) => (
               <option key={cat.key} value={cat.key} className="text-[#0a0a0a]">{cat.label}</option>
             ))}
@@ -108,10 +102,10 @@ export function HeroSearch({
             value={region}
             onChange={(e) => onRegionChange(e.target.value)}
             aria-label="Filtrer par région"
-            className={`w-full min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
+            className={`w-full min-w-0 rounded-xl px-2.5 h-11 text-sm font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
           >
             {regions.map((item) => (
-              <option key={item.value} value={item.value} className="text-[#0a0a0a]">{item.label}</option>
+              <option key={item.value} value={item.value} className="text-[#0a0a0a]">{item.value === "all" ? "Sélectionner" : item.label}</option>
             ))}
           </select>
         </div>
@@ -121,41 +115,43 @@ export function HeroSearch({
             value={city}
             onChange={(e) => onCityChange(e.target.value)}
             aria-label="Filtrer par ville"
-            className={`w-full min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
+            className={`w-full min-w-0 rounded-xl px-2.5 h-11 text-sm font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
           >
             {cities.map((c) => (
-              <option key={c} value={c} className="text-[#0a0a0a]">{c === "all" ? "Toutes les villes" : c}</option>
+              <option key={c} value={c} className="text-[#0a0a0a]">{c === "all" ? "Sélectionner" : c}</option>
             ))}
           </select>
         </div>
-      </div>
-
-      <div className="flex items-center gap-2.5">
+        <div className="min-w-0">
+          <p className={`mb-1 text-[11px] font-bold uppercase tracking-wide ${dark ? "text-white/70" : "text-text-secondary"}`}>Distance</p>
+          <div className="flex items-center gap-1.5">
         <select
           value={radius}
           onChange={(e) => onRadiusChange(e.target.value)}
-          className={`flex-1 min-w-0 rounded-xl px-3.5 h-12 text-[15px] font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
+          className={`flex-1 min-w-0 rounded-xl px-2.5 h-11 text-sm font-medium focus:outline-none transition-colors duration-base ${selectCls}`}
           aria-label="Rayon de recherche"
         >
           {RADIUS_OPTIONS.map((r) => (
-            <option key={r} value={r} className="text-[#0a0a0a]">Rayon {r} km</option>
+            <option key={r} value={r} className="text-[#0a0a0a]">{r} km</option>
           ))}
         </select>
         <button
           onClick={onLocate}
           disabled={locating}
           aria-label="Me localiser"
-          className={`shrink-0 w-12 h-12 flex items-center justify-center rounded-xl transition-colors duration-base disabled:opacity-50 ${
+          className={`shrink-0 w-9 h-11 flex items-center justify-center rounded-xl transition-colors duration-base disabled:opacity-50 ${
             dark ? "border border-white/20 bg-white/5 text-[#F2AE1F] hover:bg-white/10" : "border border-border text-text-secondary hover:text-text-primary hover:bg-muted"
           }`}
         >
           <Navigation size={18} />
         </button>
+          </div>
+        </div>
       </div>
 
       <button
         onClick={onSearch}
-        className={`group inline-flex items-center justify-center gap-2 w-full h-14 rounded-xl font-bold text-base transition-all duration-base ${
+        className={`group inline-flex items-center justify-center gap-2 w-full h-12 rounded-xl font-bold text-base transition-all duration-base ${
           dark
             ? "bg-[#F2AE1F] text-[#0B3B2E] hover:bg-[#D6941A] hover:shadow-elevation-2 hover:-translate-y-0.5"
             : "bg-[#1F8A5D] text-white hover:bg-[#12543F] hover:shadow-elevation-2 hover:-translate-y-0.5"

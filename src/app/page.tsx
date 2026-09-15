@@ -597,18 +597,18 @@ export default function HomePage() {
 
             <div className="relative z-[5] flex items-center min-h-[560px] lg:min-h-[620px] px-6 py-10 sm:px-10 sm:py-12 lg:px-14 lg:py-14">
               <div className="w-full max-w-[520px]">
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white mb-6">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-medium tracking-[0.01em] text-white mb-5">
                   <span aria-hidden="true" className="w-1.5 h-1.5 rounded-full bg-[#F2AE1F]" />
                   {loading
                     ? "Annuaire scolaire du Cameroun"
                     : `${stats.establishments.toLocaleString("fr-FR")} établissement${stats.establishments !== 1 ? "s" : ""} référencé${stats.establishments !== 1 ? "s" : ""} dans tout le Cameroun`}
                 </span>
 
-                <h1 className="font-[family-name:var(--font-fraunces)] text-[32px] sm:text-[40px] lg:text-[46px] leading-[1.1] font-semibold text-white tracking-[-0.01em]">
+                <h1 className="font-[family-name:var(--font-jakarta)] text-[30px] sm:text-[36px] lg:text-[40px] leading-[1.15] font-semibold text-white tracking-[-0.035em]">
                   Le portail vers l&apos;éducation au Cameroun
                 </h1>
 
-                <div className="relative rounded-[20px] overflow-hidden mt-7 max-w-[440px] shadow-[0_20px_44px_-16px_rgba(0,0,0,0.5)]">
+                <div className="relative rounded-[20px] overflow-hidden mt-6 max-w-[440px] shadow-[0_20px_44px_-16px_rgba(0,0,0,0.5)]">
                   <div
                     aria-hidden="true"
                     className="absolute inset-0 bg-cover bg-center blur-[18px] scale-110 brightness-75"
@@ -648,21 +648,21 @@ export default function HomePage() {
 
                 <div className="flex items-center gap-6 sm:gap-9 flex-wrap mt-7">
                   <div>
-                    <p className="font-[family-name:var(--font-fraunces)] text-2xl font-semibold text-white leading-none tabular-nums">
+                    <p className="font-[family-name:var(--font-jakarta)] text-[28px] font-semibold text-white leading-none tracking-[-0.04em] tabular-nums">
                       {loading ? "—" : stats.establishments.toLocaleString("fr-FR")}
                     </p>
                     <p className="text-[11px] font-semibold uppercase tracking-wider text-white/60 mt-1">Établissements</p>
                   </div>
                   <span aria-hidden="true" className="hidden sm:block w-px h-9 bg-white/20" />
                   <div>
-                    <p className="font-[family-name:var(--font-fraunces)] text-2xl font-semibold text-white leading-none tabular-nums">
+                    <p className="font-[family-name:var(--font-jakarta)] text-[28px] font-semibold text-white leading-none tracking-[-0.04em] tabular-nums">
                       {loading ? "—" : stats.regions.toLocaleString("fr-FR")}
                     </p>
                     <p className="text-[11px] font-semibold uppercase tracking-wider text-white/60 mt-1">Régions couvertes</p>
                   </div>
                   <span aria-hidden="true" className="hidden sm:block w-px h-9 bg-white/20" />
                   <div>
-                    <p className="font-[family-name:var(--font-fraunces)] text-2xl font-semibold text-white leading-none tabular-nums">
+                    <p className="font-[family-name:var(--font-jakarta)] text-[28px] font-semibold text-white leading-none tracking-[-0.04em] tabular-nums">
                       {loading ? "—" : stats.cities.toLocaleString("fr-FR")}
                     </p>
                     <p className="text-[11px] font-semibold uppercase tracking-wider text-white/60 mt-1">Villes couvertes</p>
@@ -811,53 +811,45 @@ export default function HomePage() {
             RLS de lecture pour le rôle anonyme, et en créer une sortirait du
             périmètre Supabase de ce sprint — remplacé par "Régions couvertes",
             dérivé des vraies villes en base via une géographie réelle.
-            Fond vert foncé de marque (identique à la maquette) — c'est la
-            seule section "corps de page" à porter cette couleur, jamais du
-            blanc/crème pour une section qui est verte dans la référence. */}
-        <section className="relative bg-[#0B3B2E] overflow-hidden">
-          {/* Halo décoratif à faible opacité, jamais une carte cartographique précise. */}
-          <div
-            aria-hidden="true"
-            className="absolute -left-24 -top-40 w-[420px] h-[420px] rounded-full pointer-events-none"
-            style={{ background: "radial-gradient(circle, rgba(31,138,93,0.45), transparent 70%)" }}
-          />
+            Fond clair pour séparer le contenu du footer vert. */}
+        <section className="relative bg-white border-t border-[#E5EBE6] overflow-hidden">
 
           <div className="relative px-[18px] py-16 lg:py-20">
             <div className="max-w-xl mb-10">
-              <SectionEyebrow label="Notre engagement" dark />
-              <h2 className="font-[family-name:var(--font-fraunces)] text-2xl lg:text-[28px] font-semibold text-white leading-snug">
-                L&apos;éducation camerounaise devient <em className="italic text-[#F2AE1F]">plus accessible.</em>
+              <SectionEyebrow label="Notre engagement" />
+              <h2 className="font-[family-name:var(--font-fraunces)] text-2xl lg:text-[28px] font-semibold text-[#132019] leading-snug">
+                L&apos;éducation camerounaise devient <em className="italic text-[#1F8A5D]">plus accessible.</em>
               </h2>
-              <p className="text-[15px] text-white/65 leading-relaxed mt-3.5">
+              <p className="text-[15px] text-[#5A695F] leading-relaxed mt-3.5">
                 Écoles237 centralise, vérifie et met à jour l&apos;information scolaire dans tout le pays — pour que
                 chaque famille et chaque établissement y gagne en clarté.
               </p>
             </div>
 
-            <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/10 rounded-[20px] overflow-hidden">
+            <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-px bg-[#E5EBE6] border border-[#E5EBE6] rounded-[20px] overflow-hidden">
               <LandingStatCard
-                variant="cell-dark"
+                variant="cell"
                 icon={Building2}
                 value={loading ? "—" : stats.establishments.toLocaleString("fr-FR")}
                 label="Établissements référencés"
                 description="Dans tout le Cameroun."
               />
               <LandingStatCard
-                variant="cell-dark"
+                variant="cell"
                 icon={MapIcon}
                 value={loading ? "—" : stats.regions.toLocaleString("fr-FR")}
                 label="Régions couvertes"
                 description="Sur 10 régions au total."
               />
               <LandingStatCard
-                variant="cell-dark"
+                variant="cell"
                 icon={LayoutGrid}
                 value={loading ? "—" : stats.categories.toLocaleString("fr-FR")}
                 label="Catégories représentées"
                 description="Issues des établissements du registre."
               />
               <LandingStatCard
-                variant="cell-dark"
+                variant="cell"
                 icon={MapPin}
                 value={loading ? "—" : stats.cities.toLocaleString("fr-FR")}
                 label="Villes couvertes"
@@ -867,10 +859,10 @@ export default function HomePage() {
 
             <div className="relative grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
               {WHY_REASONS.map((reason) => (
-                <div key={reason.title} className="bg-white/[0.06] border border-white/10 rounded-[16px] p-5">
-                  <reason.icon size={19} className="text-[#F2AE1F] mb-3" aria-hidden="true" />
-                  <h4 className="text-[14.5px] font-bold text-white mb-1">{reason.title}</h4>
-                  <p className="text-[12.5px] text-white/60 leading-relaxed">{reason.description}</p>
+                <div key={reason.title} className="bg-[#F6F8F5] border border-[#E5EBE6] rounded-[16px] p-5">
+                  <reason.icon size={19} className="text-[#1F8A5D] mb-3" aria-hidden="true" />
+                  <h4 className="text-[14.5px] font-bold text-[#132019] mb-1">{reason.title}</h4>
+                  <p className="text-[12.5px] text-[#5A695F] leading-relaxed">{reason.description}</p>
                 </div>
               ))}
             </div>
@@ -880,7 +872,7 @@ export default function HomePage() {
         {/* ── PARTENAIRES ───────────────────────────────────────────── */}
       </div>
 
-      <SiteFooter />
+      <SiteFooter tone="landing" />
     </div>
   );
 }

@@ -74,10 +74,10 @@ test("the now-unnecessary Guyskull-only is_claimed override was removed from /ap
 // French option text ("Toutes les catégories") and silently
 // ellipsis-truncated to "Toutes les c...". Guards against regressing back
 // to a cramped multi-column layout and confirms the clarifying labels exist.
-test("HeroSearch stacks category/region/city selects one per row (never squeezed into 3 columns)", async () => {
+test("HeroSearch keeps explicit filter labels without a cramped three-column row", async () => {
   const src = await source("src/components/hero/HeroSearch.tsx");
   assert.doesNotMatch(src, /grid-cols-1 sm:grid-cols-3/, "must not reintroduce the 3-column layout that truncated select text inside the 440px-capped card");
-  assert.match(src, /Catégories<\/p>/);
+  assert.match(src, /Catégorie<\/p>/);
   assert.match(src, /Région<\/p>/);
   assert.match(src, /Ville<\/p>/);
 });
