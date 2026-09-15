@@ -1,37 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { Fraunces, Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { supabase } from "@/lib/supabase";
 import {
-  ArrowLeft, MapPin, ArrowRight, School, Search, X, ChevronUp, ChevronDown, Heart,
+  ArrowLeft, MapPin, ArrowRight, School, Search, X, Scale,
 } from "lucide-react";
+import { CategoryComparison } from "@/components/categories/CategoryComparison";
 import { CAT_META } from "./catMeta";
 import { includesInsensitive } from "@/lib/textSearch";
 import { formatQuartierCity } from "@/lib/formatSchoolLocation";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader, SiteHeaderSpacer } from "@/components/layout/SiteHeader";
-import { AnnouncementTicker, type TickerItem } from "@/components/hero/AnnouncementTicker";
-import { FeaturedSchoolsCarousel } from "@/components/schools/FeaturedSchoolsCarousel";
-import { THUMBNAIL_TONES, type FeaturedSchool } from "@/components/schools/SchoolCard";
-import { HERO_PHOTOS } from "@/lib/heroPhotos";
 import { useNearMeFilter, haversineKm } from "@/lib/useNearMeFilter";
 import { citiesForRegionFilter, getMajorCity } from "@/lib/cameroonMajorCities";
 import { REGION_FILTER_OPTIONS, regionsForFilterValue } from "@/lib/cameroonRegions";
 import { paginateAll } from "@/lib/sitemap/paginate";
 
-// Typographie de marque (skill ecoles237-design-system) — Fraunces pour les
-// titres éditoriaux, scopée à cette page via variable CSS (voir même
-// pattern déjà en place sur src/app/page.tsx), sans toucher au Manrope
-// global du reste du site.
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  variable: "--font-fraunces",
-  display: "swap",
-});
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
@@ -39,136 +26,10 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-// ─── Carrousel des écoles mises en avant ────────────────────────────────────
-//
-// Volontairement pas un encart "publicitaire"/"sponsorisé" : une slide = une
-// vraie école "mise en avant" dans cette catégorie (`establishments.is_featured`,
-// le même signal que l'admin bascule sous le libellé "Mise en avant
-// (sponsorisé)" — voir dashboard/admin/ecoles/[id]). Volontairement sans
-// badge visible ("À la une"/"Sponsorisé") — juste un défilement de vraies
-// photos d'écoles avec nom/description/lien réels, jamais une étiquette
-// commerciale sur la carte.
-// La photo vient de `school_images` (statut live) puis `cover_image_url` en
-// repli, comme sur le reste du site (voir useShowcasePhotos) ; si aucune
-// photo réelle n'existe encore pour cette école précise, le fond utilise une
-// des vraies photos du Hero de l'accueil (src/lib/heroPhotos.ts, mêmes
-// photos que le panneau d'authentification) plutôt qu'un aplat de couleur
-// ou une image inventée — jamais une photo présentée comme LA photo de
-// cette école, juste un fond de marque réel et cohérent avec le reste du
-// site. La description vient du champ réel `establishments.description` ;
-// à défaut, un texte factuel dérivé de données réelles (sous-catégorie +
-// ville) — jamais un texte marketing inventé.
-type FeaturedSlide = {
-  id: string;
-  schoolId: string;
-  photoUrl: string | null;
-  name: string;
-  description: string;
-};
-
-function FeaturedCarousel({ slides }: { slides: FeaturedSlide[] }) {
-  const [active, setActive] = useState(0);
-
-  useEffect(() => {
-    if (slides.length < 2) return;
-    const id = setInterval(() => setActive((v) => (v + 1) % slides.length), 4500);
-    return () => clearInterval(id);
-  }, [slides.length]);
-
-  if (slides.length === 0) {
-    return (
-      <div className="relative flex-1 min-h-[220px] lg:min-h-[420px] rounded-[18px] overflow-hidden shadow-[0_18px_36px_-18px_rgba(11,59,46,0.3)]">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${HERO_PHOTOS[0].url})` }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{ background: "linear-gradient(135deg, rgba(6,37,27,0.85) 0%, rgba(6,37,27,0.55) 100%)" }}
-        />
-        <div className="relative h-full flex flex-col items-center justify-center text-center p-8">
-          <p className="text-sm text-white/85 max-w-[260px]">
-            Aucune école mise en avant dans cette catégorie pour l&apos;instant.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  const move = (dir: 1 | -1) => setActive((v) => (v + dir + slides.length) % slides.length);
-
-  return (
-    <div className="relative flex-1 min-h-[220px] lg:min-h-[420px] rounded-[18px] overflow-hidden shadow-[0_18px_36px_-18px_rgba(11,59,46,0.3)]">
-      {slides.map((slide, i) => (
-        <div
-          key={slide.id}
-          className="absolute inset-0 bg-cover bg-center transition-opacity duration-[900ms] ease-in-out"
-          style={{
-            backgroundImage: `url(${slide.photoUrl ?? HERO_PHOTOS[i % HERO_PHOTOS.length].url})`,
-            opacity: i === active ? 1 : 0,
-          }}
-        >
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(0deg, rgba(6,37,27,0.92) 0%, rgba(6,37,27,0.6) 45%, rgba(6,37,27,0.15) 75%, transparent 100%)",
-            }}
-          />
-          <div className="absolute inset-0 flex flex-col justify-end p-6">
-            <h3 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-white leading-tight mb-2">
-              {slide.name}
-            </h3>
-            <p className="text-sm text-white/85 leading-relaxed mb-4 line-clamp-3">{slide.description}</p>
-            <Link
-              href={`/ecole/${slide.schoolId}`}
-              className="inline-flex items-center gap-2 w-fit bg-white text-[#0B3B2E] text-sm font-bold px-4 py-2.5 rounded-[10px] hover:bg-[#F2AE1F] transition-colors duration-base"
-            >
-              Voir la fiche <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
-      ))}
-
-      {slides.length > 1 && (
-        <>
-          <button
-            onClick={() => move(-1)}
-            aria-label="Précédent"
-            className="absolute left-1/2 -translate-x-1/2 top-3 z-10 w-7 h-7 rounded-full bg-white/85 text-[#0B3B2E] flex items-center justify-center hover:bg-white transition-colors duration-base"
-          >
-            <ChevronUp size={14} />
-          </button>
-          <button
-            onClick={() => move(1)}
-            aria-label="Suivant"
-            className="absolute left-1/2 -translate-x-1/2 bottom-3 z-10 w-7 h-7 rounded-full bg-white/85 text-[#0B3B2E] flex items-center justify-center hover:bg-white transition-colors duration-base"
-          >
-            <ChevronDown size={14} />
-          </button>
-          <div className="absolute top-12 right-3 z-10 flex flex-col gap-1.5">
-            {slides.map((slide, i) => (
-              <button
-                key={slide.id}
-                onClick={() => setActive(i)}
-                aria-label={`Voir l'établissement mis en avant ${i + 1}`}
-                className={`w-1.5 rounded-full transition-all duration-base ${i === active ? "h-4 bg-white" : "h-1.5 bg-white/50"}`}
-              />
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-// ─── Page ──────────────────────────────────────────────────────────────────
-
 function CategoryPageInner() {
   const { slug } = useParams() as { slug: string };
   const searchParams = useSearchParams();
   const router = useRouter();
-  const activeSub = searchParams.get("sous") ?? "all";
   // § filtres cohérents avec /recherche : Nom/Région/Ville/Près de moi, état
   // d'URL comme source de vérité (même pattern que /recherche/page.tsx).
   const urlRegion = searchParams.get("region") ?? "all";
@@ -180,15 +41,19 @@ function CategoryPageInner() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const near = useNearMeFilter();
-  const [likedIds, setLikedIds] = useState<string[]>([]);
-  const toggleLiked = (id: string) =>
-    setLikedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  const [compareIds, setCompareIds] = useState<string[]>([]);
+  const [showCompare, setShowCompare] = useState(false);
+  const compareSchools = schools.filter((school) => compareIds.includes(school.id));
+  function toggleCompare(id: string) {
+    setCompareIds((ids) => ids.includes(id) ? ids.filter((value) => value !== id) : ids.length < 3 ? [...ids, id] : ids);
+  }
 
   // Ville dépend de la Région choisie — même correspondance que /recherche.
   const cityOptions = useMemo(() => ["all", ...citiesForRegionFilter(urlRegion).map((c) => c.name)], [urlRegion]);
 
   function updateParams(next: Record<string, string | null>) {
     const params = new URLSearchParams(searchParams.toString());
+    params.delete("sous");
     for (const [key, value] of Object.entries(next)) {
       if (!value || value === "all" || value === "") params.delete(key);
       else params.set(key, value);
@@ -202,6 +67,9 @@ function CategoryPageInner() {
     setLoading(true);
     setLoadError(null);
     setSchools([]);
+    setQuery("");
+    setCompareIds([]);
+    setShowCompare(false);
     paginateAll(500, async (from, to) => {
       const { data, error } = await supabase
       .from("establishments")
@@ -234,55 +102,6 @@ function CategoryPageInner() {
     return () => controller.abort();
   }, [slug, meta]);
 
-  const featuredForCarousel: FeaturedSchool[] = useMemo(
-    () =>
-      schools
-        .filter((s) => s.is_featured)
-        .map((s) => ({
-          id: s.id,
-          name: s.name,
-          city: s.city ?? null,
-          quartier: s.neighborhood ?? null,
-          category: s.sub_category ?? meta?.label ?? "",
-          subcategory: "",
-          image: s.cover_image_url ?? null,
-          verified: !!s.is_verified,
-          isFeatured: !!s.is_featured,
-          isClaimed: s.is_claimed ?? true,
-        })),
-    [schools, meta]
-  );
-
-  // Une slide par vraie photo (pas juste une par école) : la plupart des
-  // écoles mises en avant ont plusieurs photos publiées dans
-  // `school_images`, c'est ce qui fait réellement défiler le carrousel
-  // comme dans la maquette plutôt que de rester figé sur une seule image.
-  const featuredSlides: FeaturedSlide[] = useMemo(
-    () =>
-      schools
-        .filter((s) => s.is_featured)
-        .flatMap((s) => {
-          const location = formatQuartierCity(s.neighborhood, s.city);
-          const description =
-            (s.description as string | null)?.trim() ||
-            `${s.sub_category ?? meta?.label ?? "Établissement"}${location ? ` à ${location}` : ""}.`;
-          // Uniquement `school_images` (upload réel, modéré — statut "live")
-          // — jamais `cover_image_url`, qui peut contenir une image de stock
-          // sans rapport avec l'établissement (même logique que SchoolCard :
-          // aucune "vraie photo" non vérifiable présentée comme telle).
-          const livePhotos: string[] = (s.school_images ?? []).map((img: { url: string }) => img.url).filter(Boolean);
-          const photoUrls: (string | null)[] = livePhotos.length > 0 ? livePhotos : [null];
-          return photoUrls.map((photoUrl, j) => ({
-            id: `${s.id}-${j}`,
-            schoolId: s.id,
-            photoUrl,
-            name: s.name,
-            description,
-          }));
-        }),
-    [schools, meta]
-  );
-
   if (!meta) {
     return (
       <div className="min-h-screen bg-[#FBF6F2]">
@@ -298,40 +117,7 @@ function CategoryPageInner() {
     );
   }
 
-  const { label, description, icon: CatIcon, subcategories } = meta;
-
-  // Sous-catégories réelles — regroupées insensible à la casse/espaces pour
-  // ne jamais créer deux tuiles pour la même valeur (ex. "Primaire public"
-  // prédéfini vs "primaire public" en base), et toute école sans
-  // sous-catégorie renseignée (null/vide) rejoint une tuile "Non classée"
-  // plutôt que de disparaître du décompte — garantit que la somme des
-  // tuiles est TOUJOURS exactement égale à `schools.length` (§ demande
-  // "le chiffre affiché doit être calculé dynamiquement... jamais un
-  // chiffre en dur").
-  const UNCLASSIFIED_KEY = "__non_classee__";
-  const subcatLabelByKey = new Map<string, string>();
-  subcategories.forEach((sub) => subcatLabelByKey.set(sub.toLowerCase(), sub));
-  schools.forEach((s) => {
-    const raw = (s.sub_category ?? "").trim();
-    if (raw && !subcatLabelByKey.has(raw.toLowerCase())) {
-      subcatLabelByKey.set(raw.toLowerCase(), raw);
-    }
-  });
-  const allSubcats = Array.from(subcatLabelByKey.values());
-
-  const subcatCounts: Record<string, number> = {};
-  allSubcats.forEach((sub) => {
-    subcatCounts[sub] = schools.filter(
-      (s) => (s.sub_category ?? "").trim().toLowerCase() === sub.toLowerCase()
-    ).length;
-  });
-  const unclassifiedCount = schools.filter((s) => !(s.sub_category ?? "").trim()).length;
-
-  // "Mis en avant" = uniquement is_featured (signal commercial réel, distinct
-  // de la vérification). Vérifié reste un badge indépendant affiché sur
-  // n'importe quelle carte, organique ou mise en avant — jamais fusionnés
-  // (voir docs/03_DESIGN_SYSTEM, hiérarchie commerciale organic/verified/sponsored).
-  const featured = schools.filter((s) => s.is_featured);
+  const { label } = meta;
 
   // Ville/Région — même logique de correspondance que /recherche
   // (regionsForFilterValue + getMajorCity pour résoudre les alias de ville).
@@ -339,13 +125,6 @@ function CategoryPageInner() {
 
   // Filtered list
   const filtered = schools.filter((s) => {
-    if (activeSub !== "all") {
-      if (activeSub === UNCLASSIFIED_KEY) {
-        if ((s.sub_category ?? "").trim()) return false;
-      } else if ((s.sub_category ?? "").trim().toLowerCase() !== activeSub.toLowerCase()) {
-        return false;
-      }
-    }
     if (query && !includesInsensitive(`${s.name} ${s.city ?? ""} ${s.neighborhood ?? ""} ${s.sub_category ?? ""}`, query)) {
       return false;
     }
@@ -361,37 +140,10 @@ function CategoryPageInner() {
     return true;
   });
 
-  // Bande d'annonces — même contrat que la Landing (src/app/page.tsx) :
-  // chaque entrée est un vrai lien vers une école ou une page existante,
-  // jamais un message inventé. Masquée automatiquement (voir
-  // AnnouncementTicker) si aucune entrée réelle n'est disponible.
-  const tickerItems: TickerItem[] = [];
-  if (featured[0]) {
-    tickerItems.push({
-      id: "featured",
-      label: `École à la une : ${featured[0].name}`,
-      href: `/ecole/${featured[0].id}`,
-    });
-  }
-  if (!loading && schools.length > 0) {
-    tickerItems.push({
-      id: "count",
-      label: `${schools.length} établissement${schools.length !== 1 ? "s" : ""} ${label.toLowerCase()} référencé${schools.length !== 1 ? "s" : ""}`,
-      href: `/categorie/${slug}`,
-    });
-  }
-  tickerItems.push({ id: "preinscription", label: "Préinscription en ligne", href: "/preinscription" });
-  tickerItems.push({ id: "inscription", label: "Inscrire mon établissement", href: "/auth/inscription" });
-
-  function setSubcat(sub: string) {
-    updateParams({ sous: sub === "all" ? null : sub });
-  }
-
   return (
-    <div className={`min-h-screen bg-[#FBF6F2] ${fraunces.variable} ${jakarta.variable}`}>
+    <div className={`min-h-screen bg-[#FBF6F2] ${jakarta.variable} font-[family-name:var(--font-jakarta)]`}>
       <SiteHeader />
       <SiteHeaderSpacer />
-      <AnnouncementTicker items={tickerItems} />
 
       <div className="max-w-[1520px] mx-auto px-[18px]">
 
@@ -403,124 +155,17 @@ function CategoryPageInner() {
           <ArrowLeft size={15} /> Accueil
         </Link>
 
-        {/* ── EN-TÊTE CATÉGORIE + CARROUSEL SPONSORISÉ ─────────────── */}
-        <section className="pt-5 pb-10 flex flex-col lg:flex-row lg:items-center gap-7">
-          <div className="flex gap-5 items-start lg:flex-[0_1_480px] min-w-0">
-            <div className="shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-[#E9F5EE] to-[#DCEFE3] text-[#0B3B2E] flex items-center justify-center">
-              <CatIcon size={28} />
-            </div>
-            <div>
-              <p className="flex items-center gap-2.5 text-xs font-bold uppercase tracking-wider text-[#12543F] mb-2">
-                <span aria-hidden="true" className="w-6 h-[3px] rounded-full bg-gradient-to-r from-[#1F8A5D] via-[#C8202F] to-[#F2AE1F]" />
-                Catégorie
-              </p>
-              <h1 className="font-[family-name:var(--font-fraunces)] text-3xl md:text-4xl font-semibold text-[#132019] leading-tight mb-3">
-                {label}
-              </h1>
-              <p className="text-sm text-[#5A695F] max-w-lg">{description}</p>
-              <div className="flex items-center gap-5 mt-4 text-sm">
-                <span>
-                  <span className="font-[family-name:var(--font-fraunces)] text-[#132019] font-semibold text-xl">
-                    {loading ? "—" : schools.length}
-                  </span>
-                  <span className="ml-1.5 text-[#5A695F]">établissement{schools.length !== 1 ? "s" : ""}</span>
-                </span>
-              </div>
-            </div>
-          </div>
+        <header className="pt-4 pb-5">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#12543F] mb-1">Catégorie</p>
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#132019]">{label}</h1>
+        </header>
 
-          <FeaturedCarousel slides={featuredSlides} />
-        </section>
-
-        {/* ── SOUS-CATÉGORIES ──────────────────────────────────────── */}
-        <section className="pb-10">
-          <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-[#132019] mb-5">
-            Explorer par sous-catégorie
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5">
-            <button
-              onClick={() => setSubcat("all")}
-              className={`flex flex-col items-start p-5 rounded-[16px] border text-left transition-colors duration-base ${
-                activeSub === "all"
-                  ? "bg-[#0B3B2E] text-white border-[#0B3B2E]"
-                  : "bg-white border-[#E7E0D7] hover:border-[#12543F]"
-              }`}
-            >
-              <span className={`font-[family-name:var(--font-fraunces)] text-2xl font-semibold ${activeSub === "all" ? "text-white" : "text-[#132019]"}`}>
-                {loading ? "—" : schools.length}
-              </span>
-              <p className={`font-semibold text-sm mt-2 ${activeSub === "all" ? "text-white" : "text-[#132019]"}`}>Toutes</p>
-              <p className={`text-xs mt-0.5 ${activeSub === "all" ? "text-white/60" : "text-[#5A695F]"}`}>
-                école{schools.length !== 1 ? "s" : ""}
-              </p>
-            </button>
-
-            {allSubcats.map((sub) => {
-              const count = subcatCounts[sub] ?? 0;
-              const active = activeSub === sub;
-              return (
-                <button
-                  key={sub}
-                  onClick={() => setSubcat(sub)}
-                  className={`flex flex-col items-start p-5 rounded-[16px] border text-left transition-colors duration-base ${
-                    active
-                      ? "bg-[#0B3B2E] text-white border-[#0B3B2E]"
-                      : "bg-white border-[#E7E0D7] hover:border-[#12543F]"
-                  } ${count === 0 ? "opacity-50" : ""}`}
-                >
-                  <span className={`font-[family-name:var(--font-fraunces)] text-2xl font-semibold ${active ? "text-white" : "text-[#132019]"}`}>
-                    {loading ? "—" : count}
-                  </span>
-                  <p className={`font-semibold text-sm mt-2 ${active ? "text-white" : "text-[#132019]"}`}>{sub}</p>
-                  <p className={`text-xs mt-0.5 ${active ? "text-white/60" : "text-[#5A695F]"}`}>
-                    école{count !== 1 ? "s" : ""}
-                  </p>
-                </button>
-              );
-            })}
-
-            {unclassifiedCount > 0 && (
-              <button
-                onClick={() => setSubcat(UNCLASSIFIED_KEY)}
-                className={`flex flex-col items-start p-5 rounded-[16px] border text-left transition-colors duration-base ${
-                  activeSub === UNCLASSIFIED_KEY
-                    ? "bg-[#0B3B2E] text-white border-[#0B3B2E]"
-                    : "bg-white border-[#E7E0D7] hover:border-[#12543F]"
-                }`}
-              >
-                <span className={`font-[family-name:var(--font-fraunces)] text-2xl font-semibold ${activeSub === UNCLASSIFIED_KEY ? "text-white" : "text-[#132019]"}`}>
-                  {loading ? "—" : unclassifiedCount}
-                </span>
-                <p className={`font-semibold text-sm mt-2 ${activeSub === UNCLASSIFIED_KEY ? "text-white" : "text-[#132019]"}`}>Non classée</p>
-                <p className={`text-xs mt-0.5 ${activeSub === UNCLASSIFIED_KEY ? "text-white/60" : "text-[#5A695F]"}`}>
-                  école{unclassifiedCount !== 1 ? "s" : ""}
-                </p>
-              </button>
-            )}
-          </div>
-        </section>
-
-        {/* ── ÉTABLISSEMENTS À DÉCOUVRIR (mis en avant) ────────────── */}
-        {!loading && featuredForCarousel.length > 0 && (
-          <section className="pb-10">
-            <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-[#132019] mb-5">
-              Établissements à découvrir
-            </h2>
-            <FeaturedSchoolsCarousel schools={featuredForCarousel} showBadges={false} />
-          </section>
-        )}
-
-        {/* ── LISTE DES ÉTABLISSEMENTS ──────────────────────────────── */}
-        <section className="pb-16">
-          <h2 className="font-[family-name:var(--font-fraunces)] text-xl font-semibold text-[#132019] mb-5">
-            {activeSub === "all" ? "Tous les établissements" : activeSub === UNCLASSIFIED_KEY ? "Non classée" : activeSub}
-          </h2>
-
+        <section className="pb-16" aria-label="Établissements de la catégorie">
           {/* Filtres — mêmes champs et même style que /recherche (Nom, Région,
               Ville dépendante, Près de moi), sans "Toutes catégories"
               puisque cette page est déjà scopée à une catégorie. */}
-          <div className="bg-white border border-[#E7E0D7] rounded-[16px] shadow-[0_8px_24px_-14px_rgba(11,59,46,0.15)] p-3.5 flex items-center gap-2.5 mb-6 flex-wrap">
-            <div className="flex items-center gap-2 bg-[#FCFAF7] border border-[#E7E0D7] rounded-[10px] px-3 h-10 flex-1 min-w-[220px] max-w-sm focus-within:border-[#12543F] transition-colors duration-base">
+          <div className="bg-white border border-[#E7E0D7] rounded-[16px] shadow-[0_8px_24px_-14px_rgba(11,59,46,0.15)] p-3 grid grid-cols-2 lg:flex lg:items-center gap-2.5 mb-5">
+            <div className="flex items-center gap-2 bg-[#FCFAF7] border border-[#E7E0D7] rounded-[10px] px-3 h-10 col-span-2 lg:flex-1 min-w-0 focus-within:border-[#12543F] transition-colors duration-base">
               <Search size={15} className="text-[#5A695F] shrink-0" />
               <input
                 value={query}
@@ -544,10 +189,10 @@ function CategoryPageInner() {
                 updateParams(stillValid ? { region: nextRegion } : { region: nextRegion, ville: null });
               }}
               aria-label="Filtrer par région"
-              className="border border-[#E7E0D7] rounded-[10px] px-3 h-10 text-sm font-medium bg-[#FCFAF7] text-[#132019]"
+              className="border border-[#E7E0D7] rounded-[10px] px-2.5 h-10 min-w-0 text-sm font-medium bg-[#FCFAF7] text-[#132019]"
             >
               {REGION_FILTER_OPTIONS.map((r) => (
-                <option key={r.value} value={r.value}>{r.label}</option>
+                <option key={r.value} value={r.value}>{r.value === "all" ? "Région" : r.label}</option>
               ))}
             </select>
 
@@ -555,10 +200,10 @@ function CategoryPageInner() {
               value={urlCity}
               onChange={(e) => updateParams({ ville: e.target.value })}
               aria-label="Filtrer par ville"
-              className="border border-[#E7E0D7] rounded-[10px] px-3 h-10 text-sm font-medium bg-[#FCFAF7] text-[#132019]"
+              className="border border-[#E7E0D7] rounded-[10px] px-2.5 h-10 min-w-0 text-sm font-medium bg-[#FCFAF7] text-[#132019]"
             >
               {cityOptions.map((c) => (
-                <option key={c} value={c}>{c === "all" ? "Toutes les villes" : c}</option>
+                <option key={c} value={c}>{c === "all" ? "Ville" : c}</option>
               ))}
             </select>
 
@@ -578,10 +223,17 @@ function CategoryPageInner() {
               </span>
             )}
 
-            <span className="ml-auto text-sm text-[#5A695F] font-medium whitespace-nowrap" aria-live="polite">
-              {loading ? "Chargement…" : <><span className="text-[#132019] font-bold font-[family-name:var(--font-fraunces)]">{filtered.length}</span> résultat{filtered.length !== 1 ? "s" : ""}</>}
-            </span>
+            <button type="button" onClick={() => setShowCompare((value) => !value)} aria-expanded={showCompare} aria-controls="category-comparison"
+              className="inline-flex items-center justify-center gap-2 h-10 px-3 rounded-[10px] bg-[#F2AE1F] text-[#0B3B2E] text-sm font-semibold whitespace-nowrap">
+              <Scale size={16} /> Comparer{compareIds.length > 0 ? ` (${compareIds.length})` : ""}
+            </button>
           </div>
+
+          {showCompare && <CategoryComparison schools={compareSchools} onRemove={toggleCompare} onClose={() => setShowCompare(false)} />}
+
+          <p className="text-sm text-[#5A695F] mb-4" aria-live="polite">
+            {loading ? "Chargement…" : loadError ? "" : <><span className="text-[#132019] font-semibold">{filtered.length}</span> établissement{filtered.length !== 1 ? "s" : ""}</>}
+          </p>
 
           {near.locationError && (
             <div className="flex items-center justify-between gap-3 mb-6 px-4 py-3 bg-[#F4F3EF] border border-[#E7E0D7] rounded-[10px] text-sm text-[#5A695F]">
@@ -604,42 +256,20 @@ function CategoryPageInner() {
             <div className="bg-white border border-[#E7E0D7] rounded-[16px] py-20 text-center">
               <School size={32} className="mx-auto text-[#E7E0D7] mb-4" />
               <p className="font-semibold text-[#5A695F] text-sm">Aucun établissement trouvé</p>
-              {activeSub !== "all" && (
-                <button onClick={() => setSubcat("all")} className="text-xs text-[#12543F] font-semibold mt-3 block mx-auto">
-                  Voir tous les établissements →
-                </button>
-              )}
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {filtered.map((s, i) => {
+              {filtered.map((s) => {
                 const tuition = s.fees?.[0]?.tuition_fee ?? 0;
-                const [tone1, tone2] = THUMBNAIL_TONES[i % THUMBNAIL_TONES.length];
                 const location = formatQuartierCity(s.neighborhood, s.city);
                 return (
                   <div
                     key={s.id}
                     className="group bg-white border border-[#E7E0D7] rounded-[16px] overflow-hidden shadow-[0_8px_24px_-14px_rgba(11,59,46,0.2)] hover:shadow-[0_16px_34px_-14px_rgba(11,59,46,0.26)] hover:-translate-y-0.5 transition-all duration-base"
                   >
-                    <div
-                      className="relative h-40 overflow-hidden"
-                      style={{ background: `linear-gradient(150deg, ${tone1}, ${tone2})` }}
-                    >
-                      <Link href={`/ecole/${s.id}`} className="absolute inset-0" aria-label={s.name} />
-                      <button
-                        type="button"
-                        onClick={() => toggleLiked(s.id)}
-                        aria-label={likedIds.includes(s.id) ? "Retirer des favoris" : "Ajouter aux favoris"}
-                        aria-pressed={likedIds.includes(s.id)}
-                        className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-white/85 backdrop-blur-sm text-[#5A695F] hover:text-red-500 transition-colors duration-base"
-                      >
-                        <Heart size={14} className={likedIds.includes(s.id) ? "fill-red-500 text-red-500" : ""} />
-                      </button>
-                    </div>
-
                     <Link href={`/ecole/${s.id}`}>
                       <div className="p-4 pb-0">
-                        <p className="font-bold text-[#132019] truncate">{s.name}</p>
+                        <p className="font-bold text-[#132019] leading-snug">{s.name}</p>
                         {location && (
                           <p className="text-xs text-[#5A695F] mt-1 flex items-center gap-1">
                             <MapPin size={10} /> {location}
@@ -663,7 +293,7 @@ function CategoryPageInner() {
                       </div>
                     </Link>
 
-                    <div className="p-4 pt-3">
+                    <div className="p-4 pt-3 flex items-center justify-between gap-3">
                       <Link
                         href={`/ecole/${s.id}`}
                         className="group/voir inline-flex items-center justify-center gap-1.5 h-8 px-3.5 rounded-[9px] bg-[#F2AE1F] text-[#0B3B2E] text-[13px] font-bold shadow-[0_6px_16px_-8px_rgba(11,59,46,0.45)] hover:bg-[#D6941A] hover:shadow-[0_10px_22px_-8px_rgba(11,59,46,0.5)] hover:-translate-y-0.5 active:translate-y-0 active:shadow-[0_4px_10px_-6px_rgba(11,59,46,0.4)] transition-all duration-base"
@@ -671,6 +301,10 @@ function CategoryPageInner() {
                         Voir
                         <ArrowRight size={12} strokeWidth={2.5} className="transition-transform duration-base group-hover/voir:translate-x-0.5" />
                       </Link>
+                      <label className="inline-flex items-center gap-2 text-xs font-semibold text-[#12543F]">
+                        <input type="checkbox" checked={compareIds.includes(s.id)} onChange={() => toggleCompare(s.id)} disabled={compareIds.length >= 3 && !compareIds.includes(s.id)} aria-label={`Comparer ${s.name}`} className="accent-[#12543F]" />
+                        Comparer
+                      </label>
                     </div>
                   </div>
                 );

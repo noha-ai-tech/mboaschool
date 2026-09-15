@@ -48,11 +48,11 @@ test("SearchSuggestions routes school suggestions unconditionally to /ecole/{id}
   assert.match(src, /router\.push\(`\/ecole\/\$\{school\.id\}`\)/);
 });
 
-test("homepage and category-page ticker items link unconditionally to /ecole/{id} for the featured school", async () => {
+test("homepage ticker and category cards link unconditionally to /ecole/{id}", async () => {
   const homepage = await source("src/app/page.tsx");
   assert.match(homepage, /href: `\/ecole\/\$\{featuredSchools\[0\]\.id\}`,/);
   const category = await source("src/app/categorie/[slug]/page.tsx");
-  assert.match(category, /href: `\/ecole\/\$\{featured\[0\]\.id\}`,/);
+  assert.match(category, /href=\{`\/ecole\/\$\{s\.id\}`\}/);
 });
 
 test("useSiteTickerItems links unconditionally to /ecole/{id} for the featured school", async () => {
