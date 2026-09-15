@@ -28,6 +28,7 @@ export function SchoolSiteHeader({
   activeView,
   phone,
   sticky = true,
+  showcase = false,
 }: {
   logoUrl: string | null;
   name: string;
@@ -40,11 +41,11 @@ export function SchoolSiteHeader({
    * above this header; a second `sticky top-0` here would overlap it
    * instead of stacking. Preview passes `sticky={false}`. */
   sticky?: boolean;
+  showcase?: boolean;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const isGuyskullShowcase = baseHref.includes("a4cc4966-0d85-4c63-9c24-0538b8d5133b");
 
-  if (isGuyskullShowcase) {
+  if (showcase) {
     return (
       <header className={`${sticky ? "sticky top-0" : ""} z-40 border-b border-slate-200 bg-white print:hidden`}>
         <div className="mx-auto flex h-[72px] max-w-[1440px] items-center gap-5 px-4 lg:px-7">

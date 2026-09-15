@@ -11,8 +11,8 @@ const renderer = await readFile(new URL("src/components/school/StructuredPricing
 // GUYSKULL-05 — MiniSiteRenderer.tsx was split into a shared shell + 5
 // independently routed views; the two assertions that used to read it now
 // read the specific view each pattern actually lives in.
-const admissionsView = await readFile(new URL("src/components/school/views/FormationsAdmissionsView.tsx", root), "utf8");
-const accueilView = await readFile(new URL("src/components/school/views/AccueilView.tsx", root), "utf8");
+const admissionsView = await readFile(new URL("src/components/school/SchoolShowcase.tsx", root), "utf8");
+const accueilView = await readFile(new URL("src/components/school/SchoolShowcase.tsx", root), "utf8");
 const snapshot = await readFile(new URL("src/lib/schoolPage/snapshot.ts", root), "utf8");
 
 const base = {
@@ -53,8 +53,8 @@ test("pricing renderer prevents mobile overflow", () => {
   assert.match(renderer, /hidden sm:block/);
   assert.match(renderer, /sm:hidden/);
 });
-test("admissions navigation exposes five focused sections", () => ["Formations", "Admissions", "Tarifs", "Pièces à fournir", "Documents"].forEach((label) => assert.match(admissionsView, new RegExp(label))));
-test("unknown category falls back to neutral rendering", () => { assert.match(accueilView, /categoryLabel.*\?\.label \?\? null/); assert.match(admissionsView, /Formations/); });
+test("admissions navigation exposes five focused sections", () => ["Programmes et niveaux", "Admissions", "Frais de scolarité", "Pièces à fournir", "Documents"].forEach((label) => assert.match(admissionsView, new RegExp(label))));
+test("unknown category falls back to neutral rendering", () => { assert.match(accueilView, /categoryLabel.*\?\.label \?\? null/); assert.match(admissionsView, /Programmes et niveaux/); });
 test("snapshot includes published schedules and additional fees for discard", () => { assert.match(snapshot, /school_fee_schedules/); assert.match(snapshot, /school_additional_fees/); });
 test("migration revokes direct client pricing writes", () => { assert.match(sql, /revoke all on public\.school_fee_schedules[\s\S]*from public, anon, authenticated/i); assert.match(sql, /revoke all on public\.fees from public, anon, authenticated/i); });
 test("anonymous access is live read-only", () => { assert.match(sql, /for select to anon, authenticated using \(true\)/i); assert.doesNotMatch(sql, /grant (insert|update|delete)[^;]*school_fee_schedules[^;]*authenticated/i); });

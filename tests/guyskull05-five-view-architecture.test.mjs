@@ -111,10 +111,10 @@ test("shared shell (header/footer) is used by both the public layout and the pre
 // ==================== STRUCTURED PRICING — DETAIL + HOMEPAGE PREVIEW ====================
 
 test("StructuredPricing remains in FormationsAdmissionsView and is conditionally previewed on Accueil", async () => {
-  const admissionsView = await src("src/components/school/views/FormationsAdmissionsView.tsx");
-  const accueilView = await src("src/components/school/views/AccueilView.tsx");
+  const admissionsView = await src("src/components/school/SchoolShowcase.tsx");
+  const accueilView = await src("src/components/school/SchoolShowcase.tsx");
   assert.match(admissionsView, /<StructuredPricing/);
-  assert.match(accueilView, /flags\.showPricing && fees && <StructuredPricing/);
+  assert.match(accueilView, /flags\.showPricing && data\.fees \? <StructuredPricing/);
 });
 
 // ==================== ACTIVE NAVIGATION / ACCESSIBILITY (static) ====================
@@ -135,12 +135,12 @@ test("mobile navigation collapses into a labeled hamburger menu, not squeezed de
 // ==================== MISSING OPTIONAL CONTENT / RESULTS-RANKING GATING ====================
 
 test("results/ranking preview only renders when results or ranking actually exist", async () => {
-  const accueilView = await src("src/components/school/views/AccueilView.tsx");
-  assert.match(accueilView, /results\.length > 0 \|\| !!ranking/);
+  const accueilView = await src("src/components/school/SchoolShowcase.tsx");
+  assert.match(accueilView, /data\.results\.length > 0 \|\| !!data\.ranking/);
 });
 
 test("MiniSiteResultsPreview component itself is the single source of the empty-state gate (no duplicated logic per view)", async () => {
-  const vieView = await src("src/components/school/views/VieResultatsView.tsx");
+  const vieView = await src("src/components/school/SchoolShowcase.tsx");
   assert.match(vieView, /<MiniSiteResultsPreview/);
   assert.doesNotMatch(vieView, /results\.map\(/, "VieResultatsView must not re-implement result-card rendering itself");
 });

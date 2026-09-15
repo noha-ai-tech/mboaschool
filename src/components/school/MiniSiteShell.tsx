@@ -6,6 +6,7 @@ import { SchoolSiteHeader } from "@/components/school/SchoolSiteHeader";
 import { SchoolSiteFooter } from "@/components/school/SchoolSiteFooter";
 import type { MiniSiteViewKey } from "@/lib/schoolPage/miniSiteViews";
 import type { MiniSiteRendererData } from "@/lib/schoolPage/miniSiteData";
+import { computeMiniSiteFlags } from "@/lib/schoolPage/miniSiteData";
 
 // GUYSKULL-05 — the shared chrome (header/nav/footer/mobile CTA bar) around
 // whichever one of the 5 independent views is the current route's content.
@@ -24,6 +25,7 @@ export function MiniSiteShell({
   children: React.ReactNode;
 }) {
   const { establishment: school } = data;
+  const flags = computeMiniSiteFlags(data);
   const address = [school.address, school.neighborhood, school.city].filter(Boolean).join(", ");
 
   // GUYSKULL-06 §3 — the mini-site's own token layer, scoped to this
@@ -44,6 +46,7 @@ export function MiniSiteShell({
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#F4F4F2]" style={schoolThemeStyle}>
       <SchoolSiteHeader
+        showcase
         logoUrl={school.logo_url}
         name={school.name}
         motto={school.motto}
@@ -70,7 +73,7 @@ export function MiniSiteShell({
         />
       </div>
 
-      {data.mode === "public" && (
+      {data.mode === "public" && flags.showAdmissions && flags.admissionsOpen && (
         <>
           <div className="lg:hidden print:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-border p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
             <Link
