@@ -52,6 +52,9 @@ export function SchoolShowcase({ data, baseHref, activeView = "accueil" }: { dat
   const slides = resolveHeroSlides(computeAllHeroSlides(data.images, school.cover_image_url), school.hero_mode as HeroMode | null).filter((slide) => !failedImages.includes(slide.image));
   const [activeHero, setActiveHero] = useState(0);
   const [favorite, setFavorite] = useState(false);
+  const [activeAnchor, setActiveAnchor] = useState("");
+  const activeNavigation = navigation.find((item) => item.view === activeView && (item.anchor ?? "") === activeAnchor)
+    ?? navigation.find((item) => item.view === activeView);
   const photoIndex = activeHero % Math.max(slides.length, 1);
   const badge = getPrimaryPublicBadge(resolveEstablishmentTrustState(trustInputFromEstablishmentRow(school)));
   const home = activeView === "accueil";
@@ -60,6 +63,16 @@ export function SchoolShowcase({ data, baseHref, activeView = "accueil" }: { dat
     ? `https://www.google.com/maps?q=${school.latitude},${school.longitude}` : null;
   const canApply = data.mode === "public" && flags.showAdmissions && flags.admissionsOpen;
 
+  useEffect(() => {
+    const syncAnchor = () => setActiveAnchor(window.location.hash.slice(1));
+    syncAnchor();
+    window.addEventListener("hashchange", syncAnchor);
+    window.addEventListener("popstate", syncAnchor);
+    return () => {
+      window.removeEventListener("hashchange", syncAnchor);
+      window.removeEventListener("popstate", syncAnchor);
+    };
+  }, [activeView, baseHref]);
   useEffect(() => {
     setActiveHero(0);
     setFavorite(false);
@@ -143,7 +156,7 @@ export function SchoolShowcase({ data, baseHref, activeView = "accueil" }: { dat
       </div>
     </section>
     <nav aria-label="Sections de l’établissement" className={`${data.mode === "public" ? "sticky top-[72px]" : ""} z-30 overflow-x-auto border-b border-slate-200 bg-white shadow-sm`}>
-      <div className="mx-auto flex w-max min-w-full max-w-[1440px] px-4">{navigation.map((item, index) => <Link key={item.label} href={`${buildMiniSiteViewHref(baseHref, item.view)}${item.anchor ? `#${item.anchor}` : ""}`} aria-current={activeView === item.view && navigation.findIndex((entry) => entry.view === item.view) === index ? "page" : undefined} className={`flex h-14 shrink-0 items-center border-b-2 px-4 text-sm font-bold ${activeView === item.view ? "border-blue-600 text-blue-700" : "border-transparent text-slate-700 hover:text-blue-700"}`}>{item.label}</Link>)}</div>
+      <div className="mx-auto flex w-max min-w-full max-w-[1440px] px-4">{navigation.map((item) => <Link key={item.label} href={`${buildMiniSiteViewHref(baseHref, item.view)}${item.anchor ? `#${item.anchor}` : ""}`} onClick={() => setActiveAnchor(item.anchor ?? "")} aria-current={activeNavigation === item ? "page" : undefined} className={`flex h-14 shrink-0 items-center border-b-2 px-4 text-sm font-bold ${activeNavigation === item ? "border-blue-600 text-blue-700" : "border-transparent text-slate-700 hover:text-blue-700"}`}>{item.label}</Link>)}</div>
     </nav>
     <div className="mx-auto grid max-w-[1440px] gap-6 px-5 py-7 lg:grid-cols-[minmax(0,1fr)_330px] lg:px-8">
       <div className="min-w-0 space-y-7">
