@@ -13,9 +13,10 @@ function readEnvVar(key) {
 }
 
 const SUPABASE_URL = readEnvVar("NEXT_PUBLIC_SUPABASE_URL").replace(/\/$/, "");
-const SERVICE_ROLE_KEY = readEnvVar("SUPABASE_SERVICE_ROLE_KEY");
+
 
 function request(pathname, { method = "GET", body = null, contentType = "application/json", prefer, extraHeaders = {} } = {}) {
+  const SERVICE_ROLE_KEY = readEnvVar("SUPABASE_SERVICE_ROLE_KEY");
   const url = new URL(pathname, `${SUPABASE_URL}/`);
   const binaryBody = body === null ? null : Buffer.isBuffer(body) ? body : Buffer.from(JSON.stringify(body));
   const headers = {

@@ -1,8 +1,7 @@
 // GUYSKULL-04A — unit tests for the population/rollback hardening, run
 // entirely against an in-memory mock PostgREST client. No network call,
-// no .env secret value is ever used (guyskull04_client.js's module-scope
-// reads of .env.local execute on import, but its serviceRole() export is
-// never called here — every table access goes through the mock below).
+// no .env secret value is ever read: serviceRole() loads the secret only
+// when called, and every table access here goes through the mock below.
 import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";

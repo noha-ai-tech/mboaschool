@@ -24,9 +24,10 @@ function readEnvVar(key) {
 }
 
 const SUPABASE_URL = readEnvVar("NEXT_PUBLIC_SUPABASE_URL");
-const SERVICE_ROLE_KEY = readEnvVar("SUPABASE_SERVICE_ROLE_KEY");
+
 
 async function serviceRole(pathAndQuery, { method = "GET", body = null } = {}) {
+  const SERVICE_ROLE_KEY = readEnvVar("SUPABASE_SERVICE_ROLE_KEY");
   const url = new URL(`${SUPABASE_URL}/rest/v1/${pathAndQuery}`);
   const headers = { apikey: SERVICE_ROLE_KEY, Authorization: `Bearer ${SERVICE_ROLE_KEY}`, Prefer: "return=representation" };
   return new Promise((resolve, reject) => {

@@ -268,6 +268,11 @@ async function addSession(a) {
 // than recomputing it in the test — this is exactly the same call the
 // production repository makes, so a test bug in reimplementing the
 // arithmetic can never mask (or falsely flag) a real regression.
+async function currentSchoolDay() {
+  const result = await adminPool.query("select to_char(now() at time zone 'Africa/Douala', 'YYYY-MM-DD') as day" );
+  return result.rows[0].day;
+}
+
 async function dayWindow(date) {
   const r = await adminPool.query("select window_from, window_to from public.school_day_window($1)", [date]);
   return { from: r.rows[0].window_from.toISOString(), to: r.rows[0].window_to.toISOString() };
@@ -342,7 +347,7 @@ test("real Postgres — staff/application/admission/timesheet events always appe
     c.query("insert into public.timesheet_approvals (establishment_id, enseignant_id, period_start, period_end, approved_minutes, approved_by) values ($1,$2,current_date-6,current_date,480,$3)", [a.establishmentId, a.enseignantId, a.owner])
   );
   await adminPool.query("insert into public.applications (establishment_id, student_name) values ($1,'Dana')", [a.establishmentId]);
-  const today = new Date().toISOString().slice(0, 10);
+  const today = await currentSchoolDay();
   const rows = await activity(a.owner, a.establishmentId, today, 50);
   const types = rows.map((r) => r.event_type).sort();
   assert.deepEqual(types, ["application.received", "staff.checked_in", "timesheet.approved"]);
@@ -354,7 +359,7 @@ test("real Postgres — activity ordering is deterministic (occurred_at desc) an
   const a = await seedSchool();
   await punch(a.teacherUserId, a.establishmentId, "arrivee");
   await punch(a.teacherUserId, a.establishmentId, "depart");
-  const today = new Date().toISOString().slice(0, 10);
+  const today = await currentSchoolDay();
   const rows = await activity(a.owner, a.establishmentId, today, 1);
   assert.equal(rows.length, 1);
   assert.equal(rows[0].event_type, "staff.checked_out", "the most recent event must come first");
@@ -365,7 +370,7 @@ test("real Postgres — activity is establishment-scoped, no cross-school leakag
   const a = await seedSchool();
   const b = await seedSchool();
   await punch(a.teacherUserId, a.establishmentId, "arrivee");
-  const today = new Date().toISOString().slice(0, 10);
+  const today = await currentSchoolDay();
   const rowsAAsOwnerA = await activity(a.owner, a.establishmentId, today, 50);
   const rowsAAsOwnerB = await activity(b.owner, a.establishmentId, today, 50);
   assert.equal(rowsAAsOwnerA.length, 1);
@@ -391,7 +396,7 @@ test("real Postgres RLS — teacher and anonymous have no read access to the act
   if (!dbAvailable) return t.skip(unavailableReason);
   const a = await seedSchool();
   await punch(a.teacherUserId, a.establishmentId, "arrivee");
-  const today = new Date().toISOString().slice(0, 10);
+  const today = await currentSchoolDay();
   const asTeacher = await activity(a.teacherUserId, a.establishmentId, today, 50);
   const asAnon = await activity(null, a.establishmentId, today, 50);
   assert.equal(asTeacher.length, 0);
@@ -412,7 +417,7 @@ test("real Postgres — a teacher who checked in without checking out has an ope
   if (!dbAvailable) return t.skip(unavailableReason);
   const a = await seedSchool();
   const result = await punch(a.teacherUserId, a.establishmentId, "arrivee");
-  const today = new Date().toISOString().slice(0, 10);
+  const today = await currentSchoolDay();
   const rows = await openShifts(a.owner, a.establishmentId, today);
   assert.equal(rows.length, 1);
   assert.equal(rows[0].subject_id, a.enseignantId);
@@ -427,7 +432,7 @@ test("real Postgres — a teacher who checked in then out has no open shift", as
   const a = await seedSchool();
   await punch(a.teacherUserId, a.establishmentId, "arrivee");
   await punch(a.teacherUserId, a.establishmentId, "depart");
-  const today = new Date().toISOString().slice(0, 10);
+  const today = await currentSchoolDay();
   const rows = await openShifts(a.owner, a.establishmentId, today);
   assert.equal(rows.length, 0);
 });
@@ -438,7 +443,7 @@ test("real Postgres — a teacher with a completed cycle plus a fresh check-in s
   await punch(a.teacherUserId, a.establishmentId, "arrivee");
   await punch(a.teacherUserId, a.establishmentId, "depart");
   const second = await punch(a.teacherUserId, a.establishmentId, "arrivee");
-  const today = new Date().toISOString().slice(0, 10);
+  const today = await currentSchoolDay();
   const rows = await openShifts(a.owner, a.establishmentId, today);
   assert.equal(rows.length, 1);
   const ev = await adminPool.query("select source_id from public.school_events where id=$1", [rows[0].last_checked_in_event_id]);
@@ -450,7 +455,7 @@ test("real Postgres — open shifts are establishment-scoped, no cross-school le
   const a = await seedSchool();
   const b = await seedSchool();
   await punch(a.teacherUserId, a.establishmentId, "arrivee");
-  const today = new Date().toISOString().slice(0, 10);
+  const today = await currentSchoolDay();
   const rowsBAsOwnerB = await openShifts(b.owner, b.establishmentId, today);
   const rowsAAsOwnerB = await openShifts(b.owner, a.establishmentId, today);
   assert.equal(rowsBAsOwnerB.length, 0);
@@ -483,7 +488,7 @@ test("real Postgres — full scenario: all daily-intelligence pieces match the h
   // get_daily_school_proof via occurred_at::date — the real wall-clock day
   // this test actually runs on. Using real "today" for everything keeps
   // the whole scenario internally consistent.
-  const day = new Date().toISOString().slice(0, 10);
+  const day = await currentSchoolDay();
 
   // Attendance
   await markAttendance(a.teacherUserId, a.establishmentId, a.emploiDuTempsId, a.studentId, day, "present"); // A/S1
@@ -715,7 +720,7 @@ test("real Postgres — school_day_window rejects an impossible calendar date", 
 test("real Postgres — source blending: attendance (with a correction), staff in/out, application.received, admission.accepted, and timesheet.approved all coexist correctly the same day", async (t) => {
   if (!dbAvailable) return t.skip(unavailableReason);
   const a = await seedSchool();
-  const day = new Date().toISOString().slice(0, 10); // real "today" — applications/timesheets/staff key off occurred_at
+  const day = await currentSchoolDay(); // real "today" — applications/timesheets/staff key off occurred_at
 
   // Attendance: one routine present, one corrected absent->present
   const student2 = (await adminPool.query("insert into public.students (establishment_id, classe_id, first_name, last_name) values ($1,$2,'Marie','Ngo') returning id", [a.establishmentId, a.classeId])).rows[0].id;
@@ -773,7 +778,7 @@ test("real Postgres — one owner with two establishments never mixes A1 and A2 
   await punch(a1.teacherUserId, a1.establishmentId, "depart");
   await punch(a2.teacherUserId, a2.establishmentId, "arrivee");
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = await currentSchoolDay();
   const proofA1 = await asUser(a1.owner, (c) => c.query("select * from public.get_daily_school_proof($1,$2)", [a1.establishmentId, today]));
   const proofA2 = await asUser(a1.owner, (c) => c.query("select * from public.get_daily_school_proof($1,$2)", [a2.establishmentId, today]));
   const mapA1 = Object.fromEntries(proofA1.rows.map((r) => [r.metric, Number(r.count_value)]));
