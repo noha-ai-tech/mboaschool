@@ -13,6 +13,8 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { useSiteTickerItems } from "@/lib/useSiteTickerItems";
 import { joinWithSeparator } from "@/lib/formatSchoolLocation";
 import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
+import { paginateAll } from "@/lib/sitemap/paginate";
+import { includesInsensitive } from "@/lib/textSearch";
 
 type SchoolOption = {
   id: string;
@@ -50,6 +52,9 @@ function PreinscriptionForm() {
   const preselectedId = searchParams.get("ecole") ?? "";
 
   const [schools, setSchools] = useState<SchoolOption[]>([]);
+  const [schoolsLoading, setSchoolsLoading] = useState(true);
+  const [schoolsError, setSchoolsError] = useState<string | null>(null);
+  const [schoolQuery, setSchoolQuery] = useState("");
   const [anneesScolaires, setAnneesScolaires] = useState<any[]>([]);
   const [step, setStep] = useState(1);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -61,15 +66,22 @@ function PreinscriptionForm() {
   const [form, setForm] = useState({ ...EMPTY_FORM, establishment_id: preselectedId });
 
   useEffect(() => {
-    supabase
+    const controller = new AbortController();
+    paginateAll(500, async (from, to) => {
+      const { data, error } = await supabase
       .from("establishments")
       .select("id, name, city, main_category, is_verified, cover_image_url, school_images(url)")
       // CMS-F.6 — défense en profondeur avec la policy RLS publique
       // (migration 0029, PRÉPARÉE NON EXÉCUTÉE).
       .eq("school_images.status", "live")
       .order("name", { ascending: true })
-      .then(({ data }) => {
-        if (!data) return;
+      .order("id", { ascending: true })
+      .range(from, to)
+      .abortSignal(controller.signal);
+      if (error) throw error;
+      return data ?? [];
+    }).then((data) => {
+        if (controller.signal.aborted) return;
         setSchools(
           data.map((s: any) => ({
             id: s.id,
@@ -83,7 +95,12 @@ function PreinscriptionForm() {
             ].filter((url, i, arr) => arr.indexOf(url) === i).slice(0, 5),
           }))
         );
+      }).catch(() => {
+        if (!controller.signal.aborted) setSchoolsError("Impossible de charger les établissements. Rechargez la page pour réessayer.");
+      }).finally(() => {
+        if (!controller.signal.aborted) setSchoolsLoading(false);
       });
+    return () => controller.abort();
   }, []);
 
   useEffect(() => {
@@ -277,13 +294,25 @@ function PreinscriptionForm() {
             <div className="bg-white rounded-[24px] shadow-elevation-2 p-6">
               <h1 className="text-xl font-bold text-text-primary mb-1.5">Quel établissement ?</h1>
               <p className="text-sm text-text-secondary mb-4">Choisissez l&apos;établissement pour lequel vous souhaitez préinscrire votre enfant.</p>
+              <input
+                type="search"
+                aria-label="Rechercher un établissement pour la préinscription"
+                placeholder="Nom ou ville de l’établissement"
+                value={schoolQuery}
+                onChange={(event) => setSchoolQuery(event.target.value)}
+                className="w-full h-[52px] border border-border rounded-card px-4 text-sm mb-3"
+              />
+              {schoolsError && <p role="alert" className="text-sm text-red-700 mb-3">{schoolsError}</p>}
+              <p role="status" className="text-sm text-text-secondary mb-3">{schoolsLoading ? "Chargement des établissements…" : schoolsError ? "Liste indisponible" : `${schools.length.toLocaleString("fr-FR")} établissements disponibles`}</p>
               <select
+                aria-label="Établissement choisi"
+                disabled={schoolsLoading || Boolean(schoolsError)}
                 value={form.establishment_id}
                 onChange={(e) => field("establishment_id", e.target.value)}
                 className="w-full h-[52px] border border-border rounded-card px-4 text-sm bg-white outline-none focus:border-primary focus:shadow-elevation-1 transition-all duration-base"
               >
                 <option value="">— Choisir un établissement —</option>
-                {schools.map((s) => (
+                {schools.filter((s) => includesInsensitive(`${s.name} ${s.city ?? ""}`, schoolQuery)).map((s) => (
                   <option key={s.id} value={s.id}>{s.city ? `${s.name} — ${s.city}` : s.name}</option>
                 ))}
               </select>

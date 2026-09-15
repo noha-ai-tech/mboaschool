@@ -68,6 +68,7 @@ const ACCENT_VARIANT_PAIRS: readonly (readonly [string, string])[] = [
   ["edea", "edéa"],
   ["kousseri", "kousséri"],
   ["bangangte", "bangangté"],
+  ["reussite", "réussite"],
 ];
 const ACCENT_VARIANTS: ReadonlyMap<string, readonly string[]> = (() => {
   const map = new Map<string, string[]>();
@@ -89,6 +90,12 @@ export function serverSearchWordForms(normalizedWord: string): readonly string[]
   const lyceeForms = searchWordVariants(normalizedWord);
   const accentForms = ACCENT_VARIANTS.get(normalizedWord) ?? [normalizedWord];
   return Array.from(new Set([...lyceeForms, ...accentForms]));
+}
+
+/** Preserve the user's spelling as well as known unaccented aliases. */
+export function serverSearchQueryForms(raw: string): readonly string[] {
+  const original = raw.toLowerCase().replace(/[’‘´`]/g, "'").replace(/\s+/g, " ").trim();
+  return Array.from(new Set([original, ...serverSearchWordForms(normalizeSearchText(raw))])).filter(Boolean);
 }
 
 /**

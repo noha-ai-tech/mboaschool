@@ -20,6 +20,7 @@ import { HERO_PHOTOS } from "@/lib/heroPhotos";
 import { useNearMeFilter, haversineKm } from "@/lib/useNearMeFilter";
 import { citiesForRegionFilter, getMajorCity } from "@/lib/cameroonMajorCities";
 import { REGION_FILTER_OPTIONS, regionsForFilterValue } from "@/lib/cameroonRegions";
+import { paginateAll } from "@/lib/sitemap/paginate";
 
 // Typographie de marque (skill ecoles237-design-system) — Fraunces pour les
 // titres éditoriaux, scopée à cette page via variable CSS (voir même
@@ -176,6 +177,7 @@ function CategoryPageInner() {
   const meta = CAT_META[slug];
   const [schools, setSchools] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const near = useNearMeFilter();
   const [likedIds, setLikedIds] = useState<string[]>([]);
@@ -196,8 +198,12 @@ function CategoryPageInner() {
 
   useEffect(() => {
     if (!meta) return;
+    const controller = new AbortController();
     setLoading(true);
-    supabase
+    setLoadError(null);
+    setSchools([]);
+    paginateAll(500, async (from, to) => {
+      const { data, error } = await supabase
       .from("establishments")
       .select(`
         id, name, main_category, sub_category, description,
@@ -212,11 +218,21 @@ function CategoryPageInner() {
       // useShowcasePhotos), défense en profondeur avec la policy RLS.
       .eq("school_images.status", "live")
       .order("is_featured", { ascending: false })
-      .then(({ data }) => {
-        if (data) setSchools(data);
-        setLoading(false);
-      });
-  }, [slug]);
+      .order("name", { ascending: true })
+      .order("id", { ascending: true })
+      .range(from, to)
+      .abortSignal(controller.signal);
+      if (error) throw error;
+      return data ?? [];
+    }).then((data) => {
+      if (!controller.signal.aborted) setSchools(data);
+    }).catch(() => {
+      if (!controller.signal.aborted) setLoadError("Impossible de charger les établissements. Rechargez la page pour réessayer.");
+    }).finally(() => {
+      if (!controller.signal.aborted) setLoading(false);
+    });
+    return () => controller.abort();
+  }, [slug, meta]);
 
   const featuredForCarousel: FeaturedSchool[] = useMemo(
     () =>
@@ -582,6 +598,8 @@ function CategoryPageInner() {
                 <div key={i} className="h-64 bg-white border border-[#E7E0D7] rounded-[16px] animate-pulse" />
               ))}
             </div>
+          ) : loadError ? (
+            <p role="alert" className="rounded-[16px] border border-red-200 bg-white p-6 text-red-700">{loadError}</p>
           ) : filtered.length === 0 ? (
             <div className="bg-white border border-[#E7E0D7] rounded-[16px] py-20 text-center">
               <School size={32} className="mx-auto text-[#E7E0D7] mb-4" />

@@ -2,7 +2,7 @@
 // extraite de la route pour rester testable sans serveur Next.js. Utilisée
 // par src/app/api/recherche/route.ts.
 
-import { normalizeSearchText, serverSearchWordForms } from "./normalizeSearchText";
+import { normalizeSearchText, serverSearchWordForms, serverSearchQueryForms } from "./normalizeSearchText";
 import { regionsForFilterValue } from "@/lib/cameroonRegions";
 import { getMajorCity } from "@/lib/cameroonMajorCities";
 
@@ -67,9 +67,8 @@ export function resolveRegionFilter(raw: string | null): { regions: string[] } |
  * l'accent ne serait pas encore dans cette table.
  */
 export function cityForms(cityParam: string): string[] {
-  const normalizedCity = normalizeSearchText(cityParam);
   const major = getMajorCity(cityParam);
-  const forms = new Set<string>([normalizedCity, ...serverSearchWordForms(normalizedCity)]);
+  const forms = new Set<string>([...serverSearchQueryForms(cityParam)]);
   if (major) {
     const majorNormalized = normalizeSearchText(major.name);
     forms.add(majorNormalized);
@@ -85,6 +84,6 @@ export function cityForms(cityParam: string): string[] {
 
 /** §12 — un groupe OR (colonnes x variantes) par mot de la requête, à AND-er entre mots. */
 export function queryWordGroups(q: string): string[] {
-  const words = normalizeSearchText(q).split(" ").filter(Boolean);
-  return words.map((word) => ilikeOrGroup(SEARCHABLE_COLUMNS, serverSearchWordForms(word)));
+  const words = q.trim().split(/\s+/).filter(Boolean);
+  return words.map((word) => ilikeOrGroup(SEARCHABLE_COLUMNS, serverSearchQueryForms(word)));
 }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { ilikeOrGroup } from "@/lib/search/queryBuilder";
-import { normalizeSearchText, serverSearchWordForms } from "@/lib/search/normalizeSearchText";
+import { queryWordGroups } from "@/lib/search/queryBuilder";
+import { normalizeSearchText, matchesSearchQuery } from "@/lib/search/normalizeSearchText";
 
 export const dynamic = "force-dynamic";
 
@@ -12,11 +12,11 @@ export async function GET(req: NextRequest) {
 
   try {
     const supabase = await createClient();
-    const forms = serverSearchWordForms(normalized);
-    const { data, error } = await supabase
+    let query = supabase
       .from("establishments")
-      .select("id, name, city, is_claimed")
-      .or(ilikeOrGroup(["name", "city"], forms))
+      .select("id, name, city, is_claimed");
+    for (const group of queryWordGroups(raw)) query = query.or(group);
+    const { data, error } = await query
       .order("name", { ascending: true })
       .limit(12);
 
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
         .filter((city): city is string => Boolean(city) && normalizeSearchText(city!).includes(normalized))
     )).slice(0, 4);
     const schools = rows
-      .filter((row) => normalizeSearchText(row.name ?? "").includes(normalized))
+      .filter((row) => matchesSearchQuery(normalizeSearchText(`${row.name ?? ""} ${row.city ?? ""}`), raw))
       .slice(0, 6);
 
     return NextResponse.json({ cities, schools });
