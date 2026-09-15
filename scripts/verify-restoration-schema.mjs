@@ -41,7 +41,9 @@ try {
   await db.query(await fs.readFile('../production-schema-before.sql', 'utf8'));
   console.log('PASS: actual production public schema restored (no production data).');
   await db.query('set search_path=public,extensions; set check_function_bodies=true; set row_security=on');
-  const files = (await fs.readdir('supabase/migrations')).filter(name => name >= '20260907222604_' && name < '20260918090000_').sort();
+  const files = (await fs.readdir('supabase/migrations')).filter(name =>
+    (name >= '20260907222604_' && name < '20260918090000_') || name.endsWith('_restoration_release_hardening.sql')
+  ).sort();
   for (const file of files) {
     await db.query(await fs.readFile(`supabase/migrations/${file}`, 'utf8'));
     console.log(`PASS: ${file}`);
@@ -79,6 +81,7 @@ try {
   console.log('PASS: forged approval and successful sync receipts denied; scoped rejection allowed.');
   await db.query("select set_config('request.jwt.claim.sub','',false)");
   await db.query('set role anon');
+  await assert.rejects(db.query('truncate public.school_events'), {code:'42501'});
   await assert.rejects(db.query('select * from public.establishment_creation_requests'), {code:'42501'});
   await assert.rejects(db.query('insert into public.applications default values'), {code:'42501'});
   const application = (await db.query(`select * from public.submit_public_application($1,'Test','Local','Parent test','699000001')`,[school])).rows[0];

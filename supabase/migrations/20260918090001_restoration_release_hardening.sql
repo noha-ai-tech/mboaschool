@@ -1,5 +1,6 @@
 -- Restoration gate: validated against a schema-only copy of production.
--- This follows the onboarding, offline, mobile and timesheet foundations.
+-- CLI-created migration reordered after the existing future-dated foundations
+-- so school_events exists before its client privileges are restricted.
 -- No existing school or application data is rewritten.
 
 revoke all on table public.establishment_creation_requests,
@@ -14,6 +15,8 @@ grant select, insert, update, delete on public.students to authenticated;
 grant select on public.lesson_sessions, public.student_attendance to authenticated;
 grant select, insert, update on public.timesheet_corrections to authenticated;
 grant select, insert on public.timesheet_approvals to authenticated;
+revoke all on public.school_events from public, anon, authenticated;
+grant select on public.school_events to authenticated;
 
 alter policy "requester creates own creation request"
 on public.establishment_creation_requests to authenticated

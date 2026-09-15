@@ -56,7 +56,7 @@ La production ne contient pas les tables des nouveaux modules `establishment_cre
 
 Le rejeu local des dix migrations allant de `20260907222604_onboarding_01_establishment_creation_requests.sql` à `20260917090000_daily_intelligence_01_1_local_day_boundary.sql` est validé. Ne pas lancer un rattrapage global des anciennes migrations : le registre distant ne reflète pas tous les objets réellement présents, y compris le hotfix applications déjà appliqué.
 
-Migration corrective `20260915003651_restoration_release_hardening.sql` créée par la CLI : conversions de catégorie et slug de création, contrôle des champs administratifs, interdiction de forger les reçus de synchronisation réussis, privilèges limités pour les nouvelles tables. Les dix migrations historiques restent inchangées. Son ordre chronologique suit toutes les tables qu'elle modifie et précède le moteur d'événements.
+Migration corrective `20260918090001_restoration_release_hardening.sql` créée par la CLI : conversions de catégorie et slug de création, contrôle des champs administratifs, interdiction de forger les reçus de synchronisation réussis, privilèges limités pour les nouvelles tables. Les dix migrations historiques restent inchangées. Le fichier créé par la CLI a été ordonné après les migrations déjà datées dans le futur, pour inclure les droits du moteur d'événements. Les rôles clients ne peuvent notamment pas vider le journal par TRUNCATE.
 
 Points à contrôler explicitement : grants des nouvelles tables, restriction des colonnes administratives à la création des demandes, compatibilité des enums avec le RPC d'approbation, fonctions SECURITY DEFINER, contraintes multi-école, événements ajoutés aux candidatures et absence de régression du hotfix.
 
