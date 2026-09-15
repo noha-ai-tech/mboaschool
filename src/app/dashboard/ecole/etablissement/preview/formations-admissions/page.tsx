@@ -4,7 +4,7 @@ import { FormationsAdmissionsView } from "@/components/school/views/FormationsAd
 import { useMiniSiteContext } from "@/lib/schoolPage/miniSiteContext";
 
 export default function PreviewFormationsAdmissionsPage() {
-  const { data } = useMiniSiteContext();
+  const { data, baseHref } = useMiniSiteContext();
   if (!data) return null;
-  return <FormationsAdmissionsView data={data} />;
+  return <FormationsAdmissionsView data={data} baseHref={baseHref} />;
 }

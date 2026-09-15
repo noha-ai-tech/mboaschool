@@ -7,7 +7,7 @@ import { useMiniSiteContext } from "@/lib/schoolPage/miniSiteContext";
 // can become a Server Component exporting generateMetadata(); this
 // component's own client-side render logic is unchanged.
 export function VieResultatsPageClient() {
-  const { data } = useMiniSiteContext();
+  const { data, baseHref } = useMiniSiteContext();
   if (!data) return null;
-  return <VieResultatsView data={data} />;
+  return <VieResultatsView data={data} baseHref={baseHref} />;
 }
