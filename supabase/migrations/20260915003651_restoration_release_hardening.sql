@@ -47,6 +47,10 @@ revoke execute on function public.sync_apply_absence_create(uuid,uuid,uuid,text,
   from public, anon, service_role;
 grant execute on function public.sync_apply_absence_create(uuid,uuid,uuid,text,date,date,text)
   to authenticated;
+revoke execute on function public.sync_apply_attendance_mark(uuid,uuid,uuid,uuid,date,text)
+  from public, anon, service_role;
+grant execute on function public.sync_apply_attendance_mark(uuid,uuid,uuid,uuid,date,text)
+  to authenticated;
 
 create or replace function public.approve_establishment_creation_request(
   p_request_id uuid, p_admin_comment text default null
