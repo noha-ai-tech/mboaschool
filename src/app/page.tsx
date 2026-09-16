@@ -590,12 +590,12 @@ export default function HomePage() {
           recherche : catégorie + ville + rayon + géolocalisation). */}
       <section className="relative">
         <div className="max-w-[1500px] mx-auto px-[18px] pt-4 pb-3">
-          <div className="relative overflow-hidden rounded-[28px] shadow-[0_24px_60px_-24px_rgba(11,59,46,0.45)] min-h-[560px] lg:min-h-[620px]">
+          <div className="relative overflow-hidden rounded-[28px] shadow-[0_24px_60px_-24px_rgba(11,59,46,0.45)] min-h-[500px] lg:min-h-[560px]">
             <div className="absolute inset-0">
               <HeroPhotoCard photos={heroPhotos} variant="background" />
             </div>
 
-            <div className="relative z-[5] flex items-center min-h-[560px] lg:min-h-[620px] px-6 py-10 sm:px-10 sm:py-12 lg:px-14 lg:py-14">
+            <div className="relative z-[5] flex items-center min-h-[500px] lg:min-h-[560px] px-6 py-7 sm:px-10 sm:py-8 lg:px-14 lg:py-10">
               <div className="w-full max-w-[520px]">
                 <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3.5 py-1.5 text-xs font-medium tracking-[0.01em] text-white mb-5">
                   <span aria-hidden="true" className="w-1.5 h-1.5 rounded-full bg-[#F2AE1F]" />
