@@ -695,7 +695,7 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 sm:overflow-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden mt-6">
+            <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 sm:grid sm:grid-cols-2 md:grid-cols-5 sm:overflow-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden mt-6">
               {categories.map((cat) => (
                 <CategoryCard
                   key={cat.key}

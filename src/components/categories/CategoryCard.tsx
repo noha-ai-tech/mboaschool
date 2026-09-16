@@ -26,9 +26,9 @@ export function CategoryCard({
   return (
     <Link
       href={href}
-      className="group shrink-0 w-[72%] sm:w-auto snap-start bg-white rounded-[18px] border border-[#E7E0D7] p-5 shadow-[0_2px_8px_rgba(11,59,46,0.06)] hover:shadow-[0_10px_24px_-8px_rgba(11,59,46,0.22)] hover:-translate-y-0.5 transition-all duration-base text-center flex flex-col items-center"
+      className="group shrink-0 min-w-0 w-[72%] sm:w-auto snap-start bg-white rounded-[18px] border border-[#E7E0D7] px-3 py-4 shadow-[0_2px_8px_rgba(11,59,46,0.06)] hover:shadow-[0_10px_24px_-8px_rgba(11,59,46,0.22)] hover:-translate-y-0.5 transition-all duration-base text-center flex flex-col items-center"
     >
-      <div className="w-14 h-14 rounded-full bg-[#E9F5EE] flex items-center justify-center mb-3 group-hover:bg-[#0B3B2E] transition-colors duration-base">
+      <div className="w-12 h-12 rounded-full bg-[#E9F5EE] flex items-center justify-center mb-2 group-hover:bg-[#0B3B2E] transition-colors duration-base">
         <Icon size={24} className="text-[#0B3B2E] group-hover:text-white transition-colors duration-base" />
       </div>
       <div className="flex items-center gap-1.5">
