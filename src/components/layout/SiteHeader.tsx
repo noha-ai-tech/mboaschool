@@ -112,7 +112,7 @@ export function SiteHeader() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-[#0B3B2E] border-b border-white/10">
-      <div className="max-w-[1500px] mx-auto px-4 sm:px-6">
+      <div className="max-w-[1240px] mx-auto px-8">
         <div
           className={`relative flex items-center gap-8 transition-all duration-300 ease-out ${
             headerScrolled ? "h-14" : "h-[76px]"

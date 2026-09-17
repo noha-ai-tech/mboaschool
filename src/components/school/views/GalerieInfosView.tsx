@@ -9,8 +9,9 @@ import { AnnouncementsTab } from "@/components/school/AnnouncementsTab";
 import { MiniSiteOfficialLinks } from "@/components/school/MiniSiteOfficialLinks";
 import { computeMiniSiteFlags, type MiniSiteRendererData } from "@/lib/schoolPage/miniSiteData";
 import { classifySchoolGalleryImage } from "@/lib/school/galleryGroups";
+import { ministryLinksForCategory } from "@/lib/schoolPage/category";
 import { ViewBanner } from "@/components/school/views/ViewBanner";
-import { ViewShell, ViewContextMenu } from "@/components/school/views/ViewShell";
+import { ViewShell, ViewContextMenu, EmptyViewNote } from "@/components/school/views/ViewShell";
 
 // GUYSKULL-06 §12/§15 — dedicated "Galerie & Infos" view: a featured
 // campus photo, one discreet contextual notice (never a caption stamped
@@ -29,6 +30,12 @@ export function GalerieInfosView({ data }: { data: MiniSiteRendererData }) {
   // Guyskull-specific) — a school with real verified photos gets no
   // disclaimer at all.
   const hasDemoImagery = images.some((img) => /concept|démonstration|à confirmer|non confirmé/i.test(img.caption ?? ""));
+  // MODIFICATION 6 — cette vue était la seule des 5 sans repli visuel quand
+  // rien n'est publié (galerie/actualités/documents/ressources tous vides) :
+  // même logique que EtablissementView/FormationsAdmissionsView, jamais un
+  // espace blanc silencieux sous le bandeau.
+  const hasResources = !!school.website || ministryLinksForCategory(school.main_category).length > 0;
+  const isEmpty = !flags.showGallery && !showNews && !flags.showDocuments && !hasResources;
 
   return (
     <>
@@ -84,6 +91,7 @@ export function GalerieInfosView({ data }: { data: MiniSiteRendererData }) {
           <div id="ressources" className="scroll-mt-20">
             <MiniSiteOfficialLinks category={school.main_category} website={school.website} />
           </div>
+          {isEmpty && <EmptyViewNote />}
         </div>
       </ViewShell>
     </>

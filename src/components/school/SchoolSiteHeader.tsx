@@ -34,7 +34,9 @@ export function SchoolSiteHeader({
   motto?: string | null;
   /** Root URL for this school's mini-site — `/ecole/<id>` in public, `/dashboard/ecole/etablissement/preview` in CMS Preview. */
   baseHref: string;
-  activeView: MiniSiteViewKey;
+  /** `null` quand la page n'appartient à aucun des 5 onglets du mini-site
+   * (ex. formulaire de préinscription) — aucun onglet ne s'affiche actif. */
+  activeView: MiniSiteViewKey | null;
   phone: string | null;
   /** PUBLIC-SITE-02 §7 — the CMS Preview stacks its own sticky "draft" banner
    * above this header; a second `sticky top-0` here would overlap it
@@ -47,14 +49,14 @@ export function SchoolSiteHeader({
   if (isGuyskullShowcase) {
     return (
       <header className={`${sticky ? "sticky top-0" : ""} z-40 border-b border-slate-200 bg-white print:hidden`}>
-        <div className="mx-auto flex h-[72px] max-w-[1440px] items-center gap-5 px-4 lg:px-7">
+        <div className="mx-auto flex h-[72px] max-w-[1240px] items-center gap-5 px-8">
           <Link href="/" aria-label="Accueil Écoles237" className="shrink-0"><Logo size="header" priority /></Link>
           <form action="/recherche" className="relative hidden min-w-0 max-w-[470px] flex-1 md:block">
             <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={17} />
             <input name="q" aria-label="Rechercher une école" placeholder="Rechercher une école, une ville, une catégorie…" className="h-11 w-full rounded-xl bg-slate-50 pl-11 pr-4 text-sm outline-none ring-1 ring-slate-100 focus:ring-2 focus:ring-blue-500" />
           </form>
           <nav className="ml-auto hidden items-center gap-6 text-sm font-semibold text-slate-700 lg:flex" aria-label="Navigation Écoles237">
-            <Link href="/">Accueil</Link><Link href="/recherche">Annuaire</Link><Link href="/recherche">Catégories</Link><Link href="/qui-sommes-nous">À propos</Link><Link href="/contact">Contact</Link>
+            <Link href="/">Accueil</Link><Link href="/recherche">Annuaire</Link><Link href="/qui-sommes-nous">À propos</Link><Link href="/contact">Contact</Link>
           </nav>
           <Link href="/auth/connexion" aria-label="Mon compte" className="ml-auto grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-slate-50 text-slate-700 lg:ml-0"><UserRound size={19} /></Link>
         </div>
@@ -64,7 +66,7 @@ export function SchoolSiteHeader({
 
   return (
     <header className={`${sticky ? "sticky top-0" : ""} z-40 bg-white border-b border-border`}>
-      <div className="max-w-[1280px] mx-auto px-4 lg:px-6 h-[72px] flex items-center justify-between gap-4">
+      <div className="max-w-[1240px] mx-auto px-8 h-[72px] flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 min-w-0">
           {logoUrl ? (
             <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0 bg-muted ring-1 ring-black/5">

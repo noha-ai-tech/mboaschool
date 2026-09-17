@@ -19,14 +19,15 @@ export function SchoolQuickInfoAside({ data }: { data: MiniSiteRendererData }) {
     <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
       <div className="rounded-2xl border border-border bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,42,74,0.4)]">
         {data.mode === "public" && (
-          <Link href={data.preinscriptionHref} className="flex h-12 items-center justify-center gap-2 rounded-xl bg-emerald-600 text-sm font-bold text-white transition-colors hover:bg-emerald-700">
-            <ClipboardList size={17} /> Inscrire mon enfant
+          <Link href={data.preinscriptionHref} className="flex h-14 items-center justify-center gap-2.5 rounded-[12px] bg-[#F2AE1F] text-base font-bold text-[#0B3B2E] transition-colors hover:bg-[#D6941A]">
+            <ClipboardList size={19} /> Inscription
           </Link>
         )}
-        <div className="mt-2 grid gap-2">
-          {school.phone && <a href={`tel:${school.phone}`} className="flex h-10 items-center justify-center gap-2 rounded-xl border border-border text-sm font-bold text-[var(--school-primary)] hover:bg-muted"><Phone size={15} /> Contacter l&apos;établissement</a>}
-          {whatsappHref && <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="flex h-10 items-center justify-center gap-2 rounded-xl border border-border text-sm font-bold text-[var(--school-primary)] hover:bg-muted"><MessageCircle size={15} className="text-emerald-600" /> Écrire sur WhatsApp</a>}
-        </div>
+        {whatsappHref && (
+          <div className="mt-2 grid gap-2">
+            <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="flex h-10 items-center justify-center gap-2 rounded-xl border border-border text-sm font-bold text-[var(--school-primary)] hover:bg-muted"><MessageCircle size={15} className="text-emerald-600" /> Écrire sur WhatsApp</a>
+          </div>
+        )}
       </div>
 
       {rows.length > 0 && (

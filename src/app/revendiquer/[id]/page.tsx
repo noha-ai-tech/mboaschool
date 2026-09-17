@@ -66,7 +66,7 @@ const STEPS = [
 function Shell({ children }: { children: React.ReactNode }) {
   const tickerItems = useSiteTickerItems();
   return (
-    <div className="min-h-screen bg-[#ECECEA] flex flex-col">
+    <div className="min-h-screen bg-[#FBF6F2] flex flex-col">
       <SiteHeader />
       <SiteHeaderSpacer />
       <AnnouncementTicker items={tickerItems} />
@@ -288,7 +288,7 @@ export default function RevendiquerPage() {
   const canContinue = step === 1 ? step1Valid : step === 2 ? step2Valid : true;
 
   return (
-    <div className="min-h-screen bg-[#ECECEA] flex flex-col">
+    <div className="min-h-screen bg-[#FBF6F2] flex flex-col">
       <SiteHeader />
       <SiteHeaderSpacer />
       <AnnouncementTicker items={tickerItems} />

@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Phone, MessageCircle, Navigation as NavigationIcon, Globe, CheckCircle2, Crown, ArrowRight } from "lucide-react";
+import { Phone, MessageCircle, Navigation as NavigationIcon, Globe, CheckCircle2, Crown, ArrowRight, Heart } from "lucide-react";
 import type { SchoolHeroSlide } from "@/components/school/SchoolHeroCarousel";
+import { useFavorite } from "@/lib/useFavorites";
 
 // PUBLIC-SITE-01 §4A — mini-site hero. Deliberately a NEW component rather
 // than a rewrite of SchoolHeroCarousel (still used by the CMS live editor +
@@ -25,6 +26,7 @@ import type { SchoolHeroSlide } from "@/components/school/SchoolHeroCarousel";
 // preview card and the Formations & Admissions page, where there's room
 // for the right context — not shouted from the hero.
 export function MiniSiteHero({
+  establishmentId,
   slides,
   name,
   motto,
@@ -41,7 +43,9 @@ export function MiniSiteHero({
   logoUrl,
   categoryLabel,
   locationLabel,
+  showFavoriteButton = true,
 }: {
+  establishmentId: string;
   slides: SchoolHeroSlide[];
   name: string;
   motto?: string | null;
@@ -60,8 +64,12 @@ export function MiniSiteHero({
   logoUrl?: string | null;
   categoryLabel?: string | null;
   locationLabel?: string | null;
+  /** CORRECTION 4 — masqué en CMS Preview : cliquer "favoris" en preview ne
+   * doit jamais incrémenter le compteur public réel de l'établissement. */
+  showFavoriteButton?: boolean;
 }) {
   const [active, setActive] = useState(0);
+  const favorite = useFavorite(establishmentId);
 
   useEffect(() => {
     if (slides.length <= 1) return;
@@ -100,7 +108,20 @@ export function MiniSiteHero({
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/35 to-black/5 pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none" />
 
-        <div className="relative z-10 max-w-[1280px] mx-auto px-4 lg:px-6 h-full flex items-end gap-6 pb-10 lg:pb-12">
+        {showFavoriteButton && (
+          <button
+            type="button"
+            onClick={favorite.toggle}
+            aria-pressed={favorite.isFavorite}
+            aria-label={favorite.isFavorite ? "Retirer des favoris" : "Ajouter aux favoris"}
+            className="absolute right-4 top-4 lg:right-6 lg:top-6 z-10 inline-flex items-center gap-2 rounded-card bg-white/95 backdrop-blur-sm px-4 py-2.5 text-sm font-bold text-text-primary shadow-elevation-2 hover:bg-white transition-colors duration-base"
+          >
+            <Heart size={15} className={favorite.isFavorite ? "fill-red-500 text-red-500" : "text-text-secondary"} />
+            {favorite.isFavorite ? "Dans mes favoris" : "Ajouter aux favoris"}
+          </button>
+        )}
+
+        <div className="relative z-10 max-w-[1240px] mx-auto px-8 h-full flex items-end gap-6 pb-10 lg:pb-12">
           {logoUrl && (
             <div className="relative hidden md:block h-44 w-44 shrink-0 overflow-hidden rounded-[28px] border-4 border-white bg-white shadow-2xl">
               <Image src={logoUrl} alt={`Logo ${name}`} fill sizes="176px" className="object-contain p-2" />
@@ -164,7 +185,7 @@ export function MiniSiteHero({
           Adaptive sizing: a lone action gets a compact single-line card
           instead of a near-empty full panel. */}
       {quickActions.length > 0 && (
-        <div className="relative max-w-[1280px] mx-auto px-4 lg:px-6">
+        <div className="relative max-w-[1240px] mx-auto px-8">
           <div
             className={`lg:absolute lg:right-6 w-full lg:w-auto -mt-6 lg:mt-0 mb-6 lg:mb-0 text-text-primary shadow-elevation-3 border border-border rounded-card ${
               isCompactContact ? "lg:-top-8 lg:w-auto p-2" : "lg:-top-20 lg:w-[280px] p-5"

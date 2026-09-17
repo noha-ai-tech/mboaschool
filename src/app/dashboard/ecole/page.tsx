@@ -28,6 +28,7 @@ import {
   Clock3,
   CalendarDays,
   AlertCircle,
+  Heart,
 } from "lucide-react";
 
 const ANNEE_SCOLAIRE_COURANTE = "2026-2027";
@@ -50,6 +51,7 @@ export default function DashboardEcoleHome() {
     infra: any | null;
     imageCount: number;
     latestAnnouncement: string | null;
+    favoriteCount: number;
   } | null>(null);
   const [pro, setPro] = useState<{
     teacherCount: number;
@@ -78,7 +80,7 @@ export default function DashboardEcoleHome() {
         .select("id, name, level, teacher_name")
         .eq("establishment_id", schoolId)
         .order("created_at", { ascending: false }),
-      supabase.from("establishments").select("logo_url, description").eq("id", schoolId).single(),
+      supabase.from("establishments").select("logo_url, description, favorite_count").eq("id", schoolId).single(),
       supabase.from("fees").select("tuition_fee, registration_fee").eq("establishment_id", schoolId).maybeSingle(),
       supabase.from("infrastructures").select("*").eq("establishment_id", schoolId).maybeSingle(),
       supabase.from("school_images").select("id", { count: "exact", head: true }).eq("establishment_id", schoolId),
@@ -98,6 +100,7 @@ export default function DashboardEcoleHome() {
       infra: infraRes.data ?? null,
       imageCount: imagesRes.count ?? 0,
       latestAnnouncement: annRes.data?.[0]?.created_at ?? null,
+      favoriteCount: estRes.data?.favorite_count ?? 0,
     });
 
     // Widgets Écoles237 Pro — uniquement si le forfait est réellement actif,
@@ -212,12 +215,13 @@ export default function DashboardEcoleHome() {
         }
       />
 
-      {/* KPI — 4 maximum, données réelles uniquement */}
-      <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {/* KPI — 5 maximum, données réelles uniquement */}
+      <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <KpiCard icon={ClipboardList} value={loading ? "—" : pending} label="Admissions en attente" />
         <KpiCard icon={Gauge} value={loading ? "—" : `${completionPct}%`} label="Profil complété" />
         <KpiCard icon={GraduationCap} value={loading ? "—" : classes.length} label="Classes" />
         <KpiCard icon={CheckCircle} value={loading ? "—" : accepted} label="Admissions acceptées" />
+        <KpiCard icon={Heart} value={loading || !profile ? "—" : profile.favoriteCount} label="Mises en favori" />
       </div>
 
       {/* À traiter */}

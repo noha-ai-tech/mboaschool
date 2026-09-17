@@ -60,6 +60,8 @@ type PreviewApiData = {
     founding_year: number | null;
     student_count: number | null;
     teacher_count: number | null;
+    couleur_primaire: string | null;
+    couleur_secondaire: string | null;
   };
   images: { id: string; url: string; caption: string | null }[];
   documents: any[];
@@ -170,6 +172,8 @@ export default function PreviewDraftLayout({ children }: { children: React.React
             verification_status: establishment.verification_status,
             official_id: establishment.official_id,
             source_ministry: establishment.source_ministry,
+            couleur_primaire: establishment.couleur_primaire,
+            couleur_secondaire: establishment.couleur_secondaire,
           },
           fees: draft.pricing,
           infra: draft.infrastructure,

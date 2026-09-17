@@ -25,9 +25,10 @@ const LEGAL_LINKS = ["Mentions légales", "Confidentialité"];
 
 export function SiteFooter() {
   return (
-    <>
+    <div className="bg-[#FBF6F2] pt-2 pb-10 lg:pb-16">
+      <div className="max-w-[1240px] mx-auto">
       <footer className="bg-[#0B3B2E] text-white">
-        <div className="max-w-[1520px] mx-auto px-[18px] py-16 grid md:grid-cols-5 gap-10">
+        <div className="px-8 py-16 grid md:grid-cols-5 gap-10">
           <div className="md:col-span-2">
             <Link href="/" className="inline-block">
               <Logo variant="dark" />
@@ -80,7 +81,7 @@ export function SiteFooter() {
       </footer>
 
       <div className="bg-[#08251B]">
-        <div className="max-w-[1520px] mx-auto px-[18px] py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/40">
+        <div className="px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/40">
           <p>© {new Date().getFullYear()} Écoles237. Tous droits réservés.</p>
           <span
             aria-hidden="true"
@@ -88,6 +89,7 @@ export function SiteFooter() {
           />
         </div>
       </div>
-    </>
+      </div>
+    </div>
   );
 }

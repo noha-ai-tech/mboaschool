@@ -209,7 +209,7 @@ function SecondaryCtaBanner({ photo }: { photo: string | null }) {
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-r from-[#0B3B2E] via-[#0B3B2E]/95 to-[#12543F]/95" />
-      <div className="relative max-w-[1500px] mx-auto px-[18px] py-7 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+      <div className="relative max-w-[1240px] mx-auto px-8 py-7 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
         <div>
           <span
             aria-hidden="true"
@@ -406,7 +406,7 @@ export default function HomePage() {
           déroulant des catégories réelles, Qui sommes-nous, Contact).
           Rétrécit doucement au scroll. */}
       <header className="fixed inset-x-0 top-0 z-50 bg-[#0B3B2E] border-b border-white/10">
-        <div className="max-w-[1500px] mx-auto px-4 sm:px-6">
+        <div className="max-w-[1240px] mx-auto px-8">
           <div
             className={`relative flex items-center gap-8 transition-all duration-300 ease-out ${
               headerScrolled ? "h-14" : "h-[76px]"
@@ -589,7 +589,7 @@ export default function HomePage() {
           qu'avant (aucun champ région/département n'existe dans la vraie
           recherche : catégorie + ville + rayon + géolocalisation). */}
       <section className="relative">
-        <div className="max-w-[1500px] mx-auto px-[18px] pt-4 pb-3">
+        <div className="max-w-[1240px] mx-auto px-8 pt-4 pb-3">
           <div className="relative overflow-hidden rounded-[28px] shadow-[0_24px_60px_-24px_rgba(11,59,46,0.45)] min-h-[560px] lg:min-h-[620px]">
             <div className="absolute inset-0">
               <HeroPhotoCard photos={heroPhotos} variant="background" />
@@ -678,10 +678,10 @@ export default function HomePage() {
       </section>
 
       {/* ── CONTENEUR CENTRAL ─────────────────────────────────────────── */}
-      <div className="max-w-[1500px] mx-auto bg-[#FBF6F2]">
+      <div className="max-w-[1240px] mx-auto bg-[#FBF6F2] pb-16 lg:pb-24">
         {/* ── EXPLORER PAR CATÉGORIE ────────────────────────────────── */}
         <section className="border-t border-[#E7E0D7]">
-          <div className="px-[18px] py-12 lg:py-14">
+          <div className="px-8 py-12 lg:py-14">
             <div className="flex items-center justify-between gap-4 mb-1">
               <div>
                 <SectionEyebrow label="Explorer" />
@@ -720,7 +720,7 @@ export default function HomePage() {
             réellement mis en avant, jamais de carte factice. */}
         {!loading && featuredSchools.length > 0 && (
           <section className="border-t border-[#E7E0D7]">
-            <div className="px-[18px] py-12 lg:py-14">
+            <div className="px-8 py-12 lg:py-14">
               <div className="flex items-center justify-between gap-4 mb-1">
                 <div>
                   <SectionEyebrow label="Sélection" />
@@ -759,7 +759,7 @@ export default function HomePage() {
             trois bénéfices parallèles réels (pas de numérotation 01/02/03,
             ces points ne sont pas une séquence à suivre dans l'ordre). */}
         <section className="border-t border-[#E7E0D7]">
-          <div className="px-[18px] py-16 lg:py-20 grid lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-16 items-center">
+          <div className="px-8 py-16 lg:py-20 grid lg:grid-cols-[0.9fr_1.1fr] gap-12 lg:gap-16 items-center">
             <div className="relative rounded-[20px] overflow-hidden h-[300px] lg:h-[380px] shadow-[0_20px_44px_-20px_rgba(11,59,46,0.35)]">
               <Image
                 src={PARENT_PHOTO.url}
@@ -825,7 +825,7 @@ export default function HomePage() {
             style={{ background: "radial-gradient(circle, rgba(31,138,93,0.45), transparent 70%)" }}
           />
 
-          <div className="relative px-[18px] py-16 lg:py-20">
+          <div className="relative px-8 py-16 lg:py-20">
             <div className="max-w-xl mb-10">
               <SectionEyebrow label="Notre engagement" dark />
               <h2 className="font-[family-name:var(--font-fraunces)] text-2xl lg:text-[28px] font-semibold text-white leading-snug">

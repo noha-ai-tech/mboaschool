@@ -437,7 +437,7 @@ function RecherchePageInner() {
       <SiteHeaderSpacer />
       <AnnouncementTicker items={tickerItems} />
 
-      <div className="max-w-[1520px] mx-auto px-[18px] py-8">
+      <div className="max-w-[1240px] mx-auto px-8 py-8">
         <div className="mb-6">
           <h1 className="font-[family-name:var(--font-fraunces)] text-3xl font-semibold text-[#132019]">Tous les établissements</h1>
           <p className="text-sm text-[#5A695F] mt-1.5">Annuaire complet des écoles référencées sur Écoles237.</p>

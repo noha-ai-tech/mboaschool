@@ -42,6 +42,11 @@ export type MiniSiteEstablishment = {
   verification_status: string | null;
   official_id: string | null;
   source_ministry: string | null;
+  /** Couleurs de marque propres à l'école (CMS), format hex — voir
+   * MiniSiteShell.tsx pour leur application dynamique au thème du mini-site
+   * (fallback sur la palette Écoles237 par défaut si absentes). */
+  couleur_primaire: string | null;
+  couleur_secondaire: string | null;
 };
 
 export type MiniSiteRendererData = {

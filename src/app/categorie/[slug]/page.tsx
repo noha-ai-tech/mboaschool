@@ -377,7 +377,7 @@ function CategoryPageInner() {
       <SiteHeaderSpacer />
       <AnnouncementTicker items={tickerItems} />
 
-      <div className="max-w-[1520px] mx-auto px-[18px]">
+      <div className="max-w-[1240px] mx-auto px-8">
 
         {/* ── FIL D'ARIANE ─────────────────────────────────────────── */}
         <Link

@@ -41,7 +41,7 @@ export function ViewBanner({
       )}
       <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-black/15" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-      <div className="relative z-10 max-w-[1280px] mx-auto px-4 lg:px-6 py-8 lg:py-10 w-full">
+      <div className="relative z-10 max-w-[1240px] mx-auto px-8 py-8 lg:py-10 w-full">
         {eyebrow && (
           <p className="text-[10px] font-bold tracking-widest uppercase mb-2" style={{ color: "var(--school-accent-gold, #C9A24B)" }}>
             {eyebrow}

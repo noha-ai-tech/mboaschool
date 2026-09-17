@@ -95,7 +95,7 @@ export default function QuiSommesNousPage() {
       <AnnouncementTicker items={tickerItems} />
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
-      <section className="max-w-[1240px] mx-auto px-[18px] pt-16 pb-11">
+      <section className="max-w-[1240px] mx-auto px-8 pt-16 pb-11">
         <p className="flex items-center gap-2.5 text-xs font-bold uppercase tracking-wider text-[#12543F] mb-3.5">
           <TricolorBar /> Qui sommes-nous
         </p>
@@ -109,7 +109,7 @@ export default function QuiSommesNousPage() {
       </section>
 
       {/* ── CARTES FONCTIONNALITÉS ───────────────────────────────────── */}
-      <section className="max-w-[1240px] mx-auto px-[18px] pb-6">
+      <section className="max-w-[1240px] mx-auto px-8 pb-6">
         <div className="grid sm:grid-cols-2 gap-[18px]">
           {POINTS.map((p) => (
             <div
@@ -127,7 +127,7 @@ export default function QuiSommesNousPage() {
       </section>
 
       {/* ── COMMENT ÇA MARCHE ────────────────────────────────────────── */}
-      <section className="max-w-[1240px] mx-auto px-[18px] py-16">
+      <section className="max-w-[1240px] mx-auto px-8 py-16">
         <div className="max-w-xl mb-10">
           <p className="flex items-center gap-2.5 text-xs font-bold uppercase tracking-wider text-[#12543F] mb-3.5">
             <TricolorBar /> Fonctionnement
@@ -184,7 +184,7 @@ export default function QuiSommesNousPage() {
       </section>
 
       {/* ── BANNIÈRE CTA ─────────────────────────────────────────────── */}
-      <section className="max-w-[1240px] mx-auto px-[18px] pb-16">
+      <section className="max-w-[1240px] mx-auto px-8 pb-16">
         <div className="relative overflow-hidden bg-gradient-to-br from-[#0B3B2E] to-[#12543F] rounded-[24px] p-9 md:p-11 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <span aria-hidden="true" className="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-[#F2AE1F]/25 blur-3xl" />
           <div className="relative">

@@ -30,7 +30,7 @@ import type { ExamResult, OfficialRanking } from "@/components/school/MiniSiteRe
 // placement matters. This component's own logic is unchanged.
 
 const ESTABLISHMENT_COLUMNS =
-  "id, name, description, main_category, city, neighborhood, address, latitude, longitude, phone, whatsapp, email, website, logo_url, cover_image_url, subscription_plan, hero_mode, motto, history, mission, vision, founding_year, student_count, teacher_count, is_verified, owner_id, is_claimed, verification_status, official_id, source_ministry";
+  "id, name, description, main_category, city, neighborhood, address, latitude, longitude, phone, whatsapp, email, website, logo_url, cover_image_url, subscription_plan, hero_mode, motto, history, mission, vision, founding_year, student_count, teacher_count, is_verified, owner_id, is_claimed, verification_status, official_id, source_ministry, couleur_primaire, couleur_secondaire";
 
 export function SchoolMiniSiteLayoutClient({ children }: { children: React.ReactNode }) {
   const params = useParams();

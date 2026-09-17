@@ -5,7 +5,7 @@
 // desktop sidebar / mobile pill sub-navigation for its internal sections).
 export function ViewShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="max-w-[1280px] mx-auto px-4 lg:px-6 py-8 flex flex-col lg:flex-row gap-8 items-start">
+    <div className="max-w-[1240px] mx-auto px-8 pt-8 pb-16 lg:pb-20 flex flex-col lg:flex-row gap-8 items-start">
       {children}
     </div>
   );

@@ -44,8 +44,10 @@ export function SchoolSiteFooter({
   const ministries = ministryLinksForCategory(category);
 
   return (
+    <div className="bg-[#F4F4F2] pt-2 pb-10 lg:pb-16">
+      <div className="max-w-[1240px] mx-auto">
     <footer className="text-white" style={{ backgroundColor: "var(--school-primary-dark, #0A0F0D)" }}>
-      <div className="max-w-[1280px] mx-auto px-4 lg:px-6 py-14 grid sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr] gap-10">
+      <div className="px-8 py-14 grid sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr] gap-10">
         <div>
           <div className="flex items-center gap-3 mb-3">
             <div
@@ -133,7 +135,7 @@ export function SchoolSiteFooter({
       </div>
 
       <div className="border-t border-white/10">
-        <div className="max-w-[1280px] mx-auto px-4 lg:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-white/40">
+        <div className="px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-white/40">
           <p>© {new Date().getFullYear()} {name}</p>
           <Link href="/" className="hover:text-white/70 transition-colors duration-base">
             Propulsé par Écoles237
@@ -141,5 +143,7 @@ export function SchoolSiteFooter({
         </div>
       </div>
     </footer>
+      </div>
+    </div>
   );
 }

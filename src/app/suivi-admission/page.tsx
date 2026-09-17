@@ -83,7 +83,7 @@ function SuiviForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[#ECECEA] flex flex-col">
+    <div className="min-h-screen bg-[#FBF6F2] flex flex-col">
       <SiteHeader />
       <SiteHeaderSpacer />
       <AnnouncementTicker items={tickerItems} />

@@ -54,7 +54,7 @@ export default function ContactPage() {
       <AnnouncementTicker items={tickerItems} />
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
-      <section className="max-w-[1240px] mx-auto px-[18px] pt-16 pb-2 text-center">
+      <section className="max-w-[1240px] mx-auto px-8 pt-16 pb-2 text-center">
         <p className="flex items-center justify-center gap-2.5 text-xs font-bold uppercase tracking-wider text-[#12543F] mb-3.5">
           <TricolorBar /> Contact
         </p>
@@ -68,7 +68,7 @@ export default function ContactPage() {
       </section>
 
       {/* ── CANAUX ───────────────────────────────────────────────────── */}
-      <section className="max-w-[1240px] mx-auto px-[18px] pt-12 pb-2">
+      <section className="max-w-[1240px] mx-auto px-8 pt-12 pb-2">
         <div className="grid sm:grid-cols-3 gap-5">
           <div className="bg-white border border-[#E7E0D7] rounded-[18px] p-[30px_26px] text-center hover:-translate-y-1 hover:shadow-[0_22px_38px_-18px_rgba(11,59,46,0.22)] hover:border-transparent transition-all duration-base">
             <div className="w-[52px] h-[52px] rounded-[14px] mx-auto mb-[18px] flex items-center justify-center bg-gradient-to-br from-[#E9F5EE] to-[#DCEFE3] text-[#0B3B2E]">
@@ -112,7 +112,7 @@ export default function ContactPage() {
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────────────────── */}
-      <section className="max-w-[1240px] mx-auto px-[18px] py-16">
+      <section className="max-w-[1240px] mx-auto px-8 py-16">
         <div className="text-center mb-9">
           <p className="flex items-center justify-center gap-2.5 text-xs font-bold uppercase tracking-wider text-[#12543F] mb-3.5">
             <TricolorBar /> Avant d&apos;écrire

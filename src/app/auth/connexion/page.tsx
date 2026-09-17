@@ -114,11 +114,13 @@ export default function ConnexionPage() {
       <SiteHeaderSpacer />
       <AnnouncementTicker items={tickerItems} />
 
-      <div className="flex-1 flex flex-col lg:flex-row">
-        <AuthBranding />
+      <div className="flex-1 bg-[#FBF6F2] px-4 py-10 lg:px-8 lg:py-16">
+        <div className="max-w-[1240px] mx-auto min-h-[560px] rounded-[24px] overflow-hidden shadow-[0_24px_64px_-32px_rgba(11,59,46,0.3)] bg-white flex flex-col lg:flex-row">
+          <AuthBranding />
 
-        {/* Panel connexion — fond crème de marque, large surface épurée */}
-        <div className="flex-1 flex flex-col items-center justify-center px-6 py-10 lg:py-12 bg-[#FBF6F2]">
+          {/* Panel connexion — carte contenue (même format que la page
+              publique d'une école) plutôt qu'un panneau plein écran. */}
+          <div className="flex-1 flex flex-col items-center justify-center px-6 py-10 lg:py-12">
           <div className="w-full max-w-[400px]">
             <div className="mb-7">
               <h1 className="font-[family-name:var(--font-fraunces)] text-3xl font-semibold text-[#132019] mb-1.5">
@@ -230,6 +232,7 @@ export default function ConnexionPage() {
               <Lock size={12} aria-hidden="true" />
               Accès sécurisé à votre espace Écoles237.
             </p>
+          </div>
           </div>
         </div>
       </div>

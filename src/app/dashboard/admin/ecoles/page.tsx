@@ -12,7 +12,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import {
   School, MapPin, Search, CheckCircle2, Crown, ArrowRight,
-  ShieldOff, ShieldCheck, RotateCcw, Loader2,
+  ShieldOff, ShieldCheck, RotateCcw, Loader2, Heart,
 } from "lucide-react";
 import { includesInsensitive, normalizeForSearch, dedupeInsensitive } from "@/lib/textSearch";
 
@@ -47,7 +47,7 @@ export default function AdminEcolesPage() {
     setLoading(true);
     const { data } = await supabase
       .from("establishments")
-      .select("id, name, city, region, main_category, is_verified, forfait, verification_status, created_at")
+      .select("id, name, city, region, main_category, is_verified, forfait, verification_status, favorite_count, created_at")
       .order("created_at", { ascending: false });
     if (data) setSchools(data);
     setLoading(false);
@@ -176,6 +176,10 @@ export default function AdminEcolesPage() {
                       <MapPin size={10} /> {school.city || "—"} · {school.region || "—"} · {school.main_category || "—"}
                     </p>
                   </div>
+                  <span title="Mises en favori" className="shrink-0 flex items-center gap-1 text-[11px] font-semibold text-slate-500">
+                    <Heart size={11} className={school.favorite_count > 0 ? "fill-red-400 text-red-400" : "text-slate-300"} />
+                    {school.favorite_count ?? 0}
+                  </span>
                   <span className={`shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-full border ${status.cls}`}>
                     {status.label}
                   </span>

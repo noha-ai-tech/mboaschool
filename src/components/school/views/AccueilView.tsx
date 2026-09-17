@@ -97,6 +97,8 @@ export function AccueilView({ data, baseHref }: { data: MiniSiteRendererData; ba
   return (
     <>
       <MiniSiteHero
+        establishmentId={school.id}
+        showFavoriteButton={data.mode === "public"}
         slides={heroSlides}
         name={school.name}
         motto={school.motto}
@@ -115,7 +117,7 @@ export function AccueilView({ data, baseHref }: { data: MiniSiteRendererData; ba
         locationLabel={[school.neighborhood, school.city].filter(Boolean).join(", ") || null}
       />
 
-      <div className="max-w-[1280px] mx-auto px-4 lg:px-6 pt-6 lg:pt-10 pb-12">
+      <div className="max-w-[1240px] mx-auto px-8 pt-6 lg:pt-10 pb-16 lg:pb-20">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_310px] lg:items-start">
           <div className="min-w-0 space-y-8">
           <MiniSiteKeyNumbers

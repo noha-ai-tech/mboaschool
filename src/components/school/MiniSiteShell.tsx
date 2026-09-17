@@ -6,6 +6,7 @@ import { SchoolSiteHeader } from "@/components/school/SchoolSiteHeader";
 import { SchoolSiteFooter } from "@/components/school/SchoolSiteFooter";
 import type { MiniSiteViewKey } from "@/lib/schoolPage/miniSiteViews";
 import type { MiniSiteRendererData } from "@/lib/schoolPage/miniSiteData";
+import { ensureReadableColor } from "@/lib/schoolColor";
 
 // GUYSKULL-05 — the shared chrome (header/nav/footer/mobile CTA bar) around
 // whichever one of the 5 independent views is the current route's content.
@@ -29,12 +30,15 @@ export function MiniSiteShell({
   // GUYSKULL-06 §3 — the mini-site's own token layer, scoped to this
   // subtree only via CSS custom properties on the root — never the
   // platform-wide Tailwind `primary`/`accent` tokens (shared by the whole
-  // app). Every school gets this default premium palette today; a future
-  // school-branding feature only has to override these variables per
-  // establishment, no component changes required.
+  // app). MODIFICATION 5/7 — `--school-primary`/`--school-primary-dark` now
+  // come from the school's own CMS colors (`establishments.couleur_primaire`
+  // / `couleur_secondaire`, same pair already used for the directory card
+  // gradient fallback on /recherche and the homepage) when the school has
+  // set them; the Écoles237 default premium palette below is only a
+  // fallback for schools that haven't configured their own colors yet.
   const schoolThemeStyle = {
-    "--school-primary": "#0F2A4A",
-    "--school-primary-dark": "#081A30",
+    "--school-primary": ensureReadableColor(school.couleur_primaire, "#0F2A4A"),
+    "--school-primary-dark": ensureReadableColor(school.couleur_secondaire, "#081A30"),
     "--school-accent-gold": "#C9A24B",
     "--school-surface": "#FFFFFF",
     "--school-muted": "#F4F3EF",
