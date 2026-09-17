@@ -1,12 +1,26 @@
+"use client";
+
 import Link from "next/link";
-import { ClipboardList, Globe, Mail, MapPin, MessageCircle, Phone, ShieldCheck } from "lucide-react";
+import dynamic from "next/dynamic";
+import { ClipboardList, Globe, Mail, MapPin, MessageCircle, Navigation, Phone, ShieldCheck } from "lucide-react";
 import type { MiniSiteRendererData } from "@/lib/schoolPage/miniSiteData";
+
+// MODIFICATION 6 — carte de localisation réelle (mêmes tuiles OpenStreetMap
+// que /recherche), jamais la photo assombrie + punaise "aperçu illustratif"
+// utilisée par la vitrine de démonstration Guyskull : ici la position vient
+// des vraies coordonnées de l'établissement, pas d'une image décorative.
+const LocalSchoolMap = dynamic(() => import("@/components/LocalSchoolMap"), {
+  ssr: false,
+  loading: () => <div className="w-full h-full bg-muted animate-pulse" />,
+});
 
 export function SchoolQuickInfoAside({ data }: { data: MiniSiteRendererData }) {
   const school = data.establishment;
   const address = [school.address, school.neighborhood, school.city].filter(Boolean).join(", ");
-  const mapsHref = school.latitude && school.longitude ? `https://www.google.com/maps?q=${school.latitude},${school.longitude}` : null;
+  const hasCoordinates = !!(school.latitude && school.longitude);
+  const mapsHref = hasCoordinates ? `https://www.google.com/maps?q=${school.latitude},${school.longitude}` : null;
   const whatsappHref = school.whatsapp ? `https://wa.me/${school.whatsapp.replace(/\D/g, "")}` : null;
+
   const rows = [
     address ? { icon: MapPin, label: "Localisation", value: address, href: mapsHref } : null,
     school.phone ? { icon: Phone, label: "Téléphone", value: school.phone, href: `tel:${school.phone}` } : null,
@@ -42,6 +56,25 @@ export function SchoolQuickInfoAside({ data }: { data: MiniSiteRendererData }) {
               </div>
             ))}
           </dl>
+        </div>
+      )}
+
+      {hasCoordinates && (
+        <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-[0_14px_34px_-24px_rgba(15,42,74,0.4)]">
+          <h2 className="flex items-center gap-2 p-5 pb-3 text-sm font-black text-[var(--school-primary)]"><MapPin size={17} className="text-emerald-600" /> Localisation</h2>
+          <div className="relative h-56 w-full">
+            <LocalSchoolMap
+              center={{ lat: school.latitude as number, lng: school.longitude as number }}
+              userLocation={null}
+              radiusKm={0}
+              schools={[{ id: school.id, name: school.name, city: school.city, lat: school.latitude as number, lng: school.longitude as number }]}
+            />
+          </div>
+          {mapsHref && (
+            <a href={mapsHref} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 p-3 text-xs font-bold text-[var(--school-primary)] hover:bg-muted border-t border-border">
+              <Navigation size={13} /> Ouvrir dans Google Maps
+            </a>
+          )}
         </div>
       )}
     </aside>

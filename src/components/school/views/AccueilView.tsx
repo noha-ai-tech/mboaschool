@@ -13,7 +13,7 @@ import { AnnouncementsTab } from "@/components/school/AnnouncementsTab";
 import { StructuredPricing } from "@/components/school/StructuredPricing";
 import { MiniSiteResultsPreview } from "@/components/school/MiniSiteResultsPreview";
 import { SchoolQuickInfoAside } from "@/components/school/SchoolQuickInfoAside";
-import { GeneralTab } from "@/components/school/GeneralTab";
+import { GeneralTab, INFRA_LABELS } from "@/components/school/GeneralTab";
 import { getPrimaryPublicBadge, resolveEstablishmentTrustState, trustInputFromEstablishmentRow } from "@/lib/trust/resolveEstablishmentTrustState";
 import { computeAllHeroSlides, resolveHeroSlides } from "@/lib/school/heroMode";
 import { categories } from "@/lib/categories";
@@ -88,6 +88,13 @@ export function AccueilView({ data, baseHref }: { data: MiniSiteRendererData; ba
   const newsVisible = flags.showNewsSection && (newsCount === null || newsCount > 0);
   const hasResultsOrRanking = flags.showAdmissions && (results.length > 0 || !!ranking);
 
+  // MODIFICATION 6 — points forts réels (infrastructures effectivement
+  // déclarées par l'établissement), affichés en grille d'icônes juste sous
+  // la présentation — même emplacement/esprit que les 4 cases de la vitrine
+  // de référence, mais uniquement des données réelles : rien ne s'affiche
+  // si l'école n'a renseigné aucune infrastructure.
+  const highlightItems = Object.keys(INFRA_LABELS).filter((k) => infra?.[k] === true);
+
   // GUYSKULL-06 §14 — a representative "campus" photo for the About card,
   // generic (caption-classified, same mechanism as the grouped gallery),
   // falling back to the establishment's own cover image, never invented.
@@ -128,7 +135,24 @@ export function AccueilView({ data, baseHref }: { data: MiniSiteRendererData; ba
             foundingYear={school.founding_year}
           />
 
-          <GeneralTab school={school} fees={fees} infra={infra} sections={{ presentation: true, tarifs: false, infrastructures: flags.showInfrastructure }} />
+          <GeneralTab school={school} fees={fees} infra={infra} sections={{ presentation: true, tarifs: false, infrastructures: false }} />
+
+          {highlightItems.length > 0 && (
+            <div className="grid gap-3 sm:grid-cols-2">
+              {highlightItems.map((key) => {
+                const item = INFRA_LABELS[key];
+                const Icon = item.icon;
+                return (
+                  <div key={key} className="flex gap-3 rounded-xl border border-border bg-white p-4">
+                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full" style={{ backgroundColor: "var(--school-muted, #F4F3EF)", color: "var(--school-primary, #0F2A4A)" }}>
+                      <Icon size={18} />
+                    </div>
+                    <p className="self-center font-bold text-sm text-text-primary">{item.label}</p>
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
           {flags.showAdmissions && admissionsConfig?.levels?.length ? (
             <section className="rounded-card border border-border bg-white p-6">

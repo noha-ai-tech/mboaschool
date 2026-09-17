@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Phone, MessageCircle, Navigation as NavigationIcon, Globe, CheckCircle2, Crown, ArrowRight, Heart } from "lucide-react";
+import { Navigation as NavigationIcon, CheckCircle2, Crown, ArrowRight, Heart } from "lucide-react";
 import type { SchoolHeroSlide } from "@/components/school/SchoolHeroCarousel";
 import { useFavorite } from "@/lib/useFavorites";
 
@@ -78,17 +78,6 @@ export function MiniSiteHero({
     const timer = setInterval(() => setActive((i) => (i + 1) % slides.length), 6000);
     return () => clearInterval(timer);
   }, [slides.length]);
-
-  const quickActions = [
-    phone ? { icon: Phone, label: "Appeler", href: `tel:${phone}`, external: false } : null,
-    whatsapp ? { icon: MessageCircle, label: "WhatsApp", href: `https://wa.me/${whatsapp.replace(/\D/g, "")}`, external: true } : null,
-    mapsHref ? { icon: NavigationIcon, label: "Itinéraire", href: mapsHref, external: true } : null,
-    website ? { icon: Globe, label: "Site officiel", href: website, external: true } : null,
-  ].filter(Boolean) as { icon: typeof Phone; label: string; href: string; external: boolean }[];
-
-  // GUYSKULL-06C §10 — adaptive contact card: a single action gets a
-  // compact one-line treatment instead of a half-empty full card.
-  const isCompactContact = quickActions.length === 1;
 
   return (
     <section className="relative text-white" style={{ background: "var(--school-primary-dark, #0A0F0D)" }}>
@@ -178,43 +167,6 @@ export function MiniSiteHero({
           </div>
         </div>
       </div>
-
-      {/* GUYSKULL-06 §5 / GUYSKULL-06C §10 — pulled up out of the photo's
-          own clipped box so it visually straddles the hero/content
-          boundary on desktop; on mobile it stacks below in normal flow.
-          Adaptive sizing: a lone action gets a compact single-line card
-          instead of a near-empty full panel. */}
-      {quickActions.length > 0 && (
-        <div className="relative max-w-[1240px] mx-auto px-8">
-          <div
-            className={`lg:absolute lg:right-6 w-full lg:w-auto -mt-6 lg:mt-0 mb-6 lg:mb-0 text-text-primary shadow-elevation-3 border border-border rounded-card ${
-              isCompactContact ? "lg:-top-8 lg:w-auto p-2" : "lg:-top-20 lg:w-[280px] p-5"
-            }`}
-            style={{ backgroundColor: "var(--school-surface, #ffffff)" }}
-          >
-            {!isCompactContact && (
-              <p className="text-[10px] font-bold tracking-widest uppercase mb-3" style={{ color: "var(--school-accent-gold, #C9A24B)" }}>Contact rapide</p>
-            )}
-            <div className={isCompactContact ? "" : "space-y-2"}>
-              {quickActions.map((action) => (
-                <a
-                  key={action.label}
-                  href={action.href}
-                  target={action.external ? "_blank" : undefined}
-                  rel={action.external ? "noopener noreferrer" : undefined}
-                  className={`flex items-center gap-2.5 text-sm font-semibold text-text-primary transition-colors duration-base hover:bg-muted ${
-                    isCompactContact ? "rounded-lg px-4 py-2.5" : "rounded-lg px-3 py-2.5"
-                  }`}
-                  style={isCompactContact ? undefined : { border: "1px solid var(--school-border, #E8E6E1)" }}
-                >
-                  <action.icon size={14} className="shrink-0" style={{ color: "var(--school-primary, #0F2A4A)" }} />
-                  {action.label}
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }
