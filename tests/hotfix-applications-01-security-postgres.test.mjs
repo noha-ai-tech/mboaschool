@@ -112,6 +112,9 @@ test.before(async () => {
     create table public.establishments (
       id uuid primary key default gen_random_uuid(),
       owner_id uuid references public.profiles(id) on delete set null,
+      is_claimed boolean not null default false,
+      is_verified boolean not null default false,
+      verification_status text not null default 'referenced',
       name text not null, slug text unique not null,
       main_category main_category not null default 'primaire',
       city text not null default 'Douala', forfait text not null default 'gratuit',
@@ -174,11 +177,13 @@ test.before(async () => {
   const sql0007 = await readFile(path.join(projectRoot, "supabase/migrations/0007_production_security_reconciliation.sql"), "utf8");
   const sql0012 = await readFile(path.join(projectRoot, "supabase/migrations/0012_admissions_v1.sql"), "utf8");
   const hotfixSql = await readFile(path.join(projectRoot, "supabase/migrations/20260918090000_fix_public_application_submission.sql"), "utf8");
+  const eligibilitySql = await readFile(path.join(projectRoot, "supabase/migrations/20261028025913_disable_unmanaged_school_preinscriptions.sql"), "utf8");
 
   try {
     await adminPool.query(sql0007);
     await adminPool.query(sql0012);
     await adminPool.query(hotfixSql);
+    await adminPool.query(eligibilitySql);
 
     await adminPool.query(`
       do $$
@@ -293,8 +298,16 @@ async function seedSchool() {
   // establishments.owner_id references profiles(id), not auth.users(id)
   // directly — a profiles row is required first.
   await adminPool.query("insert into public.profiles (id) values ($1)", [owner]);
-  const establishmentId = (await adminPool.query("insert into public.establishments (owner_id, slug, name) values ($1,$2,'École Test') returning id", [owner, `school-${newId()}`])).rows[0].id;
+  const establishmentId = (await adminPool.query("insert into public.establishments (owner_id, is_claimed, is_verified, verification_status, slug, name) values ($1,true,true,'active',$2,'École Test') returning id", [owner, `school-${newId()}`])).rows[0].id;
   return { owner, establishmentId };
+}
+
+async function seedReferencedSchool() {
+  const establishmentId = (await adminPool.query(
+    "insert into public.establishments (slug, name) values ($1,'École Référencée') returning id",
+    [`referenced-${newId()}`]
+  )).rows[0].id;
+  return { establishmentId };
 }
 
 test.beforeEach(async () => {
@@ -372,6 +385,20 @@ test("real Postgres — the RPC's DB row is correctly established, server-contro
 test("real Postgres — an invalid/nonexistent establishment is rejected with a clean error", async (t) => {
   if (!dbAvailable) return t.skip(unavailableReason);
   await assert.rejects(() => submit(null, { p_establishment_id: newId() }), /introuvable/i);
+});
+
+test("real Postgres — a referenced directory listing cannot receive an application", async (t) => {
+  if (!dbAvailable) return t.skip(unavailableReason);
+  const school = await seedReferencedSchool();
+  await assert.rejects(
+    () => submit(null, { p_establishment_id: school.establishmentId }),
+    /Préinscription indisponible/i
+  );
+  const count = await adminPool.query(
+    "select count(*)::int as n from public.applications where establishment_id=$1",
+    [school.establishmentId]
+  );
+  assert.equal(count.rows[0].n, 0);
 });
 
 // ============================================================================
