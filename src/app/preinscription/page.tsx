@@ -15,6 +15,7 @@ import { joinWithSeparator } from "@/lib/formatSchoolLocation";
 import { TRUST_BADGE_LABELS } from "@/lib/trust/resolveEstablishmentTrustState";
 import { paginateAll } from "@/lib/sitemap/paginate";
 import { includesInsensitive } from "@/lib/textSearch";
+import { canEstablishmentReceivePreinscriptions } from "@/lib/schoolPage/miniSiteData";
 
 type SchoolOption = {
   id: string;
@@ -22,6 +23,9 @@ type SchoolOption = {
   city: string | null;
   category: string | null;
   verified: boolean;
+  owner_id: string | null;
+  is_claimed: boolean;
+  verification_status: string | null;
   images: string[];
 };
 
@@ -54,6 +58,7 @@ function PreinscriptionForm() {
   const [schools, setSchools] = useState<SchoolOption[]>([]);
   const [schoolsLoading, setSchoolsLoading] = useState(true);
   const [schoolsError, setSchoolsError] = useState<string | null>(null);
+  const [unavailablePreselectedSchool, setUnavailablePreselectedSchool] = useState(false);
   const [schoolQuery, setSchoolQuery] = useState("");
   const [anneesScolaires, setAnneesScolaires] = useState<any[]>([]);
   const [step, setStep] = useState(1);
@@ -70,7 +75,7 @@ function PreinscriptionForm() {
     paginateAll(500, async (from, to) => {
       const { data, error } = await supabase
       .from("establishments")
-      .select("id, name, city, main_category, is_verified, cover_image_url, school_images(url)")
+      .select("id, name, city, main_category, is_verified, owner_id, is_claimed, verification_status, cover_image_url, school_images(url)")
       // CMS-F.6 — défense en profondeur avec la policy RLS publique
       // (migration 0029, PRÉPARÉE NON EXÉCUTÉE).
       .eq("school_images.status", "live")
@@ -82,19 +87,25 @@ function PreinscriptionForm() {
       return data ?? [];
     }).then((data) => {
         if (controller.signal.aborted) return;
-        setSchools(
-          data.map((s: any) => ({
+        const eligibleSchools = data.map((s: any) => ({
             id: s.id,
             name: s.name,
             city: s.city,
             category: s.main_category ?? null,
             verified: s.is_verified ?? false,
+            owner_id: s.owner_id ?? null,
+            is_claimed: s.is_claimed ?? false,
+            verification_status: s.verification_status ?? null,
             images: [
               ...(s.school_images ?? []).map((img: any) => img.url).filter(Boolean),
               ...(s.cover_image_url ? [s.cover_image_url] : []),
             ].filter((url, i, arr) => arr.indexOf(url) === i).slice(0, 5),
-          }))
-        );
+          })).filter(canEstablishmentReceivePreinscriptions);
+        setSchools(eligibleSchools);
+        if (preselectedId && !eligibleSchools.some((school) => school.id === preselectedId)) {
+          setUnavailablePreselectedSchool(true);
+          setForm((current) => ({ ...current, establishment_id: "" }));
+        }
       }).catch(() => {
         if (!controller.signal.aborted) setSchoolsError("Impossible de charger les établissements. Rechargez la page pour réessayer.");
       }).finally(() => {
@@ -147,6 +158,10 @@ function PreinscriptionForm() {
     // re-rende le bouton désactivé ; le bouton `disabled={loading}` reste
     // la protection principale, ceci est une seconde ligne minimale.
     if (loading || !form.establishment_id) return;
+    if (!selectedSchool) {
+      setSubmitError("La préinscription n’est pas disponible pour cet établissement.");
+      return;
+    }
     setLoading(true);
     setSubmitError(null);
     // Soumission publique anonyme : passe par submit_public_application
@@ -185,7 +200,7 @@ function PreinscriptionForm() {
       }
     } else {
       setSubmitError(
-        error.message.includes("Trop de préinscriptions")
+        error.message.includes("Trop de préinscriptions") || error.message.includes("Préinscription indisponible")
           ? error.message
           : "Une erreur est survenue. Merci de réessayer dans quelques instants."
       );
@@ -294,6 +309,11 @@ function PreinscriptionForm() {
             <div className="bg-white rounded-[24px] shadow-elevation-2 p-6">
               <h1 className="text-xl font-bold text-text-primary mb-1.5">Quel établissement ?</h1>
               <p className="text-sm text-text-secondary mb-4">Choisissez l&apos;établissement pour lequel vous souhaitez préinscrire votre enfant.</p>
+              {unavailablePreselectedSchool && (
+                <div role="alert" className="mb-4 rounded-[12px] border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  Cet établissement est bien référencé dans l&apos;annuaire, mais il ne gère pas encore les préinscriptions sur Écoles237. Choisissez un autre établissement disponible.
+                </div>
+              )}
               <input
                 type="search"
                 aria-label="Rechercher un établissement pour la préinscription"
