@@ -59,6 +59,27 @@ export type MiniSiteRendererData = {
   mode: "public" | "preview";
 };
 
+export type PreinscriptionEligibilityEstablishment = Pick<
+  MiniSiteEstablishment,
+  "owner_id" | "is_claimed" | "verification_status"
+>;
+
+/**
+ * A directory listing cannot receive a family application until a real
+ * school administrator is linked to it and the onboarding workflow is
+ * active. This is deliberately stricter than the public trust badge:
+ * "verified" or "active" is therefore combined with a non-null owner: the
+ * status authorizes the feature and the linked administrator can process it.
+ */
+export function canEstablishmentReceivePreinscriptions(
+  establishment: PreinscriptionEligibilityEstablishment
+): boolean {
+  return (
+    ["verified", "active"].includes(establishment.verification_status ?? "") &&
+    Boolean(establishment.owner_id)
+  );
+}
+
 /** Same visibility/gating logic every view previously computed inline inside MiniSiteRenderer — centralized so the 5 views (and the shell) can never compute it differently from one another. */
 export function computeMiniSiteFlags(data: MiniSiteRendererData) {
   const { establishment: school, fees, infra, images, docsList, sectionConfig, admissionsConfig } = data;
@@ -74,11 +95,17 @@ export function computeMiniSiteFlags(data: MiniSiteRendererData) {
   const showDocuments = isVisible("documents") && docsList.length > 0;
   const showGallery = isVisible("gallery") && images.length > 0;
   const showAdmissions = isVisible("admissions");
+  const establishmentAcceptsPreinscriptions = canEstablishmentReceivePreinscriptions(school);
+  const preinscriptionsAvailable =
+    data.mode === "public" &&
+    showAdmissions &&
+    admissionsOpen &&
+    establishmentAcceptsPreinscriptions;
   /** CMS section-visibility toggle only — still needs combining with a live newsCount check (announcements are fetched separately by each view). */
   const showNewsSection = isVisible("news");
   const hasIdentityText = !!(school.history || school.mission || school.vision);
 
-  return { showPresentation, showInfrastructure, showContact, showPricing, showDocuments, showGallery, showAdmissions, showNewsSection, admissionsOpen, hasIdentityText, infraItems };
+  return { showPresentation, showInfrastructure, showContact, showPricing, showDocuments, showGallery, showAdmissions, showNewsSection, admissionsOpen, establishmentAcceptsPreinscriptions, preinscriptionsAvailable, hasIdentityText, infraItems };
 }
 
 export function admissionYearLabelFrom(periodStart: string | null | undefined, periodEnd: string | null | undefined): string | null {

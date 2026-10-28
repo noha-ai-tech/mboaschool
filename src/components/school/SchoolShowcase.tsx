@@ -61,7 +61,7 @@ export function SchoolShowcase({ data, baseHref, activeView = "accueil" }: { dat
   const levels = data.admissionsConfig?.levels ?? [];
   const mapsHref = school.latitude != null && school.longitude != null
     ? `https://www.google.com/maps?q=${school.latitude},${school.longitude}` : null;
-  const canApply = data.mode === "public" && flags.showAdmissions && flags.admissionsOpen;
+  const canApply = flags.preinscriptionsAvailable;
 
   useEffect(() => {
     const syncAnchor = () => setActiveAnchor(window.location.hash.slice(1));
@@ -86,7 +86,13 @@ export function SchoolShowcase({ data, baseHref, activeView = "accueil" }: { dat
 
   const applyButton = canApply
     ? <Link href={data.preinscriptionHref} className="flex min-h-12 items-center justify-center rounded-xl bg-emerald-600 px-4 py-3 text-center font-bold text-white">Préinscrire mon enfant</Link>
-    : <p className="rounded-xl bg-slate-100 px-4 py-3 text-center text-sm text-slate-600">{data.mode === "preview" ? "Préinscription indisponible dans l’aperçu" : "Admissions actuellement fermées"}</p>;
+    : <p className="rounded-xl bg-slate-100 px-4 py-3 text-center text-sm text-slate-600">{
+        data.mode === "preview"
+          ? "Préinscription indisponible dans l’aperçu"
+          : !flags.establishmentAcceptsPreinscriptions
+            ? "Préinscription indisponible : cet établissement ne gère pas encore les demandes sur Écoles237."
+            : "Admissions actuellement fermées"
+      }</p>;
 
   const presentation = <Section id="presentation" title="Présentation" icon={<BookOpen className="shrink-0 text-blue-600" />}>
     <div className="grid gap-6 xl:grid-cols-[1fr_240px]">

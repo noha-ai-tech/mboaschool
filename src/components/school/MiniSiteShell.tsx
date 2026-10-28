@@ -73,7 +73,7 @@ export function MiniSiteShell({
         />
       </div>
 
-      {data.mode === "public" && flags.showAdmissions && flags.admissionsOpen && (
+      {flags.preinscriptionsAvailable && (
         <>
           <div className="lg:hidden print:hidden fixed bottom-0 inset-x-0 z-40 bg-white border-t border-border p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
             <Link

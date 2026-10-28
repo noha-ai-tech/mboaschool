@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { ClipboardList, Globe, Mail, MapPin, MessageCircle, Phone, ShieldCheck } from "lucide-react";
 import type { MiniSiteRendererData } from "@/lib/schoolPage/miniSiteData";
+import { computeMiniSiteFlags } from "@/lib/schoolPage/miniSiteData";
 
 export function SchoolQuickInfoAside({ data }: { data: MiniSiteRendererData }) {
   const school = data.establishment;
+  const flags = computeMiniSiteFlags(data);
   const address = [school.address, school.neighborhood, school.city].filter(Boolean).join(", ");
   const mapsHref = school.latitude && school.longitude ? `https://www.google.com/maps?q=${school.latitude},${school.longitude}` : null;
   const whatsappHref = school.whatsapp ? `https://wa.me/${school.whatsapp.replace(/\D/g, "")}` : null;
@@ -18,7 +20,7 @@ export function SchoolQuickInfoAside({ data }: { data: MiniSiteRendererData }) {
   return (
     <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
       <div className="rounded-2xl border border-border bg-white p-4 shadow-[0_14px_34px_-24px_rgba(15,42,74,0.4)]">
-        {data.mode === "public" && (
+        {flags.preinscriptionsAvailable && (
           <Link href={data.preinscriptionHref} className="flex h-12 items-center justify-center gap-2 rounded-xl bg-emerald-600 text-sm font-bold text-white transition-colors hover:bg-emerald-700">
             <ClipboardList size={17} /> Inscrire mon enfant
           </Link>

@@ -32,7 +32,7 @@ function load(file) {
 const { SchoolShowcase } = load(path.join(root, 'components/school/SchoolShowcase.tsx'));
 function fixture(overrides = {}) {
   return {
-    establishment: { id: 'school-alpha', name: 'Lycée Alpha', main_category: 'secondaire', city: 'Bafoussam', is_verified: false, is_claimed: false, logo_url: null, cover_image_url: null },
+    establishment: { id: 'school-alpha', name: 'Lycée Alpha', main_category: 'secondaire', city: 'Bafoussam', is_verified: true, owner_id: 'owner-alpha', is_claimed: true, verification_status: 'active', logo_url: null, cover_image_url: null },
     fees: null, infra: null, images: [], docsList: [], sectionConfig: [], admissionsConfig: null, ranking: null, results: [], preinscriptionHref: '/preinscription?ecole=school-alpha', mode: 'public', ...overrides,
   };
 }
@@ -66,6 +66,13 @@ test('preview and closed admissions do not expose an active preinscription link'
   for (const data of [fixture({ mode: 'preview', preinscriptionHref: '#' }), fixture({ admissionsConfig: { is_open: false, levels: [], required_documents: [] } })]) {
     assert.doesNotMatch(render(data, 'admissions'), /href="(?:#|\/preinscription)/);
   }
+});
+test('a referenced directory listing cannot expose an active preinscription link', () => {
+  const data = fixture();
+  data.establishment = { ...data.establishment, owner_id: null, is_claimed: false, verification_status: 'referenced' };
+  const html = render(data, 'admissions');
+  assert.doesNotMatch(html, /href="\/preinscription/);
+  assert.ok(html.includes('ne gère pas encore les demandes sur Écoles237'));
 });
 test('every route uses the same school and preview links stay inside the preview tree', () => {
   const base = '/dashboard/ecole/etablissement/preview';
